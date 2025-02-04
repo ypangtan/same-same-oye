@@ -18,6 +18,38 @@ use Illuminate\Http\Request;
 //     return view( 'welcome' );
 // } );
 
+Route::get('.well-known/apple-app-site-association', function () {
+    $data = [
+        'applinks' => [
+            'details' => [
+                [
+                    'appIDs' => [
+                        '8XQG3SLQJX.com.mecar.user'
+                    ],
+                    'components' => [
+                        [
+                            '#' => 'no_universal_links',
+                            'exclude' => true,
+                            'comment' => 'Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link.'
+                        ],
+                        [
+                            '/' => '/register/*',
+                            'comment' => 'Matches any URL with a path that starts with /register/.'
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'webcredentials' => [
+            'apps' => [
+                '8XQG3SLQJX.com.mecar.user'
+            ]
+        ]
+    ];
+    
+    return response()->json($data);
+});
+
 Route::get('/register', function (Request $request) {    
     $userAgent = $request->header('User-Agent');
 
@@ -32,6 +64,7 @@ Route::get('/register', function (Request $request) {
     return response()->json([
         'code' => $code,
         'all_parameters' => $request->all(),
+        'agent' => $userAgent,
     ]);
 
 });
