@@ -155,19 +155,6 @@ class CartService {
             ],
         ]);
 
-        if (($request->promo_code && ($request->bundle || $request->user_bundle)) || 
-            ($request->bundle && $request->user_bundle)) {
-            return response()->json([
-                'message' => 'Invalid combination of bundle and promotion.',
-                'message_key' => 'bundle_not_available',
-                'errors' => [
-                    'voucher' => 'Promo code, bundle, and user bundle cannot be used together.',
-                    // 'bundle' => 'Promo code, bundle, and user bundle cannot be used together.',
-                    // 'user_bundle' => 'Promo code, bundle, and user bundle cannot be used together.',
-                ]
-            ], 422);
-        }
-
         if (isset($request->items)) {
             $validator->after(function ($validator) use ($request) {
                 foreach ($request->items as $index => $item) {
@@ -241,8 +228,17 @@ class CartService {
 
             return response()->json(["message"=> "The given data was invalid.",'errors' => $formattedErrors], 422);
         }
+        // end of laravel validation
 
-        // check voucher type
+        // custom validation
+        // bundle rules
+        $validateCBR = self::validateCartBundleRules($request);
+
+        if ($validateCBR->getStatusCode() === 422) {
+            return $validateCBR;
+        }
+
+        // voucher rules
         if ( $request->promo_code ) {
 
             $voucher = Voucher::where( 'id', $request->promo_code )
@@ -257,16 +253,6 @@ class CartService {
                     ]
                 ] , 422);
             }
-
-            // if( $voucher->type == 1 ){
-            //     return response()->json( [
-            //         'message' => 'Voucher Not applicable to cart',
-            //         'message_key' => 'voucher_not_applicable_to_cart',
-            //         'errors' => [
-            //             'voucher' => 'Voucher Not applicable to cart'
-            //         ]
-            //     ] , 422);
-            // }
 
             $test = self::validateCartVoucher($request);
 
@@ -2505,5 +2491,22 @@ class CartService {
             $cartMeta->save();
         }
         return $totalCartDeduction;
+    }
+    
+    public static function validateCartBundleRules ( $request ){
+
+        // check for bundle with voucher
+        if (($request->promo_code && ($request->bundle || $request->user_bundle)) || 
+            ($request->bundle && $request->user_bundle)) {
+            return response()->json([
+                'message' => 'Invalid combination of bundle and promotion.',
+                'message_key' => 'bundle_not_available',
+                'errors' => [
+                    'voucher' => 'Promo code, bundle, and user bundle cannot be used together.',
+                ]
+            ], 422);
+        }
+
+        return response()->json('',200);
     }
 }

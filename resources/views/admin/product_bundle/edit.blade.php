@@ -106,13 +106,7 @@ $product_bundle_edit = 'product_bundle_edit';
                     </div>
                 </div>
 
-                <div class="mb-3 row">
-                    <label for="{{ $product_bundle_edit}}_quantity" class="col-sm-5 form-label">{{ __( 'product_bundle.quantity' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $product_bundle_edit}}_quantity" value=1>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
+                <div id="productBundleContainer"></div>
 
                 <div class="text-end">
                     <button id="{{ $product_bundle_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
@@ -139,7 +133,8 @@ window.cke_element1 = 'product_bundle_edit_description';
     document.addEventListener( 'DOMContentLoaded', function() {
 
         let fe = '#{{ $product_bundle_edit }}',
-                fileID = '';
+                fileID = '',
+                container = $('#productBundleContainer');
 
         $( fe + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.product_bundle.index' ) }}';
@@ -162,6 +157,13 @@ window.cke_element1 = 'product_bundle_edit_description';
             formData.append( 'price', $( fe + '_price' ).val() );
             formData.append( 'discount_price', $( fe + '_discount_price' ).val() );
             formData.append( 'quantity', $( fe + '_quantity' ).val()  );
+            $('#productBundleContainer input[type="number"]').each(function () {
+                let productId = $(this).attr('id').replace('product_quantity_', ''); // Extract product ID
+                let quantity = $(this).val(); // Get input value
+
+                // Append as array (so PHP can process multiple values)
+                formData.append(`quantities[${productId}]`, quantity);
+            });
             formData.append( 'validity_days', $( fe + '_validity_days' ).val()  );
             formData.append( 'description', editor.getData() );
             formData.append( 'image', fileID );
@@ -271,7 +273,26 @@ window.cke_element1 = 'product_bundle_edit_description';
                         productSelect2.trigger( 'change' );
                     });
 
-                    $( fe + '_quantity' ).val( response.product_bundle_metas[0].quantity );
+                    // Assuming `fe` is defined somewhere in your script
+                    $('#productBundleContainer').empty(); // Clear previous inputs before appending
+
+                    response.product_bundle_metas.forEach((meta, index) => {
+                        let inputId = `product_quantity_${meta.product.id}`; // Unique ID for each input field
+                        let  Quantitylabel = meta.product.title; // Get product title from response
+
+                        let inputHtml = `
+                            <div class="mb-3 row" id="input_${meta.product.id}">
+                                <label for="${inputId}" class="col-sm-5 form-label">${Quantitylabel} Quantity</label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" id="${inputId}" value="${meta.quantity}">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        `;
+
+                        $('#productBundleContainer').append(inputHtml); // Append input to container
+                    });
+
 
                     const dropzone = new Dropzone( fe + '_image', {
                         url: '{{ route( 'admin.file.upload' ) }}',
@@ -324,6 +345,29 @@ window.cke_element1 = 'product_bundle_edit_description';
                 },
             } );
         }
+
+        $(fe + '_product').on('select2:select', function (e) {
+            let data = e.params.data; 
+            let inputId = `product_quantity_${data.id}`;
+
+            if ($('#' + inputId).length === 0) {
+                let inputHtml = `
+                    <div class="mb-3 row" id="input_${data.id}">
+                        <label for="${inputId}" class="col-sm-5 form-label">${data.text} Quantity</label>
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" id="${inputId}" value="1">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                `;
+                container.append(inputHtml);
+            }
+        });
+
+        $(fe + '_product').on('select2:unselect', function (e) {
+            let data = e.params.data;
+            $('#input_' + data.id).remove();
+        });
 
     } );
 </script>

@@ -64,4 +64,5 @@ return [
     'claim_per_user' => 'Claim Per User',
     'voucher_fully_claimed' => 'Voucher fully Claimed',
     'voucher_you_have_maximum_used' => 'You have reached maximum usage for this voucher',
+    'voucher_not_available' => 'Voucher is not available',
 ];

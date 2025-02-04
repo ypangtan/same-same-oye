@@ -27,6 +27,7 @@ class UserBundle extends Model
         'status',
         'payment_attempt',
         'payment_url',
+        'cups_left_metas',
     ];
 
     protected $hidden = [
@@ -103,6 +104,7 @@ class UserBundle extends Model
         'status',
         'payment_attempt',
         'payment_url',
+        'cups_left_metas',
     ];
 
     protected static $logName = 'user_bundles';

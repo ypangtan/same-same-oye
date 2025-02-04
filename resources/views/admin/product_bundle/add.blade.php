@@ -106,13 +106,7 @@ $product_bundle_create = 'product_bundle_create';
                     </div>
                 </div>
 
-                <div class="mb-3 row">
-                    <label for="{{ $product_bundle_create}}_quantity" class="col-sm-5 form-label">{{ __( 'product_bundle.quantity' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $product_bundle_create}}_quantity" value=1>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
+                <div id="productBundleContainer" ></div>
 
                 <div class="text-end">
                     <button id="{{ $product_bundle_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
@@ -139,7 +133,8 @@ window.cke_element1 = 'product_bundle_create_description';
     document.addEventListener( 'DOMContentLoaded', function() {
 
         let fc = '#{{ $product_bundle_create }}',
-                fileID = '';
+                fileID = '',
+                container = $('#productBundleContainer');
 
         $( fc + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.product_bundle.index' ) }}';
@@ -161,6 +156,13 @@ window.cke_element1 = 'product_bundle_create_description';
             formData.append( 'price', $( fc + '_price' ).val() );
             formData.append( 'discount_price', $( fc + '_discount_price' ).val() );
             formData.append( 'quantity', $( fc + '_quantity' ).val()  );
+            $('#productBundleContainer input[type="number"]').each(function () {
+                let productId = $(this).attr('id').replace('product_quantity_', ''); // Extract product ID
+                let quantity = $(this).val(); // Get input value
+
+                // Append as array (so PHP can process multiple values)
+                formData.append(`quantities[${productId}]`, quantity);
+            });
             formData.append( 'validity_days', $( fc + '_validity_days' ).val()  );
             
             formData.append( 'description', editor.getData() );
@@ -238,6 +240,29 @@ window.cke_element1 = 'product_bundle_create_description';
                 }
             }
         } );
+
+        $(fc + '_product').on('select2:select', function (e) {
+            let data = e.params.data; 
+            let inputId = `product_quantity_${data.id}`;
+
+            if ($('#' + inputId).length === 0) {
+                let inputHtml = `
+                    <div class="mb-3 row" id="input_${data.id}">
+                        <label for="${inputId}" class="col-sm-5 form-label">${data.text} Quantity</label>
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" id="${inputId}" value="1">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                `;
+                container.append(inputHtml);
+            }
+        });
+
+        $(fc + '_product').on('select2:unselect', function (e) {
+            let data = e.params.data;
+            $('#input_' + data.id).remove();
+        });
 
         Dropzone.autoDiscover = false;
         const dropzone = new Dropzone( fc + '_image', { 

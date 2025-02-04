@@ -1360,13 +1360,21 @@ class OrderService
 
                 // create bundle
                 if( $order->product_bundle_id ){
+                    $bundleMetas = $bundle->productBundleMetas;
+
+                    $bundleCupLeft = [];
+
+                    foreach($bundleMetas as $key => $bundleMeta){
+                        $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity;
+                    }
                             
                     $userBundle = UserBundle::create([
                         'user_id' => $user->id,
                         'product_bundle_id' => $bundle->id,
                         'status' => $request->payment_method == 1 ? 10 : 20,
-                        'total_cups' => $bundle->productBundleMetas->first()->quantity,
-                        'cups_left' => $bundle->productBundleMetas->first()->quantity - count( $order->orderMetas ),
+                        'total_cups' => $bundle->productBundleMetas->sum('quantity'),
+                        'cups_left' => $bundle->productBundleMetas->sum('quantity') - count( $order->orderMetas ),
+                        'cups_left_metas' => json_encode( $bundleCupLeft ),
                         'last_used' => Carbon::now(),
                         'payment_attempt' => 1,
                         'payment_url' => 'null',

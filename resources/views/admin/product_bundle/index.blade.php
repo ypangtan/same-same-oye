@@ -215,7 +215,10 @@ var statusMapper = @json( $data['status'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "quantity" ) }}' ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
-                    return data[0].quantity ? data[0].quantity : '-' ;
+                    return data.length > 1 
+                    ? data.reduce((sum, item) => sum + (item.quantity || 0), 0) // Sum all quantities
+                    : data[0]?.quantity ?? '-'; // Return first quantity or '-'
+
                 },
             },
             {

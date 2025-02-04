@@ -50,6 +50,8 @@ class ProductBundleService
             'products' => [ 'required' ],
             'quantity' => [ 'required', 'min:1' ],
             'validity_days' => [ 'nullable', 'min:1' ],
+            'quantities' => ['nullable', 'array'],
+            'quantities.*' => ['required', 'integer', 'min:1'],
             
         ] );
 
@@ -112,7 +114,7 @@ class ProductBundleService
                 ProductBundleMeta::create([
                     'product_id' => $product,
                     'product_bundle_id' => $productBundleCreate->id,
-                    'quantity' => $request->quantity,
+                    'quantity' => $request->quantities[$product],
                     'status' => 10,
                 ]);
             }
@@ -149,6 +151,8 @@ class ProductBundleService
             'products' => [ 'required' ],
             'quantity' => [ 'required', 'min:1' ],
             'validity_days' => [ 'nullable', 'min:1' ],
+            'quantities' => ['nullable', 'array'],
+            'quantities.*' => ['required', 'integer', 'min:1'],
         ] );
 
         $attributeName = [
@@ -173,7 +177,7 @@ class ProductBundleService
         DB::beginTransaction();
 
         try {
-            
+
             $updateProductBundle = ProductBundle::with(['productBundleMetas'])->find( $request->id );
   
             $updateProductBundle->code = $request->code ?? $updateProductBundle->code;
@@ -215,7 +219,7 @@ class ProductBundleService
                 ProductBundleMeta::create([
                     'product_id' => $product,
                     'product_bundle_id' => $updateProductBundle->id,
-                    'quantity' => $request->quantity,
+                    'quantity' => $request->quantities[$product],
                     'status' => 10,
                 ]);
             }
@@ -642,8 +646,8 @@ class ProductBundleService
                 'user_id' => $user->id,
                 'product_bundle_id' => $bundle->id,
                 'status' => $request->payment_method == 1 ? 10 : 20,
-                'total_cups' => $bundle->productBundleMetas->first()->quantity,
-                'cups_left' => $bundle->productBundleMetas->first()->quantity,
+                'total_cups' => $bundle->productBundleMetas->sum('quantity'),
+                'cups_left' => $bundle->productBundleMetas->sum('quantity'),
                 'last_used' => null,
                 'payment_attempt' => 1,
                 'payment_url' => 'null',
