@@ -89,6 +89,24 @@ class UserBundle extends Model
         return $statuses[$this->attributes['status']] ?? null;
     }
 
+    public function getCupsLeftMetasDetailsAttribute()
+    {
+
+        $cupLeftMetas = json_decode($this->attributes['cups_left_metas'],true);
+        $cupLeftDetails = [];
+
+        if( $this->attributes['cups_left_metas'] ){
+            foreach( $cupLeftMetas as $id => $quantity ){
+                $product = Product::find( $id );
+                $cupLeftDetails[ $product->title ] = $quantity;
+            }
+        }else {
+            $cupLeftDetails[ $this->productBundle->productBundleMetas->first()->product->title ] = $this->attributes['cups_left'];
+        }
+        
+        return $cupLeftDetails;
+    }
+    
     public $translatable = [ 'title', 'description' ];
 
     protected function serializeDate( DateTimeInterface $date ) {

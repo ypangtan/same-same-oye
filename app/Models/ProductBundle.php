@@ -45,17 +45,37 @@ class ProductBundle extends Model
         });
     
         if ($meta) {
-            $meta->product->append(['image_path']); // Append custom attributes if needed
+            $meta->product->append(['image_path']);
             return [
                 'product' => $meta->product,
                 'quantity' => $meta->quantity,
             ];
         }
     
-        return null; // Return null if no matching meta is found
+        return null;
+    }
+
+    public function getBundleMetaRulesAttribute()
+    {
+        // Filter to include only metas that have both 'quantity' and 'product'
+        $metas = $this->productBundleMetas->filter(function ($meta) {
+            return isset($meta->quantity, $meta->product);
+        });
+    
+        // If there are matching metas, append 'image_path' and return formatted data
+        if ($metas->isNotEmpty()) {
+            return $metas->map(function ($meta) {
+                $meta->product->append(['image_path']);
+                return [
+                    'product' => $meta->product,
+                    'quantity' => $meta->quantity,
+                ];
+            })->values(); // Reset keys for a clean array
+        }
+    
+        return null; // Return null if no valid metas are found
     }
     
-
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

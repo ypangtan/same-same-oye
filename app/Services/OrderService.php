@@ -1094,7 +1094,6 @@ class OrderService
                     $chargeableFroyoPrices = array_slice($froyoPrices, 0, $chargeableCount, true);
                     $totalDeduction = array_sum($chargeableFroyoPrices);
 
-
                     $orderPrice -= $totalDeduction;
                     $metaPrice -= $totalDeduction;
 
@@ -1363,9 +1362,9 @@ class OrderService
                     $bundleMetas = $bundle->productBundleMetas;
 
                     $bundleCupLeft = [];
-
+                    $orderMetas = $order->orderMetas;
                     foreach($bundleMetas as $key => $bundleMeta){
-                        $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity;
+                        $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $orderMetas->where('product_id',$bundleMeta->product_id)->count();
                     }
                             
                     $userBundle = UserBundle::create([

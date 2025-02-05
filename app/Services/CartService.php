@@ -266,22 +266,36 @@ class CartService {
 
             $bundle = ProductBundle::where( 'id', $request->bundle )->where( 'status', 10 )->first();
             $bundleRules = $bundle->bundle_rules;
+            $bundleMetaRules = $bundle->bundle_meta_rules; //mix product bundle
 
             $isValid = true;
             $error = 0;
-            
-            if ( ( isset( $request->items ) ? count($request->items) : 0 ) > $bundleRules['quantity'] ) {
-                return response()->json( [
-                    'message' => 'Product exceeeds bundle quantity',
-                    'message_key' => 'product_exceeds_bundle_quantity',
-                    'errors' => [
-                        'bundle' => 'Product exceeeds bundle quantity',
-                    ]
-                ] , 422);
+
+            // if ( ( isset( $request->items ) ? count($request->items) : 0 ) > $bundleRules['quantity'] ) {
+
+            //     return response()->json( [
+            //         'message' => 'Product exceeeds bundle quantity',
+            //         'message_key' => 'product_exceeds_bundle_quantity',
+            //         'errors' => [
+            //             'bundle' => 'Product exceeeds bundle quantity',
+            //         ]
+            //     ] , 422);
+            // }
+
+            foreach ($bundleMetaRules as $rule) {
+                $items = collect( $request->items );
+                $selectedQuantity = $items->where('product', $rule['product']['id'])->count();
+
+                if ($selectedQuantity > $rule['quantity']) {
+                    return response()->json([
+                        'message' => "Quantity for {$rule['product']['title']} exceeds the limit.",
+                        'errors' => ['products' => "Selected: $selectedQuantity, Allowed: {$rule['quantity']}"]
+                    ], 422);
+                }
             }
 
             foreach ($request->items as $item) {
-                if ($item['product'] !== $bundleRules['product']->id) {
+                if ( !collect($bundleMetaRules)->firstWhere('product.id', $item['product']) ) {
                     $isValid = false;
                     $error = 1;
                     break;
@@ -807,15 +821,10 @@ class CartService {
             ],
         ] );
 
-        if (($request->promo_code && ($request->bundle || $request->user_bundle)) || 
-            ($request->bundle && $request->user_bundle)) {
-            return response()->json([
-                'message' => 'Invalid combination of bundle and promotion.',
-                'message_key' => 'bundle_not_available',
-                'errors' => [
-                    'voucher' => 'Promo code, bundle, and user bundle cannot be used together.'
-                ]
-            ], 422);
+        $validateCBR = self::validateCartBundleRules($request);
+
+        if ($validateCBR->getStatusCode() === 422) {
+            return $validateCBR;
         }
 
         if (isset($request->items)) {
@@ -1032,6 +1041,7 @@ class CartService {
 
             $bundle = ProductBundle::where( 'id', $request->bundle )->where( 'status', 10 )->first();
             $bundleRules = $bundle->bundle_rules;
+            $bundleMetaRules = $bundle->bundle_meta_rules; //mix product bundle
 
             $isValid = true;
             $error = 0;
@@ -1046,18 +1056,30 @@ class CartService {
                 $cartMetaCount = 0;
             }
 
-            if ( ( isset( $request->items ) ? count($request->items) : 0 ) + $cartMetaCount > $bundleRules['quantity'] ) {
-                return response()->json( [
-                    'message' => 'Product exceeeds bundle quantity',
-                    'message_key' => 'product_exceeds_bundle_quantity',
-                    'errors' => [
-                        'bundle' => 'Product exceeeds bundle quantity',
-                    ]
-                ] , 422);
+            // if ( ( isset( $request->items ) ? count($request->items) : 0 ) + $cartMetaCount > $bundleRules['quantity'] ) {
+            //     return response()->json( [
+            //         'message' => 'Product exceeeds bundle quantity',
+            //         'message_key' => 'product_exceeds_bundle_quantity',
+            //         'errors' => [
+            //             'bundle' => 'Product exceeeds bundle quantity',
+            //         ]
+            //     ] , 422);
+            // }
+
+            foreach ($bundleMetaRules as $rule) {
+                $items = collect( $request->items );
+                $selectedQuantity = $items->where('product', $rule['product']['id'])->count();
+
+                if (($selectedQuantity + $cartMetaCount) > $rule['quantity']) {
+                    return response()->json([
+                        'message' => "Quantity for {$rule['product']['title']} exceeds the limit.",
+                        'errors' => ['products' => "Selected: $selectedQuantity, Allowed: {$rule['quantity']}"]
+                    ], 422);
+                }
             }
 
             foreach ($request->items as $item) {
-                if ($item['product'] !== $bundleRules['product']->id) {
+                if ( !collect($bundleMetaRules)->firstWhere('product.id', $item['product']) ) {
                     $isValid = false;
                     $error = 1;
                     break;
