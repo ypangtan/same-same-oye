@@ -413,23 +413,54 @@ class CartService {
                 ], 422 );
             }
 
+            // check for specific product cups left
+            if($userBundle->cups_left_metas){
+                $cupLeftMetas = json_decode($userBundle->cups_left_metas,true);
+
+                foreach ($cupLeftMetas as $product => $quantity) {
+                    $items = collect( $request->items );
+                    $selectedQuantity = $items->where('product', $product)->count();
+    
+                    if ($selectedQuantity > $quantity) {
+                        $productName = Product::find($product)->title;
+                        return response()->json([
+                            'message' => "Quantity for {$productName} exceeds your remaining cups.",
+                            'errors' => ['products' => "Selected: $selectedQuantity, Allowed: {$quantity}"]
+                        ], 422);
+                    }
+                }
+            }
+
             $bundleRules = $userBundle->productBundle->bundle_rules;
+            $bundleMetaRules = $userBundle->productBundle->bundle_meta_rules;
 
             $isValid = true;
             $error = 0;
             
-            if ( ( isset( $request->items ) ? count($request->items) : 0 ) > $bundleRules['quantity'] ) {
-                return response()->json( [
-                    'message' => 'Product exceeeds bundle quantity',
-                    'message_key' => 'product_exceeds_bundle_quantity',
-                    'errors' => [
-                        'user_bundle' => 'Product exceeeds bundle quantity',
-                    ]
-                ] , 422);
+            // if ( ( isset( $request->items ) ? count($request->items) : 0 ) > $bundleRules['quantity'] ) {
+            //     return response()->json( [
+            //         'message' => 'Product exceeeds bundle quantity',
+            //         'message_key' => 'product_exceeds_bundle_quantity',
+            //         'errors' => [
+            //             'user_bundle' => 'Product exceeeds bundle quantity',
+            //         ]
+            //     ] , 422);
+            // }
+
+            foreach ($bundleMetaRules as $rule) {
+                $items = collect( $request->items );
+                $selectedQuantity = $items->where('product', $rule['product']['id'])->count();
+
+                if ($selectedQuantity > $rule['quantity']) {
+                    return response()->json([
+                        'message' => "Quantity for {$rule['product']['title']} exceeds the limit.",
+                        'errors' => ['products' => "Selected: $selectedQuantity, Allowed: {$rule['quantity']}"]
+                    ], 422);
+                }
             }
 
             foreach ($request->items as $item) {
-                if ($item['product'] !== $bundleRules['product']->id) {
+                if ( !collect($bundleMetaRules)->firstWhere('product.id', $item['product']) ) {
                     $isValid = false;
                     $error = 1;
                     break;
@@ -734,6 +765,17 @@ class CartService {
                 $cart->subtotal = $orderPrice;
 
                 $userBundle->cups_left -= count( $cart->cartMetas );
+
+                $bundleMetas = $userBundle->productBundle->productBundleMetas;
+
+                $bundleCupLeft = [];
+                $cartMetas = $cart->cartMetas;
+                foreach($bundleMetas as $key => $bundleMeta){
+                    $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $cartMetas->where('product_id',$bundleMeta->product_id)->count();
+                }
+
+                $userBundle->cups_left_metas =json_encode( $bundleCupLeft );
+                
                 $userBundle->save();
             }
 
@@ -1189,32 +1231,40 @@ class CartService {
             }
 
             $bundleRules = $userBundle->productBundle->bundle_rules;
+            $bundleMetaRules = $userBundle->productBundle->bundle_meta_rules; //mix product bundle
 
             $isValid = true;
             $error = 0;
             
-            if ( ( isset( $request->items ) ? count($request->items) : 0 ) + $cartMetaCount > $bundleRules['quantity'] ) {
-                return response()->json( [
-                    'message' => 'Product exceeeds bundle quantity',
-                    'message_key' => 'product_exceeds_bundle_quantity',
-                    'errors' => [
-                        'user_bundle' => 'Product exceeeds bundle quantity',
-                    ]
-                ] , 422);
-            }
+            // if ( ( isset( $request->items ) ? count($request->items) : 0 ) + $cartMetaCount > $bundleRules['quantity'] ) {
+            //     return response()->json( [
+            //         'message' => 'Product exceeeds bundle quantity',
+            //         'message_key' => 'product_exceeds_bundle_quantity',
+            //         'errors' => [
+            //             'user_bundle' => 'Product exceeeds bundle quantity',
+            //         ]
+            //     ] , 422);
+            // }
             
-            if ( ( isset( $request->items ) ? count($request->items) : 0 ) > $bundleRules['quantity'] ) {
-                return response()->json( [
-                    'message' => 'Product exceeeds bundle quantity',
-                    'message_key' => 'product_exceeds_bundle_quantity',
-                    'errors' => [
-                        'user_bundle' => 'Product exceeeds bundle quantity',
-                    ]
-                ] , 422);
+            if( !$request->cart_item ){
+                foreach ($bundleMetaRules as $rule) {
+                    $items = collect( $request->items );
+    
+                    $cartMetaCount = Cart::find($request->id)->cartMetas->where( 'product_id', $rule['product']['id'] );
+    
+                    $selectedQuantity = $items->where('product', $rule['product']['id'])->count() + $cartMetaCount;
+    
+                    if ( $selectedQuantity > $rule['quantity']) {
+                        return response()->json([
+                            'message' => "Quantity for {$rule['product']['title']} exceeds the limit.",
+                            'errors' => ['products' => "Selected: $selectedQuantity, Allowed: {$rule['quantity']}"]
+                        ], 422);
+                    }
+                }
             }
 
             foreach ($request->items as $item) {
-                if ($item['product'] !== $bundleRules['product']->id) {
+                if ( !collect($bundleMetaRules)->firstWhere('product.id', $item['product']) ) {
                     $isValid = false;
                     $error = 1;
                     break;
@@ -1864,8 +1914,20 @@ class CartService {
                     $userBundle->cups_left -= count( $updateCart->cartMetas );
                     $userBundle->save();
                 }
+                
+                $bundleMetas = $userBundle->productBundle->productBundleMetas;
+
+                $bundleCupLeft = [];
+                $cartMetas = $updateCart->cartMetas;
+                foreach($bundleMetas as $key => $bundleMeta){
+                    $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $cartMetas->where('product_id',$bundleMeta->product_id)->count();
+                }
+
+                $userBundle->cups_left_metas =json_encode( $bundleCupLeft );
+                $userBundle->save();
+
             }
-    
+
             $updateCart->total_price = Helper::numberFormatV2($orderPrice,2);
             $taxSettings = Option::getTaxesSettings();
             $updateCart->tax = $taxSettings ? (Helper::numberFormatV2(($taxSettings->option_value/100),2) * Helper::numberFormatV2($updateCart->total_price,2)) : 0;
@@ -2454,7 +2516,7 @@ class CartService {
     public static function calculateBundleCharges( $cartMetas ){
         
         $totalCartDeduction = 0;
-        
+
         foreach( $cartMetas as $cartMeta ){
             $cartMeta->total_price = 0;
 
@@ -2511,6 +2573,7 @@ class CartService {
             }
 
             $cartMeta->save();
+
         }
         return $totalCartDeduction;
     }

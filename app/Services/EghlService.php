@@ -262,7 +262,6 @@ class EghlService {
                         'user_bundle'
                     );
 
-
                 }else {
                     UserService::createUserNotification(
                         $userBundle->user->id,
@@ -307,13 +306,22 @@ class EghlService {
                     );
                     
                     if( $order->product_bundle_id ){
-                                
+
+                        $bundleMetas = $bundle->productBundleMetas;
+
+                        $bundleCupLeft = [];
+                        $orderMetas = $order->orderMetas;
+                        foreach($bundleMetas as $key => $bundleMeta){
+                            $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $orderMetas->where('product_id',$bundleMeta->product_id)->count();
+                        }
+
                         $userBundle = UserBundle::create([
                             'user_id' => $order->user->id,
                             'product_bundle_id' => $bundle->id,
                             'status' => 10,
                             'total_cups' => $bundle->productBundleMetas->first()->quantity,
                             'cups_left' => $bundle->productBundleMetas->first()->quantity - count( $order->orderMetas ),
+                            'cups_left_metas' => json_encode( $bundleCupLeft ),
                             'last_used' => Carbon::now(),
                             'payment_attempt' => 1,
                             'payment_url' => 'null',
