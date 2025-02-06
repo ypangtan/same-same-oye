@@ -588,6 +588,12 @@ class ProductBundleService
                 return $productbundle;
             });
         }
+
+        foreach ($productbundles as $productbundle) {
+            $productbundle->makeHidden('productBundleMetas');
+            $productbundle->productBundle->makeHidden('productBundleMetas');
+        }
+
         return response()->json( [
             'message' => '',
             'message_key' => $request->user_bundle ? 'get_user_bundle_success' : 'get_product_bundle_success',

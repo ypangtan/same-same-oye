@@ -67,7 +67,7 @@ class ProductBundle extends Model
             return $metas->map(function ($meta) {
                 $meta->product->append(['image_path']);
                 return [
-                    'product' => $meta->product->title,
+                    'product' => $meta->product,
                     'quantity' => $meta->quantity,
                 ];
             })->values(); // Reset keys for a clean array
