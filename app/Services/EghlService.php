@@ -383,6 +383,16 @@ class EghlService {
                     if( $order->userBundle ){
                         $userBundle = $order->userBundle;
                         $userBundle->cups_left += count( $order->orderMetas );
+
+                        $bundleMetas = $order->userBundle->productBundle->productBundleMetas;
+
+                        $bundleCupLeft = [];
+                        $orderMetas = $order->orderMetas;
+                        foreach($bundleMetas as $key => $bundleMeta){
+                            $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $orderMetas->where('product_id',$bundleMeta->product_id)->count();
+                        }
+                        $userBundle->cups_left_metas = json_encode( $bundleCupLeft );
+
                         $userBundle->save();
                     }
 
