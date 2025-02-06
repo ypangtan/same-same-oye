@@ -591,7 +591,9 @@ class ProductBundleService
 
         foreach ($productbundles as $productbundle) {
             $productbundle->makeHidden('productBundleMetas');
-            $productbundle->productBundle->makeHidden('productBundleMetas');
+            if($productbundle->productBundle){
+                $productbundle->productBundle->makeHidden('productBundleMetas');
+            }
         }
 
         return response()->json( [
