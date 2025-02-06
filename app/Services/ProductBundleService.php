@@ -650,12 +650,18 @@ class ProductBundleService
             $userWallet = $user->wallets->where( 'type', 1 )->first();
             $bundle = ProductBundle::find( $request->bundle_id );
 
+            $bundleCupLeft = [];
+            foreach($bundleMetas as $key => $bundleMeta){
+                $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity;
+            }
+
             $userBundle = UserBundle::create([
                 'user_id' => $user->id,
                 'product_bundle_id' => $bundle->id,
                 'status' => $request->payment_method == 1 ? 10 : 20,
                 'total_cups' => $bundle->productBundleMetas->sum('quantity'),
                 'cups_left' => $bundle->productBundleMetas->sum('quantity'),
+                'cups_left_metas' => json_encode( $bundleCupLeft ),
                 'last_used' => null,
                 'payment_attempt' => 1,
                 'payment_url' => 'null',
