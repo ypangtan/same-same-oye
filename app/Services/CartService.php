@@ -2040,6 +2040,14 @@ class CartService {
             if( $updateCart->userBundle ){
                 $userBundle = $updateCart->userBundle;
                 $userBundle->cups_left += count($updateCart->cartMetas);
+
+                $bundleCupLeft = [];
+                $bundleMetas = $userBundle->productBundle->productBundleMetas;
+
+                foreach($bundleMetas as $key => $bundleMeta){
+                    $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $updateCart->cartMetas->where('product_id',$bundleMeta->product_id)->count();
+                }
+                
                 $userBundle->save();
             }
 
