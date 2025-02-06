@@ -38,22 +38,26 @@ class ProductBundle extends Model
         return $this->attributes['image'] ? asset( 'storage/' . $this->attributes['image'] ) : asset( 'admin/images/placeholder.png' ) . Helper::assetVersion();
     }
     
-    // public function getBundleRulesAttribute()
-    // {
-    //     $meta = $this->productBundleMetas->first(function ($meta) {
-    //         return isset($meta->quantity, $meta->product);
-    //     });
+    public function getBundleMetaRulesAttribute()
+    {
+        // Filter to include only metas that have both 'quantity' and 'product'
+        $metas = $this->productBundleMetas->filter(function ($meta) {
+            return isset($meta->quantity, $meta->product);
+        });
     
-    //     if ($meta) {
-    //         $meta->product->append(['image_path']);
-    //         return [
-    //             'product' => $meta->product,
-    //             'quantity' => $meta->quantity,
-    //         ];
-    //     }
+        // If there are matching metas, append 'image_path' and return formatted data
+        if ($metas->isNotEmpty()) {
+            return $metas->map(function ($meta) {
+                $meta->product->append(['image_path']);
+                return [
+                    'product' => $meta->product,
+                    'quantity' => $meta->quantity,
+                ];
+            })->values(); // Reset keys for a clean array
+        }
     
-    //     return null;
-    // }
+        return null; // Return null if no valid metas are found
+    }
 
     public function getBundleRulesAttribute()
     {
