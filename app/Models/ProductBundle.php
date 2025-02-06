@@ -38,24 +38,24 @@ class ProductBundle extends Model
         return $this->attributes['image'] ? asset( 'storage/' . $this->attributes['image'] ) : asset( 'admin/images/placeholder.png' ) . Helper::assetVersion();
     }
     
-    public function getBundleRulesAttribute()
-    {
-        $meta = $this->productBundleMetas->first(function ($meta) {
-            return isset($meta->quantity, $meta->product);
-        });
+    // public function getBundleRulesAttribute()
+    // {
+    //     $meta = $this->productBundleMetas->first(function ($meta) {
+    //         return isset($meta->quantity, $meta->product);
+    //     });
     
-        if ($meta) {
-            $meta->product->append(['image_path']);
-            return [
-                'product' => $meta->product,
-                'quantity' => $meta->quantity,
-            ];
-        }
+    //     if ($meta) {
+    //         $meta->product->append(['image_path']);
+    //         return [
+    //             'product' => $meta->product,
+    //             'quantity' => $meta->quantity,
+    //         ];
+    //     }
     
-        return null;
-    }
+    //     return null;
+    // }
 
-    public function getBundleMetaRulesAttribute()
+    public function getBundleRulesAttribute()
     {
         // Filter to include only metas that have both 'quantity' and 'product'
         $metas = $this->productBundleMetas->filter(function ($meta) {
@@ -67,7 +67,7 @@ class ProductBundle extends Model
             return $metas->map(function ($meta) {
                 $meta->product->append(['image_path']);
                 return [
-                    'product' => $meta->product,
+                    'product' => $meta->product->title,
                     'quantity' => $meta->quantity,
                 ];
             })->values(); // Reset keys for a clean array

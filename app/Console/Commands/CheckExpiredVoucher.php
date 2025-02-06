@@ -33,7 +33,7 @@ class CheckExpiredVoucher extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Check voucher expired';
 
     /**
      * Create a new command instance.
