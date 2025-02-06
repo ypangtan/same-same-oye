@@ -4,6 +4,20 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use Illuminate\Support\Facades\{
+    DB,
+};
+
+use App\Services\{
+    VoucherService,
+};
+
+use App\Models\{
+    Voucher,
+};
+
+use Carbon\Carbon;
+
 class CheckExpiredVoucher extends Command
 {
     /**
@@ -11,7 +25,8 @@ class CheckExpiredVoucher extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'check:expired-voucher
+    {--dryrun : Whether the calculated result should store}';
 
     /**
      * The console command description.
@@ -37,6 +52,25 @@ class CheckExpiredVoucher extends Command
      */
     public function handle()
     {
+        $isDryRun = $this->option('dryrun');
+        
+        $vouchers = Voucher::where('status', 10)->get();
+
+        foreach ( $vouchers as $voucher ) {
+
+            DB::beginTransaction();
+
+            if (Carbon::parse( $voucher->created_at)->lessThan(Carbon::now()->subMinutes(10))) {
+                $voucher->status = 21;
+                $voucher->save();
+            }            
+
+            if ( !$isDryRun ) {
+                DB::commit();
+            }
+                   
+        }
+
         return 0;
     }
 }

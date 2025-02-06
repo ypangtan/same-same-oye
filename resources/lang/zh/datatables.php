@@ -43,6 +43,7 @@ return [
     'activated' => '已启用',
     'suspend' => '停用',
     'suspended' => '已停用',
+    'expired' => 'Expired',
 
     'sub_total' => '小计',
     'grand_total' => '累计',

@@ -30,6 +30,7 @@ class VoucherController extends Controller
         $this->data['data']['status'] = [
             '10' => __( 'datatables.activated' ),
             '20' => __( 'datatables.suspended' ),
+            '21' => __( 'datatables.expired' ),
         ];
 
         $this->data['data']['voucher_type'] = [

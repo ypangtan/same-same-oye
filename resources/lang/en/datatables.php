@@ -47,6 +47,7 @@ return [
     'activated' => 'Activated',
     'suspend' => 'Suspend',
     'suspended' => 'Suspended',
+    'expired' => 'Expired',
     'to_x' => 'To :title',
     'to_sales_order' => 'To: Sales Order',
     'to_invoice' => 'To: Invoice',
