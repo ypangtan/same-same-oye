@@ -304,7 +304,7 @@ class CartService {
                 $validator = Validator::make([], []); // Initialize an empty validator
 
                 foreach ($request->items as $index => $item) {
-                    $product = $bundleRules['product']; // Access the product object from bundle rules
+                    $product = Product::find( $item['product'] );// Access the product object from bundle rules
                 
                     // Check froyo quantity
                     if (isset($item['froyo']) && count($item['froyo']) > $product->default_froyo_quantity) {
@@ -469,8 +469,8 @@ class CartService {
                 $validator = Validator::make([], []); // Initialize an empty validator
 
                 foreach ($request->items as $index => $item) {
-                    $product = $bundleRules['product']; // Access the product object from bundle rules
-                
+                    $product = Product::find( $item['product'] );// Access the product object from bundle rules
+
                     // Check froyo quantity
                     if (isset($item['froyo']) && count($item['froyo']) > $product->default_froyo_quantity) {
                         $validator->errors()->add(
@@ -769,11 +769,13 @@ class CartService {
                 $bundleMetas = $userBundle->productBundle->productBundleMetas;
 
                 $bundleCupLeft = [];
-                $cartMetas = $cart->cartMetas;
+                $bundleCarts = Cart::where( 'user_bundle_id', $userBundle->id )->pluck('id');
+                $cartMetas = CartMeta::whereIn( 'cart_id', $bundleCarts )->get();
+
                 foreach($bundleMetas as $key => $bundleMeta){
                     $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $cartMetas->where('product_id',$bundleMeta->product_id)->count();
                 }
-
+                
                 $userBundle->cups_left_metas =json_encode( $bundleCupLeft );
                 
                 $userBundle->save();
@@ -1130,7 +1132,7 @@ class CartService {
                 $validator = Validator::make([], []); // Initialize an empty validator
 
                 foreach ($request->items as $index => $item) {
-                    $product = $bundleRules['product']; // Access the product object from bundle rules
+                    $product = Product::find( $item['product'] );// Access the product object from bundle rules
                 
                     // Check froyo quantity
                     if (isset($item['froyo']) && count($item['froyo']) > $product->default_froyo_quantity) {
@@ -1249,15 +1251,33 @@ class CartService {
             if( !$request->cart_item ){
                 foreach ($bundleMetaRules as $rule) {
                     $items = collect( $request->items );
-    
-                    $cartMetaCount = Cart::find($request->id)->cartMetas->where( 'product_id', $rule['product']['id'] );
-    
+                    
+                    $bundleCarts = Cart::where( 'user_bundle_id', $request->user_bundle )->pluck('id');
+                    $cartMetaCount = CartMeta::whereIn( 'cart_id', $bundleCarts )->where( 'product_id', $rule['product']['id'] )->count();
+
                     $selectedQuantity = $items->where('product', $rule['product']['id'])->count() + $cartMetaCount;
-    
+
                     if ( $selectedQuantity > $rule['quantity']) {
                         return response()->json([
                             'message' => "Quantity for {$rule['product']['title']} exceeds the limit.",
                             'errors' => ['products' => "Selected: $selectedQuantity, Allowed: {$rule['quantity']}"]
+                        ], 422);
+                    }
+                }
+            }else{
+                // calculate cups left
+                foreach( $request->items as $item ){
+
+                    $rule = json_decode($userBundle->cups_left_metas,true);
+                    $previousMeta = CartMeta::find($request->cart_item);
+
+                    if ( $rule[$item['product']] == 0 && $item['product'] != $previousMeta->product_id ) {
+
+                        $productName = Product::find( $item['product'] )->title;
+                        
+                        return response()->json([
+                            'message' => "Quantity for {$productName} exceeds the limit.",
+                            'errors' => ['products' => "Selected: 1, Allowed: {$rule[$item['product']]}"]
                         ], 422);
                     }
                 }
@@ -1273,7 +1293,7 @@ class CartService {
                 $validator = Validator::make([], []); // Initialize an empty validator
 
                 foreach ($request->items as $index => $item) {
-                    $product = $bundleRules['product']; // Access the product object from bundle rules
+                    $product = Product::find( $item['product'] );// Access the product object from bundle rules
                 
                     // Check froyo quantity
                     if (isset($item['froyo']) && count($item['froyo']) > $product->default_froyo_quantity) {
@@ -1918,7 +1938,8 @@ class CartService {
                 $bundleMetas = $userBundle->productBundle->productBundleMetas;
 
                 $bundleCupLeft = [];
-                $cartMetas = $updateCart->cartMetas;
+                $bundleCarts = Cart::where( 'user_bundle_id', $userBundle->id )->pluck('id');
+                $cartMetas = CartMeta::whereIn( 'cart_id', $bundleCarts )->get();
                 foreach($bundleMetas as $key => $bundleMeta){
                     $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $cartMetas->where('product_id',$bundleMeta->product_id)->count();
                 }
