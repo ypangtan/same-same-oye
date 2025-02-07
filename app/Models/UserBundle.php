@@ -18,6 +18,10 @@ class UserBundle extends Model
 {
     use HasFactory, LogsActivity, HasTranslations;
 
+    protected $casts = [
+        'cups_left_metas' => 'array',
+    ];
+
     protected $fillable = [
         'user_id',
         'product_bundle_id',

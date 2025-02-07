@@ -544,7 +544,7 @@ class ProductBundleService
             $productbundles = $productbundles->get();
 
             $productbundles = $productbundles->map(function ($productbundle){
-                $productbundle->append( ['bundle_status_label','cups_left_metas_details'] );
+                $productbundle->append( ['bundle_status_label'] );
                 $productbundle->productBundle->append( ['image_path','bundle_rules'] );
                 $productbundle->bundle_rules = $productbundle->productBundle->bundle_rules;
                 $productbundle->cups_in_cart = $productbundle->activeCarts->sum(function ($cart) {
