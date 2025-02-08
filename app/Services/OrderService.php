@@ -1364,7 +1364,7 @@ class OrderService
                     $bundleCupLeft = [];
                     $orderMetas = $order->orderMetas;
                     foreach($bundleMetas as $key => $bundleMeta){
-                        $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity - $orderMetas->where('product_id',$bundleMeta->product_id)->count();
+                        $bundleCupLeft[intval($bundleMeta->product_id)] = $bundleMeta->quantity - $orderMetas->where('product_id',$bundleMeta->product_id)->count();
                     }
                             
                     $userBundle = UserBundle::create([

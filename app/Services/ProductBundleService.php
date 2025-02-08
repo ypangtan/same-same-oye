@@ -653,7 +653,7 @@ class ProductBundleService
 
             $bundleCupLeft = [];
             foreach($bundleMetas as $key => $bundleMeta){
-                $bundleCupLeft[$bundleMeta->product_id] = $bundleMeta->quantity;
+                $bundleCupLeft[intval($bundleMeta->product_id)] = $bundleMeta->quantity;
             }
 
             $userBundle = UserBundle::create([
