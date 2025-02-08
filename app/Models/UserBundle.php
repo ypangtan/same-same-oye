@@ -19,8 +19,15 @@ class UserBundle extends Model
     use HasFactory, LogsActivity, HasTranslations;
 
     protected $casts = [
-        'cups_left_metas' => 'array',
+        'cups_left_metas' => 'json', // Store as raw JSON in DB
     ];
+    
+    // Ensure it returns as an array when accessed
+    public function getCupsLeftMetasAttribute($value)
+    {
+        return json_decode($value, true); // Always return as an array
+    }
+    
 
     protected $fillable = [
         'user_id',
