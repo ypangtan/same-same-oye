@@ -18,15 +18,29 @@ class UserBundle extends Model
 {
     use HasFactory, LogsActivity, HasTranslations;
 
-    protected $casts = [
-        'cups_left_metas' => 'array', // Store as raw JSON in DB
-    ];
+    // protected $casts = [
+    //     'cups_left_metas' => 'array', // Store as raw JSON in DB
+    // ];
+
+    public static function trimSurroundingQuotes($string) {
+        if (is_string($string) && str_starts_with($string, '"') && str_ends_with($string, '"')) {
+            return trim($string, '"');
+        }
+        return $string;
+    }
     
     // Ensure it returns as an array when accessed
     public function getCupsLeftMetasAttribute($value)
     {
-        return json_decode($value, true); // Always return as an array
+        if (empty($value)) {
+            return []; // Ensure it always returns an array
+        }
+    
+        $trimmed = self::trimSurroundingQuotes($value);
+    
+        return json_decode($trimmed, true) ?? []; // Fallback to an empty array if decoding fails
     }
+    
     
 
     protected $fillable = [
