@@ -415,7 +415,7 @@ class CartService {
 
             // check for specific product cups left
             if($userBundle->cups_left_metas){
-                $cupLeftMetas = json_decode($userBundle->cups_left_metas,true);
+                $cupLeftMetas = $userBundle->cups_left_metas;
 
                 foreach ($cupLeftMetas as $product => $quantity) {
                     $items = collect( $request->items );
@@ -1268,7 +1268,7 @@ class CartService {
                 // calculate cups left
                 foreach( $request->items as $item ){
 
-                    $rule = json_decode($userBundle->cups_left_metas,true);
+                    $rule = $userBundle->cups_left_metas;
                     $previousMeta = CartMeta::find($request->cart_item);
 
                     if ( $rule[$item['product']] == 0 && $item['product'] != $previousMeta->product_id ) {
