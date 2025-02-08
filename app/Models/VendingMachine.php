@@ -36,6 +36,7 @@ class VendingMachine extends Model
         'closing_hour',
         'navigation_links',
         'status',
+        'api_key',
     ];
 
     public function outlet()
@@ -136,6 +137,7 @@ class VendingMachine extends Model
         'closing_hour',
         'navigation_links',
         'status',
+        'api_key',
     ];
 
     protected static $logName = 'vending_machines';

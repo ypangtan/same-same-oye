@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'checkAdminIsMFA' => \App\Http\Middleware\CheckAdminIsMFA::class,
         'api_version' => \App\Http\Middleware\APIVersion::class,
         'checkMFA' => \App\Http\Middleware\CheckMFA::class,
+        'vending.auth' => \App\Http\Middleware\VerifyVendingMachineKey::class,
     ];
 }

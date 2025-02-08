@@ -649,6 +649,7 @@ class ProductBundleService
             $user = auth()->user();
             $userWallet = $user->wallets->where( 'type', 1 )->first();
             $bundle = ProductBundle::find( $request->bundle_id );
+            $bundleMetas = $bundle->productBundleMetas;
 
             $bundleCupLeft = [];
             foreach($bundleMetas as $key => $bundleMeta){

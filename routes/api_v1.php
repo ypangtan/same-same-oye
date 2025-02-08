@@ -128,3 +128,28 @@ Route::middleware( 'auth:user' )->group( function() {
     } );
     
 });
+
+// Start Vending Machine Route
+Route::middleware( 'vending.auth' )->group( function() {
+
+    Route::prefix( 'vending-machine-operation' )->group( function() {
+        Route::post( 'update-status', [ VendingMachineController::class, 'updateVendingMachineStatus' ] );
+        Route::post( 'update-stock', [ VendingMachineController::class, 'updateVendingMachineStock' ] );
+    } );
+
+    Route::prefix( 'order-operation' )->group( function() {
+        Route::post( 'update-order-status', [ OrderController::class, 'updateOrderStatus' ] );
+        Route::post( 'update-sales-data', [ OrderController::class, 'updateSalesData' ] );
+    } );
+
+    Route::prefix( 'menus-operation' )->group( function() {
+        Route::get( '/', [ MenuController::class, 'getMenus' ] );
+        Route::get( 'get-selections', [ MenuController::class, 'getSelections' ] );
+        Route::get( 'get-froyos', [ MenuController::class, 'getFroyos' ] );
+        Route::get( 'get-syrups', [ MenuController::class, 'getSyrups' ] );
+        Route::get( 'get-toppings', [ MenuController::class, 'getToppings' ] );
+    } );
+
+});
+
+

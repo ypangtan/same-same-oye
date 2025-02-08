@@ -48,4 +48,8 @@ return [
     'opening_hour' => 'Opening Hour',
     'closing_hour' => 'Closing Hour',
     'navigation_links' => 'Navigation Link',
+
+    'online' => 'Online',
+    'offline' => 'Offline',
+    'maintenance_required' => 'Maintenance Required',
 ];

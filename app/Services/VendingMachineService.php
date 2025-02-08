@@ -77,6 +77,7 @@ class VendingMachineService
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
                 'navigation_links' => $request->navigation_links,
+                'api_key' => \Str::random( 16 ),
                 'closing_hour' => now()->format('Y-m-d') . ' ' . $request->closing_hour,
                 'opening_hour' => now()->format('Y-m-d') . ' ' . $request->opening_hour,
             ]);
