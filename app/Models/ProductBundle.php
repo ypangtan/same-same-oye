@@ -79,6 +79,23 @@ class ProductBundle extends Model
     
         return null; // Return null if no valid metas are found
     }
+
+    // public function getBundleRulesAttribute()
+    // {
+    //     $meta = $this->productBundleMetas->first(function ($meta) {
+    //         return isset($meta->quantity, $meta->product);
+    //     });
+    
+    //     if ($meta) {
+    //         $meta->product->append(['image_path']);
+    //         return [
+    //             'product' => $meta->product,
+    //             'quantity' => $meta->quantity,
+    //         ];
+    //     }
+    
+    //     return null;
+    // }
     
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );

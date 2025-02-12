@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use App\Model\VendingMachine;
+use App\Models\VendingMachine;
 
 class VerifyVendingMachineKey
 {
@@ -21,7 +21,7 @@ class VerifyVendingMachineKey
     {
         $apiKey = $request->header('X-Vending-Machine-Key');
 
-        if (!$apiKey || !VendingMachine::where('secret_key', $apiKey)->exists()) {
+        if (!$apiKey || !VendingMachine::where('api_key', $apiKey)->exists()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
     

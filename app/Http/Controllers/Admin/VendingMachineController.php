@@ -30,6 +30,7 @@ class VendingMachineController extends Controller
         $this->data['data']['status'] = [
             '10' => __( 'datatables.activated' ),
             '20' => __( 'datatables.suspended' ),
+            '21' => __( 'vending_machine.maintenance_required' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );

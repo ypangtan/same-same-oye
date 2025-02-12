@@ -31,9 +31,13 @@ use App\Models\{
     UserBundleHistory,
     UserBundleHistoryMeta,
     UserBundleTransaction,
+    VendingMachine,
+    VendingMachineStock,
+    MachineSalesData,
 };
 
 use Helper;
+use Illuminate\Validation\Rule;
 
 use Carbon\Carbon;
 
@@ -1844,4 +1848,176 @@ class OrderService
             'order_metas' => $orderMetas
         ] );
     }
+
+    public static function updateOrderStatusOperation( $request ) {
+
+        $validator = Validator::make($request->all(), [
+            'reference' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $order = Order::where('reference', $value)->first();
+        
+                    if (!$order) {
+                        return $fail('The selected reference does not exist.');
+                    }
+        
+                    if ($order->status == 1) {
+                        return $fail('Unpaid order detected. Please complete payment.');
+                    }
+        
+                    if (in_array($order->status, [10, 20])) {
+                        return $fail('Order Completed.');
+                    }
+                },
+            ],
+        ]);
+        
+
+        $validator->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            $updateOrder = Order::with( [
+                'orderMetas','vendingMachine','user'
+            ] )->where( 'reference', $request->reference )
+            ->whereNotIn('status', [10, 20])->first();
+
+            if( $updateOrder ){
+                if( $updateOrder->status == 1 ){
+                    return response()->json( [
+                        'message' => 'Unpaid Order',
+                        'message_key' => 'scan order failed',
+                    ], 500 );
+                }
+                $updateOrder->status = 10;
+                $updateOrder->save();
+                DB::commit();
+                return response()->json( [
+                    
+                    'errors' => [
+                        'message' => 'Order Pickep Up',
+                        'message_key' => 'scan order success',
+                    ]
+                ] );
+            }
+
+            $updateOrder = $updateOrder->paginate(10);
+    
+            // Modify each order and its related data
+            $updateOrder->getCollection()->transform(function ($order) {
+                $order->vendingMachine->makeHidden(['created_at', 'updated_at', 'status'])
+                    ->setAttribute('operational_hour', $order->vendingMachine->operational_hour)
+                    ->setAttribute('image_path', $order->vendingMachine->image_path);
+        
+                $orderMetas = $order->orderMetas->map(function ($meta) {
+                    return [
+                        'id' => $meta->id,
+                        'subtotal' => $meta->total_price,
+                        'product' => $meta->product?->makeHidden(['created_at', 'updated_at', 'status'])
+                            ->setAttribute('image_path', $meta->product->image_path),
+                        'froyo' => $meta->froyos_metas,
+                        'syrup' => $meta->syrups_metas,
+                        'topping' => $meta->toppings_metas,
+                    ];
+                });
+        
+                $order->orderMetas = $orderMetas;
+
+                return $order;
+            });
+        
+            // Return the paginated response
+            return response()->json([
+                'message' => '',
+                'message_key' => 'get_order_success',
+                'orders' => $updateOrder,
+            ]);
+
+        } catch ( \Throwable $th ) {
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+                'message_key' => 'create_froyo_failed',
+            ], 500 );
+        }
+    }
+
+    public static function updateSalesData($request)
+    {
+        // Validate request data
+        $validator = Validator::make($request->all(), [
+            'sales_date' => ['required', 'date_format:Y-m-d'],
+            'sales_type' => ['nullable', 'integer'],
+            'sales_metas' => ['nullable', 'array'],
+            'order_references' => ['nullable', 'array'], // Validate order references
+            'order_references.*' => ['string', 'exists:orders,reference'], // Ensure references exist in orders table
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $vendingMachine = VendingMachine::where('api_key', $request->header('X-Vending-Machine-Key'))->first();
+
+            $totalSales = 0;
+            $totalRevenue = 0;
+            $voucherMetas = [];
+            $bundleMetas = [];
+
+            foreach( $request->order_references as $orderReference ){
+                $order = Order::where( 'reference', $orderReference )
+                ->where('status', 10)->first();
+
+                if( $order ){
+                    $totalSales += $order->subtotal;
+                    $totalRevenue += $order->total_price;
+
+                    if( $order->user_bundle_id ){
+                        array_push( $bundleMetas, $order->userBundle->productBundle->code );
+                    }
+
+                    if( $order->voucher_id ){
+                        array_push( $voucherMetas, $order->voucher->code );
+                    }
+                }
+
+            }
+
+            $machineSales = MachineSalesData::create([
+                'vending_machine_id' => $vendingMachine->vending_machine_id,
+                'sales_date' => $request->sales_date,
+                'sales_type' => $request->sales_type ?? 1, // Default to 1
+                'sales_metas' => json_encode($request->sales_metas ?? []),
+                'orders_metas' => json_encode($request->order_references ?? []), // Store order references
+                'total_sales' => $totalSales,
+                'total_revenue' => $totalRevenue,
+                'bundle_metas' => json_encode($bundleMetas),
+                'voucher_metas' => json_encode($voucherMetas),
+                'status' => 10, // Default status
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'data' => [
+                    'machine_sales' => $machineSales,
+                    'message_key' => 'store_machine_sales_success',
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+
+            return response()->json([
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+                'message_key' => 'store_machine_sales_failed',
+            ], 500);
+        }
+    }
+
 }

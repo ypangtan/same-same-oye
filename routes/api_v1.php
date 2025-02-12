@@ -133,7 +133,9 @@ Route::middleware( 'auth:user' )->group( function() {
 Route::middleware( 'vending.auth' )->group( function() {
 
     Route::prefix( 'vending-machine-operation' )->group( function() {
+        Route::any( 'get-status', [ VendingMachineController::class, 'getVendingMachineStatus' ] );
         Route::post( 'update-status', [ VendingMachineController::class, 'updateVendingMachineStatus' ] );
+        Route::post( 'deduct-stock', [ VendingMachineController::class, 'deductVendingMachineStock' ] );
         Route::post( 'update-stock', [ VendingMachineController::class, 'updateVendingMachineStock' ] );
     } );
 

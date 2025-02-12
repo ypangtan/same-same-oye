@@ -27,6 +27,19 @@ class VendingMachineController extends Controller
     }
 
     /**
+     * 1. Get vending machines status
+     * 
+     * @group Vending Machine Operation API
+     * 
+     * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
+     * 
+     */   
+    public function getVendingMachineStatus( Request $request ) {
+
+        return VendingMachineService::getVendingMachineStatus( $request );
+    }
+
+    /**
      * 2. update machines status
      * 
      * <strong>status</strong><br>
@@ -35,9 +48,7 @@ class VendingMachineController extends Controller
      * 21: Maintenance Required<br>
      * 
      * 
-     * @group Vending Machine API
-     * 
-     * @authenticated
+     * @group Vending Machine Operation API
      * 
      * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
      * 
@@ -50,31 +61,50 @@ class VendingMachineController extends Controller
     }
 
     /**
-     * 3. update machines stock
-     * 
-     * <strong>status</strong><br>
-     * 10: Online<br>
-     * 20: Offline<br>
-     * 21: Maintenance Required<br>
+     * 3. deduct machines stock
      * 
      * 
-     * @group Vending Machine API
+     * @group Vending Machine Operation API
      * 
-     * @authenticated
      * 
      * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
      * 
-     * @bodyParam items array required The list of products with their ingredients. Example: [{"productId": 1, "froyo": [1, 2], "syrup": [3], "topping": [4, 5]}]
-     * @bodyParam items.*.froyo array An array of froyo IDs. Pass an empty array if no froyo is selected. Example: [1, 2]
-     * @bodyParam items.*.froyo.* integer A froyo ID. Example: 1
-     * @bodyParam items.*.syrup array An array of syrup IDs. Pass an empty array if no syrup is selected. Example: [3]
-     * @bodyParam items.*.syrup.* integer A syrup ID. Example: 3
-     * @bodyParam items.*.topping array An array of topping IDs. Pass an empty array if no topping is selected. Example: [4, 5]
-     * @bodyParam items.*.topping.* integer A topping ID. Example: 4
+     * @bodyParam froyos array required An array of objects representing froyo stock changes. Example: [{"1": -1}]
+     * @bodyParam froyos.* object required A key-value pair where the key is the froyo ID, and the value is the quantity change. Example: {"1": -1}
+     * @bodyParam syrups array required An array of objects representing syrup stock changes. Example: [{"1": -1}]
+     * @bodyParam syrups.* object required A key-value pair where the key is the syrup ID, and the value is the quantity change. Example: {"1": -1}
+     * @bodyParam toppings array required An array of objects representing topping stock changes. Example: [{"1": -1}]
+     * @bodyParam toppings.* object required A key-value pair where the key is the topping ID, and the value is the quantity change. Example: {"1": -1}
+     * 
+     */   
+    public function deductVendingMachineStock( Request $request ) {
+        $request->merge( [
+            'update_method' => 2,
+        ] );
+        return VendingMachineService::updateVendingMachineStock( $request );
+    }
+
+    /**
+     * 4. update machines stock
+     * 
+     * 
+     * @group Vending Machine Operation API
+     * 
+     * 
+     * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
+     * 
+     * @bodyParam froyos array required An array of objects representing froyo stock changes. Example: [{"1": 100}]
+     * @bodyParam froyos.* object required A key-value pair where the key is the froyo ID, and the value is the quantity change. Example: {"1": 100}
+     * @bodyParam syrups array required An array of objects representing syrup stock changes. Example: [{"1": 98}]
+     * @bodyParam syrups.* object required A key-value pair where the key is the syrup ID, and the value is the quantity change. Example: {"1": 98}
+     * @bodyParam toppings array required An array of objects representing topping stock changes. Example: [{"1": 50}]
+     * @bodyParam toppings.* object required A key-value pair where the key is the topping ID, and the value is the quantity change. Example: {"1": 50}
      * 
      */   
     public function updateVendingMachineStock( Request $request ) {
-
-        return VendingMachineService::updateVendingMachineStatus( $request );
+        $request->merge( [
+            'update_method' => 2,
+        ] );
+        return VendingMachineService::updateVendingMachineStock( $request );
     }
 }

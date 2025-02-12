@@ -75,5 +75,44 @@ class OrderController extends Controller
 
         return OrderService::retryPayment( $request );
     }
+
+    /**
+     * 1. Update order status (Scan Order)
+     * 
+     * 
+     * @group Order Operation API
+     * 
+     * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
+     * 
+     * @bodyParam reference string Order reference to be updated. Example: 1knkbasbmc
+     * 
+     */   
+    public function updateOrderStatus( Request $request ) {
+
+        return OrderService::updateOrderStatusOperation( $request );
+    }
+
+    /**
+     * 2. Update machine sales
+     * 
+     * <strong>sales_type</strong><br>
+     * 1: daily <br>
+     * 2: weekly <br>
+     * 3: monthly <br>
+     * 
+     * @group Order Operation API
+     * 
+     * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
+     * 
+     * @bodyParam sales_date string required The date of sales in YYYY-MM-DD format. Example: "2025-02-12"
+     * @bodyParam sales_type integer The type of sales (e.g., 1 for daily, 2 for weekly, 3 for monthly). Default: 1 Example: 2
+     * @bodyParam sales_metas array Additional sales metadata (e.g., products sold). Example: [{"product_id": 1, "quantity": 3}]
+     * @bodyParam order_references array A list of related order references. Example: ["ORD-12345", "ORD-67890"]
+     * 
+     */   
+    public function updateSalesData( Request $request ) {
+
+        return OrderService::updateSalesData( $request );
+    }
     
 }

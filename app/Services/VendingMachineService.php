@@ -14,8 +14,10 @@ use Helper;
 use App\Models\{
     VendingMachine,
     FileManager,
+    VendingMachineStock
 };
 
+use Illuminate\Validation\Rule;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -391,18 +393,31 @@ class VendingMachineService
 
     public static function updateVendingMachineStatus( $request ) {
         
-        $request->merge( [
-            'id' => Helper::decode( $request->id ),
-        ] );
+        if( $request->id ){
+            $request->merge( [
+                'id' => Helper::decode( $request->id ),
+            ] );
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => [ 'nullable', 'in:10,20,21'  ],
+        ]);
+
+        $validator->validate();
 
         DB::beginTransaction();
 
         try {
 
-            $updateVendingMachine = VendingMachine::find( $request->id );
+            $updateVendingMachine = $request->id ? VendingMachine::find( $request->id ) : VendingMachine::where('api_key', $request->header('X-Vending-Machine-Key'))->first();
+            
             $updateVendingMachine->status = $updateVendingMachine->status == 10 ? 20 : 10;
+            if( $request->status ){
+                $updateVendingMachine->status = $request->status;
+            }
 
             $updateVendingMachine->save();
+            $updateVendingMachine->append(['status_label']);
             DB::commit();
 
             return response()->json( [
@@ -416,7 +431,43 @@ class VendingMachineService
 
             return response()->json( [
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-                'message_key' => 'create_vending_machine_failed',
+                'message_key' => 'update_vending_machine_failed',
+            ], 500 );
+        }
+    }
+
+    public static function getVendingMachineStatus( $request ) {
+        
+        if( $request->id ){
+            $request->merge( [
+                'id' => Helper::decode( $request->id ),
+            ] );
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => [ 'nullable', 'in:10,20,21'  ],
+        ]);
+
+        $validator->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            $vendingMachine = $request->id ? VendingMachine::with( ['stocks.froyo','stocks.syrup','stocks.topping'] )->find( $request->id ) : VendingMachine::with( ['stocks.froyo','stocks.syrup','stocks.topping'] )->where('api_key', $request->header('X-Vending-Machine-Key'))->first();
+
+            return response()->json( [
+                'data' => [
+                    'vending_machine' => $vendingMachine,
+                    'message_key' => 'get_vending_machine_success',
+                ]
+            ] );
+
+        } catch ( \Throwable $th ) {
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+                'message_key' => 'get_vending_machine_failed',
             ], 500 );
         }
     }
@@ -470,6 +521,7 @@ class VendingMachineService
                 'created_at',
                 'updated_at',
                 'outlet_id',
+                'api_key',
             ]);
 
             $vendingMachines->append( [
@@ -487,4 +539,72 @@ class VendingMachineService
         ]);
 
     }
+
+    public static function updateVendingMachineStock($request)
+    {
+        DB::beginTransaction();
+
+        $vendingMachine = VendingMachine::where('api_key', $request->header('X-Vending-Machine-Key'))->first();
+
+        $stockData = $request->all();
+        $updateMethod = $request->update_method;
+    
+        try {
+            // Iterate over each stock type
+            foreach (['froyos', 'syrups', 'toppings'] as $stockType) {
+
+                if (!empty($stockData[$stockType])) {
+                    self::processStockUpdates($vendingMachine->id, $stockData[$stockType], $stockType, $updateMethod);
+                }
+            }
+    
+            DB::commit();
+    
+            return response()->json([
+                'message' => __('template.x_updated', ['title' => Str::singular(__('template.vending_machine_stocks'))]),
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+    
+            return response()->json([
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500);
+        }
+    }
+    
+    private static function processStockUpdates($vendingMachineId, array $stocks, $stockType, $updateMethod)
+    {
+        $columnMap = [
+            'froyos' => 'froyo_id',
+            'syrups' => 'syrup_id',
+            'toppings' => 'topping_id'
+        ];
+    
+        $column = $columnMap[$stockType] ?? null;
+        if (!$column) {
+            throw new \Exception("Invalid stock type: $stockType.");
+        }
+    
+        foreach ($stocks as $stockItem) {
+            foreach ($stockItem as $stockId => $change) {
+                $vendingMachineStock = VendingMachineStock::where('vending_machine_id', $vendingMachineId)
+                    ->where($column, $stockId)
+                    ->first();
+
+                if ($vendingMachineStock) {
+                    $newQuantity = $updateMethod == 1 ? $vendingMachineStock->quantity + $change : $change;
+    
+                    // Prevent negative stock values
+                    // if ($newQuantity < 0) {
+                    //     throw new \Exception("Stock quantity for $column: $stockId cannot be negative.");
+                    // }
+    
+                    $vendingMachineStock->old_quantity = $vendingMachineStock->quantity;
+                    $vendingMachineStock->quantity = $newQuantity;
+                    $vendingMachineStock->save();
+                } 
+            }
+        }
+    }
+    
 }

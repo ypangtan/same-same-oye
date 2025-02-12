@@ -114,6 +114,27 @@ class VendingMachine extends Model
         return $openingHour;
     }
 
+    public function getStatusLabelAttribute(){
+        $statusLabel =  '';
+
+        switch ($this->attributes['status']) {
+            case 10:
+                $statusLabel =  'Active';
+                break;
+            case 20:
+                $statusLabel =  'Offline';
+                break;
+            case 21:
+                $statusLabel =  'Maintenance Required';
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        return $statusLabel;
+    }
+
     public $translatable = [ 'name', 'description' ];
 
     protected function serializeDate( DateTimeInterface $date ) {

@@ -13,8 +13,21 @@ class CreateMachinesSalesDatasTable extends Migration
      */
     public function up()
     {
-        Schema::create('machines_sales_datas', function (Blueprint $table) {
+        Schema::create('machine_sales_datas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('vending_machine_id')->nullable()->constrained('vending_machines')->onUpdate( 'restrict')->onDelete('cascade');
+            $table->timestamp('sales_date')->nullable();
+            
+            // Sales data
+            $table->integer('sales_type')->default(1); 
+            $table->json('sales_metas')->nullable();
+            $table->json('orders_metas')->nullable();
+            $table->json('bundle_metas')->nullable();
+            $table->json('voucher_metas')->nullable();
+            $table->json('order_references')->nullable();
+            $table->integer('total_sales')->default(0);
+            $table->decimal('total_revenue', 10, 2)->default(0.00);
+            $table->tinyInteger('status')->default(10);
             $table->timestamps();
         });
     }
@@ -26,6 +39,6 @@ class CreateMachinesSalesDatasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('machines_sales_datas');
+        Schema::dropIfExists('machine_sales_datas');
     }
 }
