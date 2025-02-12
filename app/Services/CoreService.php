@@ -54,7 +54,7 @@ class CoreService {
             if ( $notification->meta_data ) {
 
                 $metaKeys = json_decode( $notification->meta_data, true );
-
+ 
                 foreach ( $metaKeys as $key => $metaKey ) {
                     $metaKeys[$key] = __( $metaKey );
                 }
@@ -68,7 +68,7 @@ class CoreService {
             
             $notification->icon = 'ni-clock';
             $notification->time_ago = Helper::getDisplayTimeUnit( $notification->created_at );
-            $notification->url = route( 'admin.module_parent.vehicle.index' );
+            $notification->url = route( 'admin.module_parent.vending_machine_stock.index' );
         }
 
         return response()->json( [

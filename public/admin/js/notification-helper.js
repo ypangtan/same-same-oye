@@ -1,6 +1,6 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 
-    // setInterval( getNotificationList, 5000 );
+    setInterval( getNotificationList, 5000 );
 
     $( '#readAllNotification' ).on( 'click', function() {
         seenNotification()
@@ -10,7 +10,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
         seenNotification( $( this ).data( 'id' ) );
     } );
 
-    // getNotificationList();
+    getNotificationList();
 
     function getNotificationList() {
         $.ajax( {

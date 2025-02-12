@@ -14,7 +14,13 @@ use Helper;
 use App\Models\{
     VendingMachine,
     FileManager,
-    VendingMachineStock
+    VendingMachineStock,
+    VendingMachineStockHistory,
+    AdministratorNotification,
+    AdministratorNotificationSeen,
+    Froyo,
+    Syrup,
+    Topping,
 };
 
 use Illuminate\Validation\Rule;
@@ -592,19 +598,126 @@ class VendingMachineService
                     ->first();
 
                 if ($vendingMachineStock) {
-                    $newQuantity = $updateMethod == 1 ? $vendingMachineStock->quantity + $change : $change;
-    
+                    $newQuantity = $updateMethod == 1 ? ($vendingMachineStock->quantity - $change ): $change;
                     // Prevent negative stock values
                     // if ($newQuantity < 0) {
                     //     throw new \Exception("Stock quantity for $column: $stockId cannot be negative.");
                     // }
     
+                    $vendingMachineStockHistory = VendingMachineStockHistory::create([
+                        'vending_machine_id' => $vendingMachineId,
+                        $column => $stockId,
+                        'quantity' => $change,
+                        'old_quantity' => $vendingMachineStock->old_quantity ,
+                        'status' => 10, // Default status
+                    ]);
+
                     $vendingMachineStock->old_quantity = $vendingMachineStock->quantity;
                     $vendingMachineStock->quantity = $newQuantity;
+
                     $vendingMachineStock->save();
-                } 
+                } else {
+                    if ($updateMethod == 2) {
+                        $vendingMachineStock = VendingMachineStock::create([
+                            'vending_machine_id' => $vendingMachineId,
+                            $column => $stockId,
+                            'quantity' => $change,
+                            'old_quantity' => 0, // Since it's a new record
+                            'last_stock_check' => now(),
+                            'status' => 10, // Default status
+                        ]);
+
+                        $vendingMachineStockHistory = VendingMachineStockHistory::create([
+                            'vending_machine_id' => $vendingMachineId,
+                            $column => $stockId,
+                            'quantity' => $change,
+                            'old_quantity' => 0, // Since it's a new record
+                            'status' => 10, // Default status
+                        ]);
+                    }
+                }
             }
         }
     }
+
+    public static function alertStock( $request ) {
+        
+        if( $request->id ){
+            $request->merge( [
+                'id' => Helper::decode( $request->id ),
+            ] );
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $vendingMachine = VendingMachine::with( ['stocks.froyo','stocks.syrup','stocks.topping'] )->where('api_key', $request->header('X-Vending-Machine-Key'))->first();
+
+            $meta = [];
+            $notificationContent = [];
+            
+            foreach ($request->froyos ?? [] as $froyoData) {
+                foreach ($froyoData as $froyoId => $quantity) {
+                    $froyo = Froyo::find($froyoId);
+                    if ($froyo) {
+                        $notificationContent[] = "Left {$quantity} of {$froyo->title} (Froyo)";
+                        $meta['froyos'][] = ['id' => $froyoId, 'title' => $froyo->title, 'quantity' => $quantity];
+                    }
+                }
+            }
+            
+            foreach ($request->toppings ?? [] as $toppingData) {
+                foreach ($toppingData as $toppingId => $quantity) {
+                    $topping = Topping::find($toppingId);
+                    if ($topping) {
+                        $notificationContent[] = "Left {$quantity} of {$topping->title} (Topping)";
+                        $meta['toppings'][] = ['id' => $toppingId, 'title' => $topping->title, 'quantity' => $quantity];
+                    }
+                }
+            }
+            
+            foreach ($request->syrups ?? [] as $syrupData) {
+                foreach ($syrupData as $syrupId => $quantity) {
+                    $syrup = Syrup::find($syrupId);
+                    if ($syrup) {
+                        $notificationContent[] = "Left {$quantity} of {$syrup->title} (Syrup)";
+                        $meta['syrups'][] = ['id' => $syrupId, 'title' => $syrup->title, 'quantity' => $quantity];
+                    }
+                }
+            }
+            
+            // Compose notification
+            $notificationTitle = "Low Stock Update, Vending Machine: " . $vendingMachine->title;
+            $notificationBody = implode("\n", $notificationContent);
+            
+            $notification = AdministratorNotification::create([
+                'title' => $notificationTitle,
+                'content' => $notificationBody,
+                'system_title' => $vendingMachine->title . ' Low Stock',
+                'system_content' => $vendingMachine->title . ' Low Stock',
+                'meta_data' => null,
+                'type' => 2,
+                'role_id' => 1,
+            ]);        
+
+            DB::commit();
+
+            return response()->json( [
+                'data' => [
+                    'vending_machine' => $vendingMachine,
+                    'message_key' => 'alert_low_stock_success',
+                ]
+            ] );
+
+        } catch ( \Throwable $th ) {
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+                'message_key' => 'alert_low_stock_success',
+            ], 500 );
+        }
+    }
+
     
 }

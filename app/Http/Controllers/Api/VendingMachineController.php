@@ -79,7 +79,7 @@ class VendingMachineController extends Controller
      */   
     public function deductVendingMachineStock( Request $request ) {
         $request->merge( [
-            'update_method' => 2,
+            'update_method' => 1,
         ] );
         return VendingMachineService::updateVendingMachineStock( $request );
     }
@@ -107,4 +107,26 @@ class VendingMachineController extends Controller
         ] );
         return VendingMachineService::updateVendingMachineStock( $request );
     }
+
+    /**
+     * 5. Alert stock
+     * 
+     * 
+     * @group Vending Machine Operation API
+     * 
+     * 
+     * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
+     * 
+     * @bodyParam froyos array required An array of objects representing froyo stock changes. Example: [{"1": 100}]
+     * @bodyParam froyos.* object required A key-value pair where the key is the froyo ID, and the value is the quantity change. Example: {"1": 100}
+     * @bodyParam syrups array required An array of objects representing syrup stock changes. Example: [{"1": 98}]
+     * @bodyParam syrups.* object required A key-value pair where the key is the syrup ID, and the value is the quantity change. Example: {"1": 98}
+     * @bodyParam toppings array required An array of objects representing topping stock changes. Example: [{"1": 50}]
+     * @bodyParam toppings.* object required A key-value pair where the key is the topping ID, and the value is the quantity change. Example: {"1": 50}
+     * 
+     */   
+    public function alertStock( Request $request ) {
+        return VendingMachineService::alertStock( $request );
+    }
+
 }

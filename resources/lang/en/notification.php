@@ -13,6 +13,9 @@ return [
     |
     */
 
+    'notifications' => 'notifications',
+    'no_notification' => 'No notifications',
+    'mark_all_as_read' => 'Mark all as read',
     'notification_seen' => 'Updated notification seen',
     'register_success' => 'Register Success',
     'register_success_content' => 'Welcome to Yobe!',
