@@ -24,6 +24,7 @@ return [
              * Specify conditions to determine what routes will be a part of this group.
              * A route must fulfill ALL conditions to be included.
              */
+
             'match' => [
                 /*
                  * Match only routes whose domains match this pattern (use * as a wildcard to match any characters). Example: 'api.*'.
@@ -33,7 +34,11 @@ return [
                 /*
                  * Match only routes whose paths match this pattern (use * as a wildcard to match any characters). Example: 'users/*'.
                  */
-                'prefixes' => ['api/*'],
+                'prefixes' => [
+                    'api/*/vending-machine-operation/*',
+                    'api/*/order-operation/*',
+                    'api/*/menus-operation/*',
+                ],
 
                 /*
                  * [Dingo router only] Match only routes registered under this version. Wildcards are not supported.
@@ -65,7 +70,7 @@ return [
                  * Additional headers to be added to the example requests
                  */
 
-                'group' => 'Api',
+                'group' => 'Vending',
 
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -143,7 +148,7 @@ return [
          * HTML documentation, assets and Postman collection will be generated to this folder.
          * Source Markdown will still be in resources/docs.
          */
-        'output_path' => 'public/docs/api',
+        'output_path' => 'public/docs/vending',
     ],
 
     /*

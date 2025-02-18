@@ -1,0 +1,513 @@
+openapi: 3.0.3
+info:
+  title: Laravel
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost/yobe-backoffice'
+paths:
+  /api/v1/order-operation/update-order-status:
+    post:
+      summary: '1. Update order status (Scan Order)'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: X-Vending-Machine-Key
+          description: ''
+          example: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Order Operation API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  description: 'Order reference to be updated.'
+                  example: 1knkbasbmc
+      security: []
+  /api/v1/order-operation/update-sales-data:
+    post:
+      summary: '2. Update machine sales'
+      description: "<strong>sales_type</strong><br>\n1: daily <br>\n2: weekly <br>\n3: monthly <br>"
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: X-Vending-Machine-Key
+          description: ''
+          example: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Order Operation API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sales_date:
+                  type: string
+                  description: 'The date of sales in YYYY-MM-DD format.'
+                  example: '"2025-02-12"'
+                sales_type:
+                  type: integer
+                  description: 'The type of sales (e.g., 1 for daily, 2 for weekly, 3 for monthly). Default: 1'
+                  example: 2
+                sales_metas:
+                  type: array
+                  description: 'Additional sales metadata (e.g., products sold).'
+                  example:
+                    -
+                      product_id: 1
+                      quantity: 3
+                  items:
+                    type: string
+                order_references:
+                  type: array
+                  description: 'A list of related order references.'
+                  example:
+                    - ORD-12345
+                    - ORD-67890
+                  items:
+                    type: string
+              required:
+                - sales_date
+      security: []
+  /api/v1/vending-machine-operation/get-status:
+    get:
+      summary: '1. Get vending machines status'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: X-Vending-Machine-Key
+          description: ''
+          example: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Vending Machine Operation API'
+      security: []
+  /api/v1/vending-machine-operation/update-status:
+    post:
+      summary: '2. update machines status'
+      description: "<strong>status</strong><br>\n10: Online<br>\n20: Offline<br>\n21: Maintenance Required<br>"
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: X-Vending-Machine-Key
+          description: ''
+          example: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Vending Machine Operation API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: 'Vending Machine Status to be updated.'
+                  example: '1'
+      security: []
+  /api/v1/vending-machine-operation/alert-stock:
+    post:
+      summary: '5. Alert stock'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: X-Vending-Machine-Key
+          description: ''
+          example: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Vending Machine Operation API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                froyos:
+                  type: array
+                  description: 'An array of objects representing froyo stock changes.'
+                  example:
+                    -
+                      '1': 100
+                  items:
+                    type: string
+                syrups:
+                  type: array
+                  description: 'An array of objects representing syrup stock changes.'
+                  example:
+                    -
+                      '1': 98
+                  items:
+                    type: string
+                toppings:
+                  type: array
+                  description: 'An array of objects representing topping stock changes.'
+                  example:
+                    -
+                      '1': 50
+                  items:
+                    type: string
+              required:
+                - froyos
+                - syrups
+                - toppings
+      security: []
+  /api/v1/vending-machine-operation/deduct-stock:
+    post:
+      summary: '3. deduct machines stock'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: X-Vending-Machine-Key
+          description: ''
+          example: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Vending Machine Operation API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                froyos:
+                  type: array
+                  description: 'An array of objects representing froyo stock changes.'
+                  example:
+                    -
+                      '1': -1
+                  items:
+                    type: string
+                syrups:
+                  type: array
+                  description: 'An array of objects representing syrup stock changes.'
+                  example:
+                    -
+                      '1': -1
+                  items:
+                    type: string
+                toppings:
+                  type: array
+                  description: 'An array of objects representing topping stock changes.'
+                  example:
+                    -
+                      '1': -1
+                  items:
+                    type: string
+              required:
+                - froyos
+                - syrups
+                - toppings
+      security: []
+  /api/v1/vending-machine-operation/update-stock:
+    post:
+      summary: '4. update machines stock'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: X-Vending-Machine-Key
+          description: ''
+          example: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Vending Machine Operation API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                froyos:
+                  type: array
+                  description: 'An array of objects representing froyo stock changes.'
+                  example:
+                    -
+                      '1': 100
+                  items:
+                    type: string
+                syrups:
+                  type: array
+                  description: 'An array of objects representing syrup stock changes.'
+                  example:
+                    -
+                      '1': 98
+                  items:
+                    type: string
+                toppings:
+                  type: array
+                  description: 'An array of objects representing topping stock changes.'
+                  example:
+                    -
+                      '1': 50
+                  items:
+                    type: string
+              required:
+                - froyos
+                - syrups
+                - toppings
+      security: []
+  /api/v1/menus-operation/get-selections:
+    get:
+      summary: '2. Get selections'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Menu API'
+  /api/v1/menus-operation/get-froyos:
+    get:
+      summary: '3. Get froyos'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Menu API'
+  /api/v1/menus-operation/get-syrups:
+    get:
+      summary: '4. Get syrups'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Menu API'
+  /api/v1/menus-operation/get-toppings:
+    get:
+      summary: '5. Get toppings'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Menu API'
+tags:
+  -
+    name: 'Order Operation API'
+    description: ''
+  -
+    name: 'Vending Machine Operation API'
+    description: ''
+  -
+    name: 'Menu API'
+    description: ''

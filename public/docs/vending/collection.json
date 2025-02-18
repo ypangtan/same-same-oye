@@ -1,0 +1,482 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/localhost\/yobe-backoffice"
+        }
+    ],
+    "info": {
+        "name": "Laravel",
+        "_postman_id": "96db05bb-5c82-4904-8285-833c42f3fd21",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Order Operation API",
+            "description": "",
+            "item": [
+                {
+                    "name": "1. Update order status (Scan Order)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/order-operation\/update-order-status",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/order-operation\/update-order-status"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "X-Vending-Machine-Key",
+                                "value": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"reference\":\"1knkbasbmc\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "2. Update machine sales",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/order-operation\/update-sales-data",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/order-operation\/update-sales-data"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "X-Vending-Machine-Key",
+                                "value": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"sales_date\":\"\\\"2025-02-12\\\"\",\"sales_type\":2,\"sales_metas\":[{\"product_id\":1,\"quantity\":3}],\"order_references\":[\"ORD-12345\",\"ORD-67890\"]}"
+                        },
+                        "description": "<strong>sales_type<\/strong><br>\n1: daily <br>\n2: weekly <br>\n3: monthly <br>",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Vending Machine Operation API",
+            "description": "",
+            "item": [
+                {
+                    "name": "1. Get vending machines status",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/vending-machine-operation\/get-status",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/vending-machine-operation\/get-status"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "X-Vending-Machine-Key",
+                                "value": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "2. update machines status",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/vending-machine-operation\/update-status",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/vending-machine-operation\/update-status"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "X-Vending-Machine-Key",
+                                "value": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"status\":\"1\"}"
+                        },
+                        "description": "<strong>status<\/strong><br>\n10: Online<br>\n20: Offline<br>\n21: Maintenance Required<br>",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "5. Alert stock",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/vending-machine-operation\/alert-stock",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/vending-machine-operation\/alert-stock"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "X-Vending-Machine-Key",
+                                "value": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"froyos\":[{\"1\":100}],\"syrups\":[{\"1\":98}],\"toppings\":[{\"1\":50}]}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "3. deduct machines stock",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/vending-machine-operation\/deduct-stock",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/vending-machine-operation\/deduct-stock"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "X-Vending-Machine-Key",
+                                "value": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"froyos\":[{\"1\":-1}],\"syrups\":[{\"1\":-1}],\"toppings\":[{\"1\":-1}]}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "4. update machines stock",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/vending-machine-operation\/update-stock",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/vending-machine-operation\/update-stock"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "X-Vending-Machine-Key",
+                                "value": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"froyos\":[{\"1\":100}],\"syrups\":[{\"1\":98}],\"toppings\":[{\"1\":50}]}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Menu API",
+            "description": "",
+            "item": [
+                {
+                    "name": "2. Get selections",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/menus-operation\/get-selections",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-selections"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "3. Get froyos",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/menus-operation\/get-froyos",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-froyos"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "4. Get syrups",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/menus-operation\/get-syrups",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-syrups"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "5. Get toppings",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/menus-operation\/get-toppings",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-toppings"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "noauth"
+    }
+}
