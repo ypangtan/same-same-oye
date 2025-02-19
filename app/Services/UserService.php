@@ -925,6 +925,11 @@ class UserService
                 'home'
             );
 
+            // Register OneSignal
+            if ( !empty( $request->register_token ) ) {
+                self::registerOneSignal( $user->id, $request->device_type, $request->register_token );
+            }
+
             DB::commit();
 
         } catch ( \Throwable $th ) {
