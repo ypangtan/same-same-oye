@@ -999,7 +999,7 @@ class UserService
         ] );
     }
 
-    private function registerOneSignal( $user_id, $device_type, $register_token ) {
+    private static function registerOneSignal( $user_id, $device_type, $register_token ) {
 
         UserDevice::updateOrCreate(
             [ 'user_id' => $user_id, 'device_type' => 1 ],
