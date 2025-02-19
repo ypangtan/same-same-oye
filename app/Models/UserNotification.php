@@ -68,22 +68,18 @@ class UserNotification extends Model
     {
         $translations = json_decode($value, true) ?? [];
 
-        // Get the current app locale
-        $currentLocale = App::getLocale();
 
         // Return translation for the current locale or fallback to default
-        return $translations[$currentLocale] ?? $translations[Config::get('app.fallback_locale')] ?? $value;
+        return $translations;
     }
 
     public function getTitleAttribute($value)
     {
         $translations = json_decode($value, true) ?? [];
 
-        // Get the current app locale
-        $currentLocale = App::getLocale();
 
         // Return translation for the current locale or fallback to default
-        return $translations[$currentLocale] ?? $translations[Config::get('app.fallback_locale')] ?? $value;
+        return $translations;
     }
 
     public function UserNotificationUsers() {
