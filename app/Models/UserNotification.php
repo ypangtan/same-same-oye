@@ -64,6 +64,28 @@ class UserNotification extends Model
         $this->attributes['content'] = json_encode($translations);
     }
 
+    public function getContentAttribute($value)
+    {
+        $translations = json_decode($value, true) ?? [];
+
+        // Get the current app locale
+        $currentLocale = App::getLocale();
+
+        // Return translation for the current locale or fallback to default
+        return $translations[$currentLocale] ?? $translations[Config::get('app.fallback_locale')] ?? $value;
+    }
+
+    public function getTitleAttribute($value)
+    {
+        $translations = json_decode($value, true) ?? [];
+
+        // Get the current app locale
+        $currentLocale = App::getLocale();
+
+        // Return translation for the current locale or fallback to default
+        return $translations[$currentLocale] ?? $translations[Config::get('app.fallback_locale')] ?? $value;
+    }
+
     public function UserNotificationUsers() {
         return $this->hasMany( UserNotificationUser::class, 'user_notification_id' );
     }
@@ -87,17 +109,17 @@ class UserNotification extends Model
         return $status[ $this->attributes['status'] ];
     }
 
-    public function getContentAttribute($value)
-    {
-        $user = request()->user();
+    // public function getContentAttribute($value)
+    // {
+    //     $user = request()->user();
 
-        $value = str_replace('{username}', $user->username ?? null, $value);
-        $value = str_replace('{fullname}', $user->fullname ?? null, $value);
-        $value = str_replace('{phone_number}', $user->phone_number ?? null, $value);
-        $value = str_replace('{email}', $user->email ?? null, $value);
+    //     $value = str_replace('{username}', $user->username ?? null, $value);
+    //     $value = str_replace('{fullname}', $user->fullname ?? null, $value);
+    //     $value = str_replace('{phone_number}', $user->phone_number ?? null, $value);
+    //     $value = str_replace('{email}', $user->email ?? null, $value);
 
-        return $value;
-    }
+    //     return $value;
+    // }
 
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
