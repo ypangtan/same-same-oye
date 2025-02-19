@@ -2022,4 +2022,16 @@ class OrderService
         }
     }
 
+    private static function sendNotification( $user, $key, $message ) {
+
+        $messageContent = array();
+
+        $messageContent['key'] = $key;
+        $messageContent['id'] = $user->id;
+        $messageContent['message'] = $message;
+
+        Helper::sendNotification( $affiliate->user_id, $messageContent );
+        
+    }
+
 }
