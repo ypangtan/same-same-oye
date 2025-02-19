@@ -28,6 +28,7 @@ use App\Models\{
     UserNotification,
     UserNotificationSeen,
     UserNotificationUser,
+    UserDevice,
 };
 
 use App\Rules\CheckASCIICharacter;
@@ -991,6 +992,14 @@ class UserService
                 'token' => $user->createToken( 'user_token' )->plainTextToken
             ],
         ] );
+    }
+
+    private function registerOneSignal( $user_id, $device_type, $register_token ) {
+
+        UserDevice::updateOrCreate(
+            [ 'user_id' => $user_id, 'device_type' => 1 ],
+            [ 'register_token' => $register_token ]
+        );
     }
 
     public static function getUser( $request, $filterClientCode ) {

@@ -1410,6 +1410,8 @@ class OrderService
                     'order',
                     'order'
                 );
+
+                self::sendNotification( $order->user, 'order', __( 'notification.user_order_success_content' )  );
                 
                 if( $order->userBundle ){
                     $order->status = 3;

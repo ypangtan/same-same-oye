@@ -217,6 +217,8 @@ class EghlService {
                         'topup',
                         'wallet'
                     );
+
+                    self::sendNotification( $order->user, 'topup', __( 'notification.topup_success_content' )  );
         
                 }
 
@@ -228,6 +230,9 @@ class EghlService {
                         'topup',
                         'wallet'
                     );
+
+                    self::sendNotification( $order->user, 'topup', __( 'notification.topup_failed' )  );
+
                 }
             }
     
@@ -262,6 +267,8 @@ class EghlService {
                         'user_bundle'
                     );
 
+                    self::sendNotification( $order->user, 'bundle', __( 'notification.user_bundle_success_content' )  );
+
                 }else {
                     UserService::createUserNotification(
                         $userBundle->user->id,
@@ -270,6 +277,9 @@ class EghlService {
                         'user_bundle',
                         'user_bundle'
                     );
+
+                    self::sendNotification( $order->user, 'bundle', __( 'notification.user_bundle_failed_content' )  );
+
                 }
                 
             }
@@ -304,6 +314,8 @@ class EghlService {
                         'order',
                         'order'
                     );
+
+                    self::sendNotification( $order->user, 'order', __( 'notification.user_order_success_content' )  );
                     
                     if( $order->product_bundle_id ){
 
@@ -403,6 +415,8 @@ class EghlService {
                         'order',
                         'order'
                     );
+
+                    self::sendNotification( $order->user, 'order', __( 'notification.user_order_failed_content' )  );
 
                 }
                 
@@ -668,4 +682,15 @@ class EghlService {
         ];
     }
 
+    private static function sendNotification( $user, $key, $message ) {
+
+        $messageContent = array();
+
+        $messageContent['key'] = $key;
+        $messageContent['id'] = $user->id;
+        $messageContent['message'] = $message;
+
+        Helper::sendNotification( $affiliate->user_id, $messageContent );
+        
+    }
 }

@@ -974,6 +974,8 @@ class VoucherService
             'voucher'
         );
 
+        self::sendNotification( $order->user, 'voucher', __( 'notification.user_voucher_success_content' )  );
+
         return response()->json( [
             'message' => __('voucher.voucher_claimed'),
             'message_key' => 'voucher_claimed',

@@ -12,6 +12,8 @@ use App\Models\{
     Order,
     Adjustment,
     Wallet,
+    UserDevice,
+    User,
 };
 
 use Illuminate\Support\Facades\{
@@ -390,6 +392,41 @@ class Helper {
             'method' => 'GET',
             'raw_response' => json_encode( $sendSMS ),
         ] );
+
+    }
+
+    public static function sendNotification( $user, $message ){
+
+        $device = UserDevice::where( 'user_id', $user )->first();
+        if( $device ) {
+
+            $header = [
+                'Content-Type: application/json; charset=utf-8',
+                'Authorization: BASIC ' . config( 'services.os.api_key' ),
+            ];
+
+            $json = [
+                'app_id' => config( 'services.os.app_id' ),
+                'contents' => [
+                    'en' => $message['message'],
+                ],
+                'headings' => [
+                    'en' => 'Yobe Froyo!'
+                ],
+                'include_player_ids' => [
+                    $device->register_token
+                ],
+                'data' => [
+                    'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                    'sound' => 'default',
+                    'status' => 'done',
+                    'key' => $message['key'],
+                    'id' => $message['id'],
+                ]
+            ];
+
+            Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $json ), $header );
+        }    
 
     }
 

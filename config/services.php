@@ -34,6 +34,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'os' => [
+        'api_key' => env( 'ONE_SIGNAL_API_KEY' ),
+        'app_id' => env( 'ONE_SIGNAL_APP_ID' ),
+    ],
+
     'url' => [
         'admin' => env( 'ADMIN_URL' ),
         'admin_path' => env( 'ADMIN_PATH' ),
