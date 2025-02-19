@@ -54,7 +54,9 @@ return [
              * The route can be referenced by name or path here. Wildcards are supported.
              */
             'exclude' => [
-                // '/health', 'admin.*'
+                'api/*/vending-machine-operation/*',
+                'api/*/order-operation/*',
+                'api/*/menus-operation/*',
             ],
 
             /*
