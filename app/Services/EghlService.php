@@ -199,6 +199,7 @@ class EghlService {
                 $order = TopupRecord::where( 'reference', $request->OrderNumber )->first(); 
     
                 $order->status = $request->TxnStatus == 0 ? 3 : 20;
+                $order->is_processed = 1;
                 if( $request->TxnStatus == 0 && $order){
                     $wallet = Wallet::lockForUpdate()->where( 'user_id', $order->user_id )->where( 'type', 1 )->first();
 
@@ -246,6 +247,7 @@ class EghlService {
         }else if( strpos($request->OrderNumber, 'BDL') !== false ){
             $bundle = UserBundleTransaction::where( 'reference', $request->OrderNumber )->first();
             $bundleStatus = false;
+            $bundle->is_processed = 1;
     
             if($request->HashValue2 == Helper::generateResponseHash($request) && $bundle){
                 $bundle = UserBundleTransaction::where( 'reference', $request->OrderNumber )->first(); 
@@ -300,6 +302,7 @@ class EghlService {
                 $order = Order::where( 'reference', $request->OrderNumber )->first(); 
                 $orderTransaction = OrderTransaction::where( 'order_no', $request->PaymentID )->first(); 
                 $bundle = $order->productBundle;
+                $order->is_processed = 1;
 
                 $order->status = $request->TxnStatus == 0 ? 3 : 20;
 
