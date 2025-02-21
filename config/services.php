@@ -64,5 +64,7 @@ return [
         'live_success_url' => env( 'EGHL_LIVE_SUCCESS_URL' ),
         'staging_failed_url' => env( 'EGHL_STAGING_FAILED_URL' ),
         'live_failed_url' => env( 'EGHL_LIVE_FAILED_URL' ),
+        'staging_fallback_url' => env( 'EGHL_STAGING_FALLBACK' ),
+        'live_fallback_url' => env( 'EGHL_LIVE_FALLBACK' ),
     ]
 ];

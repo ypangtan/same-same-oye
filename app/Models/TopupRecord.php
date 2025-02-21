@@ -24,6 +24,7 @@ class TopupRecord extends Model
         'payment_url',
         'payment_attempt',
         'status',
+        'is_processed',
     ];
 
     public function user() {
@@ -46,6 +47,7 @@ class TopupRecord extends Model
         'payment_url',
         'payment_attempt',
         'status',
+        'is_processed',
     ];
 
     protected static $logName = 'topup_record';

@@ -384,6 +384,7 @@ class WalletService
                 'MerchantReturnURL' => config('services.eghl.staging_callabck_url'),
                 'MerchantApprovalURL' => config('services.eghl.staging_success_url'),
                 'MerchantUnApprovalURL' => config('services.eghl.staging_failed_url'),
+                'MerchantCallbacklURL' => config('services.eghl.staging_fallback_url'),
                 'Amount' => Helper::numberFormatV2($request->topup_amount, 2),
                 'CurrencyCode' => 'MYR',
                 'CustIP' => request()->ip(),

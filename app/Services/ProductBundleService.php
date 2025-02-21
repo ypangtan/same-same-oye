@@ -848,6 +848,7 @@ class ProductBundleService
                 'MerchantReturnURL' => config('services.eghl.staging_callabck_url'),
                 'MerchantApprovalURL' => config('services.eghl.staging_success_url'),
                 'MerchantUnApprovalURL' => config('services.eghl.staging_failed_url'),
+                'MerchantCallbacklURL' => config('services.eghl.staging_fallback_url'),
                 'Amount' => $bundleTransaction->price,
                 'CurrencyCode' => 'MYR',
                 'CustIP' => request()->ip(),

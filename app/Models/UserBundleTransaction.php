@@ -27,6 +27,7 @@ class UserBundleTransaction extends Model
         'payment_attempt',
         'price',
         'payment_url',
+        'is_processed',
     ];
 
     protected $hidden = [
@@ -98,6 +99,7 @@ class UserBundleTransaction extends Model
         'payment_attempt',
         'price',
         'payment_url',
+        'is_processed',
     ];
 
     protected static $logName = 'user_bundle_transactions';

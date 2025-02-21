@@ -38,6 +38,7 @@ class Order extends Model
         'tax',
         'subtotal',
         'additional_charges',
+        'is_processed',
     ];
 
     protected $hidden = [
@@ -117,6 +118,7 @@ class Order extends Model
         'tax',
         'subtotal',
         'additional_charges',
+        'is_processed',
     ];
 
     protected static $logName = 'orders';

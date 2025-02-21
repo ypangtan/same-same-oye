@@ -435,6 +435,36 @@ class EghlService {
         }
     }
 
+    public static function fallback( $request ) {
+
+        $url = $request->fullUrl();
+        $baseUrl = parse_url($url, PHP_URL_SCHEME) . "://" . parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH);
+
+        ApiLog::create( [
+            'url' => $baseUrl,
+            'method' => $request->method(),
+            'raw_response' => json_encode( $request->all() ),
+        ] );
+
+        if (strpos($request->OrderNumber, 'TPP') !== false) {
+            $order = TopupRecord::where( 'reference', $request->OrderNumber )->first(); 
+        }else if( strpos($request->OrderNumber, 'BDL') !== false ){
+            $order = UserBundleTransaction::where( 'reference', $request->OrderNumber )->first();
+        }else{
+            $order = Order::where( 'reference', $request->OrderNumber )->first();
+        }
+
+        $processedLog = ApiLog::where( 'url', 'https://yobe.upplex.com.my/eghl/callback' )
+        ->where( 'raw_response', 'LIKE', '%' . $request->OrderNumber . '%' )
+        ->first();
+
+        if( $order->is_processed == 0  && !$processedLog ){
+            self::callback( $request );
+        }
+
+        return view( 'admin.order.callback_response' );        
+    }
+
     public static function processTransaction( $orderId, $response ) {
 
         $transaction = EghlTransaction::where( 'order_no', $orderId )->first();

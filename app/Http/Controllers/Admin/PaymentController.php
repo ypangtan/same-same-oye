@@ -38,6 +38,11 @@ class PaymentController extends Controller
         return EghlService::callback( $request );
     }
 
+    public function fallbackEghl( Request $request ) {
+
+        return EghlService::fallback( $request );
+    }
+
     public function success( Request $request ) {
 
         return response()->json( [
