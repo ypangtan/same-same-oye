@@ -1536,7 +1536,7 @@ class UserService
         $messageContent['id'] = $user->id;
         $messageContent['message'] = $message;
 
-        Helper::sendNotification( $affiliate->user_id, $messageContent );
+        Helper::sendNotification( $user->user_id, $messageContent );
         
     }
 }
