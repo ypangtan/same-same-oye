@@ -26,14 +26,66 @@ class VendingMachineController extends Controller
         return VendingMachineService::getVendingMachines( $request );
     }
 
-    /**
-     * 1. Get vending machines status
-     * 
-     * @group Vending Machine Operation API
-     * 
-     * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
-     * 
-     */   
+/**
+     * 1. Get vending machines
+     *
+     * Retrieves the details of vending machines from the backoffice.
+     * This endpoint requires authentication.
+     *
+     * @group Vending Machine API
+     *
+     * @authenticated
+     *
+     * @response 200 {
+     *   "data": {
+     *     "vending_machine": {
+     *       "id": 4,
+     *       "code": "MD01",
+     *       "title": "Midvalley",
+     *       "description": "Midvalley Megamall",
+     *       "latitude": "3.118056",
+     *       "longitude": "101.676666",
+     *       "address_1": "Lingkaran Syed Putra, Mid Valley City, 59200 Kuala Lumpur",
+     *       "city": "KL",
+     *       "state": "Kuala Lumpur",
+     *       "postcode": "59200",
+     *       "status": 10,
+     *       "opening_hour": "2025-02-08 10:00:00",
+     *       "closing_hour": "2025-02-08 11:00:00",
+     *       "navigation_links": "https://g.co/kgs/XwXNHFf",
+     *       "stocks": [
+     *         {
+     *           "id": 9,
+     *           "vending_machine_id": 4,
+     *           "froyo_id": 2,
+     *           "quantity": 100,
+     *           "froyo": {
+     *             "id": 2,
+     *             "code": "choco",
+     *             "title": "Chocolate",
+     *             "image": "froyo/2/skdqNYKoAP4VJu9GmYklpSpst2YB4gohIQtsfgAK.png",
+     *             "price": "0.00"
+     *           }
+     *         },
+     *         {
+     *           "id": 10,
+     *           "vending_machine_id": 4,
+     *           "syrup_id": 1,
+     *           "quantity": 100,
+     *           "syrup": {
+     *             "id": 1,
+     *             "code": "chocolate",
+     *             "title": "Chocolate",
+     *             "image": "syrup/1/7I6h6rZK2u2vaLYYzllW6Fr2R2K6MCMjVOrhsyAn.png",
+     *             "price": "1.99"
+     *           }
+     *         }
+     *       ]
+     *     },
+     *     "message_key": "get_vending_machine_success"
+     *   }
+     * }
+     */
     public function getVendingMachineStatus( Request $request ) {
 
         return VendingMachineService::getVendingMachineStatus( $request );

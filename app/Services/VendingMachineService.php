@@ -462,6 +462,16 @@ class VendingMachineService
 
             $vendingMachine = $request->id ? VendingMachine::with( ['stocks.froyo','stocks.syrup','stocks.topping'] )->find( $request->id ) : VendingMachine::with( ['stocks.froyo','stocks.syrup','stocks.topping'] )->where('api_key', $request->header('X-Vending-Machine-Key'))->first();
 
+            if ($vendingMachine->stocks->isNotEmpty()) {
+                $vendingMachine->stocks->each(function ($stock) {
+                    collect(['froyo', 'syrup', 'topping'])->each(function ($item) use ($stock) {
+                        if ($stock->$item) {
+                            $stock->$item->append(['image_path']);
+                        }
+                    });
+                });
+            }            
+
             return response()->json( [
                 'data' => [
                     'vending_machine' => $vendingMachine,

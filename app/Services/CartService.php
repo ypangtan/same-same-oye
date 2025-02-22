@@ -135,13 +135,37 @@ class CartService {
             'user_bundle' => [ 'nullable', 'exists:user_bundles,id'  ],
             'vending_machine' => [ 'nullable', 'exists:vending_machines,id'  ],
             'items' => ['nullable', 'array'],
-            'items.*.product' => ['required', 'exists:products,id'],
+            'items.*.product' => ['required', 'exists:products,id',function ($attribute, $value, $fail) {
+                $existsInPromoCode = Product::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$existsInPromoCode) {
+                    $fail(__('Product is not available'));
+                }
+            }],
             'items.*.froyo' => ['nullable', 'array'],
-            'items.*.froyo.*' => ['exists:froyos,id'], // Validate each froyo ID
+            'items.*.froyo.*' => ['exists:froyos,id',function ($attribute, $value, $fail) {
+                $existsInPromoCode = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Product is not available'));
+                }
+            }], // Validate each froyo ID
             'items.*.syrup' => ['nullable', 'array'],
-            'items.*.syrup.*' => ['exists:syrups,id'], // Validate each syrup ID
+            'items.*.syrup.*' => ['exists:syrups,id',function ($attribute, $value, $fail) {
+                $existsInPromoCode = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Product is not available'));
+                }
+            }], // Validate each syrup ID
             'items.*.topping' => ['nullable', 'array'],
-            'items.*.topping.*' => ['exists:toppings,id'], // Validate each topping ID
+            'items.*.topping.*' => ['exists:toppings,id',function ($attribute, $value, $fail) {
+                $exists = Topping::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Product is not available'));
+                }
+            }], // Validate each topping ID
              'promo_code' => [
                 'nullable',
                 function ($attribute, $value, $fail) {
@@ -844,13 +868,37 @@ class CartService {
             'session_key' => ['nullable', 'exists:carts,session_key', 'required_without:id'],
             'vending_machine' => [ 'nullable', 'exists:vending_machines,id'  ],
             'items' => ['nullable', 'array'],
-            'items.*.product' => ['required', 'exists:products,id'],
+            'items.*.product' => ['required', 'exists:products,id',function ($attribute, $value, $fail) {
+                $existsInPromoCode = Product::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$existsInPromoCode) {
+                    $fail(__('Product is not available'));
+                }
+            }],
             'items.*.froyo' => ['nullable', 'array'],
-            'items.*.froyo.*' => ['exists:froyos,id'], // Validate each froyo ID
+            'items.*.froyo.*' => ['exists:froyos,id',function ($attribute, $value, $fail) {
+                $existsInPromoCode = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Product is not available'));
+                }
+            }], // Validate each froyo ID
             'items.*.syrup' => ['nullable', 'array'],
-            'items.*.syrup.*' => ['exists:syrups,id'], // Validate each syrup ID
+            'items.*.syrup.*' => ['exists:syrups,id',function ($attribute, $value, $fail) {
+                $existsInPromoCode = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Product is not available'));
+                }
+            }], // Validate each syrup ID
             'items.*.topping' => ['nullable', 'array'],
-            'items.*.topping.*' => ['exists:toppings,id'], // Validate each topping ID
+            'items.*.topping.*' => ['exists:toppings,id',function ($attribute, $value, $fail) {
+                $exists = Topping::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Product is not available'));
+                }
+            }], // Validate each topping ID
             'cart_item' => ['nullable', 'exists:cart_metas,id'],
             'promo_code' => [
                 'nullable',
