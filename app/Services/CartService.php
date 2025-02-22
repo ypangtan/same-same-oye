@@ -136,15 +136,15 @@ class CartService {
             'vending_machine' => [ 'nullable', 'exists:vending_machines,id'  ],
             'items' => ['nullable', 'array'],
             'items.*.product' => ['required', 'exists:products,id',function ($attribute, $value, $fail) {
-                $existsInPromoCode = Product::where( 'id', $value )->where( 'status', 10 )->first();
+                $exists = Product::where( 'id', $value )->where( 'status', 10 )->first();
 
-                if (!$existsInPromoCode) {
+                if (!$exists) {
                     $fail(__('Product is not available'));
                 }
             }],
             'items.*.froyo' => ['nullable', 'array'],
             'items.*.froyo.*' => ['exists:froyos,id',function ($attribute, $value, $fail) {
-                $existsInPromoCode = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
+                $exists = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
                     $fail(__('Product is not available'));
@@ -152,7 +152,7 @@ class CartService {
             }], // Validate each froyo ID
             'items.*.syrup' => ['nullable', 'array'],
             'items.*.syrup.*' => ['exists:syrups,id',function ($attribute, $value, $fail) {
-                $existsInPromoCode = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
+                $exists = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
                     $fail(__('Product is not available'));
@@ -869,15 +869,15 @@ class CartService {
             'vending_machine' => [ 'nullable', 'exists:vending_machines,id'  ],
             'items' => ['nullable', 'array'],
             'items.*.product' => ['required', 'exists:products,id',function ($attribute, $value, $fail) {
-                $existsInPromoCode = Product::where( 'id', $value )->where( 'status', 10 )->first();
+                $exists = Product::where( 'id', $value )->where( 'status', 10 )->first();
 
-                if (!$existsInPromoCode) {
+                if (!$exists) {
                     $fail(__('Product is not available'));
                 }
             }],
             'items.*.froyo' => ['nullable', 'array'],
             'items.*.froyo.*' => ['exists:froyos,id',function ($attribute, $value, $fail) {
-                $existsInPromoCode = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
+                $exists = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
                     $fail(__('Product is not available'));
@@ -885,7 +885,7 @@ class CartService {
             }], // Validate each froyo ID
             'items.*.syrup' => ['nullable', 'array'],
             'items.*.syrup.*' => ['exists:syrups,id',function ($attribute, $value, $fail) {
-                $existsInPromoCode = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
+                $exists = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
                     $fail(__('Product is not available'));
