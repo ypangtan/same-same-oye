@@ -707,6 +707,7 @@ class OrderService
         try {
 
             $updateOrder = Order::find( $request->id );
+            
             $updateOrder->status = $updateOrder->status != 20 ? 20 : 1;
 
             $updateOrder->save();
@@ -1889,23 +1890,76 @@ class OrderService
             ] )->where( 'reference', $request->reference )
             ->whereNotIn('status', [10, 20])->first();
 
+            $vendingMachine = VendingMachine::where('api_key', $request->header('X-Vending-Machine-Key'))->first();
+
+            // if( $updateOrder->vending_machine_id != $vendingMachine->id ){
+            //     return response()->json([
+            //         'message' => __('order.collection_point_error_message') . $vendingMachine->title,
+            //         'message_key' => 'collection_point_error',
+            //         'errors' => [
+            //             'order' => [
+            //                 __('order.collection_point_error_message') . $vendingMachine->title,
+            //             ]
+            //         ]
+            //     ], 422);
+            // }
+
             if( $updateOrder ){
                 if( $updateOrder->status == 1 ){
-                    return response()->json( [
-                        'message' => 'Unpaid Order',
-                        'message_key' => 'scan order failed',
-                    ], 500 );
+                    return response()->json([
+                        'message' => __('order.unpaid_order'),
+                        'message_key' => 'unpaid_order',
+                        'errors' => [
+                            'order' => [
+                                __('order.unpaid_order_message'),
+                            ]
+                        ]
+                    ], 422);
                 }
                 $updateOrder->status = 10;
                 $updateOrder->save();
+
+                if( $updateOrder->orderMetas ) {
+                    $orderMetas = $updateOrder->orderMetas;
+
+                    foreach ($orderMetas as $orderMeta) {
+
+                        if( $orderMeta->syrups ){
+                            $decodedItems = json_decode($orderMeta->syrups, true);
+                            $stockData = ['syrups' => []];
+                            
+                            foreach ($decodedItems as $decodedItem) {
+                                $stockData['syrups'][$decodedItem] = 1;
+                            }
+
+                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'syrups', 1);
+                        }
+
+                        if( $orderMeta->toppings ){
+                            $decodedItems = json_decode($orderMeta->toppings, true);
+                            $stockData = ['toppings' => []];
+                            
+                            foreach ($decodedItems as $decodedItem) {
+                                $stockData['toppings'][$decodedItem] = 1;
+                            }
+
+                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'toppings', 1);
+                        }
+
+                        if( $orderMeta->froyos ){
+                            $decodedItems = json_decode($orderMeta->froyos, true);
+                            $stockData = ['froyos' => []];
+                            
+                            foreach ($decodedItems as $decodedItem) {
+                                $stockData['froyos'][$decodedItem] = 1;
+                            }
+
+                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'froyos', 1);
+                        }
+                    }
+                }
+
                 DB::commit();
-                return response()->json( [
-                    
-                    'errors' => [
-                        'message' => 'Order Pickep Up',
-                        'message_key' => 'scan order success',
-                    ]
-                ] );
             }
 
             $updateOrder = $updateOrder->paginate(10);
@@ -1936,7 +1990,7 @@ class OrderService
             // Return the paginated response
             return response()->json([
                 'message' => '',
-                'message_key' => 'get_order_success',
+                'message_key' => 'update_order_success',
                 'orders' => $updateOrder,
             ]);
 
@@ -1944,7 +1998,7 @@ class OrderService
 
             return response()->json( [
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-                'message_key' => 'create_froyo_failed',
+                'message_key' => 'update_order_failed',
             ], 500 );
         }
     }

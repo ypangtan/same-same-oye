@@ -148,9 +148,6 @@ Route::middleware( 'vending.auth' )->group( function() {
     Route::prefix( 'menus-operation' )->group( function() {
         Route::get( '/', [ MenuController::class, 'getMenus' ] );
         Route::get( 'get-selections', [ MenuController::class, 'getSelections' ] );
-        Route::get( 'get-froyos', [ MenuController::class, 'getFroyos' ] );
-        Route::get( 'get-syrups', [ MenuController::class, 'getSyrups' ] );
-        Route::get( 'get-toppings', [ MenuController::class, 'getToppings' ] );
     } );
 
 });

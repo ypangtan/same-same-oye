@@ -41,4 +41,13 @@ return [
     'status' => 'Status',
     'bundle' => 'Bundle',
     'cups_left' => 'Cups Left',
+
+    'collection_point_error' => 'Invalid Collection point',
+    'collection_point_error_message' => 'Please collect your order at the correct location: ',
+    
+    'unpaid_order' => 'Unpaid Order',
+    'unpaid_order_message' => 'Scan order failed ',
+    
+    'collection_point_error' => 'Invalid Collection point',
+    'collection_point_error_message' => 'Please collect your order at the correct location: ',
 ];

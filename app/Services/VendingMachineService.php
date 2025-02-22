@@ -459,18 +459,32 @@ class VendingMachineService
         DB::beginTransaction();
 
         try {
-
-            $vendingMachine = $request->id ? VendingMachine::with( ['stocks.froyo','stocks.syrup','stocks.topping'] )->find( $request->id ) : VendingMachine::with( ['stocks.froyo','stocks.syrup','stocks.topping'] )->where('api_key', $request->header('X-Vending-Machine-Key'))->first();
-
-            if ($vendingMachine->stocks->isNotEmpty()) {
-                $vendingMachine->stocks->each(function ($stock) {
-                    collect(['froyo', 'syrup', 'topping'])->each(function ($item) use ($stock) {
-                        if ($stock->$item) {
-                            $stock->$item->append(['image_path']);
-                        }
-                    });
+            $vendingMachine = $request->id 
+            ? VendingMachine::with(['stocks.froyo', 'stocks.syrup', 'stocks.topping'])->find($request->id)
+            : VendingMachine::with(['stocks.froyo', 'stocks.syrup', 'stocks.topping'])->where('api_key', $request->header('X-Vending-Machine-Key'))->first();
+        
+        if ($vendingMachine->stocks->isNotEmpty()) {
+            $groupedStocks = $vendingMachine->stocks->groupBy(function ($stock) {
+                if ($stock->froyo) {
+                    return 'froyo';
+                } elseif ($stock->syrup) {
+                    return 'syrup';
+                } elseif ($stock->topping) {
+                    return 'topping';
+                }
+                return 'other';
+            });
+        
+            $groupedStocks->each(function ($stocks, $key) {
+                $stocks->each(function ($stock) use ($key) {
+                    if ($stock->$key) {
+                        $stock->$key->append(['image_path']);
+                    }
                 });
-            }            
+            });
+        
+            $vendingMachine->setRelation('stocks', $groupedStocks);
+        }
 
             return response()->json( [
                 'data' => [
@@ -588,7 +602,7 @@ class VendingMachineService
         }
     }
     
-    private static function processStockUpdates($vendingMachineId, array $stocks, $stockType, $updateMethod)
+    public static function processStockUpdates($vendingMachineId, array $stocks, $stockType, $updateMethod)
     {
         $columnMap = [
             'froyos' => 'froyo_id',
@@ -600,7 +614,7 @@ class VendingMachineService
         if (!$column) {
             throw new \Exception("Invalid stock type: $stockType.");
         }
-    
+
         foreach ($stocks as $stockItem) {
             foreach ($stockItem as $stockId => $change) {
                 $vendingMachineStock = VendingMachineStock::where('vending_machine_id', $vendingMachineId)
@@ -617,7 +631,7 @@ class VendingMachineService
                     $vendingMachineStockHistory = VendingMachineStockHistory::create([
                         'vending_machine_id' => $vendingMachineId,
                         $column => $stockId,
-                        'quantity' => $change,
+                        'quantity' => $updateMethod == 1 ? $change : ( -1 * $change ),
                         'old_quantity' => $vendingMachineStock->old_quantity ,
                         'status' => 10, // Default status
                     ]);
