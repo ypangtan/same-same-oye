@@ -503,7 +503,7 @@ class UserCheckinService
             'user_checkin'
         );
 
-        self::sendNotification( $order->user, 'checkin', __( 'notification.user_checkin_success_content' )  );
+        self::sendNotification( $user, 'checkin', __( 'notification.user_checkin_success_content' )  );
 
         DB::commit();
     

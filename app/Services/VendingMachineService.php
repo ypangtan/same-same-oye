@@ -666,11 +666,11 @@ class VendingMachineService
 
     public static function alertStock( $request ) {
         
-        if( $request->id ){
-            $request->merge( [
-                'id' => Helper::decode( $request->id ),
-            ] );
-        }
+        // if( $request->id ){
+        //     $request->merge( [
+        //         'id' => Helper::decode( $request->id ),
+        //     ] );
+        // }
 
         DB::beginTransaction();
 
