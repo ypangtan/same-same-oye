@@ -25,7 +25,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command( 'check:expired-voucher' )->daily();
+        $schedule->command( 'check:expired-voucher' )->timezone('Asia/Kuala_Lumpur')
+        ->dailyAt('00:00');
+        $schedule->command( 'check:user-checkin ' )->timezone('Asia/Kuala_Lumpur')
+        ->dailyAt('00:00');
     }
 
     /**

@@ -44,6 +44,9 @@ return [
     'user_checkin_success' => 'Checkin Success',
     'user_checkin_success_content' => 'Checkin Success! Yobe Welcomes You Today',
     
+    'user_checkin_reset' => 'Checkin Reset',
+    'user_checkin_reset_content' => 'Oops, your checkin has been reset',
+
     // template
     // 'topup_success' => 'Topup Success',
     // 'topup_success_content' => 'Topup Success! Enjoy Your Froyo Now!',
