@@ -15,6 +15,7 @@ use App\Models\{
     VendingMachine,
     FileManager,
     VendingMachineStock,
+    VendingMachineGallery,
     VendingMachineStockHistory,
     AdministratorNotification,
     AdministratorNotificationSeen,
@@ -32,7 +33,7 @@ class VendingMachineService
 {
 
     public static function createVendingMachine( $request ) {
-        
+
         $validator = Validator::make( $request->all(), [
             'title' => [ 'required' ],
             'description' => [ 'nullable' ],
@@ -105,8 +106,8 @@ class VendingMachineService
                     $target = 'vending_machine/' . $vendingmachineCreate->id . '/' . $fileName[1];
                     Storage::disk( 'public' )->move( $imageFile->file, $target );
 
-                   $vendingmachineCreate->image = $target;
-                   $vendingmachineCreate->save();
+                    $vendingmachineCreate->image = $target;
+                    $vendingmachineCreate->save();
 
                     $imageFile->status = 10;
                     $imageFile->save();

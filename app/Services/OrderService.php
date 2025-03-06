@@ -318,7 +318,7 @@ class OrderService
                 'discount' => 0,
                 'reference' => Helper::generateOrderReference(),
                 'payment_method' => 1,
-                'status' => 1,
+                'status' => 3,
             ] );
 
             foreach ( $request->products as $product ) {

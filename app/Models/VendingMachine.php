@@ -39,6 +39,11 @@ class VendingMachine extends Model
         'api_key',
     ];
 
+    public function images()
+    {
+        return $this->hasMany(VendingMachineGallery::class, 'vending_machine_id');
+    }
+
     public function outlet()
     {
         return $this->belongsTo(Outlet::class, 'outlet_id');

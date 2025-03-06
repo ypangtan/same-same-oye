@@ -148,9 +148,10 @@ $vending_machine_create = 'vending_machine_create';
 
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
-
+        
         let fc = '#{{ $vending_machine_create }}',
-                fileID = '';
+                fileID = '',
+                order = [];
 
         $( fc + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.vending_machine.index' ) }}';
@@ -190,7 +191,7 @@ $vending_machine_create = 'vending_machine_create';
             formData.append( 'closing_hour', $( fc + '_closing_hour' ).val() );
             formData.append( 'opening_hour', $( fc + '_opening_hour' ).val() );
             formData.append( 'navigation_links', $( fc + '_navigation_links' ).val() );
-            formData.append( 'image', fileID );
+            formData.append( 'image', fileId );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -225,30 +226,47 @@ $vending_machine_create = 'vending_machine_create';
         } );
 
         Dropzone.autoDiscover = false;
-        const dropzone = new Dropzone( fc + '_image', { 
+        const dropzone = new Dropzone(fc + '_image', { 
             url: '{{ route( 'admin.file.upload' ) }}',
-            maxFiles: 1,
+            maxFiles: 10,
             acceptedFiles: 'image/jpg,image/jpeg,image/png',
             addRemoveLinks: true,
-            removedfile: function( file ) {
+            init: function () {
+                let dropzoneInstance = this;
 
+                // Enable Sorting with Sortable.js
+                new Sortable(document.getElementById("vending_machine_create_image"), {
+                    draggable: ".dz-preview",
+                    animation: 150, // Smooth transition
+                    onEnd: function () {
+                        updateImageOrder(dropzoneInstance);
+                    }
+                });
+
+                // Update Order on File Add or Remove
+                this.on("addedfile", function () {
+                    updateImageOrder(dropzoneInstance);
+                });
+
+                this.on("removedfile", function () {
+                    updateImageOrder(dropzoneInstance);
+                });
+            },
+            removedfile: function(file) {
                 var idToRemove = file.previewElement.id;
-
                 var idArrays = fileID.split(/\s*,\s*/);
-
-                var indexToRemove = idArrays.indexOf( idToRemove.toString() );
+                var indexToRemove = idArrays.indexOf(idToRemove.toString());
                 if (indexToRemove !== -1) {
-                    idArrays.splice( indexToRemove, 1 );
+                    idArrays.splice(indexToRemove, 1);
                 }
-
-                fileID = idArrays.join( ', ' );
+                fileID = idArrays.join(', ');
 
                 file.previewElement.remove();
+                updateImageOrder(this); // Update order after removal
             },
-            success: function( file, response ) {
-
-                if ( response.status == 200 )  {
-                    if ( fileID !== '' ) {
+            success: function(file, response) {
+                if (response.status == 200) {
+                    if (fileID !== '') {
                         fileID += ','; // Add a comma if fileID is not empty
                     }
                     fileID += response.data.id;
@@ -256,7 +274,22 @@ $vending_machine_create = 'vending_machine_create';
                     file.previewElement.id = response.data.id;
                 }
             }
-        } );
+        });
+
+        // Function to Update Image Order Using fileId
+        function updateImageOrder(dropzoneInstance) {
+            document.querySelectorAll("#vending_machine_create_image .dz-preview").forEach((element, index) => {
+                let file = dropzoneInstance.files.find(f => f.previewElement === element);
+                if (file && file.previewElement.id) {
+                    order.push({ id: file.previewElement.id, order: index + 1 });
+                }
+
+
+            });
+
+            console.log("Updated Order:", order);
+        }
+
 
     } );
 </script>
