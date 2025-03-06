@@ -99,6 +99,7 @@ $columns = [
             order: [[ 1, 'desc' ]],
             columns: [
                 { data: null },
+                { data: null },
                 { data: 'created_at' },
                 { data: 'name' },
                 { data: 'email' },

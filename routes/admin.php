@@ -358,6 +358,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                     Route::get( 'edit', [ OrderController::class, 'edit' ] )->name( 'admin.order.edit' );
                 } );
     
+                Route::get( 'generate-test-order', [ OrderController::class, 'generateTestOrder' ] )->name( 'admin.order.generateTestOrder' );
                 Route::post( 'all-orders', [ OrderController::class, 'allOrders' ] )->name( 'admin.order.allOrders' );
                 Route::post( 'one-order', [ OrderController::class, 'oneOrder' ] )->name( 'admin.order.oneOrder' );
                 Route::post( 'create-order', [ OrderController::class, 'createOrder' ] )->name( 'admin.order.createOrder' );

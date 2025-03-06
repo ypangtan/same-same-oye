@@ -180,4 +180,8 @@ class OrderController extends Controller
         return OrderService::updateOrderStatusView( $request );
     }
 
+    public function generateTestOrder( Request $request ) {
+        return OrderService::generateTestOrder( $request );
+    }
+
 }

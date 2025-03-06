@@ -18,7 +18,7 @@ class OrderFactory extends Factory
             'product_id' => null,
             'product_bundle_id' => null,
             'outlet_id' => null,
-            'user_id' => 40, // Change this dynamically if needed
+            'user_id' => 1, // Change this dynamically if needed
             'vending_machine_id' => 1, // Update accordingly
             'total_price' => 6.97,
             'discount' => 0,

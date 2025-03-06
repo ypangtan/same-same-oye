@@ -12,6 +12,9 @@
                         <li class="nk-block-tools-opt">
                             <a href="{{ route( 'admin.order.add' ) }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
                         </li>
+                        <li class="nk-block-tools-opt">
+                            <a href="#" class="btn btn-primary dt-generate-order">{{ __( 'template.generate_test_order' ) }}</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -127,9 +130,11 @@ $columns = [
                 </div>
             </div>
             <div class="mb-3 row d-flex justify-content-between">
-                <label class="col-sm-5 col-form-label">Total Price</label>
+                <label class="col-sm-5 col-form-label">QR Code</label>
                 <div class="col-sm-7">
-                    <input type="number" class="form-control-plaintext" id="{{ $order_view }}_leverage" readonly>
+                    <div id="downloadQR" class="form-control-plaintext image-container" 
+                         style="background-image: url('your-image.jpg'); height: 250px; cursor: pointer; background-size:cover;">
+                    </div>
                 </div>
             </div>
             <input type="hidden" id="{{ $order_view }}_id">
@@ -321,6 +326,14 @@ var statusMapper = @json( $data['status'] ),
             } );
         } );
 
+        $(document).on('click', '.dt-generate-order', function () {
+            window.location.href = '{{ route('admin.order.generateTestOrder') }}';
+            
+            dt_table.draw( true );
+            $( '#modal_success .caption-text' ).html( 'Test Orders Generated' );
+            modalSuccess.toggle();
+        });
+
         $( document ).on( 'click', '.dt-view', function() {
 
             $( '#modal_order_view .form-control-plaintext' ).val( '-' );
@@ -344,7 +357,9 @@ var statusMapper = @json( $data['status'] ),
                     $('#{{ $order_view }}_email').val(response.reference || '-');
                     $('#{{ $order_view }}_type').val(response.payment_method === 1 ? 'Yobe Wallet' : 'Online Payment');
                     $('#{{ $order_view }}_account_type').val(response.status === 1 ? 'Order Placed' : 'Collected');
-                    $('#{{ $order_view }}_leverage').val(response.total_price || '0.00');
+                    if (response.qr_code) {
+                        $('#downloadQR').css('background-image', `url(${response.qr_code})`);
+                    }
                     $('#modal_order_view .selections').empty();
 
                     const orderMetas = response.orderMetas || [];
@@ -398,6 +413,18 @@ var statusMapper = @json( $data['status'] ),
                 },
             } );
         } );
+
+        $( '#downloadQR' ).on( 'click', function() {
+            if (!this.style.backgroundImage) return;
+        
+            let imageUrl = this.style.backgroundImage.replace(/url\(["']?/, '').replace(/["']?\)/, '');
+            let link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = 'qr_code.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
 
         $( '#modal_order_view .btn-primary' ).on( 'click', function() {
 

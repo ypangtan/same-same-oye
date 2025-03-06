@@ -78,7 +78,7 @@
                                     </li>
                                 @endcan
 
-                                @can( 'view Outlets' )
+                                @can( 'view vending_machines' )
                                 <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\OutletController' || $controller == 'App\Http\Controllers\Admin\VendingMachineController' || $controller == 'App\Http\Controllers\Admin\VendingMachineStockController') ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-dot-box"></em></span>
@@ -142,7 +142,7 @@
                                 </li>
                                 @endcan
 
-                                @can( 'view Orders' )
+                                @can( 'view orders' )
                                 <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\OrderController') ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-list-index-fill"></em></span>

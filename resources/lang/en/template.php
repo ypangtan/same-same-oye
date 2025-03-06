@@ -63,6 +63,7 @@ return [
 
     'loading' => 'Loading...',
     'add' => 'Add',
+    'generate_test_order' => 'Generate Test Order',
     'add_x' => 'Add :title',
     'print_barcode' => 'Print Barcode',
     'edit' => 'Edit',

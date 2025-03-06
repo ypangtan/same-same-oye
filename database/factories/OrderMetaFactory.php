@@ -14,7 +14,7 @@ class OrderMetaFactory extends Factory
     {
         return [
             'order_id' => null,
-            'product_id' => 4,
+            'product_id' => 2,
             'product_bundle_id' => null,
             'froyos' => "[1]",
             'syrups' => "[1]",

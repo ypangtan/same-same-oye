@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\{
     Validator,
     File,
 };
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 use App\Models\{
     FileManager,
@@ -244,6 +245,7 @@ class OrderService
     
         // Attach the cart metas to the cart object
         $order->orderMetas = $orderMetas;
+        $order->qr_code = $order->status != 20 && in_array($order->status, [3, 10]) ? self::generateQrCode($order) : null;
 
         return response()->json( $order );
     }
@@ -726,6 +728,38 @@ class OrderService
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
                 'message_key' => 'update_order_failed',
             ], 500 );
+        }
+    }
+    
+    public static function generateTestOrder()
+    {
+        DB::beginTransaction();
+    
+        try {
+            // Generate 3 test orders
+            $orders = Order::factory()->count(3)->create();
+
+            foreach( $orders as $order ) {
+                $order->qr_code = $order->status != 20 && in_array($order->status, [3, 10]) ? self::generateQrCode($order) : null;
+            }
+
+            // Commit transaction
+            DB::commit();
+    
+            // Generate PDF
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->setPaper('a4', 'portrait');
+    
+            // Load the orders into the Blade view for the PDF
+            $pdf->loadView('admin.order.test_orders_pdf', compact('orders'));
+    
+            // Return the PDF as a downloadable file
+            return $pdf->download('test_orders.pdf');
+    
+        } catch (\Throwable $th) {
+            DB::rollBack();
+    
+            return back()->with('error', 'Failed to generate test orders: ' . $th->getMessage());
         }
     }
 

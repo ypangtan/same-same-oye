@@ -61,6 +61,7 @@ $administrator_edit = 'administrator_edit';
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'administrator.role' ) ] ) }}</option>
                             <option value="1">Super Admin</option>
                             <option value="2">Admin</option>
+                            <option value="5">Vending Admin</option>
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
