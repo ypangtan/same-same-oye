@@ -1926,18 +1926,6 @@ class OrderService
 
             $vendingMachine = VendingMachine::where('api_key', $request->header('X-Vending-Machine-Key'))->first();
 
-            // if( $updateOrder->vending_machine_id != $vendingMachine->id ){
-            //     return response()->json([
-            //         'message' => __('order.collection_point_error_message') . $vendingMachine->title,
-            //         'message_key' => 'collection_point_error',
-            //         'errors' => [
-            //             'order' => [
-            //                 __('order.collection_point_error_message') . $vendingMachine->title,
-            //             ]
-            //         ]
-            //     ], 422);
-            // }
-
             if( $updateOrder ){
                 if( $updateOrder->status == 1 ){
                     return response()->json([
@@ -1995,29 +1983,24 @@ class OrderService
 
                 DB::commit();
             }
-
-            $updateOrder = $updateOrder->paginate(10);
     
-            // Modify each order and its related data
-            $updateOrder->getCollection()->transform(function ($order) {
-                $order->vendingMachine->makeHidden(['created_at', 'updated_at', 'status'])
-                    ->setAttribute('operational_hour', $order->vendingMachine->operational_hour)
-                    ->setAttribute('image_path', $order->vendingMachine->image_path);
+            $transformedOrder = collect([$updateOrder])->map(function ($order) {
+                $order->vendingMachine?->makeHidden(['created_at', 'updated_at', 'status'])
+                    ->setAttribute('operational_hour', $order->vendingMachine?->operational_hour)
+                    ->setAttribute('image_path', $order->vendingMachine?->image_path);
         
-                $orderMetas = $order->orderMetas->map(function ($meta) {
+                $order->orderMetas = $order->orderMetas->map(function ($meta) {
                     return [
                         'id' => $meta->id,
                         'subtotal' => $meta->total_price,
                         'product' => $meta->product?->makeHidden(['created_at', 'updated_at', 'status'])
-                            ->setAttribute('image_path', $meta->product->image_path),
+                            ->setAttribute('image_path', $meta->product?->image_path),
                         'froyo' => $meta->froyos_metas,
                         'syrup' => $meta->syrups_metas,
                         'topping' => $meta->toppings_metas,
                     ];
                 });
         
-                $order->orderMetas = $orderMetas;
-
                 return $order;
             });
         
@@ -2025,7 +2008,7 @@ class OrderService
             return response()->json([
                 'message' => '',
                 'message_key' => 'update_order_success',
-                'orders' => $updateOrder,
+                'orders' => $transformedOrder,
             ]);
 
         } catch ( \Throwable $th ) {
