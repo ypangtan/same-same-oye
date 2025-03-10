@@ -23,6 +23,7 @@ class VendingMachine extends Model
         'outlet_id',
         'title',
         'description',
+        'quick_description',
         'code',
         'image',
         'latitude',
@@ -140,7 +141,7 @@ class VendingMachine extends Model
         return $statusLabel;
     }
 
-    public $translatable = [ 'name', 'description' ];
+    public $translatable = [ 'name', 'description', 'quick_description' ];
 
     protected function serializeDate( DateTimeInterface $date ) {
         return $date->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' );
@@ -150,6 +151,7 @@ class VendingMachine extends Model
         'outlet_id',
         'title',
         'description',
+        'quick_description',
         'code',
         'image',
         'latitude',

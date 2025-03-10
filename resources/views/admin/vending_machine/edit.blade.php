@@ -37,6 +37,13 @@ $vending_machine_edit = 'vending_machine_edit';
                     </div>
                 </div>
                 <div class="mb-3 row">
+                    <label for="{{ $vending_machine_edit }}_quick_description" class="col-sm-5 col-form-label">{{ __( 'vending_machine.quick_description' ) }}</label>
+                    <div class="col-sm-7">
+                        <textarea class="form-control" id="{{ $vending_machine_edit }}_quick_description"></textarea>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
                     <label for="{{ $vending_machine_edit }}_opening_hour" class="col-sm-5 col-form-label">{{ __( 'vending_machine.opening_hour' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $vending_machine_edit }}_opening_hour">
@@ -170,6 +177,8 @@ $vending_machine_edit = 'vending_machine_edit';
             formData.append( 'code', $( fe + '_code' ).val() );
             formData.append( 'title', $( fe + '_title' ).val() );
             formData.append( 'description', $( fe + '_description' ).val() );
+            formData.append( 'quick_description', $( fe + '_quick_description' ).val() );
+            
             formData.append( 'address_1', $( fe + '_address_1' ).val() );
             formData.append( 'address_2', $( fe + '_address_2' ).val() );
             formData.append( 'latitude', $( fe + '_latitude' ).val() );
@@ -235,6 +244,8 @@ $vending_machine_edit = 'vending_machine_edit';
                     $( fe + '_code' ).val( response.code );
                     $( fe + '_title' ).val( response.title );
                     $( fe + '_description' ).val( response.description );
+                    $( fe + '_quick_description' ).val( response.quick_description );
+                    
                     $( fe + '_address_1' ).val( response.address_1 );
                     $( fe + '_address_2' ).val( response.address_2 );
                     $( fe + '_latitude' ).val( response.latitude );

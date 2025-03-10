@@ -37,6 +37,7 @@ class VendingMachineService
         $validator = Validator::make( $request->all(), [
             'title' => [ 'required' ],
             'description' => [ 'nullable' ],
+            'quick_description' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'address_1' => [ 'nullable' ],
             'address_2' => [ 'nullable' ],
@@ -77,6 +78,7 @@ class VendingMachineService
             $vendingmachineCreate = VendingMachine::create([
                 'title' => $request->title,
                 'description' => $request->description,
+                'quick_description' => $request->quick_description,
                 'code' => $request->code,
                 'address_1' => $request->address_1,
                 'address_2' => $request->address_2,
@@ -159,6 +161,7 @@ class VendingMachineService
         $validator = Validator::make( $request->all(), [
             'title' => [ 'required' ],
             'description' => [ 'nullable' ],
+            'quick_description' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'address_1' => [ 'nullable' ],
             'address_2' => [ 'nullable' ],
@@ -199,6 +202,7 @@ class VendingMachineService
     
             $updateVendingMachine->title = $request->title;
             $updateVendingMachine->description = $request->description;
+            $updateVendingMachine->quick_description = $request->quick_description;
             $updateVendingMachine->code = $request->code;
             $updateVendingMachine->address_1 = $request->address_1;
             $updateVendingMachine->address_2 = $request->address_2;

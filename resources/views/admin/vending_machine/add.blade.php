@@ -37,6 +37,13 @@ $vending_machine_create = 'vending_machine_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
+                    <label for="{{ $vending_machine_create }}_quick_description" class="col-sm-5 col-form-label">{{ __( 'vending_machine.quick_description' ) }}</label>
+                    <div class="col-sm-7">
+                        <textarea class="form-control" id="{{ $vending_machine_create }}_quick_description"></textarea>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
                     <label for="{{ $vending_machine_create }}_opening_hour" class="col-sm-5 col-form-label">{{ __( 'vending_machine.opening_hour' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $vending_machine_create }}_opening_hour">
@@ -181,6 +188,7 @@ $vending_machine_create = 'vending_machine_create';
             formData.append( 'title', $( fc + '_title' ).val() );
             formData.append( 'code', $( fc + '_code' ).val() );
             formData.append( 'description', $( fc + '_description' ).val() );
+            formData.append( 'quick_description', $( fc + '_quick_description' ).val() );
             formData.append( 'latitude', $( fc + '_latitude' ).val() );
             formData.append( 'longitude', $( fc + '_longitude' ).val() );
             formData.append( 'address_1', $( fc + '_address_1' ).val() );
