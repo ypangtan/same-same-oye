@@ -1,151 +1,71 @@
-name: 'Menu API'
+name: Endpoints
 description: ''
 endpoints:
   -
     httpMethods:
-      - GET
-    uri: api/v1/menus-operation/get-selections
+      - POST
+    uri: api/v1/api-request-operation/create
     metadata:
-      title: '2. Get selections'
+      title: 'Submit a new API request.'
       description: ''
-      authenticated: true
+      authenticated: false
       custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
     queryParameters: []
-    bodyParameters: []
+    bodyParameters:
+      endpoint:
+        name: endpoint
+        description: 'The desired API endpoint.'
+        required: true
+        example: '"/order/create"'
+        type: string
+        custom: []
+      method:
+        name: method
+        description: 'optional The HTTP method for the API request. Must be one of: GET, POST, PUT, DELETE.'
+        required: false
+        example: '"POST"'
+        type: string
+        custom: []
+      request_body:
+        name: request_body
+        description: 'optional The JSON request payload structure.'
+        required: false
+        example:
+          order_id: 12345
+          amount: 100
+        type: object
+        custom: []
+      response_body:
+        name: response_body
+        description: 'optional The expected JSON response format.'
+        required: false
+        example:
+          success: true
+          message: 'Order created'
+        type: object
+        custom: []
+      api_name:
+        name: api_name
+        description: 'optional A descriptive name for the API.'
+        required: false
+        example: '"Order Creation API"'
+        type: string
+        custom: []
+      remarks:
+        name: remarks
+        description: 'optional Additional remarks or comments about the API request.'
+        required: false
+        example: '"Urgent request for new order system."'
+        type: string
+        custom: []
     responses:
       -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/menus-operation/get-froyos
-    metadata:
-      title: '3. Get froyos'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/menus-operation/get-syrups
-    metadata:
-      title: '4. Get syrups'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/menus-operation/get-toppings
-    metadata:
-      title: '5. Get toppings'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-        description: null
+        status: 201
+        content: '{"message": "API request submitted successfully", "data": {"id": 1, "endpoint": "/order/create", "method": "POST", "status": "pending"}}'
+        headers: []
+        description: '201'
     responseFields: []

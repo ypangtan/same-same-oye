@@ -10,11 +10,106 @@
     ],
     "info": {
         "name": "Laravel",
-        "_postman_id": "96db05bb-5c82-4904-8285-833c42f3fd21",
+        "_postman_id": "adde1ec2-6952-493c-b354-0e59e4f5ab66",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "Submit a new API request.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/api-request-operation\/create",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/api-request-operation\/create"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"endpoint\":\"\\\"\\\/order\\\/create\\\"\",\"method\":\"\\\"POST\\\"\",\"request_body\":{\"order_id\":12345,\"amount\":100},\"response_body\":{\"success\":true,\"message\":\"Order created\"},\"api_name\":\"\\\"Order Creation API\\\"\",\"remarks\":\"\\\"Urgent request for new order system.\\\"\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"message\": \"API request submitted successfully\", \"data\": {\"id\": 1, \"endpoint\": \"\/order\/create\", \"method\": \"POST\", \"status\": \"pending\"}}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Menu API",
+            "description": "",
+            "item": [
+                {
+                    "name": "2. Get selections",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/menus-operation\/get-selections",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-selections"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
         {
             "name": "Order Operation API",
             "description": "",
@@ -92,11 +187,11 @@
             ]
         },
         {
-            "name": "Vending Machine Operation API",
+            "name": "Vending Machine API",
             "description": "",
             "item": [
                 {
-                    "name": "1. Get vending machines status",
+                    "name": "1. Get vending machines",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -113,40 +208,26 @@
                             {
                                 "key": "Accept",
                                 "value": "application\/json"
-                            },
-                            {
-                                "key": "X-Vending-Machine-Key",
-                                "value": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"
                             }
                         ],
                         "body": null,
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
+                        "description": "Retrieves the details of vending machines from the backoffice.\nThis endpoint requires authentication."
                     },
                     "response": [
                         {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": {\n    \"vending_machine\": {\n      \"id\": 4,\n      \"code\": \"MD01\",\n      \"title\": \"Midvalley\",\n      \"description\": \"Midvalley Megamall\",\n      \"latitude\": \"3.118056\",\n      \"longitude\": \"101.676666\",\n      \"address_1\": \"Lingkaran Syed Putra, Mid Valley City, 59200 Kuala Lumpur\",\n      \"city\": \"KL\",\n      \"state\": \"Kuala Lumpur\",\n      \"postcode\": \"59200\",\n      \"status\": 10,\n      \"opening_hour\": \"2025-02-08 10:00:00\",\n      \"closing_hour\": \"2025-02-08 11:00:00\",\n      \"navigation_links\": \"https:\/\/g.co\/kgs\/XwXNHFf\",\n      \"stocks\": [\n        {\n          \"id\": 9,\n          \"vending_machine_id\": 4,\n          \"froyo_id\": 2,\n          \"quantity\": 100,\n          \"froyo\": {\n            \"id\": 2,\n            \"code\": \"choco\",\n            \"title\": \"Chocolate\",\n            \"image\": \"froyo\/2\/skdqNYKoAP4VJu9GmYklpSpst2YB4gohIQtsfgAK.png\",\n            \"price\": \"0.00\"\n          }\n        },\n        {\n          \"id\": 10,\n          \"vending_machine_id\": 4,\n          \"syrup_id\": 1,\n          \"quantity\": 100,\n          \"syrup\": {\n            \"id\": 1,\n            \"code\": \"chocolate\",\n            \"title\": \"Chocolate\",\n            \"image\": \"syrup\/1\/7I6h6rZK2u2vaLYYzllW6Fr2R2K6MCMjVOrhsyAn.png\",\n            \"price\": \"1.99\"\n          }\n        }\n      ]\n    },\n    \"message_key\": \"get_vending_machine_success\"\n  }\n}",
                             "name": ""
                         }
                     ]
-                },
+                }
+            ]
+        },
+        {
+            "name": "Vending Machine Operation API",
+            "description": "",
+            "item": [
                 {
                     "name": "2. update machines status",
                     "request": {
@@ -286,192 +367,6 @@
                         }
                     },
                     "response": []
-                }
-            ]
-        },
-        {
-            "name": "Menu API",
-            "description": "",
-            "item": [
-                {
-                    "name": "2. Get selections",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus-operation\/get-selections",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-selections"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "3. Get froyos",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus-operation\/get-froyos",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-froyos"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "4. Get syrups",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus-operation\/get-syrups",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-syrups"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "5. Get toppings",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus-operation\/get-toppings",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-toppings"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
                 }
             ]
         }

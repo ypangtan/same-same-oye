@@ -13,5 +13,8 @@ class ApiLog extends Model
         'url',
         'method',
         'raw_response',
+        'module_name',
+        'api_type',
+        'scope',
     ];
 }

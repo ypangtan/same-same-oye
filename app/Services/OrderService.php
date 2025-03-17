@@ -1549,7 +1549,7 @@ class OrderService
     }
 
     public static function scannedOrder( $request ) {
-
+        
         DB::beginTransaction();
 
         try {
@@ -1939,6 +1939,7 @@ class OrderService
                     ], 422);
                 }
                 $updateOrder->status = 10;
+                $updateOrder->vending_machine_id = $vendingMachine->id;
                 $updateOrder->save();
 
                 if( $updateOrder->orderMetas ) {
@@ -2000,6 +2001,10 @@ class OrderService
                         'topping' => $meta->toppings_metas,
                     ];
                 });
+
+                $order->order_metas = $order->orderMetas;
+                $order->orderMetas = null;
+                unset($order->orderMetas);
         
                 return $order;
             });

@@ -1,83 +1,40 @@
-name: 'Order Operation API'
+name: 'Menu API'
 description: ''
 endpoints:
   -
     httpMethods:
-      - POST
-    uri: api/v1/order-operation/update-order-status
+      - GET
+    uri: api/v1/menus-operation/get-selections
     metadata:
-      title: '1. Update order status (Scan Order)'
+      title: '2. Get selections'
       description: ''
-      authenticated: false
+      authenticated: true
       custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
-      X-Vending-Machine-Key: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
     urlParameters: []
     queryParameters: []
-    bodyParameters:
-      reference:
-        name: reference
-        description: 'Order reference to be updated.'
-        required: false
-        example: 1knkbasbmc
-        type: string
-        custom: []
-    responses: []
-    responseFields: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/order-operation/update-sales-data
-    metadata:
-      title: '2. Update machine sales'
-      description: |-
-        <strong>sales_type</strong><br>
-        1: daily <br>
-        2: weekly <br>
-        3: monthly <br>
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-      X-Vending-Machine-Key: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
-    urlParameters: []
-    queryParameters: []
-    bodyParameters:
-      sales_date:
-        name: sales_date
-        description: 'The date of sales in YYYY-MM-DD format.'
-        required: true
-        example: '"2025-02-12"'
-        type: string
-        custom: []
-      sales_type:
-        name: sales_type
-        description: 'The type of sales (e.g., 1 for daily, 2 for weekly, 3 for monthly). Default: 1'
-        required: false
-        example: 2
-        type: integer
-        custom: []
-      sales_metas:
-        name: sales_metas
-        description: 'Additional sales metadata (e.g., products sold).'
-        required: false
-        example:
-          -
-            product_id: 1
-            quantity: 3
-        type: 'string[]'
-        custom: []
-      order_references:
-        name: order_references
-        description: 'A list of related order references.'
-        required: false
-        example:
-          - ORD-12345
-          - ORD-67890
-        type: 'string[]'
-        custom: []
-    responses: []
+    bodyParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
+
+                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
+              </head>
+              <body>
+                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
+          content-type: 'text/html; charset=utf-8'
+        description: null
     responseFields: []

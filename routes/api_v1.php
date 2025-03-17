@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\{
     VoucherController,
     CheckinController,
     ProductBundleController,
+    ApiRequestController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -148,6 +149,10 @@ Route::middleware( 'vending.auth' )->group( function() {
     Route::prefix( 'menus-operation' )->group( function() {
         Route::get( '/', [ MenuController::class, 'getMenus' ] );
         Route::get( 'get-selections', [ MenuController::class, 'getSelections' ] );
+    } );
+
+    Route::prefix( 'api-request-operation' )->group( function() {
+        Route::post( 'create', [ ApiRequestController::class, 'createApiRequest' ] );
     } );
 
 });

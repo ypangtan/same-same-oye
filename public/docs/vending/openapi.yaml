@@ -7,6 +7,121 @@ servers:
   -
     url: 'http://localhost/yobe-backoffice'
 paths:
+  /api/v1/api-request-operation/create:
+    post:
+      summary: 'Submit a new API request.'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'API request submitted successfully'
+                  data:
+                    id: 1
+                    endpoint: /order/create
+                    method: POST
+                    status: pending
+                properties:
+                  message:
+                    type: string
+                    example: 'API request submitted successfully'
+                  data:
+                    type: object
+                    example:
+                      id: 1
+                      endpoint: /order/create
+                      method: POST
+                      status: pending
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endpoint:
+                  type: string
+                  description: 'The desired API endpoint.'
+                  example: '"/order/create"'
+                method:
+                  type: string
+                  description: 'optional The HTTP method for the API request. Must be one of: GET, POST, PUT, DELETE.'
+                  example: '"POST"'
+                request_body:
+                  type: object
+                  description: 'optional The JSON request payload structure.'
+                  example:
+                    order_id: 12345
+                    amount: 100
+                  properties: []
+                response_body:
+                  type: object
+                  description: 'optional The expected JSON response format.'
+                  example:
+                    success: true
+                    message: 'Order created'
+                  properties: []
+                api_name:
+                  type: string
+                  description: 'optional A descriptive name for the API.'
+                  example: '"Order Creation API"'
+                remarks:
+                  type: string
+                  description: 'optional Additional remarks or comments about the API request.'
+                  example: '"Urgent request for new order system."'
+              required:
+                - endpoint
+      security: []
+  /api/v1/menus-operation/get-selections:
+    get:
+      summary: '2. Get selections'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Menu API'
   /api/v1/order-operation/update-order-status:
     post:
       summary: '1. Update order status (Scan Order)'
@@ -114,8 +229,8 @@ paths:
       security: []
   /api/v1/vending-machine-operation/get-status:
     get:
-      summary: '1. Get vending machines status'
-      description: ''
+      summary: '1. Get vending machines'
+      description: "Retrieves the details of vending machines from the backoffice.\nThis endpoint requires authentication."
       parameters:
         -
           in: header
@@ -131,24 +246,99 @@ paths:
           example: application/json
           schema:
             type: string
-        -
-          in: header
-          name: X-Vending-Machine-Key
-          description: ''
-          example: 'string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf'
-          schema:
-            type: string
       responses:
-        302:
+        200:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+                type: object
+                example:
+                  data:
+                    vending_machine:
+                      id: 4
+                      code: MD01
+                      title: Midvalley
+                      description: 'Midvalley Megamall'
+                      latitude: '3.118056'
+                      longitude: '101.676666'
+                      address_1: 'Lingkaran Syed Putra, Mid Valley City, 59200 Kuala Lumpur'
+                      city: KL
+                      state: 'Kuala Lumpur'
+                      postcode: '59200'
+                      status: 10
+                      opening_hour: '2025-02-08 10:00:00'
+                      closing_hour: '2025-02-08 11:00:00'
+                      navigation_links: 'https://g.co/kgs/XwXNHFf'
+                      stocks:
+                        -
+                          id: 9
+                          vending_machine_id: 4
+                          froyo_id: 2
+                          quantity: 100
+                          froyo:
+                            id: 2
+                            code: choco
+                            title: Chocolate
+                            image: froyo/2/skdqNYKoAP4VJu9GmYklpSpst2YB4gohIQtsfgAK.png
+                            price: '0.00'
+                        -
+                          id: 10
+                          vending_machine_id: 4
+                          syrup_id: 1
+                          quantity: 100
+                          syrup:
+                            id: 1
+                            code: chocolate
+                            title: Chocolate
+                            image: syrup/1/7I6h6rZK2u2vaLYYzllW6Fr2R2K6MCMjVOrhsyAn.png
+                            price: '1.99'
+                    message_key: get_vending_machine_success
+                properties:
+                  data:
+                    type: object
+                    example:
+                      vending_machine:
+                        id: 4
+                        code: MD01
+                        title: Midvalley
+                        description: 'Midvalley Megamall'
+                        latitude: '3.118056'
+                        longitude: '101.676666'
+                        address_1: 'Lingkaran Syed Putra, Mid Valley City, 59200 Kuala Lumpur'
+                        city: KL
+                        state: 'Kuala Lumpur'
+                        postcode: '59200'
+                        status: 10
+                        opening_hour: '2025-02-08 10:00:00'
+                        closing_hour: '2025-02-08 11:00:00'
+                        navigation_links: 'https://g.co/kgs/XwXNHFf'
+                        stocks:
+                          -
+                            id: 9
+                            vending_machine_id: 4
+                            froyo_id: 2
+                            quantity: 100
+                            froyo:
+                              id: 2
+                              code: choco
+                              title: Chocolate
+                              image: froyo/2/skdqNYKoAP4VJu9GmYklpSpst2YB4gohIQtsfgAK.png
+                              price: '0.00'
+                          -
+                            id: 10
+                            vending_machine_id: 4
+                            syrup_id: 1
+                            quantity: 100
+                            syrup:
+                              id: 1
+                              code: chocolate
+                              title: Chocolate
+                              image: syrup/1/7I6h6rZK2u2vaLYYzllW6Fr2R2K6MCMjVOrhsyAn.png
+                              price: '1.99'
+                      message_key: get_vending_machine_success
       tags:
-        - 'Vending Machine Operation API'
-      security: []
+        - 'Vending Machine API'
   /api/v1/vending-machine-operation/update-status:
     post:
       summary: '2. update machines status'
@@ -385,129 +575,19 @@ paths:
                 - syrups
                 - toppings
       security: []
-  /api/v1/menus-operation/get-selections:
-    get:
-      summary: '2. Get selections'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/menus-operation/get-froyos:
-    get:
-      summary: '3. Get froyos'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/menus-operation/get-syrups:
-    get:
-      summary: '4. Get syrups'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/menus-operation/get-toppings:
-    get:
-      summary: '5. Get toppings'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
 tags:
+  -
+    name: Endpoints
+    description: ''
+  -
+    name: 'Menu API'
+    description: ''
   -
     name: 'Order Operation API'
     description: ''
   -
-    name: 'Vending Machine Operation API'
+    name: 'Vending Machine API'
     description: ''
   -
-    name: 'Menu API'
+    name: 'Vending Machine Operation API'
     description: ''

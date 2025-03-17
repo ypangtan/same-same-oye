@@ -38,6 +38,7 @@ return [
                     'api/*/vending-machine-operation/*',
                     'api/*/order-operation/*',
                     'api/*/menus-operation/*',
+                    'api/*/api-request-operation/*',
                 ],
 
                 /*

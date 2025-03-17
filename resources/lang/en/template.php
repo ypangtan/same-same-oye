@@ -60,6 +60,7 @@ return [
     'order_list' => 'Order List',
     'order_item_list' => 'Order Item List',
     'orders' => 'Orders',
+    'api_requests' => 'Api Requests',
 
     'loading' => 'Loading...',
     'add' => 'Add',

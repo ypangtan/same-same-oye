@@ -70,6 +70,26 @@
                                                 </ul>
                     
                     <ul id="tocify-header-2" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="endpoints">
+                    <a href="#endpoints">Endpoints</a>
+                </li>
+                                    <ul id="tocify-subheader-endpoints" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-api-request-operation-create">
+                        <a href="#endpoints-POSTapi-v1-api-request-operation-create">Submit a new API request.</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-3" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="menu-api">
+                    <a href="#menu-api">Menu API</a>
+                </li>
+                                    <ul id="tocify-subheader-menu-api" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="menu-api-GETapi-v1-menus-operation-get-selections">
+                        <a href="#menu-api-GETapi-v1-menus-operation-get-selections">2. Get selections</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-4" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="order-operation-api">
                     <a href="#order-operation-api">Order Operation API</a>
                 </li>
@@ -82,15 +102,22 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-3" class="tocify-header">
+                    <ul id="tocify-header-5" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="vending-machine-api">
+                    <a href="#vending-machine-api">Vending Machine API</a>
+                </li>
+                                    <ul id="tocify-subheader-vending-machine-api" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="vending-machine-api-GETapi-v1-vending-machine-operation-get-status">
+                        <a href="#vending-machine-api-GETapi-v1-vending-machine-operation-get-status">1. Get vending machines</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-6" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="vending-machine-operation-api">
                     <a href="#vending-machine-operation-api">Vending Machine Operation API</a>
                 </li>
                                     <ul id="tocify-subheader-vending-machine-operation-api" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="vending-machine-operation-api-GETapi-v1-vending-machine-operation-get-status">
-                        <a href="#vending-machine-operation-api-GETapi-v1-vending-machine-operation-get-status">1. Get vending machines status</a>
-                    </li>
-                                    <li class="tocify-item level-2" data-unique="vending-machine-operation-api-POSTapi-v1-vending-machine-operation-update-status">
+                                                    <li class="tocify-item level-2" data-unique="vending-machine-operation-api-POSTapi-v1-vending-machine-operation-update-status">
                         <a href="#vending-machine-operation-api-POSTapi-v1-vending-machine-operation-update-status">2. update machines status</a>
                     </li>
                                     <li class="tocify-item level-2" data-unique="vending-machine-operation-api-POSTapi-v1-vending-machine-operation-alert-stock">
@@ -104,25 +131,6 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-4" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="menu-api">
-                    <a href="#menu-api">Menu API</a>
-                </li>
-                                    <ul id="tocify-subheader-menu-api" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="menu-api-GETapi-v1-menus-operation-get-selections">
-                        <a href="#menu-api-GETapi-v1-menus-operation-get-selections">2. Get selections</a>
-                    </li>
-                                    <li class="tocify-item level-2" data-unique="menu-api-GETapi-v1-menus-operation-get-froyos">
-                        <a href="#menu-api-GETapi-v1-menus-operation-get-froyos">3. Get froyos</a>
-                    </li>
-                                    <li class="tocify-item level-2" data-unique="menu-api-GETapi-v1-menus-operation-get-syrups">
-                        <a href="#menu-api-GETapi-v1-menus-operation-get-syrups">4. Get syrups</a>
-                    </li>
-                                    <li class="tocify-item level-2" data-unique="menu-api-GETapi-v1-menus-operation-get-toppings">
-                        <a href="#menu-api-GETapi-v1-menus-operation-get-toppings">5. Get toppings</a>
-                    </li>
-                                                    </ul>
-                            </ul>
         
                         
             </div>
@@ -133,7 +141,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: February 18 2025</li>
+        <li>Last updated: March 16 2025</li>
     </ul>
 </div>
 
@@ -151,6 +159,284 @@ You can switch the language used with the tabs at the top right (or from the nav
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>This API is not authenticated.</p>
+
+        <h1 id="endpoints">Endpoints</h1>
+
+    
+
+            <h2 id="endpoints-POSTapi-v1-api-request-operation-create">Submit a new API request.</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-v1-api-request-operation-create">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/yobe-backoffice/api/v1/api-request-operation/create" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"endpoint\": \"\\\"\\/order\\/create\\\"\",
+    \"method\": \"\\\"POST\\\"\",
+    \"request_body\": {
+        \"order_id\": 12345,
+        \"amount\": 100
+    },
+    \"response_body\": {
+        \"success\": true,
+        \"message\": \"Order created\"
+    },
+    \"api_name\": \"\\\"Order Creation API\\\"\",
+    \"remarks\": \"\\\"Urgent request for new order system.\\\"\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/yobe-backoffice/api/v1/api-request-operation/create"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "endpoint": "\"\/order\/create\"",
+    "method": "\"POST\"",
+    "request_body": {
+        "order_id": 12345,
+        "amount": 100
+    },
+    "response_body": {
+        "success": true,
+        "message": "Order created"
+    },
+    "api_name": "\"Order Creation API\"",
+    "remarks": "\"Urgent request for new order system.\""
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-api-request-operation-create">
+            <blockquote>
+            <p>Example response (201):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;message&quot;: &quot;API request submitted successfully&quot;,
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;endpoint&quot;: &quot;/order/create&quot;,
+        &quot;method&quot;: &quot;POST&quot;,
+        &quot;status&quot;: &quot;pending&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v1-api-request-operation-create" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-api-request-operation-create"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-api-request-operation-create"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-api-request-operation-create" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-api-request-operation-create"></code></pre>
+</span>
+<form id="form-POSTapi-v1-api-request-operation-create" data-method="POST"
+      data-path="api/v1/api-request-operation/create"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-api-request-operation-create', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/api-request-operation/create</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>endpoint</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="endpoint"
+               data-endpoint="POSTapi-v1-api-request-operation-create"
+               value=""/order/create""
+               data-component="body" hidden>
+    <br>
+<p>The desired API endpoint.</p>
+        </p>
+                <p>
+            <b><code>method</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="method"
+               data-endpoint="POSTapi-v1-api-request-operation-create"
+               value=""POST""
+               data-component="body" hidden>
+    <br>
+<p>optional The HTTP method for the API request. Must be one of: GET, POST, PUT, DELETE.</p>
+        </p>
+                <p>
+            <b><code>request_body</code></b>&nbsp;&nbsp;<small>object</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="request_body"
+               data-endpoint="POSTapi-v1-api-request-operation-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+<p>optional The JSON request payload structure.</p>
+        </p>
+                <p>
+            <b><code>response_body</code></b>&nbsp;&nbsp;<small>object</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="response_body"
+               data-endpoint="POSTapi-v1-api-request-operation-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+<p>optional The expected JSON response format.</p>
+        </p>
+                <p>
+            <b><code>api_name</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="api_name"
+               data-endpoint="POSTapi-v1-api-request-operation-create"
+               value=""Order Creation API""
+               data-component="body" hidden>
+    <br>
+<p>optional A descriptive name for the API.</p>
+        </p>
+                <p>
+            <b><code>remarks</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="remarks"
+               data-endpoint="POSTapi-v1-api-request-operation-create"
+               value=""Urgent request for new order system.""
+               data-component="body" hidden>
+    <br>
+<p>optional Additional remarks or comments about the API request.</p>
+        </p>
+        </form>
+
+        <h1 id="menu-api">Menu API</h1>
+
+    
+
+            <h2 id="menu-api-GETapi-v1-menus-operation-get-selections">2. Get selections</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-menus-operation-get-selections">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/yobe-backoffice/api/v1/menus-operation/get-selections" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/yobe-backoffice/api/v1/menus-operation/get-selections"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-menus-operation-get-selections">
+            <blockquote>
+            <p>Example response (302):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+location: http://localhost/yobe-backoffice/backoffice/dashboard
+content-type: text/html; charset=utf-8
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url='http://localhost/yobe-backoffice/backoffice/dashboard'&quot; /&gt;
+
+        &lt;title&gt;Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;http://localhost/yobe-backoffice/backoffice/dashboard&quot;&gt;http://localhost/yobe-backoffice/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-menus-operation-get-selections" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-menus-operation-get-selections"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-menus-operation-get-selections"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-menus-operation-get-selections" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-menus-operation-get-selections"></code></pre>
+</span>
+<form id="form-GETapi-v1-menus-operation-get-selections" data-method="GET"
+      data-path="api/v1/menus-operation/get-selections"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-menus-operation-get-selections', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/menus-operation/get-selections</code></b>
+        </p>
+                <p>
+            <label id="auth-GETapi-v1-menus-operation-get-selections" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETapi-v1-menus-operation-get-selections"
+                                                                data-component="header"></label>
+        </p>
+                </form>
 
         <h1 id="order-operation-api">Order Operation API</h1>
 
@@ -389,16 +675,18 @@ fetch(url, {
         </p>
         </form>
 
-        <h1 id="vending-machine-operation-api">Vending Machine Operation API</h1>
+        <h1 id="vending-machine-api">Vending Machine API</h1>
 
     
 
-            <h2 id="vending-machine-operation-api-GETapi-v1-vending-machine-operation-get-status">1. Get vending machines status</h2>
+            <h2 id="vending-machine-api-GETapi-v1-vending-machine-operation-get-status">1. Get vending machines</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
-
+<p>Retrieves the details of vending machines from the backoffice.
+This endpoint requires authentication.</p>
 
 <span id="example-requests-GETapi-v1-vending-machine-operation-get-status">
 <blockquote>Example request:</blockquote>
@@ -408,8 +696,7 @@ fetch(url, {
     <pre><code class="language-bash">curl --request GET \
     --get "http://localhost/yobe-backoffice/api/v1/vending-machine-operation/get-status" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --header "X-Vending-Machine-Key: string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"</code></pre></div>
+    --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
@@ -420,7 +707,6 @@ fetch(url, {
 const headers = {
     "Content-Type": "application/json",
     "Accept": "application/json",
-    "X-Vending-Machine-Key": "string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf",
 };
 
 fetch(url, {
@@ -432,30 +718,59 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-vending-machine-operation-get-status">
             <blockquote>
-            <p>Example response (302):</p>
+            <p>Example response (200):</p>
         </blockquote>
-                <details class="annotation">
-            <summary>
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-location: http://localhost/yobe-backoffice/backoffice/dashboard
-content-type: text/html; charset=utf-8
- </code></pre>
-        </details>         <pre>
+                <pre>
 
-<code class="language-json">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot; /&gt;
-        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url='http://localhost/yobe-backoffice/backoffice/dashboard'&quot; /&gt;
-
-        &lt;title&gt;Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        Redirecting to &lt;a href=&quot;http://localhost/yobe-backoffice/backoffice/dashboard&quot;&gt;http://localhost/yobe-backoffice/backoffice/dashboard&lt;/a&gt;.
-    &lt;/body&gt;
-&lt;/html&gt;</code>
+<code class="language-json">{
+    &quot;data&quot;: {
+        &quot;vending_machine&quot;: {
+            &quot;id&quot;: 4,
+            &quot;code&quot;: &quot;MD01&quot;,
+            &quot;title&quot;: &quot;Midvalley&quot;,
+            &quot;description&quot;: &quot;Midvalley Megamall&quot;,
+            &quot;latitude&quot;: &quot;3.118056&quot;,
+            &quot;longitude&quot;: &quot;101.676666&quot;,
+            &quot;address_1&quot;: &quot;Lingkaran Syed Putra, Mid Valley City, 59200 Kuala Lumpur&quot;,
+            &quot;city&quot;: &quot;KL&quot;,
+            &quot;state&quot;: &quot;Kuala Lumpur&quot;,
+            &quot;postcode&quot;: &quot;59200&quot;,
+            &quot;status&quot;: 10,
+            &quot;opening_hour&quot;: &quot;2025-02-08 10:00:00&quot;,
+            &quot;closing_hour&quot;: &quot;2025-02-08 11:00:00&quot;,
+            &quot;navigation_links&quot;: &quot;https://g.co/kgs/XwXNHFf&quot;,
+            &quot;stocks&quot;: [
+                {
+                    &quot;id&quot;: 9,
+                    &quot;vending_machine_id&quot;: 4,
+                    &quot;froyo_id&quot;: 2,
+                    &quot;quantity&quot;: 100,
+                    &quot;froyo&quot;: {
+                        &quot;id&quot;: 2,
+                        &quot;code&quot;: &quot;choco&quot;,
+                        &quot;title&quot;: &quot;Chocolate&quot;,
+                        &quot;image&quot;: &quot;froyo/2/skdqNYKoAP4VJu9GmYklpSpst2YB4gohIQtsfgAK.png&quot;,
+                        &quot;price&quot;: &quot;0.00&quot;
+                    }
+                },
+                {
+                    &quot;id&quot;: 10,
+                    &quot;vending_machine_id&quot;: 4,
+                    &quot;syrup_id&quot;: 1,
+                    &quot;quantity&quot;: 100,
+                    &quot;syrup&quot;: {
+                        &quot;id&quot;: 1,
+                        &quot;code&quot;: &quot;chocolate&quot;,
+                        &quot;title&quot;: &quot;Chocolate&quot;,
+                        &quot;image&quot;: &quot;syrup/1/7I6h6rZK2u2vaLYYzllW6Fr2R2K6MCMjVOrhsyAn.png&quot;,
+                        &quot;price&quot;: &quot;1.99&quot;
+                    }
+                }
+            ]
+        },
+        &quot;message_key&quot;: &quot;get_vending_machine_success&quot;
+    }
+}</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-vending-machine-operation-get-status" hidden>
@@ -470,10 +785,10 @@ content-type: text/html; charset=utf-8
 </span>
 <form id="form-GETapi-v1-vending-machine-operation-get-status" data-method="GET"
       data-path="api/v1/vending-machine-operation/get-status"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json","X-Vending-Machine-Key":"string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf"}'
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-vending-machine-operation-get-status', this);">
     <h3>
@@ -503,7 +818,19 @@ content-type: text/html; charset=utf-8
             <small class="badge badge-grey">OPTIONS</small>
             <b><code>api/v1/vending-machine-operation/get-status</code></b>
         </p>
-                    </form>
+                <p>
+            <label id="auth-GETapi-v1-vending-machine-operation-get-status" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="GETapi-v1-vending-machine-operation-get-status"
+                                                                data-component="header"></label>
+        </p>
+                </form>
+
+        <h1 id="vending-machine-operation-api">Vending Machine Operation API</h1>
+
+    
 
             <h2 id="vending-machine-operation-api-POSTapi-v1-vending-machine-operation-update-status">2. update machines status</h2>
 
@@ -1076,406 +1403,6 @@ fetch(url, {
                                     </details>
         </p>
         </form>
-
-        <h1 id="menu-api">Menu API</h1>
-
-    
-
-            <h2 id="menu-api-GETapi-v1-menus-operation-get-selections">2. Get selections</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-menus-operation-get-selections">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/yobe-backoffice/api/v1/menus-operation/get-selections" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/yobe-backoffice/api/v1/menus-operation/get-selections"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-menus-operation-get-selections">
-            <blockquote>
-            <p>Example response (302):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary>
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-location: http://localhost/yobe-backoffice/backoffice/dashboard
-content-type: text/html; charset=utf-8
- </code></pre>
-        </details>         <pre>
-
-<code class="language-json">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot; /&gt;
-        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url='http://localhost/yobe-backoffice/backoffice/dashboard'&quot; /&gt;
-
-        &lt;title&gt;Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        Redirecting to &lt;a href=&quot;http://localhost/yobe-backoffice/backoffice/dashboard&quot;&gt;http://localhost/yobe-backoffice/backoffice/dashboard&lt;/a&gt;.
-    &lt;/body&gt;
-&lt;/html&gt;</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-menus-operation-get-selections" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-menus-operation-get-selections"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-menus-operation-get-selections"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-menus-operation-get-selections" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-menus-operation-get-selections"></code></pre>
-</span>
-<form id="form-GETapi-v1-menus-operation-get-selections" data-method="GET"
-      data-path="api/v1/menus-operation/get-selections"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-menus-operation-get-selections', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/menus-operation/get-selections</code></b>
-        </p>
-                <p>
-            <label id="auth-GETapi-v1-menus-operation-get-selections" hidden>Authorization header:
-                <b><code>Bearer </code></b><input type="text"
-                                                                name="Authorization"
-                                                                data-prefix="Bearer "
-                                                                data-endpoint="GETapi-v1-menus-operation-get-selections"
-                                                                data-component="header"></label>
-        </p>
-                </form>
-
-            <h2 id="menu-api-GETapi-v1-menus-operation-get-froyos">3. Get froyos</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-menus-operation-get-froyos">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/yobe-backoffice/api/v1/menus-operation/get-froyos" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/yobe-backoffice/api/v1/menus-operation/get-froyos"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-menus-operation-get-froyos">
-            <blockquote>
-            <p>Example response (302):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary>
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-location: http://localhost/yobe-backoffice/backoffice/dashboard
-content-type: text/html; charset=utf-8
- </code></pre>
-        </details>         <pre>
-
-<code class="language-json">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot; /&gt;
-        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url='http://localhost/yobe-backoffice/backoffice/dashboard'&quot; /&gt;
-
-        &lt;title&gt;Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        Redirecting to &lt;a href=&quot;http://localhost/yobe-backoffice/backoffice/dashboard&quot;&gt;http://localhost/yobe-backoffice/backoffice/dashboard&lt;/a&gt;.
-    &lt;/body&gt;
-&lt;/html&gt;</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-menus-operation-get-froyos" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-menus-operation-get-froyos"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-menus-operation-get-froyos"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-menus-operation-get-froyos" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-menus-operation-get-froyos"></code></pre>
-</span>
-<form id="form-GETapi-v1-menus-operation-get-froyos" data-method="GET"
-      data-path="api/v1/menus-operation/get-froyos"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-menus-operation-get-froyos', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/menus-operation/get-froyos</code></b>
-        </p>
-                <p>
-            <label id="auth-GETapi-v1-menus-operation-get-froyos" hidden>Authorization header:
-                <b><code>Bearer </code></b><input type="text"
-                                                                name="Authorization"
-                                                                data-prefix="Bearer "
-                                                                data-endpoint="GETapi-v1-menus-operation-get-froyos"
-                                                                data-component="header"></label>
-        </p>
-                </form>
-
-            <h2 id="menu-api-GETapi-v1-menus-operation-get-syrups">4. Get syrups</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-menus-operation-get-syrups">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/yobe-backoffice/api/v1/menus-operation/get-syrups" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/yobe-backoffice/api/v1/menus-operation/get-syrups"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-menus-operation-get-syrups">
-            <blockquote>
-            <p>Example response (302):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary>
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-location: http://localhost/yobe-backoffice/backoffice/dashboard
-content-type: text/html; charset=utf-8
- </code></pre>
-        </details>         <pre>
-
-<code class="language-json">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot; /&gt;
-        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url='http://localhost/yobe-backoffice/backoffice/dashboard'&quot; /&gt;
-
-        &lt;title&gt;Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        Redirecting to &lt;a href=&quot;http://localhost/yobe-backoffice/backoffice/dashboard&quot;&gt;http://localhost/yobe-backoffice/backoffice/dashboard&lt;/a&gt;.
-    &lt;/body&gt;
-&lt;/html&gt;</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-menus-operation-get-syrups" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-menus-operation-get-syrups"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-menus-operation-get-syrups"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-menus-operation-get-syrups" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-menus-operation-get-syrups"></code></pre>
-</span>
-<form id="form-GETapi-v1-menus-operation-get-syrups" data-method="GET"
-      data-path="api/v1/menus-operation/get-syrups"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-menus-operation-get-syrups', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/menus-operation/get-syrups</code></b>
-        </p>
-                <p>
-            <label id="auth-GETapi-v1-menus-operation-get-syrups" hidden>Authorization header:
-                <b><code>Bearer </code></b><input type="text"
-                                                                name="Authorization"
-                                                                data-prefix="Bearer "
-                                                                data-endpoint="GETapi-v1-menus-operation-get-syrups"
-                                                                data-component="header"></label>
-        </p>
-                </form>
-
-            <h2 id="menu-api-GETapi-v1-menus-operation-get-toppings">5. Get toppings</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-menus-operation-get-toppings">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/yobe-backoffice/api/v1/menus-operation/get-toppings" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/yobe-backoffice/api/v1/menus-operation/get-toppings"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-menus-operation-get-toppings">
-            <blockquote>
-            <p>Example response (302):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary>
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-location: http://localhost/yobe-backoffice/backoffice/dashboard
-content-type: text/html; charset=utf-8
- </code></pre>
-        </details>         <pre>
-
-<code class="language-json">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot; /&gt;
-        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url='http://localhost/yobe-backoffice/backoffice/dashboard'&quot; /&gt;
-
-        &lt;title&gt;Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        Redirecting to &lt;a href=&quot;http://localhost/yobe-backoffice/backoffice/dashboard&quot;&gt;http://localhost/yobe-backoffice/backoffice/dashboard&lt;/a&gt;.
-    &lt;/body&gt;
-&lt;/html&gt;</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-menus-operation-get-toppings" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-menus-operation-get-toppings"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-menus-operation-get-toppings"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-menus-operation-get-toppings" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-menus-operation-get-toppings"></code></pre>
-</span>
-<form id="form-GETapi-v1-menus-operation-get-toppings" data-method="GET"
-      data-path="api/v1/menus-operation/get-toppings"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-menus-operation-get-toppings', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/menus-operation/get-toppings</code></b>
-        </p>
-                <p>
-            <label id="auth-GETapi-v1-menus-operation-get-toppings" hidden>Authorization header:
-                <b><code>Bearer </code></b><input type="text"
-                                                                name="Authorization"
-                                                                data-prefix="Bearer "
-                                                                data-endpoint="GETapi-v1-menus-operation-get-toppings"
-                                                                data-component="header"></label>
-        </p>
-                </form>
 
     
 

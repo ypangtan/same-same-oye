@@ -114,5 +114,25 @@ class OrderController extends Controller
 
         return OrderService::updateSalesData( $request );
     }
+
+    /**
+     * 3. Service Route (Api For Endpoint Preparation)
+     * 
+     * 
+     * @group Order Operation API
+     * 
+     * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
+     * 
+     * @bodyParam sales_metas array Additional sales metadata (e.g., products sold). Example: [{"product_id": 1, "quantity": 3}]
+     * @bodyParam module_name string required The module for this datas. Example: Vending Machine
+     * @bodyParam scope string required The scope for this module. Example: Update Product Sold
+     * @bodyParam api_type string required The api type for this module. Example: POST
+     * 
+     * 
+     */   
+    public function serviceApi( Request $request ) {
+
+        return OrderService::serviceApi( $request );
+    }
     
 }
