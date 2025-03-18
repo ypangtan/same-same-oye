@@ -510,9 +510,14 @@ class ProductBundleService
             }
 
             $productbundles = $productbundles->get();
-            $claimedBundleIds = UserBundle::where('user_id', auth()->user()->id)
-            ->pluck('product_bundle_id')
-            ->toArray();
+
+            $claimedBundleIds = [];
+
+            if( auth()->user() ) {
+                $claimedBundleIds = UserBundle::where('user_id', auth()->user()->id)
+                ->pluck('product_bundle_id')
+                ->toArray();
+            }
 
             $productbundles = $productbundles->map(function ($productbundle) use ($claimedBundleIds) {
                 $productbundle->claimed = in_array($productbundle->id, $claimedBundleIds) ? 'purchased' : 'not purchased';

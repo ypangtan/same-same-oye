@@ -50,4 +50,11 @@ return [
     
     'collection_point_error' => 'Invalid Collection point',
     'collection_point_error_message' => 'Please collect your order at the correct location: ',
+    'order_preparation_status' => 'Order Preparation Status',
+
+    'preparing' => 'Preparing',
+    'adding_syrups' => 'Adding Syrups',
+    'adding_toppings' => 'Adding Toppings',
+    'almost_done' => 'Almost Done',
+    'froyo_complete' => 'Froyo Complete',
 ];

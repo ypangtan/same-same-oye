@@ -39,6 +39,7 @@ class Order extends Model
         'subtotal',
         'additional_charges',
         'is_processed',
+        'order_preparation_status',
     ];
 
     protected $hidden = [
@@ -53,6 +54,19 @@ class Order extends Model
             '3' => __( 'datatables.order_paid' ),
             '10' => __( 'datatables.order_completed' ),
             '20' => __( 'datatables.order_canceled' ),
+        ];
+
+        return $discountTypes[$this->attributes['status']] ?? null;
+    }
+
+    public function getOrderPreparationStatusLabelAttribute()
+    {
+        $discountTypes = [
+            '1' => __( 'order.preparing' ),
+            '2' => __( 'order.adding_syrups' ),
+            '3' => __( 'order.adding_toppings' ),
+            '4' => __( 'order.almost_done' ),
+            '5' => __( 'order.froyo_complete' ),
         ];
 
         return $discountTypes[$this->attributes['status']] ?? null;
@@ -119,6 +133,7 @@ class Order extends Model
         'subtotal',
         'additional_charges',
         'is_processed',
+        'order_preparation_status',
     ];
 
     protected static $logName = 'orders';

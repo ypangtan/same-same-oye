@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Services\{
     ProductService,
+    ProductBundleService,
 };
 
 class MenuController extends Controller
@@ -16,7 +17,6 @@ class MenuController extends Controller
      * 
      * @group Menu API
      * 
-     * @authenticated
      * 
      * 
      */   
@@ -30,7 +30,6 @@ class MenuController extends Controller
      * 
      * @group Menu API
      * 
-     * @authenticated
      * 
      * 
      */   
@@ -44,7 +43,6 @@ class MenuController extends Controller
      * 
      * @group Menu API
      * 
-     * @authenticated
      * 
      * 
      */   
@@ -58,7 +56,6 @@ class MenuController extends Controller
      * 
      * @group Menu API
      * 
-     * @authenticated
      * 
      * 
      */   
@@ -72,12 +69,24 @@ class MenuController extends Controller
      * 
      * @group Menu API
      * 
-     * @authenticated
      * 
      * 
      */   
     public function getToppings( Request $request ) {
 
         return ProductService::getToppings( $request );
+    }
+
+    /**
+     * 6. Get Bundles
+     * 
+     * @group Menu API
+     * 
+     * 
+     * 
+     */   
+    public function getBundles( Request $request ) {
+
+        return ProductBundleService::getBundles( $request );
     }
 }
