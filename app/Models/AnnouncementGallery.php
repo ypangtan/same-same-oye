@@ -15,22 +15,20 @@ use App\Traits\HasTranslations;
 use Helper;
 use Carbon\Carbon;
 
-class VendingMachineGallery extends Model
+class AnnouncementGallery extends Model
 {
     use HasFactory, LogsActivity, HasTranslations;
 
-    protected $table = 'vending_machines_galleries';
-
     protected $fillable = [
-        'vending_machine_id',
+        'announcement_id',
         'sequence',
         'image',
         'status',
     ];
 
-    public function vendingMachine()
+    public function announcement()
     {
-        return $this->belongsTo(Outlet::class, 'vending_machine_id');
+        return $this->belongsTo(Announcement::class, 'announcement_id');
     }
 
     public function getImagePathAttribute() {
@@ -48,13 +46,13 @@ class VendingMachineGallery extends Model
     }
 
     protected static $logAttributes = [
-        'vending_machine_id',
+        'announcement_id',
         'sequence',
         'image',
         'status',
     ];
 
-    protected static $logName = 'vending_machines_galleries';
+    protected static $logName = 'announcement_galleries';
 
     protected static $logOnlyDirty = true;
 
@@ -63,6 +61,6 @@ class VendingMachineGallery extends Model
     }
 
     public function getDescriptionForEvent( string $eventName ): string {
-        return "{$eventName} vending machine gallery";
+        return "{$eventName} announcement gallery";
     }
 }

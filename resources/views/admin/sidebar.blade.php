@@ -159,6 +159,32 @@
                                 </li>
                                 @endcan
 
+                                @can( 'view announcements' )
+                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\AnnouncementController' || $controller == 'App\Http\Controllers\Admin\AnnouncementRewardController' ) ? 'active current-page' : '' }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-list-fill"></em></span>
+                                        <span class="nk-menu-text">{{ __( 'template.announcements' ) }}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.announcement.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.announcements' ) }}</span></a>
+                                        </li>
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementRewardController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.announcement_reward.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.announcement_rewards' ) }}</span></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @endcan
+
+                                @can( 'view Banner' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\BannerController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.banner.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-flag-fill"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.banners' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
                                 @can( 'view Vouchers' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\VoucherController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.voucher.index' ) }}" class="nk-menu-link">

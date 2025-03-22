@@ -39,12 +39,13 @@ class VendingMachineService
             'description' => [ 'nullable' ],
             'quick_description' => [ 'nullable' ],
             'image' => [ 'nullable' ],
+            'gallery' => [ 'nullable' ],
             'address_1' => [ 'nullable' ],
             'address_2' => [ 'nullable' ],
             'city' => [ 'nullable' ],
             'state' => [ 'nullable' ],
             'postcode' => [ 'nullable' ],
-            'thumbnail' => [ 'nullable' ],
+            'gallery' => [ 'nullable' ],
             'code' => [ 'nullable' ],
             'opening_hour' => [ 'nullable' ],
             'closing_hour' => [ 'nullable' ],
@@ -57,7 +58,8 @@ class VendingMachineService
             'title' => __( 'vending_machine.title' ),
             'description' => __( 'vending_machine.description' ),
             'image' => __( 'vending_machine.image' ),
-            'thumbnail' => __( 'vending_machine.thumbnail' ),
+            'gallery' => __( 'vending_machine.gallery' ),
+            'gallery' => __( 'vending_machine.gallery' ),
             'url_slug' => __( 'vending_machine.url_slug' ),
             'structure' => __( 'vending_machine.structure' ),
             'size' => __( 'vending_machine.size' ),
@@ -94,10 +96,10 @@ class VendingMachineService
             ]);
 
             $image = explode( ',', $request->image );
-            $thumbnail = explode( ',', $request->thumbnail );
+            $gallery = explode( ',', $request->gallery );
 
             $imageFiles = FileManager::whereIn( 'id', $image )->get();
-            $thumbnailFiles = FileManager::whereIn( 'id', $thumbnail )->get();
+            $galleryFiles = FileManager::whereIn( 'id', $gallery )->get();
 
             if ( $imageFiles ) {
                 foreach ( $imageFiles as $imageFile ) {
@@ -117,20 +119,24 @@ class VendingMachineService
                 }
             }
 
-            if ( $thumbnailFiles ) {
-                foreach ( $thumbnailFiles as $thumbnailFile ) {
+            if ( $galleryFiles ) {
+                foreach ( $galleryFiles as $galleryFile ) {
 
-                    $fileName = explode( '/', $thumbnailFile->file );
+                    $fileName = explode( '/', $galleryFile->file );
                     $fileExtention = pathinfo($fileName[1])['extension'];
 
-                    $target = 'vending_machine/' . $vendingmachineCreate->id . '/' . $fileName[1];
-                    Storage::disk( 'public' )->move( $thumbnailFile->file, $target );
+                    $target = 'vending_machine_gallery/' . $vendingmachineCreate->id . '/' . $fileName[1];
+                    Storage::disk( 'public' )->move( $galleryFile->file, $target );
 
-                   $vendingmachineCreate->thumbnail = $target;
-                   $vendingmachineCreate->save();
+                    VendingMachineGallery::create( [
+                        'vending_machine_id' =>  $vendingmachineCreate->id,
+                        'sequence' =>  0,
+                        'image' =>  $target,
+                        'status' =>  10,
+                    ] );
 
-                    $thumbnailFile->status = 10;
-                    $thumbnailFile->save();
+                    $galleryFile->status = 10;
+                    $galleryFile->save();
 
                 }
             }
@@ -168,7 +174,7 @@ class VendingMachineService
             'city' => [ 'nullable' ],
             'state' => [ 'nullable' ],
             'postcode' => [ 'nullable' ],
-            'thumbnail' => [ 'nullable' ],
+            'gallery' => [ 'nullable' ],
             'opening_hour' => ['nullable'],
             'closing_hour' => ['nullable'],
             'code' => [ 'nullable' ],
@@ -180,7 +186,7 @@ class VendingMachineService
             'title' => __( 'vending_machine.title' ),
             'description' => __( 'vending_machine.description' ),
             'image' => __( 'vending_machine.image' ),
-            'thumbnail' => __( 'vending_machine.thumbnail' ),
+            'gallery' => __( 'vending_machine.gallery' ),
             'url_slug' => __( 'vending_machine.url_slug' ),
             'structure' => __( 'vending_machine.structure' ),
             'size' => __( 'vending_machine.size' ),
@@ -216,10 +222,10 @@ class VendingMachineService
             $updateVendingMachine->opening_hour = now()->format('Y-m-d') . ' ' . $request->opening_hour;
 
             $image = explode( ',', $request->image );
-            $thumbnail = explode( ',', $request->thumbnail );
+            $gallery = explode( ',', $request->gallery );
 
             $imageFiles = FileManager::whereIn( 'id', $image )->get();
-            $thumbnailFiles = FileManager::whereIn( 'id', $thumbnail )->get();
+            $galleryFiles = FileManager::whereIn( 'id', $gallery )->get();
 
             if ( $imageFiles ) {
                 foreach ( $imageFiles as $imageFile ) {
@@ -235,6 +241,28 @@ class VendingMachineService
 
                     $imageFile->status = 10;
                     $imageFile->save();
+
+                }
+            }
+
+            if ( $galleryFiles ) {
+                foreach ( $galleryFiles as $galleryFile ) {
+
+                    $fileName = explode( '/', $galleryFile->file );
+                    $fileExtention = pathinfo($fileName[1])['extension'];
+
+                    $target = 'vending_machine_gallery/' . $vendingmachineCreate->id . '/' . $fileName[1];
+                    Storage::disk( 'public' )->move( $galleryFile->file, $target );
+
+                    VendingMachineGallery::create( [
+                        'vending_machine_id' =>  $vendingmachineCreate->id,
+                        'sequence' =>  0,
+                        'image' =>  $target,
+                        'status' =>  10,
+                    ] );
+
+                    $galleryFile->status = 10;
+                    $galleryFile->save();
 
                 }
             }
@@ -259,7 +287,7 @@ class VendingMachineService
 
     public static function allVendingMachines( $request ) {
 
-        $vendingMachines = VendingMachine::select( 'vending_machines.*');
+        $vendingMachines = VendingMachine::with( ['galleries'] )->select( 'vending_machines.*');
 
         $filterObject = self::filter( $request, $vendingMachines );
         $vendingMachine = $filterObject['model'];
@@ -292,6 +320,15 @@ class VendingMachineService
                     'encrypted_id',
                     'image_path',
                 ] );
+            }
+
+            foreach( $vendingMachines as $vendingMachine ) {
+                if( $vendingMachine->galleries ) {
+                    $vendingMachine->galleries->append( [
+                        'image_path',
+                        'encrypted_id',
+                    ] ); 
+                }
             }
 
             $totalRecord = VendingMachine::count();
@@ -356,9 +393,16 @@ class VendingMachineService
             'id' => Helper::decode( $request->id ),
         ] );
 
-        $vendingMachine = VendingMachine::find( $request->id );
+        $vendingMachine = VendingMachine::with( ['galleries'] )->find( $request->id );
 
         $vendingMachine->append( ['encrypted_id','image_path'] );
+
+        if( $vendingMachine->galleries ) {
+            $vendingMachine->galleries->append( [
+                'image_path',
+                'encrypted_id',
+            ] ); 
+        }
         
         return response()->json( $vendingMachine );
     }
@@ -507,7 +551,7 @@ class VendingMachineService
         }
     }
 
-    public static function removeVendingMachineGalleryImage( $request ) {
+    public static function removeVendingMachineThumbImage( $request ) {
 
         $updateVendingMachine = VendingMachine::find( Helper::decode($request->id) );
         $updateVendingMachine->image = null;
@@ -518,9 +562,24 @@ class VendingMachineService
         ] );
     }
 
+    public static function removeVendingMachineGalleryImage( $request ) {
+
+        $updateVendingMachine = VendingMachineGallery::find( Helper::decode($request->id) );
+
+        if ( $updateVendingMachine && $updateVendingMachine->image ) {
+            Storage::delete( 'public/' . $updateVendingMachine->image );
+        }
+        
+        $updateVendingMachine->delete();
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'farm.galleries' ) ) ] ),
+        ] );
+    }
+
     public static function getVendingMachines( $request ) {
 
-        $vendingMachines = VendingMachine::select( 'vending_machines.*')->where('status',10);
+        $vendingMachines = VendingMachine::with( ['galleries'] )->select( 'vending_machines.*')->where('status',10);
 
         $filterObject = self::filter( $request, $vendingMachines );
         $vendingMachine = $filterObject['model'];
@@ -565,6 +624,15 @@ class VendingMachineService
                 'formatted_closing_hour',
                 'formatted_opening_hour',
             ] );
+
+            foreach( $vendingMachines as $vendingMachine ) {
+                if( $vendingMachine->galleries ) {
+                    $vendingMachine->galleries->append( [
+                        'image_path',
+                        'encrypted_id',
+                    ] ); 
+                }
+            }
         }
 
         return response()->json([

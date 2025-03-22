@@ -19,8 +19,6 @@ class VendingMachineGallery extends Model
 {
     use HasFactory, LogsActivity, HasTranslations;
 
-    protected $table = 'vending_machines_galleries';
-
     protected $fillable = [
         'vending_machine_id',
         'sequence',
@@ -54,7 +52,7 @@ class VendingMachineGallery extends Model
         'status',
     ];
 
-    protected static $logName = 'vending_machines_galleries';
+    protected static $logName = 'vending_machine_galleries';
 
     protected static $logOnlyDirty = true;
 

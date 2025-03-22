@@ -14,34 +14,22 @@ use App\Traits\HasTranslations;
 
 use Helper;
 
-class Voucher extends Model
+class Banner extends Model
 {
     use HasFactory, LogsActivity, HasTranslations;
 
     protected $fillable = [
-        'promo_code',
+        'voucher_id',
         'title',
         'description',
         'image',
-        'start_date',
-        'expired_date',
-        'discount_type',
-        'discount_amount',
-        'type',
+        'sequence',
         'status',
-        'usable_amount',
-        'points_required',
-        'min_spend',
-        'min_order',
-        'buy_x_get_y_adjustment',
-        'total_claimable',
-        'validity_days',
-        'claim_per_user',
     ];
 
-    public function announcement()
+    public function voucher()
     {
-        return $this->hasOne( Announcement::class, 'voucher_id' );
+        return $this->belongsTo(Voucher::class, 'voucher_id');
     }
 
     public function getImagePathAttribute() {
@@ -84,25 +72,25 @@ class Voucher extends Model
     public function getDiscountTypeLabelAttribute()
     {
         $discountTypes = [
-            '1' => __('voucher.percentage'),
-            '2' => __('voucher.fixed_amount'),
-            '3' => __('voucher.free_cup'),
+            '1' => __('banner.percentage'),
+            '2' => __('banner.fixed_amount'),
+            '3' => __('banner.free_cup'),
         ];
 
         return $discountTypes[$this->attributes['discount_type']] ?? null;
     }
 
-    public function getVoucherTypeLabelAttribute()
+    public function getBannerTypeLabelAttribute()
     {
         $discountTypes = [
-            '1' => __('voucher.public_voucher'),
-            '2' => __('voucher.user_specific_voucher'),
+            '1' => __('banner.public_banner'),
+            '2' => __('banner.user_specific_banner'),
         ];
 
         return $discountTypes[$this->attributes['type']] ?? null;
     }
 
-    public function getVoucherTypeAttribute()
+    public function getBannerTypeAttribute()
     {
         return $this->attributes['type'] ?? null;
     }
@@ -114,27 +102,15 @@ class Voucher extends Model
     }
 
     protected static $logAttributes = [
-        'promo_code',
+        'voucher_id',
         'title',
         'description',
         'image',
-        'start_date',
-        'expired_date',
-        'discount_type',
-        'discount_amount',
-        'type',
+        'sequence',
         'status',
-        'usable_amount',
-        'points_required',
-        'min_spend',
-        'min_order',
-        'buy_x_get_y_adjustment',
-        'total_claimable',
-        'validity_days',
-        'claim_per_user',
     ];
 
-    protected static $logName = 'vouchers';
+    protected static $logName = 'banners';
 
     protected static $logOnlyDirty = true;
 
@@ -143,6 +119,6 @@ class Voucher extends Model
     }
 
     public function getDescriptionForEvent( string $eventName ): string {
-        return "{$eventName} voucher";
+        return "{$eventName} banner";
     }
 }

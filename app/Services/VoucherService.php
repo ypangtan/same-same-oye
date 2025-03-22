@@ -25,6 +25,8 @@ use App\Models\{
     Order,
     OrderMeta,
     UserVoucher,
+    Announcement,
+    AnnouncementReward,
 };
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -964,6 +966,18 @@ class VoucherService
 
         $voucher->total_claimable -= 1;
         $voucher->save();
+
+        // announcement
+        $announcement = $voucher->announcement;
+        if( $announcement ) {
+            AnnouncementReward::create( [
+                'user_id' => auth()->user()->id,
+                'announcement_id' => $announcement->id,
+                'expired_at' => Carbon::now()->setTimezone( 'Asia/Kuala_Lumpur' )->addDays( $voucher->validity_days ),
+                'status' => 10,
+                'used_at' => null,
+            ] );
+        }
     
         // notification
         UserService::createUserNotification(
@@ -974,7 +988,7 @@ class VoucherService
             'voucher'
         );
 
-        self::sendNotification( $order->user, 'voucher', __( 'notification.user_voucher_success_content' )  );
+        self::sendNotification( $userVoucher->user, 'voucher', __( 'notification.user_voucher_success_content' )  );
 
         return response()->json( [
             'message' => __('voucher.voucher_claimed'),
@@ -991,7 +1005,7 @@ class VoucherService
         $messageContent['id'] = $user->id;
         $messageContent['message'] = $message;
 
-        Helper::sendNotification( $affiliate->user_id, $messageContent );
+        Helper::sendNotification( $user->id, $messageContent );
         
     }
 

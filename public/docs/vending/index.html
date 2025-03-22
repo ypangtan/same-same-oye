@@ -99,6 +99,9 @@
                                     <li class="tocify-item level-2" data-unique="menu-api-GETapi-v1-menus-operation-get-toppings">
                         <a href="#menu-api-GETapi-v1-menus-operation-get-toppings">5. Get toppings</a>
                     </li>
+                                    <li class="tocify-item level-2" data-unique="menu-api-GETapi-v1-menus-operation-get-bundles">
+                        <a href="#menu-api-GETapi-v1-menus-operation-get-bundles">6. Get Bundles</a>
+                    </li>
                                                     </ul>
                             </ul>
                     <ul id="tocify-header-4" class="tocify-header">
@@ -798,6 +801,96 @@ content-type: text/html; charset=utf-8
             <p>
             <small class="badge badge-green">GET</small>
             <b><code>api/v1/menus-operation/get-toppings</code></b>
+        </p>
+                    </form>
+
+            <h2 id="menu-api-GETapi-v1-menus-operation-get-bundles">6. Get Bundles</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-menus-operation-get-bundles">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/yobe-backoffice/api/v1/menus-operation/get-bundles" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/yobe-backoffice/api/v1/menus-operation/get-bundles"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-menus-operation-get-bundles">
+            <blockquote>
+            <p>Example response (302):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+location: http://localhost/yobe-backoffice/backoffice/dashboard
+content-type: text/html; charset=utf-8
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url='http://localhost/yobe-backoffice/backoffice/dashboard'&quot; /&gt;
+
+        &lt;title&gt;Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;http://localhost/yobe-backoffice/backoffice/dashboard&quot;&gt;http://localhost/yobe-backoffice/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-menus-operation-get-bundles" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-menus-operation-get-bundles"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-menus-operation-get-bundles"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-menus-operation-get-bundles" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-menus-operation-get-bundles"></code></pre>
+</span>
+<form id="form-GETapi-v1-menus-operation-get-bundles" data-method="GET"
+      data-path="api/v1/menus-operation/get-bundles"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-menus-operation-get-bundles', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/menus-operation/get-bundles</code></b>
         </p>
                     </form>
 

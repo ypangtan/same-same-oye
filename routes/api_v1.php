@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\{
     CheckinController,
     ProductBundleController,
     ApiRequestController,
+    BannerController,
+    AnnouncementController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -44,7 +46,6 @@ Route::prefix( 'users' )->group( function() {
     Route::post( 'check-phone-number', [ UserController::class, 'checkPhoneNumber' ] );
     Route::post( 'forgot-password', [ UserController::class, 'forgotPasswordOtp' ] );
     Route::post( 'reset-password', [ UserController::class, 'resetPassword' ] );
-
 } );
 
 /* End Public route */
@@ -99,6 +100,15 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::get( '/', [ OrderController::class, 'getOrder' ] );
         Route::post( 'checkout', [ OrderController::class, 'checkout' ] );
         Route::post( 'retry-payment', [ OrderController::class, 'retryPayment' ] );
+    } );
+
+    Route::prefix( 'banners' )->group( function() {
+        Route::get( '/', [ BannerController::class, 'getBanners' ] );
+    } );
+
+    Route::prefix( 'announcements' )->group( function() {
+        Route::get( '/', [ AnnouncementController::class, 'getAnnouncements' ] );
+        Route::post( 'claim', [ AnnouncementController::class, 'claim' ] );
     } );
 
     Route::prefix( 'vouchers' )->group( function() {
@@ -157,6 +167,10 @@ Route::middleware( 'vending.auth' )->group( function() {
 
     Route::prefix( 'api-request-operation' )->group( function() {
         Route::post( 'create', [ ApiRequestController::class, 'createApiRequest' ] );
+    } );
+
+    Route::prefix( 'banners-operation' )->group( function() {
+        Route::any( '/', [ BannerController::class, 'getBanners' ] );
     } );
 
 });

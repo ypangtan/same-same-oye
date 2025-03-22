@@ -65,4 +65,6 @@ return [
     'order_paid' => 'Order Paid',
     'order_completed' => 'Order Completed',
     'order_canceled' => 'Order Canceled',
+    'enabled' => 'Enabled',
+    'disabled' => 'Disabled',
 ];

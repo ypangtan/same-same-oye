@@ -34,6 +34,9 @@ use App\Http\Controllers\Admin\{
     CheckinRewardController,
     ProductBundleController,
     UserBundleController,
+    AnnouncementController,
+    AnnouncementRewardController,
+    BannerController,
 };
 
 use App\Models\{
@@ -220,8 +223,10 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'one-vending-machine', [ VendingMachineController::class, 'oneVendingMachine' ] )->name( 'admin.vending_machine.oneVendingMachine' );
                 Route::post( 'create-vending-machine', [ VendingMachineController::class, 'createVendingMachine' ] )->name( 'admin.vending_machine.createVendingMachine' );
                 Route::post( 'update-vending-machine', [ VendingMachineController::class, 'updateVendingMachine' ] )->name( 'admin.vending_machine.updateVendingMachine' );
+                Route::post( 'update-vending-machine-sequence', [ VendingMachineController::class, 'updateVendingMachineSequence' ] )->name( 'admin.vending_machine.updateVendingMachineSequence' );
                 Route::post( 'update-vending-machine-status', [ VendingMachineController::class, 'updateVendingMachineStatus' ] )->name( 'admin.vending_machine.updateVendingMachineStatus' );
                 Route::post( 'remove-vending-machine-gallery-image', [ VendingMachineController::class, 'removeVendingMachineGalleryImage' ] )->name( 'admin.vending_machine.removeVendingMachineGalleryImage' );
+                Route::post( 'remove-vending-machine-thumb-image', [ VendingMachineController::class, 'removeVendingMachineThumbImage' ] )->name( 'admin.vending_machine.removeVendingMachineThumbImage' );
             } );
 
             Route::prefix( 'vending-machine-stocks' )->group( function() {
@@ -527,6 +532,68 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'remove-user-bundle-gallery-image', [ UserBundleController::class, 'removeUserBundleGalleryImage' ] )->name( 'admin.user_bundle.removeUserBundleGalleryImage' );
                 Route::post( 'ckeUpload', [ UserBundleController::class, 'ckeUpload' ] )->name( 'admin.user_bundle.ckeUpload' );
             } );
+            
+            Route::prefix( 'announcements' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view announcements' ] ], function() {
+                    Route::get( '/', [ AnnouncementController::class, 'index' ] )->name( 'admin.module_parent.announcement.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add announcements' ] ], function() {
+                    Route::get( 'add', [ AnnouncementController::class, 'add' ] )->name( 'admin.announcement.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit announcements' ] ], function() {
+                    Route::get( 'edit', [ AnnouncementController::class, 'edit' ] )->name( 'admin.announcement.edit' );
+                } );
+    
+                Route::post( 'all-announcements', [ AnnouncementController::class, 'allAnnouncements' ] )->name( 'admin.announcement.allAnnouncements' );
+                Route::post( 'one-announcement', [ AnnouncementController::class, 'oneAnnouncement' ] )->name( 'admin.announcement.oneAnnouncement' );
+                Route::post( 'create-announcement', [ AnnouncementController::class, 'createAnnouncement' ] )->name( 'admin.announcement.createAnnouncement' );
+                Route::post( 'update-announcement', [ AnnouncementController::class, 'updateAnnouncement' ] )->name( 'admin.announcement.updateAnnouncement' );
+                Route::post( 'update-announcement-status', [ AnnouncementController::class, 'updateAnnouncementStatus' ] )->name( 'admin.announcement.updateAnnouncementStatus' );
+                Route::post( 'remove-announcement-gallery-image', [ AnnouncementController::class, 'removeAnnouncementGalleryImage' ] )->name( 'admin.announcement.removeAnnouncementGalleryImage' );
+                Route::post( 'ckeUpload', [ AnnouncementController::class, 'ckeUpload' ] )->name( 'admin.announcement.ckeUpload' );
+            } );
+
+            Route::prefix( 'banners' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view banners' ] ], function() {
+                    Route::get( '/', [ BannerController::class, 'index' ] )->name( 'admin.module_parent.banner.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add banners' ] ], function() {
+                    Route::get( 'add', [ BannerController::class, 'add' ] )->name( 'admin.banner.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit banners' ] ], function() {
+                    Route::get( 'edit', [ BannerController::class, 'edit' ] )->name( 'admin.banner.edit' );
+                } );
+    
+                Route::post( 'update-order', [ BannerController::class, 'updateOrder' ] )->name( 'admin.banner.updateOrder' );
+                Route::post( 'all-banners', [ BannerController::class, 'allBanners' ] )->name( 'admin.banner.allBanners' );
+                Route::post( 'one-banner', [ BannerController::class, 'oneBanner' ] )->name( 'admin.banner.oneBanner' );
+                Route::post( 'create-banner', [ BannerController::class, 'createBanner' ] )->name( 'admin.banner.createBanner' );
+                Route::post( 'update-banner', [ BannerController::class, 'updateBanner' ] )->name( 'admin.banner.updateBanner' );
+                Route::post( 'delete-banner', [ BannerController::class, 'deleteBanner' ] )->name( 'admin.banner.deleteBanner' );
+                Route::post( 'update-banner-status', [ BannerController::class, 'updateBannerStatus' ] )->name( 'admin.banner.updateBannerStatus' );
+                Route::post( 'remove-banner-gallery-image', [ BannerController::class, 'removeBannerGalleryImage' ] )->name( 'admin.banner.removeBannerGalleryImage' );
+                Route::post( 'ckeUpload', [ BannerController::class, 'ckeUpload' ] )->name( 'admin.banner.ckeUpload' );
+            } );
+
+            Route::prefix( 'announcement-rewards' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view announcement-rewards' ] ], function() {
+                    Route::get( '/', [ AnnouncementRewardController::class, 'index' ] )->name( 'admin.module_parent.announcement_reward.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add announcement-rewards' ] ], function() {
+                    Route::get( 'add', [ AnnouncementRewardController::class, 'add' ] )->name( 'admin.announcement_reward.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit announcement-rewards' ] ], function() {
+                    Route::get( 'edit', [ AnnouncementRewardController::class, 'edit' ] )->name( 'admin.announcement_reward.edit' );
+                } );
+    
+                Route::post( 'all-announcement-rewards', [ AnnouncementRewardController::class, 'allAnnouncementRewards' ] )->name( 'admin.announcement_reward.allAnnouncementRewards' );
+                Route::post( 'one-announcement-reward', [ AnnouncementRewardController::class, 'oneAnnouncementReward.' ] )->name( 'admin.announcement_reward.oneAnnouncementReward.' );
+                Route::post( 'create-announcement-reward', [ AnnouncementRewardController::class, 'createAnnouncementReward.' ] )->name( 'admin.announcement_reward.createAnnouncementReward.' );
+                Route::post( 'update-announcement-reward', [ AnnouncementRewardController::class, 'updateAnnouncementReward.' ] )->name( 'admin.announcement_reward.updateAnnouncementReward.' );
+                Route::post( 'update-announcement-reward-status', [ AnnouncementRewardController::class, 'updateAnnouncementRewardStatus' ] )->name( 'admin.announcement_reward.updateAnnouncementRewardStatus' );
+                Route::post( 'remove-announcement-reward-gallery-image', [ AnnouncementRewardController::class, 'removeAnnouncementRewardGalleryImage' ] )->name( 'admin.announcement_reward.removeAnnouncementRewardGalleryImage' );
+                Route::post( 'ckeUpload', [ AnnouncementRewardController::class, 'ckeUpload' ] )->name( 'admin.announcement_reward.ckeUpload' );
+            } );
 
         } );
         
@@ -557,60 +624,3 @@ Route::prefix( 'eghl' )->group( function() {
     Route::any( 'callback', [PaymentController::class, 'callbackEghl'] )->name( 'payment.callbackEghl' )->withoutMiddleware( [ \App\Http\Middleware\VerifyCsrfToken::class ] );
     Route::any( 'fallback', [PaymentController::class, 'fallbackEghl'] )->name( 'payment.fallbackEghl' )->withoutMiddleware( [ \App\Http\Middleware\VerifyCsrfToken::class ] );
 } );
-
-
-if( 1 == 2 ){
-    Route::prefix('eghl-test')->group(function () {
-        Route::get('/', function () {
-            $order = Order::latest()->first();
-    
-            $data = [
-                'TransactionType' => 'SALE',
-                'PymtMethod' => 'ANY',
-                'ServiceID' => config('services.eghl.merchant_id'),
-                'PaymentID' => $order->reference . '-' . $order->payment_attempt,
-                'OrderNumber' => $order->reference,
-                'PaymentDesc' => $order->reference,
-                'MerchantName' => 'Yobe Froyo',
-                'MerchantReturnURL' => config('services.eghl.staging_callabck_url'),
-                'Amount' => $order->total_price,
-                'CurrencyCode' => 'MYR',
-                'CustIP' => request()->ip(),
-                'CustName' => $order->user->username ?? 'Yobe Guest',
-                'HashValue' => '',
-                'CustEmail' => $order->user->email ?? 'yobeguest@gmail.com',
-                'CustPhone' => $order->user->phone_number,
-                'MerchantTermsURL' => null,
-                'LanguageCode' => 'en',
-                'PageTimeout' => '780',
-            ];
-    
-            $data['HashValue'] = Helper::generatePaymentHash($data);
-            $url2 = config('services.eghl.test_url') . '?' . http_build_query($data);
-    
-            $orderTransaction = OrderTransaction::create( [
-                'order_id' => $order->id,
-                'checkout_id' => null,
-                'checkout_url' => null,
-                'payment_url' => $url2,
-                'transaction_id' => null,
-                'layout_version' => 'v1',
-                'redirect_url' => null,
-                'notify_url' => null,
-                'order_no' => $order->reference,
-                'order_title' => $order->reference,
-                'order_detail' => $order->reference,
-                'amount' => $order->total_price,
-                'currency' => 'MYR',
-                'transaction_type' => 1,
-                'status' => 10,
-            ] );
-    
-            $order->payment_url = $url2;
-            $order->order_transaction_id = $orderTransaction->id;
-            $order->save();
-    
-            return redirect($url2);
-        });
-    });
-}

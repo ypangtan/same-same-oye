@@ -115,4 +115,9 @@ class VendingMachineController extends Controller
 
         return VendingMachineService::removeVendingMachineGalleryImage( $request );
     }
+
+    public function removeVendingMachineThumbImage( Request $request ) {
+
+        return VendingMachineService::removeVendingMachineThumbImage( $request );
+    }
 }

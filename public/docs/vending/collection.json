@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel",
-        "_postman_id": "f8f04d97-72c4-4890-8714-e9de187c3a3c",
+        "_postman_id": "a1870233-4f14-4218-a483-71dde658aa77",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -263,6 +263,54 @@
                             "path": "api\/v1\/menus-operation\/get-toppings",
                             "query": [],
                             "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-toppings"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "6. Get Bundles",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/menus-operation\/get-bundles",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation\/get-bundles"
                         },
                         "method": "GET",
                         "header": [

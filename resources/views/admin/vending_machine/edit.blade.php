@@ -74,6 +74,17 @@ $vending_machine_edit = 'vending_machine_edit';
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
+                
+                <div class="mb-3">
+                    <label>{{ __( 'vending_machine.gallery' ) }}</label>
+                    <div class="dropzone mb-3" id="{{ $vending_machine_edit }}_gallery" style="min-height: 0px;">
+                        <div class="dz-message needsclick">
+                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback"></div>
+                </div>
+
                 <h5 class="card-title mb-4">{{ __( 'template.location_info' ) }}</h5>
 
                 <div class="mb-3 row">
@@ -159,6 +170,7 @@ $vending_machine_edit = 'vending_machine_edit';
 
         let fe = '#{{ $vending_machine_edit }}',
                 fileID = '';
+                fileID2 = '';
 
         $( fe + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.vending_machine.index' ) }}';
@@ -190,6 +202,7 @@ $vending_machine_edit = 'vending_machine_edit';
             formData.append( 'opening_hour', $( fe + '_opening_hour' ).val() );
             formData.append( 'navigation_links', $( fe + '_navigation_links' ).val() );
             formData.append( 'image', fileID );
+            formData.append( 'gallery', fileID2 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -308,6 +321,59 @@ $vending_machine_edit = 'vending_machine_edit';
 
                             file.previewElement.remove();
 
+                            removeThumb( idToRemove );
+
+                        },
+                        success: function( file, response ) {
+                            if ( response.status == 200 )  {
+                                if ( fileID !== '' ) {
+                                    fileID += ','; // Add a comma if fileID is not empty
+                                }
+                                fileID += response.data.id;
+
+                                file.previewElement.id = response.data.id;
+                            }
+                        }
+                    } );
+
+                    const dropzone2 = new Dropzone( fe + '_gallery', {
+                        url: '{{ route( 'admin.file.upload' ) }}',
+                        maxFiles: 10,
+                        acceptedFiles: 'image/jpg,image/jpeg,image/png',
+                        addRemoveLinks: true,
+                        init: function() {
+
+                            let that = this;
+                            console.log(response)
+                            let myDropzone = that
+
+                            response.galleries.forEach(gallery => {
+                                let mockFile = { 
+                                    name: 'Default', 
+                                    size: 1024, 
+                                    accepted: true, 
+                                    id: gallery.encrypted_id 
+                                };
+
+                                myDropzone.files.push(mockFile);
+                                myDropzone.displayExistingFile(mockFile, gallery.image_path);
+                                $(myDropzone.files[myDropzone.files.length - 1].previewElement).data('id', cat_id);
+                            });
+                        },
+                        removedfile: function( file ) {
+                            var idToRemove = file.id;
+
+                            var idArrays = fileID.split(/\s*,\s*/);
+
+                            var indexToRemove = idArrays.indexOf( idToRemove.toString() );
+                            if (indexToRemove !== -1) {
+                                idArrays.splice( indexToRemove, 1 );
+                            }
+
+                            fileID = idArrays.join( ', ' );
+
+                            file.previewElement.remove();
+
                             removeGallery( idToRemove );
 
                         },
@@ -325,6 +391,45 @@ $vending_machine_edit = 'vending_machine_edit';
 
                     $( 'body' ).loading( 'stop' );
                 },
+            } );
+        }
+
+        function removeThumb( gallery ) {
+
+            resetInputValidation();
+
+            $( 'body' ).loading( {
+                message: '{{ __( 'template.loading' ) }}'
+            } );
+
+            let formData = new FormData();
+            formData.append( 'id', gallery );
+            formData.append( '_token', '{{ csrf_token() }}' );
+
+            $.ajax( {
+                url: '{{ route( 'admin.vending_machine.removeVendingMachineThumbImage' ) }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType:   false,
+                success: function( response ) {
+                    $( 'body' ).loading( 'stop' );
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.toggle();
+                },
+                error: function( error ) {
+                    $( 'body' ).loading( 'stop' );
+
+                    if ( error.status === 422 ) {
+                        let errors = error.responseJSON.errors;
+                        $.each( errors, function( key, value ) {
+                            $( fe + '_' + key ).addClass( 'is-invalid' ).nextAll( 'div.invalid-feedback' ).text( value );
+                        } );
+                    } else {
+                        $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
+                        modalDanger.toggle();
+                    }
+                }
             } );
         }
 

@@ -54,4 +54,5 @@ return [
     'offline' => 'Offline',
     'maintenance_required' => 'Maintenance Required',
     'quick_description' => 'Quick Descriptions',
+    'gallery' => 'Gallery',
 ];

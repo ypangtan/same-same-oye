@@ -178,4 +178,8 @@ return [
 
     'wallets' => 'Wallets',
     'wallet_transactions' => 'Wallet Transactions',
+    'announcements' => 'Announcements',
+    'banners' => 'Banners',
+    'announcement_rewards' => 'Announcement Rewards History',
+    'reward_histories' => 'Reward Histories',
 ];

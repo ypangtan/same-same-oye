@@ -74,6 +74,17 @@ $vending_machine_create = 'vending_machine_create';
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
+
+                <div class="mb-3">
+                    <label>{{ __( 'vending_machine.gallery' ) }}</label>
+                    <div class="dropzone mb-3" id="{{ $vending_machine_create }}_gallery" style="min-height: 0px;">
+                        <div class="dz-message needsclick">
+                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback"></div>
+                </div>
+
                 <h5 class="card-title mb-4">{{ __( 'template.location_info' ) }}</h5>
 
                 <div class="mb-3 row">
@@ -158,6 +169,7 @@ $vending_machine_create = 'vending_machine_create';
         
         let fc = '#{{ $vending_machine_create }}',
                 fileID = '',
+                fileID2 = '',
                 order = [];
 
         $( fc + '_cancel' ).click( function() {
@@ -199,7 +211,8 @@ $vending_machine_create = 'vending_machine_create';
             formData.append( 'closing_hour', $( fc + '_closing_hour' ).val() );
             formData.append( 'opening_hour', $( fc + '_opening_hour' ).val() );
             formData.append( 'navigation_links', $( fc + '_navigation_links' ).val() );
-            formData.append( 'image', fileId );
+            formData.append( 'image', fileID );
+            formData.append( 'gallery', fileID2 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -236,7 +249,7 @@ $vending_machine_create = 'vending_machine_create';
         Dropzone.autoDiscover = false;
         const dropzone = new Dropzone(fc + '_image', { 
             url: '{{ route( 'admin.file.upload' ) }}',
-            maxFiles: 10,
+            maxFiles: 1,
             acceptedFiles: 'image/jpg,image/jpeg,image/png',
             addRemoveLinks: true,
             init: function () {
@@ -278,6 +291,37 @@ $vending_machine_create = 'vending_machine_create';
                         fileID += ','; // Add a comma if fileID is not empty
                     }
                     fileID += response.data.id;
+
+                    file.previewElement.id = response.data.id;
+                }
+            }
+        });
+
+        const dropzoneGallery = new Dropzone(fc + '_gallery', { 
+            url: '{{ route( 'admin.file.upload' ) }}',
+            maxFiles: 10,
+            acceptedFiles: 'image/jpg,image/jpeg,image/png',
+            addRemoveLinks: true,
+            init: function () {
+                let dropzoneInstance = this;
+            },
+            removedfile: function(file) {
+                var idToRemove = file.previewElement.id;
+                var idArrays = fileID2.split(/\s*,\s*/);
+                var indexToRemove = idArrays.indexOf(idToRemove.toString());
+                if (indexToRemove !== -1) {
+                    idArrays.splice(indexToRemove, 1);
+                }
+                fileID2 = idArrays.join(', ');
+
+                file.previewElement.remove();
+            },
+            success: function(file, response) {
+                if (response.status == 200) {
+                    if (fileID2 !== '') {
+                        fileID2 += ','; // Add a comma if fileID is not empty
+                    }
+                    fileID2 += response.data.id;
 
                     file.previewElement.id = response.data.id;
                 }

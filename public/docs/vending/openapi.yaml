@@ -243,6 +243,36 @@ paths:
       tags:
         - 'Menu API'
       security: []
+  /api/v1/menus-operation/get-bundles:
+    get:
+      summary: '6. Get Bundles'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Menu API'
+      security: []
   /api/v1/order-operation/update-order-status:
     post:
       summary: '1. Update order status (Scan Order)'
