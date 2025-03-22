@@ -169,9 +169,11 @@
                                         <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.module_parent.announcement.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.announcements' ) }}</span></a>
                                         </li>
+                                        @if( 1 == 2 )
                                         <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementRewardController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.module_parent.announcement_reward.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.announcement_rewards' ) }}</span></a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </li>
                                 @endcan
