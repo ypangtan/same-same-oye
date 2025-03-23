@@ -981,6 +981,12 @@ class OrderService
         // check wallet balance 
         $userWallet = $user->wallets->where('type',1)->first();
 
+        if( $userCart->total_price == 0 ) {
+            $request->merge( [
+                'payment_method' => 1
+            ] );
+        }
+
         if( $request->payment_method == 1 ){
 
             if (!$userWallet) {
