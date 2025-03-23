@@ -29,6 +29,8 @@ class AnnouncementController extends Controller
      * 
      * @group Announcement API
      * 
+     * @queryParam show_claimed integer To show claimed announcement . Example: 1
+     * 
      */
     public function getAnnouncements( Request $request ) {
 

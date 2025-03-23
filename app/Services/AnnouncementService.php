@@ -865,19 +865,24 @@ class AnnouncementService
             });
         })
         ->when(auth()->check(), function ($query) {
-            $user = auth()->user();
+
+            if ( $request->show_claimed != 1 ) {  
+
+                $user = auth()->user();
     
-            // Exclude announcements already viewed if `view_once` is enabled
-            $query->whereNotIn('id', function ($subQuery) use ($user) {
-                $subQuery->select('announcement_id')
-                    ->from('announcement_views') // Assuming a table tracks views
-                    ->where('user_id', $user->id);
-            });
-    
-            // Filter for new users if `new_user_only` is enabled
-            if ($user->created_at->diffInDays(now()) > 7) { // Assuming "new user" means 7 days
-                $query->where('new_user_only', 0);
+                // Exclude announcements already viewed if `view_once` is enabled
+                $query->whereNotIn('id', function ($subQuery) use ($user) {
+                    $subQuery->select('announcement_id')
+                        ->from('announcement_views') // Assuming a table tracks views
+                        ->where('user_id', $user->id);
+                });
+        
+                // Filter for new users if `new_user_only` is enabled
+                if ($user->created_at->diffInDays(now()) > 7) { // Assuming "new user" means 7 days
+                    $query->where('new_user_only', 0);
+                }
             }
+
         })
         ->orderBy('created_at', 'DESC')
         ->get();
