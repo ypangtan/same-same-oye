@@ -887,7 +887,12 @@ class AnnouncementService
         ->orderBy('created_at', 'DESC')
         ->get();
 
-        $announcements = $announcements->map(function ($announcement) {
+        $claimedAnnouncementIds = AnnouncementReward::where('user_id', auth()->user()->id)
+        ->pluck('announcement_id')
+        ->toArray();
+
+        $announcements = $announcements->map(function ($announcement) use ( $claimedAnnouncementIds ) {
+            $announcement->claimed = in_array($announcement->id, $claimedAnnouncementIds) ? 'claimed' : 'unclaim';
             $announcement->makeHidden( [ 'created_at', 'updated_at'] );
             $announcement->append([ 'image_path', 'unclaimed_image_path', 'claiming_image_path', 'claimed_image_path' ]);
             $announcement->voucher?->append(['decoded_adjustment', 'image_path','voucher_type','voucher_type_label']);
