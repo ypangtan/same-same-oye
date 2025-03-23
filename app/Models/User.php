@@ -45,7 +45,7 @@ class User extends Model
         'referral_id',
         'invitation_code',
         'referral_structure',
-
+        'profile_picture',
     ];
 
     public function wallets()
@@ -59,6 +59,10 @@ class User extends Model
 
     public function downlines() {
         return $this->hasMany( User::class, 'referral_id', 'id' );
+    }
+
+    public function getProfilePicturePathAttribute() {
+        return $this->attributes['profile_picture'] ? asset( 'storage/' . $this->attributes['profile_picture'] ) : asset( 'admin/images/placeholder.png' ) . Helper::assetVersion();
     }
 
     public function groups() {
@@ -102,6 +106,7 @@ class User extends Model
         'referral_id',
         'invitation_code',
         'referral_structure',
+        'profile_picture',
     ];
 
     protected static $logName = 'users';

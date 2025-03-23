@@ -119,6 +119,7 @@ class UserController extends Controller {
      * 6. Update user
      * @sort 6
      * 
+     * 
      * @group User API
      * 
      * @authenticated
@@ -126,6 +127,8 @@ class UserController extends Controller {
      * @bodyParam username string The username to update. Example: John
      * @bodyParam email string The email to update. Example: john@email.com
      * @bodyParam date_of_birth string The date of birth to update. Example: 2022-01-01
+     * @bodyParam to_remove integer Indicate remove photo or not. Example: 1
+     * @bodyParam profile_picture file The photo to update. Will create when empty
      * 
      */
     public function updateUserApi( Request $request ) {

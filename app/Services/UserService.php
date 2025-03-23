@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\{
     Validator,
     Mail,
     Crypt,
+    Storage,
 };
 
 use App\Mail\EnquiryEmail;
@@ -1019,6 +1020,11 @@ class UserService
         }
 
         if($user->wallets){ 
+
+            $user->append([
+                'profile_picture_path',
+            ]);
+
             foreach($user->wallets as $wallet){
                 $wallet->append([
                     'listing_balance',
@@ -1050,6 +1056,7 @@ class UserService
             'username' => [ 'nullable', 'unique:users,username,' . auth()->user()->id, ],
             'email' => [ 'nullable', 'unique:users,email,' . auth()->user()->id, ],
             'date_of_birth' => ['nullable', 'date'],
+            'profile_picture' => [ 'nullable', 'file', 'mimes:jpg,png' ],
         ] );
 
         $attributeName = [
@@ -1068,7 +1075,21 @@ class UserService
         $updateUser->username = $request->username;
         $updateUser->date_of_birth = $request->date_of_birth;
         $updateUser->email = $request->email;
+
+        if( $request->file( 'profile_picture' ) ) {
+            
+            Storage::disk( 'public' )->delete( $updateUser->profile_picture );
+
+            if ( $updateUser->profile_picture == 1 ) {
+                $updateUser->profile_picture = null;
+            } else {
+                $updateUser->profile_picture = $request->file( 'profile_picture' )->store( 'users/' . $updateUser->id, [ 'disk' => 'public' ] );
+            }
+        }
+
         $updateUser->save();
+
+        $updateUser->append( ['profile_picture_path'] );
 
         return response()->json( [
             'message' => __( 'user.user_updated' ),
