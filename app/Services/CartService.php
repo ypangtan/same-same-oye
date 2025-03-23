@@ -147,7 +147,7 @@ class CartService {
                 $exists = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
-                    $fail(__('Product is not available'));
+                    $fail(__('Froyo is not available'));
                 }
             }], // Validate each froyo ID
             'items.*.syrup' => ['nullable', 'array'],
@@ -155,7 +155,7 @@ class CartService {
                 $exists = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
-                    $fail(__('Product is not available'));
+                    $fail(__('Syrup is not available'));
                 }
             }], // Validate each syrup ID
             'items.*.topping' => ['nullable', 'array'],
@@ -163,7 +163,7 @@ class CartService {
                 $exists = Topping::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
-                    $fail(__('Product is not available'));
+                    $fail(__('Topping is not available'));
                 }
             }], // Validate each topping ID
              'promo_code' => [
@@ -725,7 +725,7 @@ class CartService {
         
                     $requestedProductIds = collect($request->input('items'))->pluck('product');
                     $x = $requestedProductIds->intersect($adjustment->buy_products)->count();
-        
+
                     if ( $x >= $adjustment->buy_quantity ) {
                         $getProductMeta = $cart->cartMetas
                         ->where('product_id', $adjustment->get_product)
@@ -733,9 +733,9 @@ class CartService {
                         ->first();
 
                         if ($getProductMeta) {
-                            $orderPrice -= Helper::numberFormatV2($getProductMeta->total_price,2,false,true);
+                            $orderPrice = bcsub( ( string ) $orderPrice, ( string ) Helper::numberFormatV2( floatval( $getProductMeta->total_price ), 2, false, true ), 2 );
                             $orderPrice += $getProductMeta->additional_charges;
-                            $cart->discount = Helper::numberFormatV2($getProductMeta->total_price,2,false,true);
+                            $cart->discount = ( float )Helper::numberFormatV2(floatval($getProductMeta->total_price),2,false,true);
                             $getProductMeta->total_price = 0 + $getProductMeta->additional_charges;
                             $getProductMeta->save();
                         }
@@ -880,7 +880,7 @@ class CartService {
                 $exists = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
-                    $fail(__('Product is not available'));
+                    $fail(__('Froyo is not available'));
                 }
             }], // Validate each froyo ID
             'items.*.syrup' => ['nullable', 'array'],
@@ -888,7 +888,7 @@ class CartService {
                 $exists = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
-                    $fail(__('Product is not available'));
+                    $fail(__('Syrup is not available'));
                 }
             }], // Validate each syrup ID
             'items.*.topping' => ['nullable', 'array'],
@@ -896,7 +896,7 @@ class CartService {
                 $exists = Topping::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
-                    $fail(__('Product is not available'));
+                    $fail(__('Topping is not available'));
                 }
             }], // Validate each topping ID
             'cart_item' => ['nullable', 'exists:cart_metas,id'],
@@ -1721,8 +1721,8 @@ class CartService {
                                 ->first();                    
 
                                 if ($getProductMeta) {
-                                    $updateCart->discount = Helper::numberFormatV2($getProductMeta->total_price,2,false,true);
-                                    $orderPrice -= Helper::numberFormatV2($getProductMeta->total_price,2,false,true);
+                                    $updateCart->discount = ( float )Helper::numberFormatV2(floatval($getProductMeta->total_price),2,false,true);
+                                    $orderPrice = bcsub( ( string ) $orderPrice, ( string ) Helper::numberFormatV2( floatval( $getProductMeta->total_price ), 2, false, true ), 2 );
                                     $orderPrice += $getProductMeta->additional_charges;
                                     $getProductMeta->total_price = 0 + $getProductMeta->additional_charges;
                                     $getProductMeta->save();
@@ -1922,8 +1922,9 @@ class CartService {
                             ->first();                    
 
                             if ($getProductMeta) {
-                                $orderPrice -= Helper::numberFormatV2($getProductMeta->total_price,2,false,true);
-                                $updateCart->discount = Helper::numberFormatV2($getProductMeta->total_price,2,false,true);
+                                // $orderPrice -= ( float )Helper::numberFormatV2(floatval($getProductMeta->total_price),2,false,true);
+                                $orderPrice = bcsub( ( string ) $orderPrice, ( string ) Helper::numberFormatV2( floatval( $getProductMeta->total_price ), 2, false, true ), 2 );
+                                $updateCart->discount = ( float )Helper::numberFormatV2(floatval($getProductMeta->total_price),2,false,true);
                                 $getProductMeta->total_price = 0 + $getProductMeta->additional_charges;
                                 $getProductMeta->save();
                             }

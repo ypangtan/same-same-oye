@@ -65,8 +65,8 @@ class AnnouncementController extends Controller
         $validator->after(function ($validator) use ($request) {
             $announcement = Announcement::find( $request->announcement );
             
-            if ( !$announcement || is_null( $announcement->voucher_id ) ) {
-                $validator->errors()->add('announcement', __( 'template.voucher_required' ));
+            if ( !$announcement ) {
+                $validator->errors()->add('announcement', __( 'template.announcement_not_found' ));
             }
         });
         

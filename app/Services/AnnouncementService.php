@@ -42,6 +42,7 @@ class AnnouncementService
         $request->merge( [
             'claim_per_user' => 1,
             'total_claimable' => 100000,
+            'usable_amount' => 1,
         ] );
 
         $validator = Validator::make( $request->all(), [
@@ -440,7 +441,7 @@ class AnnouncementService
                 $updateVoucher->points_required = $request->points_required;
                 $updateVoucher->start_date = $request->start_date;
                 $updateVoucher->expired_date = $request->expired_date;
-                $updateVoucher->usable_amount = $request->usable_amount;
+                // $updateVoucher->usable_amount = $request->usable_amount;
                 $updateVoucher->validity_days = $request->validity_days;
                 $updateVoucher->buy_x_get_y_adjustment = $request->adjustment_data;
                 $updateVoucher->image = $updateAnnouncement->image;
@@ -457,7 +458,7 @@ class AnnouncementService
                     'start_date' => $request->start_date,
                     'expired_date' => $request->expired_date,
                     'buy_x_get_y_adjustment' => $request->adjustment_data,
-                    'usable_amount' => $request->usable_amount,
+                    'usable_amount' => 1,
                     'validity_days' => $request->validity_days,
                     'claim_per_user' => $request->claim_per_user,
                 ]);

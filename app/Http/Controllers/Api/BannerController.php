@@ -31,6 +31,8 @@ class BannerController extends Controller
      * 
      * @group Banner API
      * 
+     * @authenticated
+     * 
      * @bodyParam id string required The id the banner. Example: 1
      * 
      */ 
