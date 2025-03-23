@@ -80,17 +80,25 @@
             @foreach($banners as $banner)
                 <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="{{ $banner->id }}">
                     <img src="{{ asset('storage/' . $banner->image) }}" class="banner-img rounded">
-                    
+        
                     <!-- Dropdown -->
                     <div class="dropdown mt-2">
-                        <button class="d-none btn btn-secondary dropdown-toggle btn-sm edit-banner" style="margin-right: 3px;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Edit
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <em class="icon ni ni-more-h"></em>
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm delete-banner" style="margin-right: 3px;" data-id="{{ $banner->id }}">X</button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <button class="dropdown-item edit-banner" data-id="{{ $banner->id }}">Edit</button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item text-danger delete-banner" data-id="{{ $banner->id }}">Delete</button>
+                            </li>
+                        </ul>
                     </div>
                 </li>
             @endforeach
         </ul>
+        
     </div>
 </div>
 
@@ -129,9 +137,23 @@
             success: function(file, response) {
                 if (response.status == 200) {
                     let newBanner = $(`
-                        <li class="list-group-item d-flex justify-content-center align-items-center" data-id="${response.data.id}">
-                            <img src="${response.data.url}" class="banner-img rounded me-3">
-                            <button type="button" class="btn btn-danger btn-sm delete-banner" data-id="${response.data.id}">X</button>
+                        <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="${response.data.id}${response.data.id}">
+                            <img src="${response.data.url}" class="banner-img rounded">
+                
+                            <!-- Dropdown -->
+                            <div class="dropdown mt-2">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <em class="icon ni ni-more-h"></em>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button class="dropdown-item edit-banner" data-id="${response.data.id}">Edit</button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger delete-banner" data-id="${response.data.id}">Delete</button>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                     `);
                     $("#banner-list").append(newBanner);
@@ -175,15 +197,36 @@
         }
     });
 
+    $( document ).on( 'click', '.edit-banner', function() {
+        window.location.href = '{{ route( 'admin.banner.edit' ) }}?id=' + $( this ).data( 'id' );
+    } );
+
     // ✅ Delete Banner
     $(document).on("click", ".delete-banner", function() {
         let bannerId = $(this).data("id");
-        $(this).closest("li").remove();
+        let bannerItem = $(this).closest(".list-group-item"); // Ensure correct targeting
+
+        $( 'body' ).loading( {
+            message: '{{ __( 'template.loading' ) }}'
+        } );
+
         $.post('{{ route("admin.banner.updateBannerStatus") }}', {
             _token: '{{ csrf_token() }}',
             id: bannerId
+        }).done(function(response) {
+            $( 'body' ).loading( 'stop' );
+
+            bannerItem.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }).fail(function() {
+            $( 'body' ).loading( 'stop' );
+
+            alert("Error occurred. Please check your connection.");
         });
     });
+
+
 });
 
 </script>

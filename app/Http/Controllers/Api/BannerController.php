@@ -25,4 +25,17 @@ class BannerController extends Controller
 
         return BannerService::getBanners( $request );
     }
+
+    /**
+     * 2. Get one banner detail
+     * 
+     * @group Banner API
+     * 
+     * @bodyParam id string required The id the banner. Example: 1
+     * 
+     */ 
+    public function oneBanner( Request $request ) {
+        
+        return BannerService::oneBannerClient( $request );
+    }
 }

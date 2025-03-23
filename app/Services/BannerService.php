@@ -89,36 +89,14 @@ class BannerService
     
     public static function updateBanner( $request ) {
 
-        $request->merge( [
-            'id' => Helper::decode( $request->id ),
-        ] );
-
         $validator = Validator::make( $request->all(), [
             'title' => [ 'required' ],
             'description' => [ 'nullable' ],
-            'discount_type' => [ 'required' ],
-            'banner_type' => [ 'nullable' ],
-            'promo_code' => [ 'nullable', 'unique:banners,promo_code,' . $request->id, ],
-            'image' => [ 'nullable' ],
-            'start_date' => [ 'nullable' ],
-            'expired_date' => [ 'nullable' ],
-            'total_claimable' => [ 'nullable' ],
-            'points_required' => [ 'nullable' ],
-            'usable_amount' => [ 'nullable' ],
-            'validity_days' => [ 'nullable' ],
-            'adjustment_data' => ['required'],
-            'claim_per_user' => ['required'],
-            
         ] );
 
         $attributeName = [
             'title' => __( 'banner.title' ),
             'description' => __( 'banner.description' ),
-            'image' => __( 'banner.image' ),
-            'code' => __( 'banner.code' ),
-            'ingredients' => __( 'banner.ingredients' ),
-            'nutritional_values' => __( 'banner.nutritional_values' ),
-            'price' => __( 'banner.price' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -126,46 +104,6 @@ class BannerService
         }
 
         $validator->setAttributeNames( $attributeName )->validate();
-
-
-        $validator->setAttributeNames( $attributeName )->validate();
-
-        $adjustmentData = json_decode($request->adjustment_data, true);
-
-        if ($request->discount_type == 3) {
-            if (!$adjustmentData) {
-                return response()->json(['error' => __('Invalid adjustment data')], 422);
-            }
-        
-            $validator = Validator::make($adjustmentData, [
-                'buy_products' => ['required', 'array'],
-                'buy_quantity' => ['required', 'numeric', 'min:1'], // Added numeric and min validation
-                'get_quantity' => ['required', 'numeric', 'min:1'], // Added numeric and min validation
-                'get_product' => ['required', 'exists:products,id'],
-            ]);
-        
-            $attributeName = [
-                'buy_products' => __('banner.buy_products'),
-                'buy_quantity' => __('banner.buy_quantity'),
-                'get_quantity' => __('banner.get_quantity'),
-                'get_product' => __('banner.get_product'),
-            ];
-        
-            $validator->setAttributeNames($attributeName)->validate();
-        } elseif ($request->discount_type == 2) {
-            $validator = Validator::make($adjustmentData, [
-                'buy_quantity' => ['required', 'numeric', 'min:1'], // Added numeric and min validation
-                'discount_quantity' => ['required', 'numeric', 'min:0'],
-            ]);
-        
-            $attributeName = [
-                'buy_quantity' => __('banner.buy_quantity'),
-                'discount_quantity' => __('banner.discount_quantity'),
-                'discount_type' => __('banner.discount_type'),
-            ];
-        
-            $validator->setAttributeNames($attributeName)->validate();
-        }
         
         DB::beginTransaction();
 
@@ -173,18 +111,7 @@ class BannerService
             $updateBanner = Banner::find( $request->id );
     
             $updateBanner->title = $request->title;
-            $updateBanner->discount_type = $request->discount_type;
-            $updateBanner->type = $request->banner_type;
             $updateBanner->description = $request->description;
-            $updateBanner->promo_code = $request->promo_code;
-            $updateBanner->total_claimable = $request->total_claimable;
-            $updateBanner->points_required = $request->points_required;
-            $updateBanner->start_date = $request->start_date;
-            $updateBanner->expired_date = $request->expired_date;
-            $updateBanner->usable_amount = $request->usable_amount;
-            $updateBanner->validity_days = $request->validity_days;
-            $updateBanner->claim_per_user = $request->claim_per_user;
-            $updateBanner->buy_x_get_y_adjustment = $request->adjustment_data;
             
             $image = explode( ',', $request->image );
 
@@ -392,15 +319,24 @@ class BannerService
 
     public static function oneBanner( $request ) {
 
-        $request->merge( [
-            'id' => Helper::decode( $request->id ),
-        ] );
+        $banner = Banner::find( $request->id );
+
+        $banner->append( ['encrypted_id','image_path'] );
+        
+        return response()->json( $banner );
+    }
+
+    public static function oneBannerClient( $request ) {
 
         $banner = Banner::find( $request->id );
 
-        $banner->append( ['encrypted_id','image_path', 'decoded_adjustment'] );
-        
-        return response()->json( $banner );
+        $banner->append( ['encrypted_id','image_path'] );
+
+        return response()->json( [
+            'message' => '',
+            'message_key' => 'get_banner_success',
+            'data' => $banner,
+        ] );
     }
 
     public static function deleteBanner( $request ){
@@ -472,9 +408,12 @@ class BannerService
 
     public static function removeBannerGalleryImage( $request ) {
 
-        $updateFarm = Banner::find( Helper::decode($request->id) );
-        $updateFarm->image = null;
-        $updateFarm->save();
+        $updateBanner = Banner::find( $request->id );
+
+        Storage::delete( 'public/' . $updateBanner->image );
+        $updateBanner->image = null;
+
+        $updateBanner->save();
 
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'farm.galleries' ) ) ] ),

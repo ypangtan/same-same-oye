@@ -104,11 +104,12 @@ Route::middleware( 'auth:user' )->group( function() {
 
     Route::prefix( 'banners' )->group( function() {
         Route::get( '/', [ BannerController::class, 'getBanners' ] );
+        Route::any( 'details', [ BannerController::class, 'oneBanner' ] );
     } );
 
     Route::prefix( 'announcements' )->group( function() {
         Route::get( '/', [ AnnouncementController::class, 'getAnnouncements' ] );
-        Route::post( 'claim', [ AnnouncementController::class, 'claim' ] );
+        Route::post( 'close', [ AnnouncementController::class, 'claim' ] );
     } );
 
     Route::prefix( 'vouchers' )->group( function() {

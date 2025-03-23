@@ -28,6 +28,7 @@ use App\Models\{
     Voucher,
     Product,
     AnnouncementReward,
+    AnnouncementView,
 };
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -850,19 +851,34 @@ class AnnouncementService
     public static function getAnnouncements( $request )
     {
 
-        $announcements = Announcement::with( 'voucher' )
-        ->where( 'status', 10 )
-        ->where(function ( $query ) {
-            $query->where(function ( $query ) {
-                $query->whereNull( 'start_date' )
-                        ->whereNull( 'expired_date' );
-            })->orWhere(function ( $query ) {
-                $query->where( 'start_date', '<=', now()->endOfDay() )
-                        ->where( 'expired_date', '>=', now()->startOfDay() );
+        $announcements = Announcement::with(['voucher'])
+        ->where('status', 10)
+        ->where(function ($query) {
+            $query->where(function ($query) {
+                $query->whereNull('start_date');
+                $query->whereNull('expired_date');
+            })
+            ->orWhere(function ($query) {
+                $query->where('start_date', '<=', now()->endOfDay());
+                $query->where('expired_date', '>=', now()->startOfDay());
             });
         })
-        ->whereNotIn( 'id', AnnouncementReward::where( 'user_id', auth()->user()->id )->pluck( 'announcement_id' )->toArray() )
-        ->orderByDesc( 'created_at' )
+        ->when(auth()->check(), function ($query) {
+            $user = auth()->user();
+    
+            // Exclude announcements already viewed if `view_once` is enabled
+            $query->whereNotIn('id', function ($subQuery) use ($user) {
+                $subQuery->select('announcement_id')
+                    ->from('announcement_views') // Assuming a table tracks views
+                    ->where('user_id', $user->id);
+            });
+    
+            // Filter for new users if `new_user_only` is enabled
+            if ($user->created_at->diffInDays(now()) > 7) { // Assuming "new user" means 7 days
+                $query->where('new_user_only', 0);
+            }
+        })
+        ->orderBy('created_at', 'DESC')
         ->get();
 
         $announcements = $announcements->map(function ($announcement) {

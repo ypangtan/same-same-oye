@@ -27,6 +27,7 @@ use App\Models\{
     UserVoucher,
     Announcement,
     AnnouncementReward,
+    AnnouncementView,
 };
 
 use Barryvdh\DomPDF\Facade\Pdf;

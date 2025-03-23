@@ -36,11 +36,14 @@ class AnnouncementController extends Controller
     }
 
     /**
-     * 2. Claim Announcement 
+     * 2. Close/Claim Announcement 
      * 
      * @authenticated
      * 
-     * @group Voucher API
+     * <aside class="notice">Marked the announcement as read, claim any promotion inside</aside>
+     * 
+     * 
+     * @group Announcement API
      * 
      * @bodyParam announcement required integer The id of announcement to be claim. Example: 1
      * 
@@ -69,12 +72,28 @@ class AnnouncementController extends Controller
         
         // Set attribute names and validate
         $validator->setAttributeNames( $attributeName )->validate();
+        $announcement = Announcement::find( $request->announcement );
+        if( $announcement->voucher_id ) {
 
-        $request->merge( [
-            'voucher_id' => Announcement::find( $request->announcement )->voucher_id
-        ] );
+            $request->merge( [
+                'voucher_id' => $announcement->voucher_id
+            ] );
 
-        return VoucherService::claimVoucher( $request );
+           return VoucherService::claimVoucher( $request );
+
+        } else {
+            AnnouncementView::create( [
+                'user_id' => auth()->user()->id,
+                'announcement_id' => $announcement->id,
+            ] );
+
+            return response()->json( [
+                'message' => __('announcement.close'),
+                'message_key' => 'close',
+            ] );
+        }
+
+
     }
 
 }

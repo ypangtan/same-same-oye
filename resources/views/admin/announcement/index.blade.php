@@ -50,11 +50,6 @@ $columns = [
         'title' => __( 'announcement.title' ),
     ],
     [
-        'type' => 'default',
-        'id' => 'new_user_only',
-        'title' => __( 'announcement.new_user_only' ),
-    ],
-    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -134,7 +129,6 @@ var statusMapper = {
             { data: 'created_at' },
             { data: 'image_path' },
             { data: 'title' },
-            { data: 'new_user_only' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
