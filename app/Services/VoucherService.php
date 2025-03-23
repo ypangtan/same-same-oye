@@ -641,6 +641,7 @@ class VoucherService
                 });
             })
             ->whereIn( 'type', [1,2] )
+            ->whereDoesntHave( 'announcement' )
             ->orderBy( 'created_at', 'DESC' );
     
             if ( $request && $request->promo_code) {
