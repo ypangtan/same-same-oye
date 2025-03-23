@@ -978,6 +978,10 @@ class VoucherService
                 'status' => 10,
                 'used_at' => null,
             ] );
+            AnnouncementView::create( [
+                'user_id' => auth()->user()->id,
+                'announcement_id' => $announcement->id,
+            ] );
         }
     
         // notification

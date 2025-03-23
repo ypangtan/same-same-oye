@@ -17,7 +17,7 @@ class CreateBannersTable extends Migration
             $table->id();
             $table->foreignId('voucher_id')->nullable()->constrained('vouchers')->onUpdate( 'restrict')->onDelete('cascade');
             $table->string('title')->nullable();
-            $table->string('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->tinyInteger('sequence')->nullable()->default(0);
             $table->tinyInteger('status')->default(10);

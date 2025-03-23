@@ -17,7 +17,7 @@ class CreateAnnoucementsTable extends Migration
             $table->id();
             $table->foreignId('voucher_id')->nullable()->constrained('vouchers')->onUpdate( 'restrict')->onDelete('cascade');
             $table->string('title')->nullable();
-            $table->string('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('promo_code')->nullable();
             $table->string('image')->nullable();
             $table->string('unclaimed_image')->nullable();
