@@ -864,7 +864,7 @@ class AnnouncementService
                 $query->where('expired_date', '>=', now()->startOfDay());
             });
         })
-        ->when(auth()->check(), function ($query) {
+        ->when(auth()->check(), function ($query) use ( $request ) {
 
             if ( $request->show_claimed != 1 ) {  
 
