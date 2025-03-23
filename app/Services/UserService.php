@@ -1056,6 +1056,7 @@ class UserService
             'username' => [ 'nullable', 'unique:users,username,' . auth()->user()->id, ],
             'email' => [ 'nullable', 'unique:users,email,' . auth()->user()->id, ],
             'date_of_birth' => ['nullable', 'date'],
+            'to_remove' => ['nullable', 'in:1,2'],
             'profile_picture' => [ 'nullable', 'file', 'mimes:jpg,png' ],
         ] );
 
@@ -1076,15 +1077,18 @@ class UserService
         $updateUser->date_of_birth = $request->date_of_birth;
         $updateUser->email = $request->email;
 
+        if ( $request->to_remove == 1 && $updateUser->profile_picture ) {
+            Storage::disk( 'public' )->delete( $updateUser->profile_picture );
+            $updateUser->profile_picture = null;
+        }
+
         if( $request->file( 'profile_picture' ) ) {
             
-            Storage::disk( 'public' )->delete( $updateUser->profile_picture );
-
-            if ( $updateUser->profile_picture == 1 ) {
-                $updateUser->profile_picture = null;
-            } else {
-                $updateUser->profile_picture = $request->file( 'profile_picture' )->store( 'users/' . $updateUser->id, [ 'disk' => 'public' ] );
+            if( $updateUser->profile_picture  ) {
+                Storage::disk( 'public' )->delete( $updateUser->profile_picture );
             }
+
+            $updateUser->profile_picture = $request->file( 'profile_picture' )->store( 'users/' . $updateUser->id, [ 'disk' => 'public' ] );
         }
 
         $updateUser->save();
