@@ -63,6 +63,12 @@ $columns = [
     ],
     [
         'type' => 'select',
+        'options' => $data['order_from'],
+        'id' => 'order_from',
+        'title' => __( 'order.order_from' ),
+    ],
+    [
+        'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
         'title' => __( 'datatables.status' ),
@@ -164,6 +170,7 @@ window['{{ $column['id'] }}'] = '';
 @endforeach
 
 var statusMapper = @json( $data['status'] ),
+    transactionLogMapper = @json( $data['order_from'] ),
     dt_table,
     dt_table_name = '#order_table',
     dt_table_config = {
@@ -194,6 +201,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'reference' },
             { data: 'user' },
             { data: 'total_price' },
+            { data: 'order_transaction_log' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -237,6 +245,12 @@ var statusMapper = @json( $data['status'] ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
                     return data;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "order_from" ) }}' ),
+                render: function( data, type, row, meta ) {
+                    return data ? transactionLogMapper[2] : transactionLogMapper[1];
                 },
             },
             {

@@ -57,4 +57,7 @@ return [
     'adding_toppings' => 'Adding Toppings',
     'almost_done' => 'Almost Done',
     'froyo_complete' => 'Froyo Complete',
+
+    'order_from' => 'Order From',
+    'apps' => 'Apps',
 ];

@@ -39,6 +39,12 @@ class OrderController extends Controller
             '10' => __( 'datatables.order_completed' ),
             '20' => __( 'datatables.order_canceled' ),
         ];
+
+        $this->data['data']['order_from'] = [
+            '1' => __( 'order.apps' ),
+            '2' => __( 'order.vending_machine' ),
+        ];
+
         $this->data['data']['company'] = [];
 
         return view( 'admin.main' )->with( $this->data );

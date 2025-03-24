@@ -48,6 +48,11 @@ class Order extends Model
         'machine_payment_method',
     ];
 
+    public function orderTransactionLog()
+    {
+        return $this->hasOne(OrderTransactionLog::class, 'order_id', 'id');
+    }
+
     protected $hidden = [
         'taxes'
     ];

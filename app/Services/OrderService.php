@@ -79,6 +79,7 @@ class OrderService
             'vendingMachine',
             'user',
             'orderMetas',
+            'orderTransactionLog',
         ] )->select( 'orders.*' )
         ->orderBy( 'created_at', 'DESC' );
             
@@ -212,6 +213,19 @@ class OrderService
 
         if ( !empty( $request->status ) ) {
             $model->where( 'orders.status', $request->status );
+            $filter = true;
+        }
+        
+        if ( !empty( $request->order_from ) ) {
+            if( $request->order_from == 2 ) {
+                $model->where( function ( $query ) use ( $request ) {
+                    $query->whereHas( 'orderTransactionLog' );
+                });
+            }else {
+                $model->where( function ( $query ) use ( $request ) {
+                    $query->whereDoesntHave( 'orderTransactionLog' );
+                });
+            }
             $filter = true;
         }
 
@@ -2098,7 +2112,7 @@ class OrderService
                 'discount' => 0,
                 'reference' => Helper::generateOrderReference(),
                 'payment_method' => 1,
-                'status' => 3,
+                'status' => 10,
                 'machine_reference' => $request->reference,
                 'order_type' => 2,
                 'machine_total_price' => $request->total_price,
