@@ -251,11 +251,11 @@ class VendingMachineService
                     $fileName = explode( '/', $galleryFile->file );
                     $fileExtention = pathinfo($fileName[1])['extension'];
 
-                    $target = 'vending_machine_gallery/' . $vendingmachineCreate->id . '/' . $fileName[1];
+                    $target = 'vending_machine_gallery/' . $updateVendingMachine->id . '/' . $fileName[1];
                     Storage::disk( 'public' )->move( $galleryFile->file, $target );
 
                     VendingMachineGallery::create( [
-                        'vending_machine_id' =>  $vendingmachineCreate->id,
+                        'vending_machine_id' =>  $updateVendingMachine->id,
                         'sequence' =>  0,
                         'image' =>  $target,
                         'status' =>  10,
