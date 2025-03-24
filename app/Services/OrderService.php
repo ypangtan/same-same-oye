@@ -2040,6 +2040,9 @@ class OrderService
             ],
             'payment_method' => [ 'nullable', 'in:1,2,3' ],
             'user_bundle' => [ 'nullable', 'exists:user_bundles,id'  ],
+            'total_price' => ['nullable', 'numeric'],
+            'discount' => ['nullable', 'numeric'],
+            'tax' => ['nullable', 'numeric'],
             'items' => ['nullable', 'array'],
             'items.*.product' => ['required', 'exists:products,id',function ($attribute, $value, $fail) {
                 $exists = Product::where( 'id', $value )->where( 'status', 10 )->first();
@@ -2081,73 +2084,169 @@ class OrderService
 
         try {
 
-            $updateOrder = Order::with( [
-                'orderMetas','vendingMachine','user'
-            ] )->where( 'reference', $request->reference )
-            ->whereNotIn('status', [10, 20])->first();
-
             $vendingMachine = VendingMachine::where('api_key', $request->header('X-Vending-Machine-Key'))->first();
 
-            if( $updateOrder ){
-                if( $updateOrder->status == 1 ){
-                    return response()->json([
-                        'message' => __('order.unpaid_order'),
-                        'message_key' => 'unpaid_order',
-                        'errors' => [
-                            'order' => [
-                                __('order.unpaid_order_message'),
-                            ]
-                        ]
-                    ], 422);
-                }
-                $updateOrder->status = 10;
-                $updateOrder->vending_machine_id = $vendingMachine->id;
-                $updateOrder->save();
+            $orderPrice = 0;
 
-                if( $updateOrder->orderMetas ) {
-                    $orderMetas = $updateOrder->orderMetas;
+            $createOrder = Order::create( [
+                'product_id' => null,
+                'product_bundle_id' => null,
+                'outlet_id' => null,
+                'user_id' => null,
+                'vending_machine_id' => $vendingMachine->id,
+                'total_price' => 0,
+                'discount' => 0,
+                'reference' => Helper::generateOrderReference(),
+                'payment_method' => 1,
+                'status' => 3,
+                'machine_reference' => $request->reference,
+                'order_type' => 2,
+                'machine_total_price' => $request->total_price,
+                'machine_discount' => $request->discount,
+                'machine_tax' => $request->tax,
+            ] );
 
-                    foreach ($orderMetas as $orderMeta) {
+            OrderTransactionLog::create( [
+                'order_id' => $createOrder->id,
+                'orders_metas' => json_encode( $request->all() ),
+                'status' => 10,
+            ] );
 
-                        if( $orderMeta->syrups ){
-                            $decodedItems = json_decode($orderMeta->syrups, true);
-                            $stockData = ['syrups' => []];
-                            
-                            foreach ($decodedItems as $decodedItem) {
-                                $stockData['syrups'][$decodedItem] = 1;
-                            }
+            if(isset($request->items)){
+                foreach ( $request->items as $product ) {
 
-                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'syrups', 1);
-                        }
-
-                        if( $orderMeta->toppings ){
-                            $decodedItems = json_decode($orderMeta->toppings, true);
-                            $stockData = ['toppings' => []];
-                            
-                            foreach ($decodedItems as $decodedItem) {
-                                $stockData['toppings'][$decodedItem] = 1;
-                            }
-
-                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'toppings', 1);
-                        }
-
-                        if( $orderMeta->froyos ){
-                            $decodedItems = json_decode($orderMeta->froyos, true);
-                            $stockData = ['froyos' => []];
-                            
-                            foreach ($decodedItems as $decodedItem) {
-                                $stockData['froyos'][$decodedItem] = 1;
-                            }
-
-                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'froyos', 1);
-                        }
-                    }
-                }
-
-                DB::commit();
-            }
+                    $froyos = $product['froyo'];
+                    $froyoCount = count($froyos);
+                    $syrups = $product['syrup'];
+                    $syrupCount = count($syrups);
+                    $toppings = $product['topping'];
+                    $toppingCount = count($toppings);
+                    $product = Product::find($product['product']);
+                    $metaPrice = 0;
     
-            $transformedOrder = collect([$updateOrder])->map(function ($order) {
+                    $orderMeta = OrderMeta::create( [
+                        'order_id' => $createOrder->id,
+                        'product_id' => $product->id,
+                        'product_bundle_id' => null,
+                        'froyos' =>  json_encode($froyos),
+                        'syrups' =>  json_encode($syrups),
+                        'toppings' =>  json_encode($toppings),
+                        'total_price' =>  $metaPrice,
+                    ] );
+    
+                    $orderPrice += $product->price ?? 0;
+                    $metaPrice += $product->price ?? 0;
+    
+                    // new calculation 
+                    $froyoPrices = Froyo::whereIn('id', $froyos)->sum('price');
+                    $orderPrice += $froyoPrices;
+                    $metaPrice += $froyoPrices;
+
+                    $syrupPrices = Syrup::whereIn('id', $syrups)->sum('price');
+                    $orderPrice += $syrupPrices;
+                    $metaPrice += $syrupPrices;
+
+                    $toppingPrices = Topping::whereIn('id', $toppings)->sum('price');
+                    $orderPrice += $toppingPrices;
+                    $metaPrice += $toppingPrices;
+
+                    // calculate free item
+                    $froyoPrices = Froyo::whereIn('id', $froyos)->pluck('price', 'id')->toArray();
+                    asort($froyoPrices);
+
+                    $froyoCount = count($froyos);
+                    $freeCount = $product->free_froyo_quantity;
+                    $chargableAmount = 0;
+
+                    if ($froyoCount > $freeCount) {
+                        $chargeableCount = $froyoCount - $freeCount;
+                        $chargeableFroyoPrices = array_slice($froyoPrices, 0, $chargeableCount, true);
+                        $totalDeduction = array_sum($chargeableFroyoPrices);
+                        $orderPrice -= $totalDeduction;
+                        $metaPrice -= $totalDeduction;
+
+                        $froyoPrices2 = Froyo::whereIn('id', $froyos)->pluck('price', 'id')->toArray();
+                        rsort($froyoPrices2);
+
+                        $chargeableCount = $froyoCount - $freeCount;
+                        $chargeableFroyoPrices = array_slice($froyoPrices2, 0, $chargeableCount, true);
+                        $totalDeduction2 = array_sum($chargeableFroyoPrices);
+                        $chargableAmount += $totalDeduction2;
+
+                    }else{
+                        $totalDeduction = array_sum($froyoPrices);
+                        $orderPrice -= $totalDeduction;
+                        $metaPrice -= $totalDeduction;
+                    }
+
+                    // free item module
+                    $syrupPrices = Syrup::whereIn('id', $syrups)->pluck('price', 'id')->toArray();
+                    asort($syrupPrices);
+                    
+                    $syrupCount = count($syrups);
+                    $freeCount = $product->free_syrup_quantity;
+
+                    if ($syrupCount > $freeCount) {
+                        $chargeableCount = $syrupCount - $freeCount;
+                        $chargeablesyrupPrices = array_slice($syrupPrices, 0, $chargeableCount, true);
+
+                        $totalDeduction = array_sum($chargeablesyrupPrices);
+                        $orderPrice -= $totalDeduction;
+                        $metaPrice -= $totalDeduction;
+
+                        $syrupPrices2 = Syrup::whereIn('id', $syrups)->pluck('price', 'id')->toArray();
+                        rsort($syrupPrices2);
+
+                        $chargeableCount = $syrupCount - $freeCount;
+                        $chargeableFroyoPrices = array_slice($syrupPrices2, 0, $chargeableCount, true);
+                        $totalDeduction2 = array_sum($chargeableFroyoPrices);
+                        $chargableAmount += $totalDeduction2;
+
+                    }else{
+                        $totalDeduction = array_sum($syrupPrices);
+                        $orderPrice -= $totalDeduction;
+                        $metaPrice -= $totalDeduction;
+                    }
+                
+                    $toppingPrices = Topping::whereIn('id', $toppings)->pluck('price', 'id')->toArray();
+                    asort($toppingPrices);
+                    
+                    $toppingCount = count($toppings);
+                    $freeCount = $product->free_topping_quantity;
+
+                    if ($toppingCount > $freeCount) {
+                        $chargeableCount = $toppingCount - $freeCount;
+                        $chargeabletoppingPrices = array_slice($toppingPrices, 0, $chargeableCount, true);
+                        $totalDeduction = array_sum($chargeabletoppingPrices);
+
+                        $orderPrice -= $totalDeduction;
+                        $metaPrice -= $totalDeduction;
+
+                        $toppingPrices2 = Topping::whereIn('id', $toppings)->pluck('price', 'id')->toArray();
+                        rsort($toppingPrices2);
+
+                        $chargeableCount = $toppingCount - $freeCount;
+                        $chargeabletoppingPrices = array_slice($toppingPrices2, 0, $chargeableCount, true);
+                        $totalDeduction2 = array_sum($chargeabletoppingPrices);
+                        $chargableAmount += $totalDeduction2;
+
+                    }else{
+                        $totalDeduction = array_sum($toppingPrices);
+                        $orderPrice -= $totalDeduction;
+                        $metaPrice -= $totalDeduction;
+                    }
+
+                    $orderMeta->total_price = $metaPrice;
+                    $orderMeta->additional_charges = $chargableAmount;
+                    $orderMeta->save();
+                }
+            }
+
+            // load relationship for later use
+            $createOrder->load('cartMetas');
+            $createOrder->subtotal = $orderPrice;
+    
+            $transformedOrder = collect([$createOrder])->map(function ($order) {
                 $order->vendingMachine?->makeHidden(['created_at', 'updated_at', 'status'])
                     ->setAttribute('operational_hour', $order->vendingMachine?->operational_hour)
                     ->setAttribute('image_path', $order->vendingMachine?->image_path);
@@ -2173,8 +2272,8 @@ class OrderService
         
             // Return the paginated response
             return response()->json([
-                'message' => '',
-                'message_key' => 'update_order_success',
+                'message' => 'Create Order Success',
+                'message_key' => 'create_order_success',
                 'orders' => $transformedOrder,
             ]);
 
@@ -2182,7 +2281,7 @@ class OrderService
 
             return response()->json( [
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-                'message_key' => 'update_order_failed',
+                'message_key' => 'create_order_failed',
             ], 500 );
         }
     }

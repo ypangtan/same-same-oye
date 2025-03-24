@@ -40,6 +40,11 @@ class Order extends Model
         'additional_charges',
         'is_processed',
         'order_preparation_status',
+        'order_type',
+        'machine_reference',
+        'machine_total_price',
+        'machine_discount',
+        'machine_tax',
     ];
 
     protected $hidden = [
@@ -134,6 +139,11 @@ class Order extends Model
         'additional_charges',
         'is_processed',
         'order_preparation_status',
+        'order_type',
+        'machine_reference',
+        'machine_total_price',
+        'machine_discount',
+        'machine_tax',
     ];
 
     protected static $logName = 'orders';

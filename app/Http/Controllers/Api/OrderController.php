@@ -116,23 +116,32 @@ class OrderController extends Controller
     }
 
     /**
-     * 3. Service Route (Api For Endpoint Preparation)
+     * 3. Update Machine Order Data
      * 
      * 
      * @group Order Operation API
      * 
      * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
      * 
-     * @bodyParam sales_metas array Additional sales metadata (e.g., products sold). Example: [{"product_id": 1, "quantity": 3}]
-     * @bodyParam module_name string required The module for this datas. Example: Vending Machine
-     * @bodyParam scope string required The scope for this module. Example: Update Product Sold
-     * @bodyParam api_type string required The api type for this module. Example: POST
-     * 
-     * 
+     * @bodyParam reference string Order reference to be generated from machine. Example: MCHS-1239123
+     * @bodyParam product_id integer nullable The ID of the product (if applicable). Example: 1
+     * @bodyParam product_bundle_id integer nullable The ID of the product bundle (if applicable). Example: 2
+     * @bodyParam total_price number nullable The total price of the order. Default: 0 Example: 19.99
+     * @bodyParam discount number nullable The discount applied to the order. Default: 0 Example: 2.50
+     * @bodyParam tax number nullable The tax applied to the order. Default: 0 Example: 0.52
+     * @bodyParam payment_method integer required The payment method used (1 = Cash, 2 = Card, 3 = Ewallet.). Default: 1 Example: 2
+     * @bodyParam items array required The list of products with their ingredients. Example: [{"productId": 1, "froyo": [1, 2], "syrup": [3], "topping": [4, 5]}]
+     * @bodyParam items.*.product integer The ID of the product. Pass `null` if no product is selected. Example: 1
+     * @bodyParam items.*.froyo array An array of froyo IDs. Pass an empty array if no froyo is selected. Example: [1, 2]
+     * @bodyParam items.*.froyo.* integer A froyo ID. Example: 1
+     * @bodyParam items.*.syrup array An array of syrup IDs. Pass an empty array if no syrup is selected. Example: [3]
+     * @bodyParam items.*.syrup.* integer A syrup ID. Example: 3
+     * @bodyParam items.*.topping array An array of topping IDs. Pass an empty array if no topping is selected. Example: [4, 5]
+     * @bodyParam items.*.topping.* integer A topping ID. Example: 4
      */   
-    public function serviceApi( Request $request ) {
+    public function createMachineOrder( Request $request ) {
 
-        return OrderService::serviceApi( $request );
+        return OrderService::createMachineOrder( $request );
     }
     
 }
