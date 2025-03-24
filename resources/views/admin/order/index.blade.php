@@ -222,7 +222,7 @@ var statusMapper = @json( $data['status'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
-                    return data.username ?? '-' + '<br>' + '+60' + data.phone_number;
+                    return data ? ( data.username ?? '-' + '<br>' + '+60' + data.phone_number ) : '-';
                 },
             },
             {
