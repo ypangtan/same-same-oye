@@ -2269,6 +2269,8 @@ class OrderService
         
                 return $order;
             });
+
+            DB::commit();
         
             // Return the paginated response
             return response()->json([
