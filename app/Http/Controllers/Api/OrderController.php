@@ -118,18 +118,21 @@ class OrderController extends Controller
     /**
      * 3. Update Machine Order Data
      * 
+     * <strong>payment_method</strong><br>
+     * 1: Cash<br>
+     * 2: Card<br>
+     * 3: Ewallet<br>
      * 
      * @group Order Operation API
      * 
      * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
      * 
      * @bodyParam reference string Order reference to be generated from machine. Example: MCHS-1239123
-     * @bodyParam product_id integer nullable The ID of the product (if applicable). Example: 1
      * @bodyParam product_bundle_id integer nullable The ID of the product bundle (if applicable). Example: 2
      * @bodyParam total_price number nullable The total price of the order. Default: 0 Example: 19.99
      * @bodyParam discount number nullable The discount applied to the order. Default: 0 Example: 2.50
      * @bodyParam tax number nullable The tax applied to the order. Default: 0 Example: 0.52
-     * @bodyParam payment_method integer required The payment method used (1 = Cash, 2 = Card, 3 = Ewallet.). Default: 1 Example: 2
+     * @bodyParam payment_method integer required The payment method used. Example: 2
      * @bodyParam items array required The list of products with their ingredients. Example: [{"productId": 1, "froyo": [1, 2], "syrup": [3], "topping": [4, 5]}]
      * @bodyParam items.*.product integer The ID of the product. Pass `null` if no product is selected. Example: 1
      * @bodyParam items.*.froyo array An array of froyo IDs. Pass an empty array if no froyo is selected. Example: [1, 2]

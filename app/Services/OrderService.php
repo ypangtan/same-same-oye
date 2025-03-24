@@ -2104,6 +2104,7 @@ class OrderService
                 'machine_total_price' => $request->total_price,
                 'machine_discount' => $request->discount,
                 'machine_tax' => $request->tax,
+                'machine_payment_method' => $request->payment_method,
             ] );
 
             OrderTransactionLog::create( [

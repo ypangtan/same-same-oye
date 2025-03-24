@@ -45,6 +45,7 @@ class Order extends Model
         'machine_total_price',
         'machine_discount',
         'machine_tax',
+        'machine_payment_method',
     ];
 
     protected $hidden = [
@@ -144,6 +145,7 @@ class Order extends Model
         'machine_total_price',
         'machine_discount',
         'machine_tax',
+        'machine_payment_method',
     ];
 
     protected static $logName = 'orders';
