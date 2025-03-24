@@ -363,14 +363,14 @@ $vending_machine_edit = 'vending_machine_edit';
                         removedfile: function( file ) {
                             var idToRemove = file.id;
 
-                            var idArrays = fileID.split(/\s*,\s*/);
+                            var idArrays = fileID2.split(/\s*,\s*/);
 
                             var indexToRemove = idArrays.indexOf( idToRemove.toString() );
                             if (indexToRemove !== -1) {
                                 idArrays.splice( indexToRemove, 1 );
                             }
 
-                            fileID = idArrays.join( ', ' );
+                            fileID2 = idArrays.join( ', ' );
 
                             file.previewElement.remove();
 
@@ -379,10 +379,10 @@ $vending_machine_edit = 'vending_machine_edit';
                         },
                         success: function( file, response ) {
                             if ( response.status == 200 )  {
-                                if ( fileID !== '' ) {
-                                    fileID += ','; // Add a comma if fileID is not empty
+                                if ( fileID2 !== '' ) {
+                                    fileID2 += ','; // Add a comma if fileID is not empty
                                 }
-                                fileID += response.data.id;
+                                fileID2 += response.data.id;
 
                                 file.previewElement.id = response.data.id;
                             }
