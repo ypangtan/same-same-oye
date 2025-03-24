@@ -2243,7 +2243,7 @@ class OrderService
             }
 
             // load relationship for later use
-            $createOrder->load('cartMetas');
+            $createOrder->load('orderMetas');
             $createOrder->subtotal = $orderPrice;
     
             $transformedOrder = collect([$createOrder])->map(function ($order) {
