@@ -155,6 +155,7 @@ Route::middleware( 'vending.auth' )->group( function() {
     Route::prefix( 'order-operation' )->group( function() {
         Route::post( 'update-order-status', [ OrderController::class, 'updateOrderStatus' ] );
         Route::post( 'update-sales-data', [ OrderController::class, 'updateSalesData' ] );
+        Route::post( 'update-machine-order', [ OrderController::class, 'createMachineOrder' ] );
     } );
 
     Route::prefix( 'menus-operation' )->group( function() {
