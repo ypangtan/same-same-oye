@@ -2053,7 +2053,13 @@ class OrderService
                 'required'
             ],
             'payment_method' => [ 'nullable', 'in:1,2,3' ],
-            'product_bundle' => [ 'nullable', 'exists:product_bundles,id'  ],
+            'product_bundle' =>['nullable', 'exists:product_bundles,id',function ($attribute, $value, $fail) {
+                $exists = ProductBundle::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Product Bundle is not available'));
+                }
+            }],
             'total_price' => ['nullable', 'numeric'],
             'discount' => ['nullable', 'numeric'],
             'tax' => ['nullable', 'numeric'],
