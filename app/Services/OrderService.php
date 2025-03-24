@@ -35,6 +35,7 @@ use App\Models\{
     VendingMachine,
     VendingMachineStock,
     MachineSalesData,
+    OrderTransactionLog,
 };
 
 use Helper;
@@ -1916,6 +1917,161 @@ class OrderService
                     }
                 },
             ],
+        ]);
+        
+
+        $validator->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            $updateOrder = Order::with( [
+                'orderMetas','vendingMachine','user'
+            ] )->where( 'reference', $request->reference )
+            ->whereNotIn('status', [10, 20])->first();
+
+            $vendingMachine = VendingMachine::where('api_key', $request->header('X-Vending-Machine-Key'))->first();
+
+            if( $updateOrder ){
+                if( $updateOrder->status == 1 ){
+                    return response()->json([
+                        'message' => __('order.unpaid_order'),
+                        'message_key' => 'unpaid_order',
+                        'errors' => [
+                            'order' => [
+                                __('order.unpaid_order_message'),
+                            ]
+                        ]
+                    ], 422);
+                }
+                $updateOrder->status = 10;
+                $updateOrder->vending_machine_id = $vendingMachine->id;
+                $updateOrder->save();
+
+                if( $updateOrder->orderMetas ) {
+                    $orderMetas = $updateOrder->orderMetas;
+
+                    foreach ($orderMetas as $orderMeta) {
+
+                        if( $orderMeta->syrups ){
+                            $decodedItems = json_decode($orderMeta->syrups, true);
+                            $stockData = ['syrups' => []];
+                            
+                            foreach ($decodedItems as $decodedItem) {
+                                $stockData['syrups'][$decodedItem] = 1;
+                            }
+
+                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'syrups', 1);
+                        }
+
+                        if( $orderMeta->toppings ){
+                            $decodedItems = json_decode($orderMeta->toppings, true);
+                            $stockData = ['toppings' => []];
+                            
+                            foreach ($decodedItems as $decodedItem) {
+                                $stockData['toppings'][$decodedItem] = 1;
+                            }
+
+                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'toppings', 1);
+                        }
+
+                        if( $orderMeta->froyos ){
+                            $decodedItems = json_decode($orderMeta->froyos, true);
+                            $stockData = ['froyos' => []];
+                            
+                            foreach ($decodedItems as $decodedItem) {
+                                $stockData['froyos'][$decodedItem] = 1;
+                            }
+
+                            VendingMachineService::processStockUpdates($updateOrder->vending_machine_id, $stockData, 'froyos', 1);
+                        }
+                    }
+                }
+
+                DB::commit();
+            }
+    
+            $transformedOrder = collect([$updateOrder])->map(function ($order) {
+                $order->vendingMachine?->makeHidden(['created_at', 'updated_at', 'status'])
+                    ->setAttribute('operational_hour', $order->vendingMachine?->operational_hour)
+                    ->setAttribute('image_path', $order->vendingMachine?->image_path);
+        
+                $order->orderMetas = $order->orderMetas->map(function ($meta) {
+                    return [
+                        'id' => $meta->id,
+                        'subtotal' => $meta->total_price,
+                        'product' => $meta->product?->makeHidden(['created_at', 'updated_at', 'status'])
+                            ->setAttribute('image_path', $meta->product?->image_path),
+                        'froyo' => $meta->froyos_metas,
+                        'syrup' => $meta->syrups_metas,
+                        'topping' => $meta->toppings_metas,
+                    ];
+                });
+
+                $order->order_metas = $order->orderMetas;
+                $order->orderMetas = null;
+                unset($order->orderMetas);
+        
+                return $order;
+            });
+        
+            // Return the paginated response
+            return response()->json([
+                'message' => '',
+                'message_key' => 'update_order_success',
+                'orders' => $transformedOrder,
+            ]);
+
+        } catch ( \Throwable $th ) {
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+                'message_key' => 'update_order_failed',
+            ], 500 );
+        }
+    }
+
+    public static function createMachineOrder( $request ) {
+
+        $validator = Validator::make($request->all(), [
+            'reference' => [
+                'required'
+            ],
+            'payment_method' => [ 'nullable', 'in:1,2,3' ],
+            'user_bundle' => [ 'nullable', 'exists:user_bundles,id'  ],
+            'items' => ['nullable', 'array'],
+            'items.*.product' => ['required', 'exists:products,id',function ($attribute, $value, $fail) {
+                $exists = Product::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Product is not available'));
+                }
+            }],
+            'items.*.froyo' => ['nullable', 'array'],
+            'items.*.froyo.*' => ['exists:froyos,id',function ($attribute, $value, $fail) {
+                $exists = Froyo::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Froyo is not available'));
+                }
+            }], // Validate each froyo ID
+            'items.*.syrup' => ['nullable', 'array'],
+            'items.*.syrup.*' => ['exists:syrups,id',function ($attribute, $value, $fail) {
+                $exists = Syrup::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Syrup is not available'));
+                }
+            }], // Validate each syrup ID
+            'items.*.topping' => ['nullable', 'array'],
+            'items.*.topping.*' => ['exists:toppings,id',function ($attribute, $value, $fail) {
+                $exists = Topping::where( 'id', $value )->where( 'status', 10 )->first();
+
+                if (!$exists) {
+                    $fail(__('Topping is not available'));
+                }
+            }], // Validate each topping ID
         ]);
         
 
