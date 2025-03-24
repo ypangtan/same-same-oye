@@ -2246,6 +2246,12 @@ class OrderService
             // load relationship for later use
             $createOrder->load('orderMetas');
             $createOrder->subtotal = $orderPrice;
+            $taxSettings = Option::getTaxesSettings();
+            $createOrder->total_price = Helper::numberFormatV2($orderPrice,2,false,true);
+            $createOrder->tax = $taxSettings ? (Helper::numberFormatV2(($taxSettings->option_value/100),2) * Helper::numberFormatV2($order->total_price,2)) : 0;
+            $createOrder->total_price += Helper::numberFormatV2($order->tax,2,false,true);
+
+            $createOrder->save();
     
             $transformedOrder = collect([$createOrder])->map(function ($order) {
                 $order->vendingMachine?->makeHidden(['created_at', 'updated_at', 'status'])
