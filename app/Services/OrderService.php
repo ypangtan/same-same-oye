@@ -2053,7 +2053,7 @@ class OrderService
                 'required'
             ],
             'payment_method' => [ 'nullable', 'in:1,2,3' ],
-            'user_bundle' => [ 'nullable', 'exists:user_bundles,id'  ],
+            'product_bundle' => [ 'nullable', 'exists:product_bundles,id'  ],
             'total_price' => ['nullable', 'numeric'],
             'discount' => ['nullable', 'numeric'],
             'tax' => ['nullable', 'numeric'],
@@ -2104,7 +2104,7 @@ class OrderService
 
             $createOrder = Order::create( [
                 'product_id' => null,
-                'product_bundle_id' => null,
+                'product_bundle_id' => $request->product_bundle,
                 'outlet_id' => null,
                 'user_id' => null,
                 'vending_machine_id' => $vendingMachine->id,

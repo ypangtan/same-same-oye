@@ -128,7 +128,7 @@ class OrderController extends Controller
      * @header X-Vending-Machine-Key string secret key of the machine to request verification. Example: 123ifa9sdb1j23sf
      * 
      * @bodyParam reference string Order reference to be generated from machine. Example: MCHS-1239123
-     * @bodyParam product_bundle_id integer nullable The ID of the product bundle (if applicable). Example: 2
+     * @bodyParam product_bundle integer nullable The ID of the product bundle (if applicable). Example: 2
      * @bodyParam total_price number nullable The total price of the order. Default: 0 Example: 19.99
      * @bodyParam discount number nullable The discount applied to the order. Default: 0 Example: 2.50
      * @bodyParam tax number nullable The tax applied to the order. Default: 0 Example: 0.52
