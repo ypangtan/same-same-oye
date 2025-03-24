@@ -62,7 +62,7 @@ class User extends Model
     }
 
     public function getProfilePicturePathAttribute() {
-        return $this->attributes['profile_picture'] ? asset( 'storage/' . $this->attributes['profile_picture'] ) : asset( 'admin/images/placeholder.png' ) . Helper::assetVersion();
+        return $this->attributes['profile_picture'] ? asset( 'storage/' . $this->attributes['profile_picture'] ) : asset( 'admin/images/profile_image.png' ) . Helper::assetVersion();
     }
 
     public function groups() {
