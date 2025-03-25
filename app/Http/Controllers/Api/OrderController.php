@@ -134,7 +134,7 @@ class OrderController extends Controller
      * @bodyParam tax number nullable The tax applied to the order. Default: 0 Example: 0.52
      * @bodyParam payment_method integer required The payment method used. Example: 2
      * @bodyParam items array required The list of products with their ingredients. Example: [{"productId": 1, "froyo": [1, 2], "syrup": [3], "topping": [4, 5]}]
-     * @bodyParam items.*.product integer The ID of the product. Pass `null` if no product is selected. Example: 1
+     * @bodyParam items.*.productId integer The ID of the product. Pass `null` if no product is selected. Example: 1
      * @bodyParam items.*.froyo array An array of froyo IDs. Pass an empty array if no froyo is selected. Example: [1, 2]
      * @bodyParam items.*.froyo.* integer A froyo ID. Example: 1
      * @bodyParam items.*.syrup array An array of syrup IDs. Pass an empty array if no syrup is selected. Example: [3]

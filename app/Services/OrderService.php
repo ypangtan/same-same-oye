@@ -2064,7 +2064,7 @@ class OrderService
             'discount' => ['nullable', 'numeric'],
             'tax' => ['nullable', 'numeric'],
             'items' => ['nullable', 'array'],
-            'items.*.product' => ['required', 'exists:products,id',function ($attribute, $value, $fail) {
+            'items.*.productId' => ['required', 'exists:products,id',function ($attribute, $value, $fail) {
                 $exists = Product::where( 'id', $value )->where( 'status', 10 )->first();
 
                 if (!$exists) {
@@ -2142,7 +2142,7 @@ class OrderService
                     $syrupCount = count($syrups);
                     $toppings = $product['topping'];
                     $toppingCount = count($toppings);
-                    $product = Product::find($product['product']);
+                    $product = Product::find($product['productId']);
                     $metaPrice = 0;
     
                     $orderMeta = OrderMeta::create( [
