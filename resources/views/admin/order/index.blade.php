@@ -84,75 +84,103 @@ $columns = [
 <x-data-tables id="order_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
 
 <div class="modal fade" id="modal_order_view" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">{{ __( 'order.order_details' ) }}</h5>
         </div>
         <div class="modal-body">
-            <div class="mb-3 row d-flex justify-content-between">
-                <label class="col-sm-5 col-form-label">Vending Machine</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control-plaintext" id="{{ $order_view }}_fullname" readonly>
-                </div>
-            </div>
-            <div class="mb-3 row d-flex justify-content-between">
-                <label class="col-sm-5 col-form-label">Reference</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control-plaintext" id="{{ $order_view }}_email" readonly>
-                </div>
-            </div>
-            
-            <div class="mb-3 row d-flex justify-content-between bundle">
-                <label class="col-sm-5 col-form-label"> {{ __( 'order.bundle' ) }}</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control-plaintext" id="{{ $order_view }}_bundle" readonly>
-                </div>
-            </div>
-            
-            <div class="mb-3 row d-flex justify-content-between bundle">
-                <label class="col-sm-5 col-form-label"> {{ __( 'order.cups_left' ) }}</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control-plaintext" id="{{ $order_view }}cups_left" readonly>
-                </div>
-            </div>
+            <div class="row">
 
-            <div class="mb-3 row d-flex justify-content-between">
-                <label class="col-sm-5 col-form-label">Payment Method</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control-plaintext" id="{{ $order_view }}_type" readonly>
-                </div>
-            </div>
-            
-            <div class="mb-3 row">
-                <label for="{{ $order_view }}_status" class="col-sm-5 col-form-label">{{ __( 'order.status' ) }}</label>
-                <div class="col-sm-7">
-                    <select class="form-select form-select-sm" id="{{ $order_view }}_status">
-                        @foreach ( $data[ 'status' ] as $key => $status)
-                            <option value="{{ $key }}">{{ $status }}</option>
-                        @endforeach
-                    </select>
-                    <div class="invalid-feedback"></div>
-                </div>
-            </div>
-            <div class="mb-3 row d-flex justify-content-between">
-                <label class="col-sm-5 col-form-label">QR Code</label>
-                <div class="col-sm-7">
-                    <div id="downloadQR" class="form-control-plaintext image-container" 
-                         style="background-image: url('your-image.jpg'); height: 250px; cursor: pointer; background-size:cover;">
+                <div class="col-md-6">
+                    <div class="mb-3 row d-flex justify-content-between">
+                        <label class="col-sm-5 col-form-label">Vending Machine</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control-plaintext" id="{{ $order_view }}_fullname" readonly>
+                        </div>
                     </div>
+                    <div class="mb-3 row d-flex justify-content-between">
+                        <label class="col-sm-5 col-form-label">Reference</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control-plaintext" id="{{ $order_view }}_email" readonly>
+                        </div>
+                    </div>
+                    
+                    @if( 1 == 2 )
+                    <div class="mb-3 row d-flex justify-content-between bundle">
+                        <label class="col-sm-5 col-form-label"> {{ __( 'order.bundle' ) }}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control-plaintext" id="{{ $order_view }}_bundle" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 row d-flex justify-content-between bundle">
+                        <label class="col-sm-5 col-form-label"> {{ __( 'order.cups_left' ) }}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control-plaintext" id="{{ $order_view }}cups_left" readonly>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="mb-3 row d-flex justify-content-between">
+                        <label class="col-sm-5 col-form-label">{{ __( 'order.subtotal' ) }}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control-plaintext" id="{{ $order_view }}_subtotal" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row d-flex justify-content-between">
+                        <label class="col-sm-5 col-form-label">{{ __( 'order.discount' ) }}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control-plaintext" id="{{ $order_view }}_discount" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row d-flex justify-content-between">
+                        <label class="col-sm-5 col-form-label">{{ __( 'order.total' ) }}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control-plaintext" id="{{ $order_view }}_total" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row d-flex justify-content-between">
+                        <label class="col-sm-5 col-form-label">Payment Method</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control-plaintext" id="{{ $order_view }}_type" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 row">
+                        <label for="{{ $order_view }}_status" class="col-sm-5 col-form-label">{{ __( 'order.status' ) }}</label>
+                        <div class="col-sm-7">
+                            <select class="form-select form-select-sm" id="{{ $order_view }}_status">
+                                @foreach ( $data[ 'status' ] as $key => $status)
+                                    <option value="{{ $key }}">{{ $status }}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row d-flex justify-content-between">
+                        <label class="col-sm-5 col-form-label">QR Code</label>
+                        <div class="col-sm-7">
+                            <div id="downloadQR" class="form-control-plaintext image-container" 
+                                style="background-image: url('your-image.jpg'); height: 250px; cursor: pointer; background-size:cover;">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="{{ $order_view }}_id">
                 </div>
-            </div>
-            <input type="hidden" id="{{ $order_view }}_id">
 
-            <div class="mb-3">
-                <strong>Order Details</strong>
-                <div class="selections"></div>
-            </div>
+                <div class="col-md-6">
+                    <strong>Order Details</strong>
+                    <div class="selections"></div>
+                </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">{{ __( 'template.cancel' ) }}</button>
-                <button type="button" class="btn btn-sm btn-primary">{{ __( 'template.save_changes' ) }}</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">{{ __( 'template.cancel' ) }}</button>
+                    <button type="button" class="btn btn-sm btn-primary">{{ __( 'template.save_changes' ) }}</button>
+                </div>
             </div>
             
         </div>
@@ -369,6 +397,9 @@ var statusMapper = @json( $data['status'] ),
                     $('#{{ $order_view }}_fullname').val(response.vending_machine.title || '-');
                     $('#{{ $order_view }}_status').val(response.status || '-');
                     $('#{{ $order_view }}_email').val(response.reference || '-');
+                    $('#{{ $order_view }}_subtotal').val(response.subtotal || '-');
+                    $('#{{ $order_view }}_discount').val(response.discount || '-');
+                    $('#{{ $order_view }}_total').val(response.total || '-');
                     $('#{{ $order_view }}_type').val(response.payment_method === 1 ? 'Yobe Wallet' : 'Online Payment');
                     $('#{{ $order_view }}_account_type').val(response.status === 1 ? 'Order Placed' : 'Collected');
                     if (response.qr_code) {
@@ -377,47 +408,55 @@ var statusMapper = @json( $data['status'] ),
                     $('#modal_order_view .selections').empty();
 
                     const orderMetas = response.orderMetas || [];
+
                     orderMetas.forEach((meta) => {
-                        const froyoHtml = meta.froyo
-                            ? meta.froyo
-                                .map(
-                                    (froyo) =>
-                                        `<div><strong>Froyo:</strong> ${froyo.title}</div>`
-                                )
-                                .join('')
-                            : '<div><strong>Froyo:</strong> None selected</div>';
-
-                        const syrupHtml = meta.syrup
-                            ? meta.syrup
-                                .map(
-                                    (syrup) =>
-                                        `<div><strong>Syrup:</strong> ${syrup.title}</div>`
-                                )
-                                .join('')
-                            : '<div><strong>Syrup:</strong> None selected</div>';
-
-                        const toppingHtml = meta.topping
-                            ? meta.topping
-                                .map(
-                                    (topping) =>
-                                        `<div><strong>Topping:</strong> ${topping.title}</div>`
-                                )
-                                .join('')
-                            : '<div><strong>Topping:</strong> None selected</div>';
-
-                        // Append to the modal
                         $('#modal_order_view .selections').append(
-                            `<div>
-                                <h6>Product: ${meta.product.title} (${meta.product.code})</h6>
-                                <h6>Price: ${meta.product.title} (${meta.product.code})</h6>
-                                ${froyoHtml}
-                                ${syrupHtml}
-                                ${toppingHtml}
-                            </div><hr>`
+                            `<strong>${meta.product.title}</strong><br>
+                            <strong>MYR: ${meta.subtotal}</strong>
+                            <div class="border-bottom py-2">
+                                <div>
+                                    <strong>Froyo:</strong>
+                                    <div class="d-flex align-items-center mb-2">
+                                        ${meta.froyo.length > 0 ? meta.froyo.map(s => `
+                                            ${s.image_path ? `
+                                                <div class="text-center me-3">
+                                                    <img src="${s.image_path}" alt="${s.title}" width="150" height="100" class="d-block">
+                                                    <small>${s.title}</small>
+                                                </div>
+                                            ` : ''}
+                                        `).join('') : '-'}
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong>Syrup:</strong>
+                                    <div class="d-flex align-items-center mb-2">
+                                        ${meta.syrup.length > 0 ? meta.syrup.map(s => `
+                                            ${s.image_path ? `
+                                                <div class="text-center me-3">
+                                                    <img src="${s.image_path}" alt="${s.title}" width="150" height="100" class="d-block">
+                                                    <small>${s.title}</small>
+                                                </div>
+                                            ` : ''}
+                                        `).join('') : '-'}
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong>Topping:</strong>
+                                    <div class="d-flex align-items-center mb-2">
+                                        ${meta.topping.length > 0 ? meta.topping.map(s => `
+                                            ${s.image_path ? `
+                                                <div class="text-center me-3">
+                                                    <img src="${s.image_path}" alt="${s.title}" width="150" height="100" class="d-block">
+                                                    <small>${s.title}</small>
+                                                </div>
+                                            ` : ''}
+                                        `).join('') : '-'}
+                                    </div>
+                                </div>
+                            </div>`
                         );
                     });
-
-
+                    
                     modalmt5Detail.show();
                 },
                 error: function( error ) {

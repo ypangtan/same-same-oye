@@ -171,7 +171,7 @@ class OrderService
         }
 
         if ( !empty( $request->reference ) ) {
-            $model->where( 'orders.reference', 'LIKE', '%' . $request->customer . '%' );
+            $model->where( 'orders.reference', 'LIKE', '%' . $request->reference . '%' );
             $filter = true;
         }
 
