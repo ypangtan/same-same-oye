@@ -38,8 +38,8 @@ return [
     'user_order_failed' => 'Order Failed',
     'user_order_failed_content' => 'Order Failed! Please Try Again',
     
-    'user_voucher_success' => 'Claim Vocher Success',
-    'user_voucher_success_content' => 'Claim Vocher Success! Enjoy Your Froyo Deals Not!',
+    'user_voucher_success' => 'Claim Voucher Success',
+    'user_voucher_success_content' => 'Claim Voucher Success! Enjoy Your Froyo Deals Now!',
     
     'user_checkin_success' => 'Checkin Success',
     'user_checkin_success_content' => 'Checkin Success! Yobe Welcomes You Today',
