@@ -176,7 +176,9 @@
         onEnd: function(evt) {
             let sortedIDs = [];
             $("#banner-list li").each(function() {
-                sortedIDs.push($(this).data("id"));
+                if( $(this).data("id") ){
+                    sortedIDs.push($(this).data("id"));
+                }
             });
 
             // ✅ Send updated order to backend
