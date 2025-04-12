@@ -17,7 +17,6 @@ class CreateVoucherUsagesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate( 'restrict')->onDelete('cascade');
             $table->foreignId('voucher_id')->nullable()->constrained('vouchers')->onUpdate( 'restrict')->onDelete('cascade');
-            $table->foreignId('order_id')->nullable()->constrained('orders')->onUpdate( 'restrict')->onDelete('cascade');
             $table->tinyInteger('status')->default(10);
             $table->timestamps();
         });

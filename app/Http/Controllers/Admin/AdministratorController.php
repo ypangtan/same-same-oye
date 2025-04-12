@@ -223,7 +223,7 @@ class AdministratorController extends Controller
                 'class' => '',
             ],
             [
-                'url' => route( 'admin.module_parent.administrator.indexSalesmen' ),
+                'url' => route( 'admin.administrator.indexSalesmen' ),
                 'text' => __( 'template.salesmen' ),
                 'class' => '',
             ],

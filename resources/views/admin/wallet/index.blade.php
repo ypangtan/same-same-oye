@@ -33,8 +33,7 @@ $columns = [
         'title' => __( 'wallet.user' ),
     ],
     [
-        'type' => 'select',
-        'options' => $data['wallet'],
+        'type' => 'default',
         'id' => 'wallet',
         'title' => __( 'wallet.wallet' ),
     ],

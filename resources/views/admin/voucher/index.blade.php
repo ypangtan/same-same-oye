@@ -57,12 +57,6 @@ $columns = [
     ],
     [
         'type' => 'select',
-        'options' => $data['voucher_type'],
-        'id' => 'voucher_type',
-        'title' => __( 'voucher.voucher_type' ),
-    ],
-    [
-        'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
         'title' => __( 'datatables.status' ),
@@ -88,7 +82,6 @@ window['{{ $column['id'] }}'] = '';
 @endforeach
 
 var statusMapper = @json( $data['status'] ),
-    typeMapper = @json( $data['voucher_type'] ),
     dt_table,
     dt_table_name = '#voucher_table',
     dt_table_config = {
@@ -119,7 +112,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'image_path' },
             { data: 'title' },
             { data: 'promo_code' },
-            { data: 'type' },
+            // { data: 'type' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -192,12 +185,6 @@ var statusMapper = @json( $data['status'] ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "voucher_type" ) }}' ),
-                render: function( data, type, row, meta ) {
-                    return typeMapper[data];
                 },
             },
             {

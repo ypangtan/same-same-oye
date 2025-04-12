@@ -13,11 +13,11 @@ return [
     |
     */
 
-    'name' => '名称',
-    'registration_no' => '注册号码.',
-    'email' => '电子邮件',
-    'phone_number' => '电话号码',
-    'address' => '地址',
-    'bank_name' => '银行名称',
-    'account_no' => '户口号码.',
+    'name' => 'Name',
+    'registration_no' => 'Registration No.',
+    'email' => 'Email',
+    'phone_number' => 'Phone Number',
+    'address' => 'Address',
+    'bank_name' => 'Bank Name',
+    'account_no' => 'Account No.',
 ];

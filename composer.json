@@ -23,6 +23,7 @@
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.28",
         "pragmarx/google2fa-qrcode": "^3.0",
+        "rap2hpoutre/fast-excel": "^5.4",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-permission": "^5.10",

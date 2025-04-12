@@ -38,14 +38,14 @@ $setting = 'setting';
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3 row">
+                                <div class="mb-3 row d-none">
                                     <label for="{{ $setting }}_referral_spending_bonus_points" class="col-sm-5 col-form-label">{{ __( 'setting.referral_spending_bonus_points' ) }} (RM 1 SPEND = <span id="referral_spending_bonus_points_preview"></span> Points)</label>
                                     <div class="col-sm-7">
                                         <input type="number" class="form-control form-control-sm" id="{{ $setting }}_referral_spending_bonus_points">
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3 row">
+                                <div class="mb-3 row d-none">
                                     <label for="{{ $setting }}_taxes" class="col-sm-5 col-form-label">{{ __( 'setting.taxes' ) }}</label>
                                     <div class="col-sm-7">
                                         <input type="number" class="form-control form-control-sm" id="{{ $setting }}_taxes">

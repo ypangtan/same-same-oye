@@ -24,7 +24,8 @@ return [
     'last' => 'Last',
     'paid' => 'Paid',
     'due' => 'Due',
-
+    'redeemed' => 'Redeemed',
+    
     'search_x' => 'Search :title',
     'select_x' => 'Select :title',
     'all' => 'All',

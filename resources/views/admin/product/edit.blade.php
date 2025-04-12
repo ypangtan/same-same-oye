@@ -5,7 +5,7 @@ $product_edit = 'product_edit';
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.add_x', [ 'title' => Str::singular( __( 'template.menus' ) ) ] ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.add_x', [ 'title' => Str::singular( __( 'template.products' ) ) ] ) }}</h3>
         </div><!-- .nk-block-head-content -->
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
@@ -56,54 +56,6 @@ $product_edit = 'product_edit';
                     </div>
                 </div>
 
-                <div class="mb-3 row">
-                    <label for="{{ $product_edit }}_default_froyo_quantity" class="col-sm-5 form-label">{{ __( 'product.default_froyo_quantity' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $product_edit }}_default_froyo_quantity">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
-                <div class="mb-3 row">
-                <label for="{{ $product_edit }}_default_syrup_quantity" class="col-sm-5 form-label">{{ __( 'product.default_syrup_quantity' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $product_edit }}_default_syrup_quantity">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
-                <div class="mb-3 row">
-                    <label for="{{ $product_edit }}_default_topping_quantity" class="col-sm-5 form-label">{{ __( 'product.default_topping_quantity' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $product_edit }}_default_topping_quantity">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
-                <div class="mb-3 row">
-                    <label for="{{ $product_edit }}_free_froyo_quantity" class="col-sm-5 form-label">{{ __( 'product.free_froyo_quantity' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $product_edit }}_free_froyo_quantity">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
-                <div class="mb-3 row">
-                <label for="{{ $product_edit }}_free_syrup_quantity" class="col-sm-5 form-label">{{ __( 'product.free_syrup_quantity' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $product_edit }}_free_syrup_quantity">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
-                <div class="mb-3 row">
-                    <label for="{{ $product_edit }}_free_topping_quantity" class="col-sm-5 form-label">{{ __( 'product.free_topping_quantity' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $product_edit }}_free_topping_quantity">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-            
                 <div class="mb-3">
                     <label>{{ __( 'product.image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $product_edit }}_image" style="min-height: 0px;">
@@ -148,12 +100,6 @@ $product_edit = 'product_edit';
             formData.append( 'description', $( fe + '_description' ).val() );
             formData.append( 'price', $( fe + '_price' ).val() );
             formData.append( 'discount_price', $( fe + '_discount_price' ).val() );
-            formData.append( 'default_froyo_quantity', $( fe + '_default_froyo_quantity' ).val() );
-            formData.append( 'default_syrup_quantity', $( fe + '_default_syrup_quantity' ).val() );
-            formData.append( 'default_topping_quantity', $( fe + '_default_topping_quantity' ).val() );
-            formData.append( 'free_froyo_quantity', $( fe + '_free_froyo_quantity' ).val() );
-            formData.append( 'free_syrup_quantity', $( fe + '_free_syrup_quantity' ).val() );
-            formData.append( 'free_topping_quantity', $( fe + '_free_topping_quantity' ).val() );
             formData.append( 'image', fileID );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -212,12 +158,6 @@ $product_edit = 'product_edit';
                     $( fe + '_description' ).val( response.description );
                     $( fe + '_price' ).val( response.price );
                     $( fe + '_discount_price' ).val( response.discount_price );
-                    $( fe + '_default_froyo_quantity' ).val( response.default_froyo_quantity );
-                    $( fe + '_default_syrup_quantity' ).val( response.default_syrup_quantity );
-                    $( fe + '_default_topping_quantity' ).val( response.default_topping_quantity );
-                    $( fe + '_free_froyo_quantity' ).val( response.free_froyo_quantity );
-                    $( fe + '_free_syrup_quantity' ).val( response.free_syrup_quantity );
-                    $( fe + '_free_topping_quantity' ).val( response.free_topping_quantity );
 
                     const dropzone = new Dropzone( fe + '_image', {
                         url: '{{ route( 'admin.file.upload' ) }}',

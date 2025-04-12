@@ -41,7 +41,7 @@ class VoucherService
         $validator = Validator::make( $request->all(), [
             'title' => [ 'required' ],
             'description' => [ 'nullable' ],
-            'discount_type' => [ 'required' ],
+            'discount_type' => [ 'nullable' ],
             'voucher_type' => [ 'nullable' ],
             'promo_code' => ['nullable', 'unique:vouchers,promo_code'],
             'image' => [ 'nullable' ],
@@ -51,7 +51,7 @@ class VoucherService
             'points_required' => [ 'nullable' ],
             'usable_amount' => [ 'nullable' ],
             'validity_days' => [ 'nullable' ],
-            'adjustment_data' => ['required'],
+            'adjustment_data' => ['nullable'],
             'claim_per_user' => ['nullable'],
         ] );
 
@@ -113,10 +113,10 @@ class VoucherService
         try {
             $voucherCreate = Voucher::create([
                 'title' => $request->title,
-                'discount_type' => $request->discount_type,
-                'type' => $request->voucher_type,
+                'discount_type' => 1,
+                'type' => 1,
                 'description' => $request->description,
-                'promo_code' => $request->promo_code,
+                'promo_code' => $request->promo_code ? $request->promo_code : Helper::generateVoucherCode(),
                 'total_claimable' => $request->total_claimable,
                 'points_required' => $request->points_required,
                 'start_date' => $request->start_date,
@@ -174,7 +174,7 @@ class VoucherService
         $validator = Validator::make( $request->all(), [
             'title' => [ 'required' ],
             'description' => [ 'nullable' ],
-            'discount_type' => [ 'required' ],
+            'discount_type' => [ 'nullable' ],
             'voucher_type' => [ 'nullable' ],
             'promo_code' => [ 'nullable', 'unique:vouchers,promo_code,' . $request->id, ],
             'image' => [ 'nullable' ],
@@ -184,8 +184,8 @@ class VoucherService
             'points_required' => [ 'nullable' ],
             'usable_amount' => [ 'nullable' ],
             'validity_days' => [ 'nullable' ],
-            'adjustment_data' => ['required'],
-            'claim_per_user' => ['required'],
+            'adjustment_data' => ['nullable'],
+            'claim_per_user' => ['nullable'],
             
         ] );
 
@@ -251,8 +251,8 @@ class VoucherService
             $updateVoucher = Voucher::find( $request->id );
     
             $updateVoucher->title = $request->title;
-            $updateVoucher->discount_type = $request->discount_type;
-            $updateVoucher->type = $request->voucher_type;
+            // $updateVoucher->discount_type = $request->discount_type;
+            // $updateVoucher->type = $request->voucher_type;
             $updateVoucher->description = $request->description;
             $updateVoucher->promo_code = $request->promo_code;
             $updateVoucher->total_claimable = $request->total_claimable;
@@ -799,7 +799,7 @@ class VoucherService
         // check is user able to claim this
         $userVoucher = UserVoucher::where( 'voucher_id', $voucher->id )->where( 'user_id', $user->id )->first();
         if(!$userVoucher){
-            $userPoints = $user->wallets->where( 'type', 2 )->first();
+            $userPoints = $user->wallets->where( 'type', 1 )->first();
 
             if ( $userPoints->balance < $voucher->points_required ) {
 
@@ -923,7 +923,7 @@ class VoucherService
             ], 422 );
         }
         
-        $userPoints = $user->wallets->where( 'type', 2 )->first();
+        $userPoints = $user->wallets->where( 'type', 1 )->first();
 
         if ( $userPoints->balance < $voucher->points_required ) {
 

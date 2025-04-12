@@ -13,16 +13,17 @@ return [
     |
     */
 
-    'name' => '名称',
-    'phone_number' => '电话号码',
-    'phone_number_2' => '电话号码 2',
-    'email' => '电子邮件',
-    'pic_name' => '负责人',
-    'address' => '地址',
-    'address_1' => '地址 1',
-    'address_2' => '地址 2',
-    'postcode' => '邮政编码',
-    'state' => '州',
-    'city' => '城市',
-    'remarks' => '备注',
+    'name' => 'Name',
+    'phone_number' => 'Phone Number',
+    'phone_number_2' => 'Phone Number 2',
+    'email' => 'Email',
+    'pic_name' => 'Person In Charge',
+    'address' => 'Address',
+    'address_1' => 'Address 1',
+    'address_2' => 'Address 2',
+    'postcode' => 'Postcode',
+    'state' => 'State',
+    'city' => 'City',
+    'remarks' => 'Remarks',
+    
 ];

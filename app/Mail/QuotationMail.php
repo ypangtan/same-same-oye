@@ -37,7 +37,7 @@ class QuotationMail extends Mailable
         $pdf = PDF::loadView('admin.mail.quotation', ['data' => $this->data])
         ->setPaper('a4', 'landscape');
 
-        return $this->from('support@infinitedesign.my', 'Infinite Design')
+        return $this->from('support@ifei.my', 'Infinite Design')
                 ->with(['data' => $this->data])
                 ->subject($this->getSubject())
                 ->view('admin.mail.quotation_response')

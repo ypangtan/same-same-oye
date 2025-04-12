@@ -30,6 +30,7 @@ use App\Models\{
     UserNotificationSeen,
     UserNotificationUser,
     UserDevice,
+    UserSocial,
 };
 
 use App\Rules\CheckASCIICharacter;
@@ -881,21 +882,19 @@ class UserService
             // assign register bonus
             $registerBonus = Option::getRegisterBonusSettings();
 
-            for ( $i = 1; $i <= 2; $i++ ) {
-                $userWallet = Wallet::create( [
-                    'user_id' => $createUser->id,
-                    'type' => $i,
-                    'balance' => 0,
-                ] );
+            $userWallet = Wallet::create( [
+                'user_id' => $createUser->id,
+                'type' => 1,
+                'balance' => 0,
+            ] );
 
-                if ( $registerBonus && $i == 2 ) {
-                    WalletService::transact( $userWallet, [
-                        'amount' => $registerBonus->option_value,
-                        'remark' => 'Register Bonus',
-                        'type' => $userWallet->type,
-                        'transaction_type' => 20,
-                    ] );
-                }
+            if ( $registerBonus ) {
+                WalletService::transact( $userWallet, [
+                    'amount' => $registerBonus->option_value,
+                    'remark' => 'Register Bonus',
+                    'type' => $userWallet->type,
+                    'transaction_type' => 20,
+                ] );
             }
 
             // assign referral bonus
@@ -1008,29 +1007,83 @@ class UserService
         );
     }
 
+    
+
+    public static function loginUserSocial( $request ) {
+
+        $request->validate( [
+            'identifier' => [ 'required', function( $attributes, $value, $fail ) {
+                $user = User::where( 'email', $value )->where( 'is_social_account', 0 )->first();
+                if ( $user ) {
+                    $fail( __( 'api.email_is_taken_not_social' ) );
+                }
+                $userSocial = UserSocial::where( 'identifier', $value )->first();
+                if ( $userSocial ) {
+                    if ( $userSocial->platform != request( 'platform' ) ) {
+                        $fail( __( 'api.email_is_taken_different_platform' ) );
+                    }
+                }
+            } ],
+            'platform' => 'required|in:1,2,3',
+            'device_type' => 'required|in:1,2,3',
+        ] );
+
+        $userSocial = UserSocial::where( 'identifier', $request->identifier )->firstOr( function() use ( $request )  {
+
+            \DB::beginTransaction();
+
+            try {
+                $createUser = User::create( [
+                    'username' => null,
+                    'email' => $request->identifier,
+                    'country_id' => 136,
+                    'phone_number' => null,
+                    'is_social_account' => 1,
+                    'invitation_code' => strtoupper( \Str::random( 6 ) ),
+                    'referral_id' => null,
+                    'referral_structure' => '-',
+                ] );
+
+                $createUserSocial = UserSocial::create( [
+                    'platform' => request( 'platform' ),
+                    'identifier' => request( 'identifier' ),
+                    'uuid' => request( 'uuid' ),
+                    'user_id' => $createUser->id,
+                ] );
+    
+                return $createUserSocial;
+    
+            } catch ( \Throwable $th ) {
+    
+                \DB::rollBack();
+                abort( 500, $th->getMessage() . ' in line: ' . $th->getLine() );
+            }
+        } );
+
+        \DB::commit();
+
+        $user = User::find( $userSocial->user_id );
+
+        // Register OneSignal
+        if ( !empty( $request->register_token ) ) {
+            self::registerOneSignal( $user->id, $request->device_type, $request->register_token );
+        }
+
+        return response()->json( [ 'data' => $user, 'token' => $user->createToken( 'x_api' )->plainTextToken ] );
+    }
+
     public static function getUser( $request, $filterClientCode ) {
 
-        $user = User::with( ['wallets'] )->find( auth()->user()->id );
+        $user = User::find( auth()->user()->id );
 
         if ( $user ) {
             $user->makeHidden( [
                 'status',
                 'updated_at',
             ] );
-        }
 
-        if($user->wallets){ 
-
-            $user->append([
-                'profile_picture_path',
-            ]);
-
-            foreach($user->wallets as $wallet){
-                $wallet->append([
-                    'listing_balance',
-                    'formatted_type'
-                ]);
-            }
+            $user->points = $user->wallets->first()->balance;
+            unset($user->wallets);
         }
     
         // If user not found, return early with error response
@@ -1054,6 +1107,7 @@ class UserService
 
         $validator = Validator::make( $request->all(), [
             'username' => [ 'nullable', 'unique:users,username,' . auth()->user()->id, ],
+            'fullname' => [ 'nullable' ],
             'email' => [ 'nullable', 'unique:users,email,' . auth()->user()->id, ],
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
@@ -1074,6 +1128,7 @@ class UserService
 
         $updateUser = User::find( auth()->user()->id );
         $updateUser->username = $request->username;
+        $updateUser->fullname = $request->fullname;
         $updateUser->date_of_birth = $request->date_of_birth;
         $updateUser->email = $request->email;
 

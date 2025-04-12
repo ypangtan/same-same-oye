@@ -20,7 +20,6 @@
                                     <a href="{{ route( 'admin.dashboard' ) }}" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-growth-fill"></em></span>
                                         <span class="nk-menu-text">{{ __( 'template.dashboard' ) }}</span>
-                                        @if ( 1 == 2 )<span class="nk-menu-badge">HOT</span>@endif
                                     </a>
                                 </li>
                                 @can( 'view administrators' )
@@ -78,105 +77,45 @@
                                     </li>
                                 @endcan
 
-                                @can( 'view vending_machines' )
-                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\OutletController' || $controller == 'App\Http\Controllers\Admin\VendingMachineController' || $controller == 'App\Http\Controllers\Admin\VendingMachineStockController') ? 'active current-page' : '' }}">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-dot-box"></em></span>
-                                        <span class="nk-menu-text">{{ __( 'template.vending_machines' ) }}</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
-                                        @if( 1 == 2 )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\OutletController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.outlet.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.outlets' ) }}</span></a>
-                                        </li>
-                                        @endif
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\VendingMachineController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.vending_machine.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.vending_machines' ) }}</span></a>
-                                        </li>
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\VendingMachineStockController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.vending_machine_stock.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.vending_machine_stocks' ) }}</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                @can( 'view Announcements' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.announcement.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-list-fill"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.announcements' ) }}</span>
+                                        </a>
+                                    </li>
                                 @endcan
+                                
+                                @if( 1 == 2 )
 
-                                @can( 'view Froyos' )
-                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\FroyoController' || $controller == 'App\Http\Controllers\Admin\SyrupController' || $controller == 'App\Http\Controllers\Admin\ToppingController') ? 'active current-page' : '' }}">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-centos"></em></span>
-                                        <span class="nk-menu-text">{{ __( 'template.froyos' ) }}</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\FroyoController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.froyo.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.froyos' ) }}</span></a>
+                                    @can( 'view Product' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\ProductController' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.product.index' ) }}" class="nk-menu-link">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-notes-alt"></em></span>
+                                                <span class="nk-menu-text">{{ __( 'template.products' ) }}</span>
+                                            </a>
                                         </li>
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SyrupController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.syrup.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.syrups' ) }}</span></a>
-                                        </li>
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\ToppingController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.topping.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.toppings' ) }}</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                @endcan
+                                    @endcan
 
-                                @can( 'view Products' )
-                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\ProductController' || $controller == 'App\Http\Controllers\Admin\ProductBundleController' || $controller == 'App\Http\Controllers\Admin\UserBundleController') ? 'active current-page' : '' }}">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-centos"></em></span>
-                                        <span class="nk-menu-text">{{ __( 'template.menus' ) }}</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\ProductController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.product.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.menus' ) }}</span></a>
-                                        </li>
-                                        
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\ProductBundleController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.product_bundle.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.product_bundles' ) }}</span></a>
-                                        </li>
-                                        
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\UserBundleController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.user_bundle.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.user_bundles' ) }}</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                @endcan
-
-                                @can( 'view orders' )
-                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\OrderController') ? 'active current-page' : '' }}">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-list-index-fill"></em></span>
-                                        <span class="nk-menu-text">{{ __( 'template.orders' ) }}</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\OrderController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.order.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.orders' ) }}</span></a>
-                                        </li>
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\OrderController' && in_array( $action, [ 'scanner' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.order.scanner' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.scan_qr' ) }}</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                @endcan
-
-                                @can( 'view announcements' )
-                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\AnnouncementController' || $controller == 'App\Http\Controllers\Admin\AnnouncementRewardController' ) ? 'active current-page' : '' }}">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-list-fill"></em></span>
-                                        <span class="nk-menu-text">{{ __( 'template.announcements' ) }}</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.announcement.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.announcements' ) }}</span></a>
-                                        </li>
-                                        @if( 1 == 2 )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementRewardController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.announcement_reward.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.announcement_rewards' ) }}</span></a>
-                                        </li>
-                                        @endif
-                                    </ul>
-                                </li>
-                                @endcan
+                                    @can( 'view announcements' )
+                                    <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\AnnouncementController' || $controller == 'App\Http\Controllers\Admin\AnnouncementRewardController' ) ? 'active current-page' : '' }}">
+                                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-list-fill"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.announcements' ) }}</span>
+                                        </a>
+                                        <ul class="nk-menu-sub">
+                                            <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
+                                                <a href="{{ route( 'admin.module_parent.announcement.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.announcements' ) }}</span></a>
+                                            </li>
+                                            @if( 1 == 2 )
+                                            <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementRewardController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
+                                                <a href="{{ route( 'admin.module_parent.announcement_reward.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.announcement_rewards' ) }}</span></a>
+                                            </li>
+                                            @endif
+                                        </ul>
+                                    </li>
+                                    @endcan
+                                @endif
 
                                 @can( 'view Banner' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\BannerController' ? 'active current-page' : '' }}">
@@ -190,12 +129,22 @@
                                 @can( 'view Vouchers' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\VoucherController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.voucher.index' ) }}" class="nk-menu-link">
-                                            <span class="nk-menu-icon"><em class="icon ni ni-ticket-alt"></em></span>
+                                           <span class="nk-menu-icon"><em class="icon ni ni-ticket-alt"></em></span>
                                             <span class="nk-menu-text">{{ __( 'template.vouchers' ) }}</span>
                                         </a>
                                     </li>
-                                @endcan
+                                @endcan 
 
+                                @can( 'view User Vouchers' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\UserVoucherController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.user_voucher.index' ) }}" class="nk-menu-link">
+                                           <span class="nk-menu-icon"><em class="icon ni ni-ticket-plus"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.user_vouchers' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan 
+
+                                @if( 1 == 2 )
                                 @can( 'view User Vouchers' )
                                 <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\UserVoucherController' || $controller == 'App\Http\Controllers\Admin\VoucherUsageController') ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
@@ -212,6 +161,7 @@
                                     </ul>
                                 </li>
                                 @endcan
+                                @endif
 
                                 @can( 'view Checkin Rewards' )
                                 <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\UserCheckinController' || $controller == 'App\Http\Controllers\Admin\CheckinRewardController') ? 'active current-page' : '' }}">

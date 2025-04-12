@@ -40,12 +40,6 @@ class ProductService
             'description' => [ 'nullable' ],
             'price' => [ 'required' ],
             'discount_price' => [ 'nullable' ],
-            'default_froyo_quantity' => [ 'required' ],
-            'default_syrup_quantity' => [ 'required' ],
-            'default_topping_quantity' => [ 'required' ],
-            'free_froyo_quantity' => [ 'nullable' ],
-            'free_syrup_quantity' => [ 'nullable' ],
-            'free_topping_quantity' => [ 'nullable' ],
             'image' => [ 'nullable' ],
         ] );
 
@@ -56,12 +50,6 @@ class ProductService
             'code' => __( 'product.code' ),
             'price' => __( 'product.price' ),
             'discount_price' => __( 'product.discount_price' ),
-            'default_froyo_quantity' => __( 'product.default_froyo_quantity' ),
-            'default_syrup_quantity' => __( 'product.default_syrup_quantity' ),
-            'default_topping_quantity' => __( 'product.default_topping_quantity' ),
-            'free_froyo_quantity' => __( 'product.free_froyo_quantity' ),
-            'free_syrup_quantity' => __( 'product.free_syrup_quantity' ),
-            'free_topping_quantity' => __( 'product.free_topping_quantity' ),
             'image' => __( 'product.image' ),
         ];
 
@@ -80,12 +68,6 @@ class ProductService
                 'description' => $request->description,
                 'price' => $request->price,
                 'discount_price' => $request->discount_price,
-                'default_froyo_quantity' => $request->default_froyo_quantity,
-                'default_syrup_quantity' => $request->default_syrup_quantity,
-                'default_topping_quantity' => $request->default_topping_quantity,
-                'free_froyo_quantity' => $request->free_froyo_quantity,
-                'free_syrup_quantity' => $request->free_syrup_quantity,
-                'free_topping_quantity' => $request->free_topping_quantity,
             ]);
 
             $image = explode( ',', $request->image );
@@ -98,7 +80,7 @@ class ProductService
                     $fileName = explode( '/', $imageFile->file );
                     $fileExtention = pathinfo($fileName[1])['extension'];
 
-                    $target = 'froyo/' . $productCreate->id . '/' . $fileName[1];
+                    $target = 'product/' . $productCreate->id . '/' . $fileName[1];
                     Storage::disk( 'public' )->move( $imageFile->file, $target );
 
                    $productCreate->image = $target;
@@ -122,7 +104,7 @@ class ProductService
         }
 
         return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.menus' ) ) ] ),
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.products' ) ) ] ),
         ] );
     }
     
@@ -138,12 +120,6 @@ class ProductService
             'description' => [ 'nullable' ],
             'price' => [ 'nullable' ],
             'discount_price' => [ 'nullable' ],
-            'default_froyo_quantity' => [ 'nullable' ],
-            'default_syrup_quantity' => [ 'nullable' ],
-            'default_topping_quantity' => [ 'nullable' ],
-            'free_froyo_quantity' => [ 'nullable' ],
-            'free_syrup_quantity' => [ 'nullable' ],
-            'free_topping_quantity' => [ 'nullable' ],
             'image' => [ 'nullable' ],
         ] );
 
@@ -154,12 +130,6 @@ class ProductService
             'code' => __( 'product.code' ),
             'price' => __( 'product.price' ),
             'discount_price' => __( 'product.discount_price' ),
-            'default_froyo_quantity' => __( 'product.default_froyo_quantity' ),
-            'default_syrup_quantity' => __( 'product.default_syrup_quantity' ),
-            'default_topping_quantity' => __( 'product.default_topping_quantity' ),
-            'free_froyo_quantity' => __( 'product.free_froyo_quantity' ),
-            'free_syrup_quantity' => __( 'product.free_syrup_quantity' ),
-            'free_topping_quantity' => __( 'product.free_topping_quantity' ),
             'image' => __( 'product.image' ),
         ];
 
@@ -180,12 +150,6 @@ class ProductService
             $updateProduct->description = $request->description ?? $updateProduct->description;
             $updateProduct->price = $request->price ?? $updateProduct->price;
             $updateProduct->discount_price = $request->discount_price ?? $updateProduct->discount_price;
-            $updateProduct->default_froyo_quantity = $request->default_froyo_quantity ?? $updateProduct->default_froyo_quantity;
-            $updateProduct->default_syrup_quantity = $request->default_syrup_quantity ?? $updateProduct->default_syrup_quantity;
-            $updateProduct->default_topping_quantity = $request->default_topping_quantity ?? $updateProduct->default_topping_quantity;
-            $updateProduct->free_froyo_quantity = $request->free_froyo_quantity ?? $updateProduct->free_froyo_quantity;
-            $updateProduct->free_syrup_quantity = $request->free_syrup_quantity ?? $updateProduct->free_syrup_quantity;
-            $updateProduct->free_topping_quantity = $request->free_topping_quantity ?? $updateProduct->free_topping_quantity;
 
             $image = explode( ',', $request->image );
 
@@ -222,7 +186,7 @@ class ProductService
         }
 
         return response()->json( [
-            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.menus' ) ) ] ),
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.products' ) ) ] ),
         ] );
     }
 
@@ -473,7 +437,7 @@ class ProductService
         }
 
         return response()->json( [
-            'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.menus' ) ) ] ),
+            'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.products' ) ) ] ),
         ] );
     }
 
@@ -519,7 +483,7 @@ class ProductService
         ] );
     }
 
-    public static function getMenus( $request ) {
+    public static function getproducts( $request ) {
 
         $products = Product::select( 'products.*' )->where('status', 10)->where('product_type', 1);
 

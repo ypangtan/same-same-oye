@@ -13,24 +13,25 @@ return [
     |
     */
 
-    'roles' => '角色',
-    'role_name' => '角色名称',
-    'guard_name' => '看守名称',
+    'roles' => 'Roles',
+    'role_name' => 'Role Name',
+    'guard_name' => 'Guard Name',
 
-    'super_admin' => '超级管理员',
-    'admin' => '管理员',
+    'super_admin' => 'Super Admin',
+    'admin' => 'Admin',
     'owner' => 'Owner',
+    'salesman' => 'Salesman',
 
-    'no_action_found' => '没有找到操作',
-    'no_module_found' => '没有找到模块',
+    'no_action_found' => 'No action found',
+    'no_module_found' => 'No module found',
 
-    'module_title' => ':module模块',
-    'action_module' => ':action:module',
+    'module_title' => ':module Module',
+    'action_module' => ':action :module',
 
-    'add' => '添加',
-    'view' => '查看',
-    'edit' => '编辑',
-    'delete' => '删除',
-    'upload' => '上传',
-    'export' => '导出',
+    'add' => 'Add',
+    'view' => 'View',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'upload' => 'Upload',
+    'export' => 'Export',
 ];

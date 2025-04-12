@@ -13,13 +13,13 @@ return [
     |
     */
 
-    'module_name' => '模块名称',
-    'guard_name' => '看守名称',
+    'module_name' => 'Module Name',
+    'guard_name' => 'Guard Name',
 
-    'administrators' => '管理员',
-    'roles' => '角色',
-    'modules' => '模块',
-    'audits' => '审计日志',
-    'users' => '用户',
-    'orders' => '订单',
+    'administrators' => 'Administrators',
+    'roles' => 'Roles',
+    'modules' => 'Modules',
+    'audits' => 'Audits',
+    'users' => 'Users',
+    'orders' => 'Orders',
 ];

@@ -42,8 +42,8 @@ $bundle_create = 'bundle_create';
             <div class="col-md-12 col-lg-6">
                 <h5 class="card-title mb-4">{{ __( 'template.bundle_products' ) }}</h5>
                 <div class="col-sm-12 mb-3 row">
-                    <label for="{{ $bundle_create }}_product" class="form-label">{{ __( 'template.menus' ) }}</label>
-                    <select class="form-select" id="{{ $bundle_create }}_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.menus' ) ] ) }}" multiple="multiple">
+                    <label for="{{ $bundle_create }}_product" class="form-label">{{ __( 'template.products' ) }}</label>
+                    <select class="form-select" id="{{ $bundle_create }}_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.products' ) ] ) }}" multiple="multiple">
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>

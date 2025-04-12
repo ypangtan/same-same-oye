@@ -14,14 +14,15 @@ return [
     */
 
     'user' => 'User',
-    'wallet' => 'Wallet',
-    'wallet_1' => 'Yobe Wallet',
-    'wallet_2' => 'Yobe Point',
+    'wallet' => 'IFei Point',
+    'wallet_1' => 'IFei Point',
+    'wallet_2' => 'IFei Point 2',
     'balance' => 'Balance',
     'balance_after_submit' => 'Balance After Submit',
     'transaction_type' => 'Transaction Type',
     'remark' => 'Remark',
     'amount' => 'Amount',
+    'exhange_voucher' => 'Exchange Voucher',
 
     'adjust_balance_x' => 'Adjust Balance <strong>(:title)</strong>',
     'deduct' => 'Deduct',
@@ -40,5 +41,6 @@ return [
     'checkin_bonus' => 'Check-in Bonus',
     'order_bonus' => 'Order Complete Bonus',
     'referral_order_bonus' => 'Referral order Complete Bonus',
-    'purchasing_bonus' => 'Purchasing Bonus'
+    'purchasing_bonus' => 'Purchasing Bonus',
+    'redeem' => 'Points Redeemed',
 ];

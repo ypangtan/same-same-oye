@@ -527,7 +527,7 @@ class UserCheckinService
                     WalletService::transact( $user->wallets->where('type', 2)->first(), [
                         'amount' => $reward->reward_value,
                         'remark' => 'Check-in Rewards',
-                        'type' => 2,
+                        'type' => 1,
                         'transaction_type' => 23,
                     ] );
                     break;

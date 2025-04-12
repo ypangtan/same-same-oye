@@ -400,7 +400,7 @@ var statusMapper = @json( $data['status'] ),
                     $('#{{ $order_view }}_subtotal').val(response.subtotal || '-');
                     $('#{{ $order_view }}_discount').val(response.discount || '-');
                     $('#{{ $order_view }}_total').val(response.total || '-');
-                    $('#{{ $order_view }}_type').val(response.payment_method === 1 ? 'Yobe Wallet' : 'Online Payment');
+                    $('#{{ $order_view }}_type').val(response.payment_method === 1 ? 'IFei Wallet' : 'Online Payment');
                     $('#{{ $order_view }}_account_type').val(response.status === 1 ? 'Order Placed' : 'Collected');
                     if (response.qr_code) {
                         $('#downloadQR').css('background-image', `url(${response.qr_code})`);

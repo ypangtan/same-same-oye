@@ -49,7 +49,7 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $voucher_create }}_voucher_type" class="col-sm-5 col-form-label">{{ __( 'voucher.voucher_type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $voucher_create }}_voucher_type">
@@ -61,7 +61,7 @@ $voucherTypes = $data['voucher_type'];
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $voucher_create }}_discount_type" class="col-sm-5 col-form-label">{{ __( 'voucher.discount_type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $voucher_create }}_discount_type">
@@ -200,7 +200,7 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                 </div>
                 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $voucher_create}}_usable_amount" class="col-sm-5 col-form-label">{{ __( 'voucher.usable_amount' ) }}</label>
                     <div class="col-sm-7">
                         <input type="number" class="form-control" id="{{ $voucher_create}}_usable_amount">
@@ -216,7 +216,7 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                 </div>
 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $voucher_create }}_promo_code" class="col-sm-5 col-form-label">{{ __( 'voucher.promo_code' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $voucher_create }}_promo_code">

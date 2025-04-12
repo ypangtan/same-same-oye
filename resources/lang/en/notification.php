@@ -18,7 +18,7 @@ return [
     'mark_all_as_read' => 'Mark all as read',
     'notification_seen' => 'Updated notification seen',
     'register_success' => 'Register Success',
-    'register_success_content' => 'Welcome to Yobe!',
+    'register_success_content' => 'Welcome to IFei!',
     
     'topup_success' => 'Topup Success',
     'topup_success_content' => 'Topup Success! Enjoy Your Froyo Now!',
@@ -42,7 +42,7 @@ return [
     'user_voucher_success_content' => 'Claim Voucher Success! Enjoy Your Froyo Deals Now!',
     
     'user_checkin_success' => 'Checkin Success',
-    'user_checkin_success_content' => 'Checkin Success! Yobe Welcomes You Today',
+    'user_checkin_success_content' => 'Checkin Success! IFei Welcomes You Today',
     
     'user_checkin_reset' => 'Checkin Reset',
     'user_checkin_reset_content' => 'Oops, your checkin has been reset',

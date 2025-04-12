@@ -18,7 +18,7 @@ class ProductController extends Controller
 {
     public function index( Request $request ) {
 
-        $this->data['header']['title'] = __( 'template.menus' );
+        $this->data['header']['title'] = __( 'template.products' );
         $this->data['content'] = 'admin.product.index';
         $this->data['breadcrumb'] = [
             [
@@ -28,7 +28,7 @@ class ProductController extends Controller
             ],
             [
                 'url' => '',
-                'text' => __( 'template.menus' ),
+                'text' => __( 'template.products' ),
                 'class' => 'active',
             ],
         ];
@@ -42,7 +42,7 @@ class ProductController extends Controller
 
     public function add( Request $request ) {
 
-        $this->data['header']['title'] = __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.menus' ) ) ] );
+        $this->data['header']['title'] = __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.products' ) ) ] );
         $this->data['content'] = 'admin.product.add';
         $this->data['breadcrumb'] = [
             [
@@ -52,12 +52,12 @@ class ProductController extends Controller
             ],
             [
                 'url' => route( 'admin.module_parent.product.index' ),
-                'text' => __( 'template.menus' ),
+                'text' => __( 'template.products' ),
                 'class' => '',
             ],
             [
                 'url' => '',
-                'text' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.menus' ) ) ] ),
+                'text' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.products' ) ) ] ),
                 'class' => 'active',
             ],
         ];
@@ -67,7 +67,7 @@ class ProductController extends Controller
 
     public function edit( Request $request ) {
 
-        $this->data['header']['title'] = __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.menus' ) ) ] );
+        $this->data['header']['title'] = __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.products' ) ) ] );
         $this->data['content'] = 'admin.product.edit';
         $this->data['breadcrumb'] = [
             [
@@ -77,12 +77,12 @@ class ProductController extends Controller
             ],
             [
                 'url' => route( 'admin.module_parent.product.index' ),
-                'text' => __( 'template.menus' ),
+                'text' => __( 'template.products' ),
                 'class' => '',
             ],
             [
                 'url' => '',
-                'text' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.menus' ) ) ] ),
+                'text' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.products' ) ) ] ),
                 'class' => 'active',
             ],
         ];

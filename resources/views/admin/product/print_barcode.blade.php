@@ -16,8 +16,8 @@ $generate_barcodes = 'generate_barcodes';
             <div class="col-md-12 col-lg-6">
                 <h5 class="card-title mb-4">{{ __( 'template.print_x', [ 'title' => Str::singular( __( 'template.product_barcodes' ) ) ] ) }}</h5>
                 <div class="col-sm-12 mb-3 row">
-                    <label for="{{ $generate_barcodes }}_product" class="form-label">{{ __( 'template.menus' ) }}</label>
-                    <select class="form-select" id="{{ $generate_barcodes }}_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.menus' ) ] ) }}" multiple="multiple">
+                    <label for="{{ $generate_barcodes }}_product" class="form-label">{{ __( 'template.products' ) }}</label>
+                    <select class="form-select" id="{{ $generate_barcodes }}_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.products' ) ] ) }}" multiple="multiple">
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>

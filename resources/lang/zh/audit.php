@@ -13,13 +13,13 @@ return [
     |
     */
 
-    'username' => '用户名',
-    'module_name' => '模块名称',
-    'action_performed' => '执行的动作',
-    'meta_data' => '元数据',
-    'ip_address' => 'IP地址',
-    'browser' => '浏览器',
-    'operating_system' => '操作系统',
-    'old_value' => '旧值',
-    'new_value' => '新值',
+    'username' => 'Username',
+    'module_name' => 'Module Name',
+    'action_performed' => 'Action Performed',
+    'meta_data' => 'Meta Data',
+    'ip_address' => 'IP Address',
+    'browser' => 'Browser',
+    'operating_system' => 'Operating System',
+    'old_value' => 'Old Value',
+    'new_value' => 'New Value',
 ];

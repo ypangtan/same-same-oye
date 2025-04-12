@@ -83,7 +83,7 @@ $announcementTypes = $data['voucher_type'];
                     <div class="invalid-feedback"></div>
                 </div>
 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_edit }}_voucher_type" class="col-sm-5 col-form-label">{{ __( 'announcement.voucher_type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $announcement_edit }}_voucher_type">
@@ -95,7 +95,7 @@ $announcementTypes = $data['voucher_type'];
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_edit }}_discount_type" class="col-sm-5 col-form-label">{{ __( 'announcement.discount_type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $announcement_edit }}_discount_type">
@@ -107,7 +107,6 @@ $announcementTypes = $data['voucher_type'];
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                
                 
                 <section id="bxgy" class="rule-section hidden mb-3 row">
                     <div class="card">
@@ -230,7 +229,7 @@ $announcementTypes = $data['voucher_type'];
                 </div>
 
                 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_edit}}_points_required" class="col-sm-5 col-form-label">{{ __( 'announcement.points_required' ) }}</label>
                     <div class="col-sm-7">
                         <input type="number" class="form-control" id="{{ $announcement_edit}}_points_required">
@@ -238,7 +237,7 @@ $announcementTypes = $data['voucher_type'];
                     </div>
                 </div>
                 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_edit}}_validity_days" class="col-sm-5 col-form-label">{{ __( 'announcement.validity_days' ) }}</label>
                     <div class="col-sm-7">
                         <input type="number" class="form-control" id="{{ $announcement_edit}}_validity_days">

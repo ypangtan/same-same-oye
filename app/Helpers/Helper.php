@@ -14,10 +14,18 @@ use App\Models\{
     Wallet,
     UserDevice,
     User,
+    PresetPermission,
+    Module,
+    Voucher,
 };
 
 use Illuminate\Support\Facades\{
-    Crypt
+    Crypt,
+    Route,
+};
+
+use Spatie\Permission\Models\{
+    Permission,
 };
 
 use App\Services\{
@@ -31,7 +39,7 @@ class Helper {
     }
 
     public static function assetVersion() {
-        return '?v=1.09';
+        return '?v=1.04';
     }
 
     public static function wallets() {
@@ -54,15 +62,12 @@ class Helper {
             '1' => __( 'wallet.topup' ),
             '2' => __( 'wallet.refund' ),
             '3' => __( 'wallet.manual_adjustment' ),
-            '10' => __( 'wallet.placed_order' ),
-            '11' => __( 'wallet.purchase_promotion' ),
             '12' => __( 'wallet.redeem' ),
             '13' => __( 'wallet.refund_redeem' ),
             '20' => __( 'wallet.register_bonus' ),
-            '21' => __( 'wallet.promo_code_bonus' ),
             '22' => __( 'wallet.affiliate_bonus' ),
-            '23' => __( 'wallet.check_in_bonus' ),
-            '24' => __( 'wallet.purchasing_bonus' ),
+            '23' => __( 'wallet.checkin_bonus' ),
+            '24' => __( 'wallet.exhange_voucher' ),
         ];
     }
 
@@ -292,7 +297,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
-            $body = 'Your OTP for Yobe Froyo ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFei ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
         else if ( $action == 'resend' ) {
@@ -307,7 +312,7 @@ class Helper {
 
             $phoneNumber = $createOtp->phone_number;
 
-            $body = 'Your OTP for Yobe Froyo ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFei ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
         else if ( $action == 'forgot_password' ) {
@@ -326,7 +331,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
-            $body = 'Your OTP for Yobe Froyo forgot password is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFei forgot password is ' . $createOtp->otp_code;
 
         }else if ( $action == 'update_account' ) {
 
@@ -341,7 +346,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
-            $body = 'Your OTP for Yobe Froyo update account is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFei update account is ' . $createOtp->otp_code;
 
         }else {
 
@@ -358,7 +363,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
-            $body = 'Your OTP for Yobe Froyo ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFei ' . $action . ' is ' . $createOtp->otp_code;
         }
 
         return [
@@ -411,7 +416,7 @@ class Helper {
                     'en' => $message['message'],
                 ],
                 'headings' => [
-                    'en' => 'Yobe Froyo!'
+                    'en' => 'IFei'
                 ],
                 'include_player_ids' => [
                     $device->register_token
@@ -450,6 +455,18 @@ class Helper {
         return 'CART-' . now()->format('YmdHis');
     }
 
+    public static function generateVoucherCode()
+    {
+        do {
+            // Example: #AB12CD34
+            $code = '#' . strtoupper(\Str::random(8));
+    
+            // Make sure it's unique in the database
+        } while (Voucher::where('promo_code', $code)->exists());
+    
+        return $code;
+    }
+
     public static function generatePaymentHash( $data ){
 
         $password = config( 'services.eghl.merchant_password' );
@@ -472,6 +489,36 @@ class Helper {
         . $data['OrderNumber'];
 
         return hash('sha256', $hashCombine);
+    }
+
+    public static function initiatePermissions() {
+
+        foreach ( Route::getRoutes() as $route ) {
+            
+            $routeName = $route->getName();
+            if ( str_contains( $route->getName(), 'admin.module_parent.' ) ) {
+                $routeName = str_replace( 'admin.module_parent.', '', $routeName );
+                $routeName = str_replace( '.index', '', $routeName );
+                $moduleName = \Str::plural( $routeName );
+
+                $module = Module::firstOrCreate( [
+                    'name' => $moduleName,
+                    'guard_name' => 'admin',
+                ] );
+
+                if ( $module ) {
+
+                    foreach ( Helper::moduleActions() as $action ) {
+                        PresetPermission::firstOrCreate( [
+                            'module_id' => $module->id,
+                            'action' => $action,
+                        ] );
+                    }
+                }
+            }
+        }
+
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
     
 }

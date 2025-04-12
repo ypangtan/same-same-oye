@@ -21,9 +21,6 @@ class CreateProductsTable extends Migration
             $table->string('description')->nullable();
             $table->decimal('price', 10, 2)->default(0);
             $table->decimal('discount_price', 10, 2)->nullable()->default(0);
-            $table->integer('default_froyo_quantity')->nullable()->default(0);
-            $table->integer('default_syrup_quantity')->nullable()->default(0);
-            $table->integer('default_topping_quantity')->nullable()->default(0);
             $table->tinyInteger('status')->default(10);
             $table->timestamps();
         });

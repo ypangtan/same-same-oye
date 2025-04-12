@@ -84,10 +84,10 @@ class SettingService {
 
         $validator = Validator::make( $request->all(), [
             'convertion_rate' => [ 'required', 'numeric', 'gte:0' ],
-            'referral_register_bonus_points' => [ 'required', 'numeric', 'gte:0' ],
-            'referral_spending_bonus_points' => [ 'required', 'numeric', 'gte:0' ],
-            'register_bonus' => [ 'required', 'numeric', 'gte:0' ],
-            'taxes' => [ 'required', 'numeric', 'gte:0' ],
+            'referral_register_bonus_points' => [ 'nullable', 'numeric', 'gte:0' ],
+            'referral_spending_bonus_points' => [ 'nullable', 'numeric', 'gte:0' ],
+            'register_bonus' => [ 'nullable', 'numeric', 'gte:0' ],
+            'taxes' => [ 'nullable', 'numeric', 'gte:0' ],
         ] );
 
         $attributeName = [
@@ -104,10 +104,10 @@ class SettingService {
 
             $options = [
                 'CONVERTION_RATE' => $request->convertion_rate,
-                'REFERRAL_REGISTER' => $request->referral_register_bonus_points,
-                'REFERRAL_SPENDING' => $request->referral_spending_bonus_points,
-                'REGISTER_BONUS' => $request->register_bonus,
-                'TAXES' => $request->taxes,
+                'REFERRAL_REGISTER' => $request->referral_register_bonus_points ?? 0,
+                'REFERRAL_SPENDING' => $request->referral_spending_bonus_points ?? 0,
+                'REGISTER_BONUS' => $request->register_bonus ?? 0,
+                'TAXES' => $request->taxes ?? 0,
             ];
             
             foreach ($options as $option_name => $option_value) {

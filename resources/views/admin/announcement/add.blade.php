@@ -81,7 +81,7 @@ $voucherTypes = $data['voucher_type'];
                     <div class="invalid-feedback"></div>
                 </div>
 
-                <div class="mt-5 mb-3 row">
+                <div class="mt-5 mb-3 row d-none ">
                     <label for="{{ $announcement_create }}_voucher_type" class="col-sm-5 col-form-label">{{ __( 'announcement.voucher_type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $announcement_create }}_voucher_type">
@@ -92,7 +92,7 @@ $voucherTypes = $data['voucher_type'];
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none" >
                     <label for="{{ $announcement_create }}_discount_type" class="col-sm-5 col-form-label">{{ __( 'announcement.discount_type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $announcement_create }}_discount_type">
@@ -225,7 +225,7 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                 </div>
 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_create}}_points_required" class="col-sm-5 col-form-label">{{ __( 'announcement.points_required' ) }}</label>
                     <div class="col-sm-7">
                         <input type="number" class="form-control" id="{{ $announcement_create}}_points_required" value="0">
@@ -233,7 +233,7 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                 </div>
                 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_create}}_validity_days" class="col-sm-5 col-form-label">{{ __( 'announcement.validity_days' ) }}</label>
                     <div class="col-sm-7">
                         <input type="number" class="form-control" id="{{ $announcement_create}}_validity_days">

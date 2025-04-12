@@ -31,10 +31,10 @@ $adjustment_edit = 'adjustment_edit';
                         </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $adjustment_edit }}_product" class="col-sm-5 form-label">{{ __( 'template.menus' ) }}</label>
+                    <label for="{{ $adjustment_edit }}_product" class="col-sm-5 form-label">{{ __( 'template.products' ) }}</label>
                     <div class="col-sm-7">
 
-                        <select class="form-select" id="{{ $adjustment_edit }}_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.menus' ) ] ) }}" multiple="multiple">
+                        <select class="form-select" id="{{ $adjustment_edit }}_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.products' ) ] ) }}" multiple="multiple">
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -56,7 +56,7 @@ $adjustment_edit = 'adjustment_edit';
                     <div class="invalid-feedback"></div>
                 </div>
             
-                <label class="mb-3" >{{ __( 'template.menus' ) }}</label>
+                <label class="mb-3" >{{ __( 'template.products' ) }}</label>
                 <table class="table table-bordered" id="product-table">
                     <thead>
                         <tr>

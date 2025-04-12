@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'username' => '用户名',
-    'email' => '电子邮件',
-    'fullname' => '全名',
-    'phone_number' => '电话号码',
-    'role' => '角色',
-    'password' => '密码',
+    'username' => 'Username',
+    'email' => 'Email',
+    'fullname' => 'Fullname',
+    'phone_number' => 'Phone Number',
+    'role' => 'Role',
+    'password' => 'Password',
 ];

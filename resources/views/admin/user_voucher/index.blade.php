@@ -50,18 +50,18 @@ $columns = [
         'id' => 'title',
         'title' => __( 'user_voucher.title' ),
     ],
-    [
-        'type' => 'select',
-        'options' => $data['voucher_type'],
-        'id' => 'voucher_type',
-        'title' => __( 'user_voucher.voucher_type' ),
-    ],
-    [
-        'type' => 'select',
-        'options' => $data['discount_types'],
-        'id' => 'discount_type',
-        'title' => __( 'user_voucher.discount_type' ),
-    ],
+    // [
+    //     'type' => 'select',
+    //     'options' => $data['voucher_type'],
+    //     'id' => 'voucher_type',
+    //     'title' => __( 'user_voucher.voucher_type' ),
+    // ],
+    // [
+    //     'type' => 'select',
+    //     'options' => $data['discount_types'],
+    //     'id' => 'discount_type',
+    //     'title' => __( 'user_voucher.discount_type' ),
+    // ],
     [
         'type' => 'select',
         'options' => $data['status'],
@@ -120,8 +120,8 @@ var statusMapper = @json( $data['status'] ),
             { data: 'created_at' },
             { data: 'user' },
             { data: 'voucher' },
-            { data: 'voucher' },
-            { data: 'voucher' },
+            // { data: 'voucher' },
+            // { data: 'voucher' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -215,7 +215,7 @@ var statusMapper = @json( $data['status'] ),
 
                     @can( 'delete user_vouchers' )
                     status = row['status'] == 10 ? 
-                    '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="20"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
+                    '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="20"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'voucher.used' ) }}</span></a></li>' : 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="10"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
                     @endcan
                     

@@ -34,7 +34,7 @@ class EnquiryEmail extends Mailable
     public function build()
     {
         // from
-        return $this->from('support@infinitedesign.my', 'Yobe Froyo')
+        return $this->from('support@ifei.my', 'IFei')
         ->subject('Enquiry')
         ->view('admin/mail/enquiry')
         ->with(['data' => $this->data]);

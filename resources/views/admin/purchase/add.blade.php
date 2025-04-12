@@ -40,10 +40,10 @@ $taxTypes = $data['tax_types'];
                         </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $purchase_create }}_product" class="col-sm-5 form-label">{{ __( 'template.menus' ) }}</label>
+                    <label for="{{ $purchase_create }}_product" class="col-sm-5 form-label">{{ __( 'template.products' ) }}</label>
                     <div class="col-sm-7">
 
-                        <select class="form-select" id="{{ $purchase_create }}_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.menus' ) ] ) }}" multiple="multiple">
+                        <select class="form-select" id="{{ $purchase_create }}_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.products' ) ] ) }}" multiple="multiple">
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -58,7 +58,7 @@ $taxTypes = $data['tax_types'];
                     <div class="invalid-feedback"></div>
                 </div>
             
-                <label class="mb-3" >{{ __( 'template.menus' ) }}</label>
+                <label class="mb-3" >{{ __( 'template.products' ) }}</label>
                 <table class="table table-bordered mb-3" id="product-table">
                     <thead>
                         <tr>

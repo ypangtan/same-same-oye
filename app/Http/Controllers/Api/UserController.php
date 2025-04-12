@@ -63,8 +63,34 @@ class UserController extends Controller {
         return UserService::loginUser( $request );
     }
 
+
     /**
-     * 3. Request an OTP
+     * 3. Login an user - Social
+     * @sort 2
+     * 
+     * <strong>platform</strong></br>
+     * 1: Google<br>
+     * 2: Facebook<br>
+     * 
+     * <strong>device_type</strong><br>
+     * 1: iOS<br>
+     * 2: Android<br>
+     * 3: Web<br>
+     * 
+     * @group User API
+     * 
+     * @bodyParam identifier string required The email for social login. Example: ifei@mail.com
+     * @bodyParam platform interger required The platform for login. Example: 1
+     * @bodyParam device_type interger required The device_type for login. Example: 3
+     * 
+     */
+    public function loginUserSocial( Request $request ) {
+
+        return UserService::loginUserSocial( $request );
+    }
+
+    /**
+     * 4. Request an OTP
      * @sort 3
      * 
      * <strong>request_type</strong><br>
@@ -82,7 +108,7 @@ class UserController extends Controller {
     }
 
     /**
-     * 4. Resend an OTP
+     * 5. Resend an OTP
      * @sort 4
      * 
      * <strong>request_type</strong><br>
@@ -101,7 +127,7 @@ class UserController extends Controller {
     }
 
     /**
-     * 5. Get user
+     * 6. Get user
      * @sort 5
      * 
      * @group User API
@@ -116,7 +142,7 @@ class UserController extends Controller {
     }
 
     /**
-     * 6. Update user
+     * 7. Update user
      * @sort 6
      * 
      * 
@@ -125,6 +151,7 @@ class UserController extends Controller {
      * @authenticated
      * 
      * @bodyParam username string The username to update. Example: John
+     * @bodyParam fullname string The fullname to update. Example: John wick wick
      * @bodyParam email string The email to update. Example: john@email.com
      * @bodyParam date_of_birth string The date of birth to update. Example: 2022-01-01
      * @bodyParam to_remove integer Indicate remove photo or not. Example: 1
@@ -137,7 +164,7 @@ class UserController extends Controller {
     }
 
     /**
-     * 7. Update user password
+     * 8. Update user password
      * @sort 7
      * 
      * @group User API

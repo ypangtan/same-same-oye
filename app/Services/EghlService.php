@@ -457,7 +457,7 @@ class EghlService {
             $order = Order::where( 'reference', $request->OrderNumber )->first();
         }
 
-        $processedLog = ApiLog::where( 'url', 'https://yobe.upplex.com.my/eghl/callback' )
+        $processedLog = ApiLog::where( 'url', 'https://ifei.upplex.com.my/eghl/callback' )
         ->where( 'raw_response', 'LIKE', '%' . $request->OrderNumber . '%' )
         ->first();
 

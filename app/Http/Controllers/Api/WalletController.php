@@ -63,7 +63,7 @@ class WalletController extends Controller
     /**
      * 1. Get points history
      * 
-     * @group Yobe Points API
+     * @group IFei Points API
      * 
      * @authenticated
      * 

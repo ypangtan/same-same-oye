@@ -22,4 +22,17 @@ return [
     'audits' => 'Audits',
     'users' => 'Users',
     'orders' => 'Orders',
+
+    'salesmen' => 'Salesman',
+    'announcement_rewards' => 'Announcement Rewards',
+    'announcements' => 'Announcements',
+    'banners' => 'Banners',
+    'checkin_rewards' => 'Checkin Rewards',
+    'settings' => 'Settings',
+    'voucher_usages' => 'Voucher Usages',
+    'vouchers' => 'Vouchers ',
+    'wallet_transactions' => 'Wallet Transactions',
+    'wallets' => 'Wallets',
+    'user_checkins' => 'User Checkins',
+    'user_vouchers' => 'User Vouchers'
 ];

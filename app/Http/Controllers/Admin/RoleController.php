@@ -5,9 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Route;
+
+use Spatie\Permission\Models\{
+    Permission,
+};
+
+use App\Models\{
+    PresetPermission,
+    Module,
+};
+
 use App\Services\{
     RoleService,
+    ModuleService,
 };
+
+use Helper;
 
 class RoleController extends Controller
 {
@@ -53,6 +67,8 @@ class RoleController extends Controller
             ],
         ];
 
+        Helper::initiatePermissions();
+
         return view( 'admin.main' )->with( $this->data );
     }
 
@@ -77,6 +93,8 @@ class RoleController extends Controller
                 'class' => 'active',
             ],
         ];
+
+        Helper::initiatePermissions();
 
         return view( 'admin.main' )->with( $this->data );
     }

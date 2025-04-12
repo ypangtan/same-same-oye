@@ -49,7 +49,7 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $voucher_edit }}_voucher_type" class="col-sm-5 col-form-label">{{ __( 'voucher.voucher_type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $voucher_edit }}_voucher_type">
@@ -61,7 +61,7 @@ $voucherTypes = $data['voucher_type'];
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $voucher_edit }}_discount_type" class="col-sm-5 col-form-label">{{ __( 'voucher.discount_type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $voucher_edit }}_discount_type">
@@ -72,8 +72,7 @@ $voucherTypes = $data['voucher_type'];
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
-                </div>
-                
+                </div>          
                 
                 <section id="bxgy" class="rule-section hidden mb-3 row">
                     <div class="card">
@@ -394,24 +393,24 @@ window.cke_element1 = 'voucher_edit_description';
                     startDate.setDate( response.start_date );
                     editor.setData( response.description );
 
-                    switch ( parseInt( response.discount_type ) ) {
-                        case 3:
-                            if( response.decoded_adjustment ) {
-                                setBxgyData( response );
-                            }
+                    // switch ( parseInt( response.discount_type ) ) {
+                    //     case 3:
+                    //         if( response.decoded_adjustment ) {
+                    //             setBxgyData( response );
+                    //         }
 
-                            $( '#bxgy' ).removeClass( 'hidden' );
-                            break
+                    //         $( '#bxgy' ).removeClass( 'hidden' );
+                    //         break
 
-                        default:
-                            if( response.decoded_adjustment ) {
+                    //     default:
+                    //         if( response.decoded_adjustment ) {
 
-                                setcartdData( response );
-                            }
+                    //             setcartdData( response );
+                    //         }
 
-                            $( '#cartd' ).removeClass( 'hidden' );
-                            break
-                    }
+                    //         $( '#cartd' ).removeClass( 'hidden' );
+                    //         break
+                    // }
 
                     const dropzone = new Dropzone( fe + '_image', {
                         url: '{{ route( 'admin.file.upload' ) }}',

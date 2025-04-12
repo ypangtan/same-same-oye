@@ -61,6 +61,8 @@ return [
     'order_item_list' => 'Order Item List',
     'orders' => 'Orders',
     'api_requests' => 'Api Requests',
+    'sales_records' => 'Sales Records',
+    'download_excel_template' => 'Download Template',
 
     'loading' => 'Loading...',
     'add' => 'Add',
@@ -73,6 +75,7 @@ return [
     'view_x' => 'View :title',
     'import' => 'Import',
     'import_x' => 'Import :title',
+    'x_imported' => ':title Imported',
     'export_x' => 'EXport :title',
     'print_x' => 'Print :title',
     'save_changes' => 'Save Changes',
@@ -90,6 +93,7 @@ return [
 
     'new_x_created' => 'New :title Created.',
     'x_updated' => ':title Updated.',
+    'x_redeemed' => ':title Redeemed.',
     'x_deleted' => ':title Deleted.',
 
     'leave_blank' => 'Leave blank to leave unchanged',
@@ -176,8 +180,8 @@ return [
     'send_quotation' => 'Send Quotation',
     'view_stocks' => 'View Inventories',
 
-    'wallets' => 'Wallets',
-    'wallet_transactions' => 'Wallet Transactions',
+    'wallets' => 'Points',
+    'wallet_transactions' => 'Points Transactions',
     'announcements' => 'Announcements',
     'banners' => 'Banners',
     'announcement_rewards' => 'Announcement Rewards History',
