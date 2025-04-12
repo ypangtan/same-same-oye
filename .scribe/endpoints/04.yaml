@@ -1,12 +1,12 @@
-name: 'Menu API'
+name: 'Points API'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/menus
+    uri: api/v1/points
     metadata:
-      title: '1. Get menus'
+      title: '1. Get Points'
       description: ''
       authenticated: true
       custom: []
@@ -18,32 +18,97 @@ endpoints:
     bodyParameters: []
     responses:
       -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/points/redeem
+    metadata:
+      title: '2. Redeem Points'
+      description: '<aside class="notice">Get all announcement filtered, claim the promotion with claim voucher api</aside>'
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      reference:
+        name: reference
+        description: 'integer The referance of sales to be claim.'
+        required: false
+        example: 1231ns-12
+        type: required
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'integer The name of customer to claim points.'
+        required: false
+        example: James
+        type: nullable
+        custom: []
+      amount:
+        name: amount
+        description: 'float The id of amount of the sales.'
+        required: false
+        example: '12.20'
+        type: required
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/points/history
+    metadata:
+      title: '3. Get redeem history'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      start_date:
+        name: start_date
+        description: 'optional redeemed time in Y-m-d'
+        required: false
+        example: '2023-08-17'
+        type: string
+        custom: []
+      end_date:
+        name: end_date
+        description: 'optional redeemed time in Y-m-d'
+        required: false
+        example: '2023-08-17'
+        type: string
+        custom: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
         description: null
     responseFields: []
   -
     httpMethods:
       - GET
-    uri: api/v1/menus/get-selections
+    uri: api/v1/points/conversion-rate
     metadata:
-      title: '2. Get selections'
+      title: '4. Get conversion rate'
       description: ''
       authenticated: true
       custom: []
@@ -55,171 +120,11 @@ endpoints:
     bodyParameters: []
     responses:
       -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/menus/get-froyos
-    metadata:
-      title: '3. Get froyos'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/menus/get-syrups
-    metadata:
-      title: '4. Get syrups'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/menus/get-toppings
-    metadata:
-      title: '5. Get toppings'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/menus-operation
-    metadata:
-      title: '1. Get menus'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
+          content-type: application/json
+          access-control-allow-origin: '*'
         description: null
     responseFields: []

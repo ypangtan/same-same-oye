@@ -53,7 +53,7 @@ $announcementTypes = $data['voucher_type'];
                 
 
                 {{-- announcement custom --}}
-                <div class="mb-3">
+                <div class="mb-3 d-none">
                     <label>{{ __( 'announcement.unclaimed_image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $announcement_edit }}_unclaimed_image" style="min-height: 0px;">
                         <div class="dz-message needsclick">
@@ -63,7 +63,7 @@ $announcementTypes = $data['voucher_type'];
                     <div class="invalid-feedback"></div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 d-none">
                     <label>{{ __( 'announcement.claiming_image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $announcement_edit }}_claiming_image" style="min-height: 0px;">
                         <div class="dz-message needsclick">
@@ -73,7 +73,7 @@ $announcementTypes = $data['voucher_type'];
                     <div class="invalid-feedback"></div>
                 </div>
 
-                <div class="mb-6">
+                <div class="mb-6 d-none">
                     <label>{{ __( 'announcement.claimed_image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $announcement_edit }}_claimed_image" style="min-height: 0px;">
                         <div class="dz-message needsclick">
@@ -245,7 +245,7 @@ $announcementTypes = $data['voucher_type'];
                     </div>
                 </div>
 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_edit }}_promo_code" class="col-sm-5 col-form-label">{{ __( 'announcement.promo_code' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $announcement_edit }}_promo_code">

@@ -14,6 +14,7 @@ use App\Services\{
 
 use App\Models\{
     Voucher,
+    UserVoucher,
 };
 
 use Carbon\Carbon;
@@ -54,15 +55,32 @@ class CheckExpiredVoucher extends Command
     {
         $isDryRun = $this->option('dryrun');
         
-        $vouchers = Voucher::where('status', 10)->get();
+        $vouchers = Voucher::where('status', 10)->where( 'validity_days', '>', 0 )->get();
 
         foreach ( $vouchers as $voucher ) {
 
             DB::beginTransaction();
 
-            if (Carbon::parse( $voucher->created_at)->lessThan(Carbon::now()->subMinutes(10))) {
+            if (Carbon::parse( $voucher->expired_date)->lessThan(Carbon::now()->subMinutes(10))) {
                 $voucher->status = 21;
                 $voucher->save();
+            }            
+
+            if ( !$isDryRun ) {
+                DB::commit();
+            }
+                   
+        }
+
+        $userVouchers = UserVoucher::where('status', 10)->get();
+
+        foreach ( $userVouchers as $userVoucher ) {
+
+            DB::beginTransaction();
+
+            if (Carbon::parse( $userVoucher->expired_date)->lessThan(Carbon::now()->subMinutes(10)) && $userVoucher->voucher->validity_days > 0 ) {
+                $userVoucher->status = 21;
+                $userVoucher->save();
             }            
 
             if ( !$isDryRun ) {

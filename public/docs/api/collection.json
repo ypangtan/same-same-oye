@@ -5,53 +5,35 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "http:\/\/localhost\/yobe-backoffice"
+            "value": "http:\/\/localhost"
         }
     ],
     "info": {
-        "name": "Laravel",
-        "_postman_id": "320cd60e-4588-400a-b492-c94f88de9233",
+        "name": "Ifei",
+        "_postman_id": "2eba7e36-e2f5-4e5a-8870-5f5b5c762301",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
         {
-            "name": "Bundle API",
+            "name": "Announcement API",
             "description": "",
             "item": [
                 {
-                    "name": "1. Get bundles",
+                    "name": "1. Get announcements",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/bundles",
+                            "path": "api\/v1\/announcements",
                             "query": [
                                 {
-                                    "key": "per_page",
-                                    "value": "10",
-                                    "description": "Retrieve how many product in a page, default is 10.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "bundle_id",
+                                    "key": "show_claimed",
                                     "value": "1",
-                                    "description": "The bundle id to be filter.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "title",
-                                    "value": "PROMO",
-                                    "description": "The bundle title to be filter.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "user_bundle",
-                                    "value": "1",
-                                    "description": "Retrieve all user's bundle only",
+                                    "description": "To show claimed announcement .",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/bundles?per_page=10&bundle_id=1&title=PROMO&user_bundle=1"
+                            "raw": "{{baseUrl}}\/api\/v1\/announcements?show_claimed=1"
                         },
                         "method": "GET",
                         "header": [
@@ -65,7 +47,7 @@
                             }
                         ],
                         "body": null,
-                        "description": "<aside class=\"notice\">Get all bundles that is buyable<\/aside>\n\n\n<strong>user_bundle (retrieve user's bundle)<\/strong><\/br>\n1: true<br>\n2: false<br>"
+                        "description": "<aside class=\"notice\">Get all announcement filtered, claim the promotion with claim voucher api<\/aside>"
                     },
                     "response": [
                         {
@@ -75,28 +57,28 @@
                                     "value": "no-cache, private"
                                 },
                                 {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                    "key": "content-type",
+                                    "value": "application\/json"
                                 },
                                 {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
                                 }
                             ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "2. Buy Bundle",
+                    "name": "2. Close\/Claim Announcement",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/bundles\/buy",
+                            "path": "api\/v1\/announcements\/close",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/bundles\/buy"
+                            "raw": "{{baseUrl}}\/api\/v1\/announcements\/close"
                         },
                         "method": "POST",
                         "header": [
@@ -111,133 +93,26 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"bundle_id\":\"1\",\"payment_method\":1}"
+                            "raw": "{\"announcement\":\"1\"}"
                         },
-                        "description": "<aside class=\"notice\">Buy bundle of later use<\/aside>\n\n<strong>payment_method<\/strong><br>\n1: yobe wallet<br>\n2: payment gateway<br>"
-                    },
-                    "response": []
-                },
-                {
-                    "name": "3. Retry Payment",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/bundles\/retry-payment",
-                            "query": [
-                                {
-                                    "key": "user_bundle_id",
-                                    "value": "1",
-                                    "description": "The ID of the bundle.",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/v1\/bundles\/retry-payment?user_bundle_id=1"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "<aside class=\"notice\">retry payment for online payment, from previous buy bundle<\/aside>"
+                        "description": ""
                     },
                     "response": []
                 }
             ]
         },
         {
-            "name": "Cart API",
+            "name": "Banner API",
             "description": "",
             "item": [
                 {
-                    "name": "1. Add to cart",
+                    "name": "1. Get banners",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/carts\/add",
+                            "path": "api\/v1\/banners",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/carts\/add"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"vending_machine\":2,\"items\":[{\"productId\":1,\"froyo\":[1,2],\"syrup\":[3],\"topping\":[4,5]}],\"promo_code\":\"BUY1FREE1\",\"bundle\":1,\"user_bundle\":2}"
-                        },
-                        "description": ""
-                    },
-                    "response": []
-                },
-                {
-                    "name": "3. Update cart",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/carts\/update",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/carts\/update"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"vending_machine\":2,\"items\":[{\"productId\":1,\"froyo\":[1,2],\"syrup\":[3],\"topping\":[4,5]}],\"session_key\":\"abcd-1234\",\"id\":1,\"cart_item\":1,\"promo_code\":0,\"cart\":0,\"bundle\":1,\"user_bundle\":2}"
-                        },
-                        "description": "<aside class=\"notice\">session_key or cart id can be used to update the cart<\/aside>"
-                    },
-                    "response": []
-                },
-                {
-                    "name": "2. Retrieve cart",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/carts",
-                            "query": [
-                                {
-                                    "key": "session_key",
-                                    "value": "abcd-1234",
-                                    "description": "The unique identifier for the cart.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "id",
-                                    "value": "abcd-1234",
-                                    "description": "The ID of the cart. .",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "per_page",
-                                    "value": "10",
-                                    "description": "Retrieve how many insurance quote in a page, default is 10.",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/v1\/carts?session_key=abcd-1234&id=abcd-1234&per_page=10"
+                            "raw": "{{baseUrl}}\/api\/v1\/banners"
                         },
                         "method": "GET",
                         "header": [
@@ -251,7 +126,7 @@
                             }
                         ],
                         "body": null,
-                        "description": "<aside class=\"notice\">id and session_key can be used to filter out the cart<\/aside>"
+                        "description": "<aside class=\"notice\">Get all banners ( sorted )<\/aside>"
                     },
                     "response": [
                         {
@@ -261,28 +136,143 @@
                                     "value": "no-cache, private"
                                 },
                                 {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                    "key": "content-type",
+                                    "value": "application\/json"
                                 },
                                 {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
+                                    "key": "x-ratelimit-limit",
+                                    "value": "200"
+                                },
+                                {
+                                    "key": "x-ratelimit-remaining",
+                                    "value": "199"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
                                 }
                             ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "code": 200,
+                            "body": "{\"message\":\"\",\"message_key\":\"get_banner_success\",\"data\":[{\"id\":1,\"voucher_id\":null,\"title\":\"tetea\",\"description\":\"<p>ssadsadasdasdada<\\\/p>\",\"image\":\"file-managers\\\/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png\",\"sequence\":1,\"status\":10,\"created_at\":\"2025-04-12 18:42:08\",\"updated_at\":\"2025-04-12 18:42:17\",\"image_path\":\"http:\\\/\\\/localhost\\\/storage\\\/file-managers\\\/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png\"},{\"id\":2,\"voucher_id\":null,\"title\":\"\",\"description\":\"\",\"image\":\"file-managers\\\/E538Kb5vZdki6XN0R2ZdsKRmeybdMhxXBYFVjD8D.png\",\"sequence\":1,\"status\":10,\"created_at\":\"2025-04-12 18:42:10\",\"updated_at\":\"2025-04-12 18:42:10\",\"image_path\":\"http:\\\/\\\/localhost\\\/storage\\\/file-managers\\\/E538Kb5vZdki6XN0R2ZdsKRmeybdMhxXBYFVjD8D.png\"}]}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "4. Delete Cart",
+                    "name": "2. Get one banner detail",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/carts\/delete",
+                            "path": "api\/v1\/banners\/details",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/carts\/delete"
+                            "raw": "{{baseUrl}}\/api\/v1\/banners\/details"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"id\":\"1\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "x-ratelimit-limit",
+                                    "value": "200"
+                                },
+                                {
+                                    "key": "x-ratelimit-remaining",
+                                    "value": "198"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"message\":\"\",\"message_key\":\"get_banner_success\",\"data\":{\"id\":1,\"voucher_id\":null,\"title\":\"tetea\",\"description\":\"<p>ssadsadasdasdada<\\\/p>\",\"image\":\"file-managers\\\/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png\",\"sequence\":1,\"status\":10,\"created_at\":\"2025-04-12 18:42:08\",\"updated_at\":\"2025-04-12 18:42:17\",\"encrypted_id\":\"ql\",\"image_path\":\"http:\\\/\\\/localhost\\\/storage\\\/file-managers\\\/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png\"}}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Points API",
+            "description": "",
+            "item": [
+                {
+                    "name": "1. Get Points",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/points",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/points"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "2. Redeem Points",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/points\/redeem",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/points\/redeem"
                         },
                         "method": "POST",
                         "header": [
@@ -297,22 +287,22 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":1,\"session_key\":\"abcd-1234\"}"
+                            "raw": "{\"reference\":\"1231ns-12\",\"customer_name\":\"James\",\"amount\":\"12.20\"}"
                         },
-                        "description": "<aside class=\"notice\">session_key or cart id can be used to delete the cart<\/aside>"
+                        "description": "<aside class=\"notice\">Get all announcement filtered, claim the promotion with claim voucher api<\/aside>"
                     },
                     "response": []
                 },
                 {
-                    "name": "4. Delete Cart Item",
+                    "name": "3. Get redeem history",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/carts\/delete-cart-item",
+                            "path": "api\/v1\/points\/history",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/carts\/delete-cart-item"
+                            "raw": "{{baseUrl}}\/api\/v1\/points\/history"
                         },
-                        "method": "POST",
+                        "method": "GET",
                         "header": [
                             {
                                 "key": "Content-Type",
@@ -325,11 +315,76 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":1,\"cart_item\":1}"
+                            "raw": "{\"start_date\":\"2023-08-17\",\"end_date\":\"2023-08-17\"}"
                         },
-                        "description": "<aside class=\"notice\">session_key or cart id can be used to delete the cart<\/aside>"
+                        "description": ""
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "4. Get conversion rate",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/points\/conversion-rate",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/points\/conversion-rate"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
                 }
             ]
         },
@@ -375,16 +430,16 @@
                                     "value": "no-cache, private"
                                 },
                                 {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                    "key": "content-type",
+                                    "value": "application\/json"
                                 },
                                 {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
                                 }
                             ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
                             "name": ""
                         }
                     ]
@@ -445,16 +500,16 @@
                                     "value": "no-cache, private"
                                 },
                                 {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                    "key": "content-type",
+                                    "value": "application\/json"
                                 },
                                 {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
                                 }
                             ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
                             "name": ""
                         }
                     ]
@@ -495,494 +550,6 @@
                         }
                     },
                     "response": []
-                }
-            ]
-        },
-        {
-            "name": "Menu API",
-            "description": "",
-            "item": [
-                {
-                    "name": "1. Get menus",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "2. Get selections",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus\/get-selections",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus\/get-selections"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "3. Get froyos",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus\/get-froyos",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus\/get-froyos"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "4. Get syrups",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus\/get-syrups",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus\/get-syrups"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "5. Get toppings",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus\/get-toppings",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus\/get-toppings"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "1. Get menus",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/menus-operation",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/menus-operation"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Order API",
-            "description": "",
-            "item": [
-                {
-                    "name": "2. Retrieve user order",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/orders",
-                            "query": [
-                                {
-                                    "key": "reference",
-                                    "value": "abcd-1234",
-                                    "description": "The unique reference for the order.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "id",
-                                    "value": "1",
-                                    "description": "The ID of the order. .",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "status",
-                                    "value": "1",
-                                    "description": "The Status of the order. .",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "per_page",
-                                    "value": "10",
-                                    "description": "Retrieve how many insurance quote in a page, default is 10.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "user_bundle",
-                                    "value": "1",
-                                    "description": "Retrieve User Bundle bought within order.",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/v1\/orders?reference=abcd-1234&id=1&status=1&per_page=10&user_bundle=1"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "<aside class=\"notice\">id and reference can be used to filter out the order<\/aside>\n\n<strong>status<\/strong><br>\n1: placed order \/ pending payment<br>\n3: paid \/ unclaimed<br>\n10: completed \/ claimed<br>\n20: canceled<br>"
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "1. checkout",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/orders\/checkout",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/orders\/checkout"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"cart\":1,\"promo_code\":0,\"payment_method\":1}"
-                        },
-                        "description": "<strong>payment_method<\/strong><br>\n1: yobe wallet<br>\n2: payment gateway<br>"
-                    },
-                    "response": []
-                },
-                {
-                    "name": "3. Retry Payment",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/orders\/retry-payment",
-                            "query": [
-                                {
-                                    "key": "order_id",
-                                    "value": "1",
-                                    "description": "The ID of the order.",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/v1\/orders\/retry-payment?order_id=1"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "<aside class=\"notice\">retry payment for online payment<\/aside>"
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
-            "name": "Promo Code API",
-            "description": "",
-            "item": [
-                {
-                    "name": "1. Get promo code",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/promo-codes",
-                            "query": [
-                                {
-                                    "key": "per_page",
-                                    "value": "10",
-                                    "description": "Retrieve how many product in a page, default is 10.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "promo_code",
-                                    "value": "XBMSD22",
-                                    "description": "The promo code to be filter.",
-                                    "disabled": false
-                                },
-                                {
-                                    "key": "discount_type",
-                                    "value": "2",
-                                    "description": "The promo discount type to be filter",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/v1\/promo-codes?per_page=10&promo_code=XBMSD22&discount_type=2"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "<aside class=\"notice\">Get all promo code<\/aside>"
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
                 }
             ]
         },
@@ -1053,7 +620,7 @@
                     "response": []
                 },
                 {
-                    "name": "5. Get user",
+                    "name": "6. Get user",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -1083,22 +650,22 @@
                                     "value": "no-cache, private"
                                 },
                                 {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                    "key": "content-type",
+                                    "value": "application\/json"
                                 },
                                 {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
                                 }
                             ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "3. Request an OTP",
+                    "name": "4. Request an OTP",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -1129,7 +696,7 @@
                     "response": []
                 },
                 {
-                    "name": "4. Resend an OTP",
+                    "name": "5. Resend an OTP",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -1278,7 +845,7 @@
                     "response": []
                 },
                 {
-                    "name": "6. Update user",
+                    "name": "7. Update user",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -1290,7 +857,7 @@
                         "header": [
                             {
                                 "key": "Content-Type",
-                                "value": "application\/json"
+                                "value": "multipart\/form-data"
                             },
                             {
                                 "key": "Accept",
@@ -1298,8 +865,44 @@
                             }
                         ],
                         "body": {
-                            "mode": "raw",
-                            "raw": "{\"username\":\"John\",\"email\":\"john@email.com\",\"date_of_birth\":\"2022-01-01\"}"
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "username",
+                                    "value": "John",
+                                    "type": "text",
+                                    "description": "The username to update."
+                                },
+                                {
+                                    "key": "fullname",
+                                    "value": "John wick wick",
+                                    "type": "text",
+                                    "description": "The fullname to update."
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "john@email.com",
+                                    "type": "text",
+                                    "description": "The email to update."
+                                },
+                                {
+                                    "key": "date_of_birth",
+                                    "value": "2022-01-01",
+                                    "type": "text",
+                                    "description": "The date of birth to update."
+                                },
+                                {
+                                    "key": "to_remove",
+                                    "value": 1,
+                                    "type": "text",
+                                    "description": "Indicate remove photo or not."
+                                },
+                                {
+                                    "key": "profile_picture",
+                                    "src": [],
+                                    "type": "file"
+                                }
+                            ]
                         },
                         "description": ""
                     },
@@ -1355,16 +958,16 @@
                                     "value": "no-cache, private"
                                 },
                                 {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                    "key": "content-type",
+                                    "value": "application\/json"
                                 },
                                 {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
                                 }
                             ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
                             "name": ""
                         }
                     ]
@@ -1399,30 +1002,17 @@
                         }
                     },
                     "response": []
-                }
-            ]
-        },
-        {
-            "name": "Vending Machine API",
-            "description": "",
-            "item": [
+                },
                 {
-                    "name": "1. Get vending machines",
+                    "name": "3. Login an user - Social",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/vending-machines",
-                            "query": [
-                                {
-                                    "key": "title",
-                                    "value": "KL+ECOCITY",
-                                    "description": "Vending Machine Title to be filter",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/v1\/vending-machines?title=KL+ECOCITY"
+                            "path": "api\/v1\/users\/login-social",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/users\/login-social"
                         },
-                        "method": "GET",
+                        "method": "POST",
                         "header": [
                             {
                                 "key": "Content-Type",
@@ -1433,30 +1023,44 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"identifier\":\"ifei@mail.com\",\"platform\":\"1\",\"device_type\":\"3\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "8. Update user password",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/users\/update-password",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/users\/update-password"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"old_password\":\"1234abcd\",\"password\":\"abcd1234\",\"password_confirmation\":\"abcd1234\"}"
+                        },
                         "description": ""
                     },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
+                    "response": []
                 }
             ]
         },
@@ -1526,47 +1130,19 @@
                                     "value": "no-cache, private"
                                 },
                                 {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
+                                    "key": "content-type",
+                                    "value": "application\/json"
                                 },
                                 {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
                                 }
                             ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
                             "name": ""
                         }
                     ]
-                },
-                {
-                    "name": "3. Validate vouchers",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/vouchers\/validate",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/vouchers\/validate"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"cart\":1,\"promo_code\":\"XBMSD22\"}"
-                        },
-                        "description": ""
-                    },
-                    "response": []
                 },
                 {
                     "name": "4. Claim Vouchers",
@@ -1595,195 +1171,6 @@
                         "description": ""
                     },
                     "response": []
-                }
-            ]
-        },
-        {
-            "name": "Wallet API",
-            "description": "",
-            "item": [
-                {
-                    "name": "2. Get wallet transactions",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/wallets\/transactions",
-                            "query": [
-                                {
-                                    "key": "per_page",
-                                    "value": "10",
-                                    "description": "Retrieve how many my tranasction in a page, default is 10.",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/v1\/wallets\/transactions?per_page=10"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "3. Topup",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/wallets\/topup",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/wallets\/topup"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"topup_amount\":\"10\",\"payment_method\":1}"
-                        },
-                        "description": "<strong>payment_method<\/strong><br>\n1: Payment Gateway"
-                    },
-                    "response": []
-                },
-                {
-                    "name": "1. Get wallet",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/wallets",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/wallets"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Yobe Points API",
-            "description": "",
-            "item": [
-                {
-                    "name": "1. Get points history",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/points\/histories",
-                            "query": [
-                                {
-                                    "key": "per_page",
-                                    "value": "10",
-                                    "description": "Retrieve how many my tranasction in a page, default is 10.",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/v1\/points\/histories?per_page=10"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard\">http:\/\/localhost\/yobe-backoffice\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
                 }
             ]
         }

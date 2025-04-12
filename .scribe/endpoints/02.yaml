@@ -25,24 +25,12 @@ endpoints:
     bodyParameters: []
     responses:
       -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
+          content-type: application/json
+          access-control-allow-origin: '*'
         description: null
     responseFields: []
   -
@@ -79,23 +67,11 @@ endpoints:
     bodyParameters: []
     responses:
       -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
+          content-type: application/json
+          access-control-allow-origin: '*'
         description: null
     responseFields: []

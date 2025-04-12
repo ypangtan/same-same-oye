@@ -6,7 +6,7 @@
                     <div class="nk-block nk-block-middle nk-auth-body  wide-xs">
                         <div class="brand-logo pb-4 text-center">
                             <a href="{{ route( 'admin.home' ) }}" class="logo-link">
-                                <img src="{{ asset( 'admin/images/logo.png' ) }}" width="100%" />
+                                <img src="{{ asset( 'admin/images/logo.png' ) . Helper::assetVersion() }}" width="100%" />
                             </a>
                         </div>
                         <div class="card" style="border-radius: 10px;">

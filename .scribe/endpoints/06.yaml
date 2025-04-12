@@ -1,13 +1,28 @@
-name: 'Promo Code API'
+name: 'Voucher API'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/promo-codes
+    uri: api/v1/vouchers
     metadata:
-      title: '1. Get promo code'
-      description: '<aside class="notice">Get all promo code</aside>'
+      title: '1. Get vouchers'
+      description: |-
+        <aside class="notice">Get all voucher that is claimable</aside>
+
+        <strong>voucher discount type</strong></br>
+        1: percentage<br>
+        2: fixed amount<br>
+        3: buy x free y<br>
+
+        <strong>voucher type</strong></br>
+        1: public voucher<br>
+        2: points redeemable<br>
+        3: register reward<br>
+
+        <strong>user_voucher (retrieve user's voucher)</strong></br>
+        1: true<br>
+        2: false<br>
       authenticated: true
       custom: []
     headers:
@@ -24,14 +39,28 @@ endpoints:
         custom: []
       promo_code:
         name: promo_code
-        description: 'The promo code to be filter.'
+        description: 'The voucher code to be filter.'
         required: false
         example: XBMSD22
         type: string
         custom: []
+      user_voucher:
+        name: user_voucher
+        description: 'Retrieve all user''s voucher only'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      voucher_type:
+        name: voucher_type
+        description: 'The voucher type to be filter'
+        required: false
+        example: 1
+        type: integer
+        custom: []
       discount_type:
         name: discount_type
-        description: 'The promo discount type to be filter'
+        description: 'The voucher discount type to be filter'
         required: false
         example: 2
         type: integer
@@ -39,23 +68,35 @@ endpoints:
     bodyParameters: []
     responses:
       -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='http://localhost/yobe-backoffice/backoffice/dashboard'" />
-
-                  <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="http://localhost/yobe-backoffice/backoffice/dashboard">http://localhost/yobe-backoffice/backoffice/dashboard</a>.
-              </body>
-          </html>
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
-          location: 'http://localhost/yobe-backoffice/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
+          content-type: application/json
+          access-control-allow-origin: '*'
         description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/vouchers/claim-voucher
+    metadata:
+      title: '4. Claim Vouchers'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      voucher_id:
+        name: voucher_id
+        description: 'integer The voucher_id to be claim.'
+        required: false
+        example: '1'
+        type: required
+        custom: []
+    responses: []
     responseFields: []

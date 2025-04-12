@@ -323,11 +323,15 @@ class SalesRecordService
         }
 
         ( new FastExcel )->import( $file, function ( $line ) {
-            SalesRecord::create([
-                'customer_name' => isset( $line['customer_name'] ) ? $line['customer_name'] : null ,
-                'reference' => isset( $line['reference'] ) ? $line['reference'] : null ,
-                'total_price' => isset( $line['total_price'] ) ? $line['total_price'] : null ,
-            ]);
+            $reference = $line['reference'] ?? null;
+        
+            if ( $reference && !SalesRecord::where( 'reference', $reference )->exists() ) {
+                SalesRecord::create([
+                    'customer_name' => $line['customer_name'] ?? null,
+                    'reference'     => $reference,
+                    'total_price'   => $line['total_price'] ?? null,
+                ]);
+            }
         });
 
         $errors = [];
@@ -360,9 +364,9 @@ class SalesRecordService
         }
 
         return response()->json([
-            'message' => '',
+            'message' => 'Get Points Success',
             'message_key' => 'get_points_success',
-            'points' => $wallet,
+            'data' => $wallet,
         ]);
     }
 
@@ -379,7 +383,7 @@ class SalesRecordService
                             ->where( 'status', 10 )
                             ->where( 'customer_name', auth()->user()->fullname )
                             ->orWhere( 'facebook_name', auth()->user()->fullname )
-                            ->exists();
+                            ->first();
 
                         if ( ! $exists ) {
                             $fail( __( 'Sorry, we cant found your order.' ) );
@@ -440,14 +444,14 @@ class SalesRecordService
             return response()->json([
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
                 'message_key' => 'oops_error_encountered',
-                'points' => $wallet,
+                'data' => $wallet,
             ], 500 );
         }
 
         return response()->json([
             'message' => __( 'template.x_redeemed', [ 'title' =>__( 'template.wallets' ) ] ),
-            'message_key' => 'ponits_redeemed',
-            'points' => $wallet,
+            'message_key' => 'points_redeemed',
+            'data' => $wallet,
         ]);
        
     }
@@ -455,7 +459,14 @@ class SalesRecordService
     public static function getPointsRedeemHistory( $request ) {
 
         $walletTransactions = WalletTransaction::where( 'user_id', auth()->user()->id )
-            ->orderBy( 'created_at', 'DESC' )->where('type', 1);
+        ->where( 'type', 1 )
+        ->when( $request->start_date, function ( $query ) use ( $request ) {
+            $query->whereDate( 'created_at', '>=', $request->start_date );
+        })
+        ->when( $request->end_date, function ( $query ) use ( $request ) {
+            $query->whereDate( 'created_at', '<=', $request->end_date );
+        })
+        ->orderBy( 'created_at', 'DESC' );
 
         $walletTransactions = $walletTransactions->paginate( empty( $request->per_page ) ? 10 : $request->per_page );
 
@@ -463,8 +474,6 @@ class SalesRecordService
 
             $wt->makeHidden( [
                 'type',
-                'opening_balance',
-                'closing_balance',
                 'updated_at',
             ] );
 
@@ -473,8 +482,13 @@ class SalesRecordService
                 'display_transaction_type',
             ] );
         }
+        
+        // Convert to array and add your message
+        $data = $walletTransactions->toArray();
+        $data[ 'message' ] = 'Points history retrieved successfully.';
+        $data[ 'message_key' ] = 'get_points_history_success';
 
-        return response()->json( $walletTransactions );
+        return response()->json( $data );
     }
 
     public static function getConversionRate( $request ) {
@@ -484,12 +498,14 @@ class SalesRecordService
         //     ? (float) $conversionRate->option_value
         //     : 1;
 
-        $conversionRate->rate = $conversionRate->option_value;
+        if( $conversionRate ){
+            $conversionRate->rate = $conversionRate->option_value;
+        }
 
         return response()->json([
             'message' => 'Get Conversion Rate Success',
             'message_key' => 'get_conversion_rate_success',
-            'conversion_rate' => $conversionRate,
+            'data' => $conversionRate,
         ]);
     }
 }

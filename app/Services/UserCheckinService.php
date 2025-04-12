@@ -398,7 +398,12 @@ class UserCheckinService
         $perPage = empty( $request->per_page) ? 10 : $request->per_page;
         $checkinHistories = $checkinHistories->paginate( $perPage );
 
-        return response()->json( $checkinHistories );
+        // Convert to array and add your message
+        $data = $checkinHistories->toArray();
+        $data[ 'message' ] = 'Check-in history retrieved successfully.';
+        $data[ 'message_key' ] = 'get_checkin_history_success';
+
+        return response()->json( $data );
     }
 
     public static function getCheckinRewards( $request )

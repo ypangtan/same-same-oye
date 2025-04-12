@@ -77,6 +77,15 @@
                                     </li>
                                 @endcan
 
+                                @can( 'view Sales Records' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SalesRecordController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.sales_record.index' ) }}" class="nk-menu-link">
+                                           <span class="nk-menu-icon"><em class="icon ni ni-report-profit"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.sales_records' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan 
+
                                 @can( 'view Announcements' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\AnnouncementController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.announcement.index' ) }}" class="nk-menu-link">

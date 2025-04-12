@@ -40,6 +40,12 @@ $columns = [
     ],
     [
         'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.fullname' ) ] ),
+        'id' => 'fullname',
+        'title' => __( 'user.fullname' ),
+    ],
+    [
+        'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.username' ) ] ),
         'id' => 'username',
         'title' => __( 'user.username' ),
@@ -110,6 +116,7 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: null },
             { data: 'created_at' },
+            { data: 'fullname' },
             { data: 'username' },
             { data: 'email' },
             { data: 'phone_number' },
@@ -152,6 +159,13 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
+                
+                render: function( data, type, row, meta ) {
+                    return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "fullname" ) }}' ),
                 
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;

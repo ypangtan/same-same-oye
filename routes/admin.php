@@ -364,50 +364,47 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'ckeUpload', [ SalesRecordController::class, 'ckeUpload' ] )->name( 'admin.sales_record.ckeUpload' );
             } );
 
-            
-            if( 1 == 2 ){
-                Route::prefix( 'products' )->group( function() {
-                    Route::group( [ 'middleware' => [ 'permission:view products' ] ], function() {
-                        Route::get( '/', [ ProductController::class, 'index' ] )->name( 'admin.module_parent.product.index' );
-                    } );
-                    Route::group( [ 'middleware' => [ 'permission:add products' ] ], function() {
-                        Route::get( 'add', [ ProductController::class, 'add' ] )->name( 'admin.product.add' );
-                    } );
-                    Route::group( [ 'middleware' => [ 'permission:edit products' ] ], function() {
-                        Route::get( 'edit', [ ProductController::class, 'edit' ] )->name( 'admin.product.edit' );
-                    } );
-        
-                    Route::post( 'update-order', [ ProductController::class, 'updateOrder' ] )->name( 'admin.product.updateOrder' );
-                    Route::post( 'all-products', [ ProductController::class, 'allProducts' ] )->name( 'admin.product.allProducts' );
-                    Route::post( 'one-product', [ ProductController::class, 'oneProduct' ] )->name( 'admin.product.oneProduct' );
-                    Route::post( 'create-product', [ ProductController::class, 'createProduct' ] )->name( 'admin.product.createProduct' );
-                    Route::post( 'update-product', [ ProductController::class, 'updateProduct' ] )->name( 'admin.product.updateProduct' );
-                    Route::post( 'delete-product', [ ProductController::class, 'deleteProduct' ] )->name( 'admin.product.deleteProduct' );
-                    Route::post( 'update-product-status', [ ProductController::class, 'updateProductStatus' ] )->name( 'admin.product.updateProductStatus' );
-                    Route::post( 'remove-product-gallery-image', [ ProductController::class, 'removeProductGalleryImage' ] )->name( 'admin.product.removeProductGalleryImage' );
-                    Route::post( 'ckeUpload', [ ProductController::class, 'ckeUpload' ] )->name( 'admin.product.ckeUpload' );
+            Route::prefix( 'products' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view products' ] ], function() {
+                    Route::get( '/', [ ProductController::class, 'index' ] )->name( 'admin.product.index' );
                 } );
+                Route::group( [ 'middleware' => [ 'permission:add products' ] ], function() {
+                    Route::get( 'add', [ ProductController::class, 'add' ] )->name( 'admin.product.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit products' ] ], function() {
+                    Route::get( 'edit', [ ProductController::class, 'edit' ] )->name( 'admin.product.edit' );
+                } );
+    
+                Route::post( 'update-order', [ ProductController::class, 'updateOrder' ] )->name( 'admin.product.updateOrder' );
+                Route::post( 'all-products', [ ProductController::class, 'allProducts' ] )->name( 'admin.product.allProducts' );
+                Route::post( 'one-product', [ ProductController::class, 'oneProduct' ] )->name( 'admin.product.oneProduct' );
+                Route::post( 'create-product', [ ProductController::class, 'createProduct' ] )->name( 'admin.product.createProduct' );
+                Route::post( 'update-product', [ ProductController::class, 'updateProduct' ] )->name( 'admin.product.updateProduct' );
+                Route::post( 'delete-product', [ ProductController::class, 'deleteProduct' ] )->name( 'admin.product.deleteProduct' );
+                Route::post( 'update-product-status', [ ProductController::class, 'updateProductStatus' ] )->name( 'admin.product.updateProductStatus' );
+                Route::post( 'remove-product-gallery-image', [ ProductController::class, 'removeProductGalleryImage' ] )->name( 'admin.product.removeProductGalleryImage' );
+                Route::post( 'ckeUpload', [ ProductController::class, 'ckeUpload' ] )->name( 'admin.product.ckeUpload' );
+            } );
 
-                Route::prefix( 'voucher-usages' )->group( function() {
-                    Route::group( [ 'middleware' => [ 'permission:view vouchers' ] ], function() {
-                        Route::get( '/', [ VoucherUsageController::class, 'index' ] )->name( 'admin.module_parent.voucher_usage.index' );
-                    } );
-                    Route::group( [ 'middleware' => [ 'permission:add vouchers' ] ], function() {
-                        Route::get( 'add', [ VoucherUsageController::class, 'add' ] )->name( 'admin.voucher_usage.add' );
-                    } );
-                    Route::group( [ 'middleware' => [ 'permission:edit vouchers' ] ], function() {
-                        Route::get( 'edit', [ VoucherUsageController::class, 'edit' ] )->name( 'admin.voucher_usage.edit' );
-                    } );
-        
-                    Route::post( 'all-voucher-usages', [ VoucherUsageController::class, 'allVoucherUsages' ] )->name( 'admin.voucher_usage.allVoucherUsages' );
-                    Route::post( 'one-voucher-usage', [ VoucherUsageController::class, 'oneVoucherUsage' ] )->name( 'admin.voucher_usage.oneVoucherUsage' );
-                    Route::post( 'create-voucher-usage', [ VoucherUsageController::class, 'createVoucherUsage' ] )->name( 'admin.voucher_usage.createVoucherUsage' );
-                    Route::post( 'update-voucher-usage', [ VoucherUsageController::class, 'updateVoucherUsage' ] )->name( 'admin.voucher_usage.updateVoucherUsage' );
-                    Route::post( 'update-voucher-usage-status', [ VoucherUsageController::class, 'updateVoucherUsageStatus' ] )->name( 'admin.voucher_usage.updateVoucherUsageStatus' );
-                    Route::post( 'remove-voucher-usage-gallery-image', [ VoucherUsageController::class, 'removeVoucherUsageGalleryImage' ] )->name( 'admin.voucher_usage.removeVoucherUsageGalleryImage' );
-                    Route::post( 'ckeUpload', [ VoucherUsageController::class, 'ckeUpload' ] )->name( 'admin.voucher_usage.ckeUpload' );
+            Route::prefix( 'voucher-usages' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view vouchers' ] ], function() {
+                    Route::get( '/', [ VoucherUsageController::class, 'index' ] )->name( 'admin.voucher_usage.index' );
                 } );
-            }
+                Route::group( [ 'middleware' => [ 'permission:add vouchers' ] ], function() {
+                    Route::get( 'add', [ VoucherUsageController::class, 'add' ] )->name( 'admin.voucher_usage.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit vouchers' ] ], function() {
+                    Route::get( 'edit', [ VoucherUsageController::class, 'edit' ] )->name( 'admin.voucher_usage.edit' );
+                } );
+    
+                Route::post( 'all-voucher-usages', [ VoucherUsageController::class, 'allVoucherUsages' ] )->name( 'admin.voucher_usage.allVoucherUsages' );
+                Route::post( 'one-voucher-usage', [ VoucherUsageController::class, 'oneVoucherUsage' ] )->name( 'admin.voucher_usage.oneVoucherUsage' );
+                Route::post( 'create-voucher-usage', [ VoucherUsageController::class, 'createVoucherUsage' ] )->name( 'admin.voucher_usage.createVoucherUsage' );
+                Route::post( 'update-voucher-usage', [ VoucherUsageController::class, 'updateVoucherUsage' ] )->name( 'admin.voucher_usage.updateVoucherUsage' );
+                Route::post( 'update-voucher-usage-status', [ VoucherUsageController::class, 'updateVoucherUsageStatus' ] )->name( 'admin.voucher_usage.updateVoucherUsageStatus' );
+                Route::post( 'remove-voucher-usage-gallery-image', [ VoucherUsageController::class, 'removeVoucherUsageGalleryImage' ] )->name( 'admin.voucher_usage.removeVoucherUsageGalleryImage' );
+                Route::post( 'ckeUpload', [ VoucherUsageController::class, 'ckeUpload' ] )->name( 'admin.voucher_usage.ckeUpload' );
+            } );
 
         } );
         

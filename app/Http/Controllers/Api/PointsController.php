@@ -23,6 +23,8 @@ class PointsController extends Controller
     /**
      * 1. Get Points
      * 
+     * <aside class="notice">Get user's current points </aside>
+     * 
      * 
      * @authenticated
      * 
@@ -38,14 +40,13 @@ class PointsController extends Controller
     /**
      * 2. Redeem Points
      * 
-     * <aside class="notice">Get all announcement filtered, claim the promotion with claim voucher api</aside>
+     * <aside class="notice">Redeem points with reference and amount, customer name is not required yet, as now use the logged in user's name</aside>
      * 
      * @authenticated
      * 
      * @group Points API
      * 
      * @bodyParam reference required integer The referance of sales to be claim. Example: 1231ns-12
-     * @bodyParam customer_name nullable integer The name of customer to claim points. Example: James
      * @bodyParam amount required float The id of amount of the sales. Example: 12.20
      * 
      */
@@ -58,12 +59,16 @@ class PointsController extends Controller
      * 3. Get redeem history
      * 
      * 
+     * <aside class="notice">Get user's points history </aside>
+     * 
+     * 
      * @authenticated
      * 
      * @group Points API
      * 
-     * @bodyParam start_date string optional redeemed time in Y-m-d Example: 2023-08-17
-     * @bodyParam end_date string optional redeemed time in Y-m-d Example: 2023-08-17
+     * @queryParam start_date string optional redeemed time in Y-m-d Example: 2023-08-17
+     * @queryParam end_date string optional redeemed time in Y-m-d Example: 2023-08-17
+     * @queryParam per_page integer Show how many record in a page. Leave blank for default (100). Example: 5
      * 
      */
     public function getPointsRedeemHistory( Request $request ) {
@@ -73,6 +78,8 @@ class PointsController extends Controller
 
     /**
      * 4. Get conversion rate
+     * 
+     * <aside class="notice">Get conversion rate, if any </aside>
      * 
      * 
      * @authenticated

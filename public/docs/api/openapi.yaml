@@ -1,56 +1,26 @@
 openapi: 3.0.3
 info:
-  title: Laravel
+  title: Ifei
   description: ''
   version: 1.0.0
 servers:
   -
-    url: 'http://localhost/yobe-backoffice'
+    url: 'http://localhost'
 paths:
-  /api/v1/bundles:
+  /api/v1/announcements:
     get:
-      summary: '1. Get bundles'
-      description: "<aside class=\"notice\">Get all bundles that is buyable</aside>\n\n\n<strong>user_bundle (retrieve user's bundle)</strong></br>\n1: true<br>\n2: false<br>"
+      summary: '1. Get announcements'
+      description: '<aside class="notice">Get all announcement filtered, claim the promotion with claim voucher api</aside>'
       parameters:
         -
           in: query
-          name: per_page
-          description: 'Retrieve how many product in a page, default is 10.'
-          example: 10
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve how many product in a page, default is 10.'
-            example: 10
-        -
-          in: query
-          name: bundle_id
-          description: 'The bundle id to be filter.'
+          name: show_claimed
+          description: 'To show claimed announcement .'
           example: 1
           required: false
           schema:
             type: integer
-            description: 'The bundle id to be filter.'
-            example: 1
-        -
-          in: query
-          name: title
-          description: 'The bundle title to be filter.'
-          example: PROMO
-          required: false
-          schema:
-            type: string
-            description: 'The bundle title to be filter.'
-            example: PROMO
-        -
-          in: query
-          name: user_bundle
-          description: 'Retrieve all user''s bundle only'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve all user''s bundle only'
+            description: 'To show claimed announcement .'
             example: 1
         -
           in: header
@@ -67,87 +37,23 @@ paths:
           schema:
             type: string
       responses:
-        302:
+        401:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
       tags:
-        - 'Bundle API'
-  /api/v1/bundles/buy:
+        - 'Announcement API'
+  /api/v1/announcements/close:
     post:
-      summary: '2. Buy Bundle'
-      description: "<aside class=\"notice\">Buy bundle of later use</aside>\n\n<strong>payment_method</strong><br>\n1: yobe wallet<br>\n2: payment gateway<br>"
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Bundle API'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                bundle_id:
-                  type: required
-                  description: 'integer The bundle_id to be claim.'
-                  example: '1'
-                payment_method:
-                  type: integer
-                  description: 'The payment Method.'
-                  example: 1
-  /api/v1/bundles/retry-payment:
-    post:
-      summary: '3. Retry Payment'
-      description: '<aside class="notice">retry payment for online payment, from previous buy bundle</aside>'
-      parameters:
-        -
-          in: query
-          name: user_bundle_id
-          description: 'The ID of the bundle.'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'The ID of the bundle.'
-            example: 1
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Bundle API'
-  /api/v1/carts/add:
-    post:
-      summary: '1. Add to cart'
+      summary: '2. Close/Claim Announcement'
       description: ''
       parameters:
         -
@@ -166,164 +72,23 @@ paths:
             type: string
       responses: {  }
       tags:
-        - 'Cart API'
+        - 'Announcement API'
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
               type: object
               properties:
-                vending_machine:
-                  type: integer
-                  description: 'The ID of the vending_machine.'
-                  example: 2
-                items:
-                  type: array
-                  description: 'The list of products with their ingredients.'
-                  example:
-                    -
-                      productId: 1
-                      froyo:
-                        - 1
-                        - 2
-                      syrup:
-                        - 3
-                      topping:
-                        - 4
-                        - 5
-                  items:
-                    type: string
-                promo_code:
-                  type: string
-                  description: 'The ID of the promotion/voucher to apply.'
-                  example: BUY1FREE1
-                bundle:
-                  type: integer
-                  description: 'The ID of the bundle to apply ( not usable together with voucher ).'
-                  example: 1
-                user_bundle:
-                  type: integer
-                  description: 'The ID of the user''s bundle to apply ( not usable together with bundle/voucher ).'
-                  example: 2
-              required:
-                - vending_machine
-                - items
-  /api/v1/carts/update:
-    post:
-      summary: '3. Update cart'
-      description: '<aside class="notice">session_key or cart id can be used to update the cart</aside>'
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Cart API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                vending_machine:
-                  type: integer
-                  description: 'The ID of the vending_machine.'
-                  example: 2
-                items:
-                  type: array
-                  description: 'The list of products with their ingredients.'
-                  example:
-                    -
-                      productId: 1
-                      froyo:
-                        - 1
-                        - 2
-                      syrup:
-                        - 3
-                      topping:
-                        - 4
-                        - 5
-                  items:
-                    type: string
-                session_key:
-                  type: string
-                  description: 'The unique identifier for the cart.'
-                  example: abcd-1234
-                id:
-                  type: integer
-                  description: 'The ID of the cart.'
-                  example: 1
-                cart_item:
-                  type: integer
-                  description: 'The ID of the cart item.'
-                  example: 1
-                promo_code:
-                  type: integer
-                  description: 'The ID of the promotion/voucher to apply.'
-                  example: 0
-                cart:
-                  type: integer
-                  description: 'The ID of the promotion/voucher to apply.'
-                  example: 0
-                bundle:
-                  type: integer
-                  description: 'The ID of the bundle to apply ( not usable together with voucher ).'
-                  example: 1
-                user_bundle:
-                  type: integer
-                  description: 'The ID of the user''s bundle to apply ( not usable together with bundle/voucher ).'
-                  example: 2
-              required:
-                - vending_machine
-                - items
-  /api/v1/carts:
+                announcement:
+                  type: required
+                  description: 'integer The id of announcement to be claim.'
+                  example: '1'
+  /api/v1/banners:
     get:
-      summary: '2. Retrieve cart'
-      description: '<aside class="notice">id and session_key can be used to filter out the cart</aside>'
+      summary: '1. Get banners'
+      description: '<aside class="notice">Get all banners ( sorted )</aside>'
       parameters:
-        -
-          in: query
-          name: session_key
-          description: 'The unique identifier for the cart.'
-          example: abcd-1234
-          required: false
-          schema:
-            type: string
-            description: 'The unique identifier for the cart.'
-            example: abcd-1234
-        -
-          in: query
-          name: id
-          description: 'The ID of the cart. .'
-          example: abcd-1234
-          required: false
-          schema:
-            type: string
-            description: 'The ID of the cart. .'
-            example: abcd-1234
-        -
-          in: query
-          name: per_page
-          description: 'Retrieve how many insurance quote in a page, default is 10.'
-          example: 10
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve how many insurance quote in a page, default is 10.'
-            example: 10
         -
           in: header
           name: Content-Type
@@ -339,19 +104,78 @@ paths:
           schema:
             type: string
       responses:
-        302:
+        200:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+                type: object
+                example:
+                  message: ''
+                  message_key: get_banner_success
+                  data:
+                    -
+                      id: 1
+                      voucher_id: null
+                      title: tetea
+                      description: '<p>ssadsadasdasdada</p>'
+                      image: file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png
+                      sequence: 1
+                      status: 10
+                      created_at: '2025-04-12 18:42:08'
+                      updated_at: '2025-04-12 18:42:17'
+                      image_path: 'http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png'
+                    -
+                      id: 2
+                      voucher_id: null
+                      title: ''
+                      description: ''
+                      image: file-managers/E538Kb5vZdki6XN0R2ZdsKRmeybdMhxXBYFVjD8D.png
+                      sequence: 1
+                      status: 10
+                      created_at: '2025-04-12 18:42:10'
+                      updated_at: '2025-04-12 18:42:10'
+                      image_path: 'http://localhost/storage/file-managers/E538Kb5vZdki6XN0R2ZdsKRmeybdMhxXBYFVjD8D.png'
+                properties:
+                  message:
+                    type: string
+                    example: ''
+                  message_key:
+                    type: string
+                    example: get_banner_success
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        voucher_id: null
+                        title: tetea
+                        description: '<p>ssadsadasdasdada</p>'
+                        image: file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png
+                        sequence: 1
+                        status: 10
+                        created_at: '2025-04-12 18:42:08'
+                        updated_at: '2025-04-12 18:42:17'
+                        image_path: 'http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png'
+                      -
+                        id: 2
+                        voucher_id: null
+                        title: ''
+                        description: ''
+                        image: file-managers/E538Kb5vZdki6XN0R2ZdsKRmeybdMhxXBYFVjD8D.png
+                        sequence: 1
+                        status: 10
+                        created_at: '2025-04-12 18:42:10'
+                        updated_at: '2025-04-12 18:42:10'
+                        image_path: 'http://localhost/storage/file-managers/E538Kb5vZdki6XN0R2ZdsKRmeybdMhxXBYFVjD8D.png'
+                    items:
+                      type: object
       tags:
-        - 'Cart API'
-  /api/v1/carts/delete:
-    post:
-      summary: '4. Delete Cart'
-      description: '<aside class="notice">session_key or cart id can be used to delete the cart</aside>'
+        - 'Banner API'
+  /api/v1/banners/details:
+    get:
+      summary: '2. Get one banner detail'
+      description: ''
       parameters:
         -
           in: header
@@ -367,28 +191,102 @@ paths:
           example: application/json
           schema:
             type: string
-      responses: {  }
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: ''
+                  message_key: get_banner_success
+                  data:
+                    id: 1
+                    voucher_id: null
+                    title: tetea
+                    description: '<p>ssadsadasdasdada</p>'
+                    image: file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png
+                    sequence: 1
+                    status: 10
+                    created_at: '2025-04-12 18:42:08'
+                    updated_at: '2025-04-12 18:42:17'
+                    encrypted_id: ql
+                    image_path: 'http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png'
+                properties:
+                  message:
+                    type: string
+                    example: ''
+                  message_key:
+                    type: string
+                    example: get_banner_success
+                  data:
+                    type: object
+                    example:
+                      id: 1
+                      voucher_id: null
+                      title: tetea
+                      description: '<p>ssadsadasdasdada</p>'
+                      image: file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png
+                      sequence: 1
+                      status: 10
+                      created_at: '2025-04-12 18:42:08'
+                      updated_at: '2025-04-12 18:42:17'
+                      encrypted_id: ql
+                      image_path: 'http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png'
       tags:
-        - 'Cart API'
+        - 'Banner API'
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
                 id:
-                  type: integer
-                  description: 'The ID of the cart.'
-                  example: 1
-                session_key:
                   type: string
-                  description: 'The unique identifier for the cart.'
-                  example: abcd-1234
-  /api/v1/carts/delete-cart-item:
+                  description: 'The id the banner.'
+                  example: '1'
+              required:
+                - id
+  /api/v1/points:
+    get:
+      summary: '1. Get Points'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Points API'
+  /api/v1/points/redeem:
     post:
-      summary: '4. Delete Cart Item'
-      description: '<aside class="notice">session_key or cart id can be used to delete the cart</aside>'
+      summary: '2. Redeem Points'
+      description: '<aside class="notice">Get all announcement filtered, claim the promotion with claim voucher api</aside>'
       parameters:
         -
           in: header
@@ -406,7 +304,7 @@ paths:
             type: string
       responses: {  }
       tags:
-        - 'Cart API'
+        - 'Points API'
       requestBody:
         required: false
         content:
@@ -414,14 +312,101 @@ paths:
             schema:
               type: object
               properties:
-                id:
-                  type: integer
-                  description: 'The ID of the cart.'
-                  example: 1
-                cart_item:
-                  type: integer
-                  description: 'The ID of the cart item.'
-                  example: 1
+                reference:
+                  type: required
+                  description: 'integer The referance of sales to be claim.'
+                  example: 1231ns-12
+                customer_name:
+                  type: nullable
+                  description: 'integer The name of customer to claim points.'
+                  example: James
+                amount:
+                  type: required
+                  description: 'float The id of amount of the sales.'
+                  example: '12.20'
+  /api/v1/points/history:
+    get:
+      summary: '3. Get redeem history'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Points API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_date:
+                  type: string
+                  description: 'optional redeemed time in Y-m-d'
+                  example: '2023-08-17'
+                end_date:
+                  type: string
+                  description: 'optional redeemed time in Y-m-d'
+                  example: '2023-08-17'
+  /api/v1/points/conversion-rate:
+    get:
+      summary: '4. Get conversion rate'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Points API'
   /api/v1/checkin:
     get:
       summary: '1. Get Check-in History'
@@ -452,13 +437,18 @@ paths:
           schema:
             type: string
       responses:
-        302:
+        401:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
       tags:
         - 'Check-in API'
     post:
@@ -502,13 +492,18 @@ paths:
           schema:
             type: string
       responses:
-        302:
+        401:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
       tags:
         - 'Check-in API'
   /api/v1/contact-us:
@@ -561,393 +556,6 @@ paths:
                 - phone_number
                 - message
       security: []
-  /api/v1/menus:
-    get:
-      summary: '1. Get menus'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/menus/get-selections:
-    get:
-      summary: '2. Get selections'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/menus/get-froyos:
-    get:
-      summary: '3. Get froyos'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/menus/get-syrups:
-    get:
-      summary: '4. Get syrups'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/menus/get-toppings:
-    get:
-      summary: '5. Get toppings'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/menus-operation:
-    get:
-      summary: '1. Get menus'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Menu API'
-  /api/v1/orders:
-    get:
-      summary: '2. Retrieve user order'
-      description: "<aside class=\"notice\">id and reference can be used to filter out the order</aside>\n\n<strong>status</strong><br>\n1: placed order / pending payment<br>\n3: paid / unclaimed<br>\n10: completed / claimed<br>\n20: canceled<br>"
-      parameters:
-        -
-          in: query
-          name: reference
-          description: 'The unique reference for the order.'
-          example: abcd-1234
-          required: false
-          schema:
-            type: string
-            description: 'The unique reference for the order.'
-            example: abcd-1234
-        -
-          in: query
-          name: id
-          description: 'The ID of the order. .'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'The ID of the order. .'
-            example: 1
-        -
-          in: query
-          name: status
-          description: 'The Status of the order. .'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'The Status of the order. .'
-            example: 1
-        -
-          in: query
-          name: per_page
-          description: 'Retrieve how many insurance quote in a page, default is 10.'
-          example: 10
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve how many insurance quote in a page, default is 10.'
-            example: 10
-        -
-          in: query
-          name: user_bundle
-          description: 'Retrieve User Bundle bought within order.'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve User Bundle bought within order.'
-            example: 1
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Order API'
-  /api/v1/orders/checkout:
-    post:
-      summary: '1. checkout'
-      description: "<strong>payment_method</strong><br>\n1: yobe wallet<br>\n2: payment gateway<br>"
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Order API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                cart:
-                  type: integer
-                  description: 'The ID of the cart.'
-                  example: 1
-                promo_code:
-                  type: integer
-                  description: 'The ID of the promotion/voucher to apply.'
-                  example: 0
-                payment_method:
-                  type: integer
-                  description: 'The payment Method.'
-                  example: 1
-              required:
-                - cart
-  /api/v1/orders/retry-payment:
-    post:
-      summary: '3. Retry Payment'
-      description: '<aside class="notice">retry payment for online payment</aside>'
-      parameters:
-        -
-          in: query
-          name: order_id
-          description: 'The ID of the order.'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'The ID of the order.'
-            example: 1
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Order API'
-  /api/v1/promo-codes:
-    get:
-      summary: '1. Get promo code'
-      description: '<aside class="notice">Get all promo code</aside>'
-      parameters:
-        -
-          in: query
-          name: per_page
-          description: 'Retrieve how many product in a page, default is 10.'
-          example: 10
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve how many product in a page, default is 10.'
-            example: 10
-        -
-          in: query
-          name: promo_code
-          description: 'The promo code to be filter.'
-          example: XBMSD22
-          required: false
-          schema:
-            type: string
-            description: 'The promo code to be filter.'
-            example: XBMSD22
-        -
-          in: query
-          name: discount_type
-          description: 'The promo discount type to be filter'
-          example: 2
-          required: false
-          schema:
-            type: integer
-            description: 'The promo discount type to be filter'
-            example: 2
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Promo Code API'
   /api/v1/users:
     post:
       summary: '1. Create an user'
@@ -1009,7 +617,7 @@ paths:
                 - password_confirmation
       security: []
     get:
-      summary: '5. Get user'
+      summary: '6. Get user'
       description: ''
       parameters:
         -
@@ -1027,13 +635,18 @@ paths:
           schema:
             type: string
       responses:
-        302:
+        401:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
       tags:
         - 'User API'
   /api/v1/users/login:
@@ -1079,7 +692,7 @@ paths:
       security: []
   /api/v1/otp:
     post:
-      summary: '3. Request an OTP'
+      summary: '4. Request an OTP'
       description: ''
       parameters:
         -
@@ -1120,7 +733,7 @@ paths:
       security: []
   /api/v1/otp/resend:
     post:
-      summary: '4. Resend an OTP'
+      summary: '5. Resend an OTP'
       description: ''
       parameters:
         -
@@ -1327,14 +940,14 @@ paths:
                 - password
   /api/v1/users/update:
     post:
-      summary: '6. Update user'
+      summary: '7. Update user'
       description: ''
       parameters:
         -
           in: header
           name: Content-Type
           description: ''
-          example: application/json
+          example: multipart/form-data
           schema:
             type: string
         -
@@ -1350,7 +963,7 @@ paths:
       requestBody:
         required: false
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -1358,6 +971,10 @@ paths:
                   type: string
                   description: 'The username to update.'
                   example: John
+                fullname:
+                  type: string
+                  description: 'The fullname to update.'
+                  example: 'John wick wick'
                 email:
                   type: string
                   description: 'The email to update.'
@@ -1366,6 +983,14 @@ paths:
                   type: string
                   description: 'The date of birth to update.'
                   example: '2022-01-01'
+                to_remove:
+                  type: integer
+                  description: 'Indicate remove photo or not.'
+                  example: 1
+                profile_picture:
+                  type: string
+                  format: binary
+                  description: 'The photo to update. Will create when empty'
   /api/v1/users/notifications:
     get:
       summary: '13. Get notifications'
@@ -1416,13 +1041,18 @@ paths:
           schema:
             type: string
       responses:
-        302:
+        401:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
       tags:
         - 'User API'
   /api/v1/users/notification:
@@ -1461,21 +1091,11 @@ paths:
               required:
                 - notification
       security: []
-  /api/v1/vending-machines:
-    get:
-      summary: '1. Get vending machines'
+  /api/v1/users/login-social:
+    post:
+      summary: '3. Login an user - Social'
       description: ''
       parameters:
-        -
-          in: query
-          name: title
-          description: 'Vending Machine Title to be filter'
-          example: 'KL ECOCITY'
-          required: false
-          schema:
-            type: string
-            description: 'Vending Machine Title to be filter'
-            example: 'KL ECOCITY'
         -
           in: header
           name: Content-Type
@@ -1490,16 +1110,78 @@ paths:
           example: application/json
           schema:
             type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+      responses: {  }
       tags:
-        - 'Vending Machine API'
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: 'The email for social login.'
+                  example: ifei@mail.com
+                platform:
+                  type: interger
+                  description: 'The platform for login.'
+                  example: '1'
+                device_type:
+                  type: interger
+                  description: 'The device_type for login.'
+                  example: '3'
+              required:
+                - identifier
+                - platform
+                - device_type
+      security: []
+  /api/v1/users/update-password:
+    post:
+      summary: '8. Update user password'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  description: 'The old password of current user.'
+                  example: 1234abcd
+                password:
+                  type: string
+                  description: 'The new password to change.'
+                  example: abcd1234
+                password_confirmation:
+                  type: string
+                  description: 'The confirm password of new password to change.'
+                  example: abcd1234
+              required:
+                - old_password
+                - password
+                - password_confirmation
   /api/v1/vouchers:
     get:
       summary: '1. Get vouchers'
@@ -1570,54 +1252,20 @@ paths:
           schema:
             type: string
       responses:
-        302:
+        401:
           description: ''
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
       tags:
         - 'Voucher API'
-  /api/v1/vouchers/validate:
-    post:
-      summary: '3. Validate vouchers'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Voucher API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                cart:
-                  type: integer
-                  description: 'The cart id'
-                  example: 1
-                promo_code:
-                  type: string
-                  description: 'The voucher code to be validate.'
-                  example: XBMSD22
-              required:
-                - cart
   /api/v1/vouchers/claim-voucher:
     post:
       summary: '4. Claim Vouchers'
@@ -1651,159 +1299,15 @@ paths:
                   type: required
                   description: 'integer The voucher_id to be claim.'
                   example: '1'
-  /api/v1/wallets/transactions:
-    get:
-      summary: '2. Get wallet transactions'
-      description: ''
-      parameters:
-        -
-          in: query
-          name: per_page
-          description: 'Retrieve how many my tranasction in a page, default is 10.'
-          example: 10
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve how many my tranasction in a page, default is 10.'
-            example: 10
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Wallet API'
-  /api/v1/wallets/topup:
-    post:
-      summary: '3. Topup'
-      description: "<strong>payment_method</strong><br>\n1: Payment Gateway"
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Wallet API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                topup_amount:
-                  type: numeric
-                  description: 'The topup amount.'
-                  example: '10'
-                payment_method:
-                  type: integer
-                  description: 'The payment method.'
-                  example: 1
-              required:
-                - topup_amount
-                - payment_method
-  /api/v1/wallets:
-    get:
-      summary: '1. Get wallet'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Wallet API'
-  /api/v1/points/histories:
-    get:
-      summary: '1. Get points history'
-      description: ''
-      parameters:
-        -
-          in: query
-          name: per_page
-          description: 'Retrieve how many my tranasction in a page, default is 10.'
-          example: 10
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve how many my tranasction in a page, default is 10.'
-            example: 10
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/yobe-backoffice/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/yobe-backoffice/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/yobe-backoffice/backoffice/dashboard\">http://localhost/yobe-backoffice/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Yobe Points API'
 tags:
   -
-    name: 'Bundle API'
+    name: 'Announcement API'
     description: ''
   -
-    name: 'Cart API'
+    name: 'Banner API'
+    description: ''
+  -
+    name: 'Points API'
     description: ''
   -
     name: 'Check-in API'
@@ -1812,26 +1316,8 @@ tags:
     name: 'Contact-Us API'
     description: ''
   -
-    name: 'Menu API'
-    description: ''
-  -
-    name: 'Order API'
-    description: ''
-  -
-    name: 'Promo Code API'
-    description: ''
-  -
     name: 'User API'
     description: ''
   -
-    name: 'Vending Machine API'
-    description: ''
-  -
     name: 'Voucher API'
-    description: ''
-  -
-    name: 'Wallet API'
-    description: ''
-  -
-    name: 'Yobe Points API'
     description: ''

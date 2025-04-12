@@ -51,7 +51,7 @@ return [
 
     'min_quantity_of_y' => 'Please add :title free item(s)',
 
-    'total_claimable' => 'Total Claimable',
+    'total_claimable' => 'Total Vouchers',
     'voucher_type' => 'Voucher Type',
     'voucher_id' => 'Voucher ID',
     'public_voucher' => 'Promo Code',

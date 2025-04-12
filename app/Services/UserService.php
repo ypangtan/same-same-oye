@@ -118,6 +118,11 @@ class UserService
             $filter = true;
         }
 
+        if ( !empty( $request->fullname ) ) {
+            $model->where( 'fullname', 'LIKE', '%' . $request->fullname . '%' );
+            $filter = true;
+        }
+
         if ( !empty( $request->username ) ) {
             $model->where( 'username', 'LIKE', '%' . $request->username . '%' );
             $filter = true;
@@ -564,7 +569,22 @@ class UserService
         DB::beginTransaction();
 
         $validator = Validator::make( $request->all(), [
-            'phone_number' => [ 'required' ],
+            'phone_number' => [ 'required' , function( $attributes, $value, $fail ) {
+
+                $user = User::where( 'phone_number', request( 'phone_number' ) )
+                ->orWhere('phone_number', ltrim(request('phone_number'), '0'))
+                ->first();
+
+                if ( !$user ) {
+                    $fail( __( 'user.user_wrong_user' ) );
+                    return 0;
+                }
+
+                if( $user->status == 20 ) {
+                    $fail( __( 'user.account_suspended' ) );
+                    return 0;
+                }
+            } ],
         ] );
 
         $attributeName = [
@@ -596,17 +616,17 @@ class UserService
                 // Mail::to( $existingUser->email )->send(new OtpMail( $forgotPassword ));
     
                 if (Mail::failures() != 0) {
-                    
-                    $response = [
+
+                    return response()->json( [
+                        'message' => 'Reset Password Otp Success',
+                        'message_key' => 'request_otp_success',
                         'data' => [
                             'title' => $forgotPassword ? __( 'user.otp_email_success' ) : '',
                             'note' => $forgotPassword ? __( 'user.otp_email_success_note', [ 'title' => $existingUser->email ] ) : '',
                             'identifier' => $forgotPassword['identifier'],
                             'otp_code' => '#DEBUG - ' . $forgotPassword['otp_code'],
                         ]
-                    ];
-    
-                    return $response;
+                    ] );
                 }
 
                 return "Oops! There was some error sending the email.";
@@ -628,13 +648,9 @@ class UserService
         }
 
         return response()->json( [
+            'message' => 'Reset Password Otp Success',
             'message_key' => 'request_otp_success',
-            'data' => [
-                'title' => $data['title'],
-                'note' => $data['note'],
-                'otp_code' => $data['otp_code'],
-                'identifier' => $data['identifier'],
-            ],
+            'data' => $data,
         ] );
     }
 
@@ -773,7 +789,7 @@ class UserService
         return response()->json( [
             'message' => 'reset_success',
             'message_key' => 'reset_success',
-            'data' => null,
+            'data' => $updateUser,
         ] );
     }
 
@@ -930,6 +946,9 @@ class UserService
                 self::registerOneSignal( $user->id, $request->device_type, $request->register_token );
             }
 
+            $token = $createUser->createToken( 'user_token' )->plainTextToken;
+            $createUser->token = $token;
+
             DB::commit();
 
         } catch ( \Throwable $th ) {
@@ -942,12 +961,10 @@ class UserService
         }
 
         return response()->json( [
-            'data' => [ 
-                'message' => __( 'user.register_success' ),
-                'message_key' => 'register_success',
-                'user' => $createUser,
-                'token' => $createUser->createToken( 'user_token' )->plainTextToken
-            ],
+            'message' => __( 'user.register_success' ),
+            'message_key' => 'register_success',
+            'data' => $createUser,
+            'token' => $token,
         ] );
 
     }
@@ -982,20 +999,23 @@ class UserService
             } ],
         ] );
 
-        $user = User::where( 'phone_number', $request->phone_number )->first();
+        $user = User::where( 'phone_number', request( 'phone_number' ) )
+        ->orWhere('phone_number', ltrim(request('phone_number'), '0'))
+        ->first();
 
         // Register OneSignal
         if ( !empty( $request->register_token ) ) {
             self::registerOneSignal( $user->id, $request->device_type, $request->register_token );
         }
 
+        $token = $user->createToken( 'user_token' )->plainTextToken;
+        $user->token = $token;
+
         return response()->json( [
-            'data' => [ 
-                'message' => __( 'user.login_success' ),
-                'message_key' => 'login_success',
-                'user' => $user,
-                'token' => $user->createToken( 'user_token' )->plainTextToken
-            ],
+            'message' => __( 'user.login_success' ),
+            'message_key' => 'login_success',
+            'data' => $user,
+            'token' => $token
         ] );
     }
 
