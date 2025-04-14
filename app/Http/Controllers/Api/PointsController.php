@@ -40,7 +40,7 @@ class PointsController extends Controller
     /**
      * 2. Redeem Points
      * 
-     * <aside class="notice">Redeem points with reference and amount, customer name is not required yet, as now use the logged in user's name</aside>
+     * <aside class="notice">Redeem points with reference and amount</aside>
      * 
      * @authenticated
      * 
@@ -48,6 +48,7 @@ class PointsController extends Controller
      * 
      * @bodyParam reference required integer The referance of sales to be claim. Example: 1231ns-12
      * @bodyParam amount required float The id of amount of the sales. Example: 12.20
+     * @bodyParam customer_name required float The name of the customer. Example: ali
      * 
      */
     public function redeemPoints( Request $request ) {

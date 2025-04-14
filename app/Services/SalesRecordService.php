@@ -327,7 +327,7 @@ class SalesRecordService
         
             if ( $reference && !SalesRecord::where( 'reference', $reference )->exists() ) {
                 SalesRecord::create([
-                    'customer_name' => $line['customer_name'] ?? null,
+                    'customer_name' => strtolower( trim( $line['customer_name'] ?? '' ) ) ?: null,
                     'reference'     => $reference,
                     'total_price'   => $line['total_price'] ?? null,
                 ]);
@@ -378,11 +378,14 @@ class SalesRecordService
             'reference' => [
                     'required',
                     function ( $attribute, $value, $fail ) use ( $request ) {
+
+                        $normalizedName = strtolower( trim( $request->customer_name ) );
+
                         $exists = SalesRecord::where( 'reference', $value )
                             ->where( 'total_price', $request->amount )
                             ->where( 'status', 10 )
-                            ->where( 'customer_name', auth()->user()->fullname )
-                            ->orWhere( 'facebook_name', auth()->user()->fullname )
+                            ->whereRaw( 'LOWER(TRIM(customer_name)) = ?', [ $normalizedName ] )
+                            ->orWhereRaw( 'LOWER(TRIM(facebook_name)) = ?', [ $normalizedName ] )
                             ->first();
 
                         if ( ! $exists ) {
@@ -390,7 +393,7 @@ class SalesRecordService
                         }
                     },
             ],
-            'customer_name' => [ 'nullable', 'string' ],
+            'customer_name' => [ 'required', 'string' ],
             'amount' => [ 'required', 'numeric', 'min:1' ],
         ] );
 
@@ -412,11 +415,13 @@ class SalesRecordService
 
             $user = auth()->user();
 
+            $normalizedName = strtolower( trim( $request->customer_name ) );
+
             $salesRecord = SalesRecord::where( 'reference', $request->reference )
             ->where( 'total_price', $request->amount )
             ->where( 'status', 10 )
-            ->where( 'customer_name', $user->fullname )
-            ->orWhere( 'facebook_name', $user->fullname )
+            ->whereRaw( 'LOWER(TRIM(customer_name)) = ?', [ $normalizedName ] )
+            ->orWhereRaw( 'LOWER(TRIM(facebook_name)) = ?', [ $normalizedName ] )
             ->first();
 
             $wallet = Wallet::lockForUpdate()->where( 'user_id', $user->id )->first();
