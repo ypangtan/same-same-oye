@@ -29,10 +29,6 @@ class UserVoucher extends Model
         'secret_code',
     ];
 
-    protected $hidden = [
-        'secret_code'
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

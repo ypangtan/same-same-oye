@@ -43,9 +43,16 @@ $user_create = 'user_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $user_create }}_fullname" class="col-sm-5 col-form-label">{{ __( 'user.fullname' ) }}</label>
+                    <label for="{{ $user_create }}_first_name" class="col-sm-5 col-form-label">{{ __( 'user.first_name' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_fullname">
+                        <input type="text" class="form-control" id="{{ $user_create }}_first_name">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="{{ $user_create }}_last_name" class="col-sm-5 col-form-label">{{ __( 'user.last_name' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $user_create }}_last_name">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -53,14 +60,15 @@ $user_create = 'user_create';
                     <label for="{{ $user_create }}_phone_number" class="col-sm-5 col-form-label">{{ __( 'user.phone_number' ) }}</label>
                     <div class="col-sm-7">
                         <div class="input-group">
-                            <button class="flex-shrink-0 inline-flex items-center input-group-text" type="button">
-                                +60
-                            </button>
+                            <select class="form-select flex-shrink-0" id="{{ $user_create }}_calling_code" style="max-width: 100px;">
+                                <option value="+60" selected>+60</option>
+                                <option value="+32">+32</option>
+                            </select>
                             <input type="text" class="form-control" id="{{ $user_create }}_phone_number">
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>                    
-                </div>
+                </div>                
                 
                 <div class="mb-3 row">
                     <label for="{{ $user_create }}_password" class="col-sm-5 col-form-label">{{ __( 'user.password' ) }}</label>
@@ -154,13 +162,15 @@ $user_create = 'user_create';
             let formData = new FormData();
             formData.append( 'username', $( dc + '_username' ).val() );
             formData.append( 'email', $( dc + '_email' ).val() );
-            formData.append( 'fullname', $( dc + '_fullname' ).val() );
+            formData.append( 'first_name', $( dc + '_first_name' ).val() );
+            formData.append( 'last_name', $( dc + '_last_name' ).val() );
             formData.append( 'address_1', $( dc + '_address_1' ).val() );
             formData.append( 'address_2', $( dc + '_address_2' ).val() );
             formData.append( 'city', $( dc + '_city' ).val() );
             formData.append( 'state', $( dc + '_state' ).val() );
             formData.append( 'postcode', $( dc + '_postcode' ).val() );
             formData.append( 'phone_number', $( dc + '_phone_number' ).val() );
+            formData.append( 'calling_code', $( dc + '_calling_code' ).val() );
             formData.append( 'password', $( dc + '_password' ).val() );
             // formData.append( 'account_type', $( dc + '_account_type' ).val() );
             

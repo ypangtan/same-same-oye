@@ -36,6 +36,7 @@ class UserController extends Controller {
      * 
      * @bodyParam identifier string required The temporary user ID during request OTP. Example: eyJpdiI...
      * @bodyParam phone_number string required The phone_number for register. Example: 0123982334
+     * @bodyParam calling_code string required The calling_code for register. Example: +60
      * @bodyParam otp_code string required The otp for register. Example: 123456
      * @bodyParam password string required The password for register. Example: abcd1234
      * @bodyParam password_confirmation string required The confirmation password. Example: abcd1234
@@ -55,6 +56,7 @@ class UserController extends Controller {
      * @group User API
      * 
      * @bodyParam phone_number string required The phone_number for login. Example: 0123982334
+     * @bodyParam calling_code string required The calling_code for register. Example: +60
      * @bodyParam password string required The password for login. Example: abcd1234
      * 
      */
@@ -71,6 +73,7 @@ class UserController extends Controller {
      * <strong>platform</strong></br>
      * 1: Google<br>
      * 2: Facebook<br>
+     * 3: Apple ID<br>
      * 
      * <strong>device_type</strong><br>
      * 1: iOS<br>
@@ -98,7 +101,8 @@ class UserController extends Controller {
      * 
      * @group User API
      * 
-     * @bodyParam phone_number string required The phone_number for login. Example: 0123982334
+     * @bodyParam phone_number string required The phone_number for register. Example: 0123982334
+     * @bodyParam calling_code string optional The calling for register. ( Default +60 ) Example: +60
      * @bodyParam request_type integer required The request type for OTP. Example: 1
      * 
      */
@@ -151,7 +155,8 @@ class UserController extends Controller {
      * @authenticated
      * 
      * @bodyParam username string The username to update. Example: John
-     * @bodyParam fullname string The fullname to update. Example: John wick wick
+     * @bodyParam first_name string The first_name to update. Example: wick
+     * @bodyParam last_name string The last_name to update. Example: John
      * @bodyParam email string The email to update. Example: john@email.com
      * @bodyParam date_of_birth string The date of birth to update. Example: 2022-01-01
      * @bodyParam to_remove integer Indicate remove photo or not. Example: 1
@@ -190,6 +195,7 @@ class UserController extends Controller {
      * @group User API
      * 
      * @bodyParam phone_number string required The phone_number for login. Example: 0123982334
+     * @bodyParam calling_code string required The calling_code for register. Example: +60
      * 
      * 
      */

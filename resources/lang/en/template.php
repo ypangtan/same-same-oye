@@ -63,6 +63,7 @@ return [
     'api_requests' => 'Api Requests',
     'sales_records' => 'Sales Records',
     'download_excel_template' => 'Download Template',
+    "earned_x" => "You've earned :amount points.",
 
     'loading' => 'Loading...',
     'add' => 'Add',

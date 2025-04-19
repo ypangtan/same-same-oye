@@ -26,7 +26,12 @@ class WalletTransaction extends Model
         'type',
         'transaction_type',
         'status',
+        'invoice_id'
     ];
+
+    public function invoice() {
+        return $this->belongsTo( SalesRecord::class, 'invoice_id' );
+    }
 
     public function user() {
         return $this->belongsTo( User::class, 'user_id' );
@@ -68,6 +73,7 @@ class WalletTransaction extends Model
         'type',
         'transaction_type',
         'status',
+        'invoice_id'
     ];
 
     protected static $logName = 'wallet_transactions';

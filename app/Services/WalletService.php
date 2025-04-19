@@ -434,6 +434,7 @@ class WalletService
             'remark' => isset( $data['remark'] ) ? $data['remark'] : null,
             'type' => $data['type'],
             'transaction_type' => $data['transaction_type'],
+            'invoice_id' => isset( $data['invoice_id'] ) ? $data['invoice_id'] : null,
         ] );
 
         return $createWalletTransaction;

@@ -40,9 +40,15 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.fullname' ) ] ),
-        'id' => 'fullname',
-        'title' => __( 'user.fullname' ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.first_name' ) ] ),
+        'id' => 'first_name',
+        'title' => __( 'user.first_name' ),
+    ],
+    [
+        'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.last_name' ) ] ),
+        'id' => 'last_name',
+        'title' => __( 'user.last_name' ),
     ],
     [
         'type' => 'input',
@@ -116,7 +122,8 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: null },
             { data: 'created_at' },
-            { data: 'fullname' },
+            { data: 'first_name' },
+            { data: 'last_name' },
             { data: 'username' },
             { data: 'email' },
             { data: 'phone_number' },
@@ -165,6 +172,20 @@ var statusMapper = @json( $data['status'] ),
                 },
             },
             {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "first_name" ) }}' ),
+                
+                render: function( data, type, row, meta ) {
+                    return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "last_name" ) }}' ),
+                
+                render: function( data, type, row, meta ) {
+                    return data ? data : '-' ;
+                },
+            },
+            {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "fullname" ) }}' ),
                 
                 render: function( data, type, row, meta ) {
@@ -188,7 +209,7 @@ var statusMapper = @json( $data['status'] ),
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "phone_number" ) }}' ),
                 render: function( data, type, row, meta ) {
-                    return data ? '+60' + data : '-' ;
+                    return data ? ( row.calling_code ? row.calling_code + " " : "+60 " ) + data : '-' ;
                 },
             },
             {

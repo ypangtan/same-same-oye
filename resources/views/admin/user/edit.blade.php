@@ -44,9 +44,16 @@ $user_edit = 'user_edit';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $user_edit }}_fullname" class="col-sm-5 col-form-label">{{ __( 'user.fullname' ) }}</label>
+                    <label for="{{ $user_edit }}_first_name" class="col-sm-5 col-form-label">{{ __( 'user.first_name' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_edit }}_fullname">
+                        <input type="text" class="form-control" id="{{ $user_edit }}_first_name">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="{{ $user_edit }}_last_name" class="col-sm-5 col-form-label">{{ __( 'user.last_name' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $user_edit }}_last_name">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -155,7 +162,9 @@ $user_edit = 'user_edit';
             formData.append( 'id', '{{ request( 'id' ) }}' );
             formData.append( 'username', $( de + '_username' ).val() );
             formData.append( 'email', $( de + '_email' ).val() );
-            formData.append( 'fullname', $( de + '_fullname' ).val() );
+            formData.append( 'first_name', $( de + '_first_name' ).val() );
+            formData.append( 'last_name', $( de + '_last_name' ).val() );
+            
             formData.append( 'phone_number', $( de + '_phone_number' ).val() );
             formData.append( 'password', $( de + '_password' ).val() );
             formData.append( 'address_1', $( de + '_address_1' ).val() );
@@ -215,7 +224,8 @@ $user_edit = 'user_edit';
                 success: function( response ) {
                     $( de + '_email' ).val( response.email );
 
-                    $( de + '_fullname' ).val( response.fullname );
+                    $( de + '_first_name' ).val( response.first_name );
+                    $( de + '_last_name' ).val( response.last_name );
                     $( de + '_username' ).val( response.username );
                     $( de + '_phone_number' ).val( response.phone_number );
                     $( de + '_address_1' ).val( response.address_1 );

@@ -241,6 +241,11 @@ class UserVoucherService
             $filter = true;
         }
 
+        if ( !empty( $request->seceret_code ) ) {
+            $model->where( 'seceret_code', 'LIKE', '%' . $request->seceret_code . '%' );
+            $filter = true;
+        }
+
         if ( !empty( $request->vending_machine_id ) ) {
             $vendingMachineUserVouchers = VendingMachineStock::where( 'vending_machine_id', $request->vending_machine_id )->pluck( 'voucher_id' );
             $model->whereNotIn( 'id', $vendingMachineUserVouchers );

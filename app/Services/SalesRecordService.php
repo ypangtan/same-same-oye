@@ -389,7 +389,7 @@ class SalesRecordService
                             ->first();
 
                         if ( ! $exists ) {
-                            $fail( __( 'Sorry, we cant found your order.' ) );
+                            $fail( __( 'Please double-check your information.' ) );
                         }
                     },
             ],
@@ -434,6 +434,7 @@ class SalesRecordService
                 'amount' => $salesRecord->total_price * $conversionRate,
                 'remark' => 'Points Redeemed',
                 'type' => $wallet->type,
+                'invoice_id' => $salesRecord->id,
                 'transaction_type' => 12,
             ] );
 
@@ -454,7 +455,7 @@ class SalesRecordService
         }
 
         return response()->json([
-            'message' => __( 'template.x_redeemed', [ 'title' =>__( 'template.wallets' ) ] ),
+            'message' => __( 'template.earned_x', [ 'amount' => $salesRecord->total_price * $conversionRate ] ),
             'message_key' => 'points_redeemed',
             'data' => $wallet,
         ]);
@@ -463,7 +464,7 @@ class SalesRecordService
 
     public static function getPointsRedeemHistory( $request ) {
 
-        $walletTransactions = WalletTransaction::where( 'user_id', auth()->user()->id )
+        $walletTransactions = WalletTransaction::with( 'invoice' )->where( 'user_id', auth()->user()->id )
         ->where( 'type', 1 )
         ->when( $request->start_date, function ( $query ) use ( $request ) {
             $query->whereDate( 'created_at', '>=', $request->start_date );
@@ -476,6 +477,8 @@ class SalesRecordService
         $walletTransactions = $walletTransactions->paginate( empty( $request->per_page ) ? 10 : $request->per_page );
 
         foreach ( $walletTransactions->items() as $wt ) {
+
+            $wt->invoice_number = $wt->invoice ? $wt->invoice->reference : '-'; 
 
             $wt->makeHidden( [
                 'type',

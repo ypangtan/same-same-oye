@@ -63,6 +63,12 @@ $columns = [
     //     'title' => __( 'user_voucher.discount_type' ),
     // ],
     [
+        'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user_voucher.secret_code' ) ] ),
+        'id' => 'secret_code',
+        'title' => __( 'user_voucher.secret_code' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -121,7 +127,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'user' },
             { data: 'voucher' },
             // { data: 'voucher' },
-            // { data: 'voucher' },
+            { data: 'secret_code' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -176,6 +182,13 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "remarks" ) }}' ),
+                width: '10%',
+                render: function( data, type, row, meta ) {
+                    return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "secret_code" ) }}' ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;

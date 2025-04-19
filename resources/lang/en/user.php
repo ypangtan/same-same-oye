@@ -15,6 +15,8 @@ return [
 
     'name' => 'Name',
     'fullname' => 'Fullname',
+    'first_name' => 'First Name',
+    'last_name' => 'Last Name',
     'username' => 'Username',
     'password' => 'Password',
     'calling_code' => 'Calling Code',

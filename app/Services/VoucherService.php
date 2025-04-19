@@ -674,11 +674,6 @@ class VoucherService
 
         }else {
             $vouchers = UserVoucher::with( ['voucher'] )
-            ->whereHas( 'voucher', function($query){
-                $query->where(function ( $query) {
-                    $query->where('discount_type' , '!=', 1 );
-                });
-            } )
             ->where( 'user_id', auth()->user()->id )
             ->where(function ( $query) {
                 $query->where(function ( $query) {

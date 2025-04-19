@@ -46,6 +46,8 @@ class User extends Model
         'invitation_code',
         'referral_structure',
         'profile_picture',
+        'first_name',
+        'last_name',
     ];
 
     public function wallets()
@@ -107,6 +109,8 @@ class User extends Model
         'invitation_code',
         'referral_structure',
         'profile_picture',
+        'first_name',
+        'last_name',
     ];
 
     protected static $logName = 'users';
