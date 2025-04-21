@@ -161,7 +161,7 @@ class CheckinRewardService
 
             $checkinRewardCount = $checkinReward->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
 
             $checkinRewards = $checkinReward->skip( $offset )->take( $limit )->get();

@@ -37,103 +37,158 @@ document.addEventListener( 'DOMContentLoaded', function() {
         buttons: [
             {
                 extend: 'copyHtml5',
-                text: '<i class="fa fa-copy"></i>', // Copy icon
-                className: 'btn btn-light', // Optional: Bootstrap styling
-                titleAttr: 'Copy to clipboard', // Tooltip
+                className: 'd-none buttons-copy', // Add class for targeting
                 exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    },
                     rows: function (idx, data, node) {
-                        let exportOnlySelected = $("#exportSelected").is(":checked");
+                        let exportOnlySelected = $('#exportSelected').is(':checked');
                         if (exportOnlySelected) {
-                            // Check if the checkbox in the row is checked
-                            let checkbox = $(node).find('.select-row');
-                            return checkbox.is(':checked');
-                        } else {
-                            // Export all rows
-                            return true;
+                            return $(node).find('.select-row').is(':checked');
                         }
+                        return true;
                     },
                     columns: ':not(:last-child)'
                 },
                 customize: function (win) {
                     $(win.document).find('.dt-button').removeClass('dt-button');
                 }
-
+            },
+            {
+                text: '<i class="fa fa-copy"></i>',
+                className: 'btn btn-light',
+                titleAttr: 'Copy All',
+                action: function (e, dt, button, config) {
+                    let exportOnlySelected = $('#exportSelected').is(':checked');
+            
+                    if (exportOnlySelected) {
+                        // Export only selected rows without changing page length
+                        $('.buttons-copy').click();
+                    } else {
+                        dt.page.len(-1).draw();
+                        dt.one('draw', function () {
+                            $('.buttons-copy').click();
+                            setTimeout(() => dt.page.len(10).draw(), 1000);
+                        });
+                    }
+                }
             },
             {
                 extend: 'excelHtml5',
-                text: '<i class="fa fa-file-excel"></i>', // Excel icon
-                className: 'btn btn-success',
-                titleAttr: 'Export to Excel',
+                className: 'd-none buttons-excel', // Add class for targeting
                 exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    },
                     rows: function (idx, data, node) {
-                        let exportOnlySelected = $("#exportSelected").is(":checked");
+                        let exportOnlySelected = $('#exportSelected').is(':checked');
                         if (exportOnlySelected) {
-                            // Check if the checkbox in the row is checked
-                            let checkbox = $(node).find('.select-row');
-                            return checkbox.is(':checked');
-                        } else {
-                            // Export all rows
-                            return true;
+                            return $(node).find('.select-row').is(':checked');
                         }
+                        return true;
                     },
                     columns: ':not(:last-child)'
                 },
                 customize: function (win) {
-                    // Remove the dt-button class from the export buttons
                     $(win.document).find('.dt-button').removeClass('dt-button');
                 }
-
+            },
+            {
+                text: '<i class="fa fa-file-excel"></i>',
+                className: 'btn btn-success',
+                titleAttr: 'Export to EXCEL',
+                action: function (e, dt, button, config) {
+                    let exportOnlySelected = $('#exportSelected').is(':checked');
+            
+                    if (exportOnlySelected) {
+                        $('.buttons-excel').click();
+                    } else {
+                        dt.page.len(-1).draw();
+                        dt.one('draw', function () {
+                            $('.buttons-excel').click();
+                            setTimeout(() => dt.page.len(10).draw(), 1000);
+                        });
+                    }
+                }
             },
             {
                 extend: 'csvHtml5',
-                text: '<i class="fa fa-file-csv"></i>', // CSV icon
-                className: 'btn btn-info',
-                titleAttr: 'Export to CSV',
+                className: 'd-none buttons-csv', // Add class for targeting
                 exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    },
                     rows: function (idx, data, node) {
-                        let exportOnlySelected = $("#exportSelected").is(":checked");
+                        let exportOnlySelected = $('#exportSelected').is(':checked');
                         if (exportOnlySelected) {
-                            // Check if the checkbox in the row is checked
-                            let checkbox = $(node).find('.select-row');
-                            return checkbox.is(':checked');
-                        } else {
-                            // Export all rows
-                            return true;
+                            return $(node).find('.select-row').is(':checked');
                         }
+                        return true;
                     },
                     columns: ':not(:last-child)'
                 },
                 customize: function (win) {
-                    // Remove the dt-button class from the export buttons
                     $(win.document).find('.dt-button').removeClass('dt-button');
                 }
-
+            },
+            {
+                text: '<i class="fa fa-file-csv"></i>',
+                className: 'btn btn-info',
+                titleAttr: 'Export to CSV',
+                action: function (e, dt, button, config) {
+                    let exportOnlySelected = $('#exportSelected').is(':checked');
+            
+                    if (exportOnlySelected) {
+                        // Export only selected rows without changing page length
+                        $('.buttons-csv').click();
+                    } else {
+                        dt.page.len(-1).draw();
+                        dt.one('draw', function () {
+                            $('.buttons-csv').click();
+                            setTimeout(() => dt.page.len(10).draw(), 1000);
+                        });
+                    }
+                }
             },
             {
                 extend: 'pdfHtml5',
-                text: '<i class="fa fa-file-pdf"></i>', // PDF icon
-                className: 'btn btn-danger',
-                titleAttr: 'Export to PDF',
+                className: 'd-none buttons-pdf', // Add class for targeting
                 exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    },
                     rows: function (idx, data, node) {
-                        let exportOnlySelected = $("#exportSelected").is(":checked");
+                        let exportOnlySelected = $('#exportSelected').is(':checked');
                         if (exportOnlySelected) {
-                            // Check if the checkbox in the row is checked
-                            let checkbox = $(node).find('.select-row');
-                            return checkbox.is(':checked');
-                        } else {
-                            // Export all rows
-                            return true;
+                            return $(node).find('.select-row').is(':checked');
                         }
+                        return true;
                     },
                     columns: ':not(:last-child)'
                 },
                 customize: function (win) {
-                    // Remove the dt-button class from the export buttons
                     $(win.document).find('.dt-button').removeClass('dt-button');
                 }
-
             },
+            {
+                text: '<i class="fa fa-file-pdf"></i>',
+                className: 'btn btn-danger',
+                titleAttr: 'Export to PDF',
+                action: function (e, dt, button, config) {
+                    let exportOnlySelected = $('#exportSelected').is(':checked');
+            
+                    if (exportOnlySelected) {
+                        $('.buttons-pdf').click();
+                    } else {
+                        dt.page.len(-1).draw();
+                        dt.one('draw', function () {
+                            $('.buttons-pdf').click();
+                            setTimeout(() => dt.page.len(10).draw(), 1000);
+                        });
+                    }
+                }
+            }      
         ],
         footerCallback: function (row, data, start, end, display) {
             // Example: Calculate total for column index 3

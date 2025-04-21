@@ -226,7 +226,7 @@ class SupplierService
 
             $supplierCount = $supplier->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
 
             $suppliers = $supplier->skip( $offset )->take( $limit )->get();

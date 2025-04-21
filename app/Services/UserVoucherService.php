@@ -165,7 +165,7 @@ class UserVoucherService
 
             $voucherCount = $voucher->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
 
             $user_vouchers = $voucher->skip( $offset )->take( $limit )->get();
@@ -193,6 +193,29 @@ class UserVoucherService
 
         $filter = false;
 
+        if ( !empty( $request->created_date ) ) {
+            if ( str_contains( $request->created_date, 'to' ) ) {
+                $dates = explode( ' to ', $request->created_date );
+
+                $startDate = explode( '-', $dates[0] );
+                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                
+                $endDate = explode( '-', $dates[1] );
+                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'user_vouchers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            } else {
+
+                $dates = explode( '-', $request->created_date );
+
+                $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'user_vouchers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            }
+            $filter = true;
+        }
+
         if ( !empty( $request->id ) ) {
             $model->where( 'user_vouchers.id', '!=', Helper::decode($request->id) );
             $filter = true;
@@ -200,7 +223,8 @@ class UserVoucherService
 
         if (!empty($request->user)) {
             $model->whereHas('user', function ($query) use ($request) {
-                $query->where('users.phone_number', 'LIKE', '%' . $request->user . '%');
+                $query->where('users.phone_number', 'LIKE', '%' . $request->user . '%')
+                ->orWhere('users.username', 'LIKE', '%' . $request->user . '%');;
             });
             $filter = true;
         }

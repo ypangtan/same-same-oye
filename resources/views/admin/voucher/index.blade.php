@@ -56,6 +56,18 @@ $columns = [
         'title' => __( 'voucher.promo_code' ),
     ],
     [
+        'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'voucher.start_date' ) ] ),
+        'id' => 'start_date',
+        'title' => __( 'voucher.start_date' ),
+    ],
+    [
+        'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'voucher.expired_date' ) ] ),
+        'id' => 'expired_date',
+        'title' => __( 'voucher.expired_date' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -112,6 +124,8 @@ var statusMapper = @json( $data['status'] ),
             { data: 'image_path' },
             { data: 'title' },
             { data: 'promo_code' },
+            { data: 'start_date' },
+            { data: 'expired_date' },
             // { data: 'type' },
             { data: 'status' },
             { data: 'encrypted_id' },
@@ -239,6 +253,24 @@ var statusMapper = @json( $data['status'] ),
     document.addEventListener( 'DOMContentLoaded', function() {
 
         $( '#created_date' ).flatpickr( {
+            mode: 'range',
+            disableMobile: true,
+            onClose: function( selected, dateStr, instance ) {
+                window[$( instance.element ).data('id')] = $( instance.element ).val();
+                dt_table.draw();
+            }
+        } );
+
+        $( '#start_date' ).flatpickr( {
+            mode: 'range',
+            disableMobile: true,
+            onClose: function( selected, dateStr, instance ) {
+                window[$( instance.element ).data('id')] = $( instance.element ).val();
+                dt_table.draw();
+            }
+        } );
+
+        $( '#expired_date' ).flatpickr( {
             mode: 'range',
             disableMobile: true,
             onClose: function( selected, dateStr, instance ) {

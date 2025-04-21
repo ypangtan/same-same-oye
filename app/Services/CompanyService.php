@@ -35,7 +35,7 @@ class CompanyService
 
         $companyCount = $company->count();
 
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
 
         $companies = $company->skip( $offset )->take( $limit )->get();

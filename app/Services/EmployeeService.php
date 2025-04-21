@@ -62,7 +62,7 @@ class EmployeeService
 
         $workerCount = $worker->count();
 
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
 
         $workers = $worker->skip( $offset )->take( $limit )->get();

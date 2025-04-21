@@ -226,7 +226,7 @@ class BrandService
 
             $brandCount = $brand->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
 
             $brands = $brand->skip( $offset )->take( $limit )->get();

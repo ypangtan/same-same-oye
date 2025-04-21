@@ -218,7 +218,7 @@ class ProductService
 
             $productCount = $product->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
 
             $products = $product->skip( $offset )->take( $limit )->get();
@@ -272,7 +272,7 @@ class ProductService
 
             $productCount = $product->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
 
             $products = $product->skip( $offset )->take( $limit )->get();

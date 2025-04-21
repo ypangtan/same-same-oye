@@ -178,7 +178,7 @@ class BannerService
 
             $bannerCount = $banner->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
 
             $banners = $banner->skip( $offset )->take( $limit )->get();
@@ -235,7 +235,7 @@ class BannerService
     
         $bannerCount = $banner->count();
     
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
     
         // Paginate results
@@ -445,7 +445,7 @@ class BannerService
 
         $bannerCount = $banner->count();
 
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
 
         $banners = $banner->skip( $offset )->take( $limit )->get();

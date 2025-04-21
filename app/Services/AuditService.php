@@ -35,7 +35,7 @@ class AuditService
 
             $auditCount = $audit->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
             
             $audits = $audit->skip( $offset )->take( $limit )->get();

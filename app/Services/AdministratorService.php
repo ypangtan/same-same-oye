@@ -55,7 +55,7 @@ class AdministratorService
 
         $administratorCount = $administrator->count();
 
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
 
         $administrators = $administrator->skip( $offset )->take( $limit )->get();
@@ -365,7 +365,7 @@ class AdministratorService
 
         $ownerCount = $owner->count();
 
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
 
         $owners = $owner->skip( $offset )->take( $limit )->get();

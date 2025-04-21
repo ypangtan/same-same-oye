@@ -156,7 +156,7 @@ class VoucherUsageService
 
         $voucherCount = $voucher->count();
 
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
 
         $voucher_usages = $voucher->skip( $offset )->take( $limit )->get();

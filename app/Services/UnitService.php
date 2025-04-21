@@ -235,7 +235,7 @@ class UnitService
 
             $unitCount = $unit->count();
 
-            $limit = $request->length;
+            $limit = $request->length == -1 ? 1000000 : $request->length;
             $offset = $request->start;
 
             $units = $unit->skip( $offset )->take( $limit )->get();

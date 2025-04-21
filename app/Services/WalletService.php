@@ -34,7 +34,7 @@ class WalletService
 
         $walletCount = $wallet->count();
 
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
 
         $wallets = $wallet->skip( $offset )->take( $limit )->get();
@@ -217,7 +217,7 @@ class WalletService
 
         $transactionCount = $transaction->count();
 
-        $limit = $request->length;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
         $offset = $request->start;
 
         $transactions = $transaction->skip( $offset )->take( $limit )->get();
