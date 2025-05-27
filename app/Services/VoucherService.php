@@ -1021,7 +1021,7 @@ class VoucherService
             'amount' => -$voucher->points_required,
             'remark' => 'Claim Voucher',
             'type' => $userPoints->type,
-            'transaction_type' => 11,
+            'transaction_type' => 24,
         ] );
 
         $userVoucher = UserVoucher::create([
