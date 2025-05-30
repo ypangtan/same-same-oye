@@ -21,25 +21,25 @@ return [
     'register_success_content' => 'Welcome to IFei!',
     
     'topup_success' => 'Topup Success',
-    'topup_success_content' => 'Topup Success! Enjoy Your Froyo Now!',
+    'topup_success_content' => 'Topup Success!',
     
     'topup_failed' => 'Topup Failed',
     'topup_failed_content' => 'Topup Failed! Please Try Again',
     
     'user_bundle_success' => 'User Bundle Purchase Success',
-    'user_bundle_success_content' => 'User Bundle Purchase Success! Enjoy Your Froyo Bundle Now!',
+    'user_bundle_success_content' => 'User Bundle Purchase Success!',
     
     'user_bundle_failed' => 'User Bundle Purchase Failed',
     'user_bundle_failed_content' => 'User Bundle Purchase Failed! Please Try Again',
     
     'user_order_success' => 'Order Success',
-    'user_order_success_content' => 'Order Success! Enjoy Your Froyo Now!',
+    'user_order_success_content' => 'Order Success!',
     
     'user_order_failed' => 'Order Failed',
     'user_order_failed_content' => 'Order Failed! Please Try Again',
     
     'user_voucher_success' => 'Claim Voucher Success',
-    'user_voucher_success_content' => 'Claim Voucher Success! Enjoy Your Froyo Deals Now!',
+    'user_voucher_success_content' => 'Claim Voucher Success!',
     
     'user_checkin_success' => 'Checkin Success',
     'user_checkin_success_content' => 'Checkin Success! IFei Welcomes You Today',
