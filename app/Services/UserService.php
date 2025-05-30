@@ -1167,6 +1167,12 @@ class UserService
                 'updated_at',
             ] );
 
+            $user->append([
+                'profile_picture_path',
+            ]);
+
+            $user->profile_picture = $user->profile_picture_path;
+
             $user->points = $user->wallets->first()->balance;
             unset($user->wallets);
         }
