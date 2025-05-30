@@ -529,7 +529,7 @@ class UserCheckinService
             switch ($reward->reward_type) {
                 case 1:
  
-                    WalletService::transact( $user->wallets->where('type', 2)->first(), [
+                    WalletService::transact( $user->wallets->where('type', 1)->first(), [
                         'amount' => $reward->reward_value,
                         'remark' => 'Check-in Rewards',
                         'type' => 1,

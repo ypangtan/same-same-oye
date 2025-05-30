@@ -363,7 +363,7 @@ class EghlService {
                     $user = $order->user;
                     if( $spendingBonus ){
 
-                        $userBonusWallet = $user->wallets->where( 'type', 2 )->first();
+                        $userBonusWallet = $user->wallets->where( 'type', 1 )->first();
 
                         WalletService::transact( $userBonusWallet, [
                             'amount' => $order->total_price * $spendingBonus->option_value,
@@ -377,7 +377,7 @@ class EghlService {
                     $referralSpendingBonus = Option::getReferralSpendingSettings();
                     if( $user->referral && $referralSpendingBonus){
 
-                        $referralWallet = $user->referral->wallets->where('type',2)->first();
+                        $referralWallet = $user->referral->wallets->where('type',1)->first();
 
                         if($referralWallet){
                             WalletService::transact( $referralWallet, [

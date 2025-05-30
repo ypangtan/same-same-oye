@@ -970,7 +970,7 @@ class UserService
             $referralBonus = Option::getReferralBonusSettings();
             if( $referral && $registerBonus){
 
-                $referralWallet = $referral->wallets->where('type',2)->first();
+                $referralWallet = $referral->wallets->where('type',1)->first();
 
                 if( $referralWallet ) {
                     WalletService::transact( $referralWallet, [

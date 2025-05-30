@@ -1011,7 +1011,7 @@ class AnnouncementService
         // check is user able to claim this
         $userAnnouncement = UserAnnouncement::where( 'announcement_id', $announcement->id )->where( 'user_id', $user->id )->first();
         if(!$userAnnouncement){
-            $userPoints = $user->wallets->where( 'type', 2 )->first();
+            $userPoints = $user->wallets->where( 'type', 1 )->first();
 
             if ( $userPoints->balance < $announcement->points_required ) {
 
@@ -1135,7 +1135,7 @@ class AnnouncementService
             ], 422 );
         }
         
-        $userPoints = $user->wallets->where( 'type', 2 )->first();
+        $userPoints = $user->wallets->where( 'type', 1 )->first();
 
         if ( $userPoints->balance < $announcement->points_required ) {
 

@@ -582,7 +582,7 @@ class BannerService
         // check is user able to claim this
         $userBanner = UserBanner::where( 'banner_id', $banner->id )->where( 'user_id', $user->id )->first();
         if(!$userBanner){
-            $userPoints = $user->wallets->where( 'type', 2 )->first();
+            $userPoints = $user->wallets->where( 'type', 1 )->first();
 
             if ( $userPoints->balance < $banner->points_required ) {
 
@@ -706,7 +706,7 @@ class BannerService
             ], 422 );
         }
         
-        $userPoints = $user->wallets->where( 'type', 2 )->first();
+        $userPoints = $user->wallets->where( 'type', 1 )->first();
 
         if ( $userPoints->balance < $banner->points_required ) {
 
