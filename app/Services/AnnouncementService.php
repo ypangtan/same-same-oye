@@ -272,7 +272,7 @@ class AnnouncementService
         $validator = Validator::make( $request->all(), [
             'title' => [ 'required' ],
             'description' => [ 'nullable' ],
-            'discount_type' => [ 'required' ],
+            'discount_type' => [ 'nullable' ],
             'voucher_type' => [ 'nullable' ],
             'promo_code' => [ 'nullable', 'unique:announcements,promo_code,' . $request->id, ],
             'image' => [ 'nullable' ],
@@ -350,7 +350,7 @@ class AnnouncementService
             $updateAnnouncement = Announcement::with( ['voucher'] )->find( $request->id );
     
             $updateAnnouncement->title = $request->title;
-            $updateAnnouncement->discount_type = $request->discount_type;
+            $updateAnnouncement->discount_type = $request->discount_type ? $request->discount_type : 1;
             $updateAnnouncement->description = $request->description;
             $updateAnnouncement->promo_code = $request->promo_code;
             $updateAnnouncement->start_date = $request->start_date;

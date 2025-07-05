@@ -88,6 +88,10 @@ var statusMapper = {
             'text': '{{ __( 'datatables.suspended' ) }}',
             'color': 'badge rounded-pill bg-danger',
         },
+        '21': {
+            'text': '{{ __( 'datatables.expired' ) }}',
+            'color': 'badge rounded-pill bg-danger',
+        },
     },
     newUserOnlyStatusMapper = {
         '1': {

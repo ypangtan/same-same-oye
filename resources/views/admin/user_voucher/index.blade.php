@@ -62,12 +62,12 @@ $columns = [
     //     'id' => 'discount_type',
     //     'title' => __( 'user_voucher.discount_type' ),
     // ],
-    [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user_voucher.secret_code' ) ] ),
-        'id' => 'secret_code',
-        'title' => __( 'user_voucher.secret_code' ),
-    ],
+    // [
+    //     'type' => 'input',
+    //     'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user_voucher.secret_code' ) ] ),
+    //     'id' => 'secret_code',
+    //     'title' => __( 'user_voucher.secret_code' ),
+    // ],
     [
         'type' => 'select',
         'options' => $data['status'],
@@ -127,7 +127,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'user' },
             { data: 'voucher' },
             // { data: 'voucher' },
-            { data: 'secret_code' },
+            // { data: 'secret_code' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -163,7 +163,8 @@ var statusMapper = @json( $data['status'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
-                    return data.username ?? '-' + '<br>' + '+60' + data.phone_number;
+                    // return data.username ?? '-' + '<br>' + '+60' + data.phone_number;
+                    return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + '+60' + data.phone_number;
                 },
             },
             {

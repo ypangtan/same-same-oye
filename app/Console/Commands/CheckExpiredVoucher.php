@@ -27,7 +27,7 @@ class CheckExpiredVoucher extends Command
      * @var string
      */
     protected $signature = 'check:expired-voucher
-    {--dryrun : Whether the calculated result should store}';
+    {--dry-run : Whether the calculated result should store}';
 
     /**
      * The console command description.

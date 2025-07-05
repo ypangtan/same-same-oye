@@ -162,6 +162,7 @@ class UserCheckinService
     public static function allUserCheckins( $request ) {
 
         $userCheckins = UserCheckin::with( ['user'] )->select( 'user_checkins.*');
+        $userCheckins->leftJoin( 'users', 'users.id', '=', 'user_checkins.user_id' );
 
         $filterObject = self::filter( $request, $userCheckins );
         $userCheckin = $filterObject['model'];
@@ -260,11 +261,16 @@ class UserCheckinService
         }
 
         if ( !empty( $request->user ) ) {
-            $model->where( function ( $query ) use ( $request ) {
-                $query->whereHas( 'user', function ( $q ) use ( $request ) {
-                    $q->where( 'phone_number', 'LIKE', '%' . $request->user . '%' );
-                });
+            $userInput = $request->user;
+            $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $userInput );
+        
+            $model->where(function ( $query ) use ( $normalizedPhone, $userInput ) {
+                $query->where( 'users.phone_number', 'LIKE', "%$normalizedPhone%" )
+                    ->orWhereRaw( "CONCAT(users.first_name, ' ', users.last_name) LIKE ?", [ "%$userInput%" ] )
+                    ->orWhere( 'users.first_name', 'LIKE', "%$userInput%" )
+                    ->orWhere( 'users.last_name', 'LIKE', "%$userInput%" );
             });
+        
             $filter = true;
         }
         
@@ -485,7 +491,7 @@ class UserCheckinService
             $user->check_in_streak = 0;
         }
     
-        UserCheckin::create([
+        $userCheckin = UserCheckin::create([
             'user_id' => $user->id,
             'checkin_date' => now(),
             'status' => 10,
@@ -508,6 +514,11 @@ class UserCheckinService
             'user_checkin'
         );
 
+        // check user has challenges
+        // $data = [];
+        // $data['user_checkin'] = $userCheckin;
+        // Helper::checkChallenge( 'checkin', $data, $user );
+
         self::sendNotification( $user, 'checkin', __( 'notification.user_checkin_success_content' )  );
 
         DB::commit();
@@ -515,7 +526,7 @@ class UserCheckinService
         return response()->json([
             'message' => 'checkin_success',
             'message_key' => 'Check-in successful',
-            'data' => $reward,
+            'data' => $userCheckin,
         ]);
     }
     
@@ -529,10 +540,10 @@ class UserCheckinService
             switch ($reward->reward_type) {
                 case 1:
  
-                    WalletService::transact( $user->wallets->where('type', 1)->first(), [
+                    WalletService::transact( $user->wallets->where('type', 2)->first(), [
                         'amount' => $reward->reward_value,
                         'remark' => 'Check-in Rewards',
-                        'type' => 1,
+                        'type' => 2,
                         'transaction_type' => 23,
                     ] );
                     break;

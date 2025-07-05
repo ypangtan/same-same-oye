@@ -105,7 +105,7 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: 'created_at' },
             { data: 'checkin_date' },
-            { data: 'user.phone_number' },
+            { data: 'user' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -131,6 +131,13 @@ var statusMapper = @json( $data['status'] ),
                 },
             },
             {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
+                width: '10%',
+                render: function( data, type, row, meta ) {
+                    return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + '+60' + data.phone_number;
+                },
+            },
+            {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "image" ) }}' ),
                 orderable: false,
                 render: function( data, type, row, meta ) {
@@ -143,6 +150,13 @@ var statusMapper = @json( $data['status'] ),
                         return '<img src="' + '{{ asset( 'admin/images/placeholder.png' ) }}' + '" width="75px" />'
                         
                     }
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "checkin_date" ) }}' ),
+                width: '10%',
+                render: function( data, type, row, meta ) {
+                    return data ? data : '-' ;
                 },
             },
             {

@@ -92,7 +92,7 @@ $columns = [
             columns: [
                 { data: null },
                 { data: 'created_at' },
-                { data: 'user.phone_number' },
+                { data: 'user' },
                 { data: 'type' },
                 { data: 'transaction_type' },
                 { data: 'converted_remark' },
@@ -110,7 +110,8 @@ $columns = [
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        return data.username ?? '-' + '<br>' + '+60' + data;
+                        // return data.username ?? '-' + '<br>' + '+60' + data;
+                        return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + '+60' + data.phone_number;
                     },
                 },
                 {

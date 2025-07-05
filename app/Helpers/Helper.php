@@ -278,6 +278,7 @@ class Helper {
             return $created->format( 'H:i' );
         }
     }   
+
     public static function requestOtp( $action, $data = [] ) {
 
         $expireOn = Carbon::now()->addMinutes( '10' );
@@ -297,7 +298,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
-            $body = 'Your OTP for IFei ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
         else if ( $action == 'resend' ) {
@@ -312,7 +313,7 @@ class Helper {
 
             $phoneNumber = $createOtp->phone_number;
 
-            $body = 'Your OTP for IFei ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
         else if ( $action == 'forgot_password' ) {
@@ -331,9 +332,27 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
-            $body = 'Your OTP for IFei forgot password is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFEI forgot password is ' . $createOtp->otp_code;
 
-        }else if ( $action == 'update_account' ) {
+        }
+        
+        else if ( $action == 'resend_forget_password' ) {
+
+            $callingCode = $data['calling_code'];
+            $tmpUser = $data['identifier'];
+
+            $createOtp = OtpAction::find( $tmpUser );
+            $createOtp->otp_code = mt_rand( 100000, 999999 );
+            $createOtp->expire_on = $expireOn;
+            $createOtp->save();
+
+            $phoneNumber = $createOtp->phone_number;
+
+            $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
+
+        } 
+        
+        else if ( $action == 'update_account' ) {
 
             $callingCode = $data['calling_code'];
             $phoneNumber = $data['phone_number'];
@@ -346,7 +365,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
-            $body = 'Your OTP for IFei update account is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFEI update account is ' . $createOtp->otp_code;
 
         }else {
 
@@ -363,7 +382,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
-            $body = 'Your OTP for IFei ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
         }
 
         return [

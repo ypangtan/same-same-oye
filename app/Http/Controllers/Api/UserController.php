@@ -98,6 +98,7 @@ class UserController extends Controller {
      * 
      * <strong>request_type</strong><br>
      * 1: Register<br>
+     * 2: Forget Password<br>
      * 
      * @group User API
      * 
@@ -127,7 +128,22 @@ class UserController extends Controller {
      */
     public function resendOtp( Request $request ) {
 
-        return UserService::requestOtp( $request );
+        if( $request->request_type == 1 ){
+
+            $request->merge( [
+                'action' => 'resend'
+            ] );
+
+            return UserService::requestOtp( $request );
+
+        }else{
+
+            $request->merge( [
+                'action' => 'resend_forget_password'
+            ] );
+
+            return UserService::forgotPasswordOtp( $request );
+        }
     }
 
     /**

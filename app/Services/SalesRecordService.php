@@ -145,11 +145,6 @@ class SalesRecordService
             $filter = true;
         }
 
-        if ( !empty( $request->phone_number ) ) {
-            $model->where( 'phone_number', 'LIKE', '%' . $request->phone_number . '%' );
-            $filter = true;
-        }
-
         if ( !empty( $request->title ) ) {
             $model->where( 'phone_number', 'LIKE', '%' . $request->title . '%' );
             $filter = true;

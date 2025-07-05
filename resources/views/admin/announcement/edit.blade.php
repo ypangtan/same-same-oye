@@ -412,39 +412,14 @@ window.cke_element1 = 'announcement_edit_description';
                 },
                 success: function( response ) {
                     
-                    $( fe + '_title' ).val( response.voucher.title );
-                    $( fe + '_description' ).val( response.voucher.description );
-                    $( fe + '_promo_code' ).val( response.voucher.promo_code );
-                    $( fe + '_discount_type' ).val( response.voucher.discount_type );
-                    $( fe + '_total_claimable' ).val( response.voucher.total_claimable );
-                    $( fe + '_points_required' ).val( response.voucher.points_required );
-                    $( fe + '_voucher_type' ).val( response.voucher.type );
-                    $( fe + '_validity_days' ).val( response.voucher.validity_days );
-                    endDate.setDate( response.voucher.expired_date );
-                    startDate.setDate( response.voucher.start_date );
-                    editor.setData( response.voucher.description );
+                    $( fe + '_title' ).val( response.title );
+                    $( fe + '_description' ).val( response.description );
+                    endDate.setDate( response.expired_date );
+                    startDate.setDate( response.start_date );
+                    editor.setData( response.description );
 
                     $(fe + '_new_user_only').prop('checked', ( response.new_user_only == 1 ? true :false ) );
                     $(fe + '_view_once').prop('checked', ( response.view_once == 1 ? true :false ) );
-
-                    switch ( parseInt( response.voucher.discount_type ) ) {
-                        case 3:
-                            if( response.voucher.decoded_adjustment ) {
-                                setBxgyData( response );
-                            }
-
-                            $( '#bxgy' ).removeClass( 'hidden' );
-                            break
-
-                        default:
-                            if( response.voucher.decoded_adjustment ) {
-
-                                setcartdData( response );
-                            }
-
-                            $( '#cartd' ).removeClass( 'hidden' );
-                            break
-                    }
 
                     const dropzone = new Dropzone( fe + '_image', {
                         url: '{{ route( 'admin.file.upload' ) }}',
@@ -455,13 +430,13 @@ window.cke_element1 = 'announcement_edit_description';
 
                             let that = this;
                             console.log(response)
-                            if ( response.voucher.image_path != 0 ) {
+                            if ( response.image_path != 0 ) {
                                 let myDropzone = that
                                     cat_id = '{{ request('id') }}',
                                     mockFile = { name: 'Default', size: 1024, accepted: true, id: cat_id };
 
                                 myDropzone.files.push( mockFile );
-                                myDropzone.displayExistingFile( mockFile, response.voucher.image_path );
+                                myDropzone.displayExistingFile( mockFile, response.image_path );
                                 $( myDropzone.files[myDropzone.files.length - 1].previewElement ).data( 'id', cat_id );
                             }
                         },

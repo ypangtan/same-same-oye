@@ -143,6 +143,7 @@ class UserVoucherService
     public static function allUserVouchers( $request ) {
 
         $user_vouchers = UserVoucher::with( ['user','voucher'] )->select( 'user_vouchers.*');
+        $user_vouchers->leftJoin( 'users', 'users.id', '=', 'user_vouchers.user_id' );
 
         $filterObject = self::filter( $request, $user_vouchers );
         $voucher = $filterObject['model'];
@@ -221,11 +222,17 @@ class UserVoucherService
             $filter = true;
         }
 
-        if (!empty($request->user)) {
-            $model->whereHas('user', function ($query) use ($request) {
-                $query->where('users.phone_number', 'LIKE', '%' . $request->user . '%')
-                ->orWhere('users.username', 'LIKE', '%' . $request->user . '%');;
+        if ( !empty( $request->user ) ) {
+            $userInput = $request->user;
+            $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $userInput );
+        
+            $model->where(function ( $query ) use ( $normalizedPhone, $userInput ) {
+                $query->where( 'users.phone_number', 'LIKE', "%$normalizedPhone%" )
+                    ->orWhereRaw( "CONCAT(users.first_name, ' ', users.last_name) LIKE ?", [ "%$userInput%" ] )
+                    ->orWhere( 'users.first_name', 'LIKE', "%$userInput%" )
+                    ->orWhere( 'users.last_name', 'LIKE', "%$userInput%" );
             });
+        
             $filter = true;
         }
 
@@ -266,7 +273,7 @@ class UserVoucherService
         }
 
         if ( !empty( $request->seceret_code ) ) {
-            $model->where( 'seceret_code', 'LIKE', '%' . $request->seceret_code . '%' );
+            $model->where( 'user_vouchers.seceret_code', 'LIKE', '%' . $request->seceret_code . '%' );
             $filter = true;
         }
 
