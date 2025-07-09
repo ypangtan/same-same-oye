@@ -736,7 +736,7 @@ class VoucherService
 
             $vouchers = $vouchers->get();
             // Count how many times each voucher has been claimed by the user
-            $userVoucherCounts = UserVoucher::where( 'user_id', $userId )
+            $userVoucherCounts = UserVoucher::where( 'user_id', auth()->user()->id )
                 ->selectRaw( 'voucher_id, COUNT(*) as total' )
                 ->groupBy( 'voucher_id' )
                 ->pluck( 'total', 'voucher_id' )
