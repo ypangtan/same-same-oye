@@ -735,14 +735,23 @@ class VoucherService
             }
 
             $vouchers = $vouchers->get();
-            $claimedVoucherIds = UserVoucher::where('user_id', auth()->user()->id)
-            ->pluck('voucher_id')
-            ->toArray();
+            // Count how many times each voucher has been claimed by the user
+            $userVoucherCounts = UserVoucher::where( 'user_id', $userId )
+                ->selectRaw( 'voucher_id, COUNT(*) as total' )
+                ->groupBy( 'voucher_id' )
+                ->pluck( 'total', 'voucher_id' )
+                ->toArray();
 
-            $vouchers = $vouchers->map(function ($voucher) use ($claimedVoucherIds) {
-                $voucher->claimed = in_array($voucher->id, $claimedVoucherIds) ? 'claimed' : 'unclaim';
-                $voucher->makeHidden( [ 'created_at', 'updated_at', 'type', 'status', 'min_spend', 'min_order', 'buy_x_get_y_adjustment', 'discount_amount' ] );
-                $voucher->append(['decoded_adjustment', 'image_path','voucher_type','voucher_type_label']);
+            $vouchers = $vouchers->filter(function ( $voucher ) use ( $userVoucherCounts ) {
+                $claimedCount = $userVoucherCounts[$voucher->id] ?? 0;
+                return $claimedCount < ( $voucher->claim_per_user ?? 1 );
+            })->map(function ( $voucher ) use ( $userVoucherCounts ) {
+                $voucher->claimed = isset( $userVoucherCounts[$voucher->id] ) ? 'claimed' : 'unclaim';
+                $voucher->makeHidden([
+                    'created_at', 'updated_at', 'type', 'status',
+                    'min_spend', 'min_order', 'buy_x_get_y_adjustment', 'discount_amount'
+                ]);
+                $voucher->append([ 'decoded_adjustment', 'image_path', 'voucher_type', 'voucher_type_label' ]);
                 return $voucher;
             });
 
