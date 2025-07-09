@@ -10,7 +10,7 @@
 $wallet_topup = 'wallet_topup';
 $wallet_deduct = 'wallet_deduct';
 
-$multiSelect = 1;
+$multiSelect = 0;
 ?>
 
 <?php
@@ -19,7 +19,7 @@ $columns = [
     [
         'type' => 'default',
         'id' => 'select_row',
-        'title' => 'No.',
+        'title' => '',
     ],
     [
         'type' => 'default',
@@ -49,14 +49,6 @@ $columns = [
     ],
 ];
 
-if ( $multiSelect ) {
-    array_unshift( $columns,  [
-        'type' => 'default',
-        'id' => 'dt_multiselect',
-        'title' => '',
-        'multi_select' => 'yes',
-    ] );
-}
 ?>
 
 <div class="card">
@@ -277,7 +269,7 @@ if ( $multiSelect ) {
             columnDefs: [
                 {
                     // Add checkboxes to the first column
-                    targets: 1,
+                    targets: 0,
                     orderable: false,
                     className: 'text-center',
                     render: function (data, type, row) {
@@ -293,7 +285,7 @@ if ( $multiSelect ) {
                         const pageInfo = dt_table.page.info();
                         return pageInfo.start + meta.row + 1; // Adjust for 1-based numbering
                     },
-                },
+                    },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
                     orderable: false,
