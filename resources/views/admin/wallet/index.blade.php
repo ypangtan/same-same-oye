@@ -298,7 +298,7 @@ if ( $multiSelect ) {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        return data.username ?? '-' + '<br>' + '+60' + data.phone_number;
+                        return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + '+60' + data.phone_number;
                     },
                 },
                 {

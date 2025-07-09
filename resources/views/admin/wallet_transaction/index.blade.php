@@ -2,6 +2,11 @@
 $columns = [
     [
         'type' => 'default',
+        'id' => 'select_row',
+        'title' => '',
+    ],
+    [
+        'type' => 'default',
         'id' => 'dt_no',
         'title' => 'No.',
     ],
@@ -91,6 +96,7 @@ $columns = [
             order: [[ 1, 'desc' ]],
             columns: [
                 { data: null },
+                { data: null },
                 { data: 'created_at' },
                 { data: 'user' },
                 { data: 'type' },
@@ -100,10 +106,29 @@ $columns = [
             ],
             columnDefs: [
                 {
+                    // Add checkboxes to the first column
+                    targets: 0,
+                    orderable: false,
+                    className: 'text-center',
+                    render: function (data, type, row) {
+                        return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
+                    },
+                },
+                {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "dt_no" ) }}' ),
                     orderable: false,
+                    
+                    render: function (data, type, row, meta) {
+                        // Calculate the row number dynamically based on the page info
+                        const pageInfo = dt_table.page.info();
+                        return pageInfo.start + meta.row + 1; // Adjust for 1-based numbering
+                    },
+                    },
+                {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "created_date" ) }}' ),
+                    
                     render: function( data, type, row, meta ) {
-                        return table_no += 1;
+                        return data ? data : '-' ;
                     },
                 },
                 {

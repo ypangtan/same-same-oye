@@ -233,6 +233,7 @@ class UserService
                 'password' => Hash::make( $request->password ),
                 'address_1' => $request->address_1,
                 'address_2' => $request->address_2,
+                'date_of_birth' => $request->date_of_birth,
                 'state' => $request->state,
                 'city' => $request->city,
                 'postcode' => $request->postcode,
@@ -330,6 +331,7 @@ class UserService
             $updateUser->state = $request->state ?? $updateUser->state;
             $updateUser->city = $request->city ?? $updateUser->city;
             $updateUser->postcode = $request->postcode ?? $updateUser->postcode;
+            $updateUser->date_of_birth = $request->date_of_birth;
             $updateUser->calling_code = '+60';
             $updateUser->fullname = $request->fullname;
 

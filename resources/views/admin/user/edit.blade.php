@@ -15,6 +15,13 @@ $user_edit = 'user_edit';
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
+                <div class="mb-3 row">
+                    <label for="{{ $user_edit }}_date_of_birth" class="col-sm-5 col-form-label">{{ __( 'user.date_of_birth' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="date" class="form-control" id="{{ $user_edit }}_date_of_birth">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 @if( 1 == 2 )
 
                 <div class="mb-3 row">
@@ -28,7 +35,6 @@ $user_edit = 'user_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                @endif
                 <div class="mb-3 row">
                     <label for="{{ $user_edit }}_username" class="col-sm-5 col-form-label">{{ __( 'user.username' ) }}</label>
                     <div class="col-sm-7">
@@ -36,6 +42,7 @@ $user_edit = 'user_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                @endif
                 <div class="mb-3 row">
                     <label for="{{ $user_edit }}_email" class="col-sm-5 col-form-label">{{ __( 'user.email' ) }}</label>
                     <div class="col-sm-7">
@@ -150,6 +157,14 @@ $user_edit = 'user_edit';
             window.location.href = '{{ route( 'admin.module_parent.user.index' ) }}';
         } );
 
+        let dateOfBirth = $( de + '_date_of_birth' ).flatpickr( {
+            disableMobile: true,
+            onClose: function( selected, dateStr, instance ) {
+                window[$( instance.element ).data('id')] = $( instance.element ).val();
+                dt_table.draw();
+            }
+        } );
+
         $( de + '_submit' ).click( function() {
 
             resetInputValidation();
@@ -160,7 +175,7 @@ $user_edit = 'user_edit';
 
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
-            formData.append( 'username', $( de + '_username' ).val() );
+            // formData.append( 'username', $( de + '_username' ).val() );
             formData.append( 'email', $( de + '_email' ).val() );
             formData.append( 'first_name', $( de + '_first_name' ).val() );
             formData.append( 'last_name', $( de + '_last_name' ).val() );
@@ -172,6 +187,7 @@ $user_edit = 'user_edit';
             formData.append( 'city', $( de + '_city' ).val() );
             formData.append( 'state', $( de + '_state' ).val() );
             formData.append( 'postcode', $( de + '_postcode' ).val() );
+            formData.append( 'date_of_birth', $( de + '_date_of_birth' ).val() );
             // formData.append( 'account_type', $( de + '_account_type' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -226,7 +242,7 @@ $user_edit = 'user_edit';
 
                     $( de + '_first_name' ).val( response.first_name );
                     $( de + '_last_name' ).val( response.last_name );
-                    $( de + '_username' ).val( response.username );
+                    // $( de + '_username' ).val( response.username );
                     $( de + '_phone_number' ).val( response.phone_number );
                     $( de + '_address_1' ).val( response.address_1 );
                     $( de + '_address_2' ).val( response.address_2 );
@@ -234,6 +250,7 @@ $user_edit = 'user_edit';
                     $( de + '_state' ).val( response.state );
                     $( de + '_postcode' ).val( response.postcode );
                     // $( de + '_account_type' ).val( response.account_type );
+                    dateOfBirth.setDate( response.date_of_birth );
 
                     $( 'body' ).loading( 'stop' );
                 },

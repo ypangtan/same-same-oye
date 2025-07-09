@@ -175,6 +175,13 @@ class UserVoucherService
                 $user_vouchers->append( [
                     'encrypted_id',
                 ] );
+
+                foreach ( $user_vouchers as $key => $user_voucher) {
+                    $user_voucher->voucher->append( [
+                        'encrypted_id',
+                    ] );
+                }
+
             }
 
             $totalRecord = UserVoucher::count();

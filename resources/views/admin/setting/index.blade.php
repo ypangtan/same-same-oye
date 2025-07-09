@@ -31,7 +31,7 @@ $setting = 'setting';
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3 row">
+                                <div class="mb-3 row d-none">
                                     <label for="{{ $setting }}_referral_register_bonus_points" class="col-sm-5 col-form-label">{{ __( 'setting.referral_register_bonus_points' ) }}</label>
                                     <div class="col-sm-7">
                                         <input type="number" class="form-control form-control-sm" id="{{ $setting }}_referral_register_bonus_points">

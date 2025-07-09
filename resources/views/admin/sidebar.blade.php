@@ -185,9 +185,11 @@
                                         <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\UserCheckinController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.module_parent.user_checkin.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.user_checkins' ) }}</span></a>
                                         </li>
+                                        @if( 1 == 2)
                                         <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\UserCheckinController' && in_array( $action, [ 'calendar' ] ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.user_checkin.calendar' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.checkin_calendar' ) }}</span></a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </li>
                                 @endcan

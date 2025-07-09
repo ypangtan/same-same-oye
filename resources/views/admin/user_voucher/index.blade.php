@@ -50,6 +50,12 @@ $columns = [
         'id' => 'title',
         'title' => __( 'user_voucher.title' ),
     ],
+    [
+        'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'voucher.promo_code' ) ] ),
+        'id' => 'promo_code',
+        'title' => __( 'voucher.promo_code' ),
+    ],
     // [
     //     'type' => 'select',
     //     'options' => $data['voucher_type'],
@@ -126,6 +132,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'created_at' },
             { data: 'user' },
             { data: 'voucher' },
+            { data: 'voucher' },
             // { data: 'voucher' },
             // { data: 'secret_code' },
             { data: 'status' },
@@ -168,13 +175,6 @@ var statusMapper = @json( $data['status'] ),
                 },
             },
             {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
-                width: '10%',
-                render: function( data, type, row, meta ) {
-                    return data.title ? data.title : '-' ;
-                },
-            },
-            {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "parent_voucher" ) }}' ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
@@ -189,10 +189,25 @@ var statusMapper = @json( $data['status'] ),
                 },
             },
             {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "secret_code" ) }}' ),
+                targets: parseInt('{{ Helper::columnIndex( $columns, "title" ) }}'),
                 width: '10%',
-                render: function( data, type, row, meta ) {
-                    return data ? data : '-' ;
+                render: function(data, type, row, meta) {
+                    const encryptedId = row.voucher?.encrypted_id || row.encrypted_id;
+                    const display = data.title ? data.title : '-';
+                    if (!encryptedId) return display;
+
+                    return `<a href="{{ route( 'admin.voucher.edit' ) }}?id=${encryptedId}">${display}</a>`;
+                },
+            },
+            {
+                targets: parseInt('{{ Helper::columnIndex( $columns, "promo_code" ) }}'),
+                width: '10%',
+                render: function(data, type, row, meta) {
+                    const encryptedId = row.voucher?.encrypted_id || row.encrypted_id;
+                    const display = data.promo_code ? data.promo_code : '-';
+                    if (!encryptedId) return display;
+
+                    return `<a href="{{ route( 'admin.voucher.edit' ) }}?id=${encryptedId}">${display}</a>`;
                 },
             },
             {
@@ -239,7 +254,7 @@ var statusMapper = @json( $data['status'] ),
                             <a class="dropdown-toggle btn btn-icon btn-trigger" href="#" type="button" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
-                                    `+edit+`
+                                    
                                     `+status+`
                                 </ul>
                             </div>

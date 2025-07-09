@@ -50,12 +50,12 @@ $columns = [
         'id' => 'last_name',
         'title' => __( 'user.last_name' ),
     ],
-    [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.username' ) ] ),
-        'id' => 'username',
-        'title' => __( 'user.username' ),
-    ],
+    // [
+    //     'type' => 'input',
+    //     'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.username' ) ] ),
+    //     'id' => 'username',
+    //     'title' => __( 'user.username' ),
+    // ],
     [
         'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.email' ) ] ),
@@ -124,7 +124,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'created_at' },
             { data: 'first_name' },
             { data: 'last_name' },
-            { data: 'username' },
+            // { data: 'username' },
             { data: 'email' },
             { data: 'phone_number' },
             { data: 'status' },
@@ -185,20 +185,20 @@ var statusMapper = @json( $data['status'] ),
                     return data ? data : '-' ;
                 },
             },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "fullname" ) }}' ),
+            // {
+            //     targets: parseInt( '{{ Helper::columnIndex( $columns, "fullname" ) }}' ),
                 
-                render: function( data, type, row, meta ) {
-                    return data ? data : '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "username" ) }}' ),
+            //     render: function( data, type, row, meta ) {
+            //         return data ? data : '-' ;
+            //     },
+            // },
+            // {
+            //     targets: parseInt( '{{ Helper::columnIndex( $columns, "username" ) }}' ),
                 
-                render: function( data, type, row, meta ) {
-                    return data ? data : '-' ;
-                },
-            },
+            //     render: function( data, type, row, meta ) {
+            //         return data ? data : '-' ;
+            //     },
+            // },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "feedback_email" ) }}' ),
                 

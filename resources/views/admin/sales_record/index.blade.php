@@ -323,7 +323,33 @@ var statusMapper = @json( $data['status'] ),
                             dt_table.draw(false);
                         }
                     }
+                },
+                error: function( file, response ) {
+                    console.log('Dropzone error response:', response);
+
+                    $('body').loading('stop');
+
+                    let message = 'An unexpected error occurred.';
+
+                    try {
+                        if (typeof response === 'string') {
+                            // Laravel might return an HTML string (500 error page)
+                            message = response;
+                        } else if (typeof response === 'object') {
+                            if (response.errors && Array.isArray(response.errors)) {
+                                message = response.errors.join('<br>');
+                            } else if (response.message) {
+                                message = response.message;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('Failed to parse Dropzone error response:', e);
+                    }
+
+                    $('#modal_danger .caption-text').html(message);
+                    modalDanger.toggle();
                 }
+
             });
         }
 

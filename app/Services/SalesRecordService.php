@@ -316,59 +316,73 @@ class SalesRecordService
     }
     
     public static function importSalesRecords( $request ) {
-
         $validator = Validator::make( $request->all(), [
             'file' => [ 'required', 'mimes:xlsx,xlsm' ],
         ] );
-
+    
         $attributeName = [
             'file' => __( 'phone_number.file' ),
         ];
-
+    
         foreach ( $attributeName as $key => $aName ) {
             $attributeName[$key] = strtolower( $aName );
         }
-
+    
         $validator->setAttributeNames( $attributeName )->validate();
-
+    
         $file = $request->file( 'file' );
         $path = $file->store( 'imports', [ 'disk' => 'public' ] );
-
+    
         $newPath = $path;
         if ( $file->getClientOriginalExtension() == 'xlsm' ) {
             $newPath = str_replace( '.xlsx', '.xlsm', $path );
             Storage::disk( 'public' )->move( $path, $newPath );
         }
+    
+        $lines = ( new FastExcel )->import( $file );
+    
+        $errors = [];
+        $referencesToInsert = [];
+        $rowNumber = 1;
 
-        ( new FastExcel )->import( $file, function ( $line ) {
+        // First Pass: Validate all rows
+        foreach ( $lines as $line ) {
             $reference = $line['reference'] ?? null;
-        
-            if ( $reference && !SalesRecord::where( 'reference', $reference )->exists() ) {
-                SalesRecord::create([
+    
+            if ( ! $reference ) {
+                $errors[] = "Row {$rowNumber}: Reference is missing.";
+            } elseif ( SalesRecord::where( 'reference', $reference )->exists() ) {
+                $errors[] = "Row {$rowNumber}: Reference '{$reference}' already exists.";
+            } else {
+                $referencesToInsert[] = [
                     'customer_name' => strtolower( trim( $line['customer_name'] ?? '' ) ) ?: null,
                     'reference'     => $reference,
                     'total_price'   => $line['total_price'] ?? null,
-                ]);
+                ];
             }
-        });
-
-        $errors = [];
-
-        if ( empty( $errors ) ) {
-         
-            return response()->json( [
-                'status' => 200,
-                'message' => __( 'template.x_imported', [ 'title' => Str::singular( __( 'template.phone_numbers' ) ) ] ),
-            ] );
-        } else {
-
-            return response()->json( [
-                'message' => __( 'template.x_partial_imported', [ 'title' => Str::singular( __( 'template.phone_numbers' ) ) ] ),
-                'errors' => $errors,
-            ] );
+    
+            $rowNumber++;
         }
-    }
 
+        // Stop if any errors
+        if ( !empty( $errors ) ) {
+            return response()->json([
+                'status'  => 422,
+                'message' => 'Duplicate references found.',
+                'errors'  => $errors,
+            ], 422);
+        }
+    
+        // Second Pass: Insert all valid rows
+        SalesRecord::insert( $referencesToInsert );
+    
+        return response()->json([
+            'status'  => 200,
+            'message' => __( 'template.x_imported', [ 'title' => Str::singular( __( 'template.phone_numbers' ) ) ] ),
+        ]);
+    }
+    
+    
     public static function getPoints( $request ) {
         
         $wallet = Wallet::where( 'user_id', auth()->user()->id )->first();

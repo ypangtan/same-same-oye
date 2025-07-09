@@ -23,6 +23,7 @@ return [
     'phone_number' => 'Phone Number',
     'email' => 'Email',
     'address' => 'Address',
+    'date_of_birth' => 'Date Of Birth',
     'address_1' => 'Address 1',
     'address_2' => 'Address 2',
     'postcode' => 'Postcode',

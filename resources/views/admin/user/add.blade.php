@@ -15,6 +15,13 @@ $user_create = 'user_create';
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
+                <div class="mb-3 row">
+                    <label for="{{ $user_create }}_date_of_birth" class="col-sm-5 col-form-label">{{ __( 'user.date_of_birth' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="date" class="form-control" id="{{ $user_create }}_date_of_birth">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 @if( 1 == 2 )
                 <div class="mb-3 row">
                     <label for="{{ $user_create }}_account_type" class="col-sm-5 col-form-label">{{ __( 'user.account_type' ) }}</label>
@@ -27,7 +34,6 @@ $user_create = 'user_create';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                @endif
                 <div class="mb-3 row">
                     <label for="{{ $user_create }}_username" class="col-sm-5 col-form-label">{{ __( 'user.username' ) }}</label>
                     <div class="col-sm-7">
@@ -35,6 +41,7 @@ $user_create = 'user_create';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                @endif
                 <div class="mb-3 row">
                     <label for="{{ $user_create }}_email" class="col-sm-5 col-form-label">{{ __( 'user.email' ) }}</label>
                     <div class="col-sm-7">
@@ -151,6 +158,14 @@ $user_create = 'user_create';
             window.location.href = '{{ route( 'admin.module_parent.user.index' ) }}';
         } );
 
+        let dateOfBirth = $( dc + '_date_of_birth' ).flatpickr( {
+            disableMobile: true,
+            onClose: function( selected, dateStr, instance ) {
+                window[$( instance.element ).data('id')] = $( instance.element ).val();
+                dt_table.draw();
+            }
+        } );
+
         $( dc + '_submit' ).click( function() {
 
             resetInputValidation();
@@ -160,7 +175,7 @@ $user_create = 'user_create';
             } );
 
             let formData = new FormData();
-            formData.append( 'username', $( dc + '_username' ).val() );
+            // formData.append( 'username', $( dc + '_username' ).val() );
             formData.append( 'email', $( dc + '_email' ).val() );
             formData.append( 'first_name', $( dc + '_first_name' ).val() );
             formData.append( 'last_name', $( dc + '_last_name' ).val() );
@@ -172,6 +187,7 @@ $user_create = 'user_create';
             formData.append( 'phone_number', $( dc + '_phone_number' ).val() );
             formData.append( 'calling_code', $( dc + '_calling_code' ).val() );
             formData.append( 'password', $( dc + '_password' ).val() );
+            formData.append( 'date_of_birth', $( dc + '_date_of_birth' ).val() );
             // formData.append( 'account_type', $( dc + '_account_type' ).val() );
             
             formData.append( '_token', '{{ csrf_token() }}' );
