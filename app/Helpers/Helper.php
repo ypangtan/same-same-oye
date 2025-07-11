@@ -441,7 +441,7 @@ class Helper {
                     $device->register_token
                 ],
                 'data' => [
-                    'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
                     'sound' => 'default',
                     'status' => 'done',
                     'key' => $message['key'],
