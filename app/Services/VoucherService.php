@@ -723,7 +723,6 @@ class VoucherService
                 })
                 ->whereIn( 'type', [1, 2] )
                 ->whereDoesntHave( 'announcement' )
-                ->whereDoesntHave( 'challenge' )
                 ->orderBy( 'created_at', 'DESC' );
         
             if ( $request->promo_code ) {
