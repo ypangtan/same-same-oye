@@ -1229,7 +1229,7 @@ class UserService
                 'updated_at',
             ] );
 
-            $user->profile_picture = $user->profile_picture_path;
+            $user->profile_picture = $user->profile_picture_path_new;
             $user->profile_picture_path = $user->profile_picture_path_new;
 
             $user->points = $user->wallets->first()->balance;
@@ -1300,7 +1300,7 @@ class UserService
 
         $updateUser->save();
 
-        $updateUser->profile_picture = $updateUser->profile_picture_path;
+        $updateUser->profile_picture = $updateUser->profile_picture_path_new;
         $updateUser->profile_picture_path = $updateUser->profile_picture_path_new;
 
         return response()->json( [
