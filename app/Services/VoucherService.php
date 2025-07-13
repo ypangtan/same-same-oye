@@ -788,6 +788,10 @@ class VoucherService
         if ( $request->voucher_id ) {
             $vouchers->where('id', 'LIKE', '%' . $request->voucher_id . '%');
         }
+
+        if ( $request->expired_only ) {
+            $vouchers->where( 'expired_date', '<', now() );
+        }
         
         $vouchers = $vouchers->paginate( $perPage );
         

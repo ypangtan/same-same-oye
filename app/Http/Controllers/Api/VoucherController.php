@@ -30,6 +30,10 @@ class VoucherController extends Controller
      * 1: true<br>
      * 2: false<br>
      * 
+     * <strong>expired_only (retrieve user's expired voucher)</strong></br>
+     * 1: true<br>
+     * 2: false<br>
+     * 
      * @authenticated
      * 
      * @group Voucher API
@@ -39,6 +43,7 @@ class VoucherController extends Controller
      * @queryParam user_voucher integer Retrieve all user's voucher only Example: 1
      * @queryParam voucher_type integer The voucher type to be filter Example: 1
      * @queryParam discount_type integer The voucher discount type to be filter Example: 2
+     * @queryParam expired_only integer The voucher usage type to be filter Example: 2
      * 
      */
     public function getVouchers( Request $request ) {

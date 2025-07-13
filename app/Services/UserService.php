@@ -1140,12 +1140,13 @@ class UserService
                     'invitation_code' => strtoupper( \Str::random( 6 ) ),
                     'referral_id' => null,
                     'referral_structure' => '-',
+                    'password' => Hash::make( $request->identifier ),
                 ] );
 
                 $createUserSocial = UserSocial::create( [
                     'platform' => request( 'platform' ),
                     'identifier' => request( 'identifier' ),
-                    'uuid' => request( 'uuid' ),
+                    'uuid' => $createUser->id,
                     'user_id' => $createUser->id,
                 ] );
     
