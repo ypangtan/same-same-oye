@@ -49,6 +49,7 @@ class User extends Model
         'first_name',
         'last_name',
         'is_social_account',
+        'platform',
     ];
 
     public function wallets()
@@ -113,6 +114,7 @@ class User extends Model
         'first_name',
         'last_name',
         'is_social_account',
+        'platform',
     ];
 
     protected static $logName = 'users';

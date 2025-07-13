@@ -1149,6 +1149,52 @@ class UserService
                     'uuid' => $createUser->id,
                     'user_id' => $createUser->id,
                 ] );
+
+                $userWallet = Wallet::create( [
+                    'user_id' => $createUser->id,
+                    'type' => 1,
+                    'balance' => 0,
+                ] );
+
+                if ( $registerBonus ) {
+                    WalletService::transact( $userWallet, [
+                        'amount' => $registerBonus->option_value,
+                        'remark' => 'Register Bonus',
+                        'type' => $userWallet->type,
+                        'transaction_type' => 20,
+                    ] );
+                }
+    
+                // assign referral bonus
+                $referralBonus = Option::getReferralBonusSettings();
+                $referral = User::where( 'invitation_code', $request->invitation_code )->first();
+
+                if( $referral && $registerBonus){
+    
+                    $referralWallet = $referral->wallets->where('type',1)->first();
+    
+                    if( $referralWallet ) {
+                        WalletService::transact( $referralWallet, [
+                            'amount' => $referralBonus->option_value,
+                            'remark' => 'Register Bonus',
+                            'type' => $referralWallet->type,
+                            'transaction_type' => 22,
+                        ] );
+                    }
+                }
+
+                self::createUserNotification(
+                    $createUser->id,
+                    'notification.register_success',
+                    'notification.register_success_content',
+                    'register',
+                    'home'
+                );
+    
+                // Register OneSignal
+                if ( !empty( $request->register_token ) ) {
+                    self::registerOneSignal( $user->id, $request->device_type, $request->register_token );
+                }
     
                 return $createUserSocial;
     
