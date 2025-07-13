@@ -1195,7 +1195,7 @@ class UserService
     
                 // Register OneSignal
                 if ( !empty( $request->register_token ) ) {
-                    self::registerOneSignal( $user->id, $request->device_type, $request->register_token );
+                    self::registerOneSignal( $createUser->id, $request->device_type, $request->register_token );
                 }
     
                 return $createUserSocial;
