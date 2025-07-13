@@ -1156,6 +1156,8 @@ class UserService
                     'balance' => 0,
                 ] );
 
+                $registerBonus = Option::getRegisterBonusSettings();
+
                 if ( $registerBonus ) {
                     WalletService::transact( $userWallet, [
                         'amount' => $registerBonus->option_value,
@@ -1228,7 +1230,7 @@ class UserService
             ] );
 
             $user->profile_picture = $user->profile_picture_path;
-            $user->profile_picture_path = $user->profile_picture_path;
+            $user->profile_picture_path = $user->profile_picture_path_new;
 
             $user->points = $user->wallets->first()->balance;
             unset($user->wallets);
@@ -1298,7 +1300,8 @@ class UserService
 
         $updateUser->save();
 
-        $updateUser->append( ['profile_picture_path'] );
+        $updateUser->profile_picture = $updateUser->profile_picture_path;
+        $updateUser->profile_picture_path = $updateUser->profile_picture_path_new;
 
         return response()->json( [
             'message' => __( 'user.user_updated' ),
