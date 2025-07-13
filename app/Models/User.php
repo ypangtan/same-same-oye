@@ -48,6 +48,7 @@ class User extends Model
         'profile_picture',
         'first_name',
         'last_name',
+        'is_social_account',
     ];
 
     public function wallets()
@@ -111,6 +112,7 @@ class User extends Model
         'profile_picture',
         'first_name',
         'last_name',
+        'is_social_account',
     ];
 
     protected static $logName = 'users';

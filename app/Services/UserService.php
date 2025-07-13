@@ -1113,7 +1113,7 @@ class UserService
             'identifier' => [ 'required', function( $attributes, $value, $fail ) {
                 $user = User::where( 'email', $value )->where( 'is_social_account', 0 )->first();
                 if ( $user ) {
-                    $fail( __( 'api.email_is_taken_not_social' ) );
+                    $fail( __( 'Email has been Registered' ) );
                 }
                 $userSocial = UserSocial::where( 'identifier', $value )->first();
                 if ( $userSocial ) {
