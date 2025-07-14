@@ -359,6 +359,7 @@ class SalesRecordService
                     'reference'     => $reference,
                     'total_price'   => $line['total_price'] ?? null,
                     'created_at'   => now(),
+                    'updated_at'   => now(),
                 ];
             }
     
