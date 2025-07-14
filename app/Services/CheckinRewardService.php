@@ -117,7 +117,7 @@ class CheckinRewardService
             $updateCheckinReward->reward_type = $request->reward_type;
             $updateCheckinReward->reward_value = $request->reward_value;
             $updateCheckinReward->validity_days = $request->validity_days;
-            $updateCheckinReward->voucher_id = $request->voucher_id;
+            $updateCheckinReward->voucher_id = $request->voucher;
             $updateCheckinReward->save();
 
             DB::commit();

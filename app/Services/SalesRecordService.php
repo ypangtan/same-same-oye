@@ -355,9 +355,10 @@ class SalesRecordService
                 $errors[] = "Row {$rowNumber}: Reference '{$reference}' already exists.";
             } else {
                 $referencesToInsert[] = [
-                    'customer_name' => strtolower( trim( $line['customer_name'] ?? '' ) ) ?: null,
+                    'customer_name' => $line['customer_name'] ?? null,
                     'reference'     => $reference,
                     'total_price'   => $line['total_price'] ?? null,
+                    'created_at'   => now(),
                 ];
             }
     

@@ -722,6 +722,7 @@ class VoucherService
                     });
                 })
                 ->whereIn( 'type', [1, 2] )
+                ->where( 'total_claimable', '>', 0 )
                 ->whereDoesntHave( 'announcement' )
                 ->orderBy( 'created_at', 'DESC' );
         

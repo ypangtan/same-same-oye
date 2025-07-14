@@ -210,7 +210,7 @@ $announcementTypes = $data['voucher_type'];
                     </div>
                 </section>
 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_edit }}_new_user_only" class="col-sm-5 col-form-label">{{ __( 'announcement.new_user_only' ) }}</label>
                     <div class="col-sm-7 d-flex align-items-center">
                         <div class="form-check form-switch">
@@ -219,7 +219,7 @@ $announcementTypes = $data['voucher_type'];
                     </div>
                 </div>
 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $announcement_edit }}_view_once" class="col-sm-5 col-form-label">{{ __( 'announcement.view_once' ) }}</label>
                     <div class="col-sm-7 d-flex align-items-center">
                         <div class="form-check form-switch">
