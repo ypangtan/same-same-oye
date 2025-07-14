@@ -741,6 +741,10 @@ class VoucherService
             if ( $request->discount_type ) {
                 $vouchers->where( 'discount_type', $request->discount_type );
             }
+            if ( $request->expired_only ) {
+                $vouchers->whereNotNull( 'expired_date' )
+                         ->where( 'expired_date', '<', now()->startOfDay() );
+            }
         
             $vouchers = $vouchers->paginate( $perPage );
         
