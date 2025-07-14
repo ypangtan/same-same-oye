@@ -409,24 +409,33 @@ class SalesRecordService
 
         $validator = Validator::make( $request->all(), [
             'reference' => [
-                    'required',
-                    function ( $attribute, $value, $fail ) use ( $request ) {
+                'required',
+                function ( $attribute, $value, $fail ) use ( $request ) {
 
-                        $normalizedName = strtolower( trim( $request->customer_name ) );
+                    $normalizedName = strtolower( trim( $request->customer_name ) );
 
-                        $exists = SalesRecord::where( 'reference', $value )
-                            ->where( 'total_price', $request->amount )
-                            ->where( 'status', 10 )
-                            ->whereRaw( 'LOWER(TRIM(customer_name)) = ?', [ $normalizedName ] )
-                            ->orWhereRaw( 'LOWER(TRIM(facebook_name)) = ?', [ $normalizedName ] )
-                            ->first();
+                    $exists = SalesRecord::where( 'reference', $value )
+                        ->where( 'total_price', $request->amount )
+                        ->where( 'status', 10 )
+                        ->where( 'customer_name', $request->customer_name )
+                        ->orWhere( 'facebook_name', $request->customer_name )
+                        ->first();
 
-                        if ( ! $exists ) {
-                            $fail( __( 'Please double-check your information.' ) );
-                        }
-                    },
+                    if ( !$exists ) {
+                        $fail( __( 'Please double-check your information.' ) );
+                    }
+                },
             ],
-            'customer_name' => [ 'required', 'string' ],
+            'customer_name' => [ 'required', 'string',
+                function ( $attribute, $value, $fail ) use ( $request ) {
+
+                    $user = auth()->user();
+
+                    if ( !$user->email && !$user->phone_number ) {
+                        $fail( __( 'Please update your profile' ) );
+                    }
+                }, 
+            ],
             'amount' => [ 'required', 'numeric', 'min:1' ],
         ] );
 
@@ -453,8 +462,8 @@ class SalesRecordService
             $salesRecord = SalesRecord::where( 'reference', $request->reference )
             ->where( 'total_price', $request->amount )
             ->where( 'status', 10 )
-            ->whereRaw( 'LOWER(TRIM(customer_name)) = ?', [ $normalizedName ] )
-            ->orWhereRaw( 'LOWER(TRIM(facebook_name)) = ?', [ $normalizedName ] )
+            ->where( 'customer_name', $request->customer_name )
+            ->orWhere( 'facebook_name', $request->customer_name )
             ->first();
 
             $wallet = Wallet::lockForUpdate()->where( 'user_id', $user->id )->first();

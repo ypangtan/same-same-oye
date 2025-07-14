@@ -66,4 +66,5 @@ return [
     'invitation_code' => 'Invitation Code',
     'referral' => 'Referral',
     'referral_structure' => 'Referral Structure',
+    'registered_social' => 'Phone number registered to social account',
 ];

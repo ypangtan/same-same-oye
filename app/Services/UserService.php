@@ -1068,6 +1068,13 @@ class UserService
                     $fail( __( 'user.account_suspended' ) );
                     return 0;
                 }
+
+                if( $user->is_social_account == 1 ) {
+                    $fail( __( 'user.registered_social' ) );
+                    return 0;
+                }
+
+
             } ],
         ] );
 
@@ -1133,7 +1140,7 @@ class UserService
             try {
                 $createUser = User::create( [
                     'username' => null,
-                    'email' => $request->identifier,
+                    'email' => null,
                     'country_id' => 136,
                     'phone_number' => null,
                     'is_social_account' => 1,
@@ -1260,6 +1267,7 @@ class UserService
             'first_name' => [ 'nullable' ],
             'last_name' => [ 'nullable' ],
             'email' => [ 'nullable', 'unique:users,email,' . auth()->user()->id, ],
+            'phone_number' => [ 'nullable', 'unique:users,phone_number,' . auth()->user()->id, ],
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
             'profile_picture' => [ 'nullable', 'file', 'mimes:jpg,png' ],
@@ -1269,6 +1277,9 @@ class UserService
             'username' => __( 'user.username' ),
             'date_of_birth' => __( 'user.date_of_birth' ),
             'email' => __( 'user.email' ),
+            'first_name' => __( 'user.first_name' ),
+            'last_name' => __( 'user.last_name' ),
+            'phone_number' => __( 'user.phone_number' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -1276,6 +1287,34 @@ class UserService
         }
 
         $validator->setAttributeNames( $attributeName )->validate();
+
+        // custom validation
+        $user = auth()->user(); // or the model you're updating
+        $input = $request->all();
+
+        $rules = [
+            'email' => [ 'nullable', 'email', Rule::unique('users')->ignore($user->id) ],
+            'phone_number' => [ 'nullable' ],
+        ];
+
+        // CASE 1: Has phone, no email
+        if ( $user->phone_number && !$user->email ) {
+            // Disallow phone change
+            $rules['phone_number'][] = function( $attribute, $value, $fail ) use ( $user ) {
+                if ( $value !== $user->phone_number ) {
+                    $fail( __( 'Please contact admin for phone number update.' ) );
+                }
+            };
+        }
+
+        // CASE 2: Has email, no phone
+        if ( !$user->phone_number && $user->email ) {
+            // Allow phone to be added once only, must be unique
+            $rules['phone_number'][] = 'required';
+            $rules['phone_number'][] = Rule::unique('users');
+        }
+
+        $validated = Validator::make($input, $rules)->validate();
 
         $updateUser = User::find( auth()->user()->id );
         $updateUser->username = $request->username;
