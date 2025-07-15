@@ -84,6 +84,7 @@ class UserController extends Controller {
      * 
      * @bodyParam identifier string required The email for social login. Example: ifei@mail.com
      * @bodyParam platform interger required The platform for login. Example: 1
+     * @bodyParam email string optional The email for user social login. Example: ifei@mail.com
      * @bodyParam device_type interger required The device_type for login. Example: 3
      * 
      */

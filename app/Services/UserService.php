@@ -1129,6 +1129,12 @@ class UserService
                     }
                 }
             } ],
+            'identifier' => [ 'sometimes', function( $attributes, $value, $fail ) {
+                $user = User::where( 'email', $value )->where( 'is_social_account', 0 )->first();
+                if ( $user ) {
+                    $fail( __( 'Email has been Registered' ) );
+                }
+            } ],
             'platform' => 'required|in:1,2,3',
             'device_type' => 'required|in:1,2,3',
         ] );
@@ -1140,7 +1146,7 @@ class UserService
             try {
                 $createUser = User::create( [
                     'username' => null,
-                    'email' => null,
+                    'email' => $request->email,
                     'country_id' => 136,
                     'phone_number' => null,
                     'is_social_account' => 1,
