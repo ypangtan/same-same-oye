@@ -1125,7 +1125,7 @@ class UserService
                 $userSocial = UserSocial::where( 'identifier', $value )->first();
                 if ( $userSocial ) {
                     if ( $userSocial->platform != request( 'platform' ) ) {
-                        $fail( __( 'api.email_is_taken_different_platform' ) );
+                        $fail( __( 'Email has been registered in other platform' ) );
                     }
                 }
             } ],

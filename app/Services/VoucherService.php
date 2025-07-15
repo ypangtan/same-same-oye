@@ -771,70 +771,70 @@ class VoucherService
             });
         
             // Sort collection: unclaimed first, claimed later
-            $sorted = $vouchers->getCollection()->sortBy(function($voucher) {
-                return $voucher->redeemable === false ? 1 : 0;
+            $sorted = $vouchers->getCollection()->filter(function($voucher) {
+                return $voucher->redeemable === true;
             });
         
             // Replace collection with sorted one but keep pagination metadata
             $vouchers->setCollection($sorted->values());
         
         }
-         else {
+        else {
+            
             $vouchers = UserVoucher::with(['voucher'])
             ->where('user_id', $userId)
             ->orderBy('created_at', 'DESC');
         
-        if ( $request->promo_code ) {
-            $vouchers->whereHas('voucher', function ($query) use ($request) {
-                $query->where('promo_code', 'LIKE', '%' . $request->promo_code . '%');
-            });
-        }
-        
-        if ( $request->voucher_id ) {
-            $vouchers->where('id', 'LIKE', '%' . $request->voucher_id . '%');
-        }
+            if ( $request->promo_code ) {
+                $vouchers->whereHas('voucher', function ($query) use ($request) {
+                    $query->where('promo_code', 'LIKE', '%' . $request->promo_code . '%');
+                });
+            }
+            
+            if ( $request->voucher_id ) {
+                $vouchers->where('id', 'LIKE', '%' . $request->voucher_id . '%');
+            }
 
-        if ( $request->expired_only ) {
-            $vouchers->where( 'expired_date', '<', now() );
-        }
-        
-        $vouchers = $vouchers->paginate( $perPage );
-        
-        $vouchers->getCollection()->transform(function ( $userVoucher ) use ( $claimedVoucherIds, $usedVoucherIds ) {
-            $voucher = $userVoucher->voucher;
-        
-            // Flatten selected voucher fields to top-level
-            $userVoucher->promo_code           = $voucher->promo_code;
-            $userVoucher->title                = $voucher->title;
-            $userVoucher->description          = $voucher->description;
-            $userVoucher->image                = $voucher->image_path;
-            $userVoucher->voucher_type_label   = $voucher->voucher_type_label;
-            $userVoucher->decoded_adjustment   = $voucher->decoded_adjustment;
-        
-            // Claimed/used info
-            $voucher->claimed       = in_array($voucher->id, $claimedVoucherIds) ? 'claimed' : 'unclaim';
-            $voucher->used          = in_array($voucher->id, $usedVoucherIds) ? 'used' : 'unused';
-            $voucher->claimed_count = collect($claimedVoucherIds)->filter(fn($id) => $id === $voucher->id)->count();
-            $voucher->used_count    = collect($usedVoucherIds)->filter(fn($id) => $id === $voucher->id)->count();
-            $voucher->redeemable    = $voucher->claimed_count <= ( $voucher->usable_amount ?? 1 );
-        
-            $voucher->append(['decoded_adjustment', 'image_path', 'voucher_type', 'voucher_type_label']);
-            $voucher->makeHidden([
-                'created_at',
-                'updated_at',
-                'type',
-                'status',
-                'min_spend',
-                'min_order',
-                'buy_x_get_y_adjustment',
-                'discount_amount',
-            ]);
-        
-            $userVoucher->append(['voucher_status_label']);
-        
-            return $userVoucher;
-        });
-        
+            if ( $request->expired_only ) {
+                $vouchers->where( 'expired_date', '<', now() );
+            }
+            
+            $vouchers = $vouchers->paginate( $perPage );
+            
+            $vouchers->getCollection()->transform(function ( $userVoucher ) use ( $claimedVoucherIds, $usedVoucherIds ) {
+                $voucher = $userVoucher->voucher;
+            
+                // Flatten selected voucher fields to top-level
+                $userVoucher->promo_code           = $voucher->promo_code;
+                $userVoucher->title                = $voucher->title;
+                $userVoucher->description          = $voucher->description;
+                $userVoucher->image                = $voucher->image_path;
+                $userVoucher->voucher_type_label   = $voucher->voucher_type_label;
+                $userVoucher->decoded_adjustment   = $voucher->decoded_adjustment;
+            
+                // Claimed/used info
+                $voucher->claimed       = in_array($voucher->id, $claimedVoucherIds) ? 'claimed' : 'unclaim';
+                $voucher->used          = in_array($voucher->id, $usedVoucherIds) ? 'used' : 'unused';
+                $voucher->claimed_count = collect($claimedVoucherIds)->filter(fn($id) => $id === $voucher->id)->count();
+                $voucher->used_count    = collect($usedVoucherIds)->filter(fn($id) => $id === $voucher->id)->count();
+                $voucher->redeemable    = $voucher->claimed_count <= ( $voucher->usable_amount ?? 1 );
+            
+                $voucher->append(['decoded_adjustment', 'image_path', 'voucher_type', 'voucher_type_label']);
+                $voucher->makeHidden([
+                    'created_at',
+                    'updated_at',
+                    'type',
+                    'status',
+                    'min_spend',
+                    'min_order',
+                    'buy_x_get_y_adjustment',
+                    'discount_amount',
+                ]);
+            
+                $userVoucher->append(['voucher_status_label']);
+            
+                return $userVoucher;
+            });
         
         }
     
