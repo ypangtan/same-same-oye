@@ -1129,7 +1129,7 @@ class UserService
                     }
                 }
             } ],
-            'identifier' => [ 'sometimes', function( $attributes, $value, $fail ) {
+            'email' => [ 'sometimes', function( $attributes, $value, $fail ) {
                 $user = User::where( 'email', $value )->where( 'is_social_account', 0 )->first();
                 if ( $user ) {
                     $fail( __( 'Email has been Registered' ) );
