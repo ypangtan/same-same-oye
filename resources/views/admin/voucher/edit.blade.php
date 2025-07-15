@@ -184,7 +184,7 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                 </div>
 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $voucher_edit}}_claim_per_user" class="col-sm-5 col-form-label">{{ __( 'voucher.claim_per_user' ) }}</label>
                     <div class="col-sm-7">
                         <input type="number" class="form-control" id="{{ $voucher_edit}}_claim_per_user">

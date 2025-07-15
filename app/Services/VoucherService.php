@@ -124,7 +124,7 @@ class VoucherService
                 'buy_x_get_y_adjustment' => $request->adjustment_data,
                 'usable_amount' => $request->usable_amount,
                 'validity_days' => $request->validity_days,
-                'claim_per_user' => $request->claim_per_user,
+                'claim_per_user' => $request->usable_amount,
             ]);
 
             $image = explode( ',', $request->image );
@@ -261,7 +261,7 @@ class VoucherService
             $updateVoucher->expired_date = $request->expired_date;
             $updateVoucher->usable_amount = $request->usable_amount;
             $updateVoucher->validity_days = $request->validity_days;
-            $updateVoucher->claim_per_user = $request->claim_per_user;
+            $updateVoucher->claim_per_user = $request->usable_amount;
             $updateVoucher->buy_x_get_y_adjustment = $request->adjustment_data;
             
             $image = explode( ',', $request->image );

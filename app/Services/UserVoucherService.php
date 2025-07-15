@@ -309,6 +309,10 @@ class UserVoucherService
             $updateUserVoucher = UserVoucher::find( $request->id );
             $updateUserVoucher->status = $updateUserVoucher->status == 10 ? 20 : 10;
 
+            if( $updateUserVoucher->status == 20 ){
+                $updateUserVoucher->used_at = now();
+            }
+
             $updateUserVoucher->save();
             DB::commit();
 
