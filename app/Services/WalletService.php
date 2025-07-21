@@ -62,13 +62,27 @@ class WalletService
 
         $filter = false;
 
-        if ( !empty( $request->user ) ) {
-            $model->where( 'users.phone_number', 'LIKE', "%$request->user%" );
-            $filter = true;
-        }
+        // if ( !empty( $request->user ) ) {
+        //     $model->where( 'users.phone_number', 'LIKE', "%$request->user%" );
+        //     $filter = true;
+        // }
 
         if ( !empty( $request->wallet ) ) {
             $model->where( 'wallets.type', $request->wallet );
+            $filter = true;
+        }
+        
+        if ( !empty( $request->user ) ) {
+            $userInput = $request->user;
+        
+            $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $userInput );
+        
+            $model->where( function ( $query ) use ( $userInput ) {
+                $query->where( 'users.email', 'LIKE', '%' . $userInput . '%' )
+                      ->orWhere( 'users.first_name', 'LIKE', '%' . $userInput . '%' )
+                      ->orWhere( 'users.last_name', 'LIKE', '%' . $userInput . '%' );
+            } );
+        
             $filter = true;
         }
 
@@ -300,7 +314,7 @@ class WalletService
             $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $userInput );
         
             $model->where(function ( $query ) use ( $normalizedPhone, $userInput ) {
-                $query->where( 'users.phone_number', 'LIKE', "%$normalizedPhone%" )
+                $query->where( 'users.email', 'LIKE', "%$normalizedPhone%" )
                     ->orWhereRaw( "CONCAT(users.first_name, ' ', users.last_name) LIKE ?", [ "%$userInput%" ] )
                     ->orWhere( 'users.first_name', 'LIKE', "%$userInput%" )
                     ->orWhere( 'users.last_name', 'LIKE', "%$userInput%" );

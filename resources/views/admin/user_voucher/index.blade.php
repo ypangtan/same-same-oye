@@ -171,7 +171,7 @@ var statusMapper = @json( $data['status'] ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
                     // return data.username ?? '-' + '<br>' + '+60' + data.phone_number;
-                    return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + '+60' + data.phone_number;
+                    return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + ( data.last_name ?? '-' );
                 },
             },
             {

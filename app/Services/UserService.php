@@ -155,6 +155,20 @@ class UserService
             $filter = true;
         }
 
+        if ( !empty( $request->user ) ) {
+            $userInput = $request->user;
+        
+            $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $userInput );
+        
+            $model->where( function ( $query ) use ( $userInput ) {
+                $query->where( 'users.email', 'LIKE', '%' . $userInput . '%' )
+                      ->orWhere( 'users.first_name', 'LIKE', '%' . $userInput . '%' )
+                      ->orWhere( 'users.last_name', 'LIKE', '%' . $userInput . '%' );
+            } );
+        
+            $filter = true;
+        }
+
         if ( !empty( $request->title ) ) {
             $model->where( 'phone_number', 'LIKE', '%' . $request->title . '%' );
             $filter = true;
@@ -1301,6 +1315,7 @@ class UserService
         $rules = [
             'email' => [ 'nullable', 'email', Rule::unique('users')->ignore($user->id) ],
             'phone_number' => [ 'nullable' ],
+            'date_of_birth' => [ 'nullable', 'date'],
         ];
 
         // CASE 1: Has phone, no email
@@ -1309,6 +1324,15 @@ class UserService
             $rules['phone_number'][] = function( $attribute, $value, $fail ) use ( $user ) {
                 if ( $value !== $user->phone_number ) {
                     $fail( __( 'Please contact admin for phone number update.' ) );
+                }
+            };
+        }
+
+        if ( $user->date_of_birth ) {
+            // Disallow phone change
+            $rules['date_of_birth'][] = function( $attribute, $value, $fail ) use ( $user ) {
+                if ( $value !== $user->date_of_birth ) {
+                    $fail( __( 'Please contact admin for Birthday update.' ) );
                 }
             };
         }
@@ -1326,6 +1350,7 @@ class UserService
         $updateUser->username = $request->username;
         $updateUser->first_name = $request->first_name;
         $updateUser->last_name = $request->last_name;
+        $updateUser->phone_number = $request->phone_number;
         $updateUser->date_of_birth = $request->date_of_birth;
         $updateUser->email = $request->email;
 
