@@ -963,6 +963,8 @@ class UserService
             } ],
             'password' => [ 'required', 'confirmed', Password::min( 8 ) ],
             'invitation_code' => [ 'sometimes', 'exists:users,invitation_code' ],
+            'register_token' => [ 'nullable' ],
+            'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
 
         $attributeName = [
@@ -1120,6 +1122,8 @@ class UserService
 
 
             } ],
+            'register_token' => [ 'nullable' ],
+            'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
 
         $defaultCallingCode = "+60";
@@ -1151,12 +1155,10 @@ class UserService
     private static function registerOneSignal( $user_id, $device_type, $register_token ) {
 
         UserDevice::updateOrCreate(
-            [ 'user_id' => $user_id, 'device_type' => 1 ],
+            [ 'user_id' => $user_id, 'device_type' => $device_type ? $device_type : 1 ],
             [ 'register_token' => $register_token ]
         );
     }
-
-    
 
     public static function loginUserSocial( $request ) {
 
@@ -1180,7 +1182,8 @@ class UserService
                 }
             } ],
             'platform' => 'required|in:1,2,3',
-            'device_type' => 'required|in:1,2,3',
+            'register_token' => [ 'nullable' ],
+            'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
 
         $userSocial = UserSocial::where( 'identifier', $request->identifier )->firstOr( function() use ( $request )  {

@@ -44,8 +44,8 @@ class UserController extends Controller {
      * @bodyParam password string required The password for register. Example: abcd1234
      * @bodyParam password_confirmation string required The confirmation password. Example: abcd1234
      * @bodyParam invitation_code string The invitation code of referral. Example: AASSCC
-     * @bodyParam device_type integer optional The device type. Example: 1
-     * @bodyParam register_token string optional The device token to receive notification. Example: example_device_token
+     * @bodyParam device_type integer optional The device type required with register_token. Example: 1
+     * @bodyParam register_token string optional The device token to receive notification. Example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
      * 
      */
     public function registerUser( Request $request ) {
@@ -68,8 +68,8 @@ class UserController extends Controller {
      * @bodyParam phone_number string required The phone_number for login. Example: 0123982334
      * @bodyParam calling_code string required The calling_code for register. Example: +60
      * @bodyParam password string required The password for login. Example: abcd1234
-     * @bodyParam device_type integer optional The device type. Example: 1
-     * @bodyParam register_token string optional The device token to receive notification. Example: example_device_token
+     * @bodyParam device_type integer optional The device type required with register_token. Example: 1
+     * @bodyParam register_token string optional The device token to receive notification. Example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
      * 
      */
     public function loginUser( Request $request ) {
@@ -90,15 +90,14 @@ class UserController extends Controller {
      * <strong>device_type</strong><br>
      * 1: iOS<br>
      * 2: Android<br>
-     * 3: Web<br>
      * 
      * @group User API
      * 
      * @bodyParam identifier string required The email for social login. Example: ifei@mail.com
      * @bodyParam platform interger required The platform for login. Example: 1
      * @bodyParam email string optional The email for user social login. Example: ifei@mail.com
-     * @bodyParam device_type integer optional The device type. Example: 1
-     * @bodyParam register_token string optional The device token to receive notification. Example: example_device_token
+     * @bodyParam device_type integer optional The device type required with register_token. Example: 1
+     * @bodyParam register_token string optional The device token to receive notification. Example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
      * 
      */
     public function loginUserSocial( Request $request ) {

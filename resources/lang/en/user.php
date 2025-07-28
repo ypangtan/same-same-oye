@@ -73,4 +73,7 @@ return [
     'facebook' => 'Facebook',
     'apple_id' => 'Apple ID',
 
+    'register_token' => 'Register Token',
+    'device_type' => 'Device Type',
+
 ];
