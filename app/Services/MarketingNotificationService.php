@@ -25,14 +25,14 @@ class MarketingNotificationService {
 
     public static function allAnnouncements( $request ) {
 
-        $notification = UserNotification::with( ['UserNotificationUsers.user'] )
-        ->leftJoin('user_notification_users', 'user_notification_users.user_notification_id', '=', 'user_notifications.id')
-        ->leftJoin('users', 'users.id', '=', 'user_notification_users.user_id')
+        $notification = UserNotification::with( ['UserNotificationUsers.user.socialLogins'] )
+        // ->leftJoin('user_notification_users', 'user_notification_users.user_notification_id', '=', 'user_notifications.id')
+        // ->leftJoin('users', 'users.id', '=', 'user_notification_users.user_id')
         ->select('user_notifications.*');
-    
+        
         $notification->where('system_title', '<>', null);
         // $notification->has('UserNotificationUsers', '!=', 0);
-
+        // dd($notification->count());
         $filterObject = self::filter( $request, $notification );
         $notification = $filterObject['model'];
         $filter = $filterObject['filter'];
@@ -124,7 +124,7 @@ class MarketingNotificationService {
             $userInput = $request->user;
             $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $userInput );
         
-            $model->where( function ( $query ) use ( $normalizedPhone, $userInput ) {
+            $model->whereHas( 'UserNotificationUsers.user', function ( $query ) use ( $normalizedPhone, $userInput ) {
                 $query->where( 'users.phone_number', 'LIKE', "%$normalizedPhone%" )
                       ->orWhere( 'users.email', 'LIKE', "%$userInput%" );
             } );

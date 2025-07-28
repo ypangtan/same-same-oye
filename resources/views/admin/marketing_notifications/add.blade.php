@@ -217,7 +217,7 @@ window.cke_element1 = 'announcement_create_content';
                     data.users.map( function( v, i ) {
                         processedResult.push( {
                             id: v.encrypted_id,
-                            text: ( v.calling_code ?? '+60' ) + v.phone_number + ' (' + v.email ?? '-' + ')',
+                            text: ( v.calling_code ? v.calling_code : '+60' ) + ( v.phone_number ? v.phone_number : '-' ) + ' (' + ( v.email ? v.email : '-' ) + ')',
                         } );
                     } );
 

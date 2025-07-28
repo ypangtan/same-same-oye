@@ -157,7 +157,7 @@ $columns = [
                             if (users.length > 1) {
                                 return 'Specific User';
                             } else if (users.length === 1 && users[0].user) {
-                                return ( users[0].user.calling_code ?? '+60' ) + users[0].user.phone_number + ' (' + users[0].user.email + ')';
+                                return ( users[0].user.calling_code ?? '+60' ) + users[0].user.phone_number + ' (' + ( users[0].user.email ? users[0].user.email : '-' ) + ')';
                             } else {
                                 return 'Unknown User';
                             }
