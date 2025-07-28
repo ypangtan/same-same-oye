@@ -194,6 +194,15 @@
                                 </li>
                                 @endcan
 
+                                @can( 'view marketing_notifications' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MarketingAnnouncementController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.marketing_notifications.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.marketing_notifications' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
                                 @can( 'view Settings' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SettingController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.setting.index' ) }}" class="nk-menu-link">

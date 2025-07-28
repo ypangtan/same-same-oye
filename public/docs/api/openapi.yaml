@@ -117,13 +117,13 @@ paths:
                     -
                       id: 1
                       voucher_id: null
-                      title: tetea
-                      description: '<p>ssadsadasdasdada</p>'
+                      title: tetea5
+                      description: '<p>ssadsadasdasdada5</p>'
                       image: file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png
                       sequence: 1
                       status: 10
                       created_at: '2025-04-12 18:42:08'
-                      updated_at: '2025-04-12 18:42:17'
+                      updated_at: '2025-07-05 15:20:28'
                       image_path: 'http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png'
                     -
                       id: 2
@@ -149,13 +149,13 @@ paths:
                       -
                         id: 1
                         voucher_id: null
-                        title: tetea
-                        description: '<p>ssadsadasdasdada</p>'
+                        title: tetea5
+                        description: '<p>ssadsadasdasdada5</p>'
                         image: file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png
                         sequence: 1
                         status: 10
                         created_at: '2025-04-12 18:42:08'
-                        updated_at: '2025-04-12 18:42:17'
+                        updated_at: '2025-07-05 15:20:28'
                         image_path: 'http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png'
                       -
                         id: 2
@@ -204,13 +204,13 @@ paths:
                   data:
                     id: 1
                     voucher_id: null
-                    title: tetea
-                    description: '<p>ssadsadasdasdada</p>'
+                    title: tetea5
+                    description: '<p>ssadsadasdasdada5</p>'
                     image: file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png
                     sequence: 1
                     status: 10
                     created_at: '2025-04-12 18:42:08'
-                    updated_at: '2025-04-12 18:42:17'
+                    updated_at: '2025-07-05 15:20:28'
                     encrypted_id: ql
                     image_path: 'http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png'
                 properties:
@@ -225,13 +225,13 @@ paths:
                     example:
                       id: 1
                       voucher_id: null
-                      title: tetea
-                      description: '<p>ssadsadasdasdada</p>'
+                      title: tetea5
+                      description: '<p>ssadsadasdasdada5</p>'
                       image: file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png
                       sequence: 1
                       status: 10
                       created_at: '2025-04-12 18:42:08'
-                      updated_at: '2025-04-12 18:42:17'
+                      updated_at: '2025-07-05 15:20:28'
                       encrypted_id: ql
                       image_path: 'http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png'
       tags:
@@ -249,164 +249,6 @@ paths:
                   example: '1'
               required:
                 - id
-  /api/v1/points:
-    get:
-      summary: '1. Get Points'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - 'Points API'
-  /api/v1/points/redeem:
-    post:
-      summary: '2. Redeem Points'
-      description: '<aside class="notice">Get all announcement filtered, claim the promotion with claim voucher api</aside>'
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Points API'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                reference:
-                  type: required
-                  description: 'integer The referance of sales to be claim.'
-                  example: 1231ns-12
-                customer_name:
-                  type: nullable
-                  description: 'integer The name of customer to claim points.'
-                  example: James
-                amount:
-                  type: required
-                  description: 'float The id of amount of the sales.'
-                  example: '12.20'
-  /api/v1/points/history:
-    get:
-      summary: '3. Get redeem history'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - 'Points API'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                start_date:
-                  type: string
-                  description: 'optional redeemed time in Y-m-d'
-                  example: '2023-08-17'
-                end_date:
-                  type: string
-                  description: 'optional redeemed time in Y-m-d'
-                  example: '2023-08-17'
-  /api/v1/points/conversion-rate:
-    get:
-      summary: '4. Get conversion rate'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - 'Points API'
   /api/v1/checkin:
     get:
       summary: '1. Get Check-in History'
@@ -556,10 +398,183 @@ paths:
                 - phone_number
                 - message
       security: []
+  /api/v1/points:
+    get:
+      summary: '1. Get Points'
+      description: '<aside class="notice">Get user''s current points </aside>'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Points API'
+  /api/v1/points/redeem:
+    post:
+      summary: '2. Redeem Points'
+      description: '<aside class="notice">Redeem points with reference and amount</aside>'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Points API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reference:
+                  type: required
+                  description: 'integer The referance of sales to be claim.'
+                  example: 1231ns-12
+                amount:
+                  type: required
+                  description: 'float The id of amount of the sales.'
+                  example: '12.20'
+                customer_name:
+                  type: required
+                  description: 'float The name of the customer.'
+                  example: ali
+  /api/v1/points/history:
+    get:
+      summary: '3. Get redeem history'
+      description: '<aside class="notice">Get user''s points history </aside>'
+      parameters:
+        -
+          in: query
+          name: start_date
+          description: 'optional redeemed time in Y-m-d'
+          example: '2023-08-17'
+          required: false
+          schema:
+            type: string
+            description: 'optional redeemed time in Y-m-d'
+            example: '2023-08-17'
+        -
+          in: query
+          name: end_date
+          description: 'optional redeemed time in Y-m-d'
+          example: '2023-08-17'
+          required: false
+          schema:
+            type: string
+            description: 'optional redeemed time in Y-m-d'
+            example: '2023-08-17'
+        -
+          in: query
+          name: per_page
+          description: 'Show how many record in a page. Leave blank for default (100).'
+          example: 5
+          required: false
+          schema:
+            type: integer
+            description: 'Show how many record in a page. Leave blank for default (100).'
+            example: 5
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Points API'
+  /api/v1/points/conversion-rate:
+    get:
+      summary: '4. Get conversion rate'
+      description: '<aside class="notice">Get conversion rate, if any </aside>'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Points API'
   /api/v1/users:
     post:
       summary: '1. Create an user'
-      description: ''
+      description: "<strong>device_type</strong><br>\n1: iOS<br>\n2: Android<br>"
       parameters:
         -
           in: header
@@ -593,6 +608,10 @@ paths:
                   type: string
                   description: 'The phone_number for register.'
                   example: '0123982334'
+                calling_code:
+                  type: string
+                  description: 'The calling_code for register.'
+                  example: '+60'
                 otp_code:
                   type: string
                   description: 'The otp for register.'
@@ -609,9 +628,18 @@ paths:
                   type: string
                   description: 'The invitation code of referral.'
                   example: AASSCC
+                device_type:
+                  type: integer
+                  description: 'optional The device type.'
+                  example: 1
+                register_token:
+                  type: string
+                  description: 'optional The device token to receive notification.'
+                  example: example_device_token
               required:
                 - identifier
                 - phone_number
+                - calling_code
                 - otp_code
                 - password
                 - password_confirmation
@@ -652,7 +680,7 @@ paths:
   /api/v1/users/login:
     post:
       summary: '2. Login an user - Email'
-      description: ''
+      description: "<strong>device_type</strong><br>\n1: iOS<br>\n2: Android<br>"
       parameters:
         -
           in: header
@@ -682,12 +710,25 @@ paths:
                   type: string
                   description: 'The phone_number for login.'
                   example: '0123982334'
+                calling_code:
+                  type: string
+                  description: 'The calling_code for register.'
+                  example: '+60'
                 password:
                   type: string
                   description: 'The password for login.'
                   example: abcd1234
+                device_type:
+                  type: integer
+                  description: 'optional The device type.'
+                  example: 1
+                register_token:
+                  type: string
+                  description: 'optional The device token to receive notification.'
+                  example: example_device_token
               required:
                 - phone_number
+                - calling_code
                 - password
       security: []
   /api/v1/otp:
@@ -721,8 +762,12 @@ paths:
               properties:
                 phone_number:
                   type: string
-                  description: 'The phone_number for login.'
+                  description: 'The phone_number for register.'
                   example: '0123982334'
+                calling_code:
+                  type: string
+                  description: 'optional The calling for register. ( Default +60 )'
+                  example: '+60'
                 request_type:
                   type: integer
                   description: 'The request type for OTP.'
@@ -865,8 +910,13 @@ paths:
                   type: string
                   description: 'The phone_number for login.'
                   example: '0123982334'
+                calling_code:
+                  type: string
+                  description: 'The calling_code for register.'
+                  example: '+60'
               required:
                 - phone_number
+                - calling_code
       security: []
   /api/v1/users/delete-verification:
     post:
@@ -971,10 +1021,14 @@ paths:
                   type: string
                   description: 'The username to update.'
                   example: John
-                fullname:
+                first_name:
                   type: string
-                  description: 'The fullname to update.'
-                  example: 'John wick wick'
+                  description: 'The first_name to update.'
+                  example: wick
+                last_name:
+                  type: string
+                  description: 'The last_name to update.'
+                  example: John
                 email:
                   type: string
                   description: 'The email to update.'
@@ -1128,14 +1182,21 @@ paths:
                   type: interger
                   description: 'The platform for login.'
                   example: '1'
+                email:
+                  type: string
+                  description: 'optional The email for user social login.'
+                  example: ifei@mail.com
                 device_type:
-                  type: interger
-                  description: 'The device_type for login.'
-                  example: '3'
+                  type: integer
+                  description: 'optional The device type.'
+                  example: 1
+                register_token:
+                  type: string
+                  description: 'optional The device token to receive notification.'
+                  example: example_device_token
               required:
                 - identifier
                 - platform
-                - device_type
       security: []
   /api/v1/users/update-password:
     post:
@@ -1185,7 +1246,7 @@ paths:
   /api/v1/vouchers:
     get:
       summary: '1. Get vouchers'
-      description: "<aside class=\"notice\">Get all voucher that is claimable</aside>\n\n<strong>voucher discount type</strong></br>\n1: percentage<br>\n2: fixed amount<br>\n3: buy x free y<br>\n\n<strong>voucher type</strong></br>\n1: public voucher<br>\n2: points redeemable<br>\n3: register reward<br>\n\n<strong>user_voucher (retrieve user's voucher)</strong></br>\n1: true<br>\n2: false<br>"
+      description: "<aside class=\"notice\">Get all voucher that is claimable</aside>\n\n<strong>voucher discount type</strong></br>\n1: percentage<br>\n2: fixed amount<br>\n3: buy x free y<br>\n\n<strong>voucher type</strong></br>\n1: public voucher<br>\n2: points redeemable<br>\n3: register reward<br>\n\n<strong>user_voucher (retrieve user's voucher)</strong></br>\n1: true<br>\n2: false<br>\n\n<strong>expired_only (retrieve user's expired voucher)</strong></br>\n1: true<br>\n2: false<br>"
       parameters:
         -
           in: query
@@ -1236,6 +1297,16 @@ paths:
           schema:
             type: integer
             description: 'The voucher discount type to be filter'
+            example: 2
+        -
+          in: query
+          name: expired_only
+          description: 'The voucher usage type to be filter'
+          example: 2
+          required: false
+          schema:
+            type: integer
+            description: 'The voucher usage type to be filter'
             example: 2
         -
           in: header
@@ -1307,13 +1378,13 @@ tags:
     name: 'Banner API'
     description: ''
   -
-    name: 'Points API'
-    description: ''
-  -
     name: 'Check-in API'
     description: ''
   -
     name: 'Contact-Us API'
+    description: ''
+  -
+    name: 'Points API'
     description: ''
   -
     name: 'User API'

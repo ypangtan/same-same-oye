@@ -7,7 +7,7 @@ endpoints:
     uri: api/v1/points
     metadata:
       title: '1. Get Points'
-      description: ''
+      description: '<aside class="notice">Get user''s current points </aside>'
       authenticated: true
       custom: []
     headers:
@@ -32,7 +32,7 @@ endpoints:
     uri: api/v1/points/redeem
     metadata:
       title: '2. Redeem Points'
-      description: '<aside class="notice">Get all announcement filtered, claim the promotion with claim voucher api</aside>'
+      description: '<aside class="notice">Redeem points with reference and amount</aside>'
       authenticated: true
       custom: []
     headers:
@@ -48,18 +48,18 @@ endpoints:
         example: 1231ns-12
         type: required
         custom: []
-      customer_name:
-        name: customer_name
-        description: 'integer The name of customer to claim points.'
-        required: false
-        example: James
-        type: nullable
-        custom: []
       amount:
         name: amount
         description: 'float The id of amount of the sales.'
         required: false
         example: '12.20'
+        type: required
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'float The name of the customer.'
+        required: false
+        example: ali
         type: required
         custom: []
     responses: []
@@ -70,15 +70,14 @@ endpoints:
     uri: api/v1/points/history
     metadata:
       title: '3. Get redeem history'
-      description: ''
+      description: '<aside class="notice">Get user''s points history </aside>'
       authenticated: true
       custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
-    queryParameters: []
-    bodyParameters:
+    queryParameters:
       start_date:
         name: start_date
         description: 'optional redeemed time in Y-m-d'
@@ -93,6 +92,14 @@ endpoints:
         example: '2023-08-17'
         type: string
         custom: []
+      per_page:
+        name: per_page
+        description: 'Show how many record in a page. Leave blank for default (100).'
+        required: false
+        example: 5
+        type: integer
+        custom: []
+    bodyParameters: []
     responses:
       -
         status: 401
@@ -109,7 +116,7 @@ endpoints:
     uri: api/v1/points/conversion-rate
     metadata:
       title: '4. Get conversion rate'
-      description: ''
+      description: '<aside class="notice">Get conversion rate, if any </aside>'
       authenticated: true
       custom: []
     headers:

@@ -26,7 +26,7 @@ return [
     'discount_amount' => 'Discount Amount',
     'type' => 'Type',
     'status' => 'Status',
-    'usable_amount' => 'Use per user',
+    'usable_amount' => 'Usage limit per user',
     'validity_days' => 'Validity Days',
     'points_required' => 'Points Required',
     'min_spend' => 'Mininum Spend',
@@ -55,6 +55,7 @@ return [
     'min_quantity_of_y' => 'Please add :title free item(s)',
 
     'total_claimable' => 'Total Claimable',
+    'voucher' => 'Voucher',
     'voucher_type' => 'Voucher Type',
     'voucher_id' => 'Voucher ID',
     'public_voucher' => 'Promo Code',
@@ -70,5 +71,17 @@ return [
     'voucher_fully_claimed' => 'Voucher fully Claimed',
     'voucher_you_have_maximum_used' => 'You have reached maximum usage for this voucher',
     'voucher_not_available' => 'Voucher is not available',
-    'close' => 'Announcement Closed'
+    'close' => 'Announcement Closed',
+    'target_page' => 'Target Page',
+    'news' => 'News',
+    'event' => 'Event',
+
+    'content' => 'Content',
+    'image' => 'Image',
+    'news' => 'News',
+    'event' => 'Event',
+    'all_users' => 'All Users',
+    'user' => 'User',
+    'target_url' => 'Target Url',
+    'url_slug' => 'Url Slug',
 ];

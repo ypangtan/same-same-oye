@@ -27,9 +27,16 @@ class UserController extends Controller
                 'class' => 'active',
             ],
         ];
+
         $this->data['data']['status'] = [
             '10' => __( 'datatables.activated' ),
             '20' => __( 'datatables.suspended' ),
+        ];
+
+        $this->data['data']['user_social'] = [
+            '1' => __( 'user.google' ),
+            '2' => __( 'user.facebook' ),
+            '3' => __( 'user.apple_id' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );

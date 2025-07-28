@@ -9,6 +9,8 @@ use App\Services\UserService;
 use Carbon\Carbon;
 use DB;
 
+use Helper;
+
 class checkUserCheckin extends Command
 {
     /**
@@ -16,7 +18,7 @@ class checkUserCheckin extends Command
      *
      * @var string
      */
-    protected $signature = 'check:user-checkin 
+    protected $signature = 'check:user-checkin
         {--dryrun : Simulate the check-in reset process without storing changes}';
 
     /**
@@ -44,8 +46,8 @@ class checkUserCheckin extends Command
         DB::beginTransaction();
 
         try {
-            $users = User::all();
-            $currentDate = now()->format( 'Y-m-d' );
+            $users = User::where( 'status', 10 )->get();
+            $currentDate = now()->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d' );
 
             foreach ( $users as $user ) {
                 $this->processUserCheckin( $user, $currentDate, $isDryRun );
@@ -72,7 +74,7 @@ class checkUserCheckin extends Command
             ->latest( 'checkin_date' )
             ->first();
 
-        if ( $lastCheckin && Carbon::parse( $lastCheckin->checkin_date )->diffInDays( now() ) > 1 ) {
+        if ( $lastCheckin && Carbon::parse( $lastCheckin->checkin_date )->diffInDays( now()->timezone( 'Asia/Kuala_Lumpur' ) ) > 1 ) {
             $this->warn( 'User ID ' . $user->id . ' streak reset required.' );
 
             if ( !$isDryRun ) {

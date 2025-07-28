@@ -15,4 +15,15 @@ class UserSocial extends Model
         'identifier',
         'uuid',
     ];
+
+    public function getPlatformLabelAttribute()
+    {
+        $platforms = [
+            '1' => __('user.google'),
+            '2' => __('user.facebook'),
+            '3' => __('user.apple_id'),
+        ];
+
+        return $platforms[$this->attributes['platform']] ?? null;
+    }
 }

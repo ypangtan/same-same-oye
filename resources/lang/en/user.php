@@ -65,6 +65,12 @@ return [
     'points_exchange' => 'Points Exchange',
     'invitation_code' => 'Invitation Code',
     'referral' => 'Referral',
+    'user_social' => 'Social Account',
     'referral_structure' => 'Referral Structure',
     'registered_social' => 'Phone number registered to social account',
+
+    'google' => 'Google',
+    'facebook' => 'Facebook',
+    'apple_id' => 'Apple ID',
+
 ];

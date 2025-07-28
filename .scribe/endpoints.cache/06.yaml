@@ -25,6 +25,10 @@ endpoints:
         <strong>user_voucher (retrieve user's voucher)</strong></br>
         1: true<br>
         2: false<br>
+
+        <strong>expired_only (retrieve user's expired voucher)</strong></br>
+        1: true<br>
+        2: false<br>
       authenticated: true
       custom: []
     headers:
@@ -63,6 +67,13 @@ endpoints:
       discount_type:
         name: discount_type
         description: 'The voucher discount type to be filter'
+        required: false
+        example: 2
+        type: integer
+        custom: []
+      expired_only:
+        name: expired_only
+        description: 'The voucher usage type to be filter'
         required: false
         example: 2
         type: integer

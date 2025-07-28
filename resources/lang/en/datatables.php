@@ -28,6 +28,7 @@ return [
     
     'search_x' => 'Search :title',
     'select_x' => 'Select :title',
+    'title' => 'Title',
     'all' => 'All',
     'all_x' => 'All (:title)',
     'created_date' => 'Created Date',

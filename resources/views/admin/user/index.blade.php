@@ -63,6 +63,12 @@ $columns = [
         'title' => __( 'user.email' ),
     ],
     [
+        'type' => 'select',
+        'options' => $data['user_social'],
+        'id' => 'user_social',
+        'title' => __( 'user.user_social' ),
+    ],
+    [
         'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.phone_number' ) ] ),
         'id' => 'phone_number',
@@ -126,6 +132,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'last_name' },
             // { data: 'username' },
             { data: 'email' },
+            { data: 'social_logins' },
             { data: 'phone_number' },
             { data: 'status' },
             { data: 'encrypted_id' },
@@ -162,6 +169,13 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "user_social" ) }}' ),
+                
+                render: function( data, type, row, meta ) {
+                    return data.length > 0 ? data[0].platform_label : '-' ;
                 },
             },
             {

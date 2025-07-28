@@ -469,10 +469,12 @@ class UserCheckinService
             $user->check_in_streak = 0;
         }
 
-        $existingCheckin = UserCheckin::where('user_id', $user->id)
-            ->whereDate('checkin_date', $currentDate)
+        $currentDateMYT = now()->timezone( 'Asia/Kuala_Lumpur' )->toDateString();
+
+        $existingCheckin = UserCheckin::where( 'user_id', $user->id )
+            ->whereDate( 'checkin_date', $currentDateMYT )
             ->first();
-    
+
         if ($existingCheckin) {
             return response()->json( [
                 'message' => 'User has already checked in today',
@@ -493,7 +495,7 @@ class UserCheckinService
     
         $userCheckin = UserCheckin::create([
             'user_id' => $user->id,
-            'checkin_date' => now(),
+            'checkin_date' => now()->timezone( 'Asia/Kuala_Lumpur' ),
             'status' => 10,
         ]);
     
@@ -513,11 +515,6 @@ class UserCheckinService
             'user_checkin',
             'user_checkin'
         );
-
-        // check user has challenges
-        // $data = [];
-        // $data['user_checkin'] = $userCheckin;
-        // Helper::checkChallenge( 'checkin', $data, $user );
 
         self::sendNotification( $user, 'checkin', __( 'notification.user_checkin_success_content' )  );
 

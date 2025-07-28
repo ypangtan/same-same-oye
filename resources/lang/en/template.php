@@ -64,6 +64,7 @@ return [
     'sales_records' => 'Sales Records',
     'download_excel_template' => 'Download Template',
     "earned_x" => "You've earned :amount points.",
+    'marketing_notifications' => 'Marketing Notifications',
 
     'loading' => 'Loading...',
     'add' => 'Add',

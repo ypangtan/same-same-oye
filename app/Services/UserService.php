@@ -45,7 +45,9 @@ class UserService
 {
     public static function allUsers( $request ) {
 
-        $user = User::select( 'users.*' )->orderBy( 'created_at', 'DESC' );
+        $user = User::select( 'users.*' )
+        ->with( ['socialLogins'] )
+        ->orderBy( 'created_at', 'DESC' );
 
         $filterObject = self::filter( $request, $user );
         $user = $filterObject['model'];
@@ -77,6 +79,12 @@ class UserService
             $users->append( [
                 'encrypted_id',
             ] );
+
+            foreach( $users as $user ){
+                if( $user->socialLogins ){
+                    $user->socialLogins->append( ['platform_label'] );
+                }
+            }
         }
 
         $totalRecord = User::count();
@@ -163,7 +171,21 @@ class UserService
             $model->where( function ( $query ) use ( $userInput ) {
                 $query->where( 'users.email', 'LIKE', '%' . $userInput . '%' )
                       ->orWhere( 'users.first_name', 'LIKE', '%' . $userInput . '%' )
-                      ->orWhere( 'users.last_name', 'LIKE', '%' . $userInput . '%' );
+                      ->orWhere( 'users.last_name', 'LIKE', '%' . $userInput . '%' )
+                      ->orWhere( 'users.phone_number', 'LIKE', '%' . $normalizedPhone . '%' );
+            } );
+        
+            $filter = true;
+        }
+
+        if ( !empty( $request->mixed_search ) ) {
+            $userInput = $request->mixed_search;
+        
+            $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $userInput );
+        
+            $model->where( function ( $query ) use ( $userInput, $normalizedPhone ) {
+                $query->where( 'users.email', 'LIKE', '%' . $userInput . '%' )
+                      ->orWhere( 'users.phone_number', 'LIKE', '%' . $normalizedPhone . '%' );
             } );
         
             $filter = true;
@@ -176,6 +198,13 @@ class UserService
 
         if ( !empty( $request->custom_search ) ) {
             $model->where( 'email', 'LIKE', '%' . $request->custom_search . '%' );
+            $filter = true;
+        }
+
+        if ( !empty( $request->user_social ) ) {
+            $model->whereHas( 'socialLogins', function ($query) use ($request) {
+                $query->where( 'platform', $request->user_social );
+            });
             $filter = true;
         }
 
@@ -1058,10 +1087,11 @@ class UserService
             'password' => 'required',
             'account' => [ 'sometimes', function( $attributes, $value, $fail ) {
 
-                $defaultCallingCode = "+60";
+                $defaultCallingCode = null;
 
                 $user = User::where( 'status', 10 )
                     ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
+                    ->orWhere( 'calling_code', '+60' )
                     ->where( function ( $query ) use ( $value ) {
                         $query->where( 'phone_number', request( 'phone_number' ) )
                             ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
@@ -1778,17 +1808,21 @@ class UserService
             return $query->where( 'user_notifications.type', request( 'type' ) );
         } );
 
-        $notifications->when( $request->is_read != '' , function( $query ) {
-            if ( request( 'is_read' ) == 0 ) {
+        $notifications->when( $request->has( 'is_read' ), function( $query ) use ( $request ) {
+            if ( ( int ) $request->is_read === 0 ) {
                 return $query->whereNull( 'user_notification_seens.id' );
-            } else {
-                return $query->where( 'user_notification_seens.id', '>', 0 );
+            } elseif ( ( int ) $request->is_read === 1 ) {
+                return $query->whereNotNull( 'user_notification_seens.id' );
             }
-        } );
+        }, function( $query ) {
+            return $query->whereNull( 'user_notification_seens.id' );
+        });
 
         $notifications->when( $request->notification != '' , function( $query ) use( $request ) {
             return $query->where( 'user_notifications.id', $request->notification );
         } );
+
+        $notifications->where( 'user_notifications.status', 10 );
 
         $notifications->orderBy( 'user_notifications.created_at', 'DESC' );
 

@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\{
     BannerController,
     ProductController,
     SalesRecordController,
+    MarketingNotificationController,
 };
 
 use App\Models\{
@@ -404,6 +405,26 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-voucher-usage-status', [ VoucherUsageController::class, 'updateVoucherUsageStatus' ] )->name( 'admin.voucher_usage.updateVoucherUsageStatus' );
                 Route::post( 'remove-voucher-usage-gallery-image', [ VoucherUsageController::class, 'removeVoucherUsageGalleryImage' ] )->name( 'admin.voucher_usage.removeVoucherUsageGalleryImage' );
                 Route::post( 'ckeUpload', [ VoucherUsageController::class, 'ckeUpload' ] )->name( 'admin.voucher_usage.ckeUpload' );
+            } );
+
+            Route::prefix( 'marketing-notifications' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view marketing_notifications' ] ], function() {
+                    Route::get( '/', [ MarketingNotificationController::class, 'index' ] )->name( 'admin.module_parent.marketing_notifications.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add marketing_notifications' ] ], function() {
+                    Route::get( 'add', [ MarketingNotificationController::class, 'add' ] )->name( 'admin.marketing_notifications.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit marketing_notifications' ] ], function() {
+                    Route::get( 'edit/{id?}', [ MarketingNotificationController::class, 'edit' ] )->name( 'admin.marketing_notifications.edit' );
+                } );
+
+                Route::post( 'all-marketing-notifications', [ MarketingNotificationController::class, 'allMarketingNotifications' ] )->name( 'admin.marketing_notifications.allMarketingNotifications' );
+                Route::post( 'one-marketing-notifications', [ MarketingNotificationController::class, 'oneMarketingNotification' ] )->name( 'admin.marketing_notifications.oneMarketingNotification' );
+                Route::post( 'create-marketing-notifications', [ MarketingNotificationController::class, 'createMarketingNotification' ] )->name( 'admin.marketing_notifications.createMarketingNotification' );
+                Route::post( 'update-marketing-notifications', [ MarketingNotificationController::class, 'updateMarketingNotification' ] )->name( 'admin.marketing_notifications.updateMarketingNotification' );
+                Route::post( 'update-marketing-notifications-status', [ MarketingNotificationController::class, 'updateMarketingNotificationStatus' ] )->name( 'admin.marketing_notifications.updateMarketingNotificationStatus' );
+
+                Route::post( 'cke-upload', [ MarketingNotificationController::class, 'ckeUpload' ] )->name( 'admin.marketing_notifications.ckeUpload' );
             } );
 
         } );

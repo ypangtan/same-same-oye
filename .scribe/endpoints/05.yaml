@@ -7,7 +7,10 @@ endpoints:
     uri: api/v1/users
     metadata:
       title: '1. Create an user'
-      description: ''
+      description: |-
+        <strong>device_type</strong><br>
+        1: iOS<br>
+        2: Android<br>
       authenticated: false
       custom: []
     headers:
@@ -28,6 +31,13 @@ endpoints:
         description: 'The phone_number for register.'
         required: true
         example: '0123982334'
+        type: string
+        custom: []
+      calling_code:
+        name: calling_code
+        description: 'The calling_code for register.'
+        required: true
+        example: '+60'
         type: string
         custom: []
       otp_code:
@@ -58,6 +68,20 @@ endpoints:
         example: AASSCC
         type: string
         custom: []
+      device_type:
+        name: device_type
+        description: 'optional The device type.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      register_token:
+        name: register_token
+        description: 'optional The device token to receive notification.'
+        required: false
+        example: example_device_token
+        type: string
+        custom: []
     responses: []
     responseFields: []
   -
@@ -66,7 +90,10 @@ endpoints:
     uri: api/v1/users/login
     metadata:
       title: '2. Login an user - Email'
-      description: ''
+      description: |-
+        <strong>device_type</strong><br>
+        1: iOS<br>
+        2: Android<br>
       authenticated: false
       custom: []
     headers:
@@ -82,11 +109,32 @@ endpoints:
         example: '0123982334'
         type: string
         custom: []
+      calling_code:
+        name: calling_code
+        description: 'The calling_code for register.'
+        required: true
+        example: '+60'
+        type: string
+        custom: []
       password:
         name: password
         description: 'The password for login.'
         required: true
         example: abcd1234
+        type: string
+        custom: []
+      device_type:
+        name: device_type
+        description: 'optional The device type.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      register_token:
+        name: register_token
+        description: 'optional The device token to receive notification.'
+        required: false
+        example: example_device_token
         type: string
         custom: []
     responses: []
@@ -133,9 +181,16 @@ endpoints:
     bodyParameters:
       phone_number:
         name: phone_number
-        description: 'The phone_number for login.'
+        description: 'The phone_number for register.'
         required: true
         example: '0123982334'
+        type: string
+        custom: []
+      calling_code:
+        name: calling_code
+        description: 'optional The calling for register. ( Default +60 )'
+        required: false
+        example: '+60'
         type: string
         custom: []
       request_type:
@@ -259,6 +314,13 @@ endpoints:
         example: '0123982334'
         type: string
         custom: []
+      calling_code:
+        name: calling_code
+        description: 'The calling_code for register.'
+        required: true
+        example: '+60'
+        type: string
+        custom: []
     responses: []
     responseFields: []
   -
@@ -331,11 +393,18 @@ endpoints:
         example: John
         type: string
         custom: []
-      fullname:
-        name: fullname
-        description: 'The fullname to update.'
+      first_name:
+        name: first_name
+        description: 'The first_name to update.'
         required: false
-        example: 'John wick wick'
+        example: wick
+        type: string
+        custom: []
+      last_name:
+        name: last_name
+        description: 'The last_name to update.'
+        required: false
+        example: John
         type: string
         custom: []
       email:
@@ -470,12 +539,26 @@ endpoints:
         example: '1'
         type: interger
         custom: []
+      email:
+        name: email
+        description: 'optional The email for user social login.'
+        required: false
+        example: ifei@mail.com
+        type: string
+        custom: []
       device_type:
         name: device_type
-        description: 'The device_type for login.'
-        required: true
-        example: '3'
-        type: interger
+        description: 'optional The device type.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      register_token:
+        name: register_token
+        description: 'optional The device token to receive notification.'
+        required: false
+        example: example_device_token
+        type: string
         custom: []
     responses: []
     responseFields: []

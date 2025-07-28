@@ -65,6 +65,10 @@ class User extends Model
         return $this->hasMany( User::class, 'referral_id', 'id' );
     }
 
+    public function socialLogins() {
+        return $this->hasMany( UserSocial::class, 'user_id' );
+    }
+
     public function getProfilePicturePathNewAttribute() {
         return $this->attributes['profile_picture'] ? asset( 'storage/' . $this->attributes['profile_picture'] ) : asset( 'admin/images/profile_image.png' ) . Helper::assetVersion();
     }
