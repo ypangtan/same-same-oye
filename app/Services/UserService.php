@@ -1089,11 +1089,11 @@ class UserService
             'password' => 'required',
             'account' => [ 'sometimes', function( $attributes, $value, $fail ) {
 
-                $defaultCallingCode = null;
+                $defaultCallingCode = "+60";
 
                 $user = User::where( 'status', 10 )
                     ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
-                    ->orWhere( 'calling_code', '+60' )
+                    ->orWhere( 'calling_code', null )
                     ->where( function ( $query ) use ( $value ) {
                         $query->where( 'phone_number', request( 'phone_number' ) )
                             ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
