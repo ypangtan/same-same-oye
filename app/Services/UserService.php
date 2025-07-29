@@ -381,7 +381,7 @@ class UserService
             if ( !empty( $request->password ) ) {
                 $updateUser->password = Hash::make( $request->password );
             }
-
+            
             $updateUser->save();
 
             DB::commit();
@@ -1091,15 +1091,17 @@ class UserService
 
                 $defaultCallingCode = "+60";
 
-                $user = User::where( 'status', 10 )
-                    ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
-                    ->orWhere( 'calling_code', null )
-                    ->where( function ( $query ) use ( $value ) {
-                        $query->where( 'phone_number', request( 'phone_number' ) )
-                            ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
-                    } )
+                $user = User::where('status', 10)
+                    ->where(function ($query) use ($defaultCallingCode) {
+                        $query->where('calling_code', request('calling_code') ?? $defaultCallingCode)
+                            ->orWhereNull('calling_code');
+                    })
+                    ->where(function ($query) {
+                        $query->where('phone_number', request('phone_number'))
+                            ->orWhere('phone_number', ltrim(request('phone_number'), '0'));
+                    })
                     ->first();
-
+            
                 if ( !$user ) {
                     $fail( __( 'user.user_wrong_user' ) );
                     return 0;
