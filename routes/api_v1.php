@@ -38,10 +38,10 @@ Route::prefix( 'contact-us' )->group( function() {
     Route::post('/', [MailContentController::class, 'createEnquiryMail']);
 } );
 
-Route::post( 'otp', [ UserController::class, 'requestOtp' ] );
-Route::post( 'otp/resend', [ UserController::class, 'resendOtp' ] );
+Route::post( 'otp', [ UserController::class, 'requestOtp' ] )->middleware( 'log.cart.order' );
+Route::post( 'otp/resend', [ UserController::class, 'resendOtp' ] )->middleware( 'log.cart.order' );
 
-Route::prefix( 'users' )->group( function() {
+Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
     Route::post( '/', [ UserController::class, 'registerUser' ] );
     Route::post( 'login', [ UserController::class, 'loginUser' ] );
     Route::post( 'login-social', [ UserController::class, 'loginUserSocial' ] );
@@ -62,7 +62,7 @@ Route::prefix( 'banners' )->group( function() {
 
 Route::middleware( 'auth:user' )->group( function() {
 
-    Route::prefix( 'users' )->group( function() {
+    Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
         Route::get( '/', [ UserController::class, 'getUser' ] );
         Route::post( 'delete-verification', [ UserController::class, 'deleteVerification' ] );
         Route::post( 'delete-confirm', [ UserController::class, 'deleteConfirm' ] );
@@ -73,23 +73,23 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( 'notification', [ UserController::class, 'updateNotificationSeen' ] );
 
     } );
-    Route::prefix( 'announcements' )->group( function() {
+    Route::prefix( 'announcements' )->middleware( 'log.cart.order' )->group( function() {
         Route::get( '/', [ AnnouncementController::class, 'getAnnouncements' ] );
         Route::post( 'close', [ AnnouncementController::class, 'claim' ] );
     } );
 
-    Route::prefix( 'vouchers' )->group( function() {
+    Route::prefix( 'vouchers' )->middleware( 'log.cart.order' )->group( function() {
         Route::get( '/', [ VoucherController::class, 'getVouchers' ] );
         Route::post( 'claim-voucher', [ VoucherController::class, 'claimVoucher' ] );
     } );
 
-    Route::prefix( 'checkin' )->group( function() {
+    Route::prefix( 'checkin' )->middleware( 'log.cart.order' )->group( function() {
         Route::get( '/', [ CheckinController::class, 'getCheckinHistory' ] );
         Route::post( '', [ CheckinController::class, 'checkin' ] );
         Route::get( 'rewards', [ CheckinController::class, 'getCheckinRewards' ] );
     } );
 
-    Route::prefix( 'points' )->group( function() {
+    Route::prefix( 'points' )->middleware( 'log.cart.order' )->group( function() {
         Route::get( '', [ PointsController::class, 'getPoints' ] );
         Route::post( 'redeem', [ PointsController::class, 'redeemPoints' ] );
         Route::get( 'history', [ PointsController::class, 'getPointsRedeemHistory' ] );

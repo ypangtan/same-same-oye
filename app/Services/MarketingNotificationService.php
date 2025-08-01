@@ -222,33 +222,16 @@ class MarketingNotificationService {
 
             if( $createAnnouncement && count( $selectedUsersId ) > 0 ){
                 foreach( $selectedUsersId as $key => $val ){
-
                     $user = User::findOrFail( Helper::decode( $val ) );
-                    
-                    $createUserNotificationUser = UserNotificationUser::create( [
-                        'user_notification_id' => $createAnnouncement->id,
-                        'user_id' => $user->id,
-                    ] );
-
                     self::sendNotification( $user, $createAnnouncement ); 
-
                 }
             }
 
             if( $request->users == NULL ){
                 $selectedUsersId = User::where( 'status', 10 )->get();
-
                 foreach( $selectedUsersId as $user ){
-                    
-                    $createUserNotificationUser = UserNotificationUser::create( [
-                        'user_notification_id' => $createAnnouncement->id,
-                        'user_id' => $user->id,
-                    ] );
-
                     self::sendNotification( $user, $createAnnouncement ); 
-
                 }
-
             }
 
             DB::commit();

@@ -99,6 +99,42 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'voucher' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/voucher.log'),
+            'level' => 'info',
+        ],
+
+        'checkin' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/checkin.log'),
+            'level' => 'info',
+        ],
+
+        'points' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/points.log'),
+            'level' => 'info',
+        ],
+
+        'otp' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/otp.log'),
+            'level' => 'info',
+        ],
+
+        'announcement' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/announcement.log'),
+            'level' => 'info',
+        ],
+
+        'user_pre_auth' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/user_pre_auth.log'),
+            'level' => 'info',
+        ],
     ],
 
 ];
