@@ -179,7 +179,8 @@ class MarketingNotificationService {
             $attributeName[$key] = strtolower( $aName );
         }
 
-        $request->users != NULL ? $selectedUsersId = explode(',', $request->users) : $selectedUsersId = User::where( 'status', 10 )->select( 'id' )->get()->pluck( 'encrypted_id' );
+        // $request->users != NULL ? $selectedUsersId = explode(',', $request->users) : $selectedUsersId = User::where( 'status', 10 )->select( 'id' )->get()->pluck( 'encrypted_id' );
+        $request->users != NULL ? $selectedUsersId = explode(',', $request->users) : $selectedUsersId = array();
 
         $is_template = self::isPrefixes($request->content);
 
@@ -232,6 +233,22 @@ class MarketingNotificationService {
                     self::sendNotification( $user, $createAnnouncement ); 
 
                 }
+            }
+
+            if( $request->users == NULL ){
+                $selectedUsersId = User::where( 'status', 10 )->get();
+
+                foreach( $selectedUsersId as $user ){
+                    
+                    $createUserNotificationUser = UserNotificationUser::create( [
+                        'user_notification_id' => $createAnnouncement->id,
+                        'user_id' => $user->id,
+                    ] );
+
+                    self::sendNotification( $user, $createAnnouncement ); 
+
+                }
+
             }
 
             DB::commit();
