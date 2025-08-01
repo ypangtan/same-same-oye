@@ -179,7 +179,7 @@ class MarketingNotificationService {
             $attributeName[$key] = strtolower( $aName );
         }
 
-        $request->users != NULL ? $selectedUsersId = explode(',', $request->users) : $selectedUsersId = User::where( 'status', 10 )->pluck( 'encrypted_id' );
+        $request->users != NULL ? $selectedUsersId = explode(',', $request->users) : $selectedUsersId = User::where( 'status', 10 )->select( 'id' )->get()->pluck( 'encrypted_id' );
 
         $is_template = self::isPrefixes($request->content);
 
