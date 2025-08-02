@@ -436,8 +436,8 @@ class Helper {
                     'zh' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['zh'] ?? '') : strip_tags( $message['message']['zh'] ?? ''),
                 ],
                 'headings' => [
-                    'en' => $message['message']['en'],
-                    'zh' => $message['message']['zh'],
+                    'en' => isset ( $message['message'] ) ? $message['message']['en'] : 'IFEI',
+                    'zh' => isset ( $message['message'] ) ? $message['message']['zh'] : 'IFEI',
                 ],
                 'include_player_ids' => [
                     $device->register_token
