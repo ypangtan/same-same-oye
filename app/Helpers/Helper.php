@@ -432,10 +432,12 @@ class Helper {
             $json = [
                 'app_id' => config( 'services.os.app_id' ),
                 'contents' => [
-                    'en' => $message['message'],
+                    'en' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['en'] ?? '') : strip_tags( $message['message']['en'] ?? ''),
+                    'zh' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['zh'] ?? '') : strip_tags( $message['message']['zh'] ?? ''),
                 ],
                 'headings' => [
-                    'en' => 'IFei'
+                    'en' => $message['message']['en'],
+                    'zh' => $message['message']['zh'],
                 ],
                 'include_player_ids' => [
                     $device->register_token
@@ -449,7 +451,8 @@ class Helper {
                 ]
             ];
 
-            Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $json ), $header );
+            $sendNotification = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $json ), $header );
+
         }    
 
     }

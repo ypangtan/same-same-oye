@@ -223,6 +223,12 @@ class MarketingNotificationService {
             if( $createAnnouncement && count( $selectedUsersId ) > 0 ){
                 foreach( $selectedUsersId as $key => $val ){
                     $user = User::findOrFail( Helper::decode( $val ) );
+                                        
+                    $createUserNotificationUser = UserNotificationUser::create( [
+                        'user_notification_id' => $createAnnouncement->id,
+                        'user_id' => $user->id,
+                    ] );
+
                     self::sendNotification( $user, $createAnnouncement ); 
                 }
             }
@@ -426,6 +432,7 @@ class MarketingNotificationService {
         $messageContent['key'] = 'announcement';
         $messageContent['id'] = $createAnnouncement->id;
         $messageContent['message'] = $createAnnouncement->title;
+        $messageContent['message_content'] = $createAnnouncement->content;
 
         Helper::sendNotification( $user->id, $messageContent );
         
