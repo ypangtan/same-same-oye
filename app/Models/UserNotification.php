@@ -90,6 +90,10 @@ class UserNotification extends Model
         return $this->belongsTo( User::class, 'user_id' )->withTrashed();
     }
 
+    public function getImagePathAttribute() {
+        return $this->attributes['image'] ? asset( 'storage/' . $this->attributes['image'] ) : null;
+    }
+
     public function getPathAttribute() {
         return $this->attributes['image'] ? asset( 'storage/' . $this->attributes['image'] ) : null;
     }

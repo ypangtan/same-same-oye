@@ -1833,6 +1833,13 @@ class UserService
 
         $notifications = $notifications->simplePaginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
+        $notifications->getCollection()->transform(function ($item) {
+            $item->image_path = $item->image 
+                ? asset('storage/notifications/' . $item->image) 
+                : asset('storage/notifications/default.png');
+            return $item;
+        });
+        
         return response()->json( $notifications );
     }
 
@@ -1862,8 +1869,11 @@ class UserService
             'user_id' => auth()->user()->id,
         ] );
 
+        $notification->append( [ 'image_path' ] );
+
         return response()->json( [
             'message' => __( 'notification.notification_seen' ),
+            'data' => $notification
         ] );
     }
 
