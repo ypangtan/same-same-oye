@@ -1873,7 +1873,7 @@ class UserService
 
         return response()->json( [
             'message' => __( 'notification.notification_seen' ),
-            'data' => $notification
+            'data' => [$notification]
         ] );
     }
 
