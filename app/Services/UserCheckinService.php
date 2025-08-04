@@ -510,8 +510,8 @@ class UserCheckinService
         // notification
         UserService::createUserNotification(
             $user->id,
-            'notification.user_checkin_success',
-            'notification.user_checkin_success_content',
+            __('notification.user_checkin_success'),
+            __('notification.user_checkin_success_content'),
             'user_checkin',
             'user_checkin'
         );

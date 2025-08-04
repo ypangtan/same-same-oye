@@ -75,5 +75,7 @@ return [
 
     'register_token' => 'Register Token',
     'device_type' => 'Device Type',
+    'rank_id' => 'Rank',
+    'rank' => 'Rank'
 
 ];

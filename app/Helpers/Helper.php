@@ -68,6 +68,7 @@ class Helper {
             '22' => __( 'wallet.affiliate_bonus' ),
             '23' => __( 'wallet.checkin_bonus' ),
             '24' => __( 'wallet.exhange_voucher' ),
+            '25' => __( 'wallet.points_expired' ),
         ];
     }
 
@@ -543,4 +544,18 @@ class Helper {
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
     
+    public static function calculatePoints( $amount )
+    {
+        if ( $amount >= 10000 ) {
+            $rate = 4;
+        } elseif ( $amount >= 1000 ) {
+            $rate = 2;
+        } elseif ( $amount >= 100 ) {
+            $rate = 1;
+        } else {
+            $rate = 1;
+        }
+
+        return  $amount * $rate;
+    }
 }

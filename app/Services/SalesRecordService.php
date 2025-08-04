@@ -203,7 +203,7 @@ class SalesRecordService
         try {
 
             $createSalesRecordObject = [
-                'order_id' => $request->order_id ?? null,
+                'order_id' => null,
                 'customer_name' => $request->customer_name ?? null,
                 'facebook_name' => $request->facebook_name ?? null,
                 'facebook_url' => $request->facebook_url ?? null,
@@ -474,11 +474,12 @@ class SalesRecordService
                 : 1;
 
             WalletService::transact( $wallet, [
-                'amount' => $salesRecord->total_price * $conversionRate,
+                'amount' => Helper::calculatePoints( $salesRecord->total_price ),
                 'remark' => 'Points Redeemed',
                 'type' => $wallet->type,
                 'invoice_id' => $salesRecord->id,
                 'transaction_type' => 12,
+                'expired_at' => Carbon::now('Asia/Kuala_Lumpur')->addMonths(6),
             ] );
 
             $salesRecord->status = 21;

@@ -31,6 +31,7 @@ class SalesRecordController extends Controller
             '10' => __( 'datatables.activated' ),
             '20' => __( 'datatables.suspended' ),
             '21' => __( 'datatables.redeemed' ),
+            '22' => __( 'datatables.points_expired' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );

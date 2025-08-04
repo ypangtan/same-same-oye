@@ -2,7 +2,7 @@
 $sales_record_edit = 'sales_record_edit';
 ?>
 
-<x-add-header title="{{ __( 'template.add_x', [ 'title' => __( 'template.sales_records' ) ] ) }}" />
+<x-add-header title="{{ __( 'template.edit_x', [ 'title' => __( 'template.sales_records' ) ] ) }}" />
 
     <x-form-card id="{{ $sales_record_edit }}" title="{{ __( 'template.general_info' ) }}">
 

@@ -465,6 +465,7 @@ class WalletService
             'user_id' => $wallet->user_id,
             'opening_balance' => $openingBalance,
             'amount' => $data['amount'],
+            'expired_at' => isset( $data['expired_at'] ) ? $data['expired_at'] : null,
             'closing_balance' => $wallet->balance,
             'remark' => isset( $data['remark'] ) ? $data['remark'] : null,
             'type' => $data['type'],

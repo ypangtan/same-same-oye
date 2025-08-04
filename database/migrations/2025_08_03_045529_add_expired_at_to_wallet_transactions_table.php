@@ -27,6 +27,7 @@ class AddExpiredAtToWalletTransactionsTable extends Migration
     {
         Schema::table('wallet_transactions', function (Blueprint $table) {
             //
+            $table->dropColumn('expired_at');
         });
     }
 }

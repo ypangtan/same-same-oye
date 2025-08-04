@@ -12,6 +12,8 @@ use Spatie\Activitylog\LogOptions;
 
 use Helper;
 
+use Carbon\Carbon;
+
 class WalletTransaction extends Model
 {
     use HasFactory, LogsActivity;
@@ -26,7 +28,8 @@ class WalletTransaction extends Model
         'type',
         'transaction_type',
         'status',
-        'invoice_id'
+        'invoice_id',
+        'expired_at',
     ];
 
     public function invoice() {
@@ -39,6 +42,11 @@ class WalletTransaction extends Model
 
     public function wallet() {
         return $this->belongsTo( Wallet::class, 'user_wallet_id' );
+    }
+
+    public function getExpiredAtAttribute()
+    {
+        return $this->attributes['expired_at'] ? Carbon::parse( $this->attributes['expired_at'] )->startOfDay()->format('Y-m-d H:m:s') : null;
     }
 
     public function getConvertedRemarkAttribute() {
@@ -73,7 +81,8 @@ class WalletTransaction extends Model
         'type',
         'transaction_type',
         'status',
-        'invoice_id'
+        'invoice_id',
+        'expired_at',
     ];
 
     protected static $logName = 'wallet_transactions';

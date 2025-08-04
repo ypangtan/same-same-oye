@@ -49,6 +49,7 @@ return [
     'activated' => 'Activated',
     'suspend' => 'Suspend',
     'suspended' => 'Suspended',
+    'points_expired' => 'Points Expired',
     'expired' => 'Expired',
     'to_x' => 'To :title',
     'to_sales_order' => 'To: Sales Order',

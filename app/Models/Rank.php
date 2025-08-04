@@ -10,32 +10,24 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
+use App\Traits\HasTranslations;
+
 use Helper;
 
-use Carbon\Carbon;
-
-class SalesRecord extends Model
+class Rank extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'order_id',
-        'customer_name',
-        'facebook_name',
-        'facebook_url',
-        'live_id',
-        'product_metas',
-        'total_price',
-        'payment_method',
-        'handler',
-        'remarks',
-        'reference',
+        'title',
+        'description',
+        'target_spending',
         'status',
     ];
 
-    public function transaction()
+    public function users()
     {
-        return $this->hasOne( WalletTransaction::class, 'invoice_id');
+        return $this->hasMany( USer::class, 'rank_id' );
     }
 
     public function getEncryptedIdAttribute() {
@@ -47,21 +39,13 @@ class SalesRecord extends Model
     }
 
     protected static $logAttributes = [
-        'order_id',
-        'customer_name',
-        'facebook_name',
-        'facebook_url',
-        'live_id',
-        'product_metas',
-        'total_price',
-        'payment_method',
-        'handler',
-        'remarks',
-        'reference',
+        'title',
+        'description',
+        'target_spending',
         'status',
     ];
 
-    protected static $logName = 'sales_record';
+    protected static $logName = 'ranks';
 
     protected static $logOnlyDirty = true;
 
@@ -70,6 +54,6 @@ class SalesRecord extends Model
     }
 
     public function getDescriptionForEvent( string $eventName ): string {
-        return "{$eventName} sales record";
+        return "{$eventName} rank";
     }
 }

@@ -50,11 +50,68 @@ class User extends Model
         'last_name',
         'is_social_account',
         'platform',
+        'rank_id',
     ];
 
     public function wallets()
     {
         return $this->hasMany(Wallet::class, 'user_id');
+    }
+
+    public function getTotalAccumulatePointsAttribute()
+    {
+        $totalPoints = $this->hasMany(WalletTransaction::class, 'user_id')
+            ->where('transaction_type', 12)
+            ->sum('amount');
+    
+        return $totalPoints;
+    }
+
+    public function getCurrentRankAttribute()
+    {
+        $totalPoints = $this->hasMany(WalletTransaction::class, 'user_id')
+            ->where('transaction_type', 12)
+            ->sum('amount');
+    
+        if ($totalPoints >= 100000) {
+            return 'Premium';
+        } elseif ($totalPoints >= 10000) {
+            return 'Gold';
+        } elseif ($totalPoints >= 1000) {
+            return 'Silver';
+        }
+    
+        return 'Member';
+    }
+    
+    public function getRequiredPointsAttribute()
+    {
+        $totalPoints = $this->hasMany(WalletTransaction::class, 'user_id')
+            ->where('transaction_type', 12)
+            ->sum('amount');
+    
+        return [
+            'Member'  => [
+                'current_points' => Helper::numberFormat( $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( 1000 - $totalPoints, 2 ),
+                'next_level_target'  => 1000,
+            ],
+            'Silver'  => [
+                'current_points' => Helper::numberFormat( $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( 9999 - $totalPoints, 2 ),
+                'next_level_target'  => 9999,
+            ],
+                'Gold'    => [
+                'current_points' => Helper::numberFormat( $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( 99999 - $totalPoints, 2 ),
+                'next_level_target'  => 99999,
+            ],
+                'Premium' => [
+                'current_points' => Helper::numberFormat( $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( 1000000 - $totalPoints, 2 ),
+                'next_level_target'  => 1000000,
+            ],
+        ];
     }
 
     public function referral() {
@@ -80,6 +137,11 @@ class User extends Model
     public function uplines() {
         return $this->hasManyThrough( User::class, UserStructure::class, 'user_id', 'id', 'id', 'referral_id' )
             ->orderBy( 'level', 'ASC' );
+    }
+
+    public function rank()
+    {
+        return $this->belongsTo(Rank::class, 'rank_id');
     }
 
     public function getEncryptedIdAttribute() {
@@ -119,6 +181,7 @@ class User extends Model
         'last_name',
         'is_social_account',
         'platform',
+        'rank_id',
     ];
 
     protected static $logName = 'users';

@@ -43,4 +43,7 @@ return [
     'referral_order_bonus' => 'Referral order Complete Bonus',
     'purchasing_bonus' => 'Purchasing Bonus',
     'redeem' => 'Points Redeemed',
+
+    'expired_at' => 'Expired At',
+    'points_expired' => 'Points Expired',
 ];

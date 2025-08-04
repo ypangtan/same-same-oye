@@ -47,6 +47,12 @@ return [
     'user_checkin_reset' => 'Checkin Reset',
     'user_checkin_reset_content' => 'Oops, your checkin has been reset',
 
+    'points_expiry_alert' => 'Points Expired Soon',
+    'points_expiry_alert_content' => 'Dear User, your points :amount will be expired in :days days',
+
+    'points_expired' => 'Points Expired',
+    'points_expired_content' => 'Dear User, your points :amount has expired',
+
     // template
     // 'topup_success' => 'Topup Success',
     // 'topup_success_content' => 'Topup Success! Enjoy Your Froyo Now!',
