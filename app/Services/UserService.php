@@ -1813,15 +1813,11 @@ class UserService
             return $query->where( 'user_notifications.type', request( 'type' ) );
         } );
 
-        // $notifications->when( $request->has( 'is_read' ), function( $query ) use ( $request ) {
-        //     if ( ( int ) $request->is_read === 0 ) {
-        //         return $query->whereNull( 'user_notification_seens.id' );
-        //     } elseif ( ( int ) $request->is_read === 1 ) {
-        //         return $query->whereNotNull( 'user_notification_seens.id' );
-        //     }
-        // }, function( $query ) {
-        //     return $query->whereNull( 'user_notification_seens.id' );
-        // });
+        $notifications->when( $request->has( 'is_read' ), function( $query ) use ( $request ) {
+            if ( ( int ) $request->is_read === 1 ) {
+                return $query->whereNotNull( 'user_notification_seens.id' );
+            }
+        });
 
         $notifications->when( $request->notification != '' , function( $query ) use( $request ) {
             return $query->where( 'user_notifications.id', $request->notification );
