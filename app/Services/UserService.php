@@ -1381,7 +1381,7 @@ class UserService
             'phone_number' => [ 'nullable', 'unique:users,phone_number,' . auth()->user()->id, ],
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
-            'profile_picture' => [ 'nullable', 'file', 'mimes:jpg,png' ],
+            'profile_picture' => [ 'nullable', 'file', 'max:30720', 'mimes:jpg,jpeg,png,heic' ],
         ] );
 
         $attributeName = [

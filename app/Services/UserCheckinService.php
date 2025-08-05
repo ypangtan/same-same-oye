@@ -547,7 +547,7 @@ class UserCheckinService
                 
                 default:
                     # code...
-                    $voucher = Voucher::find( $rward->voucher_id );
+                    $voucher = Voucher::find( $reward->voucher_id );
 
                     UserVoucher::create([
                         'user_id' => $user->id,
