@@ -58,6 +58,11 @@ class User extends Model
         return $this->hasMany(Wallet::class, 'user_id');
     }
 
+    public function walletTransactions()
+    {
+        return $this->hasMany( WalletTransaction::class, 'user_id');
+    }
+
     public function getTotalAccumulatePointsAttribute()
     {
         $totalPoints = $this->hasMany(WalletTransaction::class, 'user_id')

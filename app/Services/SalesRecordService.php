@@ -533,6 +533,17 @@ class SalesRecordService
                 'converted_remark',
                 'display_transaction_type',
             ] );
+
+            if( $wt->transaction_type == 25 ){
+                $wt->expired_at = $wt->created_at->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' );
+                $wt->remarks = 'Total Points Voided';
+                $wt->remark = 'Total Points Voided';
+            }
+
+            if( $wt->transaction_type == 12 ){
+                $wt->remarks = 'Total Points Earned';
+                $wt->remark = 'Total Points Earned';
+            }
         }
         
         // Convert to array and add your message

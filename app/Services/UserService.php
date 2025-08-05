@@ -78,6 +78,9 @@ class UserService
         if ( $users ) {
             $users->append( [
                 'encrypted_id',
+                'total_accumulate_points',
+                'current_rank',
+                'required_points',
             ] );
 
             foreach( $users as $user ){
@@ -207,6 +210,57 @@ class UserService
             });
             $filter = true;
         }
+
+        if ( !empty( $request->rank ) ) {
+
+            switch ( $request->rank ) {
+        
+                case 1: // Member
+                    $model->where(function ($query) {
+                        $query->whereHas('walletTransactions', function ($q) {
+                            $q->selectRaw('SUM(amount) as total_points')
+                              ->where('transaction_type', 12)
+                              ->groupBy('user_id')
+                              ->havingRaw('SUM(amount) < 1000');
+                        })
+                        ->orWhereDoesntHave('walletTransactions', function ($q) {
+                            $q->where('transaction_type', 12);
+                        });
+                    });
+                    break;
+        
+                case 2: // Silver
+                    $model->whereHas('walletTransactions', function ($q) {
+                        $q->selectRaw('SUM(amount) as total_points')
+                          ->where('transaction_type', 12)
+                          ->groupBy('user_id')
+                          ->havingRaw('SUM(amount) >= 1000 AND SUM(amount) < 10000');
+                    });
+                    break;
+        
+                case 3: // Gold
+                    $model->whereHas('walletTransactions', function ($q) {
+                        $q->selectRaw('SUM(amount) as total_points')
+                          ->where('transaction_type', 12)
+                          ->groupBy('user_id')
+                          ->havingRaw('SUM(amount) >= 10000 AND SUM(amount) < 100000');
+                    });
+                    break;
+        
+                case 4: // Premium
+                    $model->whereHas('walletTransactions', function ($q) {
+                        $q->selectRaw('SUM(amount) as total_points')
+                          ->where('transaction_type', 12)
+                          ->groupBy('user_id')
+                          ->havingRaw('SUM(amount) >= 100000');
+                    });
+                    break;
+        
+                default:
+                    // No rank filter
+                    break;
+            }
+        }        
 
         return [
             'filter' => $filter,

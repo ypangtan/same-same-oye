@@ -17,4 +17,9 @@ return [
     'description' => 'Description',
     'target_spending' => 'Target Spending',
     'status' => 'Status',
+
+    'member' => 'Member',
+    'silver' => 'Silver',
+    'gold' => 'Gold',
+    'premium' => 'Premium',
 ];
