@@ -78,7 +78,7 @@ class UserService
         if ( $users ) {
             $users->append( [
                 'encrypted_id',
-                'total_accumulate_points',
+                'total_accumulate_spending',
                 'current_rank',
                 'required_points',
             ] );
@@ -1345,7 +1345,7 @@ class UserService
                 'updated_at',
             ] );
 
-            $user->append( ['total_accumulate_points','current_rank','required_points',] );
+            $user->append( ['total_accumulate_spending','current_rank','required_points',] );
 
             $user->profile_picture_path = $user->profile_picture_path_new;
             $user->profile_picture = $user->profile_picture_path_new;

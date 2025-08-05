@@ -76,6 +76,8 @@ return [
     'register_token' => 'Register Token',
     'device_type' => 'Device Type',
     'rank_id' => 'Rank',
-    'rank' => 'Rank'
+    'rank' => 'Rank',
+    'total_points' => 'Total Points',
+    'total_accumulate_spending' => 'Cumulative Spending'
 
 ];

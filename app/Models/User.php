@@ -63,20 +63,44 @@ class User extends Model
         return $this->hasMany( WalletTransaction::class, 'user_id');
     }
 
-    public function getTotalAccumulatePointsAttribute()
+    public function getTotalSpendingAttribute()
     {
         $totalPoints = $this->hasMany(WalletTransaction::class, 'user_id')
             ->where('transaction_type', 12)
-            ->sum('amount');
+            ->whereHas('invoice') // Ensure only transactions with invoices are counted
+            ->with('invoice')
+            ->get()
+            ->sum(function ($transaction) {
+                return $transaction->invoice->total_price ?? 0;
+            });
     
-        return $totalPoints;
+        return Helper::numberFormat($totalPoints, 2);
+    }
+
+    public function getTotalAccumulateSpendingAttribute()
+    {
+        $totalPoints = $this->hasMany(WalletTransaction::class, 'user_id')
+        ->where('transaction_type', 12)
+        ->whereHas('invoice') // Ensure only transactions with invoices are counted
+        ->with('invoice')
+        ->get()
+        ->sum(function ($transaction) {
+            return $transaction->invoice->total_price ?? 0;
+        });
+
+        return Helper::numberFormat($totalPoints, 2);
     }
 
     public function getCurrentRankAttribute()
     {
         $totalPoints = $this->hasMany(WalletTransaction::class, 'user_id')
-            ->where('transaction_type', 12)
-            ->sum('amount');
+        ->where('transaction_type', 12)
+        ->whereHas('invoice') // Ensure only transactions with invoices are counted
+        ->with('invoice')
+        ->get()
+        ->sum(function ($transaction) {
+            return $transaction->invoice->total_price ?? 0;
+        });
     
         if ($totalPoints >= 100000) {
             return 'Premium';
@@ -92,8 +116,13 @@ class User extends Model
     public function getRequiredPointsAttribute()
     {
         $totalPoints = $this->hasMany(WalletTransaction::class, 'user_id')
-            ->where('transaction_type', 12)
-            ->sum('amount');
+        ->where('transaction_type', 12)
+        ->whereHas('invoice') // Ensure only transactions with invoices are counted
+        ->with('invoice')
+        ->get()
+        ->sum(function ($transaction) {
+            return $transaction->invoice->total_price ?? 0;
+        });
     
         return [
             'Member'  => [
