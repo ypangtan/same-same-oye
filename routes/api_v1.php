@@ -72,6 +72,8 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::get( 'notifications', [ UserController::class, 'getNotifications' ] );
         Route::post( 'notification', [ UserController::class, 'updateNotificationSeen' ] );
 
+        Route::post( 'test-notification', [ UserController::class, 'testNotification' ] );
+
     } );
     Route::prefix( 'announcements' )->middleware( 'log.cart.order' )->group( function() {
         Route::get( '/', [ AnnouncementController::class, 'getAnnouncements' ] );

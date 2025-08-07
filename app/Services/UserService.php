@@ -1985,4 +1985,65 @@ class UserService
         ] );
 
     }
+
+    public static function testNotification( $request ) {
+
+        // Defaults
+        $title = $request->input( 'title', 'test-notification' );
+        $content = $request->input( 'content', 'test-notification-content' );
+    
+        // Get user (from token or fallback to authenticated)
+        $user = auth()->user();
+    
+        if ( ! $user ) {
+            return response()->json([ 'message' => 'User not found.' ], 500);
+        }
+    
+        // Get register token (from request or fallback)
+        $registerToken = $request->input( 'register_token' );
+        $device = UserDevice::where( 'user_id', $user->id )->first();
+
+        if( $device ){
+            $registerToken = $device->register_token;
+        }
+    
+        // Allow override for app_id and api_key
+        $appId = $request->input( 'app_id', config( 'services.os.app_id' ) );
+        $apiKey = $request->input( 'api_key', config( 'services.os.api_key' ) );
+    
+        $header = [
+            'Content-Type: application/json; charset=utf-8',
+            'Authorization: BASIC ' . $apiKey,
+        ];
+    
+        $payload = [
+            'app_id' => $appId,
+            'contents' => [
+                'en' => strip_tags( $content ),
+                'zh' => strip_tags( $content ),
+            ],
+            'headings' => [
+                'en' => $title,
+                'zh' => $title,
+            ],
+            'include_player_ids' => [
+                $registerToken,
+            ],
+            'data' => [
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                'sound' => 'default',
+                'status' => 'done',
+                'key' => 'test',
+                'id' => uniqid( 'test_' ),
+            ]
+        ];
+    
+        $send = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $payload ), $header );
+    
+        return response()->json([
+            'message' => 'Test notification sent.',
+            'response' => $send
+        ]);
+    }
+    
 }

@@ -308,12 +308,35 @@ class UserController extends Controller {
      * 
      * @group User API
      * 
+     * @authenticated
+     * 
+     * 
      * @bodyParam notification integer required The notification ID of notification. Example: 5
      * 
      */ 
     public function updateNotificationSeen( Request $request ) {
 
         return UserService::updateNotificationSeen( $request );
+    }
+
+    /**
+     * 14. Test notification
+     * 
+     * @group User API
+     * 
+     * @authenticated
+     * 
+     * @bodyParam title string optional The notification title to test. ( Default will be: test-notification ). Example: test-notification
+     * @bodyParam content string optional The notification content to test. ( Default will be: test-notification-content ). Example: test-notification-content
+     * @bodyParam user_token string optional The user auth token. ( Default will be using current authenticated user ).
+     * @bodyParam register_token string optional The target device token. ( Default will be following current authenticated user's register token ).
+     * @bodyParam app_id string optional The one signal app id. ( Default will be following current settings ).
+     * @bodyParam api_key string optional The one signal api_key ( Default will be following current settings ).
+     * 
+     */ 
+    public function testNotification( Request $request ) {
+
+        return UserService::testNotification( $request );
     }
 
 }
