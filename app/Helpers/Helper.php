@@ -422,38 +422,40 @@ class Helper {
 
     public static function sendNotification( $user, $message ){
 
-        $device = UserDevice::where( 'user_id', $user )->first();
-        if( $device ) {
+        $devices = UserDevice::where( 'user_id', $user )->get();
 
-            $header = [
-                'Content-Type: application/json; charset=utf-8',
-                'Authorization: BASIC ' . config( 'services.os.api_key' ),
-            ];
+        if( $devices ) {
 
-            $json = [
-                'app_id' => config( 'services.os.app_id' ),
-                'contents' => [
-                    'en' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['en'] ?? '') : strip_tags( $message['message']['en'] ?? ''),
-                    'zh' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['zh'] ?? '') : strip_tags( $message['message']['zh'] ?? ''),
-                ],
-                'headings' => [
-                    'en' => isset ( $message['message'] ) ? $message['message']['en'] : 'IFEI',
-                    'zh' => isset ( $message['message'] ) ? $message['message']['zh'] : 'IFEI',
-                ],
-                'include_player_ids' => [
-                    $device->register_token
-                ],
-                'data' => [
-                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-                    'sound' => 'default',
-                    'status' => 'done',
-                    'key' => $message['key'],
-                    'id' => $message['id'],
-                ]
-            ];
-
-            $sendNotification = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $json ), $header );
-
+            foreach( $devices as $device ){
+                $header = [
+                    'Content-Type: application/json; charset=utf-8',
+                    'Authorization: BASIC ' . config( 'services.os.api_key' ),
+                ];
+    
+                $json = [
+                    'app_id' => config( 'services.os.app_id' ),
+                    'contents' => [
+                        'en' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['en'] ?? '') : strip_tags( $message['message']['en'] ?? ''),
+                        'zh' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['zh'] ?? '') : strip_tags( $message['message']['zh'] ?? ''),
+                    ],
+                    'headings' => [
+                        'en' => isset ( $message['message'] ) ? $message['message']['en'] : 'IFEI',
+                        'zh' => isset ( $message['message'] ) ? $message['message']['zh'] : 'IFEI',
+                    ],
+                    'include_player_ids' => [
+                        $device->register_token
+                    ],
+                    'data' => [
+                    'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                        'sound' => 'default',
+                        'status' => 'done',
+                        'key' => $message['key'],
+                        'id' => $message['id'],
+                    ]
+                ];
+    
+                $sendNotification = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $json ), $header );
+            }
         }    
 
     }

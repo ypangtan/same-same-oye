@@ -1987,66 +1987,111 @@ class UserService
     }
 
     public static function testNotification( $request ) {
-
-        // Defaults
-        $title = $request->input( 'title', 'test-notification' );
-        $content = $request->input( 'content', 'test-notification-content' );
+        try {
+            // Defaults
+            $title = $request->input( 'title', 'test-notification' );
+            $content = $request->input( 'content', 'test-notification-content' );
     
-        // Get user (from token or fallback to authenticated)
-        $user = auth()->user();
+            // Allow override for app_id and api_key
+            $appId = $request->input( 'app_id', config( 'services.os.app_id' ) );
+            $apiKey = $request->input( 'api_key', config( 'services.os.api_key' ) );
     
-        if ( ! $user ) {
-            return response()->json([ 'message' => 'User not found.' ], 500);
+            // Get user (from token or fallback to authenticated)
+            $user = auth()->user();
+    
+            if ( ! $user ) {
+                return response()->json([ 'message' => 'User not found.' ], 500);
+            }
+    
+            // Get register token (from request or fallback)
+            $devices = UserDevice::where( 'user_id', $user->id )->get();
+    
+            if ( $request->input( 'register_token' ) ) {
+                // Send to a specific register token
+                $registerToken = $request->input( 'register_token' );
+    
+                $header = [
+                    'Content-Type: application/json; charset=utf-8',
+                    'Authorization: BASIC ' . $apiKey,
+                ];
+    
+                $payload = [
+                    'app_id' => $appId,
+                    'contents' => [
+                        'en' => strip_tags( $content ),
+                        'zh' => strip_tags( $content ),
+                    ],
+                    'headings' => [
+                        'en' => $title,
+                        'zh' => $title,
+                    ],
+                    'include_player_ids' => [ $registerToken ],
+                    'data' => [
+                        'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                        'sound' => 'default',
+                        'status' => 'done',
+                        'key' => 'test',
+                        'id' => uniqid( 'test_' ),
+                    ]
+                ];
+    
+                $send = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $payload ), $header );
+    
+                return response()->json([
+                    'message' => 'Test notification sent.',
+                    'response' => $send
+                ]);
+            }
+    
+            // Send to all user devices
+            if ( $devices->count() > 0 ) {
+                foreach ( $devices as $device ) {
+                    try {
+                        $header = [
+                            'Content-Type: application/json; charset=utf-8',
+                            'Authorization: BASIC ' . $apiKey,
+                        ];
+    
+                        $payload = [
+                            'app_id' => $appId,
+                            'contents' => [
+                                'en' => strip_tags( $content ),
+                                'zh' => strip_tags( $content ),
+                            ],
+                            'headings' => [
+                                'en' => $title,
+                                'zh' => $title,
+                            ],
+                            'include_player_ids' => [ $device->register_token ],
+                            'data' => [
+                                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                                'sound' => 'default',
+                                'status' => 'done',
+                                'key' => 'test',
+                                'id' => uniqid( 'test_' ),
+                            ]
+                        ];
+    
+                        $send = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $payload ), $header );
+    
+                    } catch ( \Exception $e ) {
+                        // Continue to next device if one fails
+                        continue;
+                    }
+                }
+            }
+    
+            return response()->json([
+                'message' => 'Test notification sent.',
+                'response' => true
+            ]);
+        } catch ( \Exception $e ) {
+            return response()->json([
+                'message' => 'Failed to send test notification.',
+                'error' => $e->getMessage()
+            ], 500);
         }
-    
-        // Get register token (from request or fallback)
-        $device = UserDevice::where( 'user_id', $user->id )->first();
-
-        if( $device ){
-            $registerToken = $device->register_token;
-        }
-
-        if( $request->input( 'register_token' ) ){
-            $registerToken = $request->input( 'register_token' );
-        }
-    
-        // Allow override for app_id and api_key
-        $appId = $request->input( 'app_id', config( 'services.os.app_id' ) );
-        $apiKey = $request->input( 'api_key', config( 'services.os.api_key' ) );
-    
-        $header = [
-            'Content-Type: application/json; charset=utf-8',
-            'Authorization: BASIC ' . $apiKey,
-        ];
-    
-        $payload = [
-            'app_id' => $appId,
-            'contents' => [
-                'en' => strip_tags( $content ),
-                'zh' => strip_tags( $content ),
-            ],
-            'headings' => [
-                'en' => $title,
-                'zh' => $title,
-            ],
-            'include_player_ids' => [
-                $registerToken,
-            ],
-            'data' => [
-                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-                'sound' => 'default',
-                'status' => 'done',
-                'key' => 'test',
-                'id' => uniqid( 'test_' ),
-            ]
-        ];
-    
-        $send = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $payload ), $header );
-    
-        return response()->json([
-            'message' => 'Test notification sent.',
-            'response' => $send
-        ]);
     }
+    
     
 }
