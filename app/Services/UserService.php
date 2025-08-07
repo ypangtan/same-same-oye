@@ -2000,11 +2000,14 @@ class UserService
         }
     
         // Get register token (from request or fallback)
-        $registerToken = $request->input( 'register_token' );
         $device = UserDevice::where( 'user_id', $user->id )->first();
 
         if( $device ){
             $registerToken = $device->register_token;
+        }
+
+        if( $request->input( 'register_token' ) ){
+            $registerToken = $request->input( 'register_token' );
         }
     
         // Allow override for app_id and api_key
