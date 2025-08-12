@@ -127,22 +127,22 @@ class User extends Model
         return [
             'Member'  => [
                 'current_points' => Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( 1000 - $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( ( (1000 - $totalPoints > 0) ? 1000 - $totalPoints : 0), 2 ),
                 'next_level_target'  => 1000,
             ],
             'Silver'  => [
                 'current_points' => Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( 9999 - $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( ( (9999 - $totalPoints > 0) ? 9999 - $totalPoints : 0), 2 ),
                 'next_level_target'  => 9999,
             ],
                 'Gold'    => [
                 'current_points' => Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( 99999 - $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( ( (99999 - $totalPoints > 0) ? 99999 - $totalPoints : 0), 2 ),
                 'next_level_target'  => 99999,
             ],
                 'Premium' => [
                 'current_points' => Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( 1000000 - $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( ( (1000000 - $totalPoints > 0) ? 1000000 - $totalPoints : 0), 2 ),
                 'next_level_target'  => 1000000,
             ],
         ];
