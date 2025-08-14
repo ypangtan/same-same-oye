@@ -36,7 +36,12 @@ class Wallet extends Model
     }
 
     public function getToBeExpiredPointsAttribute() {
-        $today = Carbon::now('Asia/Kuala_Lumpur')->startOfDay();
+        $today = Carbon::now( 'Asia/Kuala_Lumpur' )->startOfDay();
+        $currentPoints = $this->balance ?? 0; // Adjust if points are calculated differently
+    
+        if ( $currentPoints <= 0 ) {
+            return [];
+        }
     
         $grouped = $this->transactions()
             ->where( 'status', 10 )
@@ -53,11 +58,19 @@ class Wallet extends Model
     
         // Get the earliest expiry date
         $nextExpiryDate = $grouped->keys()->first();
+        $expiryAmount   = $grouped->get( $nextExpiryDate );
+    
+        // Cap at current points
+        $adjustedAmount = min( $expiryAmount, $currentPoints );
+    
+        if ( $adjustedAmount <= 0 ) {
+            return [];
+        }
     
         return [
-            $nextExpiryDate => number_format( $grouped->get( $nextExpiryDate ), 2, '.', '' )
+            $nextExpiryDate => number_format( $adjustedAmount, 2, '.', '' )
         ];
-    }
+    }    
 
     public function getFormattedTypeAttribute() {
         return Helper::wallets()[$this->attributes['type']];
