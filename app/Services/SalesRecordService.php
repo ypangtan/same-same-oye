@@ -517,7 +517,7 @@ class SalesRecordService
         ->when( $request->end_date, function ( $query ) use ( $request ) {
             $query->whereDate( 'created_at', '<=', $request->end_date );
         })
-        ->orderBy( 'created_at', 'DESC' );
+        ->orderBy( 'id', 'DESC' );
 
         $walletTransactions = $walletTransactions->paginate( empty( $request->per_page ) ? 10 : $request->per_page );
 

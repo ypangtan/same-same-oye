@@ -55,7 +55,7 @@ class Wallet extends Model
         $nextExpiryDate = $grouped->keys()->first();
     
         return [
-            $nextExpiryDate => $grouped->get( $nextExpiryDate )
+            $nextExpiryDate => number_format( $grouped->get( $nextExpiryDate ), 2, '.', '' )
         ];
     }
 
