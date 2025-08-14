@@ -11,6 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 use Helper;
+use Carbon\Carbon;
 
 class Wallet extends Model
 {
@@ -35,12 +36,27 @@ class Wallet extends Model
     }
 
     public function getToBeExpiredPointsAttribute() {
-        return $this->transactions()
+        $today = Carbon::now('Asia/Kuala_Lumpur')->startOfDay();
+    
+        $grouped = $this->transactions()
             ->where( 'status', 10 )
             ->where( 'transaction_type', 12 )
+            ->whereDate( 'expired_at', '>', $today )
             ->selectRaw( 'expired_at, SUM(amount) as total' )
             ->groupBy( 'expired_at' )
+            ->orderBy( 'expired_at', 'asc' )
             ->pluck( 'total', 'expired_at' );
+    
+        if ( $grouped->isEmpty() ) {
+            return [];
+        }
+    
+        // Get the earliest expiry date
+        $nextExpiryDate = $grouped->keys()->first();
+    
+        return [
+            $nextExpiryDate => $grouped->get( $nextExpiryDate )
+        ];
     }
 
     public function getFormattedTypeAttribute() {
