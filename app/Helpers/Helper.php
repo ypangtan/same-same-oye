@@ -435,12 +435,29 @@ class Helper {
                 $json = [
                     'app_id' => config( 'services.os.app_id' ),
                     'contents' => [
-                        'en' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['en'] ?? '') : strip_tags( $message['message']['en'] ?? ''),
-                        'zh' => isset( $message['message_content'] ) ? strip_tags( $message['message_content']['zh'] ?? '') : strip_tags( $message['message']['zh'] ?? ''),
+                        'en' => ( is_array( $message ) && isset( $message['message_content'] ) )
+                            ? strip_tags( $message['message_content']['en'] ?? '' )
+                            : ( is_array( $message ) && isset( $message['message'] )
+                                ? strip_tags( $message['message']['en'] ?? '' )
+                                : strip_tags( (string) $message['message'] )
+                            ),
+
+                        'zh' => ( is_array( $message ) && isset( $message['message_content'] ) )
+                            ? strip_tags( $message['message_content']['zh'] ?? '' )
+                            : ( is_array( $message ) && isset( $message['message'] )
+                                ? strip_tags( $message['message']['zh'] ?? '' )
+                                : strip_tags( (string) $message['message'] )
+                            ),
                     ],
+
                     'headings' => [
-                        'en' => isset ( $message['message'] ) ? $message['message']['en'] : 'IFEI',
-                        'zh' => isset ( $message['message'] ) ? $message['message']['zh'] : 'IFEI',
+                        'en' => ( is_array( $message ) && isset( $message['message'] ) )
+                            ? $message['message']['en']
+                            : 'IFEI',
+
+                        'zh' => ( is_array( $message ) && isset( $message['message'] ) )
+                            ? $message['message']['zh']
+                            : 'IFEI',
                     ],
                     'include_player_ids' => [
                         $device->register_token
