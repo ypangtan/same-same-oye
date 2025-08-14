@@ -394,6 +394,7 @@ class SalesRecordService
                 'listing_balance',
                 'formatted_type',
                 'encrypted_id',
+                'to_be_expired_points',
             ] );
         }
 

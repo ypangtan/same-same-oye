@@ -26,8 +26,21 @@ class Wallet extends Model
         return $this->belongsTo( User::class, 'user_id' );
     }
 
+    public function transactions() {
+        return $this->hasMany( WalletTransaction::class, 'user_wallet_id' );
+    }
+
     public function getListingBalanceAttribute() {
         return Helper::numberFormat( $this->attributes['balance'], 2, false );
+    }
+
+    public function getToBeExpiredPointsAttribute() {
+        return $this->transactions()
+            ->where( 'status', 10 )
+            ->where( 'transaction_type', 12 )
+            ->selectRaw( 'expired_at, SUM(amount) as total' )
+            ->groupBy( 'expired_at' )
+            ->pluck( 'total', 'expired_at' );
     }
 
     public function getFormattedTypeAttribute() {

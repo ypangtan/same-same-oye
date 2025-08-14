@@ -136,7 +136,7 @@ $columns = [
                     orderable: false,
                     render: function( data, type, row, meta ) {
                         // return data.username ?? '-' + '<br>' + '+60' + data;
-                        return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + ( data.last_name ?? '-' );
+                        return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + ( data.phone_number ? ( data.calling_code ? data.calling_code + " " : "+60 " ) + data.phone_number : '-' );
                     },
                 },
                 {

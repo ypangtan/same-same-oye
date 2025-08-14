@@ -327,6 +327,11 @@ class WalletService
             $model->where( 'wallet_transactions.type', $request->wallet );
             $filter = true;
         }
+        
+        if ( !empty( $request->status ) ) {
+            $model->where( 'wallet_transactions.status', $request->status );
+            $filter = true;
+        }
 
         if ( !empty( $request->transaction_type ) ) {
             $model->where( 'wallet_transactions.transaction_type', $request->transaction_type );
