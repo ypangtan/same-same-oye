@@ -452,11 +452,15 @@ class Helper {
 
                     'headings' => [
                         'en' => ( is_array( $message ) && isset( $message['message'] ) )
+                            ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
                             ? $message['message']['en']
+                            : $message['message']
                             : 'IFEI',
 
                         'zh' => ( is_array( $message ) && isset( $message['message'] ) )
+                            ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
                             ? $message['message']['zh']
+                            : $message['message']
                             : 'IFEI',
                     ],
                     'include_player_ids' => [
