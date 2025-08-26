@@ -138,7 +138,7 @@ $rewardTypes = $data['reward_types'];
             formData.append( 'reward_type', $( fe + '_reward_type' ).val() );
             formData.append( 'consecutive_days', $( fe + '_consecutive_days' ).val() );
             formData.append( 'voucher_quantity', $( fe + '_voucher_quantity' ).val() );
-            formData.append( 'voucher', $( fe + '_voucher_quantity' ).val() ?? null );
+            formData.append( 'voucher', $( fe + '_voucher' ).val() ?? null );
             formData.append( 'points', $( fe + '_points' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
