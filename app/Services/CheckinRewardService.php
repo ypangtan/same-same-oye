@@ -115,7 +115,7 @@ class CheckinRewardService
     
             $updateCheckinReward->consecutive_days = $request->consecutive_days;
             $updateCheckinReward->reward_type = $request->reward_type;
-            $updateCheckinReward->reward_value = $request->reward_value;
+            $updateCheckinReward->reward_value = $request->reward_type == 1 ? $request->points : $request->voucher_quantity;
             $updateCheckinReward->validity_days = $request->validity_days;
             $updateCheckinReward->voucher_id = $request->voucher;
             $updateCheckinReward->save();
