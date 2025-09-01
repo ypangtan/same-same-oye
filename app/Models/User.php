@@ -101,16 +101,23 @@ class User extends Model
         ->sum(function ($transaction) {
             return $transaction->invoice->total_price ?? 0;
         });
+
+        $rank = Rank::where('min_target', '<=', $totalPoints)
+            ->where( 'status', 10 )
+            ->orderBy('priority', 'DESC')
+            ->first();
+
+        return $rank ? $rank->title : 'Member';
     
-        if ($totalPoints >= 100000) {
-            return 'Premium';
-        } elseif ($totalPoints >= 10000) {
-            return 'Gold';
-        } elseif ($totalPoints >= 1000) {
-            return 'Silver';
-        }
+        // if ($totalPoints >= 100000) {
+        //     return 'Premium';
+        // } elseif ($totalPoints >= 10000) {
+        //     return 'Gold';
+        // } elseif ($totalPoints >= 1000) {
+        //     return 'Silver';
+        // }
     
-        return 'Member';
+        // return 'Member';
     }
     
     public function getRequiredPointsAttribute()
@@ -124,28 +131,42 @@ class User extends Model
             return $transaction->invoice->total_price ?? 0;
         });
     
-        return [
-            'Member'  => [
-                'current_points' => Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( ( (1000 - $totalPoints > 0) ? 1000 - $totalPoints : 0), 2 ),
-                'next_level_target'  => 1000,
-            ],
-            'Silver'  => [
-                'current_points' => Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( ( (9999 - $totalPoints > 0) ? 9999 - $totalPoints : 0), 2 ),
-                'next_level_target'  => 9999,
-            ],
-                'Gold'    => [
-                'current_points' => Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( ( (99999 - $totalPoints > 0) ? 99999 - $totalPoints : 0), 2 ),
-                'next_level_target'  => 99999,
-            ],
-                'Premium' => [
-                'current_points' => Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( ( (1000000 - $totalPoints > 0) ? 1000000 - $totalPoints : 0), 2 ),
-                'next_level_target'  => 1000000,
-            ],
-        ];
+        $rank = Rank::where( 'status', 10 )
+            ->orderBy('priority', 'ASC')
+            ->first();
+
+        $data = [];
+        
+        foreach ( $rank as $v ) {
+            $data[$v->title] = [
+                'current_points' => \Helper::numberFormat( $totalPoints, 2 ),
+                'required_points'  => Helper::numberFormat( ( ($v->min_target - $totalPoints > 0) ? $v->min_target - $totalPoints : 0), 2 ),
+                'next_level_target'  => $v->min_target,
+            ];
+        }
+
+        // return [
+        //     'Member'  => [
+        //         'current_points' => Helper::numberFormat( $totalPoints, 2 ),
+        //         'required_points'  => Helper::numberFormat( ( (1000 - $totalPoints > 0) ? 1000 - $totalPoints : 0), 2 ),
+        //         'next_level_target'  => 1000,
+        //     ],
+        //     'Silver'  => [
+        //         'current_points' => Helper::numberFormat( $totalPoints, 2 ),
+        //         'required_points'  => Helper::numberFormat( ( (9999 - $totalPoints > 0) ? 9999 - $totalPoints : 0), 2 ),
+        //         'next_level_target'  => 9999,
+        //     ],
+        //     'Gold'    => [
+        //         'current_points' => Helper::numberFormat( $totalPoints, 2 ),
+        //         'required_points'  => Helper::numberFormat( ( (99999 - $totalPoints > 0) ? 99999 - $totalPoints : 0), 2 ),
+        //         'next_level_target'  => 99999,
+        //     ],
+        //     'Premium' => [
+        //         'current_points' => Helper::numberFormat( $totalPoints, 2 ),
+        //         'required_points'  => Helper::numberFormat( ( (1000000 - $totalPoints > 0) ? 1000000 - $totalPoints : 0), 2 ),
+        //         'next_level_target'  => 1000000,
+        //     ],
+        // ];
     }
 
     public function referral() {

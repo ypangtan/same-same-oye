@@ -65,6 +65,9 @@ return [
     'download_excel_template' => 'Download Template',
     "earned_x" => "You've earned :amount points.",
     'marketing_notifications' => 'Marketing Notifications',
+    'lucky_draw_import_histories' => 'Lucky Draw Import Histories',
+    'lucky_draw_rewards' => 'Lucky Draw Rewards',
+    'ranks' => 'Ranks',
 
     'loading' => 'Loading...',
     'add' => 'Add',
@@ -92,6 +95,8 @@ return [
     'add_transaction' => 'Add Transaction',
     'preview' => 'Preview',
     'generate_and_save' => 'Generate & Save',
+    'x_error_imported' => 'Customer Member ID: :error have repeated in current system, please remove the repeated member ID in excel. Or else the current data will be REPLACED by the latest data in excel.',
+    'x_partial_imported' => ':title Partial Imported.',
 
     'new_x_created' => 'New :title Created.',
     'x_updated' => ':title Updated.',
@@ -101,9 +106,12 @@ return [
     'leave_blank' => 'Leave blank to leave unchanged',
     'general_info' => 'General Info',
     'optional' => 'Optional',
+    'replace_it' => 'Replace it',
+    'upload' => 'Upload',
 
     'success' => 'Success',
     'error' => 'Error',
+    'warning' => 'Warning',
 
     'sign_out' => 'Sign out',
 

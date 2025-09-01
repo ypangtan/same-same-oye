@@ -203,6 +203,24 @@
                                     </li>
                                 @endcan
 
+                                @can( 'view lucky_draw_rewards' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\LuckyDrawController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.lucky_draw_reward.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon fa fa-pie-chart"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.lucky_draw_rewards' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can( 'view ranks' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\RankController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.rank.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon fa fa-signal"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.ranks' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
                                 @can( 'view Settings' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SettingController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.setting.index' ) }}" class="nk-menu-link">

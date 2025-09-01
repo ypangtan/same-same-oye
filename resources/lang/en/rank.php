@@ -16,6 +16,8 @@ return [
     'title' => 'Title',
     'description' => 'Description',
     'target_spending' => 'Target Spending',
+    'reward_value' => 'Reward Value',
+    'priority' => 'Priority',
     'status' => 'Status',
 
     'member' => 'Member',

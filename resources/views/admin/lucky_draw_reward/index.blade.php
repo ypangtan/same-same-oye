@@ -1,16 +1,19 @@
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.users' ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.lucky_draw_rewards' ) }}</h3>
         </div><!-- .nk-block-head-content -->
-        @can( 'add users' )
+        @can( 'add lucky_draw_rewards' )
         <div class="nk-block-head-content">
             <div class="toggle-wrap nk-block-tools-toggle">
                 <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
                 <div class="toggle-expand-content" data-content="pageMenu">
                     <ul class="nk-block-tools g-3">
                         <li class="nk-block-tools-opt">
-                            <a href="{{ route( 'admin.user.add' ) }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
+                            <a href="{{ route( 'admin.lucky_draw_reward.add' ) }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
+                        </li>
+                        <li class="nk-block-tools-opt">
+                            <a href="{{ route( 'admin.lucky_draw_reward.import' ) }}" class="btn btn-primary">{{ __( 'template.import' ) }}</a>
                         </li>
                     </ul>
                 </div>
@@ -21,6 +24,7 @@
 </div><!-- .nk-block-head -->
 
 <?php
+
 $columns = [
     [
         'type' => 'default',
@@ -40,50 +44,20 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.first_name' ) ] ),
-        'id' => 'first_name',
-        'title' => __( 'user.first_name' ),
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'lucky_draw_reward.customer_member_id' ) ] ),
+        'id' => 'customer_member_id',
+        'title' => __( 'lucky_draw_reward.customer_member_id' ),
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.last_name' ) ] ),
-        'id' => 'last_name',
-        'title' => __( 'user.last_name' ),
-    ],
-    // [
-    //     'type' => 'input',
-    //     'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.username' ) ] ),
-    //     'id' => 'username',
-    //     'title' => __( 'user.username' ),
-    // ],
-    [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.email' ) ] ),
-        'id' => 'email',
-        'title' => __( 'user.email' ),
-    ],
-    [
-        'type' => 'select',
-        'options' => $data['user_social'],
-        'id' => 'user_social',
-        'title' => __( 'user.user_social' ),
-    ],
-    [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.phone_number' ) ] ),
-        'id' => 'phone_number',
-        'title' => __( 'user.phone_number' ),
-    ],
-    [
-        'type' => 'select',
-        'options' => $data['rank'],
-        'id' => 'rank',
-        'title' => __( 'user.rank' ),
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'lucky_draw_reward.name' ) ] ),
+        'id' => 'name',
+        'title' => __( 'lucky_draw_reward.name' ),
     ],
     [
         'type' => 'default',
-        'id' => 'tier_progress',
-        'title' => __( 'user.tier_progress' ),
+        'id' => 'quantity',
+        'title' => __( 'lucky_draw_reward.quantity' ),
     ],
     [
         'type' => 'select',
@@ -99,7 +73,7 @@ $columns = [
 ];
 ?>
 
-<x-data-tables id="user_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
+<x-data-tables id="lucky_draw_reward_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
 
 <script>
 
@@ -113,7 +87,7 @@ window['{{ $column['id'] }}'] = '';
 
 var statusMapper = @json( $data['status'] ),
     dt_table,
-    dt_table_name = '#user_table',
+    dt_table_name = '#lucky_draw_reward_table',
     dt_table_config = {
         language: {
             'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
@@ -127,11 +101,11 @@ var statusMapper = @json( $data['status'] ),
             }
         },
         ajax: {
-            url: '{{ route( 'admin.user.allUsers' ) }}',
+            url: '{{ route( 'admin.lucky_draw_reward.allLuckyDrawRewards' ) }}',
             data: {
                 '_token': '{{ csrf_token() }}',
             },
-            dataSrc: 'users',
+            dataSrc: 'lucky_draw_rewards',
         },
         lengthMenu: [[10, 25],[10, 25]],
         order: [[ 2, 'desc' ]],
@@ -139,31 +113,26 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: null },
             { data: 'created_at' },
-            { data: 'first_name' },
-            { data: 'last_name' },
-            // { data: 'username' },
-            { data: 'email' },
-            { data: 'social_logins' },
-            { data: 'phone_number' },
-            { data: 'current_rank' },
-            { data: 'total_accumulate_spending' },
+            { data: 'customer_member_id' },
+            { data: 'name' },
+            { data: 'quantity' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
         columnDefs: [
-                {
-                    // Add checkboxes to the first column
-                    targets: 0,
-                    orderable: false,
-                    className: 'text-center',
-                    render: function (data, type, row) {
-                        return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
-                    },
+            {
+                // Add checkboxes to the first column
+                targets: 0,
+                orderable: false,
+                className: 'text-center',
+                render: function (data, type, row) {
+                    return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
                 },
+            },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "dt_no" ) }}' ),
                 orderable: false,
-                
+                width: '1%',
                 render: function (data, type, row, meta) {
                     // Calculate the row number dynamically based on the page info
                     const pageInfo = dt_table.page.info();
@@ -172,71 +141,30 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "created_date" ) }}' ),
-                
+                width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
             },
             {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "email" ) }}' ),
-                
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "customer_member_id" ) }}' ),
+                width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
             },
             {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "user_social" ) }}' ),
-                
-                render: function( data, type, row, meta ) {
-                    return data.length > 0 ? data[0].platform_label : '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
-                
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "name" ) }}' ),
+                width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
             },
             {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "first_name" ) }}' ),
-                
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "quantity" ) }}' ),
+                width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "last_name" ) }}' ),
-                
-                render: function( data, type, row, meta ) {
-                    return data ? data : '-' ;
-                },
-            },
-            // {
-            //     targets: parseInt( '{{ Helper::columnIndex( $columns, "fullname" ) }}' ),
-                
-            //     render: function( data, type, row, meta ) {
-            //         return data ? data : '-' ;
-            //     },
-            // },
-            // {
-            //     targets: parseInt( '{{ Helper::columnIndex( $columns, "username" ) }}' ),
-                
-            //     render: function( data, type, row, meta ) {
-            //         return data ? data : '-' ;
-            //     },
-            // },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "feedback_email" ) }}' ),
-                
-                render: function( data, type, row, meta ) {
-                    return data ? data : '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "phone_number" ) }}' ),
-                render: function( data, type, row, meta ) {
-                    return data ? ( row.calling_code ? row.calling_code + " " : "+60 " ) + data : '-' ;
                 },
             },
             {
@@ -248,18 +176,18 @@ var statusMapper = @json( $data['status'] ),
             {
                 targets: parseInt( '{{ count( $columns ) - 1 }}' ),
                 orderable: false,
-                
+                width: '1%',
                 className: 'text-center',
                 render: function( data, type, row, meta ) {
 
-                    @canany( [ 'edit users', 'delete users' ] )
+                    @canany( [ 'edit lucky_draw_rewards', 'delete lucky_draw_rewards' ] )
                     let edit, status = '';
 
-                    @can( 'edit users' )
+                    @can( 'edit lucky_draw_rewards' )
                     edit = '<li class="dt-edit" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.edit' ) }}</span></a></li>';
                     @endcan
 
-                    @can( 'delete users' )
+                    @can( 'delete lucky_draw_rewards' )
                     status = row['status'] == 10 ? 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="20"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="10"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
@@ -300,13 +228,13 @@ var statusMapper = @json( $data['status'] ),
         } );
 
         $( document ).on( 'click', '.dt-edit', function() {
-            window.location.href = '{{ route( 'admin.user.edit' ) }}?id=' + $( this ).data( 'id' );
+            window.location.href = '{{ route( 'admin.lucky_draw_reward.edit' ) }}?id=' + $( this ).data( 'id' );
         } );
 
         $( document ).on( 'click', '.dt-status', function() {
 
             $.ajax( {
-                url: '{{ route( 'admin.user.updateUserStatus' ) }}',
+                url: '{{ route( 'admin.lucky_draw_reward.updateLuckyDrawRewardStatus' ) }}',
                 type: 'POST',
                 data: {
                     'id': $( this ).data( 'id' ),

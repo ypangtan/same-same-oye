@@ -26,9 +26,11 @@ use App\Http\Controllers\Admin\{
     AnnouncementController,
     AnnouncementRewardController,
     BannerController,
+    LuckyDrawController,
     ProductController,
     SalesRecordController,
     MarketingNotificationController,
+    RankController,
 };
 
 use App\Models\{
@@ -425,6 +427,46 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-marketing-notifications-status', [ MarketingNotificationController::class, 'updateMarketingNotificationStatus' ] )->name( 'admin.marketing_notifications.updateMarketingNotificationStatus' );
 
                 Route::post( 'cke-upload', [ MarketingNotificationController::class, 'ckeUpload' ] )->name( 'admin.marketing_notifications.ckeUpload' );
+            } );
+
+            Route::prefix( 'lucky_draw_rewards' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view lucky_draw_rewards' ] ], function() {
+                    Route::get( '/', [ LuckyDrawController::class, 'index' ] )->name( 'admin.module_parent.lucky_draw_reward.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add lucky_draw_rewards' ] ], function() {
+                    Route::get( 'add', [ LuckyDrawController::class, 'add' ] )->name( 'admin.lucky_draw_reward.add' );
+                    Route::get( 'import', [ LuckyDrawController::class, 'import' ] )->name( 'admin.lucky_draw_reward.import' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit lucky_draw_rewards' ] ], function() {
+                    Route::get( 'edit/{id?}', [ LuckyDrawController::class, 'edit' ] )->name( 'admin.lucky_draw_reward.edit' );
+                } );
+
+                Route::post( 'all-lucky-draw-reward', [ LuckyDrawController::class, 'allLuckyDrawRewards' ] )->name( 'admin.lucky_draw_reward.allLuckyDrawRewards' );
+                Route::post( 'one-lucky-draw-reward', [ LuckyDrawController::class, 'oneLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.oneLuckyDrawReward' );
+                Route::post( 'create-lucky-draw-reward', [ LuckyDrawController::class, 'createLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.createLuckyDrawReward' );
+                Route::post( 'update-lucky-draw-reward', [ LuckyDrawController::class, 'updateLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.updateLuckyDrawReward' );
+                Route::post( 'update-lucky-draw-reward-status', [ LuckyDrawController::class, 'updateLuckyDrawRewardStatus' ] )->name( 'admin.lucky_draw_reward.updateLuckyDrawRewardStatus' );
+                Route::post( 'import-lucky-draw-reward', [ LuckyDrawController::class, 'importLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawReward' );
+                Route::post( 'import-lucky-draw-reward-v2', [ LuckyDrawController::class, 'importLuckyDrawRewardV2' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawRewardV2' );
+            } );
+
+
+            Route::prefix( 'ranks' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view ranks' ] ], function() {
+                    Route::get( '/', [ RankController::class, 'index' ] )->name( 'admin.module_parent.rank.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add ranks' ] ], function() {
+                    Route::get( 'add', [ RankController::class, 'add' ] )->name( 'admin.rank.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit ranks' ] ], function() {
+                    Route::get( 'edit/{id?}', [ RankController::class, 'edit' ] )->name( 'admin.rank.edit' );
+                } );
+
+                Route::post( 'all-ranks', [ RankController::class, 'allRanks' ] )->name( 'admin.rank.allRanks' );
+                Route::post( 'one-rank', [ RankController::class, 'oneRank' ] )->name( 'admin.rank.oneRank' );
+                Route::post( 'create-rank', [ RankController::class, 'createRank' ] )->name( 'admin.rank.createRank' );
+                Route::post( 'update-rank', [ RankController::class, 'updateRank' ] )->name( 'admin.rank.updateRank' );
+                Route::post( 'update-rank-status', [ RankController::class, 'updateRankStatus' ] )->name( 'admin.rank.updateRankStatus' );
             } );
 
         } );

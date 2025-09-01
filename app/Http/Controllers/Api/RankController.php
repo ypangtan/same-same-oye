@@ -98,4 +98,17 @@ class RankController extends Controller
 
     }
 
+    /**
+     * 3. Get all ranks 
+     * 
+     * @authenticated
+     * 
+     * @group Rank API
+     * 
+     */
+    public function getAllRanks( Request $request ) {
+
+        return RankService::getAllRanks( $request );
+    }
+
 }

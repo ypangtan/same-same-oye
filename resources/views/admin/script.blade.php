@@ -54,7 +54,8 @@
         }
 
         let modalSuccess = new bootstrap.Modal( document.getElementById( 'modal_success' ) ),
-            modalDanger = new bootstrap.Modal( document.getElementById( 'modal_danger' ) );
+            modalDanger = new bootstrap.Modal( document.getElementById( 'modal_danger' ) ),
+            modalWarning = new bootstrap.Modal( document.getElementById( 'modal_warning' ) );
 
         function resetInputValidation() {
 

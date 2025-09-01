@@ -10,37 +10,21 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
-use App\Traits\HasTranslations;
-
 use Helper;
 
-class Rank extends Model
+use Carbon\Carbon;
+
+class LuckyDrawImportHistory extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'title',
-        'description',
-        'target_spending',
-        'priority',
-        'reward_value',
+        'uploaded_by',
+        'name',
+        'hash_name',
+        'file',
         'status',
     ];
-
-    public function users()
-    {
-        return $this->hasMany( USer::class, 'rank_id' );
-    }
-
-    public function getTargetRangeAttribute() {
-        $higherRank = Rank::where( 'priority', '>', $this->priority )->orderBy( 'priority', 'ASC' )->first();
-
-        if( $higherRank ) {
-            return $higherRank->target_spending - 1 ;
-        }
-
-        return null;
-    }
 
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
@@ -51,15 +35,14 @@ class Rank extends Model
     }
 
     protected static $logAttributes = [
-        'title',
-        'description',
-        'target_spending',
-        'priority',
-        'reward_value',
+        'uploaded_by',
+        'name',
+        'hash_name',
+        'file',
         'status',
     ];
 
-    protected static $logName = 'ranks';
+    protected static $logName = 'lucky_draw_import_histories';
 
     protected static $logOnlyDirty = true;
 
@@ -68,6 +51,6 @@ class Rank extends Model
     }
 
     public function getDescriptionForEvent( string $eventName ): string {
-        return "{$eventName} rank";
+        return "{$eventName} ";
     }
 }

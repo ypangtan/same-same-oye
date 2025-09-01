@@ -208,6 +208,7 @@
         <!-- main @e -->
     </div>
 
+    <x-modal-warning />
     <x-modal-success />
     <x-modal-danger />
 

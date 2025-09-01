@@ -14,7 +14,9 @@ use App\Http\Controllers\Api\{
     ApiRequestController,
     BannerController,
     AnnouncementController,
+    LuckyDrawRewardController,
     PointsController,
+    RankController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -53,6 +55,15 @@ Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
 Route::prefix( 'banners' )->group( function() {
     Route::get( '/', [ BannerController::class, 'getBanners' ] );
     Route::any( 'details', [ BannerController::class, 'oneBanner' ] );
+} );
+
+Route::prefix( 'lucky-draw-reward' )->group( function() {
+    Route::get( '/', [ LuckyDrawRewardController::class, 'searchLuckyDrawRewards' ] );
+} );
+
+
+Route::prefix( 'ranks' )->group( function() {
+    Route::get( '/', [ RankController::class, 'getAllRanks' ] );
 } );
 
 
