@@ -57,10 +57,9 @@ Route::prefix( 'banners' )->group( function() {
     Route::any( 'details', [ BannerController::class, 'oneBanner' ] );
 } );
 
-Route::prefix( 'lucky-draw-reward' )->group( function() {
+Route::prefix( 'lucky-draw-rewards' )->group( function() {
     Route::get( '/', [ LuckyDrawRewardController::class, 'searchLuckyDrawRewards' ] );
 } );
-
 
 Route::prefix( 'ranks' )->group( function() {
     Route::get( '/', [ RankController::class, 'getAllRanks' ] );
