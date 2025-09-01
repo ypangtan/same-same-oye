@@ -21,6 +21,8 @@ class LuckyDrawRewardController extends Controller
      * 
      * @group Lucky Draw Reward API
      * 
+     * @bodyParam customer_member_id string required The customer member id of the lucky draw rewards. Example: abc1234
+     * 
      */
     public function searchLuckyDrawRewards( Request $request ) {
 
