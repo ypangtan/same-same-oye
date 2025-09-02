@@ -10,138 +10,11 @@
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "cc210aab-76b3-4a3f-bde1-cbf0e4ef866d",
+        "_postman_id": "a362eaf8-72c3-425e-a491-49f4d6107fff",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
-        {
-            "name": "Lucky Draw Reward API",
-            "description": "",
-            "item": [
-                {
-                    "name": "1. Search Lucky Draw Reward",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/lucky-draw-rewards",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/lucky-draw-rewards"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"customer_member_id\":\"abc1234\"}"
-                        },
-                        "description": "<aside class=\"notice\">Search Lucky Draw Reward <\/aside>",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "x-ratelimit-limit",
-                                    "value": "200"
-                                },
-                                {
-                                    "key": "x-ratelimit-remaining",
-                                    "value": "197"
-                                },
-                                {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
-                                }
-                            ],
-                            "code": 200,
-                            "body": "{\"data\":[{\"id\":3,\"customer_member_id\":\"abc1234\",\"name\":\"test\",\"quantity\":\"2\",\"reference_id\":\"aaa,ccc\",\"status\":10,\"created_at\":\"2025-09-01 16:40:00\",\"updated_at\":\"2025-09-01 17:03:44\"}]}",
-                            "name": ""
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Rank API",
-            "description": "",
-            "item": [
-                {
-                    "name": "3. Get all ranks",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/ranks",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/ranks"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "x-ratelimit-limit",
-                                    "value": "200"
-                                },
-                                {
-                                    "key": "x-ratelimit-remaining",
-                                    "value": "196"
-                                },
-                                {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
-                                }
-                            ],
-                            "code": 200,
-                            "body": "{\"data\":[{\"id\":1,\"title\":\"Member\",\"description\":\"a\",\"target_spending\":0,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 12:10:16\",\"encrypted_id\":\"1q\",\"target_range\":null},{\"id\":2,\"title\":\"Silver\",\"description\":\"\",\"target_spending\":3000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"OJ\",\"target_range\":null},{\"id\":3,\"title\":\"Gold\",\"description\":\"\",\"target_spending\":30000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"o4\",\"target_range\":null},{\"id\":4,\"title\":\"Premium\",\"description\":\"\",\"target_spending\":100000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"2G\",\"target_range\":null}]}",
-                            "name": ""
-                        }
-                    ]
-                }
-            ]
-        },
         {
             "name": "Announcement API",
             "description": "",
@@ -509,6 +382,71 @@
             ]
         },
         {
+            "name": "Lucky Draw Reward API",
+            "description": "",
+            "item": [
+                {
+                    "name": "1. Search Lucky Draw Reward",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/lucky-draw-rewards",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/lucky-draw-rewards"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"customer_member_id\":\"abc1234\"}"
+                        },
+                        "description": "<aside class=\"notice\">Search Lucky Draw Reward <\/aside>",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "x-ratelimit-limit",
+                                    "value": "200"
+                                },
+                                {
+                                    "key": "x-ratelimit-remaining",
+                                    "value": "197"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"data\":[{\"id\":3,\"customer_member_id\":\"abc1234\",\"name\":\"test\",\"quantity\":\"2\",\"reference_id\":\"aaa,ccc\",\"status\":10,\"created_at\":\"2025-09-01 16:40:00\",\"updated_at\":\"2025-09-01 17:03:44\"}]}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Points API",
             "description": "",
             "item": [
@@ -690,6 +628,68 @@
                             ],
                             "code": 401,
                             "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Rank API",
+            "description": "",
+            "item": [
+                {
+                    "name": "3. Get all ranks",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/ranks",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/ranks"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "x-ratelimit-limit",
+                                    "value": "200"
+                                },
+                                {
+                                    "key": "x-ratelimit-remaining",
+                                    "value": "196"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"data\":[{\"id\":1,\"title\":\"Member\",\"description\":\"a\",\"target_spending\":0,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 12:10:16\",\"encrypted_id\":\"1q\",\"target_range\":null},{\"id\":2,\"title\":\"Silver\",\"description\":\"\",\"target_spending\":3000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"OJ\",\"target_range\":null},{\"id\":3,\"title\":\"Gold\",\"description\":\"\",\"target_spending\":30000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"o4\",\"target_range\":null},{\"id\":4,\"title\":\"Premium\",\"description\":\"\",\"target_spending\":100000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"2G\",\"target_range\":null}]}",
                             "name": ""
                         }
                     ]
@@ -1230,7 +1230,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"ea\",\"app_id\":\"voluptates\",\"api_key\":\"iure\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"cumque\",\"app_id\":\"velit\",\"api_key\":\"totam\"}"
                         },
                         "description": ""
                     },

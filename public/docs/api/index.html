@@ -70,26 +70,6 @@
                                                 </ul>
                     
                     <ul id="tocify-header-2" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="lucky-draw-reward-api">
-                    <a href="#lucky-draw-reward-api">Lucky Draw Reward API</a>
-                </li>
-                                    <ul id="tocify-subheader-lucky-draw-reward-api" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">
-                        <a href="#lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">1. Search Lucky Draw Reward</a>
-                    </li>
-                                                    </ul>
-                            </ul>
-                    <ul id="tocify-header-3" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="rank-api">
-                    <a href="#rank-api">Rank API</a>
-                </li>
-                                    <ul id="tocify-subheader-rank-api" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="rank-api-GETapi-v1-ranks">
-                        <a href="#rank-api-GETapi-v1-ranks">3. Get all ranks</a>
-                    </li>
-                                                    </ul>
-                            </ul>
-                    <ul id="tocify-header-4" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="announcement-api">
                     <a href="#announcement-api">Announcement API</a>
                 </li>
@@ -102,7 +82,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-5" class="tocify-header">
+                    <ul id="tocify-header-3" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="banner-api">
                     <a href="#banner-api">Banner API</a>
                 </li>
@@ -115,7 +95,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-6" class="tocify-header">
+                    <ul id="tocify-header-4" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="check-in-api">
                     <a href="#check-in-api">Check-in API</a>
                 </li>
@@ -131,7 +111,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-7" class="tocify-header">
+                    <ul id="tocify-header-5" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="contact-us-api">
                     <a href="#contact-us-api">Contact-Us API</a>
                 </li>
@@ -141,7 +121,17 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-8" class="tocify-header">
+                    <ul id="tocify-header-6" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="lucky-draw-reward-api">
+                    <a href="#lucky-draw-reward-api">Lucky Draw Reward API</a>
+                </li>
+                                    <ul id="tocify-subheader-lucky-draw-reward-api" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">
+                        <a href="#lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">1. Search Lucky Draw Reward</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-7" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="points-api">
                     <a href="#points-api">Points API</a>
                 </li>
@@ -157,6 +147,16 @@
                     </li>
                                     <li class="tocify-item level-2" data-unique="points-api-GETapi-v1-points-conversion-rate">
                         <a href="#points-api-GETapi-v1-points-conversion-rate">4. Get conversion rate</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-8" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="rank-api">
+                    <a href="#rank-api">Rank API</a>
+                </li>
+                                    <ul id="tocify-subheader-rank-api" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="rank-api-GETapi-v1-ranks">
+                        <a href="#rank-api-GETapi-v1-ranks">3. Get all ranks</a>
                     </li>
                                                     </ul>
                             </ul>
@@ -253,292 +253,6 @@ You can switch the language used with the tabs at the top right (or from the nav
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>This API is not authenticated.</p>
-
-        <h1 id="lucky-draw-reward-api">Lucky Draw Reward API</h1>
-
-    
-
-            <h2 id="lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">1. Search Lucky Draw Reward</h2>
-
-<p>
-</p>
-
-<aside class="notice">Search Lucky Draw Reward </aside>
-
-<span id="example-requests-GETapi-v1-lucky-draw-rewards">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/lucky-draw-rewards" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"customer_member_id\": \"abc1234\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/lucky-draw-rewards"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "customer_member_id": "abc1234"
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-lucky-draw-rewards">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary>
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-ratelimit-limit: 200
-x-ratelimit-remaining: 197
-access-control-allow-origin: *
- </code></pre>
-        </details>         <pre>
-
-<code class="language-json">{
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 3,
-            &quot;customer_member_id&quot;: &quot;abc1234&quot;,
-            &quot;name&quot;: &quot;test&quot;,
-            &quot;quantity&quot;: &quot;2&quot;,
-            &quot;reference_id&quot;: &quot;aaa,ccc&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-09-01 16:40:00&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-01 17:03:44&quot;
-        }
-    ]
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-lucky-draw-rewards" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-lucky-draw-rewards"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-lucky-draw-rewards"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-lucky-draw-rewards" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-lucky-draw-rewards"></code></pre>
-</span>
-<form id="form-GETapi-v1-lucky-draw-rewards" data-method="GET"
-      data-path="api/v1/lucky-draw-rewards"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-lucky-draw-rewards', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-lucky-draw-rewards"
-                    onclick="tryItOut('GETapi-v1-lucky-draw-rewards');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-lucky-draw-rewards"
-                    onclick="cancelTryOut('GETapi-v1-lucky-draw-rewards');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-lucky-draw-rewards" hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/lucky-draw-rewards</code></b>
-        </p>
-                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <p>
-            <b><code>customer_member_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="customer_member_id"
-               data-endpoint="GETapi-v1-lucky-draw-rewards"
-               value="abc1234"
-               data-component="body" hidden>
-    <br>
-<p>The customer member id of the lucky draw rewards.</p>
-        </p>
-        </form>
-
-        <h1 id="rank-api">Rank API</h1>
-
-    
-
-            <h2 id="rank-api-GETapi-v1-ranks">3. Get all ranks</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-ranks">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/ranks" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/ranks"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-ranks">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary>
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-ratelimit-limit: 200
-x-ratelimit-remaining: 196
-access-control-allow-origin: *
- </code></pre>
-        </details>         <pre>
-
-<code class="language-json">{
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Member&quot;,
-            &quot;description&quot;: &quot;a&quot;,
-            &quot;target_spending&quot;: 0,
-            &quot;priority&quot;: &quot;0&quot;,
-            &quot;reward_value&quot;: &quot;0&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-31 12:10:16&quot;,
-            &quot;encrypted_id&quot;: &quot;1q&quot;,
-            &quot;target_range&quot;: null
-        },
-        {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Silver&quot;,
-            &quot;description&quot;: &quot;&quot;,
-            &quot;target_spending&quot;: 3000,
-            &quot;priority&quot;: &quot;0&quot;,
-            &quot;reward_value&quot;: &quot;0&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;encrypted_id&quot;: &quot;OJ&quot;,
-            &quot;target_range&quot;: null
-        },
-        {
-            &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Gold&quot;,
-            &quot;description&quot;: &quot;&quot;,
-            &quot;target_spending&quot;: 30000,
-            &quot;priority&quot;: &quot;0&quot;,
-            &quot;reward_value&quot;: &quot;0&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;encrypted_id&quot;: &quot;o4&quot;,
-            &quot;target_range&quot;: null
-        },
-        {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Premium&quot;,
-            &quot;description&quot;: &quot;&quot;,
-            &quot;target_spending&quot;: 100000,
-            &quot;priority&quot;: &quot;0&quot;,
-            &quot;reward_value&quot;: &quot;0&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;encrypted_id&quot;: &quot;2G&quot;,
-            &quot;target_range&quot;: null
-        }
-    ]
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-ranks" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-ranks"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-ranks"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-ranks" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-ranks"></code></pre>
-</span>
-<form id="form-GETapi-v1-ranks" data-method="GET"
-      data-path="api/v1/ranks"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-ranks', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-ranks"
-                    onclick="tryItOut('GETapi-v1-ranks');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-ranks"
-                    onclick="cancelTryOut('GETapi-v1-ranks');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-ranks" hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/ranks</code></b>
-        </p>
-                    </form>
 
         <h1 id="announcement-api">Announcement API</h1>
 
@@ -1958,6 +1672,138 @@ fetch(url, {
         </p>
         </form>
 
+        <h1 id="lucky-draw-reward-api">Lucky Draw Reward API</h1>
+
+    
+
+            <h2 id="lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">1. Search Lucky Draw Reward</h2>
+
+<p>
+</p>
+
+<aside class="notice">Search Lucky Draw Reward </aside>
+
+<span id="example-requests-GETapi-v1-lucky-draw-rewards">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/v1/lucky-draw-rewards" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"customer_member_id\": \"abc1234\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/lucky-draw-rewards"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "customer_member_id": "abc1234"
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-lucky-draw-rewards">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-ratelimit-limit: 200
+x-ratelimit-remaining: 197
+access-control-allow-origin: *
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 3,
+            &quot;customer_member_id&quot;: &quot;abc1234&quot;,
+            &quot;name&quot;: &quot;test&quot;,
+            &quot;quantity&quot;: &quot;2&quot;,
+            &quot;reference_id&quot;: &quot;aaa,ccc&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-09-01 16:40:00&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-01 17:03:44&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-lucky-draw-rewards" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-lucky-draw-rewards"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-lucky-draw-rewards"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-lucky-draw-rewards" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-lucky-draw-rewards"></code></pre>
+</span>
+<form id="form-GETapi-v1-lucky-draw-rewards" data-method="GET"
+      data-path="api/v1/lucky-draw-rewards"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-lucky-draw-rewards', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-lucky-draw-rewards"
+                    onclick="tryItOut('GETapi-v1-lucky-draw-rewards');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-lucky-draw-rewards"
+                    onclick="cancelTryOut('GETapi-v1-lucky-draw-rewards');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-lucky-draw-rewards" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/lucky-draw-rewards</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>customer_member_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="customer_member_id"
+               data-endpoint="GETapi-v1-lucky-draw-rewards"
+               value="abc1234"
+               data-component="body" hidden>
+    <br>
+<p>The customer member id of the lucky draw rewards.</p>
+        </p>
+        </form>
+
         <h1 id="points-api">Points API</h1>
 
     
@@ -2443,6 +2289,160 @@ access-control-allow-origin: *
                                                                 data-component="header"></label>
         </p>
                 </form>
+
+        <h1 id="rank-api">Rank API</h1>
+
+    
+
+            <h2 id="rank-api-GETapi-v1-ranks">3. Get all ranks</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-ranks">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/v1/ranks" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/ranks"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-ranks">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-ratelimit-limit: 200
+x-ratelimit-remaining: 196
+access-control-allow-origin: *
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;Member&quot;,
+            &quot;description&quot;: &quot;a&quot;,
+            &quot;target_spending&quot;: 0,
+            &quot;priority&quot;: &quot;0&quot;,
+            &quot;reward_value&quot;: &quot;0&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;updated_at&quot;: &quot;2025-08-31 12:10:16&quot;,
+            &quot;encrypted_id&quot;: &quot;1q&quot;,
+            &quot;target_range&quot;: null
+        },
+        {
+            &quot;id&quot;: 2,
+            &quot;title&quot;: &quot;Silver&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;target_spending&quot;: 3000,
+            &quot;priority&quot;: &quot;0&quot;,
+            &quot;reward_value&quot;: &quot;0&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;encrypted_id&quot;: &quot;OJ&quot;,
+            &quot;target_range&quot;: null
+        },
+        {
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;Gold&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;target_spending&quot;: 30000,
+            &quot;priority&quot;: &quot;0&quot;,
+            &quot;reward_value&quot;: &quot;0&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;encrypted_id&quot;: &quot;o4&quot;,
+            &quot;target_range&quot;: null
+        },
+        {
+            &quot;id&quot;: 4,
+            &quot;title&quot;: &quot;Premium&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;target_spending&quot;: 100000,
+            &quot;priority&quot;: &quot;0&quot;,
+            &quot;reward_value&quot;: &quot;0&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;encrypted_id&quot;: &quot;2G&quot;,
+            &quot;target_range&quot;: null
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-ranks" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-ranks"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-ranks"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-ranks" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-ranks"></code></pre>
+</span>
+<form id="form-GETapi-v1-ranks" data-method="GET"
+      data-path="api/v1/ranks"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-ranks', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-ranks"
+                    onclick="tryItOut('GETapi-v1-ranks');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-ranks"
+                    onclick="cancelTryOut('GETapi-v1-ranks');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-ranks" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/ranks</code></b>
+        </p>
+                    </form>
 
         <h1 id="user-api">User API</h1>
 
@@ -3633,7 +3633,7 @@ fetch(url, {
     --form "email=john@email.com" \
     --form "date_of_birth=2022-01-01" \
     --form "to_remove=1" \
-    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\phpDB54.tmp" </code></pre></div>
+    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\phpABB.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -4334,9 +4334,9 @@ fetch(url, {
     --data "{
     \"title\": \"test-notification\",
     \"content\": \"test-notification-content\",
-    \"register_token\": \"ea\",
-    \"app_id\": \"voluptates\",
-    \"api_key\": \"iure\"
+    \"register_token\": \"cumque\",
+    \"app_id\": \"velit\",
+    \"api_key\": \"totam\"
 }"
 </code></pre></div>
 
@@ -4354,9 +4354,9 @@ const headers = {
 let body = {
     "title": "test-notification",
     "content": "test-notification-content",
-    "register_token": "ea",
-    "app_id": "voluptates",
-    "api_key": "iure"
+    "register_token": "cumque",
+    "app_id": "velit",
+    "api_key": "totam"
 };
 
 fetch(url, {
@@ -4442,7 +4442,7 @@ fetch(url, {
                 <input type="text"
                name="register_token"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="ea"
+               value="cumque"
                data-component="body" hidden>
     <br>
 <p>optional The target device token. ( Default will be following current authenticated user's register token ).</p>
@@ -4452,7 +4452,7 @@ fetch(url, {
                 <input type="text"
                name="app_id"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="voluptates"
+               value="velit"
                data-component="body" hidden>
     <br>
 <p>optional The one signal app id. ( Default will be following current settings ).</p>
@@ -4462,7 +4462,7 @@ fetch(url, {
                 <input type="text"
                name="api_key"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="iure"
+               value="totam"
                data-component="body" hidden>
     <br>
 <p>optional The one signal api_key ( Default will be following current settings ).</p>
