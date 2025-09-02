@@ -133,7 +133,7 @@ class User extends Model
     
         $rank = Rank::where( 'status', 10 )
             ->orderBy('priority', 'ASC')
-            ->first();
+            ->get();
 
         $data = [];
         
