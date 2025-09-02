@@ -102,7 +102,7 @@ class User extends Model
             return $transaction->invoice->total_price ?? 0;
         });
 
-        $rank = Rank::where('min_target', '<=', $totalPoints)
+        $rank = Rank::where('target_spending', '<=', $totalPoints)
             ->where( 'status', 10 )
             ->orderBy('priority', 'DESC')
             ->first();
@@ -140,8 +140,8 @@ class User extends Model
         foreach ( $rank as $v ) {
             $data[$v->title] = [
                 'current_points' => \Helper::numberFormat( $totalPoints, 2 ),
-                'required_points'  => Helper::numberFormat( ( ($v->min_target - $totalPoints > 0) ? $v->min_target - $totalPoints : 0), 2 ),
-                'next_level_target'  => $v->min_target,
+                'required_points'  => Helper::numberFormat( ( ($v->target_spending - $totalPoints > 0) ? $v->target_spending - $totalPoints : 0), 2 ),
+                'next_level_target'  => $v->target_spending,
             ];
         }
 
