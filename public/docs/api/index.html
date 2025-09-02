@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var baseUrl = "http://localhost";
+        var baseUrl = "https://staging.ifei.com.my/";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -272,14 +272,14 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/announcements?show_claimed=1" \
+    --get "https://staging.ifei.com.my/api/v1/announcements?show_claimed=1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/announcements"
+    "https://staging.ifei.com.my/api/v1/announcements"
 );
 
 const params = {
@@ -302,21 +302,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-announcements">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-announcements" hidden>
@@ -393,7 +403,7 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/announcements/close" \
+    "https://staging.ifei.com.my/api/v1/announcements/close" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -404,7 +414,7 @@ access-control-allow-origin: *
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/announcements/close"
+    "https://staging.ifei.com.my/api/v1/announcements/close"
 );
 
 const headers = {
@@ -504,14 +514,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/banners" \
+    --get "https://staging.ifei.com.my/api/v1/banners" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/banners"
+    "https://staging.ifei.com.my/api/v1/banners"
 );
 
 const headers = {
@@ -528,25 +538,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-banners">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-ratelimit-limit: 200
-x-ratelimit-remaining: 199
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;&quot;,
-    &quot;message_key&quot;: &quot;get_banner_success&quot;,
-    &quot;data&quot;: []
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-banners" hidden>
@@ -612,7 +628,7 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/banners/details" \
+    --get "https://staging.ifei.com.my/api/v1/banners/details" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -623,7 +639,7 @@ access-control-allow-origin: *
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/banners/details"
+    "https://staging.ifei.com.my/api/v1/banners/details"
 );
 
 const headers = {
@@ -645,497 +661,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-banners-details">
             <blockquote>
-            <p>Example response (500):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-ratelimit-limit: 200
-x-ratelimit-remaining: 198
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Call to a member function append() on null&quot;,
-    &quot;exception&quot;: &quot;Error&quot;,
-    &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\app\\Services\\BannerService.php&quot;,
-    &quot;line&quot;: 333,
-    &quot;trace&quot;: [
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\app\\Http\\Controllers\\Api\\BannerController.php&quot;,
-            &quot;line&quot;: 41,
-            &quot;function&quot;: &quot;oneBannerClient&quot;,
-            &quot;class&quot;: &quot;App\\Services\\BannerService&quot;,
-            &quot;type&quot;: &quot;::&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php&quot;,
-            &quot;line&quot;: 54,
-            &quot;function&quot;: &quot;oneBanner&quot;,
-            &quot;class&quot;: &quot;App\\Http\\Controllers\\Api\\BannerController&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php&quot;,
-            &quot;line&quot;: 45,
-            &quot;function&quot;: &quot;callAction&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Controller&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
-            &quot;line&quot;: 261,
-            &quot;function&quot;: &quot;dispatch&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\ControllerDispatcher&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
-            &quot;line&quot;: 205,
-            &quot;function&quot;: &quot;runController&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
-            &quot;line&quot;: 721,
-            &quot;function&quot;: &quot;run&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 128,
-            &quot;function&quot;: &quot;Illuminate\\Routing\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\app\\Http\\Middleware\\APIVersion.php&quot;,
-            &quot;line&quot;: 20,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;App\\Http\\Middleware\\APIVersion&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php&quot;,
-            &quot;line&quot;: 50,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\SubstituteBindings&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
-            &quot;line&quot;: 127,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
-            &quot;line&quot;: 93,
-            &quot;function&quot;: &quot;handleRequest&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
-            &quot;line&quot;: 55,
-            &quot;function&quot;: &quot;handleRequestUsingNamedLimiter&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 103,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
-            &quot;line&quot;: 719,
-            &quot;function&quot;: &quot;then&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
-            &quot;line&quot;: 698,
-            &quot;function&quot;: &quot;runRouteWithinStack&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
-            &quot;line&quot;: 662,
-            &quot;function&quot;: &quot;runRoute&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
-            &quot;line&quot;: 651,
-            &quot;function&quot;: &quot;dispatchToRoute&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;dispatch&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 128,
-            &quot;function&quot;: &quot;Illuminate\\Foundation\\Http\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\barryvdh\\laravel-debugbar\\src\\Middleware\\InjectDebugbar.php&quot;,
-            &quot;line&quot;: 59,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Barryvdh\\Debugbar\\Middleware\\InjectDebugbar&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
-            &quot;line&quot;: 21,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php&quot;,
-            &quot;line&quot;: 31,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
-            &quot;line&quot;: 21,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php&quot;,
-            &quot;line&quot;: 40,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TrimStrings&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php&quot;,
-            &quot;line&quot;: 27,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php&quot;,
-            &quot;line&quot;: 86,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php&quot;,
-            &quot;line&quot;: 52,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Fruitcake\\Cors\\HandleCors&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\fideloper\\proxy\\src\\TrustProxies.php&quot;,
-            &quot;line&quot;: 57,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 167,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Fideloper\\Proxy\\TrustProxies&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
-            &quot;line&quot;: 103,
-            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
-            &quot;line&quot;: 142,
-            &quot;function&quot;: &quot;then&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
-            &quot;line&quot;: 111,
-            &quot;function&quot;: &quot;sendRequestThroughRouter&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
-            &quot;line&quot;: 299,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
-            &quot;line&quot;: 287,
-            &quot;function&quot;: &quot;callLaravelOrLumenRoute&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
-            &quot;line&quot;: 89,
-            &quot;function&quot;: &quot;makeApiCall&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
-            &quot;line&quot;: 45,
-            &quot;function&quot;: &quot;makeResponseCall&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
-            &quot;line&quot;: 35,
-            &quot;function&quot;: &quot;makeResponseCallIfConditionsPass&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 222,
-            &quot;function&quot;: &quot;__invoke&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 176,
-            &quot;function&quot;: &quot;iterateThroughStrategies&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 116,
-            &quot;function&quot;: &quot;fetchResponses&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 123,
-            &quot;function&quot;: &quot;processRoute&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 80,
-            &quot;function&quot;: &quot;extractEndpointsInfoFromLaravelApp&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 56,
-            &quot;function&quot;: &quot;extractEndpointsInfoAndWriteToDisk&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php&quot;,
-            &quot;line&quot;: 55,
-            &quot;function&quot;: &quot;get&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
-            &quot;line&quot;: 36,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Knuckles\\Scribe\\Commands\\GenerateDocumentation&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php&quot;,
-            &quot;line&quot;: 40,
-            &quot;function&quot;: &quot;Illuminate\\Container\\{closure}&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
-            &quot;type&quot;: &quot;::&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
-            &quot;line&quot;: 93,
-            &quot;function&quot;: &quot;unwrapIfClosure&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Container\\Util&quot;,
-            &quot;type&quot;: &quot;::&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
-            &quot;line&quot;: 35,
-            &quot;function&quot;: &quot;callBoundMethod&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
-            &quot;type&quot;: &quot;::&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php&quot;,
-            &quot;line&quot;: 653,
-            &quot;function&quot;: &quot;call&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
-            &quot;type&quot;: &quot;::&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
-            &quot;line&quot;: 136,
-            &quot;function&quot;: &quot;call&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Container\\Container&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\symfony\\console\\Command\\Command.php&quot;,
-            &quot;line&quot;: 298,
-            &quot;function&quot;: &quot;execute&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
-            &quot;line&quot;: 120,
-            &quot;function&quot;: &quot;run&quot;,
-            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Command\\Command&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\symfony\\console\\Application.php&quot;,
-            &quot;line&quot;: 1040,
-            &quot;function&quot;: &quot;run&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\symfony\\console\\Application.php&quot;,
-            &quot;line&quot;: 301,
-            &quot;function&quot;: &quot;doRunCommand&quot;,
-            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\symfony\\console\\Application.php&quot;,
-            &quot;line&quot;: 171,
-            &quot;function&quot;: &quot;doRun&quot;,
-            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php&quot;,
-            &quot;line&quot;: 94,
-            &quot;function&quot;: &quot;run&quot;,
-            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php&quot;,
-            &quot;line&quot;: 129,
-            &quot;function&quot;: &quot;run&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Console\\Application&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        },
-        {
-            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\artisan&quot;,
-            &quot;line&quot;: 35,
-            &quot;function&quot;: &quot;handle&quot;,
-            &quot;class&quot;: &quot;Illuminate\\Foundation\\Console\\Kernel&quot;,
-            &quot;type&quot;: &quot;-&gt;&quot;
-        }
-    ]
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-banners-details" hidden>
@@ -1236,14 +786,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/checkin?per_page=10" \
+    --get "https://staging.ifei.com.my/api/v1/checkin?per_page=10" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/checkin"
+    "https://staging.ifei.com.my/api/v1/checkin"
 );
 
 const params = {
@@ -1266,21 +816,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-checkin">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-checkin" hidden>
@@ -1357,14 +917,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/checkin" \
+    "https://staging.ifei.com.my/api/v1/checkin" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/checkin"
+    "https://staging.ifei.com.my/api/v1/checkin"
 );
 
 const headers = {
@@ -1444,14 +1004,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/checkin/rewards" \
+    --get "https://staging.ifei.com.my/api/v1/checkin/rewards" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/checkin/rewards"
+    "https://staging.ifei.com.my/api/v1/checkin/rewards"
 );
 
 const headers = {
@@ -1468,21 +1028,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-checkin-rewards">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-checkin-rewards" hidden>
@@ -1551,7 +1121,7 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/contact-us" \
+    "https://staging.ifei.com.my/api/v1/contact-us" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1565,7 +1135,7 @@ access-control-allow-origin: *
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/contact-us"
+    "https://staging.ifei.com.my/api/v1/contact-us"
 );
 
 const headers = {
@@ -1689,7 +1259,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/lucky-draw-rewards" \
+    --get "https://staging.ifei.com.my/api/v1/lucky-draw-rewards" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1700,7 +1270,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/lucky-draw-rewards"
+    "https://staging.ifei.com.my/api/v1/lucky-draw-rewards"
 );
 
 const headers = {
@@ -1722,34 +1292,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-lucky-draw-rewards">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-ratelimit-limit: 200
-x-ratelimit-remaining: 197
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 3,
-            &quot;customer_member_id&quot;: &quot;abc1234&quot;,
-            &quot;name&quot;: &quot;test&quot;,
-            &quot;quantity&quot;: &quot;2&quot;,
-            &quot;reference_id&quot;: &quot;aaa,ccc&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-09-01 16:40:00&quot;,
-            &quot;updated_at&quot;: &quot;2025-09-01 17:03:44&quot;
-        }
-    ]
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-lucky-draw-rewards" hidden>
@@ -1822,14 +1389,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/points" \
+    --get "https://staging.ifei.com.my/api/v1/points" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/points"
+    "https://staging.ifei.com.my/api/v1/points"
 );
 
 const headers = {
@@ -1846,21 +1413,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-points">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-points" hidden>
@@ -1926,7 +1503,7 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/points/redeem" \
+    "https://staging.ifei.com.my/api/v1/points/redeem" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1939,7 +1516,7 @@ access-control-allow-origin: *
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/points/redeem"
+    "https://staging.ifei.com.my/api/v1/points/redeem"
 );
 
 const headers = {
@@ -2057,14 +1634,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/points/history?start_date=2023-08-17&amp;end_date=2023-08-17&amp;per_page=5" \
+    --get "https://staging.ifei.com.my/api/v1/points/history?start_date=2023-08-17&amp;end_date=2023-08-17&amp;per_page=5" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/points/history"
+    "https://staging.ifei.com.my/api/v1/points/history"
 );
 
 const params = {
@@ -2089,21 +1666,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-points-history">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-points-history" hidden>
@@ -2200,14 +1787,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/points/conversion-rate" \
+    --get "https://staging.ifei.com.my/api/v1/points/conversion-rate" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/points/conversion-rate"
+    "https://staging.ifei.com.my/api/v1/points/conversion-rate"
 );
 
 const headers = {
@@ -2224,21 +1811,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-points-conversion-rate">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-points-conversion-rate" hidden>
@@ -2307,14 +1904,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/ranks" \
+    --get "https://staging.ifei.com.my/api/v1/ranks" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/ranks"
+    "https://staging.ifei.com.my/api/v1/ranks"
 );
 
 const headers = {
@@ -2331,76 +1928,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-ranks">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-ratelimit-limit: 200
-x-ratelimit-remaining: 196
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;title&quot;: &quot;Member&quot;,
-            &quot;description&quot;: &quot;a&quot;,
-            &quot;target_spending&quot;: 0,
-            &quot;priority&quot;: &quot;0&quot;,
-            &quot;reward_value&quot;: &quot;0&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-31 12:10:16&quot;,
-            &quot;encrypted_id&quot;: &quot;1q&quot;,
-            &quot;target_range&quot;: null
-        },
-        {
-            &quot;id&quot;: 2,
-            &quot;title&quot;: &quot;Silver&quot;,
-            &quot;description&quot;: &quot;&quot;,
-            &quot;target_spending&quot;: 3000,
-            &quot;priority&quot;: &quot;0&quot;,
-            &quot;reward_value&quot;: &quot;0&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;encrypted_id&quot;: &quot;OJ&quot;,
-            &quot;target_range&quot;: null
-        },
-        {
-            &quot;id&quot;: 3,
-            &quot;title&quot;: &quot;Gold&quot;,
-            &quot;description&quot;: &quot;&quot;,
-            &quot;target_spending&quot;: 30000,
-            &quot;priority&quot;: &quot;0&quot;,
-            &quot;reward_value&quot;: &quot;0&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;encrypted_id&quot;: &quot;o4&quot;,
-            &quot;target_range&quot;: null
-        },
-        {
-            &quot;id&quot;: 4,
-            &quot;title&quot;: &quot;Premium&quot;,
-            &quot;description&quot;: &quot;&quot;,
-            &quot;target_spending&quot;: 100000,
-            &quot;priority&quot;: &quot;0&quot;,
-            &quot;reward_value&quot;: &quot;0&quot;,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
-            &quot;encrypted_id&quot;: &quot;2G&quot;,
-            &quot;target_range&quot;: null
-        }
-    ]
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-ranks" hidden>
@@ -2463,7 +2015,7 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users" \
+    "https://staging.ifei.com.my/api/v1/users" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -2482,7 +2034,7 @@ access-control-allow-origin: *
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users"
+    "https://staging.ifei.com.my/api/v1/users"
 );
 
 const headers = {
@@ -2659,7 +2211,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/login" \
+    "https://staging.ifei.com.my/api/v1/users/login" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -2674,7 +2226,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/login"
+    "https://staging.ifei.com.my/api/v1/users/login"
 );
 
 const headers = {
@@ -2806,14 +2358,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/users" \
+    --get "https://staging.ifei.com.my/api/v1/users" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users"
+    "https://staging.ifei.com.my/api/v1/users"
 );
 
 const headers = {
@@ -2830,21 +2382,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-users">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-users" hidden>
@@ -2909,7 +2471,7 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/otp" \
+    "https://staging.ifei.com.my/api/v1/otp" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -2922,7 +2484,7 @@ access-control-allow-origin: *
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/otp"
+    "https://staging.ifei.com.my/api/v1/otp"
 );
 
 const headers = {
@@ -3031,7 +2593,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/otp/resend" \
+    "https://staging.ifei.com.my/api/v1/otp/resend" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -3044,7 +2606,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/otp/resend"
+    "https://staging.ifei.com.my/api/v1/otp/resend"
 );
 
 const headers = {
@@ -3153,7 +2715,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/reset-password" \
+    "https://staging.ifei.com.my/api/v1/users/reset-password" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -3168,7 +2730,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/reset-password"
+    "https://staging.ifei.com.my/api/v1/users/reset-password"
 );
 
 const headers = {
@@ -3299,7 +2861,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/forgot-password" \
+    "https://staging.ifei.com.my/api/v1/users/forgot-password" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -3311,7 +2873,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/forgot-password"
+    "https://staging.ifei.com.my/api/v1/users/forgot-password"
 );
 
 const headers = {
@@ -3410,7 +2972,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/delete-verification" \
+    "https://staging.ifei.com.my/api/v1/users/delete-verification" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -3421,7 +2983,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/delete-verification"
+    "https://staging.ifei.com.my/api/v1/users/delete-verification"
 );
 
 const headers = {
@@ -3517,7 +3079,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/delete-confirm" \
+    "https://staging.ifei.com.my/api/v1/users/delete-confirm" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -3528,7 +3090,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/delete-confirm"
+    "https://staging.ifei.com.my/api/v1/users/delete-confirm"
 );
 
 const headers = {
@@ -3624,7 +3186,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/update" \
+    "https://staging.ifei.com.my/api/v1/users/update" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "username=John" \
@@ -3633,12 +3195,12 @@ fetch(url, {
     --form "email=john@email.com" \
     --form "date_of_birth=2022-01-01" \
     --form "to_remove=1" \
-    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\phpABB.tmp" </code></pre></div>
+    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\phpFA9A.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/update"
+    "https://staging.ifei.com.my/api/v1/users/update"
 );
 
 const headers = {
@@ -3801,14 +3363,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/users/notifications?is_read=1&amp;per_page=5&amp;notification=5" \
+    --get "https://staging.ifei.com.my/api/v1/users/notifications?is_read=1&amp;per_page=5&amp;notification=5" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/notifications"
+    "https://staging.ifei.com.my/api/v1/users/notifications"
 );
 
 const params = {
@@ -3833,21 +3395,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-users-notifications">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-users-notifications" hidden>
@@ -3944,7 +3516,7 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/notification" \
+    "https://staging.ifei.com.my/api/v1/users/notification" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -3955,7 +3527,7 @@ access-control-allow-origin: *
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/notification"
+    "https://staging.ifei.com.my/api/v1/users/notification"
 );
 
 const headers = {
@@ -4050,7 +3622,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/login-social" \
+    "https://staging.ifei.com.my/api/v1/users/login-social" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -4065,7 +3637,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/login-social"
+    "https://staging.ifei.com.my/api/v1/users/login-social"
 );
 
 const headers = {
@@ -4197,7 +3769,7 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/update-password" \
+    "https://staging.ifei.com.my/api/v1/users/update-password" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -4210,7 +3782,7 @@ fetch(url, {
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/update-password"
+    "https://staging.ifei.com.my/api/v1/users/update-password"
 );
 
 const headers = {
@@ -4328,22 +3900,22 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/users/test-notification" \
+    "https://staging.ifei.com.my/api/v1/users/test-notification" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"title\": \"test-notification\",
     \"content\": \"test-notification-content\",
-    \"register_token\": \"cumque\",
-    \"app_id\": \"velit\",
-    \"api_key\": \"totam\"
+    \"register_token\": \"ut\",
+    \"app_id\": \"enim\",
+    \"api_key\": \"quod\"
 }"
 </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/users/test-notification"
+    "https://staging.ifei.com.my/api/v1/users/test-notification"
 );
 
 const headers = {
@@ -4354,9 +3926,9 @@ const headers = {
 let body = {
     "title": "test-notification",
     "content": "test-notification-content",
-    "register_token": "cumque",
-    "app_id": "velit",
-    "api_key": "totam"
+    "register_token": "ut",
+    "app_id": "enim",
+    "api_key": "quod"
 };
 
 fetch(url, {
@@ -4442,7 +4014,7 @@ fetch(url, {
                 <input type="text"
                name="register_token"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="cumque"
+               value="ut"
                data-component="body" hidden>
     <br>
 <p>optional The target device token. ( Default will be following current authenticated user's register token ).</p>
@@ -4452,7 +4024,7 @@ fetch(url, {
                 <input type="text"
                name="app_id"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="velit"
+               value="enim"
                data-component="body" hidden>
     <br>
 <p>optional The one signal app id. ( Default will be following current settings ).</p>
@@ -4462,7 +4034,7 @@ fetch(url, {
                 <input type="text"
                name="api_key"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="totam"
+               value="quod"
                data-component="body" hidden>
     <br>
 <p>optional The one signal api_key ( Default will be following current settings ).</p>
@@ -4501,14 +4073,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/vouchers?per_page=10&amp;promo_code=XBMSD22&amp;user_voucher=1&amp;voucher_type=1&amp;discount_type=2&amp;expired_only=2" \
+    --get "https://staging.ifei.com.my/api/v1/vouchers?per_page=10&amp;promo_code=XBMSD22&amp;user_voucher=1&amp;voucher_type=1&amp;discount_type=2&amp;expired_only=2" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/vouchers"
+    "https://staging.ifei.com.my/api/v1/vouchers"
 );
 
 const params = {
@@ -4536,21 +4108,31 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-vouchers">
             <blockquote>
-            <p>Example response (401):</p>
+            <p>Example response (302):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
 access-control-allow-origin: *
  </code></pre>
         </details>         <pre>
 
-<code class="language-json">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
  </pre>
     </span>
 <span id="execution-results-GETapi-v1-vouchers" hidden>
@@ -4677,7 +4259,7 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/vouchers/claim-voucher" \
+    "https://staging.ifei.com.my/api/v1/vouchers/claim-voucher" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -4688,7 +4270,7 @@ access-control-allow-origin: *
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/vouchers/claim-voucher"
+    "https://staging.ifei.com.my/api/v1/vouchers/claim-voucher"
 );
 
 const headers = {

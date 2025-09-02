@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 servers:
   -
-    url: 'http://localhost'
+    url: 'https://staging.ifei.com.my'
 paths:
   /api/v1/announcements:
     get:
@@ -37,18 +37,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Announcement API'
   /api/v1/announcements/close:
@@ -104,26 +99,13 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: ''
-                  message_key: get_banner_success
-                  data: []
-                properties:
-                  message:
-                    type: string
-                    example: ''
-                  message_key:
-                    type: string
-                    example: get_banner_success
-                  data:
-                    type: array
-                    example: []
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Banner API'
   /api/v1/banners/details:
@@ -146,840 +128,13 @@ paths:
           schema:
             type: string
       responses:
-        500:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: 'Call to a member function append() on null'
-                  exception: Error
-                  file: 'C:\xampp\htdocs\ifei-bo\app\Services\BannerService.php'
-                  line: 333
-                  trace:
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\app\Http\Controllers\Api\BannerController.php'
-                      line: 41
-                      function: oneBannerClient
-                      class: App\Services\BannerService
-                      type: '::'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Controller.php'
-                      line: 54
-                      function: oneBanner
-                      class: App\Http\Controllers\Api\BannerController
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php'
-                      line: 45
-                      function: callAction
-                      class: Illuminate\Routing\Controller
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Route.php'
-                      line: 261
-                      function: dispatch
-                      class: Illuminate\Routing\ControllerDispatcher
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Route.php'
-                      line: 205
-                      function: runController
-                      class: Illuminate\Routing\Route
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                      line: 721
-                      function: run
-                      class: Illuminate\Routing\Route
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 128
-                      function: 'Illuminate\Routing\{closure}'
-                      class: Illuminate\Routing\Router
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\app\Http\Middleware\APIVersion.php'
-                      line: 20
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: App\Http\Middleware\APIVersion
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php'
-                      line: 50
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Illuminate\Routing\Middleware\SubstituteBindings
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Middleware\ThrottleRequests.php'
-                      line: 127
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Middleware\ThrottleRequests.php'
-                      line: 93
-                      function: handleRequest
-                      class: Illuminate\Routing\Middleware\ThrottleRequests
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Middleware\ThrottleRequests.php'
-                      line: 55
-                      function: handleRequestUsingNamedLimiter
-                      class: Illuminate\Routing\Middleware\ThrottleRequests
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Illuminate\Routing\Middleware\ThrottleRequests
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 103
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                      line: 719
-                      function: then
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                      line: 698
-                      function: runRouteWithinStack
-                      class: Illuminate\Routing\Router
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                      line: 662
-                      function: runRoute
-                      class: Illuminate\Routing\Router
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                      line: 651
-                      function: dispatchToRoute
-                      class: Illuminate\Routing\Router
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php'
-                      line: 167
-                      function: dispatch
-                      class: Illuminate\Routing\Router
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 128
-                      function: 'Illuminate\Foundation\Http\{closure}'
-                      class: Illuminate\Foundation\Http\Kernel
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\barryvdh\laravel-debugbar\src\Middleware\InjectDebugbar.php'
-                      line: 59
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Barryvdh\Debugbar\Middleware\InjectDebugbar
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php'
-                      line: 21
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php'
-                      line: 31
-                      function: handle
-                      class: Illuminate\Foundation\Http\Middleware\TransformsRequest
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php'
-                      line: 21
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php'
-                      line: 40
-                      function: handle
-                      class: Illuminate\Foundation\Http\Middleware\TransformsRequest
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Illuminate\Foundation\Http\Middleware\TrimStrings
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ValidatePostSize.php'
-                      line: 27
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Illuminate\Foundation\Http\Middleware\ValidatePostSize
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php'
-                      line: 86
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\fruitcake\laravel-cors\src\HandleCors.php'
-                      line: 52
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Fruitcake\Cors\HandleCors
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\fideloper\proxy\src\TrustProxies.php'
-                      line: 57
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 167
-                      function: handle
-                      class: Fideloper\Proxy\TrustProxies
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                      line: 103
-                      function: 'Illuminate\Pipeline\{closure}'
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php'
-                      line: 142
-                      function: then
-                      class: Illuminate\Pipeline\Pipeline
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php'
-                      line: 111
-                      function: sendRequestThroughRouter
-                      class: Illuminate\Foundation\Http\Kernel
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                      line: 299
-                      function: handle
-                      class: Illuminate\Foundation\Http\Kernel
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                      line: 287
-                      function: callLaravelOrLumenRoute
-                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                      line: 89
-                      function: makeApiCall
-                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                      line: 45
-                      function: makeResponseCall
-                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                      line: 35
-                      function: makeResponseCallIfConditionsPass
-                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Extractor.php'
-                      line: 222
-                      function: __invoke
-                      class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Extractor.php'
-                      line: 176
-                      function: iterateThroughStrategies
-                      class: Knuckles\Scribe\Extracting\Extractor
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Extractor.php'
-                      line: 116
-                      function: fetchResponses
-                      class: Knuckles\Scribe\Extracting\Extractor
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\GroupedEndpoints\GroupedEndpointsFromApp.php'
-                      line: 123
-                      function: processRoute
-                      class: Knuckles\Scribe\Extracting\Extractor
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\GroupedEndpoints\GroupedEndpointsFromApp.php'
-                      line: 80
-                      function: extractEndpointsInfoFromLaravelApp
-                      class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\GroupedEndpoints\GroupedEndpointsFromApp.php'
-                      line: 56
-                      function: extractEndpointsInfoAndWriteToDisk
-                      class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Commands\GenerateDocumentation.php'
-                      line: 55
-                      function: get
-                      class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php'
-                      line: 36
-                      function: handle
-                      class: Knuckles\Scribe\Commands\GenerateDocumentation
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\Util.php'
-                      line: 40
-                      function: 'Illuminate\Container\{closure}'
-                      class: Illuminate\Container\BoundMethod
-                      type: '::'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php'
-                      line: 93
-                      function: unwrapIfClosure
-                      class: Illuminate\Container\Util
-                      type: '::'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php'
-                      line: 35
-                      function: callBoundMethod
-                      class: Illuminate\Container\BoundMethod
-                      type: '::'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\Container.php'
-                      line: 653
-                      function: call
-                      class: Illuminate\Container\BoundMethod
-                      type: '::'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Console\Command.php'
-                      line: 136
-                      function: call
-                      class: Illuminate\Container\Container
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\symfony\console\Command\Command.php'
-                      line: 298
-                      function: execute
-                      class: Illuminate\Console\Command
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Console\Command.php'
-                      line: 120
-                      function: run
-                      class: Symfony\Component\Console\Command\Command
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\symfony\console\Application.php'
-                      line: 1040
-                      function: run
-                      class: Illuminate\Console\Command
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\symfony\console\Application.php'
-                      line: 301
-                      function: doRunCommand
-                      class: Symfony\Component\Console\Application
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\symfony\console\Application.php'
-                      line: 171
-                      function: doRun
-                      class: Symfony\Component\Console\Application
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Console\Application.php'
-                      line: 94
-                      function: run
-                      class: Symfony\Component\Console\Application
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php'
-                      line: 129
-                      function: run
-                      class: Illuminate\Console\Application
-                      type: '->'
-                    -
-                      file: 'C:\xampp\htdocs\ifei-bo\artisan'
-                      line: 35
-                      function: handle
-                      class: Illuminate\Foundation\Console\Kernel
-                      type: '->'
-                properties:
-                  message:
-                    type: string
-                    example: 'Call to a member function append() on null'
-                  exception:
-                    type: string
-                    example: Error
-                  file:
-                    type: string
-                    example: 'C:\xampp\htdocs\ifei-bo\app\Services\BannerService.php'
-                  line:
-                    type: integer
-                    example: 333
-                  trace:
-                    type: array
-                    example:
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\app\Http\Controllers\Api\BannerController.php'
-                        line: 41
-                        function: oneBannerClient
-                        class: App\Services\BannerService
-                        type: '::'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Controller.php'
-                        line: 54
-                        function: oneBanner
-                        class: App\Http\Controllers\Api\BannerController
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php'
-                        line: 45
-                        function: callAction
-                        class: Illuminate\Routing\Controller
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Route.php'
-                        line: 261
-                        function: dispatch
-                        class: Illuminate\Routing\ControllerDispatcher
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Route.php'
-                        line: 205
-                        function: runController
-                        class: Illuminate\Routing\Route
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                        line: 721
-                        function: run
-                        class: Illuminate\Routing\Route
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 128
-                        function: 'Illuminate\Routing\{closure}'
-                        class: Illuminate\Routing\Router
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\app\Http\Middleware\APIVersion.php'
-                        line: 20
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: App\Http\Middleware\APIVersion
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php'
-                        line: 50
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Illuminate\Routing\Middleware\SubstituteBindings
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Middleware\ThrottleRequests.php'
-                        line: 127
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Middleware\ThrottleRequests.php'
-                        line: 93
-                        function: handleRequest
-                        class: Illuminate\Routing\Middleware\ThrottleRequests
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Middleware\ThrottleRequests.php'
-                        line: 55
-                        function: handleRequestUsingNamedLimiter
-                        class: Illuminate\Routing\Middleware\ThrottleRequests
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Illuminate\Routing\Middleware\ThrottleRequests
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 103
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                        line: 719
-                        function: then
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                        line: 698
-                        function: runRouteWithinStack
-                        class: Illuminate\Routing\Router
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                        line: 662
-                        function: runRoute
-                        class: Illuminate\Routing\Router
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Routing\Router.php'
-                        line: 651
-                        function: dispatchToRoute
-                        class: Illuminate\Routing\Router
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php'
-                        line: 167
-                        function: dispatch
-                        class: Illuminate\Routing\Router
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 128
-                        function: 'Illuminate\Foundation\Http\{closure}'
-                        class: Illuminate\Foundation\Http\Kernel
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\barryvdh\laravel-debugbar\src\Middleware\InjectDebugbar.php'
-                        line: 59
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Barryvdh\Debugbar\Middleware\InjectDebugbar
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php'
-                        line: 21
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php'
-                        line: 31
-                        function: handle
-                        class: Illuminate\Foundation\Http\Middleware\TransformsRequest
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php'
-                        line: 21
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php'
-                        line: 40
-                        function: handle
-                        class: Illuminate\Foundation\Http\Middleware\TransformsRequest
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Illuminate\Foundation\Http\Middleware\TrimStrings
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ValidatePostSize.php'
-                        line: 27
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Illuminate\Foundation\Http\Middleware\ValidatePostSize
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php'
-                        line: 86
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\fruitcake\laravel-cors\src\HandleCors.php'
-                        line: 52
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Fruitcake\Cors\HandleCors
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\fideloper\proxy\src\TrustProxies.php'
-                        line: 57
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 167
-                        function: handle
-                        class: Fideloper\Proxy\TrustProxies
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php'
-                        line: 103
-                        function: 'Illuminate\Pipeline\{closure}'
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php'
-                        line: 142
-                        function: then
-                        class: Illuminate\Pipeline\Pipeline
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php'
-                        line: 111
-                        function: sendRequestThroughRouter
-                        class: Illuminate\Foundation\Http\Kernel
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                        line: 299
-                        function: handle
-                        class: Illuminate\Foundation\Http\Kernel
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                        line: 287
-                        function: callLaravelOrLumenRoute
-                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                        line: 89
-                        function: makeApiCall
-                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                        line: 45
-                        function: makeResponseCall
-                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Strategies\Responses\ResponseCalls.php'
-                        line: 35
-                        function: makeResponseCallIfConditionsPass
-                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Extractor.php'
-                        line: 222
-                        function: __invoke
-                        class: Knuckles\Scribe\Extracting\Strategies\Responses\ResponseCalls
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Extractor.php'
-                        line: 176
-                        function: iterateThroughStrategies
-                        class: Knuckles\Scribe\Extracting\Extractor
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Extracting\Extractor.php'
-                        line: 116
-                        function: fetchResponses
-                        class: Knuckles\Scribe\Extracting\Extractor
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\GroupedEndpoints\GroupedEndpointsFromApp.php'
-                        line: 123
-                        function: processRoute
-                        class: Knuckles\Scribe\Extracting\Extractor
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\GroupedEndpoints\GroupedEndpointsFromApp.php'
-                        line: 80
-                        function: extractEndpointsInfoFromLaravelApp
-                        class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\GroupedEndpoints\GroupedEndpointsFromApp.php'
-                        line: 56
-                        function: extractEndpointsInfoAndWriteToDisk
-                        class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\knuckleswtf\scribe\src\Commands\GenerateDocumentation.php'
-                        line: 55
-                        function: get
-                        class: Knuckles\Scribe\GroupedEndpoints\GroupedEndpointsFromApp
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php'
-                        line: 36
-                        function: handle
-                        class: Knuckles\Scribe\Commands\GenerateDocumentation
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\Util.php'
-                        line: 40
-                        function: 'Illuminate\Container\{closure}'
-                        class: Illuminate\Container\BoundMethod
-                        type: '::'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php'
-                        line: 93
-                        function: unwrapIfClosure
-                        class: Illuminate\Container\Util
-                        type: '::'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php'
-                        line: 35
-                        function: callBoundMethod
-                        class: Illuminate\Container\BoundMethod
-                        type: '::'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Container\Container.php'
-                        line: 653
-                        function: call
-                        class: Illuminate\Container\BoundMethod
-                        type: '::'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Console\Command.php'
-                        line: 136
-                        function: call
-                        class: Illuminate\Container\Container
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\symfony\console\Command\Command.php'
-                        line: 298
-                        function: execute
-                        class: Illuminate\Console\Command
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Console\Command.php'
-                        line: 120
-                        function: run
-                        class: Symfony\Component\Console\Command\Command
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\symfony\console\Application.php'
-                        line: 1040
-                        function: run
-                        class: Illuminate\Console\Command
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\symfony\console\Application.php'
-                        line: 301
-                        function: doRunCommand
-                        class: Symfony\Component\Console\Application
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\symfony\console\Application.php'
-                        line: 171
-                        function: doRun
-                        class: Symfony\Component\Console\Application
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Console\Application.php'
-                        line: 94
-                        function: run
-                        class: Symfony\Component\Console\Application
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php'
-                        line: 129
-                        function: run
-                        class: Illuminate\Console\Application
-                        type: '->'
-                      -
-                        file: 'C:\xampp\htdocs\ifei-bo\artisan'
-                        line: 35
-                        function: handle
-                        class: Illuminate\Foundation\Console\Kernel
-                        type: '->'
-                    items:
-                      type: object
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Banner API'
       requestBody:
@@ -1025,18 +180,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Check-in API'
     post:
@@ -1080,18 +230,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Check-in API'
   /api/v1/contact-us:
@@ -1164,38 +309,13 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  data:
-                    -
-                      id: 3
-                      customer_member_id: abc1234
-                      name: test
-                      quantity: '2'
-                      reference_id: 'aaa,ccc'
-                      status: 10
-                      created_at: '2025-09-01 16:40:00'
-                      updated_at: '2025-09-01 17:03:44'
-                properties:
-                  data:
-                    type: array
-                    example:
-                      -
-                        id: 3
-                        customer_member_id: abc1234
-                        name: test
-                        quantity: '2'
-                        reference_id: 'aaa,ccc'
-                        status: 10
-                        created_at: '2025-09-01 16:40:00'
-                        updated_at: '2025-09-01 17:03:44'
-                    items:
-                      type: object
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Lucky Draw Reward API'
       requestBody:
@@ -1232,18 +352,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Points API'
   /api/v1/points/redeem:
@@ -1337,18 +452,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Points API'
   /api/v1/points/conversion-rate:
@@ -1371,18 +481,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Points API'
   /api/v1/ranks:
@@ -1405,116 +510,13 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  data:
-                    -
-                      id: 1
-                      title: Member
-                      description: a
-                      target_spending: 0
-                      priority: '0'
-                      reward_value: '0'
-                      status: 10
-                      created_at: '2025-08-31 11:39:55'
-                      updated_at: '2025-08-31 12:10:16'
-                      encrypted_id: 1q
-                      target_range: null
-                    -
-                      id: 2
-                      title: Silver
-                      description: ''
-                      target_spending: 3000
-                      priority: '0'
-                      reward_value: '0'
-                      status: 10
-                      created_at: '2025-08-31 11:39:55'
-                      updated_at: '2025-08-31 11:39:55'
-                      encrypted_id: OJ
-                      target_range: null
-                    -
-                      id: 3
-                      title: Gold
-                      description: ''
-                      target_spending: 30000
-                      priority: '0'
-                      reward_value: '0'
-                      status: 10
-                      created_at: '2025-08-31 11:39:55'
-                      updated_at: '2025-08-31 11:39:55'
-                      encrypted_id: o4
-                      target_range: null
-                    -
-                      id: 4
-                      title: Premium
-                      description: ''
-                      target_spending: 100000
-                      priority: '0'
-                      reward_value: '0'
-                      status: 10
-                      created_at: '2025-08-31 11:39:55'
-                      updated_at: '2025-08-31 11:39:55'
-                      encrypted_id: 2G
-                      target_range: null
-                properties:
-                  data:
-                    type: array
-                    example:
-                      -
-                        id: 1
-                        title: Member
-                        description: a
-                        target_spending: 0
-                        priority: '0'
-                        reward_value: '0'
-                        status: 10
-                        created_at: '2025-08-31 11:39:55'
-                        updated_at: '2025-08-31 12:10:16'
-                        encrypted_id: 1q
-                        target_range: null
-                      -
-                        id: 2
-                        title: Silver
-                        description: ''
-                        target_spending: 3000
-                        priority: '0'
-                        reward_value: '0'
-                        status: 10
-                        created_at: '2025-08-31 11:39:55'
-                        updated_at: '2025-08-31 11:39:55'
-                        encrypted_id: OJ
-                        target_range: null
-                      -
-                        id: 3
-                        title: Gold
-                        description: ''
-                        target_spending: 30000
-                        priority: '0'
-                        reward_value: '0'
-                        status: 10
-                        created_at: '2025-08-31 11:39:55'
-                        updated_at: '2025-08-31 11:39:55'
-                        encrypted_id: o4
-                        target_range: null
-                      -
-                        id: 4
-                        title: Premium
-                        description: ''
-                        target_spending: 100000
-                        priority: '0'
-                        reward_value: '0'
-                        status: 10
-                        created_at: '2025-08-31 11:39:55'
-                        updated_at: '2025-08-31 11:39:55'
-                        encrypted_id: 2G
-                        target_range: null
-                    items:
-                      type: object
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Rank API'
       security: []
@@ -1610,18 +612,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'User API'
   /api/v1/users/login:
@@ -2042,18 +1039,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'User API'
   /api/v1/users/notification:
@@ -2229,15 +1221,15 @@ paths:
                 register_token:
                   type: string
                   description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
-                  example: cumque
+                  example: ut
                 app_id:
                   type: string
                   description: 'optional The one signal app id. ( Default will be following current settings ).'
-                  example: velit
+                  example: enim
                 api_key:
                   type: string
                   description: 'optional The one signal api_key ( Default will be following current settings ).'
-                  example: totam
+                  example: quod
   /api/v1/vouchers:
     get:
       summary: '1. Get vouchers'
@@ -2318,18 +1310,13 @@ paths:
           schema:
             type: string
       responses:
-        401:
+        302:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Voucher API'
   /api/v1/vouchers/claim-voucher:

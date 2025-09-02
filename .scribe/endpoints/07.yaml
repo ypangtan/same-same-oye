@@ -156,11 +156,24 @@ endpoints:
     bodyParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
+
+                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
+              </body>
+          </html>
         headers:
           cache-control: 'no-cache, private'
-          content-type: application/json
+          location: 'https://staging.ifei.com.my/backoffice/dashboard'
+          content-type: 'text/html; charset=utf-8'
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -478,11 +491,24 @@ endpoints:
     bodyParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
+
+                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
+              </body>
+          </html>
         headers:
           cache-control: 'no-cache, private'
-          content-type: application/json
+          location: 'https://staging.ifei.com.my/backoffice/dashboard'
+          content-type: 'text/html; charset=utf-8'
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -633,21 +659,21 @@ endpoints:
         name: register_token
         description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
         required: false
-        example: cumque
+        example: ut
         type: string
         custom: []
       app_id:
         name: app_id
         description: 'optional The one signal app id. ( Default will be following current settings ).'
         required: false
-        example: velit
+        example: enim
         type: string
         custom: []
       api_key:
         name: api_key
         description: 'optional The one signal api_key ( Default will be following current settings ).'
         required: false
-        example: totam
+        example: quod
         type: string
         custom: []
     responses: []

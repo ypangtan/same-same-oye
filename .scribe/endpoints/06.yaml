@@ -18,13 +18,24 @@ endpoints:
     bodyParameters: []
     responses:
       -
-        status: 200
-        content: '{"data":[{"id":1,"title":"Member","description":"a","target_spending":0,"priority":"0","reward_value":"0","status":10,"created_at":"2025-08-31 11:39:55","updated_at":"2025-08-31 12:10:16","encrypted_id":"1q","target_range":null},{"id":2,"title":"Silver","description":"","target_spending":3000,"priority":"0","reward_value":"0","status":10,"created_at":"2025-08-31 11:39:55","updated_at":"2025-08-31 11:39:55","encrypted_id":"OJ","target_range":null},{"id":3,"title":"Gold","description":"","target_spending":30000,"priority":"0","reward_value":"0","status":10,"created_at":"2025-08-31 11:39:55","updated_at":"2025-08-31 11:39:55","encrypted_id":"o4","target_range":null},{"id":4,"title":"Premium","description":"","target_spending":100000,"priority":"0","reward_value":"0","status":10,"created_at":"2025-08-31 11:39:55","updated_at":"2025-08-31 11:39:55","encrypted_id":"2G","target_range":null}]}'
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
+
+                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
+              </body>
+          </html>
         headers:
           cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '200'
-          x-ratelimit-remaining: '196'
+          location: 'https://staging.ifei.com.my/backoffice/dashboard'
+          content-type: 'text/html; charset=utf-8'
           access-control-allow-origin: '*'
         description: null
     responseFields: []

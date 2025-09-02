@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "http:\/\/localhost"
+            "value": "https:\/\/staging.ifei.com.my\/"
         }
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "a362eaf8-72c3-425e-a491-49f4d6107fff",
+        "_postman_id": "618f5ec3-9664-4606-bc24-823917b9ae96",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -57,16 +57,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -136,24 +140,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "x-ratelimit-limit",
-                                    "value": "200"
-                                },
-                                {
-                                    "key": "x-ratelimit-remaining",
-                                    "value": "199"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 200,
-                            "body": "{\"message\":\"\",\"message_key\":\"get_banner_success\",\"data\":[]}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -192,24 +192,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "x-ratelimit-limit",
-                                    "value": "200"
-                                },
-                                {
-                                    "key": "x-ratelimit-remaining",
-                                    "value": "198"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 500,
-                            "body": "{\n    \"message\": \"Call to a member function append() on null\",\n    \"exception\": \"Error\",\n    \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\app\\\\Services\\\\BannerService.php\",\n    \"line\": 333,\n    \"trace\": [\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\app\\\\Http\\\\Controllers\\\\Api\\\\BannerController.php\",\n            \"line\": 41,\n            \"function\": \"oneBannerClient\",\n            \"class\": \"App\\\\Services\\\\BannerService\",\n            \"type\": \"::\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Controller.php\",\n            \"line\": 54,\n            \"function\": \"oneBanner\",\n            \"class\": \"App\\\\Http\\\\Controllers\\\\Api\\\\BannerController\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\ControllerDispatcher.php\",\n            \"line\": 45,\n            \"function\": \"callAction\",\n            \"class\": \"Illuminate\\\\Routing\\\\Controller\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Route.php\",\n            \"line\": 261,\n            \"function\": \"dispatch\",\n            \"class\": \"Illuminate\\\\Routing\\\\ControllerDispatcher\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Route.php\",\n            \"line\": 205,\n            \"function\": \"runController\",\n            \"class\": \"Illuminate\\\\Routing\\\\Route\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Router.php\",\n            \"line\": 721,\n            \"function\": \"run\",\n            \"class\": \"Illuminate\\\\Routing\\\\Route\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 128,\n            \"function\": \"Illuminate\\\\Routing\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Routing\\\\Router\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\app\\\\Http\\\\Middleware\\\\APIVersion.php\",\n            \"line\": 20,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"App\\\\Http\\\\Middleware\\\\APIVersion\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Middleware\\\\SubstituteBindings.php\",\n            \"line\": 50,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Routing\\\\Middleware\\\\SubstituteBindings\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Middleware\\\\ThrottleRequests.php\",\n            \"line\": 127,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Middleware\\\\ThrottleRequests.php\",\n            \"line\": 93,\n            \"function\": \"handleRequest\",\n            \"class\": \"Illuminate\\\\Routing\\\\Middleware\\\\ThrottleRequests\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Middleware\\\\ThrottleRequests.php\",\n            \"line\": 55,\n            \"function\": \"handleRequestUsingNamedLimiter\",\n            \"class\": \"Illuminate\\\\Routing\\\\Middleware\\\\ThrottleRequests\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Routing\\\\Middleware\\\\ThrottleRequests\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 103,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Router.php\",\n            \"line\": 719,\n            \"function\": \"then\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Router.php\",\n            \"line\": 698,\n            \"function\": \"runRouteWithinStack\",\n            \"class\": \"Illuminate\\\\Routing\\\\Router\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Router.php\",\n            \"line\": 662,\n            \"function\": \"runRoute\",\n            \"class\": \"Illuminate\\\\Routing\\\\Router\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Routing\\\\Router.php\",\n            \"line\": 651,\n            \"function\": \"dispatchToRoute\",\n            \"class\": \"Illuminate\\\\Routing\\\\Router\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Kernel.php\",\n            \"line\": 167,\n            \"function\": \"dispatch\",\n            \"class\": \"Illuminate\\\\Routing\\\\Router\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 128,\n            \"function\": \"Illuminate\\\\Foundation\\\\Http\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Kernel\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\barryvdh\\\\laravel-debugbar\\\\src\\\\Middleware\\\\InjectDebugbar.php\",\n            \"line\": 59,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Barryvdh\\\\Debugbar\\\\Middleware\\\\InjectDebugbar\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TransformsRequest.php\",\n            \"line\": 21,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\ConvertEmptyStringsToNull.php\",\n            \"line\": 31,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TransformsRequest\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\ConvertEmptyStringsToNull\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TransformsRequest.php\",\n            \"line\": 21,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TrimStrings.php\",\n            \"line\": 40,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TransformsRequest\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TrimStrings\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\ValidatePostSize.php\",\n            \"line\": 27,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\ValidatePostSize\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\PreventRequestsDuringMaintenance.php\",\n            \"line\": 86,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\PreventRequestsDuringMaintenance\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\fruitcake\\\\laravel-cors\\\\src\\\\HandleCors.php\",\n            \"line\": 52,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Fruitcake\\\\Cors\\\\HandleCors\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\fideloper\\\\proxy\\\\src\\\\TrustProxies.php\",\n            \"line\": 57,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 167,\n            \"function\": \"handle\",\n            \"class\": \"Fideloper\\\\Proxy\\\\TrustProxies\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Pipeline\\\\Pipeline.php\",\n            \"line\": 103,\n            \"function\": \"Illuminate\\\\Pipeline\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Kernel.php\",\n            \"line\": 142,\n            \"function\": \"then\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Http\\\\Kernel.php\",\n            \"line\": 111,\n            \"function\": \"sendRequestThroughRouter\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Kernel\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls.php\",\n            \"line\": 299,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Kernel\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls.php\",\n            \"line\": 287,\n            \"function\": \"callLaravelOrLumenRoute\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls.php\",\n            \"line\": 89,\n            \"function\": \"makeApiCall\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls.php\",\n            \"line\": 45,\n            \"function\": \"makeResponseCall\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls.php\",\n            \"line\": 35,\n            \"function\": \"makeResponseCallIfConditionsPass\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Extracting\\\\Extractor.php\",\n            \"line\": 222,\n            \"function\": \"__invoke\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Extracting\\\\Strategies\\\\Responses\\\\ResponseCalls\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Extracting\\\\Extractor.php\",\n            \"line\": 176,\n            \"function\": \"iterateThroughStrategies\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Extracting\\\\Extractor\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Extracting\\\\Extractor.php\",\n            \"line\": 116,\n            \"function\": \"fetchResponses\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Extracting\\\\Extractor\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\GroupedEndpoints\\\\GroupedEndpointsFromApp.php\",\n            \"line\": 123,\n            \"function\": \"processRoute\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Extracting\\\\Extractor\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\GroupedEndpoints\\\\GroupedEndpointsFromApp.php\",\n            \"line\": 80,\n            \"function\": \"extractEndpointsInfoFromLaravelApp\",\n            \"class\": \"Knuckles\\\\Scribe\\\\GroupedEndpoints\\\\GroupedEndpointsFromApp\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\GroupedEndpoints\\\\GroupedEndpointsFromApp.php\",\n            \"line\": 56,\n            \"function\": \"extractEndpointsInfoAndWriteToDisk\",\n            \"class\": \"Knuckles\\\\Scribe\\\\GroupedEndpoints\\\\GroupedEndpointsFromApp\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\knuckleswtf\\\\scribe\\\\src\\\\Commands\\\\GenerateDocumentation.php\",\n            \"line\": 55,\n            \"function\": \"get\",\n            \"class\": \"Knuckles\\\\Scribe\\\\GroupedEndpoints\\\\GroupedEndpointsFromApp\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Container\\\\BoundMethod.php\",\n            \"line\": 36,\n            \"function\": \"handle\",\n            \"class\": \"Knuckles\\\\Scribe\\\\Commands\\\\GenerateDocumentation\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Container\\\\Util.php\",\n            \"line\": 40,\n            \"function\": \"Illuminate\\\\Container\\\\{closure}\",\n            \"class\": \"Illuminate\\\\Container\\\\BoundMethod\",\n            \"type\": \"::\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Container\\\\BoundMethod.php\",\n            \"line\": 93,\n            \"function\": \"unwrapIfClosure\",\n            \"class\": \"Illuminate\\\\Container\\\\Util\",\n            \"type\": \"::\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Container\\\\BoundMethod.php\",\n            \"line\": 35,\n            \"function\": \"callBoundMethod\",\n            \"class\": \"Illuminate\\\\Container\\\\BoundMethod\",\n            \"type\": \"::\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Container\\\\Container.php\",\n            \"line\": 653,\n            \"function\": \"call\",\n            \"class\": \"Illuminate\\\\Container\\\\BoundMethod\",\n            \"type\": \"::\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Console\\\\Command.php\",\n            \"line\": 136,\n            \"function\": \"call\",\n            \"class\": \"Illuminate\\\\Container\\\\Container\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\symfony\\\\console\\\\Command\\\\Command.php\",\n            \"line\": 298,\n            \"function\": \"execute\",\n            \"class\": \"Illuminate\\\\Console\\\\Command\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Console\\\\Command.php\",\n            \"line\": 120,\n            \"function\": \"run\",\n            \"class\": \"Symfony\\\\Component\\\\Console\\\\Command\\\\Command\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\symfony\\\\console\\\\Application.php\",\n            \"line\": 1040,\n            \"function\": \"run\",\n            \"class\": \"Illuminate\\\\Console\\\\Command\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\symfony\\\\console\\\\Application.php\",\n            \"line\": 301,\n            \"function\": \"doRunCommand\",\n            \"class\": \"Symfony\\\\Component\\\\Console\\\\Application\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\symfony\\\\console\\\\Application.php\",\n            \"line\": 171,\n            \"function\": \"doRun\",\n            \"class\": \"Symfony\\\\Component\\\\Console\\\\Application\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Console\\\\Application.php\",\n            \"line\": 94,\n            \"function\": \"run\",\n            \"class\": \"Symfony\\\\Component\\\\Console\\\\Application\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Console\\\\Kernel.php\",\n            \"line\": 129,\n            \"function\": \"run\",\n            \"class\": \"Illuminate\\\\Console\\\\Application\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"C:\\\\xampp\\\\htdocs\\\\ifei-bo\\\\artisan\",\n            \"line\": 35,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Console\\\\Kernel\",\n            \"type\": \"->\"\n        }\n    ]\n}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -258,16 +254,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -328,16 +328,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -422,24 +426,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "x-ratelimit-limit",
-                                    "value": "200"
-                                },
-                                {
-                                    "key": "x-ratelimit-remaining",
-                                    "value": "197"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 200,
-                            "body": "{\"data\":[{\"id\":3,\"customer_member_id\":\"abc1234\",\"name\":\"test\",\"quantity\":\"2\",\"reference_id\":\"aaa,ccc\",\"status\":10,\"created_at\":\"2025-09-01 16:40:00\",\"updated_at\":\"2025-09-01 17:03:44\"}]}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -481,16 +481,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -573,16 +577,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -618,16 +626,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -672,24 +684,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "x-ratelimit-limit",
-                                    "value": "200"
-                                },
-                                {
-                                    "key": "x-ratelimit-remaining",
-                                    "value": "196"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 200,
-                            "body": "{\"data\":[{\"id\":1,\"title\":\"Member\",\"description\":\"a\",\"target_spending\":0,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 12:10:16\",\"encrypted_id\":\"1q\",\"target_range\":null},{\"id\":2,\"title\":\"Silver\",\"description\":\"\",\"target_spending\":3000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"OJ\",\"target_range\":null},{\"id\":3,\"title\":\"Gold\",\"description\":\"\",\"target_spending\":30000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"o4\",\"target_range\":null},{\"id\":4,\"title\":\"Premium\",\"description\":\"\",\"target_spending\":100000,\"priority\":\"0\",\"reward_value\":\"0\",\"status\":10,\"created_at\":\"2025-08-31 11:39:55\",\"updated_at\":\"2025-08-31 11:39:55\",\"encrypted_id\":\"2G\",\"target_range\":null}]}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -793,16 +801,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -1107,16 +1119,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
@@ -1230,7 +1246,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"cumque\",\"app_id\":\"velit\",\"api_key\":\"totam\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"ut\",\"app_id\":\"enim\",\"api_key\":\"quod\"}"
                         },
                         "description": ""
                     },
@@ -1310,16 +1326,20 @@
                                     "value": "no-cache, private"
                                 },
                                 {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
                                     "key": "content-type",
-                                    "value": "application\/json"
+                                    "value": "text\/html; charset=utf-8"
                                 },
                                 {
                                     "key": "access-control-allow-origin",
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
                             "name": ""
                         }
                     ]
