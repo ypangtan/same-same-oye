@@ -17,8 +17,6 @@ class LuckyDrawRewardController extends Controller
      * 
      * <aside class="notice">Search Lucky Draw Reward </aside>
      * 
-     * @authenticated
-     * 
      * @group Lucky Draw Reward API
      * 
      * @bodyParam customer_member_id string required The customer member id of the lucky draw rewards. Example: abc1234
