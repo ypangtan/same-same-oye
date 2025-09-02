@@ -1,0 +1,654 @@
+name: 'User API'
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users
+    metadata:
+      title: '1. Create an user'
+      description: |-
+        <strong>device_type</strong><br>
+        1: iOS<br>
+        2: Android<br>
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      identifier:
+        name: identifier
+        description: 'The temporary user ID during request OTP.'
+        required: true
+        example: eyJpdiI...
+        type: string
+        custom: []
+      phone_number:
+        name: phone_number
+        description: 'The phone_number for register.'
+        required: true
+        example: '0123982334'
+        type: string
+        custom: []
+      calling_code:
+        name: calling_code
+        description: 'The calling_code for register.'
+        required: true
+        example: '+60'
+        type: string
+        custom: []
+      otp_code:
+        name: otp_code
+        description: 'The otp for register.'
+        required: true
+        example: '123456'
+        type: string
+        custom: []
+      password:
+        name: password
+        description: 'The password for register.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'The confirmation password.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+      invitation_code:
+        name: invitation_code
+        description: 'The invitation code of referral.'
+        required: false
+        example: AASSCC
+        type: string
+        custom: []
+      device_type:
+        name: device_type
+        description: 'optional The device type required with register_token.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      register_token:
+        name: register_token
+        description: 'optional The device token to receive notification.'
+        required: false
+        example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/login
+    metadata:
+      title: '2. Login an user - Email'
+      description: |-
+        <strong>device_type</strong><br>
+        1: iOS<br>
+        2: Android<br>
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      phone_number:
+        name: phone_number
+        description: 'The phone_number for login.'
+        required: true
+        example: '0123982334'
+        type: string
+        custom: []
+      calling_code:
+        name: calling_code
+        description: 'The calling_code for register.'
+        required: true
+        example: '+60'
+        type: string
+        custom: []
+      password:
+        name: password
+        description: 'The password for login.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+      device_type:
+        name: device_type
+        description: 'optional The device type required with register_token.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      register_token:
+        name: register_token
+        description: 'optional The device token to receive notification.'
+        required: false
+        example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users
+    metadata:
+      title: '6. Get user'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/otp
+    metadata:
+      title: '4. Request an OTP'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      phone_number:
+        name: phone_number
+        description: 'The phone_number for register.'
+        required: true
+        example: '0123982334'
+        type: string
+        custom: []
+      calling_code:
+        name: calling_code
+        description: 'optional The calling for register. ( Default +60 )'
+        required: false
+        example: '+60'
+        type: string
+        custom: []
+      request_type:
+        name: request_type
+        description: 'The request type for OTP.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/otp/resend
+    metadata:
+      title: '5. Resend an OTP'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      identifier:
+        name: identifier
+        description: 'The temporary user ID during request OTP.'
+        required: true
+        example: eyJpdiI...
+        type: string
+        custom: []
+      phone_number:
+        name: phone_number
+        description: 'The phone_number for login.'
+        required: true
+        example: '0123982334'
+        type: string
+        custom: []
+      request_type:
+        name: request_type
+        description: 'The request type for OTP.'
+        required: true
+        example: 2
+        type: integer
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/reset-password
+    metadata:
+      title: '10. Reset Password'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      phone_number:
+        name: phone_number
+        description: 'The phone_number for login.'
+        required: true
+        example: '0123982334'
+        type: string
+        custom: []
+      identifier:
+        name: identifier
+        description: 'The unique_identifier from forgot password.'
+        required: true
+        example: WLnvrJw6YYK
+        type: string
+        custom: []
+      otp_code:
+        name: otp_code
+        description: 'The otp code to verify password reset.'
+        required: false
+        example: '123456'
+        type: string
+        custom: []
+      password:
+        name: password
+        description: 'The new password to perform password reset.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'The new password confirmation to perform password reset.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/forgot-password
+    metadata:
+      title: '9. Forgot Password (Request Otp)'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      phone_number:
+        name: phone_number
+        description: 'The phone_number for login.'
+        required: true
+        example: '0123982334'
+        type: string
+        custom: []
+      calling_code:
+        name: calling_code
+        description: 'The calling_code for register.'
+        required: true
+        example: '+60'
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/delete-verification
+    metadata:
+      title: '11. Delete Verification'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      password:
+        name: password
+        description: 'The password to perform account delete checking.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/delete-confirm
+    metadata:
+      title: '12. Delete Confirm'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      password:
+        name: password
+        description: 'The password to perform account delete checking.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/update
+    metadata:
+      title: '7. Update user'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      username:
+        name: username
+        description: 'The username to update.'
+        required: false
+        example: John
+        type: string
+        custom: []
+      first_name:
+        name: first_name
+        description: 'The first_name to update.'
+        required: false
+        example: wick
+        type: string
+        custom: []
+      last_name:
+        name: last_name
+        description: 'The last_name to update.'
+        required: false
+        example: John
+        type: string
+        custom: []
+      email:
+        name: email
+        description: 'The email to update.'
+        required: false
+        example: john@email.com
+        type: string
+        custom: []
+      date_of_birth:
+        name: date_of_birth
+        description: 'The date of birth to update.'
+        required: false
+        example: '2022-01-01'
+        type: string
+        custom: []
+      to_remove:
+        name: to_remove
+        description: 'Indicate remove photo or not.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      profile_picture:
+        name: profile_picture
+        description: 'The photo to update. Will create when empty'
+        required: false
+        example: null
+        type: file
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users/notifications
+    metadata:
+      title: '13. Get notifications'
+      description: |-
+        <strong>is_read</strong><br>
+        0: New<br>
+        1: Read<br>
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      is_read:
+        name: is_read
+        description: 'Leave empty for all.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Show how many record in a page. Leave blank for default (100).'
+        required: false
+        example: 5
+        type: integer
+        custom: []
+      notification:
+        name: notification
+        description: 'optional The notification ID of notification.'
+        required: false
+        example: 5
+        type: integer
+        custom: []
+    bodyParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/notification
+    metadata:
+      title: '14. Update notification seen'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      notification:
+        name: notification
+        description: 'The notification ID of notification.'
+        required: true
+        example: 5
+        type: integer
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/login-social
+    metadata:
+      title: '3. Login an user - Social'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      identifier:
+        name: identifier
+        description: 'The email for social login.'
+        required: true
+        example: ifei@mail.com
+        type: string
+        custom: []
+      platform:
+        name: platform
+        description: 'The platform for login.'
+        required: true
+        example: '1'
+        type: interger
+        custom: []
+      email:
+        name: email
+        description: 'optional The email for user social login.'
+        required: false
+        example: ifei@mail.com
+        type: string
+        custom: []
+      device_type:
+        name: device_type
+        description: 'optional The device type required with register_token.'
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      register_token:
+        name: register_token
+        description: 'optional The device token to receive notification.'
+        required: false
+        example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/update-password
+    metadata:
+      title: '8. Update user password'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      old_password:
+        name: old_password
+        description: 'The old password of current user.'
+        required: true
+        example: 1234abcd
+        type: string
+        custom: []
+      password:
+        name: password
+        description: 'The new password to change.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'The confirm password of new password to change.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/test-notification
+    metadata:
+      title: '14. Test notification'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'optional The notification title to test. ( Default will be: test-notification ).'
+        required: false
+        example: test-notification
+        type: string
+        custom: []
+      content:
+        name: content
+        description: 'optional The notification content to test. ( Default will be: test-notification-content ).'
+        required: false
+        example: test-notification-content
+        type: string
+        custom: []
+      register_token:
+        name: register_token
+        description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
+        required: false
+        example: ea
+        type: string
+        custom: []
+      app_id:
+        name: app_id
+        description: 'optional The one signal app id. ( Default will be following current settings ).'
+        required: false
+        example: voluptates
+        type: string
+        custom: []
+      api_key:
+        name: api_key
+        description: 'optional The one signal api_key ( Default will be following current settings ).'
+        required: false
+        example: iure
+        type: string
+        custom: []
+    responses: []
+    responseFields: []

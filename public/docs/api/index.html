@@ -70,6 +70,26 @@
                                                 </ul>
                     
                     <ul id="tocify-header-2" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="lucky-draw-reward-api">
+                    <a href="#lucky-draw-reward-api">Lucky Draw Reward API</a>
+                </li>
+                                    <ul id="tocify-subheader-lucky-draw-reward-api" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">
+                        <a href="#lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">1. Search Lucky Draw Reward</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-3" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="rank-api">
+                    <a href="#rank-api">Rank API</a>
+                </li>
+                                    <ul id="tocify-subheader-rank-api" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="rank-api-GETapi-v1-ranks">
+                        <a href="#rank-api-GETapi-v1-ranks">3. Get all ranks</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-4" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="announcement-api">
                     <a href="#announcement-api">Announcement API</a>
                 </li>
@@ -82,7 +102,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-3" class="tocify-header">
+                    <ul id="tocify-header-5" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="banner-api">
                     <a href="#banner-api">Banner API</a>
                 </li>
@@ -95,7 +115,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-4" class="tocify-header">
+                    <ul id="tocify-header-6" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="check-in-api">
                     <a href="#check-in-api">Check-in API</a>
                 </li>
@@ -111,7 +131,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-5" class="tocify-header">
+                    <ul id="tocify-header-7" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="contact-us-api">
                     <a href="#contact-us-api">Contact-Us API</a>
                 </li>
@@ -121,7 +141,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-6" class="tocify-header">
+                    <ul id="tocify-header-8" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="points-api">
                     <a href="#points-api">Points API</a>
                 </li>
@@ -140,7 +160,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-7" class="tocify-header">
+                    <ul id="tocify-header-9" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="user-api">
                     <a href="#user-api">User API</a>
                 </li>
@@ -187,9 +207,12 @@
                                     <li class="tocify-item level-2" data-unique="user-api-POSTapi-v1-users-update-password">
                         <a href="#user-api-POSTapi-v1-users-update-password">8. Update user password</a>
                     </li>
+                                    <li class="tocify-item level-2" data-unique="user-api-POSTapi-v1-users-test-notification">
+                        <a href="#user-api-POSTapi-v1-users-test-notification">14. Test notification</a>
+                    </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-8" class="tocify-header">
+                    <ul id="tocify-header-10" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="voucher-api">
                     <a href="#voucher-api">Voucher API</a>
                 </li>
@@ -212,7 +235,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: July 28 2025</li>
+        <li>Last updated: September 2 2025</li>
     </ul>
 </div>
 
@@ -230,6 +253,292 @@ You can switch the language used with the tabs at the top right (or from the nav
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>This API is not authenticated.</p>
+
+        <h1 id="lucky-draw-reward-api">Lucky Draw Reward API</h1>
+
+    
+
+            <h2 id="lucky-draw-reward-api-GETapi-v1-lucky-draw-rewards">1. Search Lucky Draw Reward</h2>
+
+<p>
+</p>
+
+<aside class="notice">Search Lucky Draw Reward </aside>
+
+<span id="example-requests-GETapi-v1-lucky-draw-rewards">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/v1/lucky-draw-rewards" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"customer_member_id\": \"abc1234\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/lucky-draw-rewards"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "customer_member_id": "abc1234"
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-lucky-draw-rewards">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-ratelimit-limit: 200
+x-ratelimit-remaining: 197
+access-control-allow-origin: *
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 3,
+            &quot;customer_member_id&quot;: &quot;abc1234&quot;,
+            &quot;name&quot;: &quot;test&quot;,
+            &quot;quantity&quot;: &quot;2&quot;,
+            &quot;reference_id&quot;: &quot;aaa,ccc&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-09-01 16:40:00&quot;,
+            &quot;updated_at&quot;: &quot;2025-09-01 17:03:44&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-lucky-draw-rewards" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-lucky-draw-rewards"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-lucky-draw-rewards"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-lucky-draw-rewards" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-lucky-draw-rewards"></code></pre>
+</span>
+<form id="form-GETapi-v1-lucky-draw-rewards" data-method="GET"
+      data-path="api/v1/lucky-draw-rewards"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-lucky-draw-rewards', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-lucky-draw-rewards"
+                    onclick="tryItOut('GETapi-v1-lucky-draw-rewards');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-lucky-draw-rewards"
+                    onclick="cancelTryOut('GETapi-v1-lucky-draw-rewards');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-lucky-draw-rewards" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/lucky-draw-rewards</code></b>
+        </p>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>customer_member_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="customer_member_id"
+               data-endpoint="GETapi-v1-lucky-draw-rewards"
+               value="abc1234"
+               data-component="body" hidden>
+    <br>
+<p>The customer member id of the lucky draw rewards.</p>
+        </p>
+        </form>
+
+        <h1 id="rank-api">Rank API</h1>
+
+    
+
+            <h2 id="rank-api-GETapi-v1-ranks">3. Get all ranks</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-ranks">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/v1/ranks" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/ranks"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-ranks">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-ratelimit-limit: 200
+x-ratelimit-remaining: 196
+access-control-allow-origin: *
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">{
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;Member&quot;,
+            &quot;description&quot;: &quot;a&quot;,
+            &quot;target_spending&quot;: 0,
+            &quot;priority&quot;: &quot;0&quot;,
+            &quot;reward_value&quot;: &quot;0&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;updated_at&quot;: &quot;2025-08-31 12:10:16&quot;,
+            &quot;encrypted_id&quot;: &quot;1q&quot;,
+            &quot;target_range&quot;: null
+        },
+        {
+            &quot;id&quot;: 2,
+            &quot;title&quot;: &quot;Silver&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;target_spending&quot;: 3000,
+            &quot;priority&quot;: &quot;0&quot;,
+            &quot;reward_value&quot;: &quot;0&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;encrypted_id&quot;: &quot;OJ&quot;,
+            &quot;target_range&quot;: null
+        },
+        {
+            &quot;id&quot;: 3,
+            &quot;title&quot;: &quot;Gold&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;target_spending&quot;: 30000,
+            &quot;priority&quot;: &quot;0&quot;,
+            &quot;reward_value&quot;: &quot;0&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;encrypted_id&quot;: &quot;o4&quot;,
+            &quot;target_range&quot;: null
+        },
+        {
+            &quot;id&quot;: 4,
+            &quot;title&quot;: &quot;Premium&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;target_spending&quot;: 100000,
+            &quot;priority&quot;: &quot;0&quot;,
+            &quot;reward_value&quot;: &quot;0&quot;,
+            &quot;status&quot;: 10,
+            &quot;created_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;updated_at&quot;: &quot;2025-08-31 11:39:55&quot;,
+            &quot;encrypted_id&quot;: &quot;2G&quot;,
+            &quot;target_range&quot;: null
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-ranks" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-ranks"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-ranks"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-ranks" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-ranks"></code></pre>
+</span>
+<form id="form-GETapi-v1-ranks" data-method="GET"
+      data-path="api/v1/ranks"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-ranks', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-ranks"
+                    onclick="tryItOut('GETapi-v1-ranks');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-ranks"
+                    onclick="cancelTryOut('GETapi-v1-ranks');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-ranks" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/ranks</code></b>
+        </p>
+                    </form>
 
         <h1 id="announcement-api">Announcement API</h1>
 
@@ -522,32 +831,7 @@ access-control-allow-origin: *
 <code class="language-json">{
     &quot;message&quot;: &quot;&quot;,
     &quot;message_key&quot;: &quot;get_banner_success&quot;,
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;voucher_id&quot;: null,
-            &quot;title&quot;: &quot;tetea5&quot;,
-            &quot;description&quot;: &quot;&lt;p&gt;ssadsadasdasdada5&lt;/p&gt;&quot;,
-            &quot;image&quot;: &quot;file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png&quot;,
-            &quot;sequence&quot;: 1,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-04-12 18:42:08&quot;,
-            &quot;updated_at&quot;: &quot;2025-07-05 15:20:28&quot;,
-            &quot;image_path&quot;: &quot;http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png&quot;
-        },
-        {
-            &quot;id&quot;: 2,
-            &quot;voucher_id&quot;: null,
-            &quot;title&quot;: &quot;&quot;,
-            &quot;description&quot;: &quot;&quot;,
-            &quot;image&quot;: &quot;file-managers/E538Kb5vZdki6XN0R2ZdsKRmeybdMhxXBYFVjD8D.png&quot;,
-            &quot;sequence&quot;: 1,
-            &quot;status&quot;: 10,
-            &quot;created_at&quot;: &quot;2025-04-12 18:42:10&quot;,
-            &quot;updated_at&quot;: &quot;2025-04-12 18:42:10&quot;,
-            &quot;image_path&quot;: &quot;http://localhost/storage/file-managers/E538Kb5vZdki6XN0R2ZdsKRmeybdMhxXBYFVjD8D.png&quot;
-        }
-    ]
+    &quot;data&quot;: []
 }</code>
  </pre>
     </span>
@@ -647,7 +931,7 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-banners-details">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (500):</p>
         </blockquote>
                 <details class="annotation">
             <summary>
@@ -662,21 +946,481 @@ access-control-allow-origin: *
         </details>         <pre>
 
 <code class="language-json">{
-    &quot;message&quot;: &quot;&quot;,
-    &quot;message_key&quot;: &quot;get_banner_success&quot;,
-    &quot;data&quot;: {
-        &quot;id&quot;: 1,
-        &quot;voucher_id&quot;: null,
-        &quot;title&quot;: &quot;tetea5&quot;,
-        &quot;description&quot;: &quot;&lt;p&gt;ssadsadasdasdada5&lt;/p&gt;&quot;,
-        &quot;image&quot;: &quot;file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png&quot;,
-        &quot;sequence&quot;: 1,
-        &quot;status&quot;: 10,
-        &quot;created_at&quot;: &quot;2025-04-12 18:42:08&quot;,
-        &quot;updated_at&quot;: &quot;2025-07-05 15:20:28&quot;,
-        &quot;encrypted_id&quot;: &quot;ql&quot;,
-        &quot;image_path&quot;: &quot;http://localhost/storage/file-managers/yMT1fPrUNBKEU9fa6Q5MU24TYYNBsf3VAFUKgmjY.png&quot;
-    }
+    &quot;message&quot;: &quot;Call to a member function append() on null&quot;,
+    &quot;exception&quot;: &quot;Error&quot;,
+    &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\app\\Services\\BannerService.php&quot;,
+    &quot;line&quot;: 333,
+    &quot;trace&quot;: [
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\app\\Http\\Controllers\\Api\\BannerController.php&quot;,
+            &quot;line&quot;: 41,
+            &quot;function&quot;: &quot;oneBannerClient&quot;,
+            &quot;class&quot;: &quot;App\\Services\\BannerService&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php&quot;,
+            &quot;line&quot;: 54,
+            &quot;function&quot;: &quot;oneBanner&quot;,
+            &quot;class&quot;: &quot;App\\Http\\Controllers\\Api\\BannerController&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php&quot;,
+            &quot;line&quot;: 45,
+            &quot;function&quot;: &quot;callAction&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Controller&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
+            &quot;line&quot;: 261,
+            &quot;function&quot;: &quot;dispatch&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\ControllerDispatcher&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
+            &quot;line&quot;: 205,
+            &quot;function&quot;: &quot;runController&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;line&quot;: 721,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 128,
+            &quot;function&quot;: &quot;Illuminate\\Routing\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\app\\Http\\Middleware\\APIVersion.php&quot;,
+            &quot;line&quot;: 20,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;App\\Http\\Middleware\\APIVersion&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php&quot;,
+            &quot;line&quot;: 50,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\SubstituteBindings&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;line&quot;: 127,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;line&quot;: 93,
+            &quot;function&quot;: &quot;handleRequest&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;line&quot;: 55,
+            &quot;function&quot;: &quot;handleRequestUsingNamedLimiter&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 103,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;line&quot;: 719,
+            &quot;function&quot;: &quot;then&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;line&quot;: 698,
+            &quot;function&quot;: &quot;runRouteWithinStack&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;line&quot;: 662,
+            &quot;function&quot;: &quot;runRoute&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;line&quot;: 651,
+            &quot;function&quot;: &quot;dispatchToRoute&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;dispatch&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 128,
+            &quot;function&quot;: &quot;Illuminate\\Foundation\\Http\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\barryvdh\\laravel-debugbar\\src\\Middleware\\InjectDebugbar.php&quot;,
+            &quot;line&quot;: 59,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Barryvdh\\Debugbar\\Middleware\\InjectDebugbar&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
+            &quot;line&quot;: 21,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php&quot;,
+            &quot;line&quot;: 31,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
+            &quot;line&quot;: 21,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php&quot;,
+            &quot;line&quot;: 40,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TrimStrings&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php&quot;,
+            &quot;line&quot;: 27,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php&quot;,
+            &quot;line&quot;: 86,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php&quot;,
+            &quot;line&quot;: 52,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Fruitcake\\Cors\\HandleCors&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\fideloper\\proxy\\src\\TrustProxies.php&quot;,
+            &quot;line&quot;: 57,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 167,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Fideloper\\Proxy\\TrustProxies&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;line&quot;: 103,
+            &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;line&quot;: 142,
+            &quot;function&quot;: &quot;then&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;line&quot;: 111,
+            &quot;function&quot;: &quot;sendRequestThroughRouter&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;line&quot;: 299,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;line&quot;: 287,
+            &quot;function&quot;: &quot;callLaravelOrLumenRoute&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;line&quot;: 89,
+            &quot;function&quot;: &quot;makeApiCall&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;line&quot;: 45,
+            &quot;function&quot;: &quot;makeResponseCall&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;line&quot;: 35,
+            &quot;function&quot;: &quot;makeResponseCallIfConditionsPass&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 222,
+            &quot;function&quot;: &quot;__invoke&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 176,
+            &quot;function&quot;: &quot;iterateThroughStrategies&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 116,
+            &quot;function&quot;: &quot;fetchResponses&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 123,
+            &quot;function&quot;: &quot;processRoute&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 80,
+            &quot;function&quot;: &quot;extractEndpointsInfoFromLaravelApp&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 56,
+            &quot;function&quot;: &quot;extractEndpointsInfoAndWriteToDisk&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php&quot;,
+            &quot;line&quot;: 55,
+            &quot;function&quot;: &quot;get&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;line&quot;: 36,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Knuckles\\Scribe\\Commands\\GenerateDocumentation&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php&quot;,
+            &quot;line&quot;: 40,
+            &quot;function&quot;: &quot;Illuminate\\Container\\{closure}&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;line&quot;: 93,
+            &quot;function&quot;: &quot;unwrapIfClosure&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\Util&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;line&quot;: 35,
+            &quot;function&quot;: &quot;callBoundMethod&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php&quot;,
+            &quot;line&quot;: 653,
+            &quot;function&quot;: &quot;call&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
+            &quot;type&quot;: &quot;::&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
+            &quot;line&quot;: 136,
+            &quot;function&quot;: &quot;call&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Container\\Container&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\symfony\\console\\Command\\Command.php&quot;,
+            &quot;line&quot;: 298,
+            &quot;function&quot;: &quot;execute&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
+            &quot;line&quot;: 120,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Command\\Command&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;line&quot;: 1040,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;line&quot;: 301,
+            &quot;function&quot;: &quot;doRunCommand&quot;,
+            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;line&quot;: 171,
+            &quot;function&quot;: &quot;doRun&quot;,
+            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php&quot;,
+            &quot;line&quot;: 94,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php&quot;,
+            &quot;line&quot;: 129,
+            &quot;function&quot;: &quot;run&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Console\\Application&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        },
+        {
+            &quot;file&quot;: &quot;C:\\xampp\\htdocs\\ifei-bo\\artisan&quot;,
+            &quot;line&quot;: 35,
+            &quot;function&quot;: &quot;handle&quot;,
+            &quot;class&quot;: &quot;Illuminate\\Foundation\\Console\\Kernel&quot;,
+            &quot;type&quot;: &quot;-&gt;&quot;
+        }
+    ]
 }</code>
  </pre>
     </span>
@@ -1731,7 +2475,7 @@ access-control-allow-origin: *
     \"password_confirmation\": \"abcd1234\",
     \"invitation_code\": \"AASSCC\",
     \"device_type\": 1,
-    \"register_token\": \"example_device_token\"
+    \"register_token\": \"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"
 }"
 </code></pre></div>
 
@@ -1755,7 +2499,7 @@ let body = {
     "password_confirmation": "abcd1234",
     "invitation_code": "AASSCC",
     "device_type": 1,
-    "register_token": "example_device_token"
+    "register_token": "45ab6cc6-bcaa-461e-af5d-ea402e5b93da"
 };
 
 fetch(url, {
@@ -1886,14 +2630,14 @@ fetch(url, {
                value="1"
                data-component="body" hidden>
     <br>
-<p>optional The device type.</p>
+<p>optional The device type required with register_token.</p>
         </p>
                 <p>
             <b><code>register_token</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
                 <input type="text"
                name="register_token"
                data-endpoint="POSTapi-v1-users"
-               value="example_device_token"
+               value="45ab6cc6-bcaa-461e-af5d-ea402e5b93da"
                data-component="body" hidden>
     <br>
 <p>optional The device token to receive notification.</p>
@@ -1923,7 +2667,7 @@ fetch(url, {
     \"calling_code\": \"+60\",
     \"password\": \"abcd1234\",
     \"device_type\": 1,
-    \"register_token\": \"example_device_token\"
+    \"register_token\": \"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"
 }"
 </code></pre></div>
 
@@ -1943,7 +2687,7 @@ let body = {
     "calling_code": "+60",
     "password": "abcd1234",
     "device_type": 1,
-    "register_token": "example_device_token"
+    "register_token": "45ab6cc6-bcaa-461e-af5d-ea402e5b93da"
 };
 
 fetch(url, {
@@ -2034,14 +2778,14 @@ fetch(url, {
                value="1"
                data-component="body" hidden>
     <br>
-<p>optional The device type.</p>
+<p>optional The device type required with register_token.</p>
         </p>
                 <p>
             <b><code>register_token</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
                 <input type="text"
                name="register_token"
                data-endpoint="POSTapi-v1-users-login"
-               value="example_device_token"
+               value="45ab6cc6-bcaa-461e-af5d-ea402e5b93da"
                data-component="body" hidden>
     <br>
 <p>optional The device token to receive notification.</p>
@@ -2889,7 +3633,7 @@ fetch(url, {
     --form "email=john@email.com" \
     --form "date_of_birth=2022-01-01" \
     --form "to_remove=1" \
-    --form "profile_picture=@C:\Users\Base Two\AppData\Local\Temp\phpDF02.tmp" </code></pre></div>
+    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\phpDB54.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3175,20 +3919,21 @@ access-control-allow-origin: *
 <p>Show how many record in a page. Leave blank for default (100).</p>
             </p>
                     <p>
-                <b><code>notification</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <b><code>notification</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
                 <input type="number"
                name="notification"
                data-endpoint="GETapi-v1-users-notifications"
                value="5"
                data-component="query" hidden>
     <br>
-<p>The notification ID of notification.</p>
+<p>optional The notification ID of notification.</p>
             </p>
                 </form>
 
             <h2 id="user-api-POSTapi-v1-users-notification">14. Update notification seen</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -3244,7 +3989,7 @@ fetch(url, {
 </span>
 <form id="form-POSTapi-v1-users-notification" data-method="POST"
       data-path="api/v1/users/notification"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
@@ -3271,7 +4016,15 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/v1/users/notification</code></b>
         </p>
-                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+                <p>
+            <label id="auth-POSTapi-v1-users-notification" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTapi-v1-users-notification"
+                                                                data-component="header"></label>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <p>
             <b><code>notification</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
@@ -3305,7 +4058,7 @@ fetch(url, {
     \"platform\": \"1\",
     \"email\": \"ifei@mail.com\",
     \"device_type\": 1,
-    \"register_token\": \"example_device_token\"
+    \"register_token\": \"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"
 }"
 </code></pre></div>
 
@@ -3325,7 +4078,7 @@ let body = {
     "platform": "1",
     "email": "ifei@mail.com",
     "device_type": 1,
-    "register_token": "example_device_token"
+    "register_token": "45ab6cc6-bcaa-461e-af5d-ea402e5b93da"
 };
 
 fetch(url, {
@@ -3416,14 +4169,14 @@ fetch(url, {
                value="1"
                data-component="body" hidden>
     <br>
-<p>optional The device type.</p>
+<p>optional The device type required with register_token.</p>
         </p>
                 <p>
             <b><code>register_token</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
                 <input type="text"
                name="register_token"
                data-endpoint="POSTapi-v1-users-login-social"
-               value="example_device_token"
+               value="45ab6cc6-bcaa-461e-af5d-ea402e5b93da"
                data-component="body" hidden>
     <br>
 <p>optional The device token to receive notification.</p>
@@ -3558,6 +4311,161 @@ fetch(url, {
                data-component="body" hidden>
     <br>
 <p>The confirm password of new password to change.</p>
+        </p>
+        </form>
+
+            <h2 id="user-api-POSTapi-v1-users-test-notification">14. Test notification</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-v1-users-test-notification">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost/api/v1/users/test-notification" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"title\": \"test-notification\",
+    \"content\": \"test-notification-content\",
+    \"register_token\": \"ea\",
+    \"app_id\": \"voluptates\",
+    \"api_key\": \"iure\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/users/test-notification"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "test-notification",
+    "content": "test-notification-content",
+    "register_token": "ea",
+    "app_id": "voluptates",
+    "api_key": "iure"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-users-test-notification">
+</span>
+<span id="execution-results-POSTapi-v1-users-test-notification" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-users-test-notification"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-users-test-notification"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-users-test-notification" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-users-test-notification"></code></pre>
+</span>
+<form id="form-POSTapi-v1-users-test-notification" data-method="POST"
+      data-path="api/v1/users/test-notification"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-users-test-notification', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-users-test-notification"
+                    onclick="tryItOut('POSTapi-v1-users-test-notification');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-users-test-notification"
+                    onclick="cancelTryOut('POSTapi-v1-users-test-notification');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-users-test-notification" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/users/test-notification</code></b>
+        </p>
+                <p>
+            <label id="auth-POSTapi-v1-users-test-notification" hidden>Authorization header:
+                <b><code>Bearer </code></b><input type="text"
+                                                                name="Authorization"
+                                                                data-prefix="Bearer "
+                                                                data-endpoint="POSTapi-v1-users-test-notification"
+                                                                data-component="header"></label>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>title</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="title"
+               data-endpoint="POSTapi-v1-users-test-notification"
+               value="test-notification"
+               data-component="body" hidden>
+    <br>
+<p>optional The notification title to test. ( Default will be: test-notification ).</p>
+        </p>
+                <p>
+            <b><code>content</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="content"
+               data-endpoint="POSTapi-v1-users-test-notification"
+               value="test-notification-content"
+               data-component="body" hidden>
+    <br>
+<p>optional The notification content to test. ( Default will be: test-notification-content ).</p>
+        </p>
+                <p>
+            <b><code>register_token</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="register_token"
+               data-endpoint="POSTapi-v1-users-test-notification"
+               value="ea"
+               data-component="body" hidden>
+    <br>
+<p>optional The target device token. ( Default will be following current authenticated user's register token ).</p>
+        </p>
+                <p>
+            <b><code>app_id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="app_id"
+               data-endpoint="POSTapi-v1-users-test-notification"
+               value="voluptates"
+               data-component="body" hidden>
+    <br>
+<p>optional The one signal app id. ( Default will be following current settings ).</p>
+        </p>
+                <p>
+            <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="POSTapi-v1-users-test-notification"
+               value="iure"
+               data-component="body" hidden>
+    <br>
+<p>optional The one signal api_key ( Default will be following current settings ).</p>
         </p>
         </form>
 
