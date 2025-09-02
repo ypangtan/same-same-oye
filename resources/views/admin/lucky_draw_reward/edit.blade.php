@@ -79,6 +79,10 @@ $lucky_draw_reward_edit = 'lucky_draw_reward_edit';
             $( this ).parent().remove();
         } );
 
+        $( document ).on( 'focus' , '.lucky_draw_reward_edit_reference_id', function() {
+            $( '.lucky_draw_reward_edit_reference_id' ).removeClass( 'is-invalid' ).parent().parent().nextAll( 'div.invalid-feedback' ).text( '' );
+        } );
+
         $( '.btn_add' ).click( function() {
             template = template_reference.clone();
             $( fe + '_reference_id' ).append( template );
@@ -133,7 +137,12 @@ $lucky_draw_reward_edit = 'lucky_draw_reward_edit';
                     if ( error.status === 422 ) {
                         let errors = error.responseJSON.errors;
                         $.each( errors, function( key, value ) {
-                            $( fe + '_' + key ).addClass( 'is-invalid' ).nextAll( 'div.invalid-feedback' ).text( value );
+                            if( key == 'reference_id' ) {
+                                $( fe + '_' + key ).addClass( 'is-invalid' ).nextAll( 'div.invalid-feedback' ).text( value );
+                                $( fe + '_' + key ).find( '.lucky_draw_reward_create_reference_id' ).addClass( 'is-invalid' )
+                            }else {
+                                $( fe + '_' + key ).addClass( 'is-invalid' ).nextAll( 'div.invalid-feedback' ).text( value );
+                            }
                         } );
                     } else {
                         $( '#modal_danger .caption-text' ).html( error.responseJSON.message );

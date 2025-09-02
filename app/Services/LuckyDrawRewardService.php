@@ -145,7 +145,7 @@ class LuckyDrawRewardService
         $validator = Validator::make( $request->all(), [
             'customer_member_id' => [ 'required', 'unique:lucky_draw_rewards,customer_member_id' ],
             'name' => [ 'required' ],
-            'quantity' => [ 'required' ],
+            'quantity' => [ 'nullable' ],
             'reference_id' => [ 'required' ],
         ] );
 
@@ -201,7 +201,7 @@ class LuckyDrawRewardService
         $validator = Validator::make( $request->all(), [
             'customer_member_id' => [ 'required', 'unique:lucky_draw_rewards,customer_member_id,' . $request->id ],
             'name' => [ 'required' ],
-            'quantity' => [ 'required' ],
+            'quantity' => [ 'nullable' ],
             'reference_id' => [ 'required' ],
         ] );
 
@@ -316,7 +316,6 @@ class LuckyDrawRewardService
                 $data[ $row[0] ] = [
                     'customer_member_id' => $row[0],
                     'name' => $row[1],
-                    'quantity' => $row[2],
                     'reference' => [
                         $row[3],
                     ],
@@ -415,7 +414,6 @@ class LuckyDrawRewardService
                     $data[ $row[0] ] = [
                         'customer_member_id' => $row[0],
                         'name' => $row[1],
-                        'quantity' => $row[2],
                         'reference' => [
                             $row[3],
                         ],
