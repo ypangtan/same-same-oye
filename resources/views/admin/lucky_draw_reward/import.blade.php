@@ -7,7 +7,7 @@ $upload_pn = 'upload';
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 row">
-                    <div class="mb-2">{!! __( 'lucky_draw_reward.upload_desc_1', [ 'url' => asset( 'admin/template/Template.xlsm' ) ] ) !!}</div>
+                    <div class="mb-2">{!! __( 'lucky_draw_reward.upload_desc_1', [ 'url' => asset( 'admin/sample_excel/Template_lucky_draw_rewards.xlsx' ) ] ) !!}</div>
                 </div>
                 <hr>
                 <div class="mb-3 row">
