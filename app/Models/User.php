@@ -141,10 +141,26 @@ class User extends Model
             $data[$v->title] = [
                 'current_points' => \Helper::numberFormat( $totalPoints, 2 ),
                 'required_points'  => Helper::numberFormat( ( ($v->target_spending - $totalPoints > 0) ? $v->target_spending - $totalPoints : 0), 2 ),
-                'next_level_target'  => $v->target_spending,
             ];
+
+            switch( $v->title ) {
+                case 'Member':
+                    $data['Member']['next_level_target'] = 1000;
+                    break;
+                case 'Silver':
+                    $data['Member']['next_level_target'] = 9999;
+                    break;
+                case 'Gold':
+                    $data['Member']['next_level_target'] = 99999;
+                    break;
+                case 'Premium':
+                    $data['Member']['next_level_target'] = 1000000;
+                    break;
+            } 
         }
 
+        return $data;
+        
         // return [
         //     'Member'  => [
         //         'current_points' => Helper::numberFormat( $totalPoints, 2 ),
@@ -167,7 +183,6 @@ class User extends Model
         //         'next_level_target'  => 1000000,
         //     ],
         // ];
-        return $data;
     }
 
     public function referral() {
