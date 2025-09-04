@@ -167,6 +167,7 @@ class User extends Model
         //         'next_level_target'  => 1000000,
         //     ],
         // ];
+        return $data;
     }
 
     public function referral() {
