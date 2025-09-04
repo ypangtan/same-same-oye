@@ -145,7 +145,7 @@ class User extends Model
             $data[$v->title] = [
                 'current_points' => \Helper::numberFormat( $totalPoints, 2 ),
                 'required_points'  => Helper::numberFormat( ( ($v->target_spending - $totalPoints > 0) ? $v->target_spending - $totalPoints : 0), 2 ),
-                'next_level_target' => $v->target_range,
+                'next_level_target' => $v->target_range + 1,
             ];
 
         }
