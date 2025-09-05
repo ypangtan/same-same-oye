@@ -159,8 +159,10 @@ class MarketingNotificationService {
         
         $validator = Validator::make( $request->all(), [
             'type' => [ 'required', 'in:2,3' ],
-            'title' => [ 'required' ],
-            'content' => [ 'required' ],
+            'en_title' => [ 'required' ],
+            'en_content' => [ 'required' ],
+            'zh_title' => [ 'nullable' ],
+            'zh_content' => [ 'nullable' ],
             'image' => [ 'nullable'],
             'target_url' => [ 'nullable'],
             'all_users' => [ 'nullable', 'in:1,0' ],
@@ -169,8 +171,10 @@ class MarketingNotificationService {
 
         $attributeName = [
             'type' => __( 'datatables.type' ),
-            'title' => __( 'datatables.title' ),
-            'content' => __( 'marketing_notification.content' ),
+            'en_title' => __( 'datatables.title' ),
+            'en_content' => __( 'marketing_notification.content' ),
+            'zh_title' => __( 'datatables.title' ),
+            'zh_content' => __( 'marketing_notification.content' ),
             'image' => __( 'marketing_notification.image' ),
             'target_url' => __( 'marketing_notification.target_url' ),
         ];
@@ -195,13 +199,15 @@ class MarketingNotificationService {
             $createAnnouncement = UserNotification::create( [
                 'type' => $request->type,
                 'target_url' => $request->target_url,
-                'title' => $request->title,
-                'content' => $request->content,
+                'en_title' => $request->en_title,
+                'en_content' => $request->en_content,
+                'zh_title' => $request->zh_title,
+                'zh_content' => $request->zh_content,
                 'is_template' => $is_template,
                 'is_broadcast' => $is_broadcast,
-                'url_slug' => $request->url_slug ? $request->url_slug : \Str::slug( $request->title ),
+                'url_slug' => $request->url_slug ? $request->url_slug : \Str::slug( $request->en_title ),
                 'key' => 'home',
-                'system_title' => $request->title,
+                'system_title' => $request->en_title,
                 'system_content' => NULL,
                 'system_data' => NULL,
                 'meta_data' => NULL,
@@ -248,7 +254,7 @@ class MarketingNotificationService {
 
             return response()->json( [
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine()
-            ] );
+            ], 500 );
         }
 
         return response()->json( [
@@ -265,8 +271,10 @@ class MarketingNotificationService {
 
         $validator = Validator::make( $request->all(), [
             'type' => [ 'required', 'in:2,3' ],
-            'title' => [ 'required' ],
-            'content' => [ 'required' ],
+            'en_title' => [ 'required' ],
+            'en_content' => [ 'required' ],
+            'zh_title' => [ 'nullable' ],
+            'zh_content' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'target_url' => [ 'nullable' ],
             'all_users' => ['nullable', 'in:1,0'],
@@ -274,8 +282,10 @@ class MarketingNotificationService {
 
         $attributeName = [
             'type' => __( 'datatables.type' ),
-            'title' => __( 'datatables.title' ),
-            'content' => __( 'marketing_notification.content' ),
+            'en_title' => __( 'datatables.title' ),
+            'en_content' => __( 'marketing_notification.content' ),
+            'zh_title' => __( 'datatables.title' ),
+            'zh_content' => __( 'marketing_notification.content' ),
             'image' => __( 'marketing_notification.image' ),
             'target_url' => __( 'marketing_notification.target_url' ),
         ];
@@ -291,11 +301,13 @@ class MarketingNotificationService {
         try {
 
             $updateAnnouncement = UserNotification::find( $request->id );
-            $updateAnnouncement->title = $request->title;
+            $updateAnnouncement->en_title = $request->en_title;
+            $updateAnnouncement->zh_title = $request->zh_title;
             // $updateAnnouncement->target_url = $request->target_url;
-            $updateAnnouncement->url_slug = $request->url_slug ? $request->url_slug : \Str::slug( $request->title );
+            $updateAnnouncement->url_slug = $request->url_slug ? $request->url_slug : \Str::slug( $request->en_title );
             $updateAnnouncement->key = 'home';
-            $updateAnnouncement->content = $request->content;
+            $updateAnnouncement->en_content = $request->en_content;
+            $updateAnnouncement->zh_content = $request->zh_content;
 
             if ( $request->image ) {
                 $file = FileManager::find( $request->image );

@@ -46,8 +46,10 @@ class AnnouncementService
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'title' => [ 'required' ],
-            'description' => [ 'nullable' ],
+            'en_title' => [ 'required' ],
+            'en_description' => [ 'nullable' ],
+            'zh_title' => [ 'nullable' ],
+            'zh_description' => [ 'nullable' ],
             'discount_type' => [ 'nullable' ],
             'voucher_type' => [ 'nullable' ],
             'promo_code' => ['nullable', 'unique:announcements,promo_code'],
@@ -64,8 +66,10 @@ class AnnouncementService
         ] );
 
         $attributeName = [
-            'title' => __( 'announcement.title' ),
-            'description' => __( 'announcement.description' ),
+            'en_title' => __( 'announcement.title' ),
+            'en_description' => __( 'announcement.description' ),
+            'zh_title' => __( 'announcement.title' ),
+            'zh_description' => __( 'announcement.description' ),
             'image' => __( 'announcement.image' ),
             'code' => __( 'announcement.code' ),
             'ingredients' => __( 'announcement.ingredients' ),
@@ -133,9 +137,11 @@ class AnnouncementService
         
         try {
             $announcementCreate = Announcement::create([
-                'title' => $request->title,
+                'en_title' => $request->en_title,
+                'zh_title' => $request->zh_title,
                 'discount_type' => $request->discount_type ? $request->discount_type : 1,
-                'description' => $request->description,
+                'en_description' => $request->en_description,
+                'zh_description' => $request->zh_description,
                 'promo_code' => $request->promo_code,
                 'total_claimable' => $request->total_claimable,
                 'points_required' => $request->points_required,
@@ -220,10 +226,12 @@ class AnnouncementService
 
             if( $request->discount_type && $request->promo_code ) {
                 $voucherCreate = Voucher::create([
-                    'title' => $request->title,
+                    'en_title' => $request->en_title,
+                    'zh_title' => $request->zh_title,
                     'discount_type' => $request->discount_type,
                     'type' => $request->voucher_type,
-                    'description' => $request->description,
+                    'en_description' => $request->en_description,
+                    'zh_description' => $request->zh_description,
                     'promo_code' => $request->promo_code,
                     'total_claimable' => $request->total_claimable,
                     'points_required' => $request->points_required,
@@ -270,8 +278,10 @@ class AnnouncementService
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'title' => [ 'required' ],
-            'description' => [ 'nullable' ],
+            'en_title' => [ 'required' ],
+            'en_description' => [ 'nullable' ],
+            'zh_title' => [ 'nullable' ],
+            'zh_description' => [ 'nullable' ],
             'discount_type' => [ 'nullable' ],
             'voucher_type' => [ 'nullable' ],
             'promo_code' => [ 'nullable', 'unique:announcements,promo_code,' . $request->id, ],
@@ -289,8 +299,10 @@ class AnnouncementService
         ] );
 
         $attributeName = [
-            'title' => __( 'announcement.title' ),
-            'description' => __( 'announcement.description' ),
+            'en_title' => __( 'announcement.title' ),
+            'en_description' => __( 'announcement.description' ),
+            'zh_title' => __( 'announcement.title' ),
+            'zh_description' => __( 'announcement.description' ),
             'image' => __( 'announcement.image' ),
             'code' => __( 'announcement.code' ),
             'ingredients' => __( 'announcement.ingredients' ),
@@ -349,9 +361,11 @@ class AnnouncementService
         try {
             $updateAnnouncement = Announcement::with( ['voucher'] )->find( $request->id );
     
-            $updateAnnouncement->title = $request->title;
+            $updateAnnouncement->en_title = $request->en_title;
+            $updateAnnouncement->zh_title = $request->zh_title;
             $updateAnnouncement->discount_type = $request->discount_type ? $request->discount_type : 1;
-            $updateAnnouncement->description = $request->description;
+            $updateAnnouncement->en_description = $request->en_description;
+            $updateAnnouncement->zh_description = $request->zh_description;
             $updateAnnouncement->promo_code = $request->promo_code;
             $updateAnnouncement->start_date = $request->start_date;
             $updateAnnouncement->expired_date = $request->expired_date;
@@ -432,10 +446,12 @@ class AnnouncementService
             $updateVoucher = Voucher::find( $updateAnnouncement->voucher_id );
     
             if( $updateVoucher ) {
-                $updateVoucher->title = $request->title;
+                $updateVoucher->en_title = $request->en_title;
+                $updateVoucher->zh_title = $request->zh_title;
                 $updateVoucher->discount_type = $request->discount_type;
                 $updateVoucher->type = $request->voucher_type;
-                $updateVoucher->description = $request->description;
+                $updateVoucher->en_description = $request->en_description;
+                $updateVoucher->zh_description = $request->zh_description;
                 $updateVoucher->promo_code = $request->promo_code;
                 $updateVoucher->total_claimable = $request->total_claimable;
                 $updateVoucher->points_required = $request->points_required;
@@ -448,10 +464,12 @@ class AnnouncementService
                 $updateVoucher->save();
             } else if ( !$updateVoucher && $request->discount_type ) {
                 $voucherCreate = Voucher::create([
-                    'title' => $request->title,
+                    'en_title' => $request->en_title,
+                    'zh_title' => $request->zh_title,
                     'discount_type' => $request->discount_type,
                     'type' => $request->voucher_type,
-                    'description' => $request->description,
+                    'en_description' => $request->en_description,
+                    'zh_description' => $request->zh_description,
                     'promo_code' => $request->promo_code,
                     'total_claimable' => $request->total_claimable,
                     'points_required' => $request->points_required,

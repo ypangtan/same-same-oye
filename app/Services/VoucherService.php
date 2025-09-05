@@ -39,8 +39,10 @@ class VoucherService
     public static function createVoucher( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'title' => [ 'required' ],
-            'description' => [ 'nullable' ],
+            'en_title' => [ 'required' ],
+            'en_description' => [ 'nullable' ],
+            'zh_title' => [ 'nullable' ],
+            'zh_description' => [ 'nullable' ],
             'discount_type' => [ 'nullable' ],
             'voucher_type' => [ 'nullable' ],
             'promo_code' => ['nullable', 'unique:vouchers,promo_code'],
@@ -56,8 +58,10 @@ class VoucherService
         ] );
 
         $attributeName = [
-            'title' => __( 'voucher.title' ),
-            'description' => __( 'voucher.description' ),
+            'en_title' => __( 'voucher.title' ),
+            'en_description' => __( 'voucher.description' ),
+            'zh_title' => __( 'voucher.title' ),
+            'zh_description' => __( 'voucher.description' ),
             'image' => __( 'voucher.image' ),
             'code' => __( 'voucher.code' ),
             'ingredients' => __( 'voucher.ingredients' ),
@@ -112,10 +116,12 @@ class VoucherService
         
         try {
             $voucherCreate = Voucher::create([
-                'title' => $request->title,
+                'en_title' => $request->en_title,
+                'zh_title' => $request->zh_title,
                 'discount_type' => 1,
                 'type' => 1,
-                'description' => $request->description,
+                'en_description' => $request->en_description,
+                'zh_description' => $request->zh_description,
                 'promo_code' => $request->promo_code ? $request->promo_code : Helper::generateVoucherCode(),
                 'total_claimable' => $request->total_claimable,
                 'points_required' => $request->points_required,
@@ -172,8 +178,10 @@ class VoucherService
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'title' => [ 'required' ],
-            'description' => [ 'nullable' ],
+            'en_title' => [ 'required' ],
+            'en_description' => [ 'nullable' ],
+            'zh_title' => [ 'nullable' ],
+            'zh_description' => [ 'nullable' ],
             'discount_type' => [ 'nullable' ],
             'voucher_type' => [ 'nullable' ],
             'promo_code' => [ 'nullable', 'unique:vouchers,promo_code,' . $request->id, ],
@@ -190,8 +198,10 @@ class VoucherService
         ] );
 
         $attributeName = [
-            'title' => __( 'voucher.title' ),
-            'description' => __( 'voucher.description' ),
+            'en_title' => __( 'voucher.title' ),
+            'en_description' => __( 'voucher.description' ),
+            'zh_title' => __( 'voucher.title' ),
+            'zh_description' => __( 'voucher.description' ),
             'image' => __( 'voucher.image' ),
             'code' => __( 'voucher.code' ),
             'ingredients' => __( 'voucher.ingredients' ),
@@ -250,10 +260,12 @@ class VoucherService
         try {
             $updateVoucher = Voucher::find( $request->id );
     
-            $updateVoucher->title = $request->title;
+            $updateVoucher->en_title = $request->en_title;
+            $updateVoucher->zh_title = $request->zh_title;
             // $updateVoucher->discount_type = $request->discount_type;
             // $updateVoucher->type = $request->voucher_type;
-            $updateVoucher->description = $request->description;
+            $updateVoucher->en_description = $request->en_description;
+            $updateVoucher->zh_description = $request->zh_description;
             $updateVoucher->promo_code = $request->promo_code;
             $updateVoucher->total_claimable = $request->total_claimable;
             $updateVoucher->points_required = $request->points_required;

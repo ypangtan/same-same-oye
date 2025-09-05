@@ -11,17 +11,22 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 use App\Traits\HasTranslations;
+use Illuminate\Support\Facades\App;
 
 use Helper;
 
 class Voucher extends Model
 {
-    use HasFactory, LogsActivity, HasTranslations;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'promo_code',
         'title',
         'description',
+        'en_title',
+        'en_description',
+        'zh_title',
+        'zh_description',
         'image',
         'start_date',
         'expired_date',
@@ -38,6 +43,34 @@ class Voucher extends Model
         'validity_days',
         'claim_per_user',
     ];
+
+    public function getTitleAttribute(){
+        
+        $nowLocale = App::getLocale();
+
+        switch( $nowLocale ) {
+            case 'zh':
+                return $this->attributes['zh_title'] ?? ( $this->attributes['en_title'] ?? '' );
+                break;
+            default:
+                return $this->attributes['en_title'] ?? $this->attributes['title'];
+                break;
+        }
+    }
+
+    public function getDescriptionAttribute(){
+        
+        $nowLocale = App::getLocale();
+
+        switch( $nowLocale ) {
+            case 'zh':
+                return $this->attributes['zh_description'] ?? ( $this->attributes['en_description'] ?? '' );
+                break;
+            default:
+                return $this->attributes['en_description'] ?? $this->attributes['description'];
+                break;
+        }
+    }
 
     public function announcement()
     {
@@ -107,7 +140,7 @@ class Voucher extends Model
         return $this->attributes['type'] ?? null;
     }
     
-    public $translatable = [ 'title', 'description' ];
+    // public $translatable = [ 'title', 'description' ];
 
     protected function serializeDate( DateTimeInterface $date ) {
         return $date->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' );
@@ -117,6 +150,10 @@ class Voucher extends Model
         'promo_code',
         'title',
         'description',
+        'en_title',
+        'en_description',
+        'zh_title',
+        'zh_description',
         'image',
         'start_date',
         'expired_date',

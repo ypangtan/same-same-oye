@@ -37,9 +37,52 @@ $voucherTypes = $data['voucher_type'];
 
 <div class="card">
     <div class="card-inner">
+        <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
         <div class="row">
-            <div class="col-md-12 col-lg-12">
-                <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
+            <div class="col-md-6">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
+                        <button class="nav-link active" id="en_title-tab" data-bs-toggle="tab" data-bs-target="#en_title" type="button" role="tab" aria-controls="en_title" aria-selected="true"> English </button>
+                        <button class="nav-link" id="zh_title-tab" data-bs-toggle="tab" data-bs-target="#zh_title" type="button" role="tab" aria-controls="zh_title" aria-selected="false">  中文 </button>
+                    </div>
+                </nav>
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade pt-4 show active" id="en_title" role="tabpanel" aria-labelledby="en_title-tab">
+                        <div class="mb-3 row">
+                            <label for="{{ $voucher_create }}_en_title" class="col-sm-5 col-form-label">{{ __( 'voucher.title' ) }} ( English )</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="{{ $voucher_create }}_en_title">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="{{ $voucher_create }}_en_description" class="col-sm-5 col-form-label">{{ __( 'voucher.description' ) }} ( English )</label>
+                            <div class="col-sm-7">
+                                <textarea class="form-control"  style="min-height: 80px;" id="{{ $voucher_create }}_en_description"></textarea>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade pt-4" id="zh_title" role="tabpanel" aria-labelledby="zh_title-tab">
+                        <div class="mb-3 row">
+                            <label for="{{ $voucher_create }}_zh_title" class="col-sm-5 col-form-label">{{ __( 'voucher.title' ) }} ( 中文 )</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="{{ $voucher_create }}_zh_title">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="{{ $voucher_create }}_zh_description" class="col-sm-5 col-form-label">{{ __( 'voucher.description' ) }} ( 中文 )</label>
+                            <div class="col-sm-7">
+                                <textarea class="form-control"  style="min-height: 80px;" id="{{ $voucher_create }}_zh_description"></textarea>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="mb-3">
                     <label>{{ __( 'voucher.image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $voucher_create }}_image" style="min-height: 0px;">
@@ -224,20 +267,6 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $voucher_create }}_title" class="col-sm-5 col-form-label">{{ __( 'voucher.title' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $voucher_create }}_title">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $voucher_create }}_description" class="col-sm-5 col-form-label">{{ __( 'voucher.description' ) }}</label>
-                    <div class="col-sm-7">
-                        <textarea class="form-control"  style="min-height: 80px;" name="{{ $voucher_create }}_description" id="{{ $voucher_create }}_description"></textarea>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
                     <label for="{{ $voucher_create}}_start_date" class="col-sm-5 col-form-label">{{ __( 'voucher.start_date' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $voucher_create}}_start_date">
@@ -251,12 +280,12 @@ $voucherTypes = $data['voucher_type'];
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+            </div>
 
-                <div class="text-end">
-                    <button id="{{ $voucher_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
-                    &nbsp;
-                    <button id="{{ $voucher_create }}_submit" type="button" class="btn btn-primary">{{ __( 'template.save_changes' ) }}</button>
-                </div>
+            <div class="text-end">
+                <button id="{{ $voucher_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
+                &nbsp;
+                <button id="{{ $voucher_create }}_submit" type="button" class="btn btn-primary">{{ __( 'template.save_changes' ) }}</button>
             </div>
         </div>
     </div>
@@ -269,9 +298,9 @@ $voucherTypes = $data['voucher_type'];
 <script>
 window.ckeupload_path = '{{ route( 'admin.voucher.ckeUpload' ) }}';
 window.csrf_token = '{{ csrf_token() }}';
-window.cke_element1 = 'voucher_create_description';
+window.cke_element = [ 'voucher_create_en_description', 'voucher_create_zh_description' ];
 </script>
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init.js' ) }}"></script>
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
 
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
@@ -310,7 +339,8 @@ window.cke_element1 = 'voucher_create_description';
             } );
 
             let formData = new FormData();
-            formData.append( 'title', $( fc + '_title' ).val() );
+            formData.append( 'en_title', $( fc + '_en_title' ).val() );
+            formData.append( 'zh_title', $( fc + '_zh_title' ).val() );
             formData.append( 'promo_code', $( fc + '_promo_code' ).val() );
             formData.append( 'discount_type', type );
             formData.append( 'voucher_type', $( fc + '_voucher_type' ).val() );
@@ -321,7 +351,8 @@ window.cke_element1 = 'voucher_create_description';
             formData.append( 'usable_amount', $( fc + '_usable_amount' ).val() );
             formData.append( 'validity_days', $( fc + '_validity_days' ).val() );
             formData.append( 'claim_per_user', $( fc + '_claim_per_user' ).val() );
-            formData.append( 'description', editor.getData() );
+            formData.append( 'en_description', editors['voucher_create_en_description'].getData() );
+            formData.append( 'zh_descriptio', editors['voucher_create_zh_description'].getData() );
             formData.append( 'image', fileID );
             formData.append( 'adjustment_data', JSON.stringify(data) );
             formData.append( '_token', '{{ csrf_token() }}' );

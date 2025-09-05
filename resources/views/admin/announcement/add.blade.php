@@ -40,240 +40,275 @@ $voucherTypes = $data['voucher_type'];
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
-                <div class="mb-3">
-                    <label>{{ __( 'announcement.image' ) }}</label>
-                    <div class="dropzone mb-3" id="{{ $announcement_create }}_image" style="min-height: 0px;">
-                        <div class="dz-message needsclick">
-                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
-                        </div>
-                    </div>
-                    <div class="invalid-feedback"></div>
-                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
+                                <button class="nav-link active" id="en_title-tab" data-bs-toggle="tab" data-bs-target="#en_title" type="button" role="tab" aria-controls="en_title" aria-selected="true"> English </button>
+                                <button class="nav-link" id="zh_title-tab" data-bs-toggle="tab" data-bs-target="#zh_title" type="button" role="tab" aria-controls="zh_title" aria-selected="false">  中文 </button>
+                            </div>
+                        </nav>
 
-                {{-- announcement custom --}}
-                <div class="mb-3 d-none">
-                    <label>{{ __( 'announcement.unclaimed_image' ) }}</label>
-                    <div class="dropzone mb-3" id="{{ $announcement_create }}_unclaimed_image" style="min-height: 0px;">
-                        <div class="dz-message needsclick">
-                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
-                        </div>
-                    </div>
-                    <div class="invalid-feedback"></div>
-                </div>
-
-                <div class="mb-3 d-none">
-                    <label>{{ __( 'announcement.claiming_image' ) }}</label>
-                    <div class="dropzone mb-3" id="{{ $announcement_create }}_claiming_image" style="min-height: 0px;">
-                        <div class="dz-message needsclick">
-                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
-                        </div>
-                    </div>
-                    <div class="invalid-feedback"></div>
-                </div>
-
-                <div class="mb-6 d-none">
-                    <label>{{ __( 'announcement.claimed_image' ) }}</label>
-                    <div class="dropzone mb-3" id="{{ $announcement_create }}_claimed_image" style="min-height: 0px;">
-                        <div class="dz-message needsclick">
-                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
-                        </div>
-                    </div>
-                    <div class="invalid-feedback"></div>
-                </div>
-
-                <div class="mt-5 mb-3 row d-none ">
-                    <label for="{{ $announcement_create }}_voucher_type" class="col-sm-5 col-form-label">{{ __( 'announcement.voucher_type' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-select" id="{{ $announcement_create }}_voucher_type">
-                            @forEach( $voucherTypes as $key => $announcementType )
-                                <option value="{{ $key }}">{{ $announcementType }}</option>
-                            @endforeach
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none" >
-                    <label for="{{ $announcement_create }}_discount_type" class="col-sm-5 col-form-label">{{ __( 'announcement.discount_type' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-select" id="{{ $announcement_create }}_discount_type">
-                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'announcement.discount_type' ) ] ) }}</option>
-                            @forEach( $discountTypes as $key => $discountType )
-                                <option value="{{ $key }}">{{ $discountType }}</option>
-                            @endforeach
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                
-                <section id="bxgy" class="rule-section hidden mb-3 row">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="mb-3 row">
-                                        <div class="col-sm-3">
-                                            <h5>{{ __( 'announcement.buy' ) }}</h5>
-                                            <small>{!!__( 'announcement.buy_description' )!!}</small>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <select class="form-select form-select-sm" id="{{ $announcement_create }}_bxgy_buy_products" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'announcement.buy_products' ) ] ) }}" multiple>
-                                            </select>
-                                            <div class="invalid-feedback"></div>
-                                        </div>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade pt-4 show active" id="en_title" role="tabpanel" aria-labelledby="en_title-tab">
+                                <div class="mb-3 row">
+                                    <label for="{{ $announcement_create }}_en_title" class="col-sm-5 col-form-label">{{ __( 'announcement.title' ) }} ( English )</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="{{ $announcement_create }}_en_title">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="{{ $announcement_create }}_en_description" class="col-sm-5 col-form-label">{{ __( 'announcement.description' ) }} ( English )</label>
+                                    <div class="col-sm-7">
+                                        <textarea class="form-control"  style="min-height: 80px;" id="{{ $announcement_create }}_en_description"></textarea>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade pt-4" id="zh_title" role="tabpanel" aria-labelledby="zh_title-tab">
+                                <div class="mb-3 row">
+                                    <label for="{{ $announcement_create }}_zh_title" class="col-sm-5 col-form-label">{{ __( 'announcement.title' ) }} ( 中文 )</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="{{ $announcement_create }}_zh_title">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="{{ $announcement_create }}_zh_description" class="col-sm-5 col-form-label">{{ __( 'announcement.description' ) }} ( 中文 )</label>
+                                    <div class="col-sm-7">
+                                        <textarea class="form-control"  style="min-height: 80px;" id="{{ $announcement_create }}_zh_description"></textarea>
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="mb-3 row">
-                                        <div class="col-sm-3">
-                                            <h5>{{ __( 'announcement.discount' ) }}</h5>
-                                            <small>{!!__( 'announcement.discount_description' )!!}</small>
-                                        </div>
-                                        <div class="col-sm">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-4">
-                                                    <fieldset class="border p-2">
-                                                        <legend class="mb-0 fs-6 float-none w-auto">{{ __( 'announcement.buy_quantity' ) }}</legend>
-                                                        <input type="number" class="form-control form-control-sm" id="{{ $announcement_create }}_bxgy_buy_quantity">
-                                                        <div class="invalid-feedback"></div>
-                                                    </fieldset>
+                    
+                    <div class="col-md-6">
+                        
+                        <div class="mb-3">
+                            <label>{{ __( 'announcement.image' ) }}</label>
+                            <div class="dropzone mb-3" id="{{ $announcement_create }}_image" style="min-height: 0px;">
+                                <div class="dz-message needsclick">
+                                    <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        {{-- announcement custom --}}
+                        <div class="mb-3 d-none">
+                            <label>{{ __( 'announcement.unclaimed_image' ) }}</label>
+                            <div class="dropzone mb-3" id="{{ $announcement_create }}_unclaimed_image" style="min-height: 0px;">
+                                <div class="dz-message needsclick">
+                                    <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3 d-none">
+                            <label>{{ __( 'announcement.claiming_image' ) }}</label>
+                            <div class="dropzone mb-3" id="{{ $announcement_create }}_claiming_image" style="min-height: 0px;">
+                                <div class="dz-message needsclick">
+                                    <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-6 d-none">
+                            <label>{{ __( 'announcement.claimed_image' ) }}</label>
+                            <div class="dropzone mb-3" id="{{ $announcement_create }}_claimed_image" style="min-height: 0px;">
+                                <div class="dz-message needsclick">
+                                    <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mt-5 mb-3 row d-none ">
+                            <label for="{{ $announcement_create }}_voucher_type" class="col-sm-5 col-form-label">{{ __( 'announcement.voucher_type' ) }}</label>
+                            <div class="col-sm-7">
+                                <select class="form-select" id="{{ $announcement_create }}_voucher_type">
+                                    @forEach( $voucherTypes as $key => $announcementType )
+                                        <option value="{{ $key }}">{{ $announcementType }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row d-none" >
+                            <label for="{{ $announcement_create }}_discount_type" class="col-sm-5 col-form-label">{{ __( 'announcement.discount_type' ) }}</label>
+                            <div class="col-sm-7">
+                                <select class="form-select" id="{{ $announcement_create }}_discount_type">
+                                    <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'announcement.discount_type' ) ] ) }}</option>
+                                    @forEach( $discountTypes as $key => $discountType )
+                                        <option value="{{ $key }}">{{ $discountType }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        
+                        <section id="bxgy" class="rule-section hidden mb-3 row">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3 row">
+                                                <div class="col-sm-3">
+                                                    <h5>{{ __( 'announcement.buy' ) }}</h5>
+                                                    <small>{!!__( 'announcement.buy_description' )!!}</small>
                                                 </div>
-                                                <div class="col-sm-12 col-md-8">
-                                                    <fieldset class="border p-2">
-                                                        <legend class="mb-0 fs-6 float-none w-auto">{{ __( 'announcement.get_quantity' ) }}</legend>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <input type="number" class="form-control form-control-sm" id="{{ $announcement_create }}_bxgy_get_quantity">
-                                                                <div class="invalid-feedback"></div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <select class="form-select form-select-sm" id="{{ $announcement_create }}_bxgy_get_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'announcement.get_product' ) ] ) }}">
-                                                                </select>
-                                                                <div class="invalid-feedback"></div>
-                                                            </div>
-                                                        </div>
-                                                    </fieldset>
+                                                <div class="col-sm-3">
+                                                    <select class="form-select form-select-sm" id="{{ $announcement_create }}_bxgy_buy_products" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'announcement.buy_products' ) ] ) }}" multiple>
+                                                    </select>
+                                                    <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </section>
-                
-                <section id="cartd" class="rule-section hidden mb-3 row">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="mb-3 row">
-                                        <div class="col-sm-3">
-                                            <h5>{{ __( 'announcement.discount' ) }}</h5>
-                                            <small>{!!__( 'announcement.discount_description' )!!}</small>
-                                        </div>
-                                        <div class="col-sm">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-4">
-                                                    <fieldset class="border p-2">
-                                                        <legend class="mb-0 fs-6 float-none w-auto">{{ __( 'announcement.buy_quantity_rm' ) }}</legend>
-                                                        <input type="number" class="form-control form-control-sm" id="{{ $announcement_create }}_cartd_buy_quantity">
-                                                        <div class="invalid-feedback"></div>
-                                                    </fieldset>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3 row">
+                                                <div class="col-sm-3">
+                                                    <h5>{{ __( 'announcement.discount' ) }}</h5>
+                                                    <small>{!!__( 'announcement.discount_description' )!!}</small>
                                                 </div>
-                                                <div class="col-sm-12 col-md-8">
-                                                    <fieldset class="border p-2">
-                                                        <legend class="mb-0 fs-6 float-none w-auto">{{ __( 'announcement.discount_quantity' ) }}</legend>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <input type="number" class="form-control form-control-sm" id="{{ $announcement_create }}_cartd_discount_quantity">
+                                                <div class="col-sm">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-4">
+                                                            <fieldset class="border p-2">
+                                                                <legend class="mb-0 fs-6 float-none w-auto">{{ __( 'announcement.buy_quantity' ) }}</legend>
+                                                                <input type="number" class="form-control form-control-sm" id="{{ $announcement_create }}_bxgy_buy_quantity">
                                                                 <div class="invalid-feedback"></div>
-                                                            </div>
+                                                            </fieldset>
                                                         </div>
-                                                    </fieldset>
+                                                        <div class="col-sm-12 col-md-8">
+                                                            <fieldset class="border p-2">
+                                                                <legend class="mb-0 fs-6 float-none w-auto">{{ __( 'announcement.get_quantity' ) }}</legend>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <input type="number" class="form-control form-control-sm" id="{{ $announcement_create }}_bxgy_get_quantity">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <select class="form-select form-select-sm" id="{{ $announcement_create }}_bxgy_get_product" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'announcement.get_product' ) ] ) }}">
+                                                                        </select>
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </section>
+                        
+                        <section id="cartd" class="rule-section hidden mb-3 row">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3 row">
+                                                <div class="col-sm-3">
+                                                    <h5>{{ __( 'announcement.discount' ) }}</h5>
+                                                    <small>{!!__( 'announcement.discount_description' )!!}</small>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-4">
+                                                            <fieldset class="border p-2">
+                                                                <legend class="mb-0 fs-6 float-none w-auto">{{ __( 'announcement.buy_quantity_rm' ) }}</legend>
+                                                                <input type="number" class="form-control form-control-sm" id="{{ $announcement_create }}_cartd_buy_quantity">
+                                                                <div class="invalid-feedback"></div>
+                                                            </fieldset>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-8">
+                                                            <fieldset class="border p-2">
+                                                                <legend class="mb-0 fs-6 float-none w-auto">{{ __( 'announcement.discount_quantity' ) }}</legend>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <input type="number" class="form-control form-control-sm" id="{{ $announcement_create }}_cartd_discount_quantity">
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="mb-3 row d-none">
+                            <label for="{{ $announcement_create }}_new_user_only" class="col-sm-5 col-form-label">{{ __( 'announcement.new_user_only' ) }}</label>
+                            <div class="col-sm-7 d-flex align-items-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="{{ $announcement_create }}_new_user_only">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </section>
 
-                <div class="mb-3 row d-none">
-                    <label for="{{ $announcement_create }}_new_user_only" class="col-sm-5 col-form-label">{{ __( 'announcement.new_user_only' ) }}</label>
-                    <div class="col-sm-7 d-flex align-items-center">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="{{ $announcement_create }}_new_user_only">
+                        <div class="mb-3 row d-none">
+                            <label for="{{ $announcement_create }}_view_once" class="col-sm-5 col-form-label">{{ __( 'announcement.view_once' ) }}</label>
+                            <div class="col-sm-7 d-flex align-items-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="{{ $announcement_create }}_view_once">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="mb-3 row d-none">
-                    <label for="{{ $announcement_create }}_view_once" class="col-sm-5 col-form-label">{{ __( 'announcement.view_once' ) }}</label>
-                    <div class="col-sm-7 d-flex align-items-center">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="{{ $announcement_create }}_view_once">
+                        <div class="mb-3 row d-none">
+                            <label for="{{ $announcement_create}}_points_required" class="col-sm-5 col-form-label">{{ __( 'announcement.points_required' ) }}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" id="{{ $announcement_create}}_points_required" value="0">
+                                <div class="invalid-feedback"></div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                        
+                        <div class="mb-3 row d-none">
+                            <label for="{{ $announcement_create}}_validity_days" class="col-sm-5 col-form-label">{{ __( 'announcement.validity_days' ) }}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" id="{{ $announcement_create}}_validity_days">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
 
-                <div class="mb-3 row d-none">
-                    <label for="{{ $announcement_create}}_points_required" class="col-sm-5 col-form-label">{{ __( 'announcement.points_required' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $announcement_create}}_points_required" value="0">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                
-                <div class="mb-3 row d-none">
-                    <label for="{{ $announcement_create}}_validity_days" class="col-sm-5 col-form-label">{{ __( 'announcement.validity_days' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $announcement_create}}_validity_days">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
-                <div class="mb-3 row d-none">
-                    <label for="{{ $announcement_create }}_promo_code" class="col-sm-5 col-form-label">{{ __( 'announcement.promo_code' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $announcement_create }}_promo_code">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $announcement_create }}_title" class="col-sm-5 col-form-label">{{ __( 'announcement.title' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $announcement_create }}_title">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $announcement_create }}_description" class="col-sm-5 col-form-label">{{ __( 'announcement.description' ) }}</label>
-                    <div class="col-sm-7">
-                        <textarea class="form-control"  style="min-height: 80px;" name="{{ $announcement_create }}_description" id="{{ $announcement_create }}_description"></textarea>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $announcement_create}}_start_date" class="col-sm-5 col-form-label">{{ __( 'announcement.start_date' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $announcement_create}}_start_date">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $announcement_create}}_expired_date" class="col-sm-5 col-form-label">{{ __( 'announcement.expired_date' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $announcement_create}}_expired_date">
-                        <div class="invalid-feedback"></div>
+                        <div class="mb-3 row d-none">
+                            <label for="{{ $announcement_create }}_promo_code" class="col-sm-5 col-form-label">{{ __( 'announcement.promo_code' ) }}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="{{ $announcement_create }}_promo_code">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="{{ $announcement_create}}_start_date" class="col-sm-5 col-form-label">{{ __( 'announcement.start_date' ) }}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="{{ $announcement_create}}_start_date">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="{{ $announcement_create}}_expired_date" class="col-sm-5 col-form-label">{{ __( 'announcement.expired_date' ) }}</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="{{ $announcement_create}}_expired_date">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -294,9 +329,9 @@ $voucherTypes = $data['voucher_type'];
 <script>
 window.ckeupload_path = '{{ route( 'admin.announcement.ckeUpload' ) }}';
 window.csrf_token = '{{ csrf_token() }}';
-window.cke_element1 = 'announcement_create_description';
+window.cke_element = [ 'announcement_create_en_description', 'announcement_create_zh_description' ];
 </script>
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init.js' ) }}"></script>
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
 
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
@@ -338,7 +373,8 @@ window.cke_element1 = 'announcement_create_description';
             } );
 
             let formData = new FormData();
-            formData.append( 'title', $( fc + '_title' ).val() );
+            formData.append( 'en_title', $( fc + '_en_title' ).val() );
+            formData.append( 'zh_title', $( fc + '_zh_title' ).val() );
             formData.append( 'view_once', $(fc + '_view_once').is(':checked') ? 1 : 0 );
             formData.append( 'new_user_only', $(fc + '_new_user_only').is(':checked') ? 1 : 0 );
             formData.append( 'promo_code', $( fc + '_promo_code' ).val() );
@@ -349,7 +385,8 @@ window.cke_element1 = 'announcement_create_description';
             formData.append( 'expired_date', $( fc + '_expired_date' ).val() );
             formData.append( 'validity_days', $( fc + '_validity_days' ).val() );
             formData.append( 'claim_per_user', $( fc + '_claim_per_user' ).val() );
-            formData.append( 'description', editor.getData() );
+            formData.append( 'en_description', editors['announcement_create_en_description'].getData() );
+            formData.append( 'zh_description', editors['announcement_create_zh_description'].getData() );
             formData.append( 'image', fileID );
             formData.append( 'unclaimed_image', fileID1 );
             formData.append( 'claiming_image', fileID2 );

@@ -37,7 +37,51 @@ $announcement_edit = 'announcement_edit';
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
+                        <button class="nav-link active" id="en_title-tab" data-bs-toggle="tab" data-bs-target="#en_title" type="button" role="tab" aria-controls="en_title" aria-selected="true"> English </button>
+                        <button class="nav-link" id="zh_title-tab" data-bs-toggle="tab" data-bs-target="#zh_title" type="button" role="tab" aria-controls="zh_title" aria-selected="false">  中文 </button>
+                    </div>
+                </nav>
+                
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade pt-4 show active" id="en_title" role="tabpanel" aria-labelledby="en_title-tab">
+                        <div class="mb-3 row">
+                            <label for="{{ $announcement_edit }}_en_title" class="col-sm-4 col-form-label">{{ __( 'datatables.title' ) }} ( English )</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm" id="{{ $announcement_edit }}_en_title">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="{{ $announcement_edit }}_en_content" class="col-sm-4 col-form-label">{{ __( 'announcement.content' ) }} ( English )</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control form-control-sm" id="{{ $announcement_edit }}_en_content" rows="10"></textarea>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade pt-4" id="zh_title" role="tabpanel" aria-labelledby="zh_title-tab">
+                        <div class="mb-3 row">
+                            <label for="{{ $announcement_edit }}_zh_title" class="col-sm-4 col-form-label">{{ __( 'datatables.title' ) }} ( 中文 )</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm" id="{{ $announcement_edit }}_zh_title">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="{{ $announcement_edit }}_zh_content" class="col-sm-4 col-form-label">{{ __( 'announcement.content' ) }} ( 中文 )</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control form-control-sm" id="{{ $announcement_edit }}_zh_content" rows="10"></textarea>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
                 <div class="mb-3 row">
                     <label class="mb-1">{{ __( 'announcement.image' ) }}</label>
                     <div class="dropzone" id="{{ $announcement_edit}}_image" style="min-height: 0px;">
@@ -61,20 +105,6 @@ $announcement_edit = 'announcement_edit';
                     <label for="{{ $announcement_edit}}_url_slug" class="col-sm-4 col-form-label">{{ __( 'announcement.url_slug' ) }}</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control form-control-sm" id="{{ $announcement_edit}}_url_slug">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $announcement_edit}}_title" class="col-sm-4 col-form-label">{{ __( 'datatables.title' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control form-control-sm" id="{{ $announcement_edit}}_title">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $announcement_edit}}_content" class="col-sm-4 col-form-label">{{ __( 'announcement.content' ) }}</label>
-                    <div class="col-sm-8">
-                        <textarea class="form-control form-control-sm" id="{{ $announcement_edit}}_content" rows="10"></textarea>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -105,10 +135,10 @@ $announcement_edit = 'announcement_edit';
 <script>
 window.ckeupload_path = '{{ route( 'admin.marketing_notifications.ckeUpload' ) }}';
 window.csrf_token = '{{ csrf_token() }}';
-window.cke_element1 = 'announcement_edit_content';
+window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_content' ];
 </script>
 
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init.js' ) }}"></script>
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
 
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
@@ -134,9 +164,11 @@ window.cke_element1 = 'announcement_edit_content';
             
             formData.append( 'id', '{{ request( 'id' ) }}' );
             formData.append( 'image', fileID );
-            formData.append( 'title', $( ae + '_title' ).val() );
+            formData.append( 'en_title', $( ae + '_en_title' ).val() );
+            formData.append( 'zh_title', $( ae + '_zh_title' ).val() );
             formData.append( 'url_slug', $( ae + '_url_slug' ).val() );
-            formData.append( 'content', editor.getData() );
+            formData.append( 'en_content', editors['announcement_edit_en_content'].getData() );
+            formData.append( 'zh_content', editors['announcement_edit_zh_content'].getData() );
             formData.append( 'type', $( ae + '_type' ).val() );
             formData.append( 'all_users', all_users );
             formData.append( '_token', '{{ csrf_token() }}' );
@@ -192,8 +224,10 @@ window.cke_element1 = 'announcement_edit_content';
                 success: function( response ) {
 
                     $( ae + '_url_slug' ).val( response.url_slug );
-                    $( ae + '_title' ).val( response.title.en );
-                    editor.setData( response.content.en );
+                    $( ae + '_en_title' ).val( response.en_title ?? response.title.en );
+                    $( ae + '_zh_title' ).val( response.zh_title ?? response.title.zh );
+                    editors['announcement_edit_en_content'].setData( response.en_content ?? response.content.en );
+                    editors['announcement_edit_zh_content'].setData( response.zh_content ?? response.content.zh );
                     $( ae + '_type' ).val( response.type ).change();
                     $( ae + '_all_users' ).prop( "checked", response.is_broadcast == 10 ? true : false );
 

@@ -23,6 +23,10 @@ class UserNotification extends Model
         'user_id',
         'title',
         'content',
+        'en_title',
+        'en_content',
+        'zh_title',
+        'zh_content',
         'system_title',
         'system_content',
         'meta_data',
@@ -49,6 +53,7 @@ class UserNotification extends Model
         }
 
         $this->attributes['title'] = json_encode($translations);
+
     }
 
     public function setContentAttribute($value)
@@ -68,16 +73,27 @@ class UserNotification extends Model
     {
         $translations = json_decode($value, true) ?? [];
 
+        if( !empty( $this->attribute['en_content'] ) ) {
+            $translations['en'] = $this->attribute['en_content'];
+        }
+        if( !empty( $this->attribute['zh_content'] ) ) {
+            $translations['zh'] = $this->attribute['zh_content'];
+        }
 
         // Return translation for the current locale or fallback to default
         return $translations;
     }
 
-    public function getTitleAttribute($value)
-    {
+    public function getTitleAttribute($value) {
+
         $translations = json_decode($value, true) ?? [];
 
-
+        if( !empty( $this->attribute['en_title'] ) ) {
+            $translations['en'] = $this->attribute['en_title'];
+        }
+        if( !empty(  $this->attribute['zh_title'] ) ) {
+            $translations['zh'] = $this->attribute['zh_title'];
+        }
         // Return translation for the current locale or fallback to default
         return $translations;
     }
@@ -145,6 +161,10 @@ class UserNotification extends Model
         'user_id',
         'title',
         'content',
+        'en_title',
+        'en_content',
+        'zh_title',
+        'zh_content',
         'system_title',
         'system_content',
         'meta_data',
