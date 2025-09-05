@@ -423,8 +423,8 @@ window.cke_element = [ 'voucher_edit_en_description', 'voucher_edit_zh_descripti
                     $( fe + '_claim_per_user' ).val( response.claim_per_user );
                     endDate.setDate( response.expired_date );
                     startDate.setDate( response.start_date );
-                    editors['voucher_edit_zh_description'].setData( response.zh_description );
-                    editors['voucher_edit_en_description'].setData( response.en_description );
+                    editors['voucher_edit_zh_description'].setData( response.zh_description ?? '' );
+                    editors['voucher_edit_en_description'].setData( response.en_description ?? '' );
 
                     // switch ( parseInt( response.discount_type ) ) {
                     //     case 3:

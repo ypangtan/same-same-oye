@@ -226,8 +226,8 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
                     $( ae + '_url_slug' ).val( response.url_slug );
                     $( ae + '_en_title' ).val( response.en_title ?? response.title.en );
                     $( ae + '_zh_title' ).val( response.zh_title ?? response.title.zh );
-                    editors['announcement_edit_en_content'].setData( response.en_content ?? response.content.en );
-                    editors['announcement_edit_zh_content'].setData( response.zh_content ?? response.content.zh );
+                    editors['announcement_edit_en_content'].setData( response.en_content ?? ( response.content.en ?? '' ) );
+                    editors['announcement_edit_zh_content'].setData( response.zh_content ?? ( response.content.zh ?? '' ) );
                     $( ae + '_type' ).val( response.type ).change();
                     $( ae + '_all_users' ).prop( "checked", response.is_broadcast == 10 ? true : false );
 

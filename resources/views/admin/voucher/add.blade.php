@@ -352,7 +352,7 @@ window.cke_element = [ 'voucher_create_en_description', 'voucher_create_zh_descr
             formData.append( 'validity_days', $( fc + '_validity_days' ).val() );
             formData.append( 'claim_per_user', $( fc + '_claim_per_user' ).val() );
             formData.append( 'en_description', editors['voucher_create_en_description'].getData() );
-            formData.append( 'zh_descriptio', editors['voucher_create_zh_description'].getData() );
+            formData.append( 'zh_description', editors['voucher_create_zh_description'].getData() );
             formData.append( 'image', fileID );
             formData.append( 'adjustment_data', JSON.stringify(data) );
             formData.append( '_token', '{{ csrf_token() }}' );

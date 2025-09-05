@@ -73,11 +73,11 @@ class UserNotification extends Model
     {
         $translations = json_decode($value, true) ?? [];
 
-        if( !empty( $this->attribute['en_content'] ) ) {
-            $translations['en'] = $this->attribute['en_content'];
+        if( !empty( $this->attributes['en_content'] ) ) {
+            $translations['en'] = $this->attributes['en_content'];
         }
-        if( !empty( $this->attribute['zh_content'] ) ) {
-            $translations['zh'] = $this->attribute['zh_content'];
+        if( !empty( $this->attributes['zh_content'] ) ) {
+            $translations['zh'] = $this->attributes['zh_content'];
         }
 
         // Return translation for the current locale or fallback to default
@@ -88,11 +88,11 @@ class UserNotification extends Model
 
         $translations = json_decode($value, true) ?? [];
 
-        if( !empty( $this->attribute['en_title'] ) ) {
-            $translations['en'] = $this->attribute['en_title'];
+        if( !empty( $this->attributes['en_title'] ) ) {
+            $translations['en'] = $this->attributes['en_title'];
         }
-        if( !empty(  $this->attribute['zh_title'] ) ) {
-            $translations['zh'] = $this->attribute['zh_title'];
+        if( !empty(  $this->attributes['zh_title'] ) ) {
+            $translations['zh'] = $this->attributes['zh_title'];
         }
         // Return translation for the current locale or fallback to default
         return $translations;

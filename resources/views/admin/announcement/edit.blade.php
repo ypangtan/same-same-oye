@@ -453,8 +453,8 @@ window.cke_element = [ 'announcement_edit_en_description', 'announcement_edit_zh
                     $( fe + '_zh_description' ).val( response.zh_description );
                     endDate.setDate( response.expired_date );
                     startDate.setDate( response.start_date );
-                    editors['announcement_edit_en_description'].setData( response.en_description );
-                    editors['announcement_edit_zh_description'].setData( response.zh_description );
+                    editors['announcement_edit_en_description'].setData( response.en_description ?? '' );
+                    editors['announcement_edit_zh_description'].setData( response.zh_description ?? '' );
 
                     $(fe + '_new_user_only').prop('checked', ( response.new_user_only == 1 ? true :false ) );
                     $(fe + '_view_once').prop('checked', ( response.view_once == 1 ? true :false ) );
