@@ -148,6 +148,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             Route::prefix( 'users' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view users' ] ], function() {
                     Route::get( '/', [ UserController::class, 'index' ] )->name( 'admin.module_parent.user.index' );
+                    Route::get( '/my-friend', [ UserController::class, 'myFriend' ] )->name( 'admin.user.my_friend' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:add users' ] ], function() {
                     Route::get( 'add', [ UserController::class, 'add' ] )->name( 'admin.user.add' );
@@ -157,6 +158,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 } );
 
                 Route::post( 'all-users', [ UserController::class, 'allUsers' ] )->name( 'admin.user.allUsers' );
+                Route::post( 'all-user-downlines', [ UserController::class, 'oneUserDownlines' ] )->name( 'admin.user.oneUserDownlines' );
                 Route::post( 'one-user', [ UserController::class, 'oneUser' ] )->name( 'admin.user.oneUser' );
                 Route::post( 'create-user', [ UserController::class, 'createUser' ] )->name( 'admin.user.createUser' );
                 Route::post( 'update-user', [ UserController::class, 'updateUser' ] )->name( 'admin.user.updateUser' );

@@ -102,6 +102,66 @@ class UserService
         return response()->json( $data );
     }
 
+    public static function oneUserDownlines( $request ) {
+
+        $user = User::select( 'users.*' )
+        ->with( ['socialLogins'] )
+        ->where( 'referral_id', $request->id )
+        ->orderBy( 'created_at', 'DESC' );
+
+        $filterObject = self::filter( $request, $user );
+        $user = $filterObject['model'];
+        $filter = $filterObject['filter'];
+
+        if ( $request->input( 'user.0.column' ) != 0 ) {
+            $dir = $request->input( 'user.0.dir' );
+            switch ( $request->input( 'user.0.column' ) ) {
+                case 1:
+                    $user->orderBy( 'created_at', $dir );
+                    break;
+                case 2:
+                    $user->orderBy( 'username', $dir );
+                    break;
+                case 3:
+                    $user->orderBy( 'email', $dir );
+                    break;
+            }
+        }
+
+        $userCount = $user->count();
+
+        $limit = $request->length == -1 ? 1000000 : $request->length;
+        $offset = $request->start;
+
+        $users = $user->skip( $offset )->take( $limit )->get();
+
+        if ( $users ) {
+            $users->append( [
+                'encrypted_id',
+                'total_accumulate_spending',
+                'current_rank',
+                'required_points',
+            ] );
+
+            foreach( $users as $user ){
+                if( $user->socialLogins ){
+                    $user->socialLogins->append( ['platform_label'] );
+                }
+            }
+        }
+
+        $totalRecord = User::where( 'referral_id', $request->id )->count();
+
+        $data = [
+            'users' => $users,
+            'draw' => $request->draw,
+            'recordsFiltered' => $filter ? $userCount : $totalRecord,
+            'recordsTotal' => $totalRecord,
+        ];
+
+        return response()->json( $data );
+    }
+
     private static function filter( $request, $model ) {
 
         $filter = false;
@@ -277,7 +337,14 @@ class UserService
 
     public static function createUser( $request ) {
 
+        if( !empty( $request->referral_id ) ) {
+            $request->merge( [
+                'referral_id' => \Helper::decode( $request->referral_id )
+            ] );
+        }
+
         $validator = Validator::make( $request->all(), [
+            'referral_id' => [ 'nullable', 'exists:users,id' ],
             'username' => [ 'nullable', 'alpha_dash', 'unique:users,username', new CheckASCIICharacter ],
             'email' => [ 'nullable', 'bail', 'unique:users,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
             'fullname' => [ 'nullable' ],
@@ -338,6 +405,12 @@ class UserService
                 'invitation_code' => strtoupper( \Str::random( 6 ) ),
             ];
 
+            if( !empty( $request->referral_id ) ) {
+                $upline = User::find( $request->referral_id );
+                $createUserObject['referral_id'] = $upline->id;
+                $createUserObject['referral_structure'] = $upline->referral_structure . '|' . $upline->id;
+            }
+
             $createUser = User::create( $createUserObject );
 
             for ( $i = 1; $i <= 2; $i++ ) {
@@ -370,7 +443,14 @@ class UserService
             'id' => Helper::decode( $request->id ),
         ] );
 
+        if( !empty( $request->referral_id ) ) {
+            $request->merge( [
+                'referral_id' => \Helper::decode( $request->referral_id )
+            ] );
+        }
+
         $validator = Validator::make( $request->all(), [
+            'referral_id' => [ 'nullable', 'exists:users,id' ],
             'username' => [ 'nullable', 'alpha_dash', 'unique:users,username,' . $request->id, new CheckASCIICharacter ],
             'email' => [ 'nullable', 'bail', 'unique:users,email,' . $request->id, 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
             'fullname' => [ 'nullable' ],
@@ -434,6 +514,37 @@ class UserService
 
             if ( !empty( $request->password ) ) {
                 $updateUser->password = Hash::make( $request->password );
+            }
+            if( !empty( $request->referral_id ) ) {
+                $upline = User::find( $request->referral_id );
+                if( $updateUser->referral_id != $request->referral_id ) {
+                    $updated_referral_structure = $upline->referral_structure . '|' . $upline->id;
+                    $before_referral_structure = $updateUser->referral_structure . '|' . $updateUser->id;
+
+                    $downlines = User::where( 'referral_structure', 'like', '|' . $before_referral_structure . '%' )->get();
+                    foreach ( $downlines as $downline ) {
+                        $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
+                        $downline->save();
+                    }
+
+                    $createUserObject['referral_id'] = $upline ? $upline->id : null;
+                    $createUserObject['referral_structure'] = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
+                }
+                
+            } else {
+                
+                if( $updateUser->referral_id != $request->referral_id ) {
+                    $updated_referral_structure = '-';
+                    $before_referral_structure = $updateUser->referral_structure . '|' . $updateUser->id;
+
+                    $downlines = User::where( 'referral_structure', 'like', '|' . $before_referral_structure . '%' )->get();
+                    foreach ( $downlines as $downline ) {
+                        $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
+                        $downline->save();
+                    }
+                    $createUserObject['referral_id'] = null;
+                    $createUserObject['referral_structure'] = '-';
+                }
             }
             
             $updateUser->save();
@@ -1025,6 +1136,7 @@ class UserService
             'email' => __( 'user.email' ),
             'fullname' => __( 'user.fullname' ),
             'password' => __( 'user.password' ),
+            'invitation_code' => __( 'user.invitation_code' ),
             'phone_number' => __( 'user.phone_number' ),
             'calling_code' => __( 'user.calling_code' ),
         ];
@@ -1060,6 +1172,7 @@ class UserService
             }
 
             $createUser = User::create( $createUserObject );
+            
             // assign register bonus
             $registerBonus = Option::getRegisterBonusSettings();
 
@@ -1382,6 +1495,7 @@ class UserService
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
             'profile_picture' => [ 'nullable', 'file', 'max:30720', 'mimes:jpg,jpeg,png,heic' ],
+            'invitation_code' => [ 'sometimes', 'exists:users,invitation_code' ],
         ] );
 
         $attributeName = [
@@ -1391,6 +1505,7 @@ class UserService
             'first_name' => __( 'user.first_name' ),
             'last_name' => __( 'user.last_name' ),
             'phone_number' => __( 'user.phone_number' ),
+            'invitation_code' => __( 'user.invitation_code' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -1457,6 +1572,13 @@ class UserService
             }
 
             $updateUser->profile_picture = $request->file( 'profile_picture' )->store( 'users/' . $updateUser->id, [ 'disk' => 'public' ] );
+        }
+
+        if( !empty( $request->invitation_code ) ) {
+            $upline = User::where( 'invitation_code', $request->invitation_code )->first();
+
+            $updateUser->referral_id = $upline->id;
+            $updateUser->referral_structure = $upline->referral_structure . '|' . $upline->id;
         }
 
         $updateUser->save();
