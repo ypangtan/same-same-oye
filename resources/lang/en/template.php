@@ -68,6 +68,7 @@ return [
     'lucky_draw_import_histories' => 'Lucky Draw Import Histories',
     'lucky_draw_rewards' => 'Lucky Draw Rewards',
     'ranks' => 'Ranks',
+    'my_friends' => 'My Friends',
 
     'loading' => 'Loading...',
     'add' => 'Add',

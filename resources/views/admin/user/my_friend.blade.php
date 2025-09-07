@@ -1,22 +1,8 @@
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.users' ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.my_friends' ) }}</h3>
         </div><!-- .nk-block-head-content -->
-        @can( 'add users' )
-        <div class="nk-block-head-content">
-            <div class="toggle-wrap nk-block-tools-toggle">
-                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                <div class="toggle-expand-content" data-content="pageMenu">
-                    <ul class="nk-block-tools g-3">
-                        <li class="nk-block-tools-opt">
-                            <a href="{{ route( 'admin.user.add' ) }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div><!-- .nk-block-head-content -->
-        @endcan
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
 
@@ -31,6 +17,11 @@ $columns = [
         'type' => 'default',
         'id' => 'dt_no',
         'title' => 'No.',
+    ],
+    [
+        'type' => 'default',
+        'id' => 'referral_id',
+        'title' => '',
     ],
     [
         'type' => 'date',
@@ -129,6 +120,7 @@ var statusMapper = @json( $data['status'] ),
         ajax: {
             url: '{{ route( 'admin.user.oneUserDownlines' ) }}',
             data: {
+                'referral_id': '{{ Request( 'id' ) }}',
                 '_token': '{{ csrf_token() }}',
             },
             dataSrc: 'users',
@@ -136,6 +128,7 @@ var statusMapper = @json( $data['status'] ),
         lengthMenu: [[10, 25],[10, 25]],
         order: [[ 2, 'desc' ]],
         columns: [
+            { data: null },
             { data: null },
             { data: null },
             { data: 'created_at' },
@@ -175,6 +168,13 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "referral_id" ) }}' ),
+                visiable: false,
+                render: function( data, type, row, meta ) {
+                    return '';
                 },
             },
             {

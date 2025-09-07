@@ -107,10 +107,16 @@ class UserService
 
     public static function oneUserDownlines( $request ) {
 
+        if( !empty( $request->referral_id ) ) {
+            $request->merge( [
+                'referral_id' => \Helper::decode( $request->referral_id )
+            ] );
+        } 
+
         $user = User::select( 'users.*' )
-        ->with( ['socialLogins'] )
-        ->where( 'referral_id', $request->id )
-        ->orderBy( 'created_at', 'DESC' );
+            ->with( ['socialLogins'] )
+            ->where( 'referral_id', $request->referral_id )
+            ->orderBy( 'created_at', 'DESC' );
 
         $filterObject = self::filter( $request, $user );
         $user = $filterObject['model'];
@@ -153,7 +159,7 @@ class UserService
             }
         }
 
-        $totalRecord = User::where( 'referral_id', $request->id )->count();
+        $totalRecord = User::where( 'referral_id', $request->referral_id )->count();
 
         $data = [
             'users' => $users,
@@ -161,7 +167,6 @@ class UserService
             'recordsFiltered' => $filter ? $userCount : $totalRecord,
             'recordsTotal' => $totalRecord,
         ];
-
         return response()->json( $data );
     }
 
@@ -323,8 +328,8 @@ class UserService
                     // No rank filter
                     break;
             }
-        }        
-
+        }
+        
         return [
             'filter' => $filter,
             'model' => $model,
