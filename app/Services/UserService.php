@@ -2228,7 +2228,7 @@ class UserService
         if ( $upline ) {
             $gift = ReferralGiftSetting::where( 'status', 10 )->first();
             if( $gift ) {
-                if( $gift->reward_type == 1 ) {
+                if( $gift->reward_type == 2 ) {
                     $voucher = Voucher::find( $gift->voucher_id );
                     if( $voucher ) {
                         $createUserVoucher = UserVoucher::create( [

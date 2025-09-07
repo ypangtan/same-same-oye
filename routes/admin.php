@@ -476,7 +476,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'import-lucky-draw-reward-v2', [ LuckyDrawController::class, 'importLuckyDrawRewardV2' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawRewardV2' );
             } );
 
-
             Route::prefix( 'ranks' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view ranks' ] ], function() {
                     Route::get( '/', [ RankController::class, 'index' ] )->name( 'admin.module_parent.rank.index' );

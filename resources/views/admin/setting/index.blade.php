@@ -65,30 +65,92 @@ $setting = 'setting';
                         <hr>
                         <div class="row">
                             <div class="col-6">
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="{{ $setting }}_birthday_enable">
+                                        <label class="form-check-label" for="{{ $setting }}_birthday_enable">{{ __( 'setting.enable_gift' ) }}</label>
+                                    </div>
+                                </div>
                                 <div class="mb-3 row">
-                                    <label for="{{ $setting }}_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
+                                    <label for="{{ $setting }}_birthday_reward_type" class="col-sm-5 col-form-label">{{ __( 'setting.reward_type' ) }}</label>
                                     <div class="col-sm-7">
-                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_reward_value">
+                                        <select class="form-select" id="{{ $setting }}_birthday_reward_type">
+                                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'setting.reward_type' ) ] ) }}</option>
+                                            @forEach( $data['rewardTypes'] as $key => $rewardType )
+                                                <option value="{{ $key }}">{{ $rewardType }}</option>
+                                            @endforeach
+                                        </select>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                 <div class="mb-3 row">
-                                    <label for="{{ $setting }}_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
+                                    <label for="{{ $setting }}_birthday_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
                                     <div class="col-sm-7">
-                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_reward_value">
+                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_birthday_reward_value">
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                 <div class="mb-3 row d-none">
-                                    <label for="{{ $setting }}_voucher" class="col-sm-5 col-form-label">{{ __( 'setting.voucher' ) }}</label>
+                                    <label for="{{ $setting }}_birthday_voucher" class="col-sm-5 col-form-label">{{ __( 'setting.voucher' ) }}</label>
                                     <div class="col-sm-7">
-                                        <select class="form-select form-select-sm" id="{{ $setting }}_voucher" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'setting.voucher' ) ] ) }}">
+                                        <select class="form-select form-select-sm" id="{{ $setting }}_birthday_voucher" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'setting.voucher' ) ] ) }}">
                                         </select>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <button class="btn btn-sm btn-primary" id="gift_save">{{ __( 'template.save_changes' ) }}</button>
+                                    <button class="btn btn-sm btn-primary" id="birthday_gift_save">{{ __( 'template.save_changes' ) }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show active" id="rgs" role="tabpanel">
+                        <h5 class="card-title mb-0">{{ __( 'setting.referral_gift_settings' ) }}</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="{{ $setting }}_referral_enable">
+                                        <label class="form-check-label" for="{{ $setting }}_referral_enable">{{ __( 'setting.enable_gift' ) }}</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="{{ $setting }}_referral_reward_type" class="col-sm-5 col-form-label">{{ __( 'setting.reward_type' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-select" id="{{ $setting }}_referral_reward_type">
+                                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'setting.reward_type' ) ] ) }}</option>
+                                            @forEach( $data['rewardTypes'] as $key => $rewardType )
+                                                <option value="{{ $key }}">{{ $rewardType }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="{{ $setting }}_referral_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_referral_reward_value">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="{{ $setting }}_referral_expiry_day" class="col-sm-5 col-form-label">{{ __( 'setting.expiry_day' ) }} ( Days )</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_referral_expiry_day">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>expiry_day
+                                <div class="mb-3 row d-none">
+                                    <label for="{{ $setting }}_referral_voucher" class="col-sm-5 col-form-label">{{ __( 'setting.voucher' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-select form-select-sm" id="{{ $setting }}_referral_voucher" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'setting.voucher' ) ] ) }}">
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-sm btn-primary" id="referral_gift_save">{{ __( 'template.save_changes' ) }}</button>
                                 </div>
                             </div>
                         </div>
@@ -127,6 +189,71 @@ $setting = 'setting';
                     register_bonus: $( s + '_register_bonus' ).val(),
                     referral_spending_bonus_points: $( s + '_referral_spending_bonus_points' ).val(),
                     taxes: $( s + '_taxes' ).val(),
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.show();
+                },
+                error: function( error ) {
+                    if ( error.status === 422 ) {
+                        let errors = error.responseJSON.errors;
+                        $.each( errors, function( key, value ) {
+                            $( s + '_' + key ).addClass( 'is-invalid' ).next().text( value );
+                        } );
+                    } else {
+                        $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
+                        modalDanger.show();       
+                    }
+                }
+            } );
+        } );
+
+        $( '#birthday_gift_save' ).on( 'click', function() {
+
+            resetInputValidation();
+
+            $.ajax( {
+                url: '{{ route( 'admin.setting.updateBirthdayGiftSetting' ) }}',
+                type: 'POST',
+                data: {
+                    reward_type: $( s + '_birthday_reward_type' ).val(),
+                    reward_value: $( s + '_birthday_reward_value' ).val(),
+                    voucher: $( s + '_birthday_voucher' ).val() ?? '',
+                    enable: $( s + '_birthday_enable' ).is( ':checked' ) ? 10 : 20,
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.show();
+                },
+                error: function( error ) {
+                    if ( error.status === 422 ) {
+                        let errors = error.responseJSON.errors;
+                        $.each( errors, function( key, value ) {
+                            $( s + '_' + key ).addClass( 'is-invalid' ).next().text( value );
+                        } );
+                    } else {
+                        $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
+                        modalDanger.show();       
+                    }
+                }
+            } );
+        } );
+
+        $( '#referral_gift_save' ).on( 'click', function() {
+
+            resetInputValidation();
+
+            $.ajax( {
+                url: '{{ route( 'admin.setting.updateReferralGiftSetting' ) }}',
+                type: 'POST',
+                data: {
+                    reward_type: $( s + '_referral_reward_type' ).val(),
+                    reward_value: $( s + '_referral_reward_value' ).val(),
+                    expiry_day: $( s + '_referral_expiry_day' ).val(),
+                    voucher: $( s + '_referral_voucher' ).val() ?? '',
+                    enable: $( s + '_referral_enable' ).is( ':checked' ) ? 10 : 20,
                     _token: '{{ csrf_token() }}',
                 },
                 success: function( response ) {

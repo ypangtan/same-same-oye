@@ -57,6 +57,11 @@ class SettingController extends Controller
             'mobile_title' => __( 'template.settings' ),
         ];
 
+        $this->data['data']['reward_types'] = [
+            '1' => __('checkin_reward.points'),
+            '2' => __('checkin_reward.voucher'),
+        ];
+
         // $this->data['data']['settings'] = SettingService::settings();
 
         return view( 'admin.main' )->with( $this->data );
