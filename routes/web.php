@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ApiController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -68,6 +69,9 @@ Route::get('/register', function (Request $request) {
     ]);
 
 });
+
+Route::get( '/invite', [ ApiController::class, 'index' ] );
+
 
 // This is admin route
 require __DIR__ . '/admin.php';
