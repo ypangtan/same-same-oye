@@ -55,7 +55,7 @@ class checkUserBirthday extends Command
             $users = User::where( 'status', 10 )->wherebetween( 'date_of_birth', [ $startMonth, $endMonth ] )->get();
 
             foreach ( $users as $user ) {
-                $this->processUserChecking( $user, $startMonth, $endMonth, $isDryRun );
+                $this->processUserChecking( $user->id, $startMonth, $endMonth, $isDryRun );
             }
 
             if ( !$isDryRun ) {
@@ -71,12 +71,12 @@ class checkUserBirthday extends Command
         }
     }
 
-    private function processUserChecking( $user, $startMonth, $endMonth, $isDryRun ) {
-        $this->info( 'Processing user ID: ' . $user->id );
+    private function processUserChecking( $user_id, $startMonth, $endMonth, $isDryRun ) {
+        $this->info( 'Processing user ID: ' . $user_id );
 
-        $user = User::where( 'user_id', $user->id )->first();
+        $user = User::find( $user_id );
 
-        if ( $user && Carbon::parse( $user->last_give_birthday_gift )->diffInYears( now()->timezone( 'Asia/Kuala_Lumpur' ) ) > 1 ) {
+        if ( $user && ( Carbon::parse( $user->last_give_birthday_gift )->diffInYears( now()->timezone( 'Asia/Kuala_Lumpur' ) ) > 1 ) || $user->last_give_birthday_gift == null ) {
             $this->warn( 'User ID ' . $user->id . ' required.' );
 
             if ( !$isDryRun ) {

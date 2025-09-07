@@ -33,6 +33,8 @@ class Kernel extends ConsoleKernel
         ->dailyAt('00:05');
         $schedule->command( 'user:check-points-expiry-alert' )->timezone('Asia/Kuala_Lumpur')
         ->dailyAt('00:10');
+        $schedule->command( 'check:user-birthday' )->timezone( 'Asia/Kuala_Lumpur' )
+        ->monthlyOn( 1, '00:15' );
     }
 
     /**
