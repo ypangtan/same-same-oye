@@ -338,26 +338,30 @@ $setting = 'setting';
                     _token: '{{ csrf_token() }}',
                 },
                 success: function( response ) {
-                    $( s + '_birthday_ ' + 'reward_type' ).val( response?.birthday?.reward_type ?? '' );
-                    $( s + '_birthday_ ' + 'reward_value' ).val( response?.birthday?.reward_value ?? '' );
-                    if ( response?.birthday?.enable == 10 ) {
-                        $( s + '_birthday_ ' + 'enable' ).attr( ':checked' );
+                    if( response.birthday ) {
+                        $( s + '_birthday_' + 'reward_type' ).val( response?.birthday?.reward_type ?? '' );
+                        $( s + '_birthday_' + 'reward_value' ).val( response?.birthday?.reward_value ?? '' );
+                        if ( response?.birthday?.enable == 10 ) {
+                            $( s + '_birthday_' + 'enable' ).attr( ':checked' );
+                        }
+                        if( response.birthday && response.birthday.voucher ){
+                            let option2 = new Option( response.birthday.voucher.title, response.birthday.voucher.id, true, true );
+                            birthdaySelect2.append( option2 )
+                        }
                     }
                     
-                    $( s + '_referral_ ' + 'reward_type' ).val( response?.referral?.reward_type ?? '' );
-                    $( s + '_referral_ ' + 'expiry_day' ).val( response?.referral?.expiry_day ?? '' );
-                    $( s + '_referral_ ' + 'reward_value' ).val( response?.referral?.reward_value ?? '' );
-                    if ( response?.referral?.enable == 10 ) {
-                        $( s + '_referral_ ' + 'enable' ).attr( ':checked' );
-                    }
+                    if ( response.referral ) {
+                        $( s + '_referral_' + 'reward_type' ).val( response?.referral?.reward_type ?? '' );
+                        $( s + '_referral_' + 'expiry_day' ).val( response?.referral?.expiry_day ?? '' );
+                        $( s + '_referral_' + 'reward_value' ).val( response?.referral?.reward_value ?? '' );
+                        if ( response?.referral?.enable == 10 ) {
+                            $( s + '_referral_' + 'enable' ).attr( ':checked' );
+                        }
 
-                    if( response.referral && response.referral.voucher ){
-                        let option = new Option( response.referral.voucher.title, response.referral.voucher.id, true, true );
-                        referralSelect2.append( option )
-                    }
-                    if( response.birthday && response.birthday.voucher ){
-                        let option2 = new Option( response.birthday.voucher.title, response.birthday.voucher.id, true, true );
-                        birthdaySelect2.append( option2 )
+                        if( response.referral && response.referral.voucher ){
+                            let option = new Option( response.referral.voucher.title, response.referral.voucher.id, true, true );
+                            referralSelect2.append( option )
+                        }
                     }
                 },
             } );
