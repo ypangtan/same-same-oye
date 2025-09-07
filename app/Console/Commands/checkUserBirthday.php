@@ -9,6 +9,7 @@ use App\Models\UserCheckin;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
 use App\Services\UserService;
+use App\Services\WalletService;
 use Carbon\Carbon;
 use DB;
 
@@ -79,7 +80,6 @@ class checkUserBirthday extends Command
             $this->warn( 'User ID ' . $user->id . ' required.' );
 
             if ( !$isDryRun ) {
-
                 // give voucher
                 $gift = BirthdayGiftSetting::where( 'status', 10 )->first();
                 if( $gift ) {
@@ -94,7 +94,13 @@ class checkUserBirthday extends Command
                             ] );
                         }
                     } else {
-                        // TODO: give point
+                        // give point
+                        WalletService::transact( $user->wallets->where('type', 1)->first(), [
+                            'amount' => $gift->reward_value,
+                            'remark' => 'Birthdays Rewards',
+                            'type' => 2,
+                            'transaction_type' => 26,
+                        ] );
                     }
 
                     $user->last_give_birthday_gift = $startMonth;

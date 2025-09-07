@@ -46,4 +46,7 @@ return [
 
     'expired_at' => 'Expired At',
     'points_expired' => 'Points Expired',
+    
+    'birthday_gift' => 'Birthday Gift',
+    'referral_gift' => 'Referral Gift',
 ];

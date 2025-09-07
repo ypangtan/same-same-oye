@@ -2239,7 +2239,13 @@ class UserService
                         ] );
                     }
                 } else {
-                    // TODO: give point
+                    //  give point
+                    WalletService::transact( $upline->wallets->where('type', 1)->first(), [
+                        'amount' => $gift->reward_value,
+                        'remark' => 'referral Rewards',
+                        'type' => 2,
+                        'transaction_type' => 27,
+                    ] );
                 }
             }
         }

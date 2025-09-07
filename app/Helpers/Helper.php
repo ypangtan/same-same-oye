@@ -69,6 +69,8 @@ class Helper {
             '23' => __( 'wallet.checkin_bonus' ),
             '24' => __( 'wallet.exhange_voucher' ),
             '25' => __( 'wallet.points_expired' ),
+            '26' => __( 'wallet.birthday_gift' ),
+            '27' => __( 'wallet.referral_gift' ),
         ];
     }
 
