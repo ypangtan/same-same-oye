@@ -59,4 +59,7 @@ return [
     
     // 'topup_failed' => 'Topup Failed',
     // 'topup_failed_content' => 'Topup Failed! Please Try Again',
+
+    'user_birthday' => 'Happy Birthday',
+    'user_birthday_content' => 'Dear User, your birthday gift already in your account.',
 ];

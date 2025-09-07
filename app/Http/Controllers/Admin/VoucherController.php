@@ -37,6 +37,8 @@ class VoucherController extends Controller
             '1' => __( 'voucher.public_voucher' ),
             '2' => __( 'voucher.user_specific_voucher' ),
             '3' => __( 'voucher.login_reward_voucher' ),
+            '4' => __( 'voucher.birthday_voucher' ),
+            '5' => __( 'voucher.referral_voucher' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
@@ -74,6 +76,8 @@ class VoucherController extends Controller
             '1' => __( 'voucher.public_voucher' ),
             '2' => __( 'voucher.user_specific_voucher' ),
             '3' => __( 'voucher.login_reward_voucher' ),
+            '4' => __( 'voucher.birthday_voucher' ),
+            '5' => __( 'voucher.referral_voucher' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
@@ -111,8 +115,9 @@ class VoucherController extends Controller
             '1' => __( 'voucher.public_voucher' ),
             '2' => __( 'voucher.user_specific_voucher' ),
             '3' => __( 'voucher.login_reward_voucher' ),
+            '4' => __( 'voucher.birthday_voucher' ),
+            '5' => __( 'voucher.referral_voucher' ),
         ];
-
 
         return view( 'admin.main' )->with( $this->data );
     }

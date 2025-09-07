@@ -37,6 +37,7 @@ class User extends Model
         'postcode',
         'calling_code',
         'status',
+        'last_give_birthday_gift',
         'phone_number',
         'account_type',
         'date_of_birth',

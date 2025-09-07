@@ -25,12 +25,15 @@ use App\Models\{
     MailContent,
     Wallet,
     Option,
+    ReferralGiftSetting,
     WalletTransaction,
     UserNotification,
     UserNotificationSeen,
     UserNotificationUser,
     UserDevice,
     UserSocial,
+    UserVoucher,
+    Voucher,
 };
 
 use App\Rules\CheckASCIICharacter;
@@ -1169,6 +1172,7 @@ class UserService
             if ( $referral ) {
                 $createUserObject['referral_id'] = $referral->id;
                 $createUserObject['referral_structure'] = $referral->referral_structure . '|' . $referral->id;
+                self::giveUplineVoucher( $referral->id );
             }
 
             $createUser = User::create( $createUserObject );
@@ -1576,6 +1580,9 @@ class UserService
 
         if( !empty( $request->invitation_code ) ) {
             $upline = User::where( 'invitation_code', $request->invitation_code )->first();
+            if( $updateUser->referral_id == null ) {
+                self::giveUplineVoucher( $upline->id );
+            }
 
             $updateUser->referral_id = $upline->id;
             $updateUser->referral_structure = $upline->referral_structure . '|' . $upline->id;
@@ -2083,6 +2090,7 @@ class UserService
         Helper::sendNotification( $user->user_id, $messageContent );
         
     }
+
     private static function sendSMS( $customMessage = false, $mobile, $otp, $message = '' ) {
 
         $url = config( 'services.sms.sms_url' );
@@ -2215,5 +2223,26 @@ class UserService
         }
     }
     
+    public static function giveUplineVoucher( $upline_id ) {
+        $upline = User::find( $upline_id );
+        if ( $upline ) {
+            $gift = ReferralGiftSetting::where( 'status', 10 )->first();
+            if( $gift ) {
+                if( $gift->reward_type == 1 ) {
+                    $voucher = Voucher::find( $gift->voucher_id );
+                    if( $voucher ) {
+                        $createUserVoucher = UserVoucher::create( [
+                            'user_id' => $upline->id, 
+                            'voucher_id' => $voucher->id,
+                            'expired_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subDays( $gift->expiry_day ),
+                            'total_left' => 1,
+                        ] );
+                    }
+                } else {
+                    // TODO: give point
+                }
+            }
+        }
+    }
     
 }
