@@ -56,8 +56,8 @@ class Voucher extends Model
         }
 
         // Return translation for the current locale or fallback to default
-        // $nowLocale = App::getLocale();
-        return $translations;
+        $nowLocale = App::getLocale();
+        return $translations[ $nowLocale ];
     }
 
     public function getDescriptionAttribute( $value ){
@@ -72,7 +72,8 @@ class Voucher extends Model
         }
 
         // Return translation for the current locale or fallback to default
-        return $translations;
+        $nowLocale = App::getLocale();
+        return $translations[ $nowLocale ];
     }
 
     public function announcement()
