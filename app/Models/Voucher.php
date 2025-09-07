@@ -44,32 +44,35 @@ class Voucher extends Model
         'claim_per_user',
     ];
 
-    public function getTitleAttribute(){
+    public function getTitleAttribute( $value ){
         
-        $nowLocale = App::getLocale();
+        $translations = json_decode($value, true) ?? [];
 
-        switch( $nowLocale ) {
-            case 'zh':
-                return $this->attributes['zh_title'] ?? ( $this->attributes['en_title'] ?? '' );
-                break;
-            default:
-                return $this->attributes['en_title'] ?? $this->attributes['title'];
-                break;
+        if( !empty( $this->attributes['en_title'] ) ) {
+            $translations['en'] = $this->attributes['en_title'];
         }
+        if( !empty( $this->attributes['zh_title'] ) ) {
+            $translations['zh'] = $this->attributes['zh_title'];
+        }
+
+        // Return translation for the current locale or fallback to default
+        // $nowLocale = App::getLocale();
+        return $translations;
     }
 
-    public function getDescriptionAttribute(){
+    public function getDescriptionAttribute( $value ){
         
-        $nowLocale = App::getLocale();
+        $translations = json_decode($value, true) ?? [];
 
-        switch( $nowLocale ) {
-            case 'zh':
-                return $this->attributes['zh_description'] ?? ( $this->attributes['en_description'] ?? '' );
-                break;
-            default:
-                return $this->attributes['en_description'] ?? $this->attributes['description'];
-                break;
+        if( !empty( $this->attributes['en_description'] ) ) {
+            $translations['en'] = $this->attributes['en_description'];
         }
+        if( !empty( $this->attributes['zh_description'] ) ) {
+            $translations['zh'] = $this->attributes['zh_description'];
+        }
+
+        // Return translation for the current locale or fallback to default
+        return $translations;
     }
 
     public function announcement()

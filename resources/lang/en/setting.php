@@ -52,6 +52,7 @@ return [
     'voucher' => 'Voucher',
     'enable' => 'Enable',
     'expiry_day' => 'Expiry Day',
+    'enable_gift' => 'Enable Gift',
     'birthday_gift_settings' => 'Birthday Gift Settings',
     'referral_gift_settings' => 'Referral Gift Settings',
 ];
