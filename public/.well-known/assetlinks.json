@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ifei.app",
+      "sha256_cert_fingerprints": [
+        "76:67:7C:AF:3D:75:5F:06:48:E8:9B:3E:3E:A5:E1:02:C4:C6:2B:5A:E6:CB:FE:67:7D:9C:6E:65:3A:23:14:E2"
+      ]
+    }
+  }
+]

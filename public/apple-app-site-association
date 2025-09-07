@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "JN9BX5Y4AU.com.ifei.my",
+        "paths": [
+          "/invite/*"
+        ]
+      }
+    ]
+  }
+}
