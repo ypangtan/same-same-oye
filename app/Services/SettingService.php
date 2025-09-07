@@ -65,8 +65,8 @@ class SettingService {
         $birthday = BirthdayGiftSetting::with( 'voucher' )->first();
         $referral = ReferralGiftSetting::with( 'voucher' )->first();
 
-        $data['birthday'] = $birthday;
-        $data['referral'] = $referral;
+        $data['birthday'] = $birthday ?? null;
+        $data['referral'] = $referral ?? null;
 
         return $data;
     }

@@ -46,4 +46,12 @@ return [
     'referral_register_bonus_points' => 'Referral Register bonus points',
     'referral_spending_bonus_points' => 'Referral Spending bonus points',
     'taxes' => 'Taxes',
+
+    'reward_type' => 'Reward Type',
+    'reward_value' => 'Reward Value',
+    'voucher' => 'Voucher',
+    'enable' => 'Enable',
+    'expiry_day' => 'Expiry Day',
+    'birthday_gift_settings' => 'Birthday Gift Settings',
+    'referral_gift_settings' => 'Referral Gift Settings',
 ];

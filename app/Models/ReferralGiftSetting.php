@@ -27,7 +27,7 @@ class ReferralGiftSetting extends Model
     ];
 
     public function voucher() {
-        $this->belongsTo( Voucher::class, 'voucher_id' );
+        return $this->belongsTo(Voucher::class, 'voucher_id');
     }
 
     public function getEncryptedIdAttribute() {
