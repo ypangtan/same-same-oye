@@ -83,18 +83,18 @@ $setting = 'setting';
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3 row">
-                                    <label for="{{ $setting }}_birthday_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
-                                    <div class="col-sm-7">
-                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_birthday_reward_value">
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
                                 <div class="mb-3 row d-none">
                                     <label for="{{ $setting }}_birthday_voucher" class="col-sm-5 col-form-label">{{ __( 'setting.voucher' ) }}</label>
                                     <div class="col-sm-7">
                                         <select class="form-select form-select-sm" id="{{ $setting }}_birthday_voucher" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'setting.voucher' ) ] ) }}">
                                         </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="{{ $setting }}_birthday_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_birthday_reward_value">
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -127,6 +127,14 @@ $setting = 'setting';
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
+                                <div class="mb-3 row d-none">
+                                    <label for="{{ $setting }}_referral_voucher" class="col-sm-5 col-form-label">{{ __( 'setting.voucher' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-select form-select-sm" id="{{ $setting }}_referral_voucher" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'setting.voucher' ) ] ) }}">
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
                                 <div class="mb-3 row">
                                     <label for="{{ $setting }}_referral_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
                                     <div class="col-sm-7">
@@ -138,14 +146,6 @@ $setting = 'setting';
                                     <label for="{{ $setting }}_referral_expiry_day" class="col-sm-5 col-form-label">{{ __( 'setting.expiry_day' ) }} ( Days )</label>
                                     <div class="col-sm-7">
                                         <input type="number" class="form-control form-control-sm" id="{{ $setting }}_referral_expiry_day">
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="mb-3 row d-none">
-                                    <label for="{{ $setting }}_referral_voucher" class="col-sm-5 col-form-label">{{ __( 'setting.voucher' ) }}</label>
-                                    <div class="col-sm-7">
-                                        <select class="form-select form-select-sm" id="{{ $setting }}_referral_voucher" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'setting.voucher' ) ] ) }}">
-                                        </select>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
