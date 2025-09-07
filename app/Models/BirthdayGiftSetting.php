@@ -25,6 +25,10 @@ class BirthdayGiftSetting extends Model
         'status',
     ];
 
+    public function voucher() {
+        $this->belongsTo( Voucher::class, 'voucher_id' );
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

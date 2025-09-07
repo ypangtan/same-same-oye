@@ -8,8 +8,8 @@ $setting = 'setting';
             <div class="col-md-2">                
                 <div class="list-group" role="tablist">
                     <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#ms" role="tab">{{ __( 'setting.bonus_settings' ) }}</a>
-                    <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#bgs" role="tab">{{ __( 'setting.birthday_gift_settings' ) }}</a>
-                    <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#rgs" role="tab">{{ __( 'setting.referral_gift_settings' ) }}</a>
+                    <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#bgs" role="tab">{{ __( 'setting.birthday_gift_settings' ) }}</a>
+                    <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#rgs" role="tab">{{ __( 'setting.referral_gift_settings' ) }}</a>
                 </div>
             </div>
             <div class="col-md-10">
@@ -60,7 +60,7 @@ $setting = 'setting';
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade show active" id="bgs" role="tabpanel">
+                    <div class="tab-pane fade" id="bgs" role="tabpanel">
                         <h5 class="card-title mb-0">{{ __( 'setting.birthday_gift_settings' ) }}</h5>
                         <hr>
                         <div class="row">
@@ -76,7 +76,7 @@ $setting = 'setting';
                                     <div class="col-sm-7">
                                         <select class="form-select" id="{{ $setting }}_birthday_reward_type">
                                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'setting.reward_type' ) ] ) }}</option>
-                                            @forEach( $data['rewardTypes'] as $key => $rewardType )
+                                            @forEach( $data['reward_types'] as $key => $rewardType )
                                                 <option value="{{ $key }}">{{ $rewardType }}</option>
                                             @endforeach
                                         </select>
@@ -104,7 +104,7 @@ $setting = 'setting';
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade show active" id="rgs" role="tabpanel">
+                    <div class="tab-pane fade" id="rgs" role="tabpanel">
                         <h5 class="card-title mb-0">{{ __( 'setting.referral_gift_settings' ) }}</h5>
                         <hr>
                         <div class="row">
@@ -120,7 +120,7 @@ $setting = 'setting';
                                     <div class="col-sm-7">
                                         <select class="form-select" id="{{ $setting }}_referral_reward_type">
                                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'setting.reward_type' ) ] ) }}</option>
-                                            @forEach( $data['rewardTypes'] as $key => $rewardType )
+                                            @forEach( $data['reward_types'] as $key => $rewardType )
                                                 <option value="{{ $key }}">{{ $rewardType }}</option>
                                             @endforeach
                                         </select>
@@ -140,7 +140,7 @@ $setting = 'setting';
                                         <input type="number" class="form-control form-control-sm" id="{{ $setting }}_referral_expiry_day">
                                         <div class="invalid-feedback"></div>
                                     </div>
-                                </div>expiry_day
+                                </div>
                                 <div class="mb-3 row d-none">
                                     <label for="{{ $setting }}_referral_voucher" class="col-sm-5 col-form-label">{{ __( 'setting.voucher' ) }}</label>
                                     <div class="col-sm-7">
@@ -165,8 +165,25 @@ $setting = 'setting';
     document.addEventListener( 'DOMContentLoaded', function() {
 
         getSettings();
+        getGiftSettings();
 
         let s = '#{{ $setting }}';
+
+        $( s + '_referral_reward_type' ).change( function() {
+            if( $( this ).val() == 1 ) {
+                $( s + '_referral_voucher' ).parent().parent().addClass( 'd-none' );
+            } else {
+                $( s + '_referral_voucher' ).parent().parent().removeClass( 'd-none' );
+            }
+        } );
+
+        $( s + '_birthday_reward_type' ).change( function() {
+            if( $( this ).val() == 1 ) {
+                $( s + '_birthday_voucher' ).parent().parent().addClass( 'd-none' );
+            } else {
+                $( s + '_birthday_voucher' ).parent().parent().removeClass( 'd-none' );
+            }
+        } );
 
         $(s+'_convertion_rate').on('keyup', function () {
             $( '#convertion_rate_preview').text( $(this).val() );
@@ -312,7 +329,7 @@ $setting = 'setting';
             } );
         }
 
-        function getSetting2() {
+        function getGiftSettings() {
 
             $.ajax( {
                 url: '{{ route( 'admin.setting.giftSettings' ) }}',
@@ -323,14 +340,17 @@ $setting = 'setting';
                 success: function( response ) {
                     $( s + '_birthday_ ' + 'reward_type' ).val( response?.birthday?.reward_type ?? '' );
                     $( s + '_birthday_ ' + 'reward_value' ).val( response?.birthday?.reward_value ?? '' );
-                    $( s + '_birthday_ ' + 'enable' ).val( response?.birthday?.enable ?? '' );
+                    if ( response?.birthday?.enable == 10 ) {
+                        $( s + '_birthday_ ' + 'enable' ).attr( ':checked' );
+                    }
                     
                     $( s + '_referral_ ' + 'reward_type' ).val( response?.referral?.reward_type ?? '' );
                     $( s + '_referral_ ' + 'expiry_day' ).val( response?.referral?.expiry_day ?? '' );
                     $( s + '_referral_ ' + 'reward_value' ).val( response?.referral?.reward_value ?? '' );
-                    $( s + '_referral_ ' + 'enable' ).val( response?.referral?.enable ?? '' );
+                    if ( response?.referral?.enable == 10 ) {
+                        $( s + '_referral_ ' + 'enable' ).attr( ':checked' );
+                    }
 
-                    
                     if( response.referral && response.referral.voucher ){
                         let option = new Option( response.referral.voucher.title, response.referral.voucher.id, true, true );
                         referralSelect2.append( option )
