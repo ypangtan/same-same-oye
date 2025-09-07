@@ -376,7 +376,6 @@ $setting = 'setting';
                 data: function (params) {
                     return {
                         title: params.term, // search term
-                        voucher_type: 4,
                         status: 10,
                         start: params.page ? params.page : 0,
                         length: 10,
@@ -418,7 +417,6 @@ $setting = 'setting';
                 data: function (params) {
                     return {
                         title: params.term, // search term
-                        voucher_type: 5,
                         status: 10,
                         start: params.page ? params.page : 0,
                         length: 10,
