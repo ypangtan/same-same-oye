@@ -257,10 +257,13 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 } );
 
                 Route::post( 'settings', [ SettingController::class, 'settings' ] )->name( 'admin.setting.settings' );
+                Route::post( 'gift-settings', [ SettingController::class, 'giftSettings' ] )->name( 'admin.setting.giftSettings' );
                 Route::post( 'bonus-settings', [ SettingController::class, 'bonusSettings' ] )->name( 'admin.setting.bonusSettings' );
                 Route::post( 'maintenance-settings', [ SettingController::class, 'maintenanceSettings' ] )->name( 'admin.setting.maintenanceSettings' );
                 Route::post( 'update-bonus-setting', [ SettingController::class, 'updateBonusSetting' ] )->name( 'admin.setting.updateBonusSetting' );
                 Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
+                Route::post( 'update-birthday-gift-setting', [ SettingController::class, 'updateBirthdayGiftSetting' ] )->name( 'admin.setting.updateBirthdayGiftSetting' );
+                Route::post( 'update-referral-gift-setting', [ SettingController::class, 'updateReferralGiftSetting' ] )->name( 'admin.setting.updateReferralGiftSetting' );
             } );
 
             Route::prefix( 'user-vouchers' )->group( function() {

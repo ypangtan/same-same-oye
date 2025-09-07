@@ -8,6 +8,8 @@ $setting = 'setting';
             <div class="col-md-2">                
                 <div class="list-group" role="tablist">
                     <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#ms" role="tab">{{ __( 'setting.bonus_settings' ) }}</a>
+                    <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#bgs" role="tab">{{ __( 'setting.birthday_gift_settings' ) }}</a>
+                    <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#rgs" role="tab">{{ __( 'setting.referral_gift_settings' ) }}</a>
                 </div>
             </div>
             <div class="col-md-10">
@@ -54,6 +56,39 @@ $setting = 'setting';
                                 </div>
                                 <div class="text-end">
                                     <button class="btn btn-sm btn-primary" id="bs_save">{{ __( 'template.save_changes' ) }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show active" id="bgs" role="tabpanel">
+                        <h5 class="card-title mb-0">{{ __( 'setting.birthday_gift_settings' ) }}</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3 row">
+                                    <label for="{{ $setting }}_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_reward_value">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="{{ $setting }}_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_reward_value">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row d-none">
+                                    <label for="{{ $setting }}_voucher" class="col-sm-5 col-form-label">{{ __( 'setting.voucher' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-select form-select-sm" id="{{ $setting }}_voucher" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'setting.voucher' ) ] ) }}">
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-sm btn-primary" id="gift_save">{{ __( 'template.save_changes' ) }}</button>
                                 </div>
                             </div>
                         </div>
@@ -149,6 +184,121 @@ $setting = 'setting';
                 },
             } );
         }
+
+        function getSetting2() {
+
+            $.ajax( {
+                url: '{{ route( 'admin.setting.giftSettings' ) }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    $( s + '_birthday_ ' + 'reward_type' ).val( response?.birthday?.reward_type ?? '' );
+                    $( s + '_birthday_ ' + 'reward_value' ).val( response?.birthday?.reward_value ?? '' );
+                    $( s + '_birthday_ ' + 'enable' ).val( response?.birthday?.enable ?? '' );
+                    
+                    $( s + '_referral_ ' + 'reward_type' ).val( response?.referral?.reward_type ?? '' );
+                    $( s + '_referral_ ' + 'expiry_day' ).val( response?.referral?.expiry_day ?? '' );
+                    $( s + '_referral_ ' + 'reward_value' ).val( response?.referral?.reward_value ?? '' );
+                    $( s + '_referral_ ' + 'enable' ).val( response?.referral?.enable ?? '' );
+
+                    
+                    if( response.referral && response.referral.voucher ){
+                        let option = new Option( response.referral.voucher.title, response.referral.voucher.id, true, true );
+                        referralSelect2.append( option )
+                    }
+                    if( response.birthday && response.birthday.voucher ){
+                        let option2 = new Option( response.birthday.voucher.title, response.birthday.voucher.id, true, true );
+                        birthdaySelect2.append( option2 )
+                    }
+                },
+            } );
+        }
+
+        let birthdaySelect2 = $( s + '_birthday_voucher' ).select2( {
+            theme: 'bootstrap-5',
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: true,
+            ajax: {
+                method: 'POST',
+                url: '{{ route( 'admin.voucher.allVouchers' ) }}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        title: params.term, // search term
+                        voucher_type: 4,
+                        status: 10,
+                        start: params.page ? params.page : 0,
+                        length: 10,
+                        _token: '{{ csrf_token() }}',
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    let processedResult = [];
+
+                    data.vouchers.map( function( v, i ) {
+                        processedResult.push( {
+                            id: v.id,
+                            text: v.title,
+                        } );
+                    } );
+
+                    return {
+                        results: processedResult,
+                        pagination: {
+                            more: ( params.page * 10 ) < data.recordsFiltered
+                        }
+                    };
+                }
+            }
+        } );
+
+        let referralSelect2 = $( s + '_referral_voucher' ).select2( {
+            theme: 'bootstrap-5',
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: true,
+            ajax: {
+                method: 'POST',
+                url: '{{ route( 'admin.voucher.allVouchers' ) }}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        title: params.term, // search term
+                        voucher_type: 5,
+                        status: 10,
+                        start: params.page ? params.page : 0,
+                        length: 10,
+                        _token: '{{ csrf_token() }}',
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    let processedResult = [];
+
+                    data.vouchers.map( function( v, i ) {
+                        processedResult.push( {
+                            id: v.id,
+                            text: v.title,
+                        } );
+                    } );
+
+                    return {
+                        results: processedResult,
+                        pagination: {
+                            more: ( params.page * 10 ) < data.recordsFiltered
+                        }
+                    };
+                }
+            }
+        } );
     } );
 </script>
 

@@ -71,6 +71,11 @@ class SettingController extends Controller
 
         return SettingService::bonusSettings();
     }
+    
+    public function giftSettings( Request $request ) {
+
+        return SettingService::giftSettings();
+    }
 
     public function maintenanceSettings( Request $request ) {
 
@@ -85,5 +90,15 @@ class SettingController extends Controller
     public function updateMaintenanceSetting( Request $request ) {
 
         return SettingService::updateMaintenanceSetting( $request );
+    }
+
+    public function updateBirthdayGiftSetting( Request $request ) {
+
+        return SettingService::updateBirthdayGiftSetting( $request );
+    }
+
+    public function updateReferralGiftSetting( Request $request ) {
+
+        return SettingService::updateReferralGiftSetting( $request );
     }
 }
