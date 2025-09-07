@@ -192,7 +192,8 @@ return [
 
     'wallets' => 'Points',
     'wallet_transactions' => 'Points Transactions',
-    'announcements' => 'Announcements',
+    'announcements' => 'what\'s New',
+    'pop_announcements' => 'Pop Announcements',
     'banners' => 'Banners',
     'announcement_rewards' => 'Announcement Rewards History',
     'reward_histories' => 'Reward Histories',

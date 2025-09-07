@@ -193,14 +193,26 @@
                                     </ul>
                                 </li>
                                 @endcan
-
-                                @can( 'view marketing_notifications' )
-                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MarketingAnnouncementController' ? 'active current-page' : '' }}">
-                                        <a href="{{ route( 'admin.module_parent.marketing_notifications.index' ) }}" class="nk-menu-link">
-                                            <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
-                                            <span class="nk-menu-text">{{ __( 'template.marketing_notifications' ) }}</span>
-                                        </a>
-                                    </li>
+                                
+                                @canany( [ 'view marketing_notifications', 'view pop_announcements' ] )
+                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\MarketingAnnouncementController' || $controller == 'App\Http\Controllers\Admin\PopAnnouncementController') ? 'active current-page' : '' }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
+                                        <span class="nk-menu-text">{{ __( 'template.marketing_notifications' ) }}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @can( 'view marketing_notifications' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MarketingAnnouncementController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.marketing_notifications.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.marketing_notifications' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view pop_announcements' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PopAnnouncementController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.pop_announcement.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.pop_announcements' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                    </ul>
+                                </li>
                                 @endcan
 
                                 @can( 'view lucky_draw_rewards' )

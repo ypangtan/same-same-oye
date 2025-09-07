@@ -21,11 +21,6 @@ $columns = [
     ],
     [
         'type' => 'default',
-        'id' => 'description',
-        'title' => __( 'rank.description' ),
-    ],
-    [
-        'type' => 'default',
         'id' => 'target_spending',
         'title' => __( 'rank.target_spending' ),
     ],
@@ -105,7 +100,6 @@ $columns = [
             columns: [
                 { data: null },
                 { data: 'title' },
-                { data: 'description' },
                 { data: 'target_spending' },
                 { data: 'reward_value' },
                 { data: 'priority' },
@@ -124,13 +118,6 @@ $columns = [
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
-                    orderable: false,
-                    render: function( data, type, row, meta ) {
-                        return data ?? '-';
-                    },
-                },
-                {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "description" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
                         return data ?? '-';

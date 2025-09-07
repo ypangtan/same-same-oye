@@ -38,6 +38,7 @@ $voucherTypes = $data['voucher_type'];
 <div class="card">
     <div class="card-inner">
         <div class="row">
+            <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
             <div class="col-md-6">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
@@ -82,7 +83,6 @@ $voucherTypes = $data['voucher_type'];
                 </div>
             </div>
             <div class="col-md-6">
-                <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
                 <div class="mb-3">
                     <label>{{ __( 'voucher.image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $voucher_edit }}_image" style="min-height: 0px;">

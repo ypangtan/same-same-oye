@@ -13,7 +13,7 @@ $rank_edit = 'rank_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $rank_edit }}_description" class="col-sm-5 col-form-label">{{ __( 'rank.description' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control form-control-sm" id="{{ $rank_edit }}_description">

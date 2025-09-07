@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\{
     ProductController,
     SalesRecordController,
     MarketingNotificationController,
+    PopPopAnnouncementController,
     RankController,
 };
 
@@ -300,6 +301,25 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-announcement-status', [ AnnouncementController::class, 'updateAnnouncementStatus' ] )->name( 'admin.announcement.updateAnnouncementStatus' );
                 Route::post( 'remove-announcement-gallery-image', [ AnnouncementController::class, 'removeAnnouncementGalleryImage' ] )->name( 'admin.announcement.removeAnnouncementGalleryImage' );
                 Route::post( 'ckeUpload', [ AnnouncementController::class, 'ckeUpload' ] )->name( 'admin.announcement.ckeUpload' );
+            } );
+            
+            Route::prefix( 'pop-announcements' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view pop_announcements' ] ], function() {
+                    Route::get( '/', [ PopPopAnnouncementController::class, 'index' ] )->name( 'admin.module_parent.pop_announcement.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add pop_announcements' ] ], function() {
+                    Route::get( 'add', [ PopPopAnnouncementController::class, 'add' ] )->name( 'admin.pop_announcement.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit pop_announcements' ] ], function() {
+                    Route::get( 'edit', [ PopPopAnnouncementController::class, 'edit' ] )->name( 'admin.pop_announcement.edit' );
+                } );
+    
+                Route::post( 'all-pop-announcements', [ PopPopAnnouncementController::class, 'allPopAnnouncements' ] )->name( 'admin.pop_announcement.allPopAnnouncements' );
+                Route::post( 'one-pop-announcement', [ PopPopAnnouncementController::class, 'onePopAnnouncement' ] )->name( 'admin.pop_announcement.onePopAnnouncement' );
+                Route::post( 'create-pop-announcement', [ PopPopAnnouncementController::class, 'createPopAnnouncement' ] )->name( 'admin.pop_announcement.createPopAnnouncement' );
+                Route::post( 'update-pop-announcement', [ PopPopAnnouncementController::class, 'updatePopAnnouncement' ] )->name( 'admin.pop_announcement.updatePopAnnouncement' );
+                Route::post( 'update-pop-announcement-status', [ PopPopAnnouncementController::class, 'updatePopAnnouncementStatus' ] )->name( 'admin.pop_announcement.updatePopAnnouncementStatus' );
+                Route::post( 'ckeUpload', [ PopPopAnnouncementController::class, 'ckeUpload' ] )->name( 'admin.pop_announcement.ckeUpload' );
             } );
 
             Route::prefix( 'banners' )->group( function() {
