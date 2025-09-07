@@ -9,7 +9,7 @@ use App\Services\{
     PopAnnouncementService,
 };
 
-class PopPopAnnouncementController extends Controller
+class PopAnnouncementController extends Controller
 {
     public function index( Request $request ) {
 
@@ -145,6 +145,11 @@ class PopPopAnnouncementController extends Controller
     public function ckeUpload( Request $request ) {
 
         return PopAnnouncementService::ckeUpload( $request );
+    }
+
+    public function imageUpload( Request $request ) {
+
+        return PopAnnouncementService::imageUpload( $request );
     }
     
 }

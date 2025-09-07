@@ -113,7 +113,7 @@ $voucherTypes = $data['voucher_type'];
 <script>
 window.ckeupload_path = '{{ route( 'admin.pop_announcement.ckeUpload' ) }}';
 window.csrf_token = '{{ csrf_token() }}';
-window.cke_element = [ 'pop_announcement_create_en_description', 'pop_announcement_create_zh_description' ];
+window.cke_element = [ 'pop_announcement_create_en_text', 'pop_announcement_create_zh_text' ];
 </script>
 <script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
 
@@ -121,33 +121,15 @@ window.cke_element = [ 'pop_announcement_create_en_description', 'pop_announceme
     document.addEventListener( 'DOMContentLoaded', function() {
 
         let fc = '#{{ $pop_announcement_create }}',
-                fileID = '';
+            fileID = '';
 
         $( fc + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.pop_announcement.index' ) }}';
         } );
 
-        $( fc + '_start_date' ).flatpickr( {
-            disableMobile: false,
-        } );
-
-        $( fc + '_expired_date' ).flatpickr( {
-            disableMobile: false,
-        } );
-
         $( fc + '_submit' ).click( function() {
 
             resetInputValidation();
-
-            let type = $( fc + '_discount_type' ).val();
-
-            let data = {};
-
-            if( type == 3 ){
-                data = bxgyData( data );
-            }else {
-                data = cartdData( data );
-            }
 
             $( 'body' ).loading( {
                 message: '{{ __( 'template.loading' ) }}'
@@ -156,13 +138,13 @@ window.cke_element = [ 'pop_announcement_create_en_description', 'pop_announceme
             let formData = new FormData();
             formData.append( 'en_title', $( fc + '_en_title' ).val() );
             formData.append( 'zh_title', $( fc + '_zh_title' ).val() );
-            formData.append( 'en_description', editors['pop_announcement_create_en_description'].getData() );
-            formData.append( 'zh_description', editors['pop_announcement_create_zh_description'].getData() );
+            formData.append( 'en_text', editors['pop_announcement_create_en_text'].getData() );
+            formData.append( 'zh_text', editors['pop_announcement_create_zh_text'].getData() );
             formData.append( 'image', fileID );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
-                url: '{{ route( 'admin.pop_announcement.creatPopAnnouncement' ) }}',
+                url: '{{ route( 'admin.pop_announcement.createPopAnnouncement' ) }}',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -194,7 +176,7 @@ window.cke_element = [ 'pop_announcement_create_en_description', 'pop_announceme
 
         Dropzone.autoDiscover = false;
         const dropzone = new Dropzone( fc + '_image', { 
-            url: '{{ route( 'admin.pop_announcement.ckeUpload' ) }}',
+            url: '{{ route( 'admin.pop_announcement.imageUpload' ) }}',
             maxFiles: 1,
             acceptedFiles: 'image/jpg,image/jpeg,image/png',
             addRemoveLinks: true,
@@ -210,9 +192,7 @@ window.cke_element = [ 'pop_announcement_create_en_description', 'pop_announceme
                 file.previewElement.remove();
             },
             success: function( file, response ) {
-                if ( response.status == 200 )  {
-                    fileID = response.file;
-                }
+                fileID = response.file;
             }
         } );
 

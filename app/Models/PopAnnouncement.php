@@ -46,7 +46,7 @@ class PopAnnouncement extends Model
         }
     }
 
-    public function getDescriptionAttribute(){
+    public function getTextAttribute(){
         
         $nowLocale = App::getLocale();
 

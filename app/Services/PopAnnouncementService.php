@@ -49,6 +49,9 @@ class PopAnnouncementService
         if ( $pop_announcements ) {
             $pop_announcements->append( [
                 'encrypted_id',
+                'image_path',
+                'title',
+                'text',
             ] );
         }
 
@@ -118,6 +121,9 @@ class PopAnnouncementService
         if( $rank ) {
             $rank->append( [
                 'encrypted_id',
+                'image_path',
+                'title',
+                'text',
             ] );
         }
 
@@ -255,6 +261,17 @@ class PopAnnouncementService
 
         $data = [
             'url' => asset( 'storage/' . $file ),
+        ];
+
+        return response()->json( $data );
+    }
+
+    public static function imageUpload( $request ) {
+
+        $file = $request->file( 'file' )->store( 'pop_announcement/image', [ 'disk' => 'public' ] );
+
+        $data = [
+            'url' => asset( 'storage/' . $file ),
             'file' => $file,
         ];
 
@@ -266,7 +283,9 @@ class PopAnnouncementService
 
         $rank->append( [
             'encrypted_id',
-            'target_range',
+            'image_path',
+            'title',
+            'text',
         ] );
 
         return response()->json( [

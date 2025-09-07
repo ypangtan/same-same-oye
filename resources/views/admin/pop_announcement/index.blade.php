@@ -100,7 +100,7 @@ var statusMapper = {
             }
         },
         ajax: {
-            url: '{{ route( 'admin.pop_announcement.allAnnouncements' ) }}',
+            url: '{{ route( 'admin.pop_announcement.allPopAnnouncements' ) }}',
             data: {
                 '_token': '{{ csrf_token() }}',
             },
@@ -233,7 +233,7 @@ var statusMapper = {
         $( document ).on( 'click', '.dt-status', function() {
 
             $.ajax( {
-                url: '{{ route( 'admin.pop_announcement.updateAnnouncementStatus' ) }}',
+                url: '{{ route( 'admin.pop_announcement.updatePopAnnouncementStatus' ) }}',
                 type: 'POST',
                 data: {
                     'id': $( this ).data( 'id' ),

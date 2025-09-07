@@ -140,8 +140,8 @@ window.cke_element = [ 'pop_announcement_edit_en_text', 'pop_announcement_edit_z
             formData.append( 'id', '{{ request( 'id' ) }}' );
             formData.append( 'en_title', $( fe + '_en_title' ).val() );
             formData.append( 'zh_title', $( fe + '_zh_title' ).val() );
-            formData.append( 'en_description', editors['pop_announcement_edit_en_text'].getData() );
-            formData.append( 'zh_description', editors['pop_announcement_edit_zh_text'].getData() );
+            formData.append( 'en_text', editors['pop_announcement_edit_en_text'].getData() );
+            formData.append( 'zh_text', editors['pop_announcement_edit_zh_text'].getData() );
             formData.append( 'image', fileID );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -203,7 +203,7 @@ window.cke_element = [ 'pop_announcement_edit_en_text', 'pop_announcement_edit_z
                     let imagePath = response.image_path ?? '';
                     
                     const dropzone = new Dropzone( fe + '_image', { 
-                        url: '{{ route( 'admin.pop_announcement.ckeUpload' ) }}',
+                        url: '{{ route( 'admin.pop_announcement.imageUpload' ) }}',
                         maxFiles: 1,
                         acceptedFiles: 'image/jpg,image/jpeg,image/png',
                         addRemoveLinks: true,
@@ -226,9 +226,7 @@ window.cke_element = [ 'pop_announcement_edit_en_text', 'pop_announcement_edit_z
                             file.previewElement.remove();
                         },
                         success: function( file, response ) {
-                            if ( response.status == 200 )  {
-                                fileID = response.file;
-                            }
+                            fileID = response.file;
                         }
                     } );
 
