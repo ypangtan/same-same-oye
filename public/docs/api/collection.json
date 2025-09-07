@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "618f5ec3-9664-4606-bc24-823917b9ae96",
+        "_postman_id": "f1a19fab-8f54-49d9-80c5-fcc06d956916",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1059,6 +1059,12 @@
                                     "description": "Indicate remove photo or not."
                                 },
                                 {
+                                    "key": "invitation_code",
+                                    "value": "abcdef",
+                                    "type": "text",
+                                    "description": "The invitation_code of upline."
+                                },
+                                {
                                     "key": "profile_picture",
                                     "src": [],
                                     "type": "file"
@@ -1246,7 +1252,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"ut\",\"app_id\":\"enim\",\"api_key\":\"quod\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"consectetur\",\"app_id\":\"aliquid\",\"api_key\":\"commodi\"}"
                         },
                         "description": ""
                     },

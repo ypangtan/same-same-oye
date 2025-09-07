@@ -235,7 +235,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: September 2 2025</li>
+        <li>Last updated: September 7 2025</li>
     </ul>
 </div>
 
@@ -3195,7 +3195,8 @@ fetch(url, {
     --form "email=john@email.com" \
     --form "date_of_birth=2022-01-01" \
     --form "to_remove=1" \
-    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\phpFA9A.tmp" </code></pre></div>
+    --form "invitation_code=abcdef" \
+    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\php4DDF.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3215,6 +3216,7 @@ body.append('last_name', 'John');
 body.append('email', 'john@email.com');
 body.append('date_of_birth', '2022-01-01');
 body.append('to_remove', '1');
+body.append('invitation_code', 'abcdef');
 body.append('profile_picture', document.querySelector('input[name="profile_picture"]').files[0]);
 
 fetch(url, {
@@ -3334,6 +3336,16 @@ fetch(url, {
                data-component="body" hidden>
     <br>
 <p>Indicate remove photo or not.</p>
+        </p>
+                <p>
+            <b><code>invitation_code</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="invitation_code"
+               data-endpoint="POSTapi-v1-users-update"
+               value="abcdef"
+               data-component="body" hidden>
+    <br>
+<p>The invitation_code of upline.</p>
         </p>
                 <p>
             <b><code>profile_picture</code></b>&nbsp;&nbsp;<small>file</small>     <i>optional</i> &nbsp;
@@ -3906,9 +3918,9 @@ fetch(url, {
     --data "{
     \"title\": \"test-notification\",
     \"content\": \"test-notification-content\",
-    \"register_token\": \"ut\",
-    \"app_id\": \"enim\",
-    \"api_key\": \"quod\"
+    \"register_token\": \"consectetur\",
+    \"app_id\": \"aliquid\",
+    \"api_key\": \"commodi\"
 }"
 </code></pre></div>
 
@@ -3926,9 +3938,9 @@ const headers = {
 let body = {
     "title": "test-notification",
     "content": "test-notification-content",
-    "register_token": "ut",
-    "app_id": "enim",
-    "api_key": "quod"
+    "register_token": "consectetur",
+    "app_id": "aliquid",
+    "api_key": "commodi"
 };
 
 fetch(url, {
@@ -4014,7 +4026,7 @@ fetch(url, {
                 <input type="text"
                name="register_token"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="ut"
+               value="consectetur"
                data-component="body" hidden>
     <br>
 <p>optional The target device token. ( Default will be following current authenticated user's register token ).</p>
@@ -4024,7 +4036,7 @@ fetch(url, {
                 <input type="text"
                name="app_id"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="enim"
+               value="aliquid"
                data-component="body" hidden>
     <br>
 <p>optional The one signal app id. ( Default will be following current settings ).</p>
@@ -4034,7 +4046,7 @@ fetch(url, {
                 <input type="text"
                name="api_key"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="quod"
+               value="commodi"
                data-component="body" hidden>
     <br>
 <p>optional The one signal api_key ( Default will be following current settings ).</p>

@@ -985,6 +985,10 @@ paths:
                   type: integer
                   description: 'Indicate remove photo or not.'
                   example: 1
+                invitation_code:
+                  type: string
+                  description: 'The invitation_code of upline.'
+                  example: abcdef
                 profile_picture:
                   type: string
                   format: binary
@@ -1221,15 +1225,15 @@ paths:
                 register_token:
                   type: string
                   description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
-                  example: ut
+                  example: consectetur
                 app_id:
                   type: string
                   description: 'optional The one signal app id. ( Default will be following current settings ).'
-                  example: enim
+                  example: aliquid
                 api_key:
                   type: string
                   description: 'optional The one signal api_key ( Default will be following current settings ).'
-                  example: quod
+                  example: commodi
   /api/v1/vouchers:
     get:
       summary: '1. Get vouchers'

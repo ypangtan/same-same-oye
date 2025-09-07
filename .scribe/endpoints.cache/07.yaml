@@ -443,6 +443,13 @@ endpoints:
         example: 1
         type: integer
         custom: []
+      invitation_code:
+        name: invitation_code
+        description: 'The invitation_code of upline.'
+        required: false
+        example: abcdef
+        type: string
+        custom: []
       profile_picture:
         name: profile_picture
         description: 'The photo to update. Will create when empty'
@@ -661,21 +668,21 @@ endpoints:
         name: register_token
         description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
         required: false
-        example: ut
+        example: consectetur
         type: string
         custom: []
       app_id:
         name: app_id
         description: 'optional The one signal app id. ( Default will be following current settings ).'
         required: false
-        example: enim
+        example: aliquid
         type: string
         custom: []
       api_key:
         name: api_key
         description: 'optional The one signal api_key ( Default will be following current settings ).'
         required: false
-        example: quod
+        example: commodi
         type: string
         custom: []
     responses: []
