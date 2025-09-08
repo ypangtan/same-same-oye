@@ -126,7 +126,7 @@
                                     @endcan
                                 @endif
 
-                                @can( 'view banner' )
+                                @can( 'view banners' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\BannerController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.banner.index' ) }}" class="nk-menu-link">
                                             <span class="nk-menu-icon"><em class="icon ni ni-flag-fill"></em></span>
