@@ -25,6 +25,7 @@ use App\Models\{
     MailContent,
     Wallet,
     Option,
+    Rank,
     ReferralGiftSetting,
     WalletTransaction,
     UserNotification,
@@ -280,54 +281,75 @@ class UserService
         }
 
         if ( !empty( $request->rank ) ) {
+            $rank = $request->rank;
+            $rank = Rank::find( $rank );
+            $rank->append( [
+                'target_range'
+            ] );
 
-            switch ( $request->rank ) {
+            $model->where(function ($query) use ( $rank ) {
+                $query->whereHas('walletTransactions', function ($q) use ( $rank ) {
+                    $q->selectRaw('SUM(amount) as total_points')
+                        ->where('transaction_type', 12)
+                        ->groupBy('user_id')
+                        ->havingRaw(
+                            'SUM(amount) >= ? AND SUM(amount) < ?',
+                            [$rank->target_spending, $rank->target_range]
+                        );
+                })
+                ->orWhereDoesntHave('walletTransactions', function ($q) {
+                    $q->where('transaction_type', 12);
+                });
+            });
+            $filter = true;
+            // switch ( $request->rank ) {
         
-                case 1: // Member
-                    $model->where(function ($query) {
-                        $query->whereHas('walletTransactions', function ($q) {
-                            $q->selectRaw('SUM(amount) as total_points')
-                              ->where('transaction_type', 12)
-                              ->groupBy('user_id')
-                              ->havingRaw('SUM(amount) < 1000');
-                        })
-                        ->orWhereDoesntHave('walletTransactions', function ($q) {
-                            $q->where('transaction_type', 12);
-                        });
-                    });
-                    break;
+
+            //     case 1: // Member
+            //         $model->where(function ($query) {
+            //             $query->whereHas('walletTransactions', function ($q) {
+            //                 $q->selectRaw('SUM(amount) as total_points')
+            //                   ->where('transaction_type', 12)
+            //                   ->groupBy('user_id')
+            //                   ->havingRaw('SUM(amount) < 1000');
+            //             })
+            //             ->orWhereDoesntHave('walletTransactions', function ($q) {
+            //                 $q->where('transaction_type', 12);
+            //             });
+            //         });
+            //         break;
         
-                case 2: // Silver
-                    $model->whereHas('walletTransactions', function ($q) {
-                        $q->selectRaw('SUM(amount) as total_points')
-                          ->where('transaction_type', 12)
-                          ->groupBy('user_id')
-                          ->havingRaw('SUM(amount) >= 1000 AND SUM(amount) < 10000');
-                    });
-                    break;
+            //     case 2: // Silver
+            //         $model->whereHas('walletTransactions', function ($q) {
+            //             $q->selectRaw('SUM(amount) as total_points')
+            //               ->where('transaction_type', 12)
+            //               ->groupBy('user_id')
+            //               ->havingRaw('SUM(amount) >= 1000 AND SUM(amount) < 10000');
+            //         });
+            //         break;
         
-                case 3: // Gold
-                    $model->whereHas('walletTransactions', function ($q) {
-                        $q->selectRaw('SUM(amount) as total_points')
-                          ->where('transaction_type', 12)
-                          ->groupBy('user_id')
-                          ->havingRaw('SUM(amount) >= 10000 AND SUM(amount) < 100000');
-                    });
-                    break;
+            //     case 3: // Gold
+            //         $model->whereHas('walletTransactions', function ($q) {
+            //             $q->selectRaw('SUM(amount) as total_points')
+            //               ->where('transaction_type', 12)
+            //               ->groupBy('user_id')
+            //               ->havingRaw('SUM(amount) >= 10000 AND SUM(amount) < 100000');
+            //         });
+            //         break;
         
-                case 4: // Premium
-                    $model->whereHas('walletTransactions', function ($q) {
-                        $q->selectRaw('SUM(amount) as total_points')
-                          ->where('transaction_type', 12)
-                          ->groupBy('user_id')
-                          ->havingRaw('SUM(amount) >= 100000');
-                    });
-                    break;
+            //     case 4: // Premium
+            //         $model->whereHas('walletTransactions', function ($q) {
+            //             $q->selectRaw('SUM(amount) as total_points')
+            //               ->where('transaction_type', 12)
+            //               ->groupBy('user_id')
+            //               ->havingRaw('SUM(amount) >= 100000');
+            //         });
+            //         break;
         
-                default:
-                    // No rank filter
-                    break;
-            }
+            //     default:
+            //         // No rank filter
+            //         break;
+            // }
         }
         
         return [
