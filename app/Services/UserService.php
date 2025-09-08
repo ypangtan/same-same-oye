@@ -288,8 +288,7 @@ class UserService
             ] );
 
             $model->where(function ($query) use ( $rank ) {
-                $query->whereHas('walletTransactions.invoice' )
-                ->withSum(['walletTransactions as total_spending' => function ($q) {
+                $query->withSum(['walletTransactions as total_spending' => function ($q) {
                     $q->where('transaction_type', 12)
                     ->whereHas('invoice')
                     ->join('invoices', 'wallet_transactions.invoice_id', '=', 'invoices.id')
