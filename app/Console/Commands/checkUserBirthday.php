@@ -93,7 +93,7 @@ class checkUserBirthday extends Command
                             $createUserVoucher = UserVoucher::create( [
                                 'user_id' => $user->id, 
                                 'voucher_id' => $voucher->id,
-                                'expired_date' => $endMonth,
+                                'expired_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->endOfMonth(),
                                 'total_left' => 1,
                             ] );
                         }
