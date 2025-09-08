@@ -283,7 +283,6 @@ class UserService
         if ( !empty( $request->rank ) ) {
             $rank = $request->rank;
             $rank = Rank::find( $rank );
-            dd( $rank );
             $rank->append( [
                 'target_range'
             ] );
