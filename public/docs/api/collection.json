@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "138bf3ac-dee2-4815-b7f3-dd89f556a5a0",
+        "_postman_id": "d6104cd8-b3f1-475e-a52e-1cea88ccc23d",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -19,6 +19,58 @@
             "name": "Announcement API",
             "description": "",
             "item": [
+                {
+                    "name": "3. Get all pop announcements",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/pop_announcements",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/pop_announcements"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                },
                 {
                     "name": "1. Get announcements",
                     "request": {
@@ -382,64 +434,6 @@
                         }
                     },
                     "response": []
-                }
-            ]
-        },
-        {
-            "name": "Endpoints",
-            "description": "",
-            "item": [
-                {
-                    "name": "api\/v1\/pop_announcements",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/pop_announcements",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/pop_announcements"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "location",
-                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                },
-                                {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
-                                }
-                            ],
-                            "code": 302,
-                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
-                            "name": ""
-                        }
-                    ]
                 }
             ]
         },
@@ -1093,7 +1087,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"et\",\"app_id\":\"esse\",\"api_key\":\"molestiae\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"iure\",\"app_id\":\"maiores\",\"api_key\":\"qui\"}"
                         },
                         "description": ""
                     },

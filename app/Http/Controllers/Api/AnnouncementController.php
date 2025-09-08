@@ -99,7 +99,7 @@ class AnnouncementController extends Controller
 
     }
 
-    /*
+    /**
      * 3. Get all pop announcements 
      * 
      * @group Announcement API

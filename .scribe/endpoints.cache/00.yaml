@@ -6,6 +6,44 @@ endpoints:
   -
     httpMethods:
       - GET
+    uri: api/v1/pop_announcements
+    metadata:
+      title: '3. Get all pop announcements'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
+
+                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'https://staging.ifei.com.my/backoffice/dashboard'
+          content-type: 'text/html; charset=utf-8'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - GET
     uri: api/v1/announcements
     metadata:
       title: '1. Get announcements'
