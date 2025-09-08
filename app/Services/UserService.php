@@ -291,11 +291,18 @@ class UserService
                 $query->whereHas('walletTransactions', function ($q) use ( $rank ) {
                     $q->selectRaw('SUM(amount) as total_points')
                         ->where('transaction_type', 12)
-                        ->groupBy('user_id')
-                        ->havingRaw(
-                            'SUM(amount) >= ? AND SUM(amount) < ?',
-                            [$rank->target_spending, $rank->target_range]
-                        );
+                        ->groupBy('user_id');
+                        
+                        if (is_null($rank->target_range)) {
+                            // No upper limit
+                            $q->havingRaw('SUM(amount) >= ?', [$rank->target_spending]);
+                        } else {
+                            // Bounded range
+                            $q->havingRaw(
+                                'SUM(amount) >= ? AND SUM(amount) < ?',
+                                [$rank->target_spending, $rank->target_range]
+                            );
+                        }
                 })
                 ->orWhereDoesntHave('walletTransactions', function ($q) {
                     $q->where('transaction_type', 12);
