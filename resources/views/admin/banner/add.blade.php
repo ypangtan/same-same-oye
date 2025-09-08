@@ -67,6 +67,7 @@
 <div class="card">
     <div class="card-inner">
         <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
+        @can( 'add banners' )
         <div class="mb-3">
             <label>{{ __( 'banner.image' ) }}</label>
             <div class="dropzone mb-3" id="{{ $banner_create }}_image" style="min-height: 0px;">
@@ -76,12 +77,14 @@
             </div>
             <div class="invalid-feedback"></div>
         </div>
+        @endcan
         <ul id="banner-list" class="list-group">
             @foreach($banners as $banner)
                 <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="{{ $banner->id }}">
                     <img src="{{ asset('storage/' . $banner->image) }}" class="banner-img rounded">
         
                     <!-- Dropdown -->
+                    @can( 'edit banners' )
                     <div class="dropdown mt-2">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <em class="icon ni ni-more-h"></em>
@@ -95,6 +98,7 @@
                             </li>
                         </ul>
                     </div>
+                    @endcan
                 </li>
             @endforeach
         </ul>
