@@ -293,7 +293,7 @@ class UserService
                         ->where('transaction_type', 12)
                         ->groupBy('user_id');
                         
-                        if (is_null($rank->target_range)) {
+                        if ( $rank->target_range === null ) {
                             // No upper limit
                             $q->havingRaw('SUM(amount) >= ?', [$rank->target_spending]);
                         } else {
