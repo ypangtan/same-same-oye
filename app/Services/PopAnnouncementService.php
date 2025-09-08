@@ -278,7 +278,7 @@ class PopAnnouncementService
         return response()->json( $data );
     }
 
-    public static function getAllPopAnnouncements( ) {
+    public static function getAllPopAnnouncements() {
         $rank = PopAnnouncement::where( 'status', '10' )->get();
 
         $rank->append( [

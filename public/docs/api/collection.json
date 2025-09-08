@@ -10,11 +10,48 @@
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "f1a19fab-8f54-49d9-80c5-fcc06d956916",
+        "_postman_id": "29696f9f-2907-4543-a0da-7f86c33efdc4",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
+        {
+            "name": "Contact-Us API",
+            "description": "",
+            "item": [
+                {
+                    "name": "1. Enquiry Mail",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/contact-us",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/contact-us"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"fullname\":\"John Wick\",\"email\":\"johnwick@gmail.com\",\"phone_number\":\"012342123\",\"message\":\"lorem ipsum..\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
         {
             "name": "Announcement API",
             "description": "",
@@ -349,43 +386,6 @@
             ]
         },
         {
-            "name": "Contact-Us API",
-            "description": "",
-            "item": [
-                {
-                    "name": "1. Enquiry Mail",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/contact-us",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/contact-us"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"fullname\":\"John Wick\",\"email\":\"johnwick@gmail.com\",\"phone_number\":\"012342123\",\"message\":\"lorem ipsum..\"}"
-                        },
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
-                }
-            ]
-        },
-        {
             "name": "Lucky Draw Reward API",
             "description": "",
             "item": [
@@ -709,68 +709,6 @@
             "description": "",
             "item": [
                 {
-                    "name": "1. Create an user",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/users",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/users"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"identifier\":\"eyJpdiI...\",\"phone_number\":\"0123982334\",\"calling_code\":\"+60\",\"otp_code\":\"123456\",\"password\":\"abcd1234\",\"password_confirmation\":\"abcd1234\",\"invitation_code\":\"AASSCC\",\"device_type\":1,\"register_token\":\"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"}"
-                        },
-                        "description": "<strong>device_type<\/strong><br>\n1: iOS<br>\n2: Android<br>",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "2. Login an user - Email",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/users\/login",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/users\/login"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"phone_number\":\"0123982334\",\"calling_code\":\"+60\",\"password\":\"abcd1234\",\"device_type\":1,\"register_token\":\"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"}"
-                        },
-                        "description": "<strong>device_type<\/strong><br>\n1: iOS<br>\n2: Android<br>",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
-                },
-                {
                     "name": "6. Get user",
                     "request": {
                         "url": {
@@ -818,130 +756,6 @@
                             "name": ""
                         }
                     ]
-                },
-                {
-                    "name": "4. Request an OTP",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/otp",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/otp"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"phone_number\":\"0123982334\",\"calling_code\":\"+60\",\"request_type\":1}"
-                        },
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "5. Resend an OTP",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/otp\/resend",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/otp\/resend"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"identifier\":\"eyJpdiI...\",\"phone_number\":\"0123982334\",\"request_type\":2}"
-                        },
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "10. Reset Password",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/users\/reset-password",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/users\/reset-password"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"phone_number\":\"0123982334\",\"identifier\":\"WLnvrJw6YYK\",\"otp_code\":\"123456\",\"password\":\"abcd1234\",\"password_confirmation\":\"abcd1234\"}"
-                        },
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
-                },
-                {
-                    "name": "9. Forgot Password (Request Otp)",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/users\/forgot-password",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/users\/forgot-password"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"phone_number\":\"0123982334\",\"calling_code\":\"+60\"}"
-                        },
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
                 },
                 {
                     "name": "11. Delete Verification",
@@ -1172,37 +986,6 @@
                     "response": []
                 },
                 {
-                    "name": "3. Login an user - Social",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/users\/login-social",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/users\/login-social"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"identifier\":\"ifei@mail.com\",\"platform\":\"1\",\"email\":\"ifei@mail.com\",\"device_type\":1,\"register_token\":\"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"}"
-                        },
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
-                },
-                {
                     "name": "8. Update user password",
                     "request": {
                         "url": {
@@ -1252,9 +1035,226 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"consectetur\",\"app_id\":\"aliquid\",\"api_key\":\"commodi\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"eos\",\"app_id\":\"enim\",\"api_key\":\"dolores\"}"
                         },
                         "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "4. Request an OTP",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/otp",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/otp"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"phone_number\":\"0123982334\",\"calling_code\":\"+60\",\"request_type\":1}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "5. Resend an OTP",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/otp\/resend",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/otp\/resend"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"identifier\":\"eyJpdiI...\",\"phone_number\":\"0123982334\",\"request_type\":2}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "1. Create an user",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/users",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/users"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"identifier\":\"eyJpdiI...\",\"phone_number\":\"0123982334\",\"calling_code\":\"+60\",\"otp_code\":\"123456\",\"password\":\"abcd1234\",\"password_confirmation\":\"abcd1234\",\"invitation_code\":\"AASSCC\",\"device_type\":1,\"register_token\":\"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"}"
+                        },
+                        "description": "<strong>device_type<\/strong><br>\n1: iOS<br>\n2: Android<br>",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "2. Login an user - Email",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/users\/login",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/users\/login"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"phone_number\":\"0123982334\",\"calling_code\":\"+60\",\"password\":\"abcd1234\",\"device_type\":1,\"register_token\":\"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"}"
+                        },
+                        "description": "<strong>device_type<\/strong><br>\n1: iOS<br>\n2: Android<br>",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "3. Login an user - Social",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/users\/login-social",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/users\/login-social"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"identifier\":\"ifei@mail.com\",\"platform\":\"1\",\"email\":\"ifei@mail.com\",\"device_type\":1,\"register_token\":\"45ab6cc6-bcaa-461e-af5d-ea402e5b93da\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "9. Forgot Password (Request Otp)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/users\/forgot-password",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/users\/forgot-password"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"phone_number\":\"0123982334\",\"calling_code\":\"+60\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "10. Reset Password",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/users\/reset-password",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/users\/reset-password"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"phone_number\":\"0123982334\",\"identifier\":\"WLnvrJw6YYK\",\"otp_code\":\"123456\",\"password\":\"abcd1234\",\"password_confirmation\":\"abcd1234\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
                     },
                     "response": []
                 }

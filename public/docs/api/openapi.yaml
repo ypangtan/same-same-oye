@@ -7,6 +7,56 @@ servers:
   -
     url: 'https://staging.ifei.com.my'
 paths:
+  /api/v1/contact-us:
+    post:
+      summary: '1. Enquiry Mail'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Contact-Us API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                  description: 'The fullname for contact us enquiry.'
+                  example: 'John Wick'
+                email:
+                  type: string
+                  description: 'The email for contact us enquiry.'
+                  example: johnwick@gmail.com
+                phone_number:
+                  type: string
+                  description: 'The phone_number for contact us enquiry.'
+                  example: '012342123'
+                message:
+                  type: string
+                  description: 'The message for contact us enquiry.'
+                  example: 'lorem ipsum..'
+              required:
+                - email
+                - phone_number
+                - message
+      security: []
   /api/v1/announcements:
     get:
       summary: '1. Get announcements'
@@ -239,56 +289,6 @@ paths:
                 example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Check-in API'
-  /api/v1/contact-us:
-    post:
-      summary: '1. Enquiry Mail'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Contact-Us API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                fullname:
-                  type: string
-                  description: 'The fullname for contact us enquiry.'
-                  example: 'John Wick'
-                email:
-                  type: string
-                  description: 'The email for contact us enquiry.'
-                  example: johnwick@gmail.com
-                phone_number:
-                  type: string
-                  description: 'The phone_number for contact us enquiry.'
-                  example: '012342123'
-                message:
-                  type: string
-                  description: 'The message for contact us enquiry.'
-                  example: 'lorem ipsum..'
-              required:
-                - email
-                - phone_number
-                - message
-      security: []
   /api/v1/lucky-draw-rewards:
     get:
       summary: '1. Search Lucky Draw Reward'
@@ -521,6 +521,34 @@ paths:
         - 'Rank API'
       security: []
   /api/v1/users:
+    get:
+      summary: '6. Get user'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'User API'
     post:
       summary: '1. Create an user'
       description: "<strong>device_type</strong><br>\n1: iOS<br>\n2: Android<br>"
@@ -592,275 +620,6 @@ paths:
                 - otp_code
                 - password
                 - password_confirmation
-      security: []
-    get:
-      summary: '6. Get user'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'User API'
-  /api/v1/users/login:
-    post:
-      summary: '2. Login an user - Email'
-      description: "<strong>device_type</strong><br>\n1: iOS<br>\n2: Android<br>"
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'User API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                phone_number:
-                  type: string
-                  description: 'The phone_number for login.'
-                  example: '0123982334'
-                calling_code:
-                  type: string
-                  description: 'The calling_code for register.'
-                  example: '+60'
-                password:
-                  type: string
-                  description: 'The password for login.'
-                  example: abcd1234
-                device_type:
-                  type: integer
-                  description: 'optional The device type required with register_token.'
-                  example: 1
-                register_token:
-                  type: string
-                  description: 'optional The device token to receive notification.'
-                  example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
-              required:
-                - phone_number
-                - calling_code
-                - password
-      security: []
-  /api/v1/otp:
-    post:
-      summary: '4. Request an OTP'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'User API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                phone_number:
-                  type: string
-                  description: 'The phone_number for register.'
-                  example: '0123982334'
-                calling_code:
-                  type: string
-                  description: 'optional The calling for register. ( Default +60 )'
-                  example: '+60'
-                request_type:
-                  type: integer
-                  description: 'The request type for OTP.'
-                  example: 1
-              required:
-                - phone_number
-                - request_type
-      security: []
-  /api/v1/otp/resend:
-    post:
-      summary: '5. Resend an OTP'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'User API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                identifier:
-                  type: string
-                  description: 'The temporary user ID during request OTP.'
-                  example: eyJpdiI...
-                phone_number:
-                  type: string
-                  description: 'The phone_number for login.'
-                  example: '0123982334'
-                request_type:
-                  type: integer
-                  description: 'The request type for OTP.'
-                  example: 2
-              required:
-                - identifier
-                - phone_number
-                - request_type
-      security: []
-  /api/v1/users/reset-password:
-    post:
-      summary: '10. Reset Password'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'User API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                phone_number:
-                  type: string
-                  description: 'The phone_number for login.'
-                  example: '0123982334'
-                identifier:
-                  type: string
-                  description: 'The unique_identifier from forgot password.'
-                  example: WLnvrJw6YYK
-                otp_code:
-                  type: string
-                  description: 'The otp code to verify password reset.'
-                  example: '123456'
-                password:
-                  type: string
-                  description: 'The new password to perform password reset.'
-                  example: abcd1234
-                password_confirmation:
-                  type: string
-                  description: 'The new password confirmation to perform password reset.'
-                  example: abcd1234
-              required:
-                - phone_number
-                - identifier
-                - password
-                - password_confirmation
-      security: []
-  /api/v1/users/forgot-password:
-    post:
-      summary: '9. Forgot Password (Request Otp)'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'User API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                phone_number:
-                  type: string
-                  description: 'The phone_number for login.'
-                  example: '0123982334'
-                calling_code:
-                  type: string
-                  description: 'The calling_code for register.'
-                  example: '+60'
-              required:
-                - phone_number
-                - calling_code
       security: []
   /api/v1/users/delete-verification:
     post:
@@ -1087,59 +846,6 @@ paths:
                   example: 5
               required:
                 - notification
-  /api/v1/users/login-social:
-    post:
-      summary: '3. Login an user - Social'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'User API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                identifier:
-                  type: string
-                  description: 'The email for social login.'
-                  example: ifei@mail.com
-                platform:
-                  type: interger
-                  description: 'The platform for login.'
-                  example: '1'
-                email:
-                  type: string
-                  description: 'optional The email for user social login.'
-                  example: ifei@mail.com
-                device_type:
-                  type: integer
-                  description: 'optional The device type required with register_token.'
-                  example: 1
-                register_token:
-                  type: string
-                  description: 'optional The device token to receive notification.'
-                  example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
-              required:
-                - identifier
-                - platform
-      security: []
   /api/v1/users/update-password:
     post:
       summary: '8. Update user password'
@@ -1225,15 +931,309 @@ paths:
                 register_token:
                   type: string
                   description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
-                  example: consectetur
+                  example: eos
                 app_id:
                   type: string
                   description: 'optional The one signal app id. ( Default will be following current settings ).'
-                  example: aliquid
+                  example: enim
                 api_key:
                   type: string
                   description: 'optional The one signal api_key ( Default will be following current settings ).'
-                  example: commodi
+                  example: dolores
+  /api/v1/otp:
+    post:
+      summary: '4. Request an OTP'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  type: string
+                  description: 'The phone_number for register.'
+                  example: '0123982334'
+                calling_code:
+                  type: string
+                  description: 'optional The calling for register. ( Default +60 )'
+                  example: '+60'
+                request_type:
+                  type: integer
+                  description: 'The request type for OTP.'
+                  example: 1
+              required:
+                - phone_number
+                - request_type
+      security: []
+  /api/v1/otp/resend:
+    post:
+      summary: '5. Resend an OTP'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: 'The temporary user ID during request OTP.'
+                  example: eyJpdiI...
+                phone_number:
+                  type: string
+                  description: 'The phone_number for login.'
+                  example: '0123982334'
+                request_type:
+                  type: integer
+                  description: 'The request type for OTP.'
+                  example: 2
+              required:
+                - identifier
+                - phone_number
+                - request_type
+      security: []
+  /api/v1/users/login:
+    post:
+      summary: '2. Login an user - Email'
+      description: "<strong>device_type</strong><br>\n1: iOS<br>\n2: Android<br>"
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  type: string
+                  description: 'The phone_number for login.'
+                  example: '0123982334'
+                calling_code:
+                  type: string
+                  description: 'The calling_code for register.'
+                  example: '+60'
+                password:
+                  type: string
+                  description: 'The password for login.'
+                  example: abcd1234
+                device_type:
+                  type: integer
+                  description: 'optional The device type required with register_token.'
+                  example: 1
+                register_token:
+                  type: string
+                  description: 'optional The device token to receive notification.'
+                  example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
+              required:
+                - phone_number
+                - calling_code
+                - password
+      security: []
+  /api/v1/users/login-social:
+    post:
+      summary: '3. Login an user - Social'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: 'The email for social login.'
+                  example: ifei@mail.com
+                platform:
+                  type: interger
+                  description: 'The platform for login.'
+                  example: '1'
+                email:
+                  type: string
+                  description: 'optional The email for user social login.'
+                  example: ifei@mail.com
+                device_type:
+                  type: integer
+                  description: 'optional The device type required with register_token.'
+                  example: 1
+                register_token:
+                  type: string
+                  description: 'optional The device token to receive notification.'
+                  example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
+              required:
+                - identifier
+                - platform
+      security: []
+  /api/v1/users/forgot-password:
+    post:
+      summary: '9. Forgot Password (Request Otp)'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  type: string
+                  description: 'The phone_number for login.'
+                  example: '0123982334'
+                calling_code:
+                  type: string
+                  description: 'The calling_code for register.'
+                  example: '+60'
+              required:
+                - phone_number
+                - calling_code
+      security: []
+  /api/v1/users/reset-password:
+    post:
+      summary: '10. Reset Password'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  type: string
+                  description: 'The phone_number for login.'
+                  example: '0123982334'
+                identifier:
+                  type: string
+                  description: 'The unique_identifier from forgot password.'
+                  example: WLnvrJw6YYK
+                otp_code:
+                  type: string
+                  description: 'The otp code to verify password reset.'
+                  example: '123456'
+                password:
+                  type: string
+                  description: 'The new password to perform password reset.'
+                  example: abcd1234
+                password_confirmation:
+                  type: string
+                  description: 'The new password confirmation to perform password reset.'
+                  example: abcd1234
+              required:
+                - phone_number
+                - identifier
+                - password
+                - password_confirmation
+      security: []
   /api/v1/vouchers:
     get:
       summary: '1. Get vouchers'
@@ -1358,6 +1358,9 @@ paths:
                   example: '1'
 tags:
   -
+    name: 'Contact-Us API'
+    description: ''
+  -
     name: 'Announcement API'
     description: ''
   -
@@ -1365,9 +1368,6 @@ tags:
     description: ''
   -
     name: 'Check-in API'
-    description: ''
-  -
-    name: 'Contact-Us API'
     description: ''
   -
     name: 'Lucky Draw Reward API'

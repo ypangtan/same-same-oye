@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\{
 
 use App\Services\{
     AnnouncementService,
+    PopAnnouncementService,
     VoucherService
 };
 
@@ -96,6 +97,21 @@ class AnnouncementController extends Controller
         }
 
 
+    }
+
+    /*
+     * 3. Get pop announcements 
+     * 
+     * <aside class="notice">Get all pop announcement filtered</aside>
+     * 
+     * @authenticated
+     * 
+     * @group Announcement API
+     * 
+     */
+    public function getAllPopAnnouncements( Request $request ) {
+
+        return PopAnnouncementService::getAllPopAnnouncements( $request );
     }
 
 }
