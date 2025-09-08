@@ -295,8 +295,8 @@ class UserService
                     ->selectRaw('COALESCE(SUM(invoices.total_price),0)');
                 }], 'total_spending')
                 ->having('total_spending', '>=', $rank->target_spending)
-                ->when(!is_null($rank->target_range), function ($q) use ($rank) {
-                    $q->having('total_spending', '<=', $rank->target_range);
+                ->when( $rank->target_range != null, function ($q) use ($rank) {
+                    $q->having('total_spending', '<', $rank->target_range);
                 });
             });
             $filter = true;
