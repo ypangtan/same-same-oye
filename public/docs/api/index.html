@@ -70,16 +70,6 @@
                                                 </ul>
                     
                     <ul id="tocify-header-2" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="endpoints">
-                    <a href="#endpoints">Endpoints</a>
-                </li>
-                                    <ul id="tocify-subheader-endpoints" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-pop_announcements-get-all-pop-announcements">
-                        <a href="#endpoints-GETapi-v1-pop_announcements-get-all-pop-announcements">GET api/v1/pop_announcements/get-all-pop-announcements</a>
-                    </li>
-                                                    </ul>
-                            </ul>
-                    <ul id="tocify-header-3" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="announcement-api">
                     <a href="#announcement-api">Announcement API</a>
                 </li>
@@ -92,7 +82,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-4" class="tocify-header">
+                    <ul id="tocify-header-3" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="banner-api">
                     <a href="#banner-api">Banner API</a>
                 </li>
@@ -105,7 +95,7 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-5" class="tocify-header">
+                    <ul id="tocify-header-4" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="check-in-api">
                     <a href="#check-in-api">Check-in API</a>
                 </li>
@@ -121,13 +111,23 @@
                     </li>
                                                     </ul>
                             </ul>
-                    <ul id="tocify-header-6" class="tocify-header">
+                    <ul id="tocify-header-5" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="contact-us-api">
                     <a href="#contact-us-api">Contact-Us API</a>
                 </li>
                                     <ul id="tocify-subheader-contact-us-api" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="contact-us-api-POSTapi-v1-contact-us">
                         <a href="#contact-us-api-POSTapi-v1-contact-us">1. Enquiry Mail</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+                    <ul id="tocify-header-6" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="endpoints">
+                    <a href="#endpoints">Endpoints</a>
+                </li>
+                                    <ul id="tocify-subheader-endpoints" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-pop_announcements-get-all-pop-announcements">
+                        <a href="#endpoints-GETapi-v1-pop_announcements-get-all-pop-announcements">GET api/v1/pop_announcements/get-all-pop-announcements</a>
                     </li>
                                                     </ul>
                             </ul>
@@ -263,115 +263,6 @@ You can switch the language used with the tabs at the top right (or from the nav
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>This API is not authenticated.</p>
-
-        <h1 id="endpoints">Endpoints</h1>
-
-    
-
-            <h2 id="endpoints-GETapi-v1-pop_announcements-get-all-pop-announcements">GET api/v1/pop_announcements/get-all-pop-announcements</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-pop_announcements-get-all-pop-announcements">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "https://staging.ifei.com.my/api/v1/pop_announcements/get-all-pop-announcements" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "https://staging.ifei.com.my/api/v1/pop_announcements/get-all-pop-announcements"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-pop_announcements-get-all-pop-announcements">
-            <blockquote>
-            <p>Example response (302):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary>
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-location: https://staging.ifei.com.my/backoffice/dashboard
-content-type: text/html; charset=utf-8
-access-control-allow-origin: *
- </code></pre>
-        </details>         <pre>
-
-<code class="language-json">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot; /&gt;
-        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
-
-        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
-    &lt;/body&gt;
-&lt;/html&gt;</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-pop_announcements-get-all-pop-announcements" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-pop_announcements-get-all-pop-announcements"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-pop_announcements-get-all-pop-announcements"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-pop_announcements-get-all-pop-announcements" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-pop_announcements-get-all-pop-announcements"></code></pre>
-</span>
-<form id="form-GETapi-v1-pop_announcements-get-all-pop-announcements" data-method="GET"
-      data-path="api/v1/pop_announcements/get-all-pop-announcements"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-pop_announcements-get-all-pop-announcements', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-pop_announcements-get-all-pop-announcements"
-                    onclick="tryItOut('GETapi-v1-pop_announcements-get-all-pop-announcements');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-pop_announcements-get-all-pop-announcements"
-                    onclick="cancelTryOut('GETapi-v1-pop_announcements-get-all-pop-announcements');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-pop_announcements-get-all-pop-announcements" hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/pop_announcements/get-all-pop-announcements</code></b>
-        </p>
-                    </form>
 
         <h1 id="announcement-api">Announcement API</h1>
 
@@ -1360,6 +1251,115 @@ fetch(url, {
 <p>The message for contact us enquiry.</p>
         </p>
         </form>
+
+        <h1 id="endpoints">Endpoints</h1>
+
+    
+
+            <h2 id="endpoints-GETapi-v1-pop_announcements-get-all-pop-announcements">GET api/v1/pop_announcements/get-all-pop-announcements</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-pop_announcements-get-all-pop-announcements">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://staging.ifei.com.my/api/v1/pop_announcements/get-all-pop-announcements" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://staging.ifei.com.my/api/v1/pop_announcements/get-all-pop-announcements"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-pop_announcements-get-all-pop-announcements">
+            <blockquote>
+            <p>Example response (302):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary>
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+location: https://staging.ifei.com.my/backoffice/dashboard
+content-type: text/html; charset=utf-8
+access-control-allow-origin: *
+ </code></pre>
+        </details>         <pre>
+
+<code class="language-json">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot; /&gt;
+        &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=&#039;https://staging.ifei.com.my/backoffice/dashboard&#039;&quot; /&gt;
+
+        &lt;title&gt;Redirecting to https://staging.ifei.com.my/backoffice/dashboard&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Redirecting to &lt;a href=&quot;https://staging.ifei.com.my/backoffice/dashboard&quot;&gt;https://staging.ifei.com.my/backoffice/dashboard&lt;/a&gt;.
+    &lt;/body&gt;
+&lt;/html&gt;</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-pop_announcements-get-all-pop-announcements" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-pop_announcements-get-all-pop-announcements"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-pop_announcements-get-all-pop-announcements"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-pop_announcements-get-all-pop-announcements" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-pop_announcements-get-all-pop-announcements"></code></pre>
+</span>
+<form id="form-GETapi-v1-pop_announcements-get-all-pop-announcements" data-method="GET"
+      data-path="api/v1/pop_announcements/get-all-pop-announcements"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-pop_announcements-get-all-pop-announcements', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-pop_announcements-get-all-pop-announcements"
+                    onclick="tryItOut('GETapi-v1-pop_announcements-get-all-pop-announcements');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-pop_announcements-get-all-pop-announcements"
+                    onclick="cancelTryOut('GETapi-v1-pop_announcements-get-all-pop-announcements');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-pop_announcements-get-all-pop-announcements" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/pop_announcements/get-all-pop-announcements</code></b>
+        </p>
+                    </form>
 
         <h1 id="lucky-draw-reward-api">Lucky Draw Reward API</h1>
 
@@ -2471,7 +2471,7 @@ fetch(url, {
     --form "date_of_birth=2022-01-01" \
     --form "to_remove=1" \
     --form "invitation_code=abcdef" \
-    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\php53F5.tmp" </code></pre></div>
+    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\phpF41.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3047,9 +3047,9 @@ fetch(url, {
     --data "{
     \"title\": \"test-notification\",
     \"content\": \"test-notification-content\",
-    \"register_token\": \"voluptas\",
-    \"app_id\": \"at\",
-    \"api_key\": \"illum\"
+    \"register_token\": \"commodi\",
+    \"app_id\": \"officia\",
+    \"api_key\": \"at\"
 }"
 </code></pre></div>
 
@@ -3067,9 +3067,9 @@ const headers = {
 let body = {
     "title": "test-notification",
     "content": "test-notification-content",
-    "register_token": "voluptas",
-    "app_id": "at",
-    "api_key": "illum"
+    "register_token": "commodi",
+    "app_id": "officia",
+    "api_key": "at"
 };
 
 fetch(url, {
@@ -3155,7 +3155,7 @@ fetch(url, {
                 <input type="text"
                name="register_token"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="voluptas"
+               value="commodi"
                data-component="body" hidden>
     <br>
 <p>optional The target device token. ( Default will be following current authenticated user's register token ).</p>
@@ -3165,7 +3165,7 @@ fetch(url, {
                 <input type="text"
                name="app_id"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="at"
+               value="officia"
                data-component="body" hidden>
     <br>
 <p>optional The one signal app id. ( Default will be following current settings ).</p>
@@ -3175,7 +3175,7 @@ fetch(url, {
                 <input type="text"
                name="api_key"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="illum"
+               value="at"
                data-component="body" hidden>
     <br>
 <p>optional The one signal api_key ( Default will be following current settings ).</p>

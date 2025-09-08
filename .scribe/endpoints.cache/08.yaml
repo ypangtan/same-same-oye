@@ -319,21 +319,21 @@ endpoints:
         name: register_token
         description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
         required: false
-        example: voluptas
+        example: commodi
         type: string
         custom: []
       app_id:
         name: app_id
         description: 'optional The one signal app id. ( Default will be following current settings ).'
         required: false
-        example: at
+        example: officia
         type: string
         custom: []
       api_key:
         name: api_key
         description: 'optional The one signal api_key ( Default will be following current settings ).'
         required: false
-        example: illum
+        example: at
         type: string
         custom: []
     responses: []

@@ -102,10 +102,6 @@ class AnnouncementController extends Controller
     /*
      * 3. Get pop announcements 
      * 
-     * <aside class="notice">Get all pop announcement filtered</aside>
-     * 
-     * @authenticated
-     * 
      * @group Announcement API
      * 
      */

@@ -7,36 +7,6 @@ servers:
   -
     url: 'https://staging.ifei.com.my'
 paths:
-  /api/v1/pop_announcements/get-all-pop-announcements:
-    get:
-      summary: ''
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - Endpoints
-      security: []
   /api/v1/announcements:
     get:
       summary: '1. Get announcements'
@@ -318,6 +288,36 @@ paths:
                 - email
                 - phone_number
                 - message
+      security: []
+  /api/v1/pop_announcements/get-all-pop-announcements:
+    get:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - Endpoints
       security: []
   /api/v1/lucky-draw-rewards:
     get:
@@ -961,15 +961,15 @@ paths:
                 register_token:
                   type: string
                   description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
-                  example: voluptas
+                  example: commodi
                 app_id:
                   type: string
                   description: 'optional The one signal app id. ( Default will be following current settings ).'
-                  example: at
+                  example: officia
                 api_key:
                   type: string
                   description: 'optional The one signal api_key ( Default will be following current settings ).'
-                  example: illum
+                  example: at
   /api/v1/otp:
     post:
       summary: '4. Request an OTP'
@@ -1388,9 +1388,6 @@ paths:
                   example: '1'
 tags:
   -
-    name: Endpoints
-    description: ''
-  -
     name: 'Announcement API'
     description: ''
   -
@@ -1401,6 +1398,9 @@ tags:
     description: ''
   -
     name: 'Contact-Us API'
+    description: ''
+  -
+    name: Endpoints
     description: ''
   -
     name: 'Lucky Draw Reward API'
