@@ -61,5 +61,5 @@ return [
     // 'topup_failed_content' => 'Topup Failed! Please Try Again',
 
     'user_birthday' => '🎉 Happy Birthday! 🎉',
-    'user_birthday_content' => 'Wishing you a year filled with love, light, and endless happiness.<br>Thank you for being part of our journey — you make us shine brighter. 💖<br>With warm wishes,<br>I Fei & I BEAUTE ✨',
+    'user_birthday_content' => 'Wishing you a year filled with love, light, and endless happiness.<br>Thank you for being part of our journey — you make us shine brighter. 💖<br><br>With warm wishes,<br>I Fei & I BEAUTE ✨',
 ];
