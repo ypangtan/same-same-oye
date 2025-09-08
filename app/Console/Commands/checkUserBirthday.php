@@ -107,7 +107,7 @@ class checkUserBirthday extends Command
                         ] );
                     }
 
-                    $user->last_give_birthday_gift = $startMonth;
+                    $user->last_give_birthday_gift = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->startOfMonth();
                     $user->save();
 
                     UserService::createUserNotification(
