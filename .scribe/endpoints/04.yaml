@@ -4,7 +4,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/pop_announcements/get-all-pop-announcements
+    uri: api/v1/pop_announcements
     metadata:
       title: ''
       description: ''

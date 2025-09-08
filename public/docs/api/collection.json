@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "349abb54-6821-47a8-bbba-a854d1721e6a",
+        "_postman_id": "138bf3ac-dee2-4815-b7f3-dd89f556a5a0",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -390,13 +390,13 @@
             "description": "",
             "item": [
                 {
-                    "name": "api\/v1\/pop_announcements\/get-all-pop-announcements",
+                    "name": "api\/v1\/pop_announcements",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/pop_announcements\/get-all-pop-announcements",
+                            "path": "api\/v1\/pop_announcements",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/pop_announcements\/get-all-pop-announcements"
+                            "raw": "{{baseUrl}}\/api\/v1\/pop_announcements"
                         },
                         "method": "GET",
                         "header": [
@@ -1093,7 +1093,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"commodi\",\"app_id\":\"officia\",\"api_key\":\"at\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"et\",\"app_id\":\"esse\",\"api_key\":\"molestiae\"}"
                         },
                         "description": ""
                     },

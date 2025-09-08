@@ -289,7 +289,7 @@ paths:
                 - phone_number
                 - message
       security: []
-  /api/v1/pop_announcements/get-all-pop-announcements:
+  /api/v1/pop_announcements:
     get:
       summary: ''
       description: ''
@@ -961,15 +961,15 @@ paths:
                 register_token:
                   type: string
                   description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
-                  example: commodi
+                  example: et
                 app_id:
                   type: string
                   description: 'optional The one signal app id. ( Default will be following current settings ).'
-                  example: officia
+                  example: esse
                 api_key:
                   type: string
                   description: 'optional The one signal api_key ( Default will be following current settings ).'
-                  example: at
+                  example: molestiae
   /api/v1/otp:
     post:
       summary: '4. Request an OTP'

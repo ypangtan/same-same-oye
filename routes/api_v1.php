@@ -66,7 +66,7 @@ Route::prefix( 'ranks' )->group( function() {
 } );
 
 Route::prefix( 'pop_announcements' )->group( function() {
-    Route::get( '/get-all-pop-announcements', [ AnnouncementController::class, 'getAllPopAnnouncements' ] );
+    Route::get( '/', [ AnnouncementController::class, 'getAllPopAnnouncements' ] );
 } );
 
 /* End Public route */
