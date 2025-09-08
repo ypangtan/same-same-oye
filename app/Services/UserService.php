@@ -290,14 +290,15 @@ class UserService
             $model->withSum([
                 'walletTransactions as total_spending' => function ($q) {
                     $q->where('transaction_type', 12)
-                        ->join('sales_records', 'wallet_transactions.invoice_id', '=', 'sales_records.id');
+                        ->leftJoin('sales_records', 'wallet_transactions.invoice_id', '=', 'sales_records.id');
                 }
             ], 'sales_records.total_price')
-            ->havingRaw('total_spending >= ?', [$rank->target_spending])
+            ->havingRaw('COALESCE(total_spending, 0) >= ?', [$rank->target_spending])
             ->when($rank->target_range != null, function ($q) use ($rank) {
-                $q->havingRaw('total_spending < ?', [$rank->target_range]);
+                $q->havingRaw('COALESCE(total_spending, 0) < ?', [$rank->target_range]);
             });
             $filter = true;
+            
             // switch ( $request->rank ) {
         
 
