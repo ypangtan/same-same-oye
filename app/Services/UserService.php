@@ -289,9 +289,7 @@ class UserService
 
             $model->withSum(['walletTransactions as total_spending' => function ($q) {
                 $q->where('transaction_type', 12)
-                ->whereHas('invoice')
-                ->join('invoices', 'wallet_transactions.invoice_id', '=', 'invoices.id')
-                ->selectRaw('COALESCE(SUM(invoices.total_price),0)');
+                ->selectRaw('COALESCE(SUM(wallet_transactions.amount),0)');
             }], 'total_spending')
             ->havingRaw('total_spending >= ?', [$rank->target_spending])
             ->when($rank->target_range != null, function ($q) use ($rank) {
