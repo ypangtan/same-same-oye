@@ -288,24 +288,16 @@ class UserService
             ] );
 
             $model->where(function ($query) use ( $rank ) {
-                $query->whereHas('walletTransactions', function ($q) use ( $rank ) {
-                    $q->selectRaw('SUM(amount) as total_points')
-                        ->where('transaction_type', 12)
-                        ->groupBy('user_id');
-                        
-                        if ( $rank->target_range === null ) {
-                            // No upper limit
-                            $q->havingRaw('SUM(amount) >= ?', [$rank->target_spending]);
-                        } else {
-                            // Bounded range
-                            $q->havingRaw(
-                                'SUM(amount) >= ? AND SUM(amount) < ?',
-                                [$rank->target_spending, $rank->target_range]
-                            );
-                        }
-                })
-                ->orWhereDoesntHave('walletTransactions', function ($q) {
-                    $q->where('transaction_type', 12);
+                $query->whereHas('walletTransactions.invoice' )
+                ->withSum(['walletTransactions as total_spending' => function ($q) {
+                    $q->where('transaction_type', 12)
+                    ->whereHas('invoice')
+                    ->join('invoices', 'wallet_transactions.invoice_id', '=', 'invoices.id')
+                    ->selectRaw('COALESCE(SUM(invoices.total_price),0)');
+                }], 'total_spending')
+                ->having('total_spending', '>=', $rank->target_spending)
+                ->when(!is_null($rank->target_range), function ($q) use ($rank) {
+                    $q->having('total_spending', '<=', $rank->target_range);
                 });
             });
             $filter = true;
