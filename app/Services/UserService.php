@@ -287,17 +287,15 @@ class UserService
                 'target_range'
             ] );
 
-            $model->where(function ($query) use ( $rank ) {
-                $query->withSum(['walletTransactions as total_spending' => function ($q) {
-                    $q->where('transaction_type', 12)
-                    ->whereHas('invoice')
-                    ->join('invoices', 'wallet_transactions.invoice_id', '=', 'invoices.id')
-                    ->selectRaw('COALESCE(SUM(invoices.total_price),0)');
-                }], 'total_spending')
-                ->having('total_spending', '>=', $rank->target_spending)
-                ->when( $rank->target_range != null, function ($q) use ($rank) {
-                    $q->having('total_spending', '<', $rank->target_range);
-                });
+            $model->withSum(['walletTransactions as total_spending' => function ($q) {
+                $q->where('transaction_type', 12)
+                ->whereHas('invoice')
+                ->join('invoices', 'wallet_transactions.invoice_id', '=', 'invoices.id')
+                ->selectRaw('COALESCE(SUM(invoices.total_price),0)');
+            }], 'total_spending')
+            ->havingRaw('total_spending >= ?', [$rank->target_spending])
+            ->when($rank->target_range != null, function ($q) use ($rank) {
+                $q->havingRaw('total_spending < ?', [$rank->target_range]);
             });
             $filter = true;
             // switch ( $request->rank ) {
