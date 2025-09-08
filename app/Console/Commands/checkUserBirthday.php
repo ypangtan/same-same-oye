@@ -50,9 +50,13 @@ class checkUserBirthday extends Command
         DB::beginTransaction();
 
         try {
-            $startMonth = now()->timezone( 'Asia/Kuala_Lumpur' )->startOfMonth()->format( 'Y-m-d' );
-            $endMonth = now()->timezone( 'Asia/Kuala_Lumpur' )->endOfMonth()->format( 'Y-m-d' );
-            $users = User::where( 'status', 10 )->wherebetween( 'date_of_birth', [ $startMonth, $endMonth ] )->get();
+            $startMonth = now()->timezone( 'Asia/Kuala_Lumpur' )->startOfMonth()->format('m-d');
+            $endMonth = now()->timezone( 'Asia/Kuala_Lumpur' )->endOfMonth()->format('m-d');
+            $users = User::where( 'status', 10 )
+                ->whereRaw("DATE_FORMAT(date_of_birth, '%m-%d') BETWEEN ? AND ?", [
+                    $startMonth,
+                    $endMonth,
+                ])->get();
 
             foreach ( $users as $user ) {
                 $this->processUserChecking( $user->id, $startMonth, $endMonth, $isDryRun );
