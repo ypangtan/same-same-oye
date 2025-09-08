@@ -53,4 +53,7 @@ return [
     
     // 'topup_failed' => 'Topup Failed',
     // 'topup_failed_content' => 'Topup Failed! Please Try Again',
+    
+    'user_birthday' => '🎂✨ 生日快乐 ✨🎂 ',
+    'user_birthday_content' => '亲爱的，<br>在这个属于您的特别日子里，愿所有的美好都如期而至。感谢您一直以来对我们的支持与信任，您的陪伴是我们最珍贵的礼物。 <br> 祝您生日快乐，愿每一天都比昨天更灿烂！💝<br><br> —— I 妃 & I BEAUTE 诚挚祝福',
 ];
