@@ -369,16 +369,16 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             } );
 
             Route::prefix( 'sales-records' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view sales-records' ] ], function() {
+                Route::group( [ 'middleware' => [ 'permission:view sales_records' ] ], function() {
                     Route::get( '/', [ SalesRecordController::class, 'index' ] )->name( 'admin.module_parent.sales_record.index' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:add sales-records' ] ], function() {
+                Route::group( [ 'middleware' => [ 'permission:add sales_records' ] ], function() {
                     Route::get( 'add', [ SalesRecordController::class, 'add' ] )->name( 'admin.sales_record.add' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:edit sales-records' ] ], function() {
+                Route::group( [ 'middleware' => [ 'permission:edit sales_records' ] ], function() {
                     Route::get( 'edit', [ SalesRecordController::class, 'edit' ] )->name( 'admin.sales_record.edit' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:import sales-records' ] ], function() {
+                Route::group( [ 'middleware' => [ 'permission:import sales_records' ] ], function() {
                     Route::get( 'import', [ SalesRecordController::class, 'import' ] )->name( 'admin.sales_record.import' );
                 } );
     
