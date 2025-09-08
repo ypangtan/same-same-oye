@@ -10,25 +10,25 @@
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "29696f9f-2907-4543-a0da-7f86c33efdc4",
+        "_postman_id": "206351a3-db72-4ac4-8a9c-906904a9a466",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
         {
-            "name": "Contact-Us API",
+            "name": "Endpoints",
             "description": "",
             "item": [
                 {
-                    "name": "1. Enquiry Mail",
+                    "name": "api\/v1\/pop_announcements\/get-all-pop-announcements",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/contact-us",
+                            "path": "api\/v1\/pop_announcements\/get-all-pop-announcements",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/contact-us"
+                            "raw": "{{baseUrl}}\/api\/v1\/pop_announcements\/get-all-pop-announcements"
                         },
-                        "method": "POST",
+                        "method": "GET",
                         "header": [
                             {
                                 "key": "Content-Type",
@@ -39,16 +39,37 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"fullname\":\"John Wick\",\"email\":\"johnwick@gmail.com\",\"phone_number\":\"012342123\",\"message\":\"lorem ipsum..\"}"
-                        },
+                        "body": null,
                         "description": "",
                         "auth": {
                             "type": "noauth"
                         }
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
                 }
             ]
         },
@@ -382,6 +403,43 @@
                             "name": ""
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "name": "Contact-Us API",
+            "description": "",
+            "item": [
+                {
+                    "name": "1. Enquiry Mail",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/contact-us",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/contact-us"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"fullname\":\"John Wick\",\"email\":\"johnwick@gmail.com\",\"phone_number\":\"012342123\",\"message\":\"lorem ipsum..\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
                 }
             ]
         },
@@ -1035,7 +1093,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"eos\",\"app_id\":\"enim\",\"api_key\":\"dolores\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"voluptas\",\"app_id\":\"at\",\"api_key\":\"illum\"}"
                         },
                         "description": ""
                     },
