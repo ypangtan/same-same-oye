@@ -96,6 +96,12 @@ class AdministratorController extends Controller
             ],
         ];
 
+        $roles = [];
+        foreach( DB::table( 'roles' )->select( 'id', 'name' )->orderBy( 'id', 'ASC' )->get() as $role ) {
+            $roles[] = [ 'key' => $role->name, 'value' => $role->id, 'title' => __( 'role.' . $role->name ) ];
+        }
+        $this->data['data']['roles'] = $roles;
+        
         return view( 'admin.main' )->with( $this->data );
     }
 

@@ -59,9 +59,9 @@ $administrator_edit = 'administrator_edit';
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $administrator_edit }}_role">
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'administrator.role' ) ] ) }}</option>
-                            <option value="1">Super Admin</option>
-                            <option value="2">Admin</option>
-                            <option value="5">Vending Admin</option>
+                            @foreach( $data['roles'] as $role )
+                            <option value="{{ $role['value'] }}">{{ $role['title'] }}</option>
+                            @endforeach
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
