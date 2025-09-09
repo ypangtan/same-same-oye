@@ -1486,7 +1486,7 @@ class UserService
                 'updated_at',
             ] );
 
-            $user->append( ['total_accumulate_spending','current_rank','required_points', 'referral_code' ] );
+            $user->append( ['total_accumulate_spending','current_rank','required_points', 'referral_code', 'need_birthday_pop_announcement' ] );
 
             $user->profile_picture_path = $user->profile_picture_path_new;
             $user->profile_picture = $user->profile_picture_path_new;
@@ -2260,6 +2260,7 @@ class UserService
                             'voucher_id' => $voucher->id,
                             'expired_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subDays( $gift->expiry_day ),
                             'total_left' => 1,
+                            'type' => 3,
                             'secret_code' => strtoupper( \Str::random( 8 ) ),
                         ] );
                     }

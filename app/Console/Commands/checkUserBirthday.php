@@ -95,6 +95,7 @@ class checkUserBirthday extends Command
                                 'voucher_id' => $voucher->id,
                                 'expired_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->endOfMonth(),
                                 'total_left' => 1,
+                                'type' => 2,
                                 'secret_code' => strtoupper( \Str::random( 8 ) ),
                             ] );
                         }

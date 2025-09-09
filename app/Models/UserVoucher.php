@@ -27,6 +27,7 @@ class UserVoucher extends Model
         'total_left',
         'used_at',
         'secret_code',
+        'type',
     ];
 
     public function user()
@@ -89,6 +90,7 @@ class UserVoucher extends Model
         'total_left',
         'used_at',
         'secret_code',
+        'type',
     ];
 
     protected static $logName = 'user_vouchers';

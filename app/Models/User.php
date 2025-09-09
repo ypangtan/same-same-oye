@@ -177,6 +177,12 @@ class User extends Model
         // ];
     }
 
+    public function getNeedBirthdayPopAnnouncementAttribute() {
+        $voucher = UserVoucher::where( 'type', 2 )->exists();
+
+        return $voucher;
+    }
+
     public function referral() {
         return $this->hasOne( User::class, 'id', 'referral_id' );
     }
