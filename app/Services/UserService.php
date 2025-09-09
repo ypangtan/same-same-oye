@@ -1478,7 +1478,7 @@ class UserService
 
     public static function getUser( $request, $filterClientCode ) {
 
-        $user = User::find( auth()->user()->id );
+        $user = User::with( 'referral' )->find( auth()->user()->id );
 
         if ( $user ) {
             $user->makeHidden( [
@@ -1486,7 +1486,7 @@ class UserService
                 'updated_at',
             ] );
 
-            $user->append( ['total_accumulate_spending','current_rank','required_points',] );
+            $user->append( ['total_accumulate_spending','current_rank','required_points', 'referral_code' ] );
 
             $user->profile_picture_path = $user->profile_picture_path_new;
             $user->profile_picture = $user->profile_picture_path_new;

@@ -189,6 +189,12 @@ class User extends Model
         return $this->hasMany( UserSocial::class, 'user_id' );
     }
 
+    public function getReferralCodeAttribute() {
+        $referral = $this->referral->first();
+
+        return $referral ? $referral->invitation_code : null;
+    }
+
     public function getProfilePicturePathNewAttribute() {
         return $this->attributes['profile_picture'] ? asset( 'storage/' . $this->attributes['profile_picture'] ) : asset( 'admin/images/profile_image.png' ) . Helper::assetVersion();
     }
