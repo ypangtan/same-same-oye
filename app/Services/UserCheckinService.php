@@ -523,7 +523,7 @@ class UserCheckinService
         return response()->json([
             'message' => 'checkin_success',
             'message_key' => 'Check-in successful',
-            'data' => $userCheckin,
+            'data' => $reward,
         ]);
     }
     
@@ -565,10 +565,10 @@ class UserCheckinService
 
                     break;
             }
-            return "Reward of $reward->reward_type_label given!";
+            return $reward;
         }
     
-        return "-";
+        return null;
     }
     
     private static function sendNotification( $user, $key, $message ) {
