@@ -192,7 +192,7 @@ class User extends Model
     public function getReferralCodeAttribute() {
         $referral = $this->referral->first();
 
-        return $referral ? $referral->invitation_code : null;
+        return $referral ? ( $referral->invitation_code ?? '' ) : null;
     }
 
     public function getProfilePicturePathNewAttribute() {
