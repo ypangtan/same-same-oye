@@ -475,7 +475,7 @@ class SalesRecordService
                 : 1;
 
             WalletService::transact( $wallet, [
-                'amount' => Helper::calculatePoints( $salesRecord->total_price ),
+                'amount' => Helper::calculatePoints( $salesRecord->total_price, $user->id ),
                 'remark' => 'Points Redeemed',
                 'type' => $wallet->type,
                 'invoice_id' => $salesRecord->id,

@@ -18,6 +18,7 @@ use App\Models\{
     Module,
     Rank,
     Voucher,
+    WalletTransaction,
 };
 
 use Illuminate\Support\Facades\{
@@ -570,12 +571,22 @@ class Helper {
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
     
-    public static function calculatePoints( $amount )
+    public static function calculatePoints( $amount, $user_id )
     {
-        $rank = Rank::where( 'target_spending', '<=', $amount )
-            ->orderBy( 'priority', 'desc' )
+        $totalPoints = WalletTransaction::where( 'user_id', $user_id )
+        ->where('transaction_type', 12)
+        ->whereHas('invoice') // Ensure only transactions with invoices are counted
+        ->with('invoice')
+        ->get()
+        ->sum(function ($transaction) {
+            return $transaction->invoice->total_price ?? 0;
+        });
+
+        $rank = Rank::where('target_spending', '<=', $totalPoints)
+            ->where( 'status', 10 )
+            ->orderBy('priority', 'DESC')
             ->first();
-        
+
         $rate = $rank ? $rank->reward_value : 1;
 
         return  $amount * $rate;
