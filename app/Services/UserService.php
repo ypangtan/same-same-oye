@@ -2260,6 +2260,7 @@ class UserService
                             'voucher_id' => $voucher->id,
                             'expired_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subDays( $gift->expiry_day ),
                             'total_left' => 1,
+                            'secret_code' => strtoupper( \Str::random( 8 ) ),
                         ] );
                     }
                 } else {
