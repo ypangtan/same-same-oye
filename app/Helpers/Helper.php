@@ -16,6 +16,7 @@ use App\Models\{
     User,
     PresetPermission,
     Module,
+    Rank,
     Voucher,
 };
 
@@ -571,15 +572,11 @@ class Helper {
     
     public static function calculatePoints( $amount )
     {
-        if ( $amount >= 10000 ) {
-            $rate = 4;
-        } elseif ( $amount >= 1000 ) {
-            $rate = 2;
-        } elseif ( $amount >= 100 ) {
-            $rate = 1;
-        } else {
-            $rate = 1;
-        }
+        $rank = Rank::where( 'target_spending', '<=', $amount )
+            ->orderBy( 'priority', 'desc' )
+            ->first();
+        
+        $rate = $rank ? $rank->reward_value : 1;
 
         return  $amount * $rate;
     }

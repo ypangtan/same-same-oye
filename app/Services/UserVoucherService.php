@@ -112,7 +112,7 @@ class UserVoucherService
                         'status' => 10,
                         'total_left' => 1,
                         'used_at' => null,
-                        'secret_code' => null,
+                        'secret_code' => strtoupper( \Str::random( 8 ) ),
                         'expired_date' => Carbon::now()->addDays($voucher->validity_days),
                     ]);
 
