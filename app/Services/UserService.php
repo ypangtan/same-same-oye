@@ -1154,7 +1154,7 @@ class UserService
                 }
             } ],
             'password' => [ 'required', 'confirmed', Password::min( 8 ) ],
-            'invitation_code' => [ 'sometimes', 'exists:users,invitation_code' ],
+            'invitation_code' => [ 'nullable', 'exists:users,invitation_code' ],
             'register_token' => [ 'nullable' ],
             'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
@@ -1523,7 +1523,7 @@ class UserService
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
             'profile_picture' => [ 'nullable', 'file', 'max:30720', 'mimes:jpg,jpeg,png,heic' ],
-            'invitation_code' => [ 'sometimes', 'exists:users,invitation_code' ],
+            'invitation_code' => [ 'nullable', 'exists:users,invitation_code' ],
         ] );
 
         $attributeName = [
@@ -1687,26 +1687,35 @@ class UserService
         if ( $request->request_type == 1 ) {
     
             $validator = Validator::make( $request->all(), [
-                'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
+                'request_type' => [ 'required', 'in:1' ],
+                'calling_code' => [ 'nullable', 'exists:countries,calling_code' ],
+                'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) {
 
-                    if ( mb_substr( $value, 0, 1 ) == 0 ) {
-                        $value = mb_substr( $value, 1 );
-                    }
+                    $defaultCallingCode = "+60";
 
-                    $user = User::where( 'phone_number', $value )
-                        ->orWhere('phone_number', ltrim($value, '0'))
-                        ->first();
-
-                    if ( $user ) {
-                        $fail( __( 'validation.unique' ) );
+                    $exist = User::where( 'status', 10 )
+                    ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
+                    ->where( function ( $query ) use ( $value ) {
+                        $query->where( 'phone_number', request( 'phone_number' ) )
+                            ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                    } )
+                    ->first();
+                    
+                    if ( $exist ) {
+                        $fail( __( 'validation.exists' ) );
+                        return false;
                     }
                 } ],
-                'request_type' => [ 'required', 'in:1' ],
+                'password' => [ 'required', 'confirmed', Password::min( 8 ) ],
+                'invitation_code' => [ 'nullable', 'exists:users,invitation_code' ],
             ] );
     
             $attributeName = [
                 'phone_number' => __( 'user.phone_number' ),
                 'request_type' => __( 'user.request_type' ),
+                'password' => __( 'user.password' ),
+                'invitation_code' => __( 'user.invitation_code' ),
+                'calling_code' => __( 'user.calling_code' ),
             ];
     
             foreach ( $attributeName as $key => $aName ) {

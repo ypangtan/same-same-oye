@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "d6104cd8-b3f1-475e-a52e-1cea88ccc23d",
+        "_postman_id": "ed570a6f-cf9f-4ee1-a27b-6f1d4d878ae8",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1087,7 +1087,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"iure\",\"app_id\":\"maiores\",\"api_key\":\"qui\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"magnam\",\"app_id\":\"dolore\",\"api_key\":\"qui\"}"
                         },
                         "description": ""
                     },
@@ -1115,7 +1115,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"phone_number\":\"0123982334\",\"calling_code\":\"+60\",\"request_type\":1}"
+                            "raw": "{\"phone_number\":\"0123982334\",\"calling_code\":\"+60\",\"password\":\"abcd1234\",\"password_confirmation\":\"abcd1234\",\"invitation_code\":\"AASSCC\",\"request_type\":1}"
                         },
                         "description": "",
                         "auth": {

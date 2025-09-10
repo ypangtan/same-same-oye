@@ -117,6 +117,9 @@ class UserController extends Controller {
      * 
      * @bodyParam phone_number string required The phone_number for register. Example: 0123982334
      * @bodyParam calling_code string optional The calling for register. ( Default +60 ) Example: +60
+     * @bodyParam password string required The password for register. Example: abcd1234
+     * @bodyParam password_confirmation string required The confirmation password. Example: abcd1234
+     * @bodyParam invitation_code string The invitation code of referral. Example: AASSCC
      * @bodyParam request_type integer required The request type for OTP. Example: 1
      * 
      */

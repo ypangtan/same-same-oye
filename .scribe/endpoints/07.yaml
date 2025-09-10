@@ -317,14 +317,14 @@ endpoints:
         name: register_token
         description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
         required: false
-        example: iure
+        example: magnam
         type: string
         custom: []
       app_id:
         name: app_id
         description: 'optional The one signal app id. ( Default will be following current settings ).'
         required: false
-        example: maiores
+        example: dolore
         type: string
         custom: []
       api_key:
@@ -363,6 +363,27 @@ endpoints:
         description: 'optional The calling for register. ( Default +60 )'
         required: false
         example: '+60'
+        type: string
+        custom: []
+      password:
+        name: password
+        description: 'The password for register.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'The confirmation password.'
+        required: true
+        example: abcd1234
+        type: string
+        custom: []
+      invitation_code:
+        name: invitation_code
+        description: 'The invitation code of referral.'
+        required: false
+        example: AASSCC
         type: string
         custom: []
       request_type:

@@ -961,11 +961,11 @@ paths:
                 register_token:
                   type: string
                   description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
-                  example: iure
+                  example: magnam
                 app_id:
                   type: string
                   description: 'optional The one signal app id. ( Default will be following current settings ).'
-                  example: maiores
+                  example: dolore
                 api_key:
                   type: string
                   description: 'optional The one signal api_key ( Default will be following current settings ).'
@@ -1007,12 +1007,26 @@ paths:
                   type: string
                   description: 'optional The calling for register. ( Default +60 )'
                   example: '+60'
+                password:
+                  type: string
+                  description: 'The password for register.'
+                  example: abcd1234
+                password_confirmation:
+                  type: string
+                  description: 'The confirmation password.'
+                  example: abcd1234
+                invitation_code:
+                  type: string
+                  description: 'The invitation code of referral.'
+                  example: AASSCC
                 request_type:
                   type: integer
                   description: 'The request type for OTP.'
                   example: 1
               required:
                 - phone_number
+                - password
+                - password_confirmation
                 - request_type
       security: []
   /api/v1/otp/resend:

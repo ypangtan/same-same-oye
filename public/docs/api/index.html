@@ -238,7 +238,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: September 8 2025</li>
+        <li>Last updated: September 10 2025</li>
     </ul>
 </div>
 
@@ -2460,7 +2460,7 @@ fetch(url, {
     --form "date_of_birth=2022-01-01" \
     --form "to_remove=1" \
     --form "invitation_code=abcdef" \
-    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\php9845.tmp" </code></pre></div>
+    --form "profile_picture=@C:\Users\nicho\AppData\Local\Temp\phpEC12.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3036,8 +3036,8 @@ fetch(url, {
     --data "{
     \"title\": \"test-notification\",
     \"content\": \"test-notification-content\",
-    \"register_token\": \"iure\",
-    \"app_id\": \"maiores\",
+    \"register_token\": \"magnam\",
+    \"app_id\": \"dolore\",
     \"api_key\": \"qui\"
 }"
 </code></pre></div>
@@ -3056,8 +3056,8 @@ const headers = {
 let body = {
     "title": "test-notification",
     "content": "test-notification-content",
-    "register_token": "iure",
-    "app_id": "maiores",
+    "register_token": "magnam",
+    "app_id": "dolore",
     "api_key": "qui"
 };
 
@@ -3144,7 +3144,7 @@ fetch(url, {
                 <input type="text"
                name="register_token"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="iure"
+               value="magnam"
                data-component="body" hidden>
     <br>
 <p>optional The target device token. ( Default will be following current authenticated user's register token ).</p>
@@ -3154,7 +3154,7 @@ fetch(url, {
                 <input type="text"
                name="app_id"
                data-endpoint="POSTapi-v1-users-test-notification"
-               value="maiores"
+               value="dolore"
                data-component="body" hidden>
     <br>
 <p>optional The one signal app id. ( Default will be following current settings ).</p>
@@ -3190,6 +3190,9 @@ fetch(url, {
     --data "{
     \"phone_number\": \"0123982334\",
     \"calling_code\": \"+60\",
+    \"password\": \"abcd1234\",
+    \"password_confirmation\": \"abcd1234\",
+    \"invitation_code\": \"AASSCC\",
     \"request_type\": 1
 }"
 </code></pre></div>
@@ -3208,6 +3211,9 @@ const headers = {
 let body = {
     "phone_number": "0123982334",
     "calling_code": "+60",
+    "password": "abcd1234",
+    "password_confirmation": "abcd1234",
+    "invitation_code": "AASSCC",
     "request_type": 1
 };
 
@@ -3280,6 +3286,36 @@ fetch(url, {
                data-component="body" hidden>
     <br>
 <p>optional The calling for register. ( Default +60 )</p>
+        </p>
+                <p>
+            <b><code>password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="password"
+               data-endpoint="POSTapi-v1-otp"
+               value="abcd1234"
+               data-component="body" hidden>
+    <br>
+<p>The password for register.</p>
+        </p>
+                <p>
+            <b><code>password_confirmation</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="password_confirmation"
+               data-endpoint="POSTapi-v1-otp"
+               value="abcd1234"
+               data-component="body" hidden>
+    <br>
+<p>The confirmation password.</p>
+        </p>
+                <p>
+            <b><code>invitation_code</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="invitation_code"
+               data-endpoint="POSTapi-v1-otp"
+               value="AASSCC"
+               data-component="body" hidden>
+    <br>
+<p>The invitation code of referral.</p>
         </p>
                 <p>
             <b><code>request_type</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
