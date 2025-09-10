@@ -56,12 +56,12 @@ $columns = [
         'id' => 'reward_value',
         'title' => __( 'checkin_reward.reward' ),
     ],
-    [
-        'type' => 'select',
-        'options' => $data['status'],
-        'id' => 'status',
-        'title' => __( 'datatables.status' ),
-    ],
+    // [
+    //     'type' => 'default',
+    //     'options' => $data['status'],
+    //     'id' => 'status',
+    //     'title' => __( 'datatables.status' ),
+    // ],
     [
         'type' => 'default',
         'id' => 'dt_action',
@@ -114,7 +114,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'consecutive_days' },
             { data: 'reward_type' },
             { data: 'reward_value' },
-            { data: 'status' },
+            // { data: 'status' },
             { data: 'encrypted_id' },
         ],
         columnDefs: [
