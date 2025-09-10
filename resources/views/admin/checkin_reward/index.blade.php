@@ -156,7 +156,7 @@ var statusMapper = @json( $data['status'] ),
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "reward_value" ) }}' ),
                 render: function( data, type, row, meta ) {
-                    return row.voucher ? row.voucher.title : parseInt(data);
+                    return row.reward_type == 2 ? ( row?.voucher?.title ?? '-' ) : parseInt(data);
                 },
             },
             {
