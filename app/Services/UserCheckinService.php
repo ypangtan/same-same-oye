@@ -161,7 +161,7 @@ class UserCheckinService
 
     public static function allUserCheckins( $request ) {
 
-        $userCheckins = UserCheckin::with( ['user'] )->select( 'user_checkins.*');
+        $userCheckins = UserCheckin::with( ['user'] )->select( 'user_checkins.*')->where( 'status', 10 );
         $userCheckins->leftJoin( 'users', 'users.id', '=', 'user_checkins.user_id' );
 
         $filterObject = self::filter( $request, $userCheckins );
@@ -183,29 +183,29 @@ class UserCheckinService
             }
         }
 
-            $userCheckinCount = $userCheckin->count();
+        $userCheckinCount = $userCheckin->count();
 
-            $limit = $request->length == -1 ? 1000000 : $request->length;
-            $offset = $request->start;
+        $limit = $request->length == -1 ? 1000000 : $request->length;
+        $offset = $request->start;
 
-            $userCheckins = $userCheckin->skip( $offset )->take( $limit )->get();
+        $userCheckins = $userCheckin->skip( $offset )->take( $limit )->get();
 
-            if ( $userCheckins ) {
-                $userCheckins->append( [
-                    'encrypted_id',
-                ] );
-            }
+        if ( $userCheckins ) {
+            $userCheckins->append( [
+                'encrypted_id',
+            ] );
+        }
 
-            $totalRecord = UserCheckin::count();
+        $totalRecord = UserCheckin::where( 'status', 10 )->count();
 
-            $data = [
-                'user_checkins' => $userCheckins,
-                'draw' => $request->draw,
-                'recordsFiltered' => $filter ? $userCheckinCount : $totalRecord,
-                'recordsTotal' => $totalRecord,
-            ];
+        $data = [
+            'user_checkins' => $userCheckins,
+            'draw' => $request->draw,
+            'recordsFiltered' => $filter ? $userCheckinCount : $totalRecord,
+            'recordsTotal' => $totalRecord,
+        ];
 
-            return response()->json( $data );
+        return response()->json( $data );
 
               
     }
