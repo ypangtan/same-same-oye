@@ -138,7 +138,7 @@ class CheckinRewardService
 
     public static function allCheckinRewards( $request ) {
 
-        $checkinRewards = CheckinReward::with( ['voucher'] )->select( 'checkin_rewards.*');
+        $checkinRewards = CheckinReward::with( ['voucher'] )->select( 'checkin_rewards.*')->where( 'status', 10 );
 
         $filterObject = self::filter( $request, $checkinRewards );
         $checkinReward = $filterObject['model'];
@@ -172,7 +172,7 @@ class CheckinRewardService
                 ] );
             }
 
-            $totalRecord = CheckinReward::count();
+            $totalRecord = CheckinReward::where( 'status', 10 )->count();
 
             $data = [
                 'checkin_rewards' => $checkinRewards,
