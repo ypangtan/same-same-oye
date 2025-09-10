@@ -12,10 +12,9 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-
-    'user_id' => 'User',
-    'user' => 'User',
-    'checkin_date' => 'Checkin Date',
-    'status' => 'Status',
-    'calendar' => 'Calendar',
+    'user_id' => '用户',
+    'user' => '用户',
+    'checkin_date' => '签到日期',
+    'status' => '状态',
+    'calendar' => '日历',
 ];

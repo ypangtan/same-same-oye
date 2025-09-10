@@ -18,17 +18,17 @@ return [
     'reward_value' => 'Reward Value',
     'validity_days' => 'Validity Days',
     'status' => 'Status',
+    'points' => '积分',
+    'voucher' => '优惠券',
+    'get_voucher' => '领取优惠券',
 
-    'points' => 'Points',
-    'voucher' => 'Voucher',
-    'get_voucher' => 'Get Voucher',
+    'reward' => '奖励',
+    'reward_description_points' => '用户将获得的 IFei 积分：',
+    'reward_description_voucher' => '用户将获得的优惠券：',
 
-    'reward' => 'Reward',
-    'reward_description_points' => 'IFei Points user will get:',
-    'reward_description_voucher' => 'Voucher user will get:',
+    'checkin_details' => '已签到用户',
+    'username' => '用户名',
+    'phone_number' => '手机号码',
+    'total_checkin' => '签到总次数',
 
-    'checkin_details' => 'Checked-in Users',
-    'username' => 'Username',
-    'phone_number' => 'phone_number',
-    'total_checkin' => 'total Check-in'
 ];
