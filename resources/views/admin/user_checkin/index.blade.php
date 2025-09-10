@@ -3,7 +3,6 @@
         <div class="nk-block-head-content">
             <h3 class="nk-block-title page-title">{{ __( 'template.user_checkins' ) }}</h3>
         </div><!-- .nk-block-head-content -->
-        @if( 1 == 2 )
         @can( 'add user_checkins' )
         <div class="nk-block-head-content">
             <div class="toggle-wrap nk-block-tools-toggle">
@@ -18,7 +17,6 @@
             </div>
         </div><!-- .nk-block-head-content -->
         @endcan
-        @endif
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
 
@@ -112,6 +110,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'encrypted_id' },
         ],
         columnDefs: [
+
             {
                 // Add checkboxes to the first column
                 targets: 0,
@@ -215,13 +214,11 @@ var statusMapper = @json( $data['status'] ),
                     edit = '<li class="dt-edit" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.edit' ) }}</span></a></li>';
                     @endcan
 
-                    @if( 1 == 2 )
                     @can( 'delete user_checkins' )
                     status = row['status'] == 10 ? 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="20"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="10"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
                     @endcan
-                    @endif
                     
                     let html = 
                         `
@@ -230,6 +227,7 @@ var statusMapper = @json( $data['status'] ),
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
                                     `+edit+`
+                                    `+status+`
                                 </ul>
                             </div>
                         </div>

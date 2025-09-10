@@ -161,7 +161,7 @@ class UserCheckinService
 
     public static function allUserCheckins( $request ) {
 
-        $userCheckins = UserCheckin::with( ['user'] )->select( 'user_checkins.*')->where( 'status', 10 );
+        $userCheckins = UserCheckin::with( ['user'] )->select( 'user_checkins.*');
         $userCheckins->leftJoin( 'users', 'users.id', '=', 'user_checkins.user_id' );
 
         $filterObject = self::filter( $request, $userCheckins );
@@ -196,7 +196,7 @@ class UserCheckinService
             ] );
         }
 
-        $totalRecord = UserCheckin::where( 'status', 10 )->count();
+        $totalRecord = UserCheckin::count();
 
         $data = [
             'user_checkins' => $userCheckins,

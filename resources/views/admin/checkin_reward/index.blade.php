@@ -3,6 +3,7 @@
         <div class="nk-block-head-content">
             <h3 class="nk-block-title page-title">{{ __( 'template.checkin_rewards' ) }}</h3>
         </div><!-- .nk-block-head-content -->
+        @if( 1 == 2 )
         @can( 'add checkin_rewards' )
         <div class="nk-block-head-content">
             <div class="toggle-wrap nk-block-tools-toggle">
@@ -17,6 +18,7 @@
             </div>
         </div><!-- .nk-block-head-content -->
         @endcan
+        @endif
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
 
@@ -196,7 +198,6 @@ var statusMapper = @json( $data['status'] ),
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
                                     `+edit+`
-                                    `+status+`
                                 </ul>
                             </div>
                         </div>
