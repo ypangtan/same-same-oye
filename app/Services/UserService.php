@@ -1788,7 +1788,8 @@ class UserService
                         $current = TmpUser::find( $value );
                         
                         if ( !$current ) {
-                            $fail( __( 'user.invalid_request' ) );
+                            // $fail( __( 'user.invalid_request' ) );
+                            $fail( $value );
                             return false;
                         }
     
