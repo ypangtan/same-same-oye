@@ -124,6 +124,7 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "phone_number" ) }}' ),
+                orderable: false,
                 width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
@@ -131,6 +132,7 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "otp_code" ) }}' ),
+                orderable: false,
                 width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
