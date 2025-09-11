@@ -265,14 +265,14 @@ var statusMapper = @json( $data['status'] ),
 
                     html += `
                         <div class="d-flex align-items-center">
-                            <strong>` + ( fullname != ' ' ? fullname : '-' ) + `</strong><br>
+                            <strong>` + ( fullname !== ' ' ? fullname : '-' ) + `</strong><br>
                                 <strong>{{ __( 'user.email' ) }}</strong>: ` + email + `<br>
                                 <strong>{{ __( 'user.phone_number' ) }}</strong>: ` + phone + `
                             </span>
                         </div>
                     `;
 
-                    return data ? ( row.calling_code ? row.calling_code + " " : "+60 " ) + data : '-' ;
+                    return html ;
                 },
             },
             {
