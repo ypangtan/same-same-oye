@@ -84,28 +84,28 @@ $user_edit = 'user_edit';
                     </div>
                 </div>
                 
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $user_edit }}_address_1" class="col-sm-5 col-form-label">{{ __( 'customer.address_1' ) }}</label>
                     <div class="col-sm-7">
                         <textarea class="form-control" id="{{ $user_edit }}_address_1" style="min-height: 80px;" placeholder="{{ __( 'template.optional' ) }}"></textarea>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $user_edit }}_address_2" class="col-sm-5 col-form-label">{{ __( 'customer.address_2' ) }}</label>
                     <div class="col-sm-7">
                         <textarea class="form-control" id="{{ $user_edit }}_address_2" style="min-height: 80px;" placeholder="{{ __( 'template.optional' ) }}"></textarea>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $user_edit }}_city" class="col-sm-5 col-form-label">{{ __( 'customer.city' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $user_edit }}_city" placeholder="{{ __( 'template.optional' ) }}">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $user_edit }}_state" class="col-sm-5 col-form-label">{{ __( 'customer.state' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $user_edit }}_state" >
@@ -130,7 +130,7 @@ $user_edit = 'user_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $user_edit }}_postcode" class="col-sm-5 col-form-label">{{ __( 'customer.postcode' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $user_edit }}_postcode" placeholder="{{ __( 'template.optional' ) }}">
