@@ -46,6 +46,14 @@
                                     </a>
                                 </li>
                                 @endcan
+                                @can( 'view otp_logs' )
+                                <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\OtpLogController' ? 'active current-page' : '' }}">
+                                    <a href="{{ route( 'admin.module_parent.otp_log.index' ) }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-notes"></em></span>
+                                        <span class="nk-menu-text">{{ __( 'template.otp_logs' ) }}</span>
+                                    </a>
+                                </li>
+                                @endcan
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">{{ __( 'template.operations' ) }}</h6>
                                 </li>

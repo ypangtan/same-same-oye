@@ -62,4 +62,5 @@ return [
     'invitation_code' => '邀请码',
     'referral' => '推荐人',
     'referral_structure' => '推荐结构',
+    'send_sms_fail' => '发送一次性密码失败',
 ];
