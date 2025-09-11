@@ -13,7 +13,6 @@ use App\Models\{
     FileManager,
     LuckyDrawImportHistory,
     OtpLog,
-    OtpLog,
 };
 
 use App\Rules\CheckASCIICharacter;
