@@ -522,14 +522,20 @@ class UserCheckinService
 
         if( empty( $reward ) ) {
             return response()->json( [
-                'message' => __( 'user.checkin_success' ),
+                'en_message' => 'Check In Successful',
+                'zh_message' => '签到成功',
                 'message_key' => 'Check-in successful',
                 'data' => $reward,
             ] );
         }
+        $en_point = 'You get ' . $reward->reward_value . ' point';
+        $zh_point = '您已获得 ' . $reward->reward_value . ' 积分';
+        $en_voucher = 'You get ' . $reward->reward_value . ' ' . $reward->voucher->en_title;
+        $zh_voucher = '您已获得 ' . $reward->reward_value . ' ' . ( $reward->voucher->zh_title ?? $reward->voucher->en_title );
     
         return response()->json([
-            'message' => $reward->reward_type == 1 ? __( 'user.checkin_success_point', [ 'quantity' => $reward->reward_value ] ) : __( 'user.checkin_success_vouvher', [ 'quantity' => $reward->reward_value, 'voucher' => $reward->voucher->title ] ),
+            'en_message' => $reward->reward_type == 1 ? $en_point : $en_voucher,
+            'zh_message' => $reward->reward_type == 1 ? $zh_point : $zh_voucher,
             'message_key' => 'Check-in successful',
             'data' => $reward,
         ]);
