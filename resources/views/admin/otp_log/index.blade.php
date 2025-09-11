@@ -21,7 +21,7 @@ $columns = [
     ],
     [
         'type' => 'date',
-        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.phone_number' ) ] ),
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'otp_log.phone_number' ) ] ),
         'id' => 'phone_number',
         'title' => __( 'otp_log.phone_number' ),
     ],
@@ -87,7 +87,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'phone_number' },
             { data: 'otp_code' },
             { data: 'status' },
-            { data: 'encrypted_id' },
+            // { data: 'encrypted_id' },
         ],
         columnDefs: [
             {
