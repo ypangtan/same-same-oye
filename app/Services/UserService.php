@@ -283,6 +283,11 @@ class UserService
             $filter = true;
         }
 
+        if( !empty( $request->invitation_code ) ) {
+            $model->where( 'invitation_code', 'like', '%' . $request->invitation_code . '%' );
+            $filter = true;
+        }
+
         if ( !empty( $request->rank ) ) {
             $rank = $request->rank;
             $rank = Rank::find( $rank );
