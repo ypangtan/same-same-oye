@@ -2134,14 +2134,15 @@ class UserService
 
         $sendSMS = \Helper::curlGet( $url . '?' . http_build_query( $request ) );
 
-        OtpLog::create( [
+        $log = OtpLog::create( [
             'url' => $url . '?' . http_build_query( $request ),
             'method' => 'GET',
             'phone_number' => $mobile,
             'otp_code' => $otp,
             'raw_response' => json_encode( $sendSMS ),
         ] );
-
+        
+        return $log;
     }
 
     public static function testNotification( $request ) {
