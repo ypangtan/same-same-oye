@@ -529,7 +529,7 @@ class UserCheckinService
         }
     
         return response()->json([
-            'message' => $reward->reward_type == 1 ? __( 'user.checkin_success_point' ) : __( 'user.checkin_success_vouvher' ),
+            'message' => $reward->reward_type == 1 ? __( 'user.checkin_success_point', [ 'quantity' => $reward->reward_value ] ) : __( 'user.checkin_success_vouvher', [ 'quantity' => $reward->reward_value, 'voucher' => $reward->voucher->title ] ),
             'message_key' => 'Check-in successful',
             'data' => $reward,
         ]);
@@ -538,7 +538,7 @@ class UserCheckinService
     private static function giveReward($user)
     {
 
-        $reward = CheckinReward::where('consecutive_days', $user->check_in_streak)->first();
+        $reward = CheckinReward::with( 'voucher' )->where('consecutive_days', $user->check_in_streak)->first();
         if( $reward ) {
             $reward->append( ['reward_type_label'] );
 
