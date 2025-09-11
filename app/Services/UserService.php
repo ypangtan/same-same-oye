@@ -283,8 +283,8 @@ class UserService
             $filter = true;
         }
 
-        if( !empty( $request->invitation_code ) ) {
-            $model->where( 'invitation_code', 'like', '%' . $request->invitation_code . '%' );
+        if( !empty( $request->referral ) ) {
+            $model->where( 'invitation_code', 'like', '%' . $request->referral . '%' );
             $filter = true;
         }
 
