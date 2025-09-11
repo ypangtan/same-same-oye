@@ -67,6 +67,7 @@ return [
     'referral' => 'Referral',
     'user_social' => 'Social Account',
     'referral_structure' => 'Referral Structure',
+    'referral_code' => 'Referral Code',
     'registered_social' => 'Phone number registered to social account',
 
     'google' => 'Google',
