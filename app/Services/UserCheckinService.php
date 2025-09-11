@@ -454,7 +454,8 @@ class UserCheckinService
     
         if (!$user) {
             return response()->json( [
-                'message' => 'User not found',
+                'en_message' => 'User not found',
+                'zh_message' => '找不到用户',
                 'message_key' => 'user_not_found',
                 'errors' => [
                     'user' => 'User not found',
@@ -477,7 +478,8 @@ class UserCheckinService
 
         if ($existingCheckin) {
             return response()->json( [
-                'message' => 'User has already checked in today',
+                'en_message' => 'User has already checked in today',
+                'zh_message' => '您今天已经签到',
                 'message_key' => 'user_already_checked_in',
                 'errors' => [
                     'user' => 'User has already checked in today',
