@@ -76,7 +76,7 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.referral' ) ] ),
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.invitation_code' ) ] ),
         'id' => 'referral',
         'title' => __( 'user.referral' ),
     ],
@@ -151,7 +151,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'email' },
             { data: 'social_logins' },
             { data: 'phone_number' },
-            { data: 'referral' },
+            { data: 'invitation_code' },
             { data: 'current_rank' },
             { data: 'total_accumulate_spending' },
             { data: 'status' },
@@ -249,30 +249,31 @@ var statusMapper = @json( $data['status'] ),
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "referral" ) }}' ),
                 render: function( data, type, row, meta ) {
-                    if ( !data ) {
-                        return '-';
-                    }
+                    return data ?? '-'
+                    // if ( !data ) {
+                    //     return '-';
+                    // }
 
-                    let firstname = data?.first_name ?? '-',
-                        lastname = data?.last_name ?? '-',
-                        email = data?.email ?? '-',
-                        calling_code = data?.calling_code ?? '+60',
-                        phone_number = data?.phone_number ?? '-',
-                        html = '';
+                    // let firstname = data?.first_name ?? '-',
+                    //     lastname = data?.last_name ?? '-',
+                    //     email = data?.email ?? '-',
+                    //     calling_code = data?.calling_code ?? '+60',
+                    //     phone_number = data?.phone_number ?? '-',
+                    //     html = '';
 
-                    fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' ),
-                    phone = calling_code + ' ' + phone_number;
+                    // fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' ),
+                    // phone = calling_code + ' ' + phone_number;
 
-                    html += `
-                        <div class="d-flex align-items-center">
-                            <strong>` + ( fullname !== ' ' ? fullname : '-' ) + `</strong><br>
-                                <strong>{{ __( 'user.email' ) }}</strong>: ` + email + `<br>
-                                <strong>{{ __( 'user.phone_number' ) }}</strong>: ` + phone + `
-                            </span>
-                        </div>
-                    `;
+                    // html += `
+                    //     <div class="d-flex align-items-center">
+                    //         <strong>` + ( fullname !== ' ' ? fullname : '-' ) + `</strong><br>
+                    //             <strong>{{ __( 'user.email' ) }}</strong>: ` + email + `<br>
+                    //             <strong>{{ __( 'user.phone_number' ) }}</strong>: ` + phone + `
+                    //         </span>
+                    //     </div>
+                    // `;
 
-                    return html ;
+                    // return html ;
                 },
             },
             {
