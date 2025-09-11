@@ -153,14 +153,21 @@ class Helper {
         ) );
 
         $response = curl_exec ($curl );
+        $httpCode  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $error = curl_error( $curl );
         
         curl_close( $curl );
 
         if( $error ) {
-            return false;
+            return [
+                'status' => $httpCode,
+                'data' => false
+            ];
         } else {
-            return $response;
+            return [
+                'status' => $httpCode,
+                'data' => $response
+            ];
         }
     }
 
@@ -184,21 +191,15 @@ class Helper {
             CURLOPT_HTTPHEADER => $header
         ) );
         $response = curl_exec ($curl );
-        $httpCode  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
         $error = curl_error( $curl );
 
         curl_close( $curl );
         
         if( $error ) {
-            return [
-                'status' => $httpCode,
-                'data' => false,
-            ];
+            return false;
         } else {
-            return [
-                'status' => $httpCode,
-                'data' => $response,
-            ];
+            return $response;
         }
     }
 
