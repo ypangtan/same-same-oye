@@ -253,8 +253,8 @@ var statusMapper = @json( $data['status'] ),
                         return '-';
                     }
 
-                    let first_name = data?.first_name ?? '-',
-                        last_name = data?.last_name ?? '-',
+                    let firstname = data?.first_name ?? '-',
+                        lastname = data?.last_name ?? '-',
                         email = data?.email ?? '-',
                         calling_code = data?.calling_code ?? '+60',
                         phone_number = data?.phone_number ?? '-',
