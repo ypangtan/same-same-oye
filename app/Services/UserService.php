@@ -904,29 +904,22 @@ class UserService
                 
                 DB::commit();
 
-                // Mail::to( $existingUser->email )->send(new OtpMail( $forgotPassword ));
-    
-                if (Mail::failures() != 0) {
+                $phoneNumber = $existingUser->calling_code . $existingUser->phone_number;
+                $result = self::sendSMS( false, $phoneNumber, $forgotPassword['otp_code'], '' );
 
-                    return response()->json( [
-                        'message' => 'Reset Password Otp Success',
-                        'message_key' => 'request_otp_success',
-                        'data' => [
-                            'title' => $forgotPassword ? __( 'user.otp_email_success' ) : '',
-                            'note' => $forgotPassword ? __( 'user.otp_email_success_note', [ 'title' => $existingUser->email ] ) : '',
-                            'identifier' => $forgotPassword['identifier'],
-                            'otp_code' => '#DEBUG - ' . $forgotPassword['otp_code'],
-                        ]
-                    ] );
+                if( $result === false ) {
+                    return response()->json([
+                        'message' => __('user.send_sms_fail'),
+                        'message_key' => 'send_sms_failed',
+                        'data' => null,
+                    ], 500 );
                 }
-
-                return "Oops! There was some error sending the email.";
             } else {
                 return response()->json([
                     'message' => __('user.user_not_found'),
                     'message_key' => 'get_user_failed',
                     'data' => null,
-                ]);
+                ],);
             }
 
         } catch ( \Throwable $th ) {
@@ -1747,6 +1740,14 @@ class UserService
 
                 // Mail::to( $request->email )->send(new OtpMail( $createTmpUser ));
                 $result = self::sendSMS( false, $phoneNumber, $createTmpUser['otp_code'], '' );
+
+                if( $result === false ) {
+                    return response()->json([
+                        'message' => __('user.send_sms_fail'),
+                        'message_key' => 'send_sms_failed',
+                        'data' => null,
+                    ], 500 );
+                }
                 
                 return response()->json( [
                     'message' => $request->calling_code . $request->phone_number . ' request otp success',
@@ -1756,7 +1757,7 @@ class UserService
                         'identifier' => $createTmpUser['identifier'],
                         'title' => $createTmpUser ? __( 'user.otp_email_success' ) : '',
                         'note' => $createTmpUser ? __( 'user.otp_email_success_note', [ 'title' => $phoneNumber ] ) : '',
-                        'result' => json_encode( $result ),
+                        // 'result' => json_encode( $result ),
                     ]
                 ] );
     
@@ -1824,6 +1825,15 @@ class UserService
             ] );
     
             DB::commit();
+            $result = self::sendSMS( false, $phoneNumber, $updateTmpUser['otp_code'], '' );
+
+            if( $result === false ) {
+                return response()->json([
+                    'message' => __('user.send_sms_fail'),
+                    'message_key' => 'send_sms_failed',
+                    'data' => null,
+                ], 500 );
+            }
     
             return response()->json( [
                 'message' => 'resend_otp_success',
@@ -2148,10 +2158,11 @@ class UserService
             'method' => 'GET',
             'phone_number' => $mobile,
             'otp_code' => $otp,
+            'status' => $sendSMS['status'] == 200 ? 10 : 20,
             'raw_response' => json_encode( $sendSMS ),
         ] );
         
-        return $log;
+        return $sendSMS['status'] == 200 ? true : false;
     }
 
     public static function testNotification( $request ) {

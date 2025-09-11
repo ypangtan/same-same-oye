@@ -78,6 +78,7 @@ return [
     'rank_id' => 'Rank',
     'rank' => 'Rank',
     'total_points' => 'Total Points',
-    'total_accumulate_spending' => 'Cumulative Spending'
+    'total_accumulate_spending' => 'Cumulative Spending',
+    'send_sms_fail' => 'Send SMS OTP code Fail',
 
 ];
