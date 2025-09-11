@@ -66,5 +66,11 @@ return [
         'live_failed_url' => env( 'EGHL_LIVE_FAILED_URL' ),
         'staging_fallback_url' => env( 'EGHL_STAGING_FALLBACK' ),
         'live_fallback_url' => env( 'EGHL_LIVE_FALLBACK' ),
-    ]
+    ],
+
+    'sms' => [
+        'url' => env( 'SMS_URL' ),
+        'username' => env( 'SMS_USERNAME' ),
+        'password' => env( 'SMS_PASSWORD' ),
+    ],
 ];

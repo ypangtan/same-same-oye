@@ -25,6 +25,7 @@ use App\Models\{
     MailContent,
     Wallet,
     Option,
+    OtpLog,
     Rank,
     ReferralGiftSetting,
     WalletTransaction,
@@ -1806,6 +1807,7 @@ class UserService
     
             $updateTmpUser = Helper::requestOtp( 'resend', [
                 'calling_code' => $callingCode,
+                'phone_number' => $phoneNumber,
                 'identifier' => $request->identifier,
                 'title' => __( 'user.otp_email_success' ),
                 'note' => __( 'user.otp_email_success_note', [ 'title' => $phoneNumber ] ),
@@ -1993,7 +1995,6 @@ class UserService
             ], 500);
         }
     }
-    
 
     public static function getNotifications( $request ) {
 
@@ -2130,11 +2131,13 @@ class UserService
             'agreedterm'=> 'YES',
         );
 
-        $sendSMS = Helper::curlGet( $url . '?' . http_build_query( $request ) );
+        $sendSMS = \Helper::curlGet( $url . '?' . http_build_query( $request ) );
 
-        ApiLog::create( [
+        OtpLog::create( [
             'url' => $url . '?' . http_build_query( $request ),
             'method' => 'GET',
+            'phone_number' => $mobile,
+            'otp_code' => $otp,
             'raw_response' => json_encode( $sendSMS ),
         ] );
 
