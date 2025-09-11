@@ -16,6 +16,7 @@ use App\Models\{
     User,
     PresetPermission,
     Module,
+    OtpLog,
     Rank,
     Voucher,
     WalletTransaction,
@@ -303,6 +304,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
+            $otp = $createOtp->otp_code;
             $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
@@ -318,6 +320,7 @@ class Helper {
 
             $phoneNumber = $createOtp->phone_number;
 
+            $otp = $createOtp->otp_code;
             $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
@@ -337,6 +340,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
+            $otp = $createOtp->otp_code;
             $body = 'Your OTP for IFEI forgot password is ' . $createOtp->otp_code;
 
         }
@@ -353,6 +357,7 @@ class Helper {
 
             $phoneNumber = $createOtp->phone_number;
 
+            $otp = $createOtp->otp_code;
             $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
@@ -370,6 +375,7 @@ class Helper {
                 'expire_on' => $expireOn,
             ] );
 
+            $otp = $createOtp->otp_code;
             $body = 'Your OTP for IFEI update account is ' . $createOtp->otp_code;
 
         }else {
@@ -386,9 +392,13 @@ class Helper {
                 'otp_code' => mt_rand( 100000, 999999 ),
                 'expire_on' => $expireOn,
             ] );
-
+            
+            $otp = $createOtp->otp_code;
             $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
         }
+
+        $mobile = $callingCode . $phoneNumber;
+        self::sendSMS( $mobile, $otp, $body );
 
         return [
             'action' => $action,
@@ -400,28 +410,34 @@ class Helper {
     public static function sendSMS( $mobile, $otp, $message = '' ) {
 
         // $url = "http://cloudsms.trio-mobile.com/index.php/api/bulk_mt?";
-        $url = config( 'services.sms.sms_url' );
+        $url = config( 'services.sms.sms_url' ) ?? '';
+
+        if( empty( $url ) ) {
+            return 0;
+        }
+        
+        $encodedMessage = rawurlencode($message);
 
         $request = array(
-            // 'api_key' => '1be74d22361e24a88b228e3359a9b8a2394833431ec8329dec548f40cb70e0dc',
-            'api_key' => config( 'services.sms.api_key' ),
-            'action' => 'send',
-            'to' => $mobile,
-            'msg' => 'MeCar: Your OTP is '.$otp.'. '.$message,
-            'sender_id' => 'CLOUDSMS',
-            'content_type' => 1,
-            'mode' => 'shortcode',
-            'campaign' => 'MeCar'
+            'un' => config( 'services.sms.username' ),
+            'pwd' => config( 'services.sms.password' ),
+            'dstno' => $mobile,
+            'msg' => $encodedMessage,
+            'type' => 1,
+            'agreedterm'=> 'YES',
         );
 
-        $sendSMS = Helper::curlGet( $url.http_build_query( $request ) );
+        $sendSMS = \Helper::curlGet( $url . '?' . http_build_query( $request ) );
                 
-        ApiLog::create( [
-            'url' => $url,
+        OtpLog::create( [
+            'url' => $url . '?' . http_build_query( $request ),
             'method' => 'GET',
+            'phone_number' => $mobile,
+            'otp_code' => $otp,
             'raw_response' => json_encode( $sendSMS ),
         ] );
 
+        return 0;
     }
 
     public static function sendNotification( $user, $message ){

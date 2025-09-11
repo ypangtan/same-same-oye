@@ -61,6 +61,7 @@ return [
     'order_item_list' => '订单项目列表',
     'orders' => '订单',
     'api_requests' => 'API 请求',
+    'otp_logs' => 'OTP 日志',
 
     'loading' => '加载中...',
     'add' => '新增',

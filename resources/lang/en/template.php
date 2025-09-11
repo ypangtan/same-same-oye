@@ -69,6 +69,7 @@ return [
     'lucky_draw_rewards' => 'Lucky Draw Rewards',
     'ranks' => 'Ranks',
     'my_friends' => 'My Friends',
+    'otp_logs' => 'OTP Logs',
 
     'loading' => 'Loading...',
     'add' => 'Add',

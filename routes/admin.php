@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\{
     ProductController,
     SalesRecordController,
     MarketingNotificationController,
+    OtpLogController,
     PopAnnouncementController,
     RankController,
 };
@@ -474,6 +475,15 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-lucky-draw-reward-status', [ LuckyDrawController::class, 'updateLuckyDrawRewardStatus' ] )->name( 'admin.lucky_draw_reward.updateLuckyDrawRewardStatus' );
                 Route::post( 'import-lucky-draw-reward', [ LuckyDrawController::class, 'importLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawReward' );
                 Route::post( 'import-lucky-draw-reward-v2', [ LuckyDrawController::class, 'importLuckyDrawRewardV2' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawRewardV2' );
+            } );
+
+            Route::prefix( 'otp_logs' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view otp_logs' ] ], function() {
+                    Route::get( '/', [ OtpLogController::class, 'index' ] )->name( 'admin.module_parent.otp_log.index' );
+                } );
+
+                Route::post( 'all-otp-logs', [ OtpLogController::class, 'allOtpLogs' ] )->name( 'admin.otp_log.allOtpLogs' );
+                Route::post( 'one-otp-log', [ OtpLogController::class, 'oneOtpLog' ] )->name( 'admin.otp_log.oneOtpLog' );
             } );
 
             Route::prefix( 'ranks' )->group( function() {
