@@ -64,4 +64,7 @@ return [
     'referral_code' => '邀请码',
     'referral_structure' => '推荐结构',
     'send_sms_fail' => '发送一次性密码失败',
+    'checkin_success' => '签到成功',
+    'checkin_success_point' => '您已获得 :quantity 积分',
+    'checkin_success_vouvher' => '您已获得 :quantity :voucher',
 ];

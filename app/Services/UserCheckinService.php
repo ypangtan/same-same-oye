@@ -519,9 +519,17 @@ class UserCheckinService
         self::sendNotification( $user, 'checkin', __( 'notification.user_checkin_success_content' )  );
 
         DB::commit();
+
+        if( empty( $reward ) ) {
+            return response()->json( [
+                'message' => __( 'user.checkin_success' ),
+                'message_key' => 'Check-in successful',
+                'data' => $reward,
+            ] );
+        }
     
         return response()->json([
-            'message' => 'checkin_success',
+            'message' => $reward->reward_type == 1 ? __( 'user.checkin_success_point' ) : __( 'user.checkin_success_vouvher' ),
             'message_key' => 'Check-in successful',
             'data' => $reward,
         ]);

@@ -81,5 +81,8 @@ return [
     'total_points' => 'Total Points',
     'total_accumulate_spending' => 'Cumulative Spending',
     'send_sms_fail' => 'Send SMS OTP code Fail',
+    'checkin_success' => 'Check In Successful',
+    'checkin_success_point' => 'You get :quantity point',
+    'checkin_success_vouvher' => 'You get :quantity :voucher',
 
 ];
