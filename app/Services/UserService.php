@@ -1777,6 +1777,7 @@ class UserService
                     'message' => __( 'validation.header_message' ),
                     'errors' => [
                         'identifier' => [ __( 'user.invalid_otp' ) ],
+                        'data' => $th->getMessage(),
                     ]
                 ], 422 );
             }
@@ -1788,8 +1789,7 @@ class UserService
                         $current = TmpUser::find( $value );
                         
                         if ( !$current ) {
-                            // $fail( __( 'user.invalid_request' ) );
-                            $fail( $value );
+                            $fail( __( 'user.invalid_request' ) );
                             return false;
                         }
     
@@ -1815,7 +1815,7 @@ class UserService
             $validator->setAttributeNames( $attributeName )->validate();
     
             $currentTmp = TmpUser::find( $request->identifier );
-            $phoneNumber = $callingCode . $currentTmp->phone_number;
+            $phoneNumber = $currentTmp->callingCode . $currentTmp->phone_number;
     
             $updateTmpUser = Helper::requestOtp( 'resend', [
                 'calling_code' => $callingCode,
