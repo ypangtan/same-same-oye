@@ -78,7 +78,7 @@ $columns = [
         'type' => 'input',
         'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.invitation_code' ) ] ),
         'id' => 'referral',
-        'title' => __( 'user.referral' ),
+        'title' => __( 'user.invitation_code' ),
     ],
     [
         'type' => 'select',
