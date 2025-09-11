@@ -398,7 +398,7 @@ class Helper {
         }
 
         $mobile = $callingCode . $phoneNumber;
-        self::sendSMS( $mobile, $otp, $body );
+        // self::sendSMS( $mobile, $otp, $body );
 
         return [
             'action' => $action,

@@ -1737,7 +1737,7 @@ class UserService
                 $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $request->phone_number );
 
                 // Mail::to( $request->email )->send(new OtpMail( $createTmpUser ));
-                // self::sendSMS( false, '+60' . $normalizedPhone, $createTmpUser['otp_code'], '' );
+                $result = self::sendSMS( false, $phoneNumber, $createTmpUser['otp_code'], '' );
                 
                 return response()->json( [
                     'message' => $request->calling_code . $request->phone_number . ' request otp success',
@@ -1746,7 +1746,8 @@ class UserService
                         'otp_code' => '#DEBUG - ' . $createTmpUser['otp_code'],
                         'identifier' => $createTmpUser['identifier'],
                         'title' => $createTmpUser ? __( 'user.otp_email_success' ) : '',
-                        'note' => $createTmpUser ? __( 'user.otp_email_success_note', [ 'title' => $phoneNumber ] ) : ''
+                        'note' => $createTmpUser ? __( 'user.otp_email_success_note', [ 'title' => $phoneNumber ] ) : '',
+                        'result' => json_encode( $result ),
                     ]
                 ] );
     
