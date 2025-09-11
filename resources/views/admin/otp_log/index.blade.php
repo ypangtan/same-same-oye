@@ -21,6 +21,12 @@ $columns = [
     ],
     [
         'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ),
+        'id' => 'created_date',
+        'title' => __( 'datatables.created_date' ),
+    ],
+    [
+        'type' => 'date',
         'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'otp_log.phone_number' ) ] ),
         'id' => 'phone_number',
         'title' => __( 'otp_log.phone_number' ),
