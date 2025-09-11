@@ -2140,7 +2140,7 @@ class UserService
     private static function sendSMS( $customMessage = false, $mobile, $otp, $message = '' ) {
 
         $url = config( 'services.sms.sms_url' );
-        $builtMessage = $customMessage ? $message : 'Your One Time Password (OTP) is '.$otp.'. This OTP expires in 30 minutes.';
+        $builtMessage = $customMessage ? $message : 'Your One Time Password (OTP) is '.$otp.'. This OTP expires in 10 minutes.';
         $encodedMessage = rawurlencode($builtMessage);
 
         $request = array(
