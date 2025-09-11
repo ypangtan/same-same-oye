@@ -51,8 +51,10 @@ class UserService
     public static function allUsers( $request ) {
 
         $user = User::select( 'users.*' )
-        ->with( ['socialLogins'] )
-        ->orderBy( 'created_at', 'DESC' );
+        ->with( [
+            'socialLogins',
+            'referral',
+        ] )->orderBy( 'created_at', 'DESC' );
 
         $filterObject = self::filter( $request, $user );
         $user = $filterObject['model'];
@@ -1148,7 +1150,7 @@ class UserService
                 }
             } ],
             'password' => [ 'required', 'confirmed', Password::min( 8 ) ],
-            'invitation_code' => [ 'nullable', 'exists:users,invitation_code' ],
+            'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
             'register_token' => [ 'nullable' ],
             'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
@@ -1517,7 +1519,7 @@ class UserService
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
             'profile_picture' => [ 'nullable', 'file', 'max:30720', 'mimes:jpg,jpeg,png,heic' ],
-            'invitation_code' => [ 'nullable', 'exists:users,invitation_code' ],
+            'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
         ] );
 
         $attributeName = [

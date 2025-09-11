@@ -184,7 +184,7 @@ class User extends Model
     }
 
     public function referral() {
-        return $this->hasOne( User::class, 'id', 'referral_id' );
+        return $this->belongsTo( User::class, 'referral_id' );
     }
 
     public function downlines() {
