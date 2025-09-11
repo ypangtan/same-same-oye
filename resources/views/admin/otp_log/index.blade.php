@@ -190,27 +190,6 @@ var statusMapper = @json( $data['status'] ),
             }
         } );
 
-        // $( document ).on( 'click', '.dt-edit', function() {
-        //     window.location.href = '{{ route( 'admin.otp_log.edit' ) }}?id=' + $( this ).data( 'id' );
-        // } );
-
-        // $( document ).on( 'click', '.dt-status', function() {
-
-        //     $.ajax( {
-        //         url: '{{ route( 'admin.otp_log.updateOtpLogStatus' ) }}',
-        //         type: 'POST',
-        //         data: {
-        //             'id': $( this ).data( 'id' ),
-        //             'status': $( this ).data( 'status' ),
-        //             '_token': '{{ csrf_token() }}'
-        //         },
-        //         success: function( response ) {
-        //             dt_table.draw( false );
-        //             $( '#modal_success .caption-text' ).html( response.message );
-        //             modalSuccess.toggle();
-        //         },
-        //     } );
-        // } );
     } );
 </script>
 
