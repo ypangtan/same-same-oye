@@ -69,7 +69,7 @@ return [
     ],
 
     'sms' => [
-        'url' => env( 'SMS_URL' ),
+        'sms_url' => env( 'SMS_URL' ),
         'username' => env( 'SMS_USERNAME' ),
         'password' => env( 'SMS_PASSWORD' ),
     ],
