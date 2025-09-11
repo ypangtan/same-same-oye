@@ -178,7 +178,7 @@ class User extends Model
     }
 
     public function getNeedBirthdayPopAnnouncementAttribute() {
-        $voucher = UserVoucher::where( 'type', 2 )->where( 'user_id', $attributes['id'] )->exists();
+        $voucher = UserVoucher::where( 'type', 2 )->where( 'user_id', $this->attributes['id'] )->exists();
 
         return $voucher;
     }
