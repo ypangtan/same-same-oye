@@ -522,7 +522,8 @@ class UserCheckinService
 
         if( empty( $reward ) ) {
             return response()->json( [
-                'message' => __( 'user.checkin_success' ),
+                'en_message' => 'Check In Successful',
+                'zh_message' => '签到成功',
                 'message_key' => 'Check-in successful',
                 'data' => $reward,
             ] );
