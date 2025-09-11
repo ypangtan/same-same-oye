@@ -530,10 +530,10 @@ class UserCheckinService
                 'data' => $reward,
             ] );
         }
-        $en_point = 'You get ' . $reward->reward_value . ' point';
-        $zh_point = '您已获得 ' . $reward->reward_value . ' 积分';
-        $en_voucher = 'You get ' . $reward->reward_value . ' ' . ( $reward->voucher->en_title ?? '-' );
-        $zh_voucher = '您已获得 ' . $reward->reward_value . ' ' . ( $reward->voucher->zh_title ?? ( $reward->voucher->en_title ?? '-' ) );
+        $en_point = 'You get ' . \Helper::numberFormat( $reward->reward_value, 0 ) . ' point';
+        $zh_point = '您已获得 ' . \Helper::numberFormat( $reward->reward_value, 0 ) . ' 积分';
+        $en_voucher = 'You get ' . \Helper::numberFormat( $reward->reward_value, 0 ) . ' ' . ( $reward->voucher->en_title ?? '-' );
+        $zh_voucher = '您已获得 ' . \Helper::numberFormat( $reward->reward_value, 0 ) . ' ' . ( $reward->voucher->zh_title ?? ( $reward->voucher->en_title ?? '-' ) );
     
         return response()->json([
             'en_message' => $reward->reward_type == 1 ? $en_point : $en_voucher,
