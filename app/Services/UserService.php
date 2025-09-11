@@ -1148,7 +1148,7 @@ class UserService
                 }
             } ],
             'password' => [ 'required', 'confirmed', Password::min( 8 ) ],
-            'invitation_code' => [ 'sometimes', 'exists:users,invitation_code' ],
+            'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
             'register_token' => [ 'nullable' ],
             'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
