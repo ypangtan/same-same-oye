@@ -77,8 +77,9 @@ class WalletService
         
             $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $userInput );
         
-            $model->where( function ( $query ) use ( $userInput ) {
+            $model->where( function ( $query ) use ( $userInput, $normalizedPhone ) {
                 $query->where( 'users.email', 'LIKE', '%' . $userInput . '%' )
+                      ->orWhere( 'users.phone_number', 'LIKE', '%' . $normalizedPhone . '%' )
                       ->orWhere( 'users.first_name', 'LIKE', '%' . $userInput . '%' )
                       ->orWhere( 'users.last_name', 'LIKE', '%' . $userInput . '%' );
             } );

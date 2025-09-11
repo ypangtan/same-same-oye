@@ -51,8 +51,10 @@ class UserService
     public static function allUsers( $request ) {
 
         $user = User::select( 'users.*' )
-        ->with( ['socialLogins'] )
-        ->orderBy( 'created_at', 'DESC' );
+        ->with( [
+            'socialLogins',
+            'referral',
+        ] )->orderBy( 'created_at', 'DESC' );
 
         $filterObject = self::filter( $request, $user );
         $user = $filterObject['model'];

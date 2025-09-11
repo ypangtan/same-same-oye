@@ -75,6 +75,12 @@ $columns = [
         'title' => __( 'user.phone_number' ),
     ],
     [
+        'type' => 'input',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.referral' ) ] ),
+        'id' => 'referral',
+        'title' => __( 'user.referral' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['rank'],
         'id' => 'rank',
@@ -145,6 +151,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'email' },
             { data: 'social_logins' },
             { data: 'phone_number' },
+            { data: 'referral' },
             { data: 'current_rank' },
             { data: 'total_accumulate_spending' },
             { data: 'status' },
@@ -236,6 +243,35 @@ var statusMapper = @json( $data['status'] ),
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "phone_number" ) }}' ),
                 render: function( data, type, row, meta ) {
+                    return data ? ( row.calling_code ? row.calling_code + " " : "+60 " ) + data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "referral" ) }}' ),
+                render: function( data, type, row, meta ) {
+                    if ( !data ) {
+                        return '-';
+                    }
+
+                    let first_name = data?.first_name ?? '-',
+                        last_name = data?.last_name ?? '-',
+                        email = data?.email ?? '-',
+                        calling_code = data?.calling_code ?? '+60',
+                        phone_number = data?.phone_number ?? '-',
+                        html = '';
+
+                    fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' ),
+                    phone = calling_code + ' ' + phone_number;
+
+                    html += `
+                        <div class="d-flex align-items-center">
+                            <strong>` + ( fullname != ' ' ? fullname : '-' ) + `</strong><br>
+                                <strong>{{ __( 'user.email' ) }}</strong>: ` + email + `<br>
+                                <strong>{{ __( 'user.phone_number' ) }}</strong>: ` + phone + `
+                            </span>
+                        </div>
+                    `;
+
                     return data ? ( row.calling_code ? row.calling_code + " " : "+60 " ) + data : '-' ;
                 },
             },
