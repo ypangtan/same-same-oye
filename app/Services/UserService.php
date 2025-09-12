@@ -571,8 +571,8 @@ class UserService
                         $downline->save();
                     }
 
-                    $createUserObject['referral_id'] = $upline ? $upline->id : null;
-                    $createUserObject['referral_structure'] = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
+                    $updateUser->referral_id = $upline ? $upline->id : null;
+                    $updateUser->referral_id = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
                 }
                 
             } else {
@@ -586,8 +586,8 @@ class UserService
                         $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
                         $downline->save();
                     }
-                    $createUserObject['referral_id'] = null;
-                    $createUserObject['referral_structure'] = '-';
+                    $updateUser->referral_id = null;
+                    $updateUser->referral_id = '-';
                 }
             }
             
