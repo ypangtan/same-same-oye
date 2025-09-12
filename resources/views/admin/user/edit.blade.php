@@ -15,7 +15,7 @@ $user_edit = 'user_edit';
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
-                <div class="mb-3 row d-none">
+                <div class="mb-3 row">
                     <label for="{{ $user_edit }}_referral" class="col-sm-5 col-form-label">{{ __( 'user.referral' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-control select2" id="{{ $user_edit }}_referral" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.users' ) ] ) }}"></select>
@@ -182,7 +182,7 @@ $user_edit = 'user_edit';
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
             // formData.append( 'username', $( de + '_username' ).val() );
-            // formData.append( 'referral_id', $( de + '_referral' ).val() ?? '' );
+            formData.append( 'referral_id', $( de + '_referral' ).val() ?? '' );
             formData.append( 'email', $( de + '_email' ).val() );
             formData.append( 'first_name', $( de + '_first_name' ).val() );
             formData.append( 'last_name', $( de + '_last_name' ).val() );
@@ -259,11 +259,11 @@ $user_edit = 'user_edit';
                     // $( de + '_account_type' ).val( response.account_type );
                     dateOfBirth.setDate( response.date_of_birth );
                     
-                    // if( response.referral != null ){
-                    //     let option1 = new Option( response.referral.email, response.referral.encrypted_id, true, true );
-                    //     userSelect2.append( option1 );
-                    //     userSelect2.trigger( 'change' );
-                    // }
+                    if( response.referral != null ){
+                        let option1 = new Option( response.referral.email, response.referral.encrypted_id, true, true );
+                        userSelect2.append( option1 );
+                        userSelect2.trigger( 'change' );
+                    }
 
                     $( 'body' ).loading( 'stop' );
                 },
