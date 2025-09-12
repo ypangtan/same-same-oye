@@ -571,8 +571,8 @@ class UserService
                         $downline->save();
                     }
 
-                    $createUserObject['referral_id'] = $upline ? $upline->id : null;
-                    $createUserObject['referral_structure'] = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
+                    $updateUser->referral_id = $upline ? $upline->id : null;
+                    $updateUser->referral_id = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
                 }
                 
             } else {
@@ -586,8 +586,8 @@ class UserService
                         $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
                         $downline->save();
                     }
-                    $createUserObject['referral_id'] = null;
-                    $createUserObject['referral_structure'] = '-';
+                    $updateUser->referral_id = null;
+                    $updateUser->referral_id = '-';
                 }
             }
             
@@ -1697,26 +1697,35 @@ class UserService
         if ( $request->request_type == 1 ) {
     
             $validator = Validator::make( $request->all(), [
-                'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
+                'request_type' => [ 'required', 'in:1' ],
+                'calling_code' => [ 'nullable', 'exists:countries,calling_code' ],
+                'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) {
 
-                    if ( mb_substr( $value, 0, 1 ) == 0 ) {
-                        $value = mb_substr( $value, 1 );
-                    }
+                    $defaultCallingCode = "+60";
 
-                    $user = User::where( 'phone_number', $value )
-                        ->orWhere('phone_number', ltrim($value, '0'))
-                        ->first();
-
-                    if ( $user ) {
-                        $fail( __( 'validation.unique' ) );
+                    $exist = User::where( 'status', 10 )
+                    ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
+                    ->where( function ( $query ) use ( $value ) {
+                        $query->where( 'phone_number', request( 'phone_number' ) )
+                            ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                    } )
+                    ->first();
+                    
+                    if ( $exist ) {
+                        $fail( __( 'validation.exists' ) );
+                        return false;
                     }
                 } ],
-                'request_type' => [ 'required', 'in:1' ],
+                'password' => [ empty( $request->identifier ) ? 'required' : 'nullable', 'confirmed', Password::min( 8 ) ],
+                'invitation_code' => [ 'nullable', 'exists:users,invitation_code' ],
             ] );
     
             $attributeName = [
                 'phone_number' => __( 'user.phone_number' ),
                 'request_type' => __( 'user.request_type' ),
+                'password' => __( 'user.password' ),
+                'invitation_code' => __( 'user.invitation_code' ),
+                'calling_code' => __( 'user.calling_code' ),
             ];
     
             foreach ( $attributeName as $key => $aName ) {
@@ -1784,6 +1793,7 @@ class UserService
                     'message' => __( 'validation.header_message' ),
                     'errors' => [
                         'identifier' => [ __( 'user.invalid_otp' ) ],
+                        'data' => $th->getMessage(),
                     ]
                 ], 422 );
             }
@@ -1821,7 +1831,7 @@ class UserService
             $validator->setAttributeNames( $attributeName )->validate();
     
             $currentTmp = TmpUser::find( $request->identifier );
-            $phoneNumber = $callingCode . $currentTmp->phone_number;
+            $phoneNumber = $currentTmp->callingCode . $currentTmp->phone_number;
     
             $updateTmpUser = Helper::requestOtp( 'resend', [
                 'calling_code' => $callingCode,
