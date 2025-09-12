@@ -326,7 +326,7 @@ $user_edit = 'user_edit';
                 const $container = $(`
                     <div class="d-flex align-items-center">
                         <span>${ fullname ? fullname : '-' }</span>
-                        ( <span>${data.phone}</span> )
+                        ( <span>${data.phone_number}</span> )
                     </div>
                 `);
                 return $container;
