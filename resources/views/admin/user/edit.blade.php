@@ -286,6 +286,7 @@ $user_edit = 'user_edit';
                 data: function (params) {
                     return {
                         user: params.term, // search term
+                        no_user: '{{ Request( 'id' ) }}',
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,
