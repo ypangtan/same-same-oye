@@ -281,7 +281,7 @@ $user_create = 'user_create';
 
                 firstname = data?.first_name ?? '-';
                 lastname = data?.last_name ?? '-';
-                fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' ),
+                fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' );
                 const $container = $(`
                     <div class="d-flex align-items-center">
                         <span>${ fullname ? fullname : '-' }</span>
