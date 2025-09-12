@@ -247,7 +247,7 @@ class UserService
                 $query->where( 'users.email', 'LIKE', '%' . $userInput . '%' )
                       ->orWhere( 'users.first_name', 'LIKE', '%' . $userInput . '%' )
                       ->orWhere( 'users.last_name', 'LIKE', '%' . $userInput . '%' )
-                      ->orWhere( 'users.phone_number', 'LIKE', '%' . $normalizedPhone . '%' );
+                      ->orWhere( 'users.phone_number', 'LIKE', '%' . $userInput . '%' );
             } );
         
             $filter = true;
@@ -365,7 +365,11 @@ class UserService
 
     public static function oneUser( $request ) {
 
-        $user = User::find( Helper::decode( $request->id ) );
+        $user = User::with( 'referral' )->find( Helper::decode( $request->id ) );
+
+        if( !empty( $user->referral ) ) {
+            $user->referral->append( 'encrypted_id' );
+        }
 
         return response()->json( $user );
     }
