@@ -565,7 +565,7 @@ class UserService
                     $updated_referral_structure = $upline->referral_structure . '|' . $upline->id;
                     $before_referral_structure = $updateUser->referral_structure . '|' . $updateUser->id;
 
-                    $downlines = User::where( 'referral_structure', 'like', '|' . $before_referral_structure . '%' )->get();
+                    $downlines = User::where( 'referral_structure', 'like', $before_referral_structure . '%' )->get();
                     foreach ( $downlines as $downline ) {
                         $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
                         $downline->save();
@@ -581,7 +581,7 @@ class UserService
                     $updated_referral_structure = '-';
                     $before_referral_structure = $updateUser->referral_structure . '|' . $updateUser->id;
 
-                    $downlines = User::where( 'referral_structure', 'like', '|' . $before_referral_structure . '%' )->get();
+                    $downlines = User::where( 'referral_structure', 'like', $before_referral_structure . '%' )->get();
                     foreach ( $downlines as $downline ) {
                         $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
                         $downline->save();
