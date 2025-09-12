@@ -271,7 +271,7 @@ $user_edit = 'user_edit';
         }
         
         
-        userSelect2 = $( ue + '_referral' ).select2({
+        userSelect2 = $( de + '_referral' ).select2({
 
             theme: 'bootstrap-5',
             width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
