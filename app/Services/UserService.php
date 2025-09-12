@@ -487,14 +487,14 @@ class UserService
             'id' => Helper::decode( $request->id ),
         ] );
 
-        if( !empty( $request->referral_id ) ) {
-            $request->merge( [
-                'referral_id' => \Helper::decode( $request->referral_id )
-            ] );
-        }
+        // if( !empty( $request->referral_id ) ) {
+        //     $request->merge( [
+        //         'referral_id' => \Helper::decode( $request->referral_id )
+        //     ] );
+        // }
 
         $validator = Validator::make( $request->all(), [
-            'referral_id' => [ 'nullable', 'exists:users,id' ],
+            // 'referral_id' => [ 'nullable', 'exists:users,id' ],
             'username' => [ 'nullable', 'alpha_dash', 'unique:users,username,' . $request->id, new CheckASCIICharacter ],
             'email' => [ 'nullable', 'bail', 'unique:users,email,' . $request->id, 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
             'fullname' => [ 'nullable' ],
@@ -559,37 +559,38 @@ class UserService
             if ( !empty( $request->password ) ) {
                 $updateUser->password = Hash::make( $request->password );
             }
-            if( !empty( $request->referral_id ) ) {
-                $upline = User::find( $request->referral_id );
-                if( $updateUser->referral_id != $request->referral_id ) {
-                    $updated_referral_structure = $upline->referral_structure . '|' . $upline->id;
-                    $before_referral_structure = $updateUser->referral_structure . '|' . $updateUser->id;
 
-                    $downlines = User::where( 'referral_structure', 'like', $before_referral_structure . '%' )->get();
-                    foreach ( $downlines as $downline ) {
-                        $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
-                        $downline->save();
-                    }
+            // if( !empty( $request->referral_id ) ) {
+            //     $upline = User::find( $request->referral_id );
+            //     if( $updateUser->referral_id != $request->referral_id ) {
+            //         $updated_referral_structure = $upline->referral_structure . '|' . $upline->id;
+            //         $before_referral_structure = $updateUser->referral_structure . '|' . $updateUser->id;
 
-                    $updateUser->referral_id = $upline ? $upline->id : null;
-                    $updateUser->referral_structure = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
-                }
+            //         $downlines = User::where( 'referral_structure', 'like', $before_referral_structure . '%' )->get();
+            //         foreach ( $downlines as $downline ) {
+            //             $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
+            //             $downline->save();
+            //         }
+
+            //         $updateUser->referral_id = $upline ? $upline->id : null;
+            //         $updateUser->referral_structure = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
+            //     }
                 
-            } else {
+            // } else {
                 
-                if( $updateUser->referral_id != $request->referral_id ) {
-                    $updated_referral_structure = '-';
-                    $before_referral_structure = $updateUser->referral_structure . '|' . $updateUser->id;
+            //     if( $updateUser->referral_id != $request->referral_id ) {
+            //         $updated_referral_structure = '-';
+            //         $before_referral_structure = $updateUser->referral_structure . '|' . $updateUser->id;
 
-                    $downlines = User::where( 'referral_structure', 'like', $before_referral_structure . '%' )->get();
-                    foreach ( $downlines as $downline ) {
-                        $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
-                        $downline->save();
-                    }
-                    $updateUser->referral_id = null;
-                    $updateUser->referral_structure = '-';
-                }
-            }
+            //         $downlines = User::where( 'referral_structure', 'like', $before_referral_structure . '%' )->get();
+            //         foreach ( $downlines as $downline ) {
+            //             $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $updateUser->id, $downline->referral_structure );
+            //             $downline->save();
+            //         }
+            //         $updateUser->referral_id = null;
+            //         $updateUser->referral_structure = '-';
+            //     }
+            // }
             
             $updateUser->save();
 
