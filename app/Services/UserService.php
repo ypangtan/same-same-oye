@@ -572,7 +572,7 @@ class UserService
                     }
 
                     $updateUser->referral_id = $upline ? $upline->id : null;
-                    $updateUser->referral_id = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
+                    $updateUser->referral_structure = $upline ? $upline->referral_structure . '|' . $upline->id : '-';
                 }
                 
             } else {
@@ -587,7 +587,7 @@ class UserService
                         $downline->save();
                     }
                     $updateUser->referral_id = null;
-                    $updateUser->referral_id = '-';
+                    $updateUser->referral_structure = '-';
                 }
             }
             
