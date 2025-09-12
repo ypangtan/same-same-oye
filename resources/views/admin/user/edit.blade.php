@@ -16,6 +16,12 @@ $user_edit = 'user_edit';
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
                 <div class="mb-3 row">
+                    <label for="{{ $user_edit }}_referral" class="col-sm-5 col-form-label">{{ __( 'user.referral' ) }}</label>
+                    <div class="col-sm-7">
+                        <select class="form-control select2" id="{{ $user_edit }}_referral" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.users' ) ] ) }}"></select>
+                    </div>
+                </div>
+                <div class="mb-3 row">
                     <label for="{{ $user_edit }}_date_of_birth" class="col-sm-5 col-form-label">{{ __( 'user.date_of_birth' ) }}</label>
                     <div class="col-sm-7">
                         <input type="date" class="form-control" id="{{ $user_edit }}_date_of_birth">
@@ -176,6 +182,7 @@ $user_edit = 'user_edit';
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
             // formData.append( 'username', $( de + '_username' ).val() );
+            formData.append( 'referral', $( de + '_referral' ).val() ?? '' );
             formData.append( 'email', $( de + '_email' ).val() );
             formData.append( 'first_name', $( de + '_first_name' ).val() );
             formData.append( 'last_name', $( de + '_last_name' ).val() );
@@ -251,11 +258,84 @@ $user_edit = 'user_edit';
                     $( de + '_postcode' ).val( response.postcode );
                     // $( de + '_account_type' ).val( response.account_type );
                     dateOfBirth.setDate( response.date_of_birth );
+                    
+                    if( response.referral != null ){
+                        let option1 = new Option( response.referral.email, response.referral.encrypted_id, true, true );
+                        userSelect2.append( option1 );
+                        userSelect2.trigger( 'change' );
+                    }
 
                     $( 'body' ).loading( 'stop' );
                 },
             } );
         }
         
+        
+        userSelect2 = $( ue + '_referral' ).select2({
+
+            theme: 'bootstrap-5',
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: true,
+
+            ajax: { 
+                url: '{{ route( 'admin.user.allUsers' ) }}',
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        user: params.term, // search term
+                        designation: 1,
+                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
+                        length: 10,
+                        _token: '{{ csrf_token() }}',
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    let processedResult = [];
+
+                    data.users.map( function( v, i ) {
+                        processedResult.push( {
+                            id: v.encrypted_id,
+                            text: v.email,
+                            first_name: v.first_name,
+                            last_name: v.last_name,
+                            phone_number: v.phone_number,
+                        } );
+                    } );
+
+                    return {
+                        results: processedResult,
+                        pagination: {
+                            more: ( params.page * 10 ) < data.recordsFiltered
+                        }
+                    };
+
+                },
+                cache: true
+            },
+            templateResult: function (data) {
+                if (data.loading) return data.text;
+
+                firstname = data?.first_name ?? '-';
+                lastname = data?.last_name ?? '-';
+                fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' ),
+                const $container = $(`
+                    <div class="d-flex align-items-center">
+                        <span>${ fullname ? fullname : '-' }</span>
+                        ( <span>${data.phone}</span> )
+                    </div>
+                `);
+                return $container;
+            },
+
+            templateSelection: function (data) {
+                return data.text || '';
+            }
+
+        });
     } );
 </script>
