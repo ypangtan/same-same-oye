@@ -182,7 +182,7 @@ $user_create = 'user_create';
 
             let formData = new FormData();
             // formData.append( 'username', $( dc + '_username' ).val() );
-            formData.append( 'referral', $( dc + '_referral' ).val() ?? '' );
+            formData.append( 'referral_id', $( dc + '_referral' ).val() ?? '' );
             formData.append( 'email', $( dc + '_email' ).val() );
             formData.append( 'first_name', $( dc + '_first_name' ).val() );
             formData.append( 'last_name', $( dc + '_last_name' ).val() );
