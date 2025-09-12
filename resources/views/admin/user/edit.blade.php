@@ -182,7 +182,7 @@ $user_edit = 'user_edit';
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
             // formData.append( 'username', $( de + '_username' ).val() );
-            formData.append( 'referral', $( de + '_referral' ).val() ?? '' );
+            formData.append( 'referral_id', $( de + '_referral' ).val() ?? '' );
             formData.append( 'email', $( de + '_email' ).val() );
             formData.append( 'first_name', $( de + '_first_name' ).val() );
             formData.append( 'last_name', $( de + '_last_name' ).val() );
