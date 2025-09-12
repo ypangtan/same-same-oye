@@ -356,6 +356,11 @@ class UserService
             //         break;
             // }
         }
+
+        if( !empty( $request->no_user ) ) {
+            $user = \Helper::decode( $request->no_user );
+            $model->where( 'id', '!=', $user );
+        }
         
         return [
             'filter' => $filter,
