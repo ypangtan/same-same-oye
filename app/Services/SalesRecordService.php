@@ -545,6 +545,10 @@ class SalesRecordService
                 $wt->remarks = 'Total Points Earned';
                 $wt->remark = 'Total Points Earned';
             }
+
+            if( $wt->transaction_type == 26 || $wt->transaction_type == 27 ){
+                $wt->transaction_type = 12;
+            }
         }
         
         // Convert to array and add your message
