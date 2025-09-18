@@ -2311,8 +2311,8 @@ class UserService
                     //  give point
                     WalletService::transact( $upline->wallets->where('type', 1)->first(), [
                         'amount' => $gift->reward_value,
-                        'remark' => 'referral Rewards',
-                        'type' => 2,
+                        'remark' => 'Referral Rewards',
+                        'type' => 1,
                         'transaction_type' => 27,
                     ] );
                 }

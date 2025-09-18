@@ -194,18 +194,18 @@ class AdministratorService
     
             $createAdmin->syncRoles( [ $roleModel->name ] );
 
-            $createUserObject = [
-                'name' => strtolower( $request->username ),
-                'fullname' => $request->fullname,
-                'email' => strtolower( $request->email ),
-                'phone_number' => null,
-                'password' => Hash::make( $request->password ),
-                'status' => 10,
-            ];
+            // $createUserObject = [
+            //     'name' => strtolower( $request->username ),
+            //     'fullname' => $request->fullname,
+            //     'email' => strtolower( $request->email ),
+            //     'phone_number' => null,
+            //     'password' => Hash::make( $request->password ),
+            //     'status' => 10,
+            // ];
 
-            $createUser = User::create( $createUserObject );
+            // $createUser = User::create( $createUserObject );
 
-            $createAdmin->user_id = $createUser->id;
+            // $createAdmin->user_id = $createUser->id;
             $createAdmin->save();
 
             DB::commit();
