@@ -453,6 +453,7 @@ class UserService
                 $upline = User::find( $request->referral_id );
                 $createUserObject['referral_id'] = $upline->id;
                 $createUserObject['referral_structure'] = $upline->referral_structure . '|' . $upline->id;
+                self::giveUplineVoucher( $request->referral_id );
             }
 
             $createUser = User::create( $createUserObject );
