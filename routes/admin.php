@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\{
     UserBundleController,
     AnnouncementController,
     AnnouncementRewardController,
+    AppVersionController,
     BannerController,
     LuckyDrawController,
     ProductController,
@@ -475,6 +476,24 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-lucky-draw-reward-status', [ LuckyDrawController::class, 'updateLuckyDrawRewardStatus' ] )->name( 'admin.lucky_draw_reward.updateLuckyDrawRewardStatus' );
                 Route::post( 'import-lucky-draw-reward', [ LuckyDrawController::class, 'importLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawReward' );
                 Route::post( 'import-lucky-draw-reward-v2', [ LuckyDrawController::class, 'importLuckyDrawRewardV2' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawRewardV2' );
+            } );
+
+            Route::prefix( 'app_version' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view app_versions' ] ], function() {
+                    Route::get( '/', [ AppVersionController::class, 'index' ] )->name( 'admin.module_parent.app_version.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add app_versions' ] ], function() {
+                    Route::get( 'add', [ AppVersionController::class, 'add' ] )->name( 'admin.app_version.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit app_versions' ] ], function() {
+                    Route::get( 'edit/{id?}', [ AppVersionController::class, 'edit' ] )->name( 'admin.app_version.edit' );
+                } );
+
+                Route::post( 'all-app-versions', [ AppVersionController::class, 'allAppVersions' ] )->name( 'admin.app_version.allAppVersions' );
+                Route::post( 'one-app-version-reward', [ AppVersionController::class, 'oneAppVersion' ] )->name( 'admin.app_version.oneAppVersion' );
+                Route::post( 'create-app-version-reward', [ AppVersionController::class, 'createAppVersion' ] )->name( 'admin.app_version.createAppVersion' );
+                Route::post( 'update-app-version-reward', [ AppVersionController::class, 'updateAppVersion' ] )->name( 'admin.app_version.updateAppVersion' );
+                Route::post( 'update-app-version-reward-status', [ AppVersionController::class, 'updateAppVersionStatus' ] )->name( 'admin.app_version.updateAppVersionStatus' );
             } );
 
             Route::prefix( 'otp_logs' )->group( function() {

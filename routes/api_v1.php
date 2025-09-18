@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\{
     ApiRequestController,
     BannerController,
     AnnouncementController,
+    AppVersionController,
     LuckyDrawRewardController,
     PointsController,
     RankController,
@@ -63,6 +64,10 @@ Route::prefix( 'lucky-draw-rewards' )->group( function() {
 
 Route::prefix( 'ranks' )->group( function() {
     Route::get( '/', [ RankController::class, 'getAllRanks' ] );
+} );
+
+Route::prefix( 'app_versions' )->group( function() {
+    Route::get( '/', [ AppVersionController::class, 'lastestAppVersion' ] );
 } );
 
 Route::prefix( 'pop_announcements' )->group( function() {
