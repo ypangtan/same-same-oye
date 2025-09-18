@@ -104,7 +104,7 @@ class checkUserBirthday extends Command
                         WalletService::transact( $user->wallets->where('type', 1)->first(), [
                             'amount' => $gift->reward_value,
                             'remark' => 'Birthdays Rewards',
-                            'type' => 2,
+                            'type' => 1,
                             'transaction_type' => 26,
                         ] );
                     }
