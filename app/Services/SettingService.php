@@ -167,8 +167,8 @@ class SettingService {
 
         $validator = Validator::make( $request->all(), [
             'reward_type' => [ 'required', 'in:1,2' ],
-            'voucher' => [ 'nullable', 'exists:vouchers,id' ],
-            'reward_value' => [ 'required', 'numeric', 'gte:0' ],
+            'voucher' => [ $request->reward_type == 1 ? 'nullable' : 'required', 'exists:vouchers,id' ],
+            'reward_value' => [ $request->reward_type == 1 ? 'required' : 'nullable', 'numeric', 'gte:0' ],
             'enable' => [ 'required', 'in:10,20' ],
         ] );
 
@@ -224,9 +224,9 @@ class SettingService {
 
         $validator = Validator::make( $request->all(), [
             'reward_type' => [ 'required', 'in:1,2' ],
-            'voucher' => [ 'nullable', 'exists:vouchers,id' ],
+            'voucher' => [ $request->reward_type == 1 ? 'nullable' : 'required', 'exists:vouchers,id' ],
             'expiry_day' => [ 'required', 'numeric', 'gte:0' ],
-            'reward_value' => [ 'required', 'numeric', 'gte:0' ],
+            'reward_value' => [ $request->reward_type == 1 ? 'required' : 'nullable', 'numeric', 'gte:0' ],
             'enable' => [ 'required', 'in:10,20' ],
         ] );
 

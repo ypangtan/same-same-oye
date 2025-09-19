@@ -91,7 +91,7 @@ $setting = 'setting';
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3 row">
+                                <div class="mb-3 row d-none">
                                     <label for="{{ $setting }}_birthday_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
                                     <div class="col-sm-7">
                                         <input type="number" class="form-control form-control-sm" id="{{ $setting }}_birthday_reward_value">
@@ -135,14 +135,14 @@ $setting = 'setting';
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3 row">
+                                <div class="mb-3 row d-none">
                                     <label for="{{ $setting }}_referral_reward_value" class="col-sm-5 col-form-label">{{ __( 'setting.reward_value' ) }}</label>
                                     <div class="col-sm-7">
                                         <input type="number" class="form-control form-control-sm" id="{{ $setting }}_referral_reward_value">
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
-                                <div class="mb-3 row">
+                                <div class="mb-3 row d-none">
                                     <label for="{{ $setting }}_referral_expiry_day" class="col-sm-5 col-form-label">{{ __( 'setting.expiry_day' ) }} ( Days )</label>
                                     <div class="col-sm-7">
                                         <input type="number" class="form-control form-control-sm" id="{{ $setting }}_referral_expiry_day">
@@ -172,16 +172,26 @@ $setting = 'setting';
         $( s + '_referral_reward_type' ).change( function() {
             if( $( this ).val() == 1 ) {
                 $( s + '_referral_voucher' ).parent().parent().addClass( 'd-none' );
+                $( s + '_referral_expiry_day' ).parent().parent().addClass( 'd-none' );
+
+                $( s + '_referral_reward_value' ).parent().parent().removeClass( 'd-none' );
             } else {
                 $( s + '_referral_voucher' ).parent().parent().removeClass( 'd-none' );
+                $( s + '_referral_expiry_day' ).parent().parent().removeClass( 'd-none' );
+
+                $( s + '_referral_reward_value' ).parent().parent().addClass( 'd-none' );
             }
         } );
 
         $( s + '_birthday_reward_type' ).change( function() {
             if( $( this ).val() == 1 ) {
                 $( s + '_birthday_voucher' ).parent().parent().addClass( 'd-none' );
+
+                $( s + '_birthday_reward_value' ).parent().parent().removeClass( 'd-none' );
             } else {
                 $( s + '_birthday_voucher' ).parent().parent().removeClass( 'd-none' );
+
+                $( s + '_birthday_reward_value' ).parent().parent().addClass( 'd-none' );
             }
         } );
 
