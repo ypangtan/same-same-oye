@@ -2015,7 +2015,27 @@ class UserService
             }
     
             DB::beginTransaction();
+
+            
+            $updated_referral_structure = '-';
+            $before_referral_structure = $currentUser->referral_structure . '|' . $currentUser->id;
+
+            $downlines = User::where( 'referral_structure', 'like', $before_referral_structure . '%' )->get();
+            foreach ( $downlines as $downline ) {
+                if ( $downline->referral_structure === $before_referral_structure ) {
+                    $downline->referral_structure = '-';
+                    $downline->referral_id = null;
+                    $downline->save();
+                    continue;
+                }
+                $downline->referral_structure = str_replace( $before_referral_structure, $updated_referral_structure . '|' . $currentUser->id, $downline->referral_structure );
+                $downline->save();
+            }
     
+            $currentUser->email = 'deleted_' . $currentUser->email;
+            $currentUser->phone_number = 'deleted_' . $currentUser->phone_number;
+            $currentUser->referral_id = null;
+            $currentUser->referral_structure = '-';
             $currentUser->status = 20;
             $currentUser->save();
             DB::commit();
