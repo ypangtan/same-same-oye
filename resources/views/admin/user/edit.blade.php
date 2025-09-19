@@ -74,9 +74,10 @@ $user_edit = 'user_edit';
                     <label for="{{ $user_edit }}_phone_number" class="col-sm-5 col-form-label">{{ __( 'user.phone_number' ) }}</label>
                     <div class="col-sm-7">
                         <div class="input-group">
-                            <button class="flex-shrink-0 inline-flex items-center input-group-text" type="button">
-                                +60
-                            </button>
+                            <select class="form-select flex-shrink-0" id="{{ $user_edit }}_calling_code" style="max-width: 100px;">
+                                <option value="+60" selected>+60</option>
+                                <option value="+65">+65</option>
+                            </select>
                             <input type="text" class="form-control" id="{{ $user_edit }}_phone_number">
                             <div class="invalid-feedback"></div>
                         </div>
@@ -187,6 +188,7 @@ $user_edit = 'user_edit';
             formData.append( 'first_name', $( de + '_first_name' ).val() );
             formData.append( 'last_name', $( de + '_last_name' ).val() );
             
+            formData.append( 'calling_code', $( de + '_calling_code' ).val() );
             formData.append( 'phone_number', $( de + '_phone_number' ).val() );
             formData.append( 'password', $( de + '_password' ).val() );
             formData.append( 'address_1', $( de + '_address_1' ).val() );
@@ -250,6 +252,7 @@ $user_edit = 'user_edit';
                     $( de + '_first_name' ).val( response.first_name );
                     $( de + '_last_name' ).val( response.last_name );
                     // $( de + '_username' ).val( response.username );
+                    $( de + '_calling_code' ).val( response.calling_code );
                     $( de + '_phone_number' ).val( response.phone_number );
                     $( de + '_address_1' ).val( response.address_1 );
                     $( de + '_address_2' ).val( response.address_2 );

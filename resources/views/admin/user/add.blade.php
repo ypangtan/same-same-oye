@@ -75,7 +75,7 @@ $user_create = 'user_create';
                         <div class="input-group">
                             <select class="form-select flex-shrink-0" id="{{ $user_create }}_calling_code" style="max-width: 100px;">
                                 <option value="+60" selected>+60</option>
-                                <option value="+32">+32</option>
+                                <option value="+65">+65</option>
                             </select>
                             <input type="text" class="form-control" id="{{ $user_create }}_phone_number">
                             <div class="invalid-feedback"></div>
