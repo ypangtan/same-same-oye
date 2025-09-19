@@ -714,6 +714,9 @@ class UserService
                 
                 $exist = User::where( 'phone_number', $value )
                     ->where( 'id', '!=', $request->id )
+                    ->when( !empty( $request->calling_code ), function ( $query ) use ( $request ) {
+                        $query->where( 'calling_code', $request->calling_code );
+                    } )
                     ->first();
 
                 if ( $exist ) {
