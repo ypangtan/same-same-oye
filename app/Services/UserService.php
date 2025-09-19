@@ -97,7 +97,7 @@ class UserService
             }
         }
 
-        $totalRecord = User::count();
+        $totalRecord = User::where( 'status', '!=', 30 )->count();
 
         $data = [
             'users' => $users,
@@ -177,6 +177,7 @@ class UserService
     private static function filter( $request, $model ) {
 
         $filter = false;
+        $model->where( 'status', '!=', 30 );
 
         if ( !empty( $request->created_date ) ) {
             if ( str_contains( $request->created_date, 'to' ) ) {
@@ -2036,7 +2037,7 @@ class UserService
             $currentUser->phone_number = 'deleted_' . $currentUser->phone_number;
             $currentUser->referral_id = null;
             $currentUser->referral_structure = '-';
-            $currentUser->status = 20;
+            $currentUser->status = 30;
             $currentUser->save();
             DB::commit();
     
