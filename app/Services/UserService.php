@@ -2036,7 +2036,7 @@ class UserService
             $currentUser->phone_number = 'deleted_' . $currentUser->phone_number;
             $currentUser->referral_id = null;
             $currentUser->referral_structure = '-';
-            $currentUser->status = 20;
+            $currentUser->status = 30;
             $currentUser->save();
             DB::commit();
     
