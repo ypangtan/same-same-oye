@@ -1617,6 +1617,9 @@ class UserService
         $updateUser->username = $request->username;
         $updateUser->first_name = $request->first_name;
         $updateUser->last_name = $request->last_name;
+        if( !empty( $request->calling_code ) ) {
+            $updateUser->calling_code = $request->calling_code;
+        }
         $updateUser->phone_number = $request->phone_number;
         $updateUser->date_of_birth = $request->date_of_birth;
         $updateUser->email = $request->email;
