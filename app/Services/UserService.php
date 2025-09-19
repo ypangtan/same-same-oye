@@ -1437,8 +1437,8 @@ class UserService
                 }
     
                 // assign referral bonus
-                $referralBonus = Option::getReferralBonusSettings();
-                $referral = User::where( 'invitation_code', $request->invitation_code )->first();
+                // $referralBonus = Option::getReferralBonusSettings();
+                // $referral = User::where( 'invitation_code', $request->invitation_code )->first();
 
                 // if( $referral && $registerBonus){
     
