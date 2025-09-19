@@ -546,7 +546,7 @@ class SalesRecordService
                 $wt->remark = 'Total Points Earned';
             }
 
-            if( $wt->transaction_type == 26 || $wt->transaction_type == 27 || $wt->transaction_type == 20 ){
+            if( $wt->transaction_type == 26 || $wt->transaction_type == 27 ){
                 $wt->transaction_type = 12;
             }
         }
