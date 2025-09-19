@@ -266,7 +266,7 @@ class SettingService {
 
             DB::commit();
             return response()->json( [
-                'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'setting.birthday_gift_settings' ) ) ] ),
+                'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'setting.referral_gift_settings' ) ) ] ),
             ] );
 
         } catch ( \Throwable $th ) {
