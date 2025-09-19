@@ -1232,20 +1232,20 @@ class UserService
             }
 
             // assign referral bonus
-            $referralBonus = Option::getReferralBonusSettings();
-            if( $referral && $registerBonus){
+            // $referralBonus = Option::getReferralBonusSettings();
+            // if( $referral && $registerBonus){
 
-                $referralWallet = $referral->wallets->where('type',1)->first();
+            //     $referralWallet = $referral->wallets->where('type',1)->first();
 
-                if( $referralWallet ) {
-                    WalletService::transact( $referralWallet, [
-                        'amount' => $referralBonus->option_value,
-                        'remark' => 'Register Bonus',
-                        'type' => $referralWallet->type,
-                        'transaction_type' => 22,
-                    ] );
-                }
-            }
+            //     if( $referralWallet ) {
+            //         WalletService::transact( $referralWallet, [
+            //             'amount' => $referralBonus->option_value,
+            //             'remark' => 'Register Bonus',
+            //             'type' => $referralWallet->type,
+            //             'transaction_type' => 22,
+            //         ] );
+            //     }
+            // }
 
             $currentTmpUser = TmpUser::find( $request->identifier );
             $currentTmpUser->status = 10;
@@ -1437,22 +1437,22 @@ class UserService
                 }
     
                 // assign referral bonus
-                $referralBonus = Option::getReferralBonusSettings();
-                $referral = User::where( 'invitation_code', $request->invitation_code )->first();
+                // $referralBonus = Option::getReferralBonusSettings();
+                // $referral = User::where( 'invitation_code', $request->invitation_code )->first();
 
-                if( $referral && $registerBonus){
+                // if( $referral && $registerBonus){
     
-                    $referralWallet = $referral->wallets->where('type',1)->first();
+                //     $referralWallet = $referral->wallets->where('type',1)->first();
     
-                    if( $referralWallet ) {
-                        WalletService::transact( $referralWallet, [
-                            'amount' => $referralBonus->option_value,
-                            'remark' => 'Register Bonus',
-                            'type' => $referralWallet->type,
-                            'transaction_type' => 22,
-                        ] );
-                    }
-                }
+                //     if( $referralWallet ) {
+                //         WalletService::transact( $referralWallet, [
+                //             'amount' => $referralBonus->option_value,
+                //             'remark' => 'Register Bonus',
+                //             'type' => $referralWallet->type,
+                //             'transaction_type' => 22,
+                //         ] );
+                //     }
+                // }
 
                 self::createUserNotification(
                     $createUser->id,
