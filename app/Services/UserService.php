@@ -500,6 +500,7 @@ class UserService
             'username' => [ 'nullable', 'alpha_dash', 'unique:users,username,' . $request->id, new CheckASCIICharacter ],
             'email' => [ 'nullable', 'bail', 'unique:users,email,' . $request->id, 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
             'fullname' => [ 'nullable' ],
+            'calling_code' => [ 'nullable' ],
             'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
                 
                 // $exist = User::where( 'phone_number', $value )
@@ -555,7 +556,6 @@ class UserService
             $updateUser->city = $request->city ?? $updateUser->city;
             $updateUser->postcode = $request->postcode ?? $updateUser->postcode;
             $updateUser->date_of_birth = $request->date_of_birth;
-            $updateUser->calling_code = '+60';
             $updateUser->fullname = $request->fullname;
 
             if ( !empty( $request->password ) ) {

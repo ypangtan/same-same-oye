@@ -15,7 +15,7 @@ $user_create = 'user_create';
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
-                <div class="mb-3 row d-none">
+                <div class="mb-3 row">
                     <label for="{{ $user_create }}_referral" class="col-sm-5 col-form-label">{{ __( 'user.referral' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-control select2" id="{{ $user_create }}_referral" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.users' ) ] ) }}"></select>
@@ -75,7 +75,7 @@ $user_create = 'user_create';
                         <div class="input-group">
                             <select class="form-select flex-shrink-0" id="{{ $user_create }}_calling_code" style="max-width: 100px;">
                                 <option value="+60" selected>+60</option>
-                                <option value="+32">+32</option>
+                                <option value="+65">+65</option>
                             </select>
                             <input type="text" class="form-control" id="{{ $user_create }}_phone_number">
                             <div class="invalid-feedback"></div>
