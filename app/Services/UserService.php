@@ -1742,7 +1742,7 @@ class UserService
                         return false;
                     }
                 } ],
-                'password' => [ empty( $request->identifier ) ? 'required' : 'nullable', 'confirmed', Password::min( 8 ) ],
+                'password' => [ empty( $request->identifier ) ? 'nullable' : 'nullable', 'confirmed', Password::min( 8 ) ],
                 'invitation_code' => [ 'nullable', 'exists:users,invitation_code' ],
             ] );
     
