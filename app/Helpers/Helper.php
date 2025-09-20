@@ -508,6 +508,63 @@ class Helper {
 
     }
 
+    public static function sendMultiNotification( $user, $message ){
+
+        $devices = UserDevice::whereIn( 'user_id', $user )->pluck('register_token')->toArray();
+
+        if( $devices ) {
+
+            $header = [
+                'Content-Type: application/json; charset=utf-8',
+                'Authorization: BASIC ' . config( 'services.os.api_key' ),
+            ];
+
+            $json = [
+                'app_id' => config( 'services.os.app_id' ),
+                'contents' => [
+                    'en' => ( is_array( $message ) && isset( $message['message_content'] ) )
+                        ? strip_tags( $message['message_content']['en'] ?? '' )
+                        : ( is_array( $message ) && isset( $message['message'] )
+                            ? strip_tags( $message['message']['en'] ?? '' )
+                            : strip_tags( (string) $message['message'] )
+                        ),
+
+                    'zh' => ( is_array( $message ) && isset( $message['message_content'] ) )
+                        ? strip_tags( $message['message_content']['zh'] ?? '' )
+                        : ( is_array( $message ) && isset( $message['message'] )
+                            ? strip_tags( $message['message']['zh'] ?? '' )
+                            : strip_tags( (string) $message['message'] )
+                        ),
+                ],
+
+                'headings' => [
+                    'en' => ( is_array( $message ) && isset( $message['message'] ) )
+                        ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
+                        ? $message['message']['en']
+                        : $message['message']
+                        : 'IFEI',
+
+                    'zh' => ( is_array( $message ) && isset( $message['message'] ) )
+                        ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
+                        ? $message['message']['zh']
+                        : $message['message']
+                        : 'IFEI',
+                ],
+                'include_player_ids' => $devices,
+                'data' => [
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                    'sound' => 'default',
+                    'status' => 'done',
+                    'key' => $message['key'],
+                    'id' => $message['id'],
+                ]
+            ];
+
+            $sendNotification = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $json ), $header );
+        }    
+
+    }
+
     public static function generateAdjustmentNumber()
     {
         return now()->format('YmdHis');
