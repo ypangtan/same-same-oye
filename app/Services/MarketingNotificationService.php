@@ -217,7 +217,9 @@ class MarketingNotificationService {
             if ( $file ) {
                 $fileName = explode( '/', $file->file );
                 $target = 'marketing_notification/' . $createAnnouncement->id . '/' . $fileName[1];
-                Storage::disk( 'public' )->move( $file->file, $target );
+                if(  $createAnnouncement->image != $target ) {
+                    Storage::disk( 'public' )->copy( $file->file, $target );
+                }
 
                 $createAnnouncement->image = $target;
                 $createAnnouncement->save();
@@ -317,7 +319,9 @@ class MarketingNotificationService {
 
                     $fileName = explode( '/', $file->file );
                     $target = 'marketing_notification/' . $updateAnnouncement->id . '/' . $fileName[1];
-                    Storage::disk( 'public' )->move( $file->file, $target );
+                    if( $updateAnnouncement->image != $target ) {
+                        Storage::disk( 'public' )->copy( $file->file, $target );
+                    }
     
                     $updateAnnouncement->image = $target;
                     $updateAnnouncement->save();
