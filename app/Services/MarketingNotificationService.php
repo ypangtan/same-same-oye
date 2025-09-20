@@ -244,7 +244,7 @@ class MarketingNotificationService {
                 // foreach( $selectedUsersId as $user ){
                 //     self::sendNotification( $user, $createAnnouncement ); 
                 // }
-                $result = self::sendMultiNotification( $createAnnouncement );
+                self::sendMultiNotification( $createAnnouncement );
             }
 
             DB::commit();
@@ -269,7 +269,6 @@ class MarketingNotificationService {
 
         return response()->json( [
             'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.marketing_notifications' ) ) ] ),
-            'data' => isset($result) ? $result : null,
         ] );
 
     }
@@ -483,6 +482,6 @@ class MarketingNotificationService {
         $messageContent['message'] = $createAnnouncement->title;
         $messageContent['message_content'] = $createAnnouncement->content;
 
-        return Helper::sendMultiNotification( $selectedUsersId, $messageContent );
+        Helper::sendMultiNotification( $selectedUsersId, $messageContent );
     }
 }

@@ -561,12 +561,7 @@ class Helper {
             ];
 
             $sendNotification = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $json ), $header );
-            return [
-                'devices' => $devices,
-                'response' => $sendNotification,
-            ];
         }
-        return null;
     }
 
     public static function generateAdjustmentNumber()
