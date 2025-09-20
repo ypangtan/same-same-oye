@@ -1535,7 +1535,24 @@ class UserService
             'first_name' => [ 'nullable' ],
             'last_name' => [ 'nullable' ],
             'email' => [ 'nullable', 'unique:users,email,' . auth()->user()->id, ],
-            'phone_number' => [ 'nullable', 'unique:users,phone_number,' . auth()->user()->id, ],
+            'phone_number' => [ 'nullable', function( $attribute, $value, $fail ) {
+
+                $defaultCallingCode = "+60";
+
+                $exist = User::where( 'status', 10 )
+                ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
+                ->where( function ( $query ) use ( $value ) {
+                    $query->where( 'phone_number', request( 'phone_number' ) )
+                        ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                } )
+                ->where( 'id', '!=', auth()->user()->id )
+                ->first();
+                
+                if ( $exist ) {
+                    $fail( __( 'validation.exists' ) );
+                    return false;
+                }
+            } ],
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
             'profile_picture' => [ 'nullable', 'file', 'max:30720', 'mimes:jpg,jpeg,png,heic' ],
@@ -1600,6 +1617,9 @@ class UserService
         $updateUser->username = $request->username;
         $updateUser->first_name = $request->first_name;
         $updateUser->last_name = $request->last_name;
+        if( !empty( $request->calling_code ) ) {
+            $updateUser->calling_code = $request->calling_code;
+        }
         $updateUser->phone_number = $request->phone_number;
         $updateUser->date_of_birth = $request->date_of_birth;
         $updateUser->email = $request->email;

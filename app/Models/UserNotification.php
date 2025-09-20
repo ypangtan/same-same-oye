@@ -49,7 +49,7 @@ class UserNotification extends Model
         $translations = [];
         foreach ($languages as $lang) {
             App::setLocale($lang);
-            $translations[$lang] = __($value);
+            $translations[$lang] = __($value) ?? '';
         }
 
         $this->attributes['title'] = json_encode($translations);
@@ -63,7 +63,7 @@ class UserNotification extends Model
         $translations = [];
         foreach ($languages as $lang) {
             App::setLocale($lang);
-            $translations[$lang] = __($value);
+            $translations[$lang] = __($value) ?? '';
         }
 
         $this->attributes['content'] = json_encode($translations);
@@ -73,12 +73,8 @@ class UserNotification extends Model
     {
         $translations = json_decode($value, true) ?? [];
 
-        if( !empty( $this->attributes['en_content'] ) ) {
-            $translations['en'] = $this->attributes['en_content'];
-        }
-        if( !empty( $this->attributes['zh_content'] ) ) {
-            $translations['zh'] = $this->attributes['zh_content'];
-        }
+        $translations['en'] = $this->attributes['en_content'] ?? ( $translations['en'] ?? '' );
+        $translations['zh'] = $this->attributes['zh_content'] ?? ( $translations['zh'] ?? '' );
 
         // Return translation for the current locale or fallback to default
         return $translations;
@@ -88,12 +84,9 @@ class UserNotification extends Model
 
         $translations = json_decode($value, true) ?? [];
 
-        if( !empty( $this->attributes['en_title'] ) ) {
-            $translations['en'] = $this->attributes['en_title'];
-        }
-        if( !empty(  $this->attributes['zh_title'] ) ) {
-            $translations['zh'] = $this->attributes['zh_title'];
-        }
+        $translations['en'] = $this->attributes['en_title'] ?? ( $translations['en'] ?? '' );
+        $translations['zh'] = $this->attributes['zh_title'] ?? ( $translations['zh'] ?? '' );
+
         // Return translation for the current locale or fallback to default
         return $translations;
     }
