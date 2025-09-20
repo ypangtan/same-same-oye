@@ -317,7 +317,15 @@ class MarketingNotificationService {
             $updateAnnouncement->key = 'home';
             $updateAnnouncement->en_content = $request->en_content;
             $updateAnnouncement->zh_content = $request->zh_content;
+            
+            $is_broadcast = intval( $request->all_users ) == 1 ? 10 : 20;
 
+            $is_template = self::isPrefixes($request->content);
+
+            $updateAnnouncement->is_broadcast = $is_broadcast;
+            $updateAnnouncement->type = $request->type;
+            $updateAnnouncement->save();
+            
             if ( $request->image ) {
                 $file = FileManager::find( $request->image );
                 if ( $file ) {
@@ -335,14 +343,6 @@ class MarketingNotificationService {
                     $file->save();
                 }
             }
-            
-            $is_broadcast = intval( $request->all_users ) == 1 ? 10 : 20;
-
-            $is_template = self::isPrefixes($request->content);
-
-            $updateAnnouncement->is_broadcast = $is_broadcast;
-            $updateAnnouncement->type = $request->type;
-            $updateAnnouncement->save();
 
             DB::commit();
 
