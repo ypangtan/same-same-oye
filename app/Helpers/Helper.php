@@ -511,8 +511,8 @@ class Helper {
     public static function sendMultiNotification( $user, $message ){
 
         $devices = UserDevice::whereIn( 'user_id', $user )->pluck('register_token')->toArray();
-
         if( $devices ) {
+            $devices = array_values( array_unique( $devices ) );
 
             $header = [
                 'Content-Type: application/json; charset=utf-8',
