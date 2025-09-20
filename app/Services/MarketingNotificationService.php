@@ -240,10 +240,11 @@ class MarketingNotificationService {
             }
 
             if( $request->users == NULL ){
-                $selectedUsersId = User::where( 'status', 10 )->get();
-                foreach( $selectedUsersId as $user ){
-                    self::sendNotification( $user, $createAnnouncement ); 
-                }
+                // $selectedUsersId = User::where( 'status', 10 )->get();
+                // foreach( $selectedUsersId as $user ){
+                //     self::sendNotification( $user, $createAnnouncement ); 
+                // }
+                self::sendMultiNotification( $createAnnouncement );
             }
 
             DB::commit();
@@ -471,4 +472,16 @@ class MarketingNotificationService {
         Helper::sendNotification( $user->id, $messageContent );
         
     } 
+
+    private static function sendMultiNotification( $createAnnouncement ) {
+        $selectedUsersId = User::where( 'status', 10 )->pluck( 'id' )->toArray();
+        $messageContent = array();
+
+        $messageContent['key'] = 'announcement';
+        $messageContent['id'] = $createAnnouncement->id;
+        $messageContent['message'] = $createAnnouncement->title;
+        $messageContent['message_content'] = $createAnnouncement->content;
+
+        Helper::sendMultiNotification( $selectedUsersId, $messageContent );
+    }
 }
