@@ -330,7 +330,7 @@ class MarketingNotificationService {
                 $file = FileManager::find( $request->image );
                 if ( $file ) {
 
-                    Storage::disk( 'public' )->delete( $updateAnnouncement->photo );
+                    $old_photo = $updateAnnouncement->image;
 
                     $fileName = explode( '/', $file->file );
                     $target = 'marketing_notification/' . $updateAnnouncement->id . '/' . $fileName[1];
@@ -341,6 +341,10 @@ class MarketingNotificationService {
     
                     $file->status = 10;
                     $file->save();
+
+                    if ( $old_photo && Storage::disk( 'public' )->exists( $old_photo ) ) { 
+                        Storage::disk( 'public' )->delete( $old_photo );
+                    }
                 }
             }
 
