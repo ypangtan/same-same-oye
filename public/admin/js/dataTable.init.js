@@ -221,10 +221,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
             lengthSelect2.addClass('custom-dropdown');
         },
         drawCallback: function (response) {
-            document.querySelectorAll('.dropdown-toggle').forEach(function (el) {
-                new bootstrap.Dropdown(el, { container: 'body' });
-            });
-
             if (response.json.subTotal != undefined) {
                 if (Array.isArray(response.json.subTotal)) {
                     $.each(response.json.subTotal, function (i, v) {

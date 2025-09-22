@@ -125,7 +125,7 @@
             let menus = [];
 
             // and when you show it, move it to the body
-            $( '.datatable-wrap' ).on( 'show.bs.dropdown', function( e ) {
+            $( '.datatable' ).on( 'show.bs.dropdown', function( e ) {
 
                 let target = $( e.target );
 
