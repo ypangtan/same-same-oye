@@ -125,86 +125,48 @@
             let menus = [];
 
             // and when you show it, move it to the body
-            // $( '.datatable-wrap' ).on( 'show.bs.dropdown', function( e ) {
+            $( '.dt-scroll-body' ).on( 'show.bs.dropdown', function( e ) {
 
-            //     let target = $( e.target );
-
-            //     // save the parent
-            //     parents.push( target.parent() );
-
-            //     // grab the menu
-            //     let dropdownMenu = target.next();
-
-            //     // save the menu
-            //     menus.push( dropdownMenu );
-
-            //     // detach it and append it to the body
-            //     $( 'body' ).append( dropdownMenu.detach() );
-
-            //     // grab the new offset position
-            //     let eOffset = target.offset();
-
-            //     // make sure to place it where it would normally go (this could be improved)
-            //     dropdownMenu.css( {
-            //         'display': 'block',
-            //         'top': eOffset.top + target.outerHeight(),
-            //         'left': eOffset.left
-            //     } );
-            // } );
-
-            // // and when you hide it, reattach the drop down, and hide it normally
-            // $( '.datatable-wrap' ).on( 'hide.bs.dropdown', function( e ) {
-
-            //     menus.forEach( function( element, index ) {
-            //         let parent = parents[index];
-            //         let dropdownMenu = element;
-
-            //         parent.append( dropdownMenu.detach() );
-            //         dropdownMenu.hide();
-
-            //         menus.splice( index, 1 );
-            //         parents.splice( index, 1 );
-            //     } )
-            // } );
-
-            $('.datatable').on('show.bs.dropdown', function (e) {
-                let target = $(e.target);
+                console.log( 'abc' );
+                let target = $( e.target );
 
                 // save the parent
-                parents.push(target.parent());
+                parents.push( target.parent() );
 
                 // grab the menu
-                let dropdownMenu = target.next('.dropdown-menu');
+                let dropdownMenu = target.next();
 
                 // save the menu
-                menus.push(dropdownMenu);
+                menus.push( dropdownMenu );
 
-                // detach it and append to body
-                $('body').append(dropdownMenu.detach());
+                // detach it and append it to the body
+                $( 'body' ).append( dropdownMenu.detach() );
 
-                // calculate correct position including scroll
+                // grab the new offset position
                 let eOffset = target.offset();
-                dropdownMenu.css({
+
+                // make sure to place it where it would normally go (this could be improved)
+                dropdownMenu.css( {
                     'display': 'block',
-                    'position': 'absolute',
                     'top': eOffset.top + target.outerHeight(),
                     'left': eOffset.left
-                });
-            });
+                } );
+            } );
 
-            // when hidden, move back to original place
-            $('.datatable').on('hide.bs.dropdown', function (e) {
-                let target = $(e.target);
-                let index = parents.length - 1;
+            // and when you hide it, reattach the drop down, and hide it normally
+            $( '.dt-scroll-body' ).on( 'hide.bs.dropdown', function( e ) {
 
-                if (index >= 0) {
-                    let parent = parents.pop();
-                    let dropdownMenu = menus.pop();
+                menus.forEach( function( element, index ) {
+                    let parent = parents[index];
+                    let dropdownMenu = element;
 
-                    parent.append(dropdownMenu.detach());
-                    dropdownMenu.hide(); // reset
-                }
-            });
+                    parent.append( dropdownMenu.detach() );
+                    dropdownMenu.hide();
+
+                    menus.splice( index, 1 );
+                    parents.splice( index, 1 );
+                } )
+            } );
 
         } );
     </script>
