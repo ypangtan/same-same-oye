@@ -139,7 +139,7 @@
                 menus.push( dropdownMenu );
 
                 // detach it and append it to the body
-                $( '.dt-container' ).append( dropdownMenu.detach() );
+                $( '.dt-container' ).parent().append( dropdownMenu.detach() );
 
                 // grab the new offset position
                 let eOffset = target.offset();
