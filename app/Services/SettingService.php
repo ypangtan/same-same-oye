@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\{
     Administrator,
+    AppVersion,
     BirthdayGiftSetting,
     Option,
     ReferralGiftSetting,
@@ -277,6 +278,50 @@ class SettingService {
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
             ], 500 );
         }
+    }
+
+    public static function updateAppVersion( $request ) {
+
+        $validator = Validator::make( $request->all(), [
+            'version' => [ 'required' ],
+            'force_logout' => [ 'required', 'in:10,20' ],
+        ] );
+
+        $attributeName = [
+            'version' => __( 'app_version.version' ),
+            'force_logout' => __( 'app_version.force_logout' ),
+        ];
+
+        foreach( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        DB::beginTransaction();
+
+        try {
+            $updateAppVersions = AppVersion::get();
+            foreach( $updateAppVersions as $updateAppVersion ) {
+                $updateAppVersion->version = $request->version;
+                $updateAppVersion->force_logout = $request->force_logout;
+                $updateAppVersion->save();
+            }
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.app_versions' ) ) ] ),
+        ] );
     }
 
 }

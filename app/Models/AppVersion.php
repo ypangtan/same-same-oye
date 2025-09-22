@@ -29,6 +29,32 @@ class AppVersion extends Model
         'status',
     ];
 
+    public function getNotesAttribute() {
+        $locale = app()->getLocale() ?? 'en';
+        
+        switch ($locale) {
+            case 'en':
+                return $this->attributes['en_notes'];
+            case 'zh':
+                return $this->attributes['zh_notes'];
+            default:
+                return $this->attributes['en_notes'];
+        }
+    }
+
+    public function getDescAttribute() {
+        $locale = app()->getLocale() ?? 'en';
+        
+        switch ($locale) {
+            case 'en':
+                return $this->attributes['en_desc'];
+            case 'zh':
+                return $this->attributes['zh_desc'];
+            default:
+                return $this->attributes['en_desc'];
+        }
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

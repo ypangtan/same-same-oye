@@ -55,4 +55,7 @@ return [
     'enable_gift' => 'Enable Gift',
     'birthday_gift_settings' => 'Birthday Gift Settings',
     'referral_gift_settings' => 'Referral Gift Settings',
+    'app_version_settings' => 'App Version Settings',
+    'enable_force_logout' => 'Enable Force Logout',
+    'app_version' => 'App Version',
 ];

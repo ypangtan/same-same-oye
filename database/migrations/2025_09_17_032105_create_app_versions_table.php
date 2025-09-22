@@ -15,7 +15,7 @@ class CreateAppVersionsTable extends Migration
     {
         Schema::create('app_versions', function (Blueprint $table) {
             $table->id();
-            $table->decimal( 'version', 5, 2 );
+            $table->string( 'version' );
             $table->tinyInteger( 'force_logout' )->default( 10 );
             $table->text( 'en_notes' )->nullable();
             $table->text( 'zh_notes' )->nullable();

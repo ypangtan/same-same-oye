@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Services\{
+    AppVersionService,
     SettingService,
 };
 
@@ -77,6 +78,11 @@ class SettingController extends Controller
         return SettingService::bonusSettings();
     }
     
+    public function lastestAppVersion( Request $request ) {
+
+        return AppVersionService::lastestAppVersion( $request );
+    }
+    
     public function giftSettings( Request $request ) {
 
         return SettingService::giftSettings();
@@ -105,5 +111,10 @@ class SettingController extends Controller
     public function updateReferralGiftSetting( Request $request ) {
 
         return SettingService::updateReferralGiftSetting( $request );
+    }
+
+    public function updateAppVersion( Request $request ) {
+
+        return SettingService::updateAppVersion( $request );
     }
 }

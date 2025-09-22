@@ -261,11 +261,13 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'settings', [ SettingController::class, 'settings' ] )->name( 'admin.setting.settings' );
                 Route::post( 'gift-settings', [ SettingController::class, 'giftSettings' ] )->name( 'admin.setting.giftSettings' );
                 Route::post( 'bonus-settings', [ SettingController::class, 'bonusSettings' ] )->name( 'admin.setting.bonusSettings' );
+                Route::post( 'app-version-settings', [ SettingController::class, 'lastestAppVersion' ] )->name( 'admin.setting.lastestAppVersion' );
                 Route::post( 'maintenance-settings', [ SettingController::class, 'maintenanceSettings' ] )->name( 'admin.setting.maintenanceSettings' );
                 Route::post( 'update-bonus-setting', [ SettingController::class, 'updateBonusSetting' ] )->name( 'admin.setting.updateBonusSetting' );
                 Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
                 Route::post( 'update-birthday-gift-setting', [ SettingController::class, 'updateBirthdayGiftSetting' ] )->name( 'admin.setting.updateBirthdayGiftSetting' );
                 Route::post( 'update-referral-gift-setting', [ SettingController::class, 'updateReferralGiftSetting' ] )->name( 'admin.setting.updateReferralGiftSetting' );
+                Route::post( 'update-app-version-setting', [ SettingController::class, 'updateAppVersion' ] )->name( 'admin.setting.updateAppVersion' );
             } );
 
             Route::prefix( 'user-vouchers' )->group( function() {
@@ -476,24 +478,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-lucky-draw-reward-status', [ LuckyDrawController::class, 'updateLuckyDrawRewardStatus' ] )->name( 'admin.lucky_draw_reward.updateLuckyDrawRewardStatus' );
                 Route::post( 'import-lucky-draw-reward', [ LuckyDrawController::class, 'importLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawReward' );
                 Route::post( 'import-lucky-draw-reward-v2', [ LuckyDrawController::class, 'importLuckyDrawRewardV2' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawRewardV2' );
-            } );
-
-            Route::prefix( 'app_version' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view app_versions' ] ], function() {
-                    Route::get( '/', [ AppVersionController::class, 'index' ] )->name( 'admin.module_parent.app_version.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add app_versions' ] ], function() {
-                    Route::get( 'add', [ AppVersionController::class, 'add' ] )->name( 'admin.app_version.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit app_versions' ] ], function() {
-                    Route::get( 'edit/{id?}', [ AppVersionController::class, 'edit' ] )->name( 'admin.app_version.edit' );
-                } );
-
-                Route::post( 'all-app-versions', [ AppVersionController::class, 'allAppVersions' ] )->name( 'admin.app_version.allAppVersions' );
-                Route::post( 'one-app-version-reward', [ AppVersionController::class, 'oneAppVersion' ] )->name( 'admin.app_version.oneAppVersion' );
-                Route::post( 'create-app-version-reward', [ AppVersionController::class, 'createAppVersion' ] )->name( 'admin.app_version.createAppVersion' );
-                Route::post( 'update-app-version-reward', [ AppVersionController::class, 'updateAppVersion' ] )->name( 'admin.app_version.updateAppVersion' );
-                Route::post( 'update-app-version-reward-status', [ AppVersionController::class, 'updateAppVersionStatus' ] )->name( 'admin.app_version.updateAppVersionStatus' );
             } );
 
             Route::prefix( 'otp_logs' )->group( function() {
