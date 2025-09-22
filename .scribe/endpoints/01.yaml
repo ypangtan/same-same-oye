@@ -1,57 +1,20 @@
-name: 'Banner API'
+name: 'App Version API'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/banners
+    uri: api/v1/app_versions
     metadata:
-      title: '1. Get banners'
-      description: '<aside class="notice">Get all banners ( sorted )</aside>'
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
+      title: '1. Lastest App Version'
+      description: |-
+        <aside class="notice">Get Lastest App Version </aside>
 
-                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'https://staging.ifei.com.my/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      0: GET
-      2: POST
-      3: PUT
-      4: PATCH
-      5: DELETE
-      6: OPTIONS
-    uri: api/v1/banners/details
-    metadata:
-      title: '2. Get one banner detail'
-      description: ''
-      authenticated: true
+        <strong>platform</strong><br>
+        1: App Store<br>
+        2: Play Store<br>
+        3: App Gallery<br>
+      authenticated: false
       custom: []
     headers:
       Content-Type: application/json
@@ -59,9 +22,9 @@ endpoints:
     urlParameters: []
     queryParameters: []
     bodyParameters:
-      id:
-        name: id
-        description: 'The id the banner.'
+      platform:
+        name: platform
+        description: 'The number of the platform.'
         required: true
         example: '1'
         type: string

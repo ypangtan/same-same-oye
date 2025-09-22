@@ -109,10 +109,60 @@ paths:
                   type: required
                   description: 'integer The id of announcement to be claim.'
                   example: '1'
-  /api/v1/banners:
+  /api/v1/contact-us:
+    post:
+      summary: '1. Enquiry Mail'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Contact-Us API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                  description: 'The fullname for contact us enquiry.'
+                  example: 'John Wick'
+                email:
+                  type: string
+                  description: 'The email for contact us enquiry.'
+                  example: johnwick@gmail.com
+                phone_number:
+                  type: string
+                  description: 'The phone_number for contact us enquiry.'
+                  example: '012342123'
+                message:
+                  type: string
+                  description: 'The message for contact us enquiry.'
+                  example: 'lorem ipsum..'
+              required:
+                - email
+                - phone_number
+                - message
+      security: []
+  /api/v1/app_versions:
     get:
-      summary: '1. Get banners'
-      description: '<aside class="notice">Get all banners ( sorted )</aside>'
+      summary: '1. Lastest App Version'
+      description: "<aside class=\"notice\">Get Lastest App Version </aside>\n\n<strong>platform</strong><br>\n1: App Store<br>\n2: Play Store<br>\n3: App Gallery<br>"
       parameters:
         -
           in: header
@@ -137,7 +187,21 @@ paths:
                 type: string
                 example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
-        - 'Banner API'
+        - 'App Version API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 'The number of the platform.'
+                  example: '1'
+              required:
+                - platform
+      security: []
   /api/v1/banners/details:
     get:
       summary: '2. Get one banner detail'
@@ -180,6 +244,35 @@ paths:
                   example: '1'
               required:
                 - id
+  /api/v1/banners:
+    get:
+      summary: '1. Get banners'
+      description: '<aside class="notice">Get all banners ( sorted )</aside>'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Banner API'
   /api/v1/checkin:
     get:
       summary: '1. Get Check-in History'
@@ -269,56 +362,6 @@ paths:
                 example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'Check-in API'
-  /api/v1/contact-us:
-    post:
-      summary: '1. Enquiry Mail'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Contact-Us API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                fullname:
-                  type: string
-                  description: 'The fullname for contact us enquiry.'
-                  example: 'John Wick'
-                email:
-                  type: string
-                  description: 'The email for contact us enquiry.'
-                  example: johnwick@gmail.com
-                phone_number:
-                  type: string
-                  description: 'The phone_number for contact us enquiry.'
-                  example: '012342123'
-                message:
-                  type: string
-                  description: 'The message for contact us enquiry.'
-                  example: 'lorem ipsum..'
-              required:
-                - email
-                - phone_number
-                - message
-      security: []
   /api/v1/lucky-draw-rewards:
     get:
       summary: '1. Search Lucky Draw Reward'
@@ -961,15 +1004,15 @@ paths:
                 register_token:
                   type: string
                   description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
-                  example: magnam
+                  example: nisi
                 app_id:
                   type: string
                   description: 'optional The one signal app id. ( Default will be following current settings ).'
-                  example: dolore
+                  example: ipsa
                 api_key:
                   type: string
                   description: 'optional The one signal api_key ( Default will be following current settings ).'
-                  example: qui
+                  example: aut
   /api/v1/otp:
     post:
       summary: '4. Request an OTP'
@@ -1405,13 +1448,16 @@ tags:
     name: 'Announcement API'
     description: ''
   -
+    name: 'Contact-Us API'
+    description: ''
+  -
+    name: 'App Version API'
+    description: ''
+  -
     name: 'Banner API'
     description: ''
   -
     name: 'Check-in API'
-    description: ''
-  -
-    name: 'Contact-Us API'
     description: ''
   -
     name: 'Lucky Draw Reward API'

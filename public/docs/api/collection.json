@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Ifei",
-        "_postman_id": "ed570a6f-cf9f-4ee1-a27b-6f1d4d878ae8",
+        "_postman_id": "dad00243-7ff4-4f79-ac37-4f67f9e151c3",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -158,17 +158,54 @@
             ]
         },
         {
-            "name": "Banner API",
+            "name": "Contact-Us API",
             "description": "",
             "item": [
                 {
-                    "name": "1. Get banners",
+                    "name": "1. Enquiry Mail",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/banners",
+                            "path": "api\/v1\/contact-us",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/banners"
+                            "raw": "{{baseUrl}}\/api\/v1\/contact-us"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"fullname\":\"John Wick\",\"email\":\"johnwick@gmail.com\",\"phone_number\":\"012342123\",\"message\":\"lorem ipsum..\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "App Version API",
+            "description": "",
+            "item": [
+                {
+                    "name": "1. Lastest App Version",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/app_versions",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/app_versions"
                         },
                         "method": "GET",
                         "header": [
@@ -181,8 +218,72 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
-                        "description": "<aside class=\"notice\">Get all banners ( sorted )<\/aside>"
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"platform\":\"1\"}"
+                        },
+                        "description": "<aside class=\"notice\">Get Lastest App Version <\/aside>\n\n<strong>platform<\/strong><br>\n1: App Store<br>\n2: Play Store<br>\n3: App Gallery<br>",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "location",
+                                    "value": "https:\/\/staging.ifei.com.my\/backoffice\/dashboard"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "text\/html; charset=utf-8"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 302,
+                            "body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" \/>\n        <meta http-equiv=\"refresh\" content=\"0;url='https:\/\/staging.ifei.com.my\/backoffice\/dashboard'\" \/>\n\n        <title>Redirecting to https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/title>\n    <\/head>\n    <body>\n        Redirecting to <a href=\"https:\/\/staging.ifei.com.my\/backoffice\/dashboard\">https:\/\/staging.ifei.com.my\/backoffice\/dashboard<\/a>.\n    <\/body>\n<\/html>",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Banner API",
+            "description": "",
+            "item": [
+                {
+                    "name": "2. Get one banner detail",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/banners\/details",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/banners\/details"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"id\":\"1\"}"
+                        },
+                        "description": ""
                     },
                     "response": [
                         {
@@ -211,13 +312,13 @@
                     ]
                 },
                 {
-                    "name": "2. Get one banner detail",
+                    "name": "1. Get banners",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/banners\/details",
+                            "path": "api\/v1\/banners",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/banners\/details"
+                            "raw": "{{baseUrl}}\/api\/v1\/banners"
                         },
                         "method": "GET",
                         "header": [
@@ -230,11 +331,8 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"id\":\"1\"}"
-                        },
-                        "description": ""
+                        "body": null,
+                        "description": "<aside class=\"notice\">Get all banners ( sorted )<\/aside>"
                     },
                     "response": [
                         {
@@ -397,43 +495,6 @@
                             "name": ""
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Contact-Us API",
-            "description": "",
-            "item": [
-                {
-                    "name": "1. Enquiry Mail",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/contact-us",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/contact-us"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"fullname\":\"John Wick\",\"email\":\"johnwick@gmail.com\",\"phone_number\":\"012342123\",\"message\":\"lorem ipsum..\"}"
-                        },
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": []
                 }
             ]
         },
@@ -1087,7 +1148,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"magnam\",\"app_id\":\"dolore\",\"api_key\":\"qui\"}"
+                            "raw": "{\"title\":\"test-notification\",\"content\":\"test-notification-content\",\"register_token\":\"nisi\",\"app_id\":\"ipsa\",\"api_key\":\"aut\"}"
                         },
                         "description": ""
                     },

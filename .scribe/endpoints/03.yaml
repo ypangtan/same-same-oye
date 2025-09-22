@@ -1,48 +1,103 @@
-name: 'Contact-Us API'
+name: 'Check-in API'
 description: ''
 endpoints:
   -
     httpMethods:
-      - POST
-    uri: api/v1/contact-us
+      - GET
+    uri: api/v1/checkin
     metadata:
-      title: '1. Enquiry Mail'
+      title: '1. Get Check-in History'
       description: ''
-      authenticated: false
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      per_page:
+        name: per_page
+        description: 'Retrieve how many product in a page, default is 10.'
+        required: false
+        example: 10
+        type: integer
+        custom: []
+    bodyParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
+
+                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'https://staging.ifei.com.my/backoffice/dashboard'
+          content-type: 'text/html; charset=utf-8'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/checkin
+    metadata:
+      title: '2. Check-in'
+      description: ''
+      authenticated: true
       custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
     queryParameters: []
-    bodyParameters:
-      fullname:
-        name: fullname
-        description: 'The fullname for contact us enquiry.'
-        required: false
-        example: 'John Wick'
-        type: string
-        custom: []
-      email:
-        name: email
-        description: 'The email for contact us enquiry.'
-        required: true
-        example: johnwick@gmail.com
-        type: string
-        custom: []
-      phone_number:
-        name: phone_number
-        description: 'The phone_number for contact us enquiry.'
-        required: true
-        example: '012342123'
-        type: string
-        custom: []
-      message:
-        name: message
-        description: 'The message for contact us enquiry.'
-        required: true
-        example: 'lorem ipsum..'
-        type: string
-        custom: []
+    bodyParameters: []
     responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/checkin/rewards
+    metadata:
+      title: '3. Get Check-in Rewards'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          <!DOCTYPE html>
+          <html>
+              <head>
+                  <meta charset="UTF-8" />
+                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
+
+                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
+              </head>
+              <body>
+                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
+              </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          location: 'https://staging.ifei.com.my/backoffice/dashboard'
+          content-type: 'text/html; charset=utf-8'
+          access-control-allow-origin: '*'
+        description: null
     responseFields: []

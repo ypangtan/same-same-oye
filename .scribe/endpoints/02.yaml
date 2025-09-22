@@ -1,12 +1,17 @@
-name: 'Check-in API'
+name: 'Banner API'
 description: ''
 endpoints:
   -
     httpMethods:
-      - GET
-    uri: api/v1/checkin
+      0: GET
+      2: POST
+      3: PUT
+      4: PATCH
+      5: DELETE
+      6: OPTIONS
+    uri: api/v1/banners/details
     metadata:
-      title: '1. Get Check-in History'
+      title: '2. Get one banner detail'
       description: ''
       authenticated: true
       custom: []
@@ -14,15 +19,15 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
-    queryParameters:
-      per_page:
-        name: per_page
-        description: 'Retrieve how many product in a page, default is 10.'
-        required: false
-        example: 10
-        type: integer
+    queryParameters: []
+    bodyParameters:
+      id:
+        name: id
+        description: 'The id the banner.'
+        required: true
+        example: '1'
+        type: string
         custom: []
-    bodyParameters: []
     responses:
       -
         status: 302
@@ -48,28 +53,11 @@ endpoints:
     responseFields: []
   -
     httpMethods:
-      - POST
-    uri: api/v1/checkin
-    metadata:
-      title: '2. Check-in'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses: []
-    responseFields: []
-  -
-    httpMethods:
       - GET
-    uri: api/v1/checkin/rewards
+    uri: api/v1/banners
     metadata:
-      title: '3. Get Check-in Rewards'
-      description: ''
+      title: '1. Get banners'
+      description: '<aside class="notice">Get all banners ( sorted )</aside>'
       authenticated: true
       custom: []
     headers:
