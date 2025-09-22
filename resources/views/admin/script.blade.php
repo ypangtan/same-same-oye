@@ -125,50 +125,47 @@
             let menus = [];
 
             // and when you show it, move it to the body
-            $( '.datatable-wrap' ).on( 'show.bs.dropdown', function( e ) {
+            // $( '.datatable-wrap' ).on( 'show.bs.dropdown', function( e ) {
 
-                let target = $( e.target );
+            //     let target = $( e.target );
 
-                // save the parent
-                parents.push( target.parent() );
+            //     // save the parent
+            //     parents.push( target.parent() );
 
-                // grab the menu
-                let dropdownMenu = target.next();
+            //     // grab the menu
+            //     let dropdownMenu = target.next();
 
-                // save the menu
-                menus.push( dropdownMenu );
+            //     // save the menu
+            //     menus.push( dropdownMenu );
 
-                // detach it and append it to the body
-                $( 'body' ).append( dropdownMenu.detach() );
+            //     // detach it and append it to the body
+            //     $( 'body' ).append( dropdownMenu.detach() );
 
-                // grab the new offset position
-                let eOffset = target.offset();
+            //     // grab the new offset position
+            //     let eOffset = target.offset();
 
-                // make sure to place it where it would normally go (this could be improved)
-                dropdownMenu.css( {
-                    'display': 'block',
-                    'top': eOffset.top + target.outerHeight(),
-                    'left': eOffset.left
-                } );
-            } );
+            //     // make sure to place it where it would normally go (this could be improved)
+            //     dropdownMenu.css( {
+            //         'display': 'block',
+            //         'top': eOffset.top + target.outerHeight(),
+            //         'left': eOffset.left
+            //     } );
+            // } );
 
-            // and when you hide it, reattach the drop down, and hide it normally
-            $( '.datatable-wrap' ).on( 'hide.bs.dropdown', function( e ) {
+            // // and when you hide it, reattach the drop down, and hide it normally
+            // $( '.datatable-wrap' ).on( 'hide.bs.dropdown', function( e ) {
 
-                menus.forEach( function( element, index ) {
-                    let parent = parents[index];
-                    let dropdownMenu = element;
+            //     menus.forEach( function( element, index ) {
+            //         let parent = parents[index];
+            //         let dropdownMenu = element;
 
-                    parent.append( dropdownMenu.detach() );
-                    dropdownMenu.hide();
+            //         parent.append( dropdownMenu.detach() );
+            //         dropdownMenu.hide();
 
-                    menus.splice( index, 1 );
-                    parents.splice( index, 1 );
-                } )
-            } );
-
-            let parents = [];
-            let menus = [];
+            //         menus.splice( index, 1 );
+            //         parents.splice( index, 1 );
+            //     } )
+            // } );
 
             $('.datatable').on('show.bs.dropdown', function (e) {
                 let target = $(e.target);
