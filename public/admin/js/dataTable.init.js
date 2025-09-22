@@ -26,7 +26,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
         serverSide: true,
         order: dt_table_config.order,
         ordering: true,
-        scrollX: true,
+        scrollX: false,
         searchCols: dt_table_config.searchCols ? dt_table_config.searchCols : [],
         columns: dt_table_config.columns,
         columnDefs: dt_table_config.columnDefs,
@@ -207,10 +207,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
             $(row).addClass('nk-tb-item');
         },
         initComplete: function () {
-            $('.dt-scroll-body').css( {
+            $('.dt-scroll-body').css({
             'overflow-x': 'auto',
             'overflow-y': 'visible'
-            } );
+            });
             this.api().columns.adjust();
 
             const exportCheckbox = `
