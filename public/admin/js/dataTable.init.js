@@ -26,8 +26,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
         serverSide: true,
         order: dt_table_config.order,
         ordering: true,
-        scrollX: true,
-        scrollY: false,
         searchCols: dt_table_config.searchCols ? dt_table_config.searchCols : [],
         columns: dt_table_config.columns,
         columnDefs: dt_table_config.columnDefs,
