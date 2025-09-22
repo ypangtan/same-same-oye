@@ -280,7 +280,7 @@ class SettingService {
         }
     }
 
-    public static function updateAppVersion( $request ) {
+    public static function updateAppVersionSetting( $request ) {
 
         $validator = Validator::make( $request->all(), [
             'version' => [ 'required' ],

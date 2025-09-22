@@ -267,7 +267,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
                 Route::post( 'update-birthday-gift-setting', [ SettingController::class, 'updateBirthdayGiftSetting' ] )->name( 'admin.setting.updateBirthdayGiftSetting' );
                 Route::post( 'update-referral-gift-setting', [ SettingController::class, 'updateReferralGiftSetting' ] )->name( 'admin.setting.updateReferralGiftSetting' );
-                Route::post( 'update-app-version-setting', [ SettingController::class, 'updateAppVersion' ] )->name( 'admin.setting.updateAppVersion' );
+                Route::post( 'update-app-version-setting', [ SettingController::class, 'updateAppVersionSetting' ] )->name( 'admin.setting.updateAppVersionSetting' );
             } );
 
             Route::prefix( 'user-vouchers' )->group( function() {

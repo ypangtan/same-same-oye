@@ -113,8 +113,8 @@ class SettingController extends Controller
         return SettingService::updateReferralGiftSetting( $request );
     }
 
-    public function updateAppVersion( Request $request ) {
+    public function updateAppVersionSetting( Request $request ) {
 
-        return SettingService::updateAppVersion( $request );
+        return SettingService::updateAppVersionSetting( $request );
     }
 }
