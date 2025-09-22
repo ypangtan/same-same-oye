@@ -25,3 +25,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
 </head>
+
+<style>
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+    }
+</style>
