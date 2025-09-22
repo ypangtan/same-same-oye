@@ -125,7 +125,7 @@
             let menus = [];
 
             // and when you show it, move it to the body
-            $( '.datatable' ).on( 'show.bs.dropdown', function( e ) {
+            $( '.datatable-wrap' ).on( 'show.bs.dropdown', function( e ) {
 
                 let target = $( e.target );
 
@@ -166,5 +166,48 @@
                     parents.splice( index, 1 );
                 } )
             } );
+
+            let parents = [];
+            let menus = [];
+
+            $('.datatable').on('show.bs.dropdown', function (e) {
+                let target = $(e.target);
+
+                // save the parent
+                parents.push(target.parent());
+
+                // grab the menu
+                let dropdownMenu = target.next('.dropdown-menu');
+
+                // save the menu
+                menus.push(dropdownMenu);
+
+                // detach it and append to body
+                $('body').append(dropdownMenu.detach());
+
+                // calculate correct position including scroll
+                let eOffset = target.offset();
+                dropdownMenu.css({
+                    'display': 'block',
+                    'position': 'absolute',
+                    'top': eOffset.top + target.outerHeight(),
+                    'left': eOffset.left
+                });
+            });
+
+            // when hidden, move back to original place
+            $('.datatable').on('hide.bs.dropdown', function (e) {
+                let target = $(e.target);
+                let index = parents.length - 1;
+
+                if (index >= 0) {
+                    let parent = parents.pop();
+                    let dropdownMenu = menus.pop();
+
+                    parent.append(dropdownMenu.detach());
+                    dropdownMenu.hide(); // reset
+                }
+            });
+
         } );
     </script>
