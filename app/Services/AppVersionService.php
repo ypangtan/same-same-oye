@@ -28,6 +28,11 @@ class AppVersionService
         $app_version = AppVersion::where( 'platform', $platform )
             ->first();
 
+        $app_version->append( [
+            'notes',
+            'desc'
+        ] );
+
         return response()->json( [
             'data' => $app_version,
         ] );
