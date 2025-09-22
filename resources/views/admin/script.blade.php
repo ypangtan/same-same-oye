@@ -125,9 +125,8 @@
             let menus = [];
 
             // and when you show it, move it to the body
-            $( '.dt-scroll-body' ).on( 'show.bs.dropdown', function( e ) {
+            $( '.datatable-wrap' ).on( 'show.bs.dropdown', function( e ) {
 
-                console.log( 'abc' );
                 let target = $( e.target );
 
                 // save the parent
@@ -154,7 +153,7 @@
             } );
 
             // and when you hide it, reattach the drop down, and hide it normally
-            $( '.dt-scroll-body' ).on( 'hide.bs.dropdown', function( e ) {
+            $( '.datatable-wrap' ).on( 'hide.bs.dropdown', function( e ) {
 
                 menus.forEach( function( element, index ) {
                     let parent = parents[index];
@@ -167,6 +166,5 @@
                     parents.splice( index, 1 );
                 } )
             } );
-
         } );
     </script>
