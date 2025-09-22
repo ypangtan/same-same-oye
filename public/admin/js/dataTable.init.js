@@ -207,6 +207,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
             $(row).addClass('nk-tb-item');
         },
         initComplete: function () {
+            $('.dt-scroll-body').css( {
+            'overflow-x': 'auto',
+            'overflow-y': 'visible'
+            } );
+            this.api().columns.adjust();
+
             const exportCheckbox = `
                 <div class="my-3">
                     <input type="checkbox" id="exportSelected" name="exportSelected">
