@@ -4,15 +4,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Part Module Language Lines
+    | Marketing Notification Language Lines
     |--------------------------------------------------------------------------
     |
-    | The following language lines are used during Part Module for various
+    | The following language lines are used during Marketing Notification for various
     | messages that we need to display to the user. You are free to modify
     | these language lines according to your application's requirements.
     |
     */
 
-    'vendor' => 'Vendor',
-    'name' => 'Name',
+    'content' => 'Content',
+    'image' => 'Image',
+    'news' => 'News',
+    'event' => 'Event',
+    'all_users' => 'All Users',
+    'target_url' => 'Target Url'
 ];

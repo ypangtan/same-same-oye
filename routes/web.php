@@ -70,8 +70,6 @@ Route::get('/register', function (Request $request) {
 
 });
 
-Route::get( '/invite', [ ApiController::class, 'index' ] );
-
 
 // This is admin route
 require __DIR__ . '/admin.php';

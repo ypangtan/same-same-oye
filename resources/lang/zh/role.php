@@ -21,6 +21,7 @@ return [
     'admin' => 'Admin',
     'owner' => 'Owner',
     'salesman' => 'Salesman',
+    'sales_admin' => 'Sales Admin',
 
     'no_action_found' => 'No action found',
     'no_module_found' => 'No module found',

@@ -53,19 +53,6 @@ Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
     Route::post( 'reset-password', [ UserController::class, 'resetPassword' ] );
 } );
 
-Route::prefix( 'banners' )->group( function() {
-    Route::get( '/', [ BannerController::class, 'getBanners' ] );
-    Route::any( 'details', [ BannerController::class, 'oneBanner' ] );
-} );
-
-Route::prefix( 'lucky-draw-rewards' )->group( function() {
-    Route::get( '/', [ LuckyDrawRewardController::class, 'searchLuckyDrawRewards' ] );
-} );
-
-Route::prefix( 'ranks' )->group( function() {
-    Route::get( '/', [ RankController::class, 'getAllRanks' ] );
-} );
-
 Route::prefix( 'app_versions' )->group( function() {
     Route::get( '/', [ AppVersionController::class, 'lastestAppVersion' ] );
 } );
@@ -96,24 +83,6 @@ Route::middleware( 'auth:user' )->group( function() {
     Route::prefix( 'announcements' )->middleware( 'log.cart.order' )->group( function() {
         Route::get( '/', [ AnnouncementController::class, 'getAnnouncements' ] );
         Route::post( 'close', [ AnnouncementController::class, 'claim' ] );
-    } );
-
-    Route::prefix( 'vouchers' )->middleware( 'log.cart.order' )->group( function() {
-        Route::get( '/', [ VoucherController::class, 'getVouchers' ] );
-        Route::post( 'claim-voucher', [ VoucherController::class, 'claimVoucher' ] );
-    } );
-
-    Route::prefix( 'checkin' )->middleware( 'log.cart.order' )->group( function() {
-        Route::get( '/', [ CheckinController::class, 'getCheckinHistory' ] );
-        Route::post( '', [ CheckinController::class, 'checkin' ] );
-        Route::get( 'rewards', [ CheckinController::class, 'getCheckinRewards' ] );
-    } );
-
-    Route::prefix( 'points' )->middleware( 'log.cart.order' )->group( function() {
-        Route::get( '', [ PointsController::class, 'getPoints' ] );
-        Route::post( 'redeem', [ PointsController::class, 'redeemPoints' ] );
-        Route::get( 'history', [ PointsController::class, 'getPointsRedeemHistory' ] );
-        Route::get( 'conversion-rate', [ PointsController::class, 'getConversionRate' ] );
     } );
     
 });

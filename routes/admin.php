@@ -188,70 +188,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             } );
             
             // new routes ( 23/12 ) 
-            Route::prefix( 'vouchers' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view vouchers' ] ], function() {
-                    Route::get( '/', [ VoucherController::class, 'index' ] )->name( 'admin.module_parent.voucher.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add vouchers' ] ], function() {
-                    Route::get( 'add', [ VoucherController::class, 'add' ] )->name( 'admin.voucher.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit vouchers' ] ], function() {
-                    Route::get( 'edit', [ VoucherController::class, 'edit' ] )->name( 'admin.voucher.edit' );
-                } );
-    
-                Route::post( 'all-vouchers', [ VoucherController::class, 'allVouchers' ] )->name( 'admin.voucher.allVouchers' );
-                Route::post( 'one-voucher', [ VoucherController::class, 'oneVoucher' ] )->name( 'admin.voucher.oneVoucher' );
-                Route::post( 'create-voucher', [ VoucherController::class, 'createVoucher' ] )->name( 'admin.voucher.createVoucher' );
-                Route::post( 'update-voucher', [ VoucherController::class, 'updateVoucher' ] )->name( 'admin.voucher.updateVoucher' );
-                Route::post( 'update-voucher-status', [ VoucherController::class, 'updateVoucherStatus' ] )->name( 'admin.voucher.updateVoucherStatus' );
-                Route::post( 'remove-voucher-gallery-image', [ VoucherController::class, 'removeVoucherGalleryImage' ] )->name( 'admin.voucher.removeVoucherGalleryImage' );
-                Route::post( 'ckeUpload', [ VoucherController::class, 'ckeUpload' ] )->name( 'admin.voucher.ckeUpload' );
-            } );
-
-            Route::prefix( 'user-checkins' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view user_checkins' ] ], function() {
-                    Route::get( '/', [ UserCheckinController::class, 'index' ] )->name( 'admin.module_parent.user_checkin.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add user_checkins' ] ], function() {
-                    Route::get( 'add', [ UserCheckinController::class, 'add' ] )->name( 'admin.user_checkin.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit user_checkins' ] ], function() {
-                    Route::get( 'edit', [ UserCheckinController::class, 'edit' ] )->name( 'admin.user_checkin.edit' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:view checkin_rewards' ] ], function() {
-                    Route::get( 'calendar', [ UserCheckinController::class, 'calendar' ] )->name( 'admin.user_checkin.calendar' );
-                } );
-    
-                Route::post( 'all-user-checkins', [ UserCheckinController::class, 'allUserCheckins' ] )->name( 'admin.user_checkin.allUserCheckins' );
-                Route::post( 'all-user-checkin-calendars', [ UserCheckinController::class, 'allUserCheckinCalendars' ] )->name( 'admin.user_checkin.allUserCheckinCalendars' );
-                Route::post( 'one-user-checkin', [ UserCheckinController::class, 'oneUserCheckin' ] )->name( 'admin.user_checkin.oneUserCheckin' );
-                Route::post( 'create-user-checkin', [ UserCheckinController::class, 'createUserCheckin' ] )->name( 'admin.user_checkin.createUserCheckin' );
-                Route::post( 'update-user-checkin', [ UserCheckinController::class, 'updateUserCheckin' ] )->name( 'admin.user_checkin.updateUserCheckin' );
-                Route::post( 'update-user-checkin-status', [ UserCheckinController::class, 'updateUserCheckinStatus' ] )->name( 'admin.user_checkin.updateUserCheckinStatus' );
-                Route::post( 'remove-user-checkin-gallery-image', [ UserCheckinController::class, 'removeUserCheckinGalleryImage' ] )->name( 'admin.user_checkin.removeUserCheckinGalleryImage' );
-                Route::post( 'ckeUpload', [ UserCheckinController::class, 'ckeUpload' ] )->name( 'admin.user_checkin.ckeUpload' );
-            } );
-
-            Route::prefix( 'checkin-rewards' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view checkin_rewards' ] ], function() {
-                    Route::get( '/', [ CheckinRewardController::class, 'index' ] )->name( 'admin.module_parent.checkin_reward.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add checkin_rewards' ] ], function() {
-                    Route::get( 'add', [ CheckinRewardController::class, 'add' ] )->name( 'admin.checkin_reward.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit checkin_rewards' ] ], function() {
-                    Route::get( 'edit', [ CheckinRewardController::class, 'edit' ] )->name( 'admin.checkin_reward.edit' );
-                } );
-    
-                Route::post( 'all-checkin-rewards', [ CheckinRewardController::class, 'allCheckinRewards' ] )->name( 'admin.checkin_reward.allCheckinRewards' );
-                Route::post( 'one-checkin-reward', [ CheckinRewardController::class, 'oneCheckinReward' ] )->name( 'admin.checkin_reward.oneCheckinReward' );
-                Route::post( 'create-checkin-reward', [ CheckinRewardController::class, 'createCheckinReward' ] )->name( 'admin.checkin_reward.createCheckinReward' );
-                Route::post( 'update-checkin-reward', [ CheckinRewardController::class, 'updateCheckinReward' ] )->name( 'admin.checkin_reward.updateCheckinReward' );
-                Route::post( 'update-checkin-reward-status', [ CheckinRewardController::class, 'updateCheckinRewardStatus' ] )->name( 'admin.checkin_reward.updateCheckinRewardStatus' );
-                Route::post( 'remove-checkin-reward-gallery-image', [ CheckinRewardController::class, 'removeCheckinRewardGalleryImage' ] )->name( 'admin.checkin_reward.removeCheckinRewardGalleryImage' );
-                Route::post( 'ckeUpload', [ CheckinRewardController::class, 'ckeUpload' ] )->name( 'admin.checkin_reward.ckeUpload' );
-            } );
-
             Route::prefix( 'settings' )->group( function() {
 
                 Route::group( [ 'middleware' => [ 'permission:add settings|view settings|edit settings|delete settings' ] ], function() {
@@ -268,26 +204,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-birthday-gift-setting', [ SettingController::class, 'updateBirthdayGiftSetting' ] )->name( 'admin.setting.updateBirthdayGiftSetting' );
                 Route::post( 'update-referral-gift-setting', [ SettingController::class, 'updateReferralGiftSetting' ] )->name( 'admin.setting.updateReferralGiftSetting' );
                 Route::post( 'update-app-version-setting', [ SettingController::class, 'updateAppVersionSetting' ] )->name( 'admin.setting.updateAppVersionSetting' );
-            } );
-
-            Route::prefix( 'user-vouchers' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view vouchers' ] ], function() {
-                    Route::get( '/', [ UserVoucherController::class, 'index' ] )->name( 'admin.module_parent.user_voucher.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add vouchers' ] ], function() {
-                    Route::get( 'add', [ UserVoucherController::class, 'add' ] )->name( 'admin.user_voucher.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit vouchers' ] ], function() {
-                    Route::get( 'edit', [ UserVoucherController::class, 'edit' ] )->name( 'admin.user_voucher.edit' );
-                } );
-    
-                Route::post( 'all-user-vouchers', [ UserVoucherController::class, 'allUserVouchers' ] )->name( 'admin.user_voucher.allUserVouchers' );
-                Route::post( 'one-user-voucher', [ UserVoucherController::class, 'oneUserVoucher' ] )->name( 'admin.user_voucher.oneUserVoucher' );
-                Route::post( 'create-user-voucher', [ UserVoucherController::class, 'createUserVoucher' ] )->name( 'admin.user_voucher.createUserVoucher' );
-                Route::post( 'update-user-voucher', [ UserVoucherController::class, 'updateUserVoucher' ] )->name( 'admin.user_voucher.updateUserVoucher' );
-                Route::post( 'update-user-user-voucher-status', [ UserVoucherController::class, 'updateUserVoucherStatus' ] )->name( 'admin.user_voucher.updateUserVoucherStatus' );
-                Route::post( 'remove-user-user-voucher-gallery-image', [ UserVoucherController::class, 'removeUserVoucherGalleryImage' ] )->name( 'admin.user_voucher.removeUserVoucherGalleryImage' );
-                Route::post( 'ckeUpload', [ UserVoucherController::class, 'ckeUpload' ] )->name( 'admin.user_voucher.ckeUpload' );
             } );
             
             Route::prefix( 'announcements' )->group( function() {
@@ -330,115 +246,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'image-upload', [ PopAnnouncementController::class, 'imageUpload' ] )->name( 'admin.pop_announcement.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
             } );
 
-            Route::prefix( 'banners' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view banners' ] ], function() {
-                    Route::get( '/', [ BannerController::class, 'index' ] )->name( 'admin.module_parent.banner.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add banners' ] ], function() {
-                    Route::get( 'add', [ BannerController::class, 'add' ] )->name( 'admin.banner.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit banners' ] ], function() {
-                    Route::get( 'edit', [ BannerController::class, 'edit' ] )->name( 'admin.banner.edit' );
-                } );
-    
-                Route::post( 'update-order', [ BannerController::class, 'updateOrder' ] )->name( 'admin.banner.updateOrder' );
-                Route::post( 'all-banners', [ BannerController::class, 'allBanners' ] )->name( 'admin.banner.allBanners' );
-                Route::post( 'one-banner', [ BannerController::class, 'oneBanner' ] )->name( 'admin.banner.oneBanner' );
-                Route::post( 'create-banner', [ BannerController::class, 'createBanner' ] )->name( 'admin.banner.createBanner' );
-                Route::post( 'update-banner', [ BannerController::class, 'updateBanner' ] )->name( 'admin.banner.updateBanner' );
-                Route::post( 'delete-banner', [ BannerController::class, 'deleteBanner' ] )->name( 'admin.banner.deleteBanner' );
-                Route::post( 'update-banner-status', [ BannerController::class, 'updateBannerStatus' ] )->name( 'admin.banner.updateBannerStatus' );
-                Route::post( 'remove-banner-gallery-image', [ BannerController::class, 'removeBannerGalleryImage' ] )->name( 'admin.banner.removeBannerGalleryImage' );
-                Route::post( 'ckeUpload', [ BannerController::class, 'ckeUpload' ] )->name( 'admin.banner.ckeUpload' );
-            } );
-
-            Route::prefix( 'announcement-rewards' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view announcement-rewards' ] ], function() {
-                    Route::get( '/', [ AnnouncementRewardController::class, 'index' ] )->name( 'admin.module_parent.announcement_reward.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add announcement-rewards' ] ], function() {
-                    Route::get( 'add', [ AnnouncementRewardController::class, 'add' ] )->name( 'admin.announcement_reward.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit announcement-rewards' ] ], function() {
-                    Route::get( 'edit', [ AnnouncementRewardController::class, 'edit' ] )->name( 'admin.announcement_reward.edit' );
-                } );
-    
-                Route::post( 'all-announcement-rewards', [ AnnouncementRewardController::class, 'allAnnouncementRewards' ] )->name( 'admin.announcement_reward.allAnnouncementRewards' );
-                Route::post( 'one-announcement-reward', [ AnnouncementRewardController::class, 'oneAnnouncementReward.' ] )->name( 'admin.announcement_reward.oneAnnouncementReward.' );
-                Route::post( 'create-announcement-reward', [ AnnouncementRewardController::class, 'createAnnouncementReward.' ] )->name( 'admin.announcement_reward.createAnnouncementReward.' );
-                Route::post( 'update-announcement-reward', [ AnnouncementRewardController::class, 'updateAnnouncementReward.' ] )->name( 'admin.announcement_reward.updateAnnouncementReward.' );
-                Route::post( 'update-announcement-reward-status', [ AnnouncementRewardController::class, 'updateAnnouncementRewardStatus' ] )->name( 'admin.announcement_reward.updateAnnouncementRewardStatus' );
-                Route::post( 'remove-announcement-reward-gallery-image', [ AnnouncementRewardController::class, 'removeAnnouncementRewardGalleryImage' ] )->name( 'admin.announcement_reward.removeAnnouncementRewardGalleryImage' );
-                Route::post( 'ckeUpload', [ AnnouncementRewardController::class, 'ckeUpload' ] )->name( 'admin.announcement_reward.ckeUpload' );
-            } );
-
-            Route::prefix( 'sales-records' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view sales_records' ] ], function() {
-                    Route::get( '/', [ SalesRecordController::class, 'index' ] )->name( 'admin.module_parent.sales_record.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add sales_records' ] ], function() {
-                    Route::get( 'add', [ SalesRecordController::class, 'add' ] )->name( 'admin.sales_record.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit sales_records' ] ], function() {
-                    Route::get( 'edit', [ SalesRecordController::class, 'edit' ] )->name( 'admin.sales_record.edit' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:import sales_records' ] ], function() {
-                    Route::get( 'import', [ SalesRecordController::class, 'import' ] )->name( 'admin.sales_record.import' );
-                } );
-    
-                Route::post( 'import-sales-records', [ SalesRecordController::class, 'importSalesRecords' ] )->name( 'admin.sales_record.importSalesRecords' );
-                Route::post( 'all-sales-records', [ SalesRecordController::class, 'allSalesRecords' ] )->name( 'admin.sales_record.allSalesRecords' );
-                Route::post( 'one-sales-record', [ SalesRecordController::class, 'oneSalesRecord' ] )->name( 'admin.sales_record.oneSalesRecord' );
-                Route::post( 'create-sales-record', [ SalesRecordController::class, 'createSalesRecord' ] )->name( 'admin.sales_record.createSalesRecord' );
-                Route::post( 'update-sales-record', [ SalesRecordController::class, 'updateSalesRecord' ] )->name( 'admin.sales_record.updateSalesRecord' );
-                Route::post( 'delete-sales-record', [ SalesRecordController::class, 'deleteSalesRecord' ] )->name( 'admin.sales_record.deleteSalesRecord' );
-                Route::post( 'update-sales-record-status', [ SalesRecordController::class, 'updateSalesRecordStatus' ] )->name( 'admin.sales_record.updateSalesRecordStatus' );
-                Route::post( 'remove-sales-record-gallery-image', [ SalesRecordController::class, 'removeSalesRecordGalleryImage' ] )->name( 'admin.sales_record.removeSalesRecordGalleryImage' );
-                Route::post( 'ckeUpload', [ SalesRecordController::class, 'ckeUpload' ] )->name( 'admin.sales_record.ckeUpload' );
-            } );
-
-            Route::prefix( 'products' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view products' ] ], function() {
-                    Route::get( '/', [ ProductController::class, 'index' ] )->name( 'admin.product.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add products' ] ], function() {
-                    Route::get( 'add', [ ProductController::class, 'add' ] )->name( 'admin.product.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit products' ] ], function() {
-                    Route::get( 'edit', [ ProductController::class, 'edit' ] )->name( 'admin.product.edit' );
-                } );
-    
-                Route::post( 'update-order', [ ProductController::class, 'updateOrder' ] )->name( 'admin.product.updateOrder' );
-                Route::post( 'all-products', [ ProductController::class, 'allProducts' ] )->name( 'admin.product.allProducts' );
-                Route::post( 'one-product', [ ProductController::class, 'oneProduct' ] )->name( 'admin.product.oneProduct' );
-                Route::post( 'create-product', [ ProductController::class, 'createProduct' ] )->name( 'admin.product.createProduct' );
-                Route::post( 'update-product', [ ProductController::class, 'updateProduct' ] )->name( 'admin.product.updateProduct' );
-                Route::post( 'delete-product', [ ProductController::class, 'deleteProduct' ] )->name( 'admin.product.deleteProduct' );
-                Route::post( 'update-product-status', [ ProductController::class, 'updateProductStatus' ] )->name( 'admin.product.updateProductStatus' );
-                Route::post( 'remove-product-gallery-image', [ ProductController::class, 'removeProductGalleryImage' ] )->name( 'admin.product.removeProductGalleryImage' );
-                Route::post( 'ckeUpload', [ ProductController::class, 'ckeUpload' ] )->name( 'admin.product.ckeUpload' );
-            } );
-
-            Route::prefix( 'voucher-usages' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view vouchers' ] ], function() {
-                    Route::get( '/', [ VoucherUsageController::class, 'index' ] )->name( 'admin.voucher_usage.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add vouchers' ] ], function() {
-                    Route::get( 'add', [ VoucherUsageController::class, 'add' ] )->name( 'admin.voucher_usage.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit vouchers' ] ], function() {
-                    Route::get( 'edit', [ VoucherUsageController::class, 'edit' ] )->name( 'admin.voucher_usage.edit' );
-                } );
-    
-                Route::post( 'all-voucher-usages', [ VoucherUsageController::class, 'allVoucherUsages' ] )->name( 'admin.voucher_usage.allVoucherUsages' );
-                Route::post( 'one-voucher-usage', [ VoucherUsageController::class, 'oneVoucherUsage' ] )->name( 'admin.voucher_usage.oneVoucherUsage' );
-                Route::post( 'create-voucher-usage', [ VoucherUsageController::class, 'createVoucherUsage' ] )->name( 'admin.voucher_usage.createVoucherUsage' );
-                Route::post( 'update-voucher-usage', [ VoucherUsageController::class, 'updateVoucherUsage' ] )->name( 'admin.voucher_usage.updateVoucherUsage' );
-                Route::post( 'update-voucher-usage-status', [ VoucherUsageController::class, 'updateVoucherUsageStatus' ] )->name( 'admin.voucher_usage.updateVoucherUsageStatus' );
-                Route::post( 'remove-voucher-usage-gallery-image', [ VoucherUsageController::class, 'removeVoucherUsageGalleryImage' ] )->name( 'admin.voucher_usage.removeVoucherUsageGalleryImage' );
-                Route::post( 'ckeUpload', [ VoucherUsageController::class, 'ckeUpload' ] )->name( 'admin.voucher_usage.ckeUpload' );
-            } );
-
             Route::prefix( 'marketing-notifications' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view marketing_notifications' ] ], function() {
                     Route::get( '/', [ MarketingNotificationController::class, 'index' ] )->name( 'admin.module_parent.marketing_notifications.index' );
@@ -459,27 +266,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'cke-upload', [ MarketingNotificationController::class, 'ckeUpload' ] )->name( 'admin.marketing_notifications.ckeUpload' );
             } );
 
-            Route::prefix( 'lucky_draw_rewards' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view lucky_draw_rewards' ] ], function() {
-                    Route::get( '/', [ LuckyDrawController::class, 'index' ] )->name( 'admin.module_parent.lucky_draw_reward.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add lucky_draw_rewards' ] ], function() {
-                    Route::get( 'add', [ LuckyDrawController::class, 'add' ] )->name( 'admin.lucky_draw_reward.add' );
-                    Route::get( 'import', [ LuckyDrawController::class, 'import' ] )->name( 'admin.lucky_draw_reward.import' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit lucky_draw_rewards' ] ], function() {
-                    Route::get( 'edit/{id?}', [ LuckyDrawController::class, 'edit' ] )->name( 'admin.lucky_draw_reward.edit' );
-                } );
-
-                Route::post( 'all-lucky-draw-reward', [ LuckyDrawController::class, 'allLuckyDrawRewards' ] )->name( 'admin.lucky_draw_reward.allLuckyDrawRewards' );
-                Route::post( 'one-lucky-draw-reward', [ LuckyDrawController::class, 'oneLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.oneLuckyDrawReward' );
-                Route::post( 'create-lucky-draw-reward', [ LuckyDrawController::class, 'createLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.createLuckyDrawReward' );
-                Route::post( 'update-lucky-draw-reward', [ LuckyDrawController::class, 'updateLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.updateLuckyDrawReward' );
-                Route::post( 'update-lucky-draw-reward-status', [ LuckyDrawController::class, 'updateLuckyDrawRewardStatus' ] )->name( 'admin.lucky_draw_reward.updateLuckyDrawRewardStatus' );
-                Route::post( 'import-lucky-draw-reward', [ LuckyDrawController::class, 'importLuckyDrawReward' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawReward' );
-                Route::post( 'import-lucky-draw-reward-v2', [ LuckyDrawController::class, 'importLuckyDrawRewardV2' ] )->name( 'admin.lucky_draw_reward.importLuckyDrawRewardV2' );
-            } );
-
             Route::prefix( 'otp_logs' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view otp_logs' ] ], function() {
                     Route::get( '/', [ OtpLogController::class, 'index' ] )->name( 'admin.module_parent.otp_log.index' );
@@ -487,24 +273,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
                 Route::post( 'all-otp-logs', [ OtpLogController::class, 'allOtpLogs' ] )->name( 'admin.otp_log.allOtpLogs' );
                 Route::post( 'one-otp-log', [ OtpLogController::class, 'oneOtpLog' ] )->name( 'admin.otp_log.oneOtpLog' );
-            } );
-
-            Route::prefix( 'ranks' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view ranks' ] ], function() {
-                    Route::get( '/', [ RankController::class, 'index' ] )->name( 'admin.module_parent.rank.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add ranks' ] ], function() {
-                    Route::get( 'add', [ RankController::class, 'add' ] )->name( 'admin.rank.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit ranks' ] ], function() {
-                    Route::get( 'edit/{id?}', [ RankController::class, 'edit' ] )->name( 'admin.rank.edit' );
-                } );
-
-                Route::post( 'all-ranks', [ RankController::class, 'allRanks' ] )->name( 'admin.rank.allRanks' );
-                Route::post( 'one-rank', [ RankController::class, 'oneRank' ] )->name( 'admin.rank.oneRank' );
-                Route::post( 'create-rank', [ RankController::class, 'createRank' ] )->name( 'admin.rank.createRank' );
-                Route::post( 'update-rank', [ RankController::class, 'updateRank' ] )->name( 'admin.rank.updateRank' );
-                Route::post( 'update-rank-status', [ RankController::class, 'updateRankStatus' ] )->name( 'admin.rank.updateRankStatus' );
             } );
 
         } );

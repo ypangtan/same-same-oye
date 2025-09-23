@@ -13,6 +13,6 @@ return [
     |
     */
 
-    'phone_number' => '电话号码',
-    'otp_code' => '一次性密码',
+    'phone_number' => 'Phone Number',
+    'otp_code' => 'OTP COde',
 ];

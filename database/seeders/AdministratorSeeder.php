@@ -25,9 +25,9 @@ class AdministratorSeeder extends Seeder
 
         $superAdmin = DB::table( 'administrators' )->insertGetId( [
             'name' => 'altasming',
-            'email' => 'altas.x.junming@gmail.com',
-            'password' => Hash::make( 'altasming1234' ),
-            'fullname' => 'Altas Xiao',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make( 'abcd1234' ),
+            'fullname' => 'Super Admin',
             'phone_number' => '12345678',
             'role' => $superAdminRole,
             'status' => 10,

@@ -24,9 +24,11 @@ return [
     'last' => 'Last',
     'paid' => 'Paid',
     'due' => 'Due',
-
+    'redeemed' => 'Redeemed',
+    
     'search_x' => 'Search :title',
     'select_x' => 'Select :title',
+    'title' => 'Title',
     'all' => 'All',
     'all_x' => 'All (:title)',
     'created_date' => 'Created Date',
@@ -47,6 +49,7 @@ return [
     'activated' => 'Activated',
     'suspend' => 'Suspend',
     'suspended' => 'Suspended',
+    'points_expired' => 'Points Expired',
     'expired' => 'Expired',
     'to_x' => 'To :title',
     'to_sales_order' => 'To: Sales Order',
