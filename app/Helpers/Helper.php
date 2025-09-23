@@ -51,29 +51,12 @@ class Helper {
             '2' => __( 'wallet.wallet_2' ),
         ];
     }
-    
-    public static function maxStocks() {
-        return [
-            'froyo' => 1000,
-            'syrup' => 1000,
-            'topping' => 1000,
-        ];
-    }
 
     public static function trxTypes() {
         return [
             '1' => __( 'wallet.topup' ),
             '2' => __( 'wallet.refund' ),
             '3' => __( 'wallet.manual_adjustment' ),
-            '12' => __( 'wallet.redeem' ),
-            '13' => __( 'wallet.refund_redeem' ),
-            '20' => __( 'wallet.register_bonus' ),
-            '22' => __( 'wallet.affiliate_bonus' ),
-            '23' => __( 'wallet.checkin_bonus' ),
-            '24' => __( 'wallet.exhange_voucher' ),
-            '25' => __( 'wallet.points_expired' ),
-            '26' => __( 'wallet.birthday_gift' ),
-            '27' => __( 'wallet.referral_gift' ),
         ];
     }
 
@@ -87,42 +70,29 @@ class Helper {
         ];
     }
 
-    public static function taxTypes() {
+    public static function additionPermission() {
         return [
-            1 => [
-                'title' => 'SST',
-                'description' => 'Sales and Service Tax',
-                'percentage' => 6,
-                'type' => 'service',
-            ],
-            2 => [
-                'title' => 'Sales Tax',
-                'description' => 'Tax on goods',
-                'percentage' => 10,
-                'type' => 'sales',
-            ],
+            // [ 'name' => 'users', 'action' => 'adjust_3' ],
         ];
     }
 
-    public static function QuotationStatuses() {
-        return [
-            10 => 'Quotation',
-            12 => 'Sales Order',
-            13 => 'Invoice',
-            14 => 'Delivery Order',
+    public static function unusedModule() {
+        $array = [
+            // 'announcements',
         ];
+
+        return $array;
     }
 
-    public static function numberFormat( $number, $decimal, $isRound = false ) {
+    public static function unusedAction () {
+        $array = [
+            // [ 'name' => 'users', 'action' => 'soft_delete' ],
+        ];
 
-        if ( $isRound ) {
-            return number_format( $number, $decimal );    
-        } else {
-            return number_format( bcdiv( $number, 1, $decimal ), $decimal );
-        }
+        return $array;
     }
 
-    public static function numberFormatV2( $number, $decimal, $displayComma = false, $isRound = false ) {
+    public static function numberFormat( $number, $decimal, $displayComma = false, $isRound = false ) {
         $formatted = '';
         if ( $isRound ) {
             $formatted = number_format( $number, $decimal );
@@ -220,6 +190,7 @@ class Helper {
         $content = file_get_contents( 'storage/'.$filename );
 
         header( "Content-Disposition: attachment; filename=".$filename );
+        header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
         unlink( 'storage/'.$filename );
         exit( $content );
     }
@@ -244,33 +215,6 @@ class Helper {
         $hashids = new Hashids( config( 'app.key' ) );
 
         return $hashids->decode( $id )[0];
-    }
-
-    public function adminNotifications() {
-
-        $notifications = AdminNotification::select( 
-            'admin_notifications.*',
-            \DB::raw( '( SELECT COUNT(*) FROM admin_notification_seens AS a WHERE a.admin_notification_id = admin_notifications.id AND a.admin_id = ' .auth()->user()->id. ' ) as is_read' )
-        )->where( function( $query ) {
-            $query->where( 'admin_id', auth()->user()->id );
-            $query->orWhere( 'role_id', auth()->user()->role );
-        } )->orWhere( function( $query ) {
-            $query->whereNull( 'admin_id' );
-            $query->whereNull( 'role_id' );
-        } )->orderBy( 'admin_notifications.created_at', 'DESC' )->get();
-
-        $totalUnread = AdminNotificationSeen::where( 'admin_id', auth()->user()->id )->count();
-
-        $data['total_unread'] = count( $notifications ) - $totalUnread;
-        $data['notifications'] = $notifications;
-
-        $data['is_notification_box_opened'] = 0;
-        $nbo = AdminMeta::where( 'meta_key', 'is_notification_box_opened' )->first();
-        if ( $nbo ) {
-            $data['is_notification_box_opened'] = $nbo->meta_value;
-        }
-
-        return $data;
     }
 
     public static function getDisplayTimeUnit( $createdAt ) {
@@ -584,18 +528,6 @@ class Helper {
         return 'CART-' . now()->format('YmdHis');
     }
 
-    public static function generateVoucherCode()
-    {
-        do {
-            // Example: #AB12CD34
-            $code = '#' . strtoupper(\Str::random(8));
-    
-            // Make sure it's unique in the database
-        } while (Voucher::where('promo_code', $code)->exists());
-    
-        return $code;
-    }
-
     public static function generatePaymentHash( $data ){
 
         $password = config( 'services.eghl.merchant_password' );
@@ -650,24 +582,4 @@ class Helper {
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
     
-    public static function calculatePoints( $amount, $user_id )
-    {
-        $totalPoints = WalletTransaction::where( 'user_id', $user_id )
-        ->where('transaction_type', 12)
-        ->whereHas('invoice') // Ensure only transactions with invoices are counted
-        ->with('invoice')
-        ->get()
-        ->sum(function ($transaction) {
-            return $transaction->invoice->total_price ?? 0;
-        });
-
-        $rank = Rank::where('target_spending', '<=', $totalPoints)
-            ->where( 'status', 10 )
-            ->orderBy('priority', 'DESC')
-            ->first();
-
-        $rate = $rank ? $rank->reward_value : 1;
-
-        return  $amount * $rate;
-    }
 }

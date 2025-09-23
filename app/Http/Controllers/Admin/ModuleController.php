@@ -40,27 +40,71 @@ class ModuleController extends Controller
             ],
         ];
 
+        $moduleDelete = \Helper::unusedModule();
+        $actionDelete = \Helper::unusedAction();
+        $deleteActionMap = [];
+        foreach ( $actionDelete as $item ) {
+            $deleteActionMap[$item['name']][] = $item['action'];
+        }
+
+        $additionPermission = \Helper::additionPermission();
+        $additionPermissionMap = [];
+        foreach ( $additionPermission as $item ) {
+            $additionPermissionMap[$item['name']][] = $item['action'];
+        }
+
+        $defaultActions = ['add', 'edit', 'view', 'delete'];
+
         foreach ( Route::getRoutes() as $route ) {
-            
-            $routeName = $route->getName();
+           $routeName = $route->getName();
             if ( str_contains( $route->getName(), 'admin.module_parent.' ) ) {
+
                 $routeName = str_replace( 'admin.module_parent.', '', $routeName );
                 $routeName = str_replace( '.index', '', $routeName );
                 $moduleName = \Str::plural( $routeName );
+
+                if ( in_array( $moduleName, $moduleDelete ) ) {
+                    $modules = Module::where( 'name', $moduleName )->get();
+                    foreach ( $modules as $module ) {
+                        $module->delete();
+                    }
+                    continue;
+                }
 
                 $module = Module::firstOrCreate( [
                     'name' => $moduleName,
                     'guard_name' => 'admin',
                 ] );
-
+                
                 if ( $module ) {
+                    $notAllowedActions = $deleteActionMap[$moduleName] ?? [];
 
-                    foreach ( Helper::moduleActions() as $action ) {
-                        PresetPermission::firstOrCreate( [
-                            'module_id' => $module->id,
-                            'action' => $action,
-                        ] );
+                    foreach ( $defaultActions as $action ) {
+                        if ( !in_array( $action, $notAllowedActions ) ) {
+                            PresetPermission::firstOrCreate([
+                                'module_id' => $module->id,
+                                'action' => $action,
+                            ]);
+                        } else {
+                            $permission = PresetPermission::where( 'module_id', $module->id )
+                                ->where('action', $action)
+                                ->first();
+
+                            if( $permission ) {
+                                $permission->delete();
+                            }
+                        }
                     }
+
+                    if( isset( $additionPermissionMap[$moduleName] ) ) {
+                        foreach( $additionPermissionMap[$moduleName] as $additionAction ) {
+                            PresetPermission::firstOrCreate([
+                                'module_id' => $module->id,
+                                'action' => $additionAction,
+                            ]);
+                        }
+                    }
+                    
                 }
             }
         }
