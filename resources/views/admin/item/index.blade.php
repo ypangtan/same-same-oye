@@ -153,7 +153,7 @@ var statusMapper = @json( $data['status'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "image" ) }}' ),
                 
                 render: function( data, type, row, meta ) {
-                    return data ? '<image src='${data}'>' : '-' ;
+                    return data ? `<image src='${data}'>` : '-' ;
                 },
             },
             {
