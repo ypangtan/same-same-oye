@@ -72,6 +72,10 @@ function renderFilter( $type, $column = [] ) {
             }
             $html .= '</select>';
             break;
+        case 'select2':
+            $html = '<select class="form-select form-select-sm" id="' . $column->id . '" data-id="' . $column->id . '" data-placeholder="' . $column->placeholder . '" >';
+            $html .= '</select>';
+            break;
         default:
             $html = '';    
     }

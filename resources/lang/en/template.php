@@ -70,6 +70,9 @@ return [
     'ranks' => 'Ranks',
     'my_friends' => 'My Friends',
     'otp_logs' => 'OTP Logs',
+    'collections' => 'Collections',
+    'playlists' => 'Playlists',
+    'items' => 'Items',
 
     'loading' => 'Loading...',
     'add' => 'Add',

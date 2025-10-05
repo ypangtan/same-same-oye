@@ -17,26 +17,25 @@ class CategorySeeder extends Seeder
         //
         $categories = [
             [
-                'title' => 'Electrical Component',
-                'description' => 'Electrical Component Info',
+                'en_name' => 'Song',
+                'zh_name' => '歌曲',
                 'status' => 10,
             ],
             [
-                'title' => 'Kitchen Compliance',
-                'description' => 'Kitchen Compliance Info',
+                'en_name' => 'E-Book',
+                'zh_name' => '电子书',
+                'status' => 10,
+            ],
+            [
+                'en_name' => 'Podcast',
+                'zh_name' => '播客',
                 'status' => 10,
             ],
         ];
 
         foreach ($categories as $category) {
 
-            $categoryAttribute = [
-                'title' => $category['title'],
-                'description' => $category['description'],
-                'status' => $category['status'],
-            ];
-
-            $createCategory = Category::create($categoryAttribute);
+            $createCategory = Category::create( $category );
         }
     }
 }

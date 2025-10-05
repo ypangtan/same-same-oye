@@ -19,20 +19,6 @@ class FileService
 {
     public static function upload( $request ) {
 
-        $validator = Validator::make( $request->all(), [
-            'file' => [ 'required','mimes:jpeg,jpg,png,pdf' ],
-        ] );
-
-        $attributeName = [
-            'file' => __( 'banner.image' ),
-        ];
-
-        foreach( $attributeName as $key => $aName ) {
-            $attributeName[$key] = strtolower( $aName );
-        }
-
-        $validator->setAttributeNames( $attributeName )->validate();
-
         $createFile = FileManager::create( [
             'name' => $request->file( 'file' )->getClientOriginalName(),
             'file' => $request->file( 'file' )->store( 'file-managers', [ 'disk' => 'public' ] ),
@@ -42,6 +28,52 @@ class FileService
         return response()->json( [
             'status' => 200,
             'data' => $createFile,
+            'url' => asset( 'storage/' . $createFile->file ),
+        ] );
+    }
+
+    public static function ckeUpload( $request ) {
+     
+        $createFile = FileManager::create( [
+            'name' => $request->file( 'file' )->getClientOriginalName(),
+            'file' => $request->file( 'file' )->store( ( $request->source ?? 'ckeditor' ) , [ 'disk' => 'public' ] ),
+            'type' => 3,
+        ] );
+
+        return response()->json( [
+            'status' => 200,
+            'data' => $createFile,
+            'url' => asset( 'storage/' . $createFile->file ),
+        ] );
+    }
+
+    public static function imageUpload( $request ) {
+     
+        $createFile = FileManager::create( [
+            'name' => $request->file( 'file' )->getClientOriginalName(),
+            'file' => $request->file( 'file' )->store( ( $request->source ?? 'image' ) , [ 'disk' => 'public' ] ),
+            'type' => 3,
+        ] );
+
+        return response()->json( [
+            'status' => 200,
+            'data' => $createFile,
+            'url' => asset( 'storage/' . $createFile->file ),
+        ] );
+    }
+
+    public static function songUpload( $request ) {
+     
+        $createFile = FileManager::create( [
+            'name' => $request->file( 'file' )->getClientOriginalName(),
+            'file' => $request->file( 'file' )->store( 'song', [ 'disk' => 'public' ] ),
+            'type' => 4,
+        ] );
+
+        return response()->json( [
+            'status' => 200,
+            'data' => $createFile,
+            'url' => asset( 'storage/' . $createFile->file ),
         ] );
     }
 }

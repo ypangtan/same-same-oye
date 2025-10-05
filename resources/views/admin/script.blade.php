@@ -138,8 +138,11 @@
                 // save the menu
                 menus.push( dropdownMenu );
 
+                // create a div for overflow hidden
+                let div = $( '<div></div>' ).append( dropdownMenu.detach() );
+
                 // detach it and append it to the body
-                $( '.dt-container' ).append( dropdownMenu.detach() );
+                $( '.dt-container' ).append( div );
 
                 // grab the new offset position
                 let eOffset = target.offset();

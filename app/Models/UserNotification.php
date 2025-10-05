@@ -77,7 +77,8 @@ class UserNotification extends Model
         $translations['zh'] = $this->attributes['zh_content'] ?? ( $translations['zh'] ?? '' );
 
         // Return translation for the current locale or fallback to default
-        return $translations;
+        $nowLocale = App::getLocale();
+        return $translations[ $nowLocale ];
     }
 
     public function getTitleAttribute($value) {
@@ -88,7 +89,8 @@ class UserNotification extends Model
         $translations['zh'] = $this->attributes['zh_title'] ?? ( $translations['zh'] ?? '' );
 
         // Return translation for the current locale or fallback to default
-        return $translations;
+        $nowLocale = App::getLocale();
+        return $translations[ $nowLocale ];
     }
 
     public function UserNotificationUsers() {

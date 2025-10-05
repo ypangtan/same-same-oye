@@ -27,11 +27,13 @@ use App\Http\Controllers\Admin\{
     AnnouncementRewardController,
     AppVersionController,
     BannerController,
+    ItemController,
     LuckyDrawController,
     ProductController,
     SalesRecordController,
     MarketingNotificationController,
     OtpLogController,
+    PlaylistController,
     PopAnnouncementController,
     RankController,
 };
@@ -70,16 +72,14 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             } )->name( 'admin.home' );
 
             Route::post( 'file/upload', [ FileController::class, 'upload' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] )->name( 'admin.file.upload' );
+            Route::post( 'file/cke-upload', [ FileController::class, 'ckeUpload' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] )->name( 'admin.file.ckeUpload' );
+            Route::post( 'file/song-upload', [ FileController::class, 'songUpload' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] )->name( 'admin.file.songUpload' );
 
             Route::prefix( 'dashboard' )->group( function() {
                 Route::get( '/', [ DashboardController::class, 'index' ] )->name( 'admin.dashboard' );
 
                 Route::post( '/', [ DashboardController::class, 'getDashboardData' ] )->name( 'admin.dashboard.getDashboardData' );
 
-                Route::post( 'total-revenue-statistics', [ DashboardController::class, 'totalRevenueStatistics' ] )->name( 'admin.dashboard.totalRevenueStatistics' );
-                Route::post( 'total-reload-statistics', [ DashboardController::class, 'totalReloadStatistics' ] )->name( 'admin.dashboard.totalReloadStatistics' );
-                Route::post( 'total-cups-statistics', [ DashboardController::class, 'totalCupsStatistics' ] )->name( 'admin.dashboard.totalCupsStatistics' );
-                Route::post( 'total-user-statistics', [ DashboardController::class, 'totalUserStatistics' ] )->name( 'admin.dashboard.totalUserStatistics' );
             } );
 
             Route::prefix( 'administrators' )->group( function() {
@@ -97,21 +97,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'one-administrator', [ AdministratorController::class, 'oneAdministrator' ] )->name( 'admin.administrator.oneAdministrator' );
                 Route::post( 'create-administrator', [ AdministratorController::class, 'createAdministrator' ] )->name( 'admin.administrator.createAdministrator' );
                 Route::post( 'update-administrator', [ AdministratorController::class, 'updateAdministrator' ] )->name( 'admin.administrator.updateAdministrator' );
-                
-                Route::group( [ 'middleware' => [ 'permission:view administrators' ] ], function() {
-                    Route::get( 'salesmen', [ AdministratorController::class, 'indexSalesman' ] )->name( 'admin.administrator.indexSalesman' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add administrators' ] ], function() {
-                    Route::get( 'salesmen/add', [ AdministratorController::class, 'addSalesman' ] )->name( 'admin.administrator.addSalesman' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit administrators' ] ], function() {
-                    Route::get( 'salesmen/edit', [ AdministratorController::class, 'editSalesman' ] )->name( 'admin.administrator.editSalesman' );
-                } );
-
-                Route::post( 'all-salesmen', [ AdministratorController::class, 'allSalesmen' ] )->name( 'admin.administrator.allSalesmen' );
-                Route::post( 'one-salesman', [ AdministratorController::class, 'oneSalesman' ] )->name( 'admin.administrator.oneSalesman' );
-                Route::post( 'create-salesman', [ AdministratorController::class, 'createSalesman' ] )->name( 'admin.administrator.createSalesman' );
-                Route::post( 'update-salesman', [ AdministratorController::class, 'updateSalesman' ] )->name( 'admin.administrator.updateSalesman' );
             } );
 
             Route::prefix( 'roles' )->group( function() {
@@ -195,35 +180,10 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 } );
 
                 Route::post( 'settings', [ SettingController::class, 'settings' ] )->name( 'admin.setting.settings' );
-                Route::post( 'gift-settings', [ SettingController::class, 'giftSettings' ] )->name( 'admin.setting.giftSettings' );
-                Route::post( 'bonus-settings', [ SettingController::class, 'bonusSettings' ] )->name( 'admin.setting.bonusSettings' );
                 Route::post( 'app-version-settings', [ SettingController::class, 'lastestAppVersion' ] )->name( 'admin.setting.lastestAppVersion' );
                 Route::post( 'maintenance-settings', [ SettingController::class, 'maintenanceSettings' ] )->name( 'admin.setting.maintenanceSettings' );
-                Route::post( 'update-bonus-setting', [ SettingController::class, 'updateBonusSetting' ] )->name( 'admin.setting.updateBonusSetting' );
                 Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
-                Route::post( 'update-birthday-gift-setting', [ SettingController::class, 'updateBirthdayGiftSetting' ] )->name( 'admin.setting.updateBirthdayGiftSetting' );
-                Route::post( 'update-referral-gift-setting', [ SettingController::class, 'updateReferralGiftSetting' ] )->name( 'admin.setting.updateReferralGiftSetting' );
                 Route::post( 'update-app-version-setting', [ SettingController::class, 'updateAppVersionSetting' ] )->name( 'admin.setting.updateAppVersionSetting' );
-            } );
-            
-            Route::prefix( 'announcements' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view announcements' ] ], function() {
-                    Route::get( '/', [ AnnouncementController::class, 'index' ] )->name( 'admin.module_parent.announcement.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add announcements' ] ], function() {
-                    Route::get( 'add', [ AnnouncementController::class, 'add' ] )->name( 'admin.announcement.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit announcements' ] ], function() {
-                    Route::get( 'edit', [ AnnouncementController::class, 'edit' ] )->name( 'admin.announcement.edit' );
-                } );
-    
-                Route::post( 'all-announcements', [ AnnouncementController::class, 'allAnnouncements' ] )->name( 'admin.announcement.allAnnouncements' );
-                Route::post( 'one-announcement', [ AnnouncementController::class, 'oneAnnouncement' ] )->name( 'admin.announcement.oneAnnouncement' );
-                Route::post( 'create-announcement', [ AnnouncementController::class, 'createAnnouncement' ] )->name( 'admin.announcement.createAnnouncement' );
-                Route::post( 'update-announcement', [ AnnouncementController::class, 'updateAnnouncement' ] )->name( 'admin.announcement.updateAnnouncement' );
-                Route::post( 'update-announcement-status', [ AnnouncementController::class, 'updateAnnouncementStatus' ] )->name( 'admin.announcement.updateAnnouncementStatus' );
-                Route::post( 'remove-announcement-gallery-image', [ AnnouncementController::class, 'removeAnnouncementGalleryImage' ] )->name( 'admin.announcement.removeAnnouncementGalleryImage' );
-                Route::post( 'ckeUpload', [ AnnouncementController::class, 'ckeUpload' ] )->name( 'admin.announcement.ckeUpload' );
             } );
             
             Route::prefix( 'pop-announcements' )->group( function() {
@@ -273,6 +233,66 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
                 Route::post( 'all-otp-logs', [ OtpLogController::class, 'allOtpLogs' ] )->name( 'admin.otp_log.allOtpLogs' );
                 Route::post( 'one-otp-log', [ OtpLogController::class, 'oneOtpLog' ] )->name( 'admin.otp_log.oneOtpLog' );
+            } );
+
+            Route::prefix( 'items' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view items' ] ], function() {
+                    Route::get( '/', [ ItemController::class, 'index' ] )->name( 'admin.module_parent.item.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add items' ] ], function() {
+                    Route::get( 'add', [ ItemController::class, 'add' ] )->name( 'admin.item.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit items' ] ], function() {
+                    Route::get( 'edit/{id?}', [ ItemController::class, 'edit' ] )->name( 'admin.item.edit' );
+                } );
+
+                Route::post( 'all-items', [ ItemController::class, 'allItems' ] )->name( 'admin.item.allItems' );
+                Route::post( 'one-item', [ ItemController::class, 'oneItem' ] )->name( 'admin.item.oneItem' );
+                Route::post( 'create-item', [ ItemController::class, 'createItem' ] )->name( 'admin.item.createItem' );
+                Route::post( 'update-item', [ ItemController::class, 'updateItem' ] )->name( 'admin.item.updateItem' );
+                Route::post( 'update-item-status', [ ItemController::class, 'updateItemStatus' ] )->name( 'admin.item.updateItemStatus' );
+                Route::post( 'cke-upload', [ ItemController::class, 'ckeUpload' ] )->name( 'admin.playlist.ckeUpload' );
+                Route::post( 'image-upload', [ ItemController::class, 'imageUpload' ] )->name( 'admin.playlist.imageUpload' );
+                Route::post( 'song-upload', [ ItemController::class, 'songUpload' ] )->name( 'admin.item.songUpload' );
+            } );
+
+            Route::prefix( 'playlists' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view playlists' ] ], function() {
+                    Route::get( '/', [ PlaylistController::class, 'index' ] )->name( 'admin.module_parent.playlist.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add playlists' ] ], function() {
+                    Route::get( 'add', [ PlaylistController::class, 'add' ] )->name( 'admin.playlist.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit playlists' ] ], function() {
+                    Route::get( 'edit/{id?}', [ PlaylistController::class, 'edit' ] )->name( 'admin.playlist.edit' );
+                } );
+
+                Route::post( 'all-playlists', [ PlaylistController::class, 'allPlaylists' ] )->name( 'admin.playlist.allPlaylists' );
+                Route::post( 'one-playlist', [ PlaylistController::class, 'onePlaylist' ] )->name( 'admin.playlist.onePlaylist' );
+                Route::post( 'create-playlist', [ PlaylistController::class, 'createPlaylist' ] )->name( 'admin.playlist.createPlaylist' );
+                Route::post( 'update-playlist', [ PlaylistController::class, 'updatePlaylist' ] )->name( 'admin.playlist.updatePlaylist' );
+                Route::post( 'update-playlist-status', [ PlaylistController::class, 'updatePlaylistStatus' ] )->name( 'admin.playlist.updatePlaylistStatus' );
+                Route::post( 'ckeUpload', [ PlaylistController::class, 'ckeUpload' ] )->name( 'admin.playlist.ckeUpload' );
+            } );
+
+
+            Route::prefix( 'collections' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view collections' ] ], function() {
+                    Route::get( '/', [ PlaylistController::class, 'index' ] )->name( 'admin.module_parent.collection.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add collections' ] ], function() {
+                    Route::get( 'add', [ PlaylistController::class, 'add' ] )->name( 'admin.collection.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit collections' ] ], function() {
+                    Route::get( 'edit/{id?}', [ PlaylistController::class, 'edit' ] )->name( 'admin.collection.edit' );
+                } );
+
+                Route::post( 'all-collections', [ PlaylistController::class, 'allCollections' ] )->name( 'admin.collection.allCollections' );
+                Route::post( 'one-collection', [ PlaylistController::class, 'oneCollection' ] )->name( 'admin.collection.oneCollection' );
+                Route::post( 'create-collection', [ PlaylistController::class, 'createCollection' ] )->name( 'admin.collection.createCollection' );
+                Route::post( 'update-collection', [ PlaylistController::class, 'updateCollection' ] )->name( 'admin.collection.updateCollection' );
+                Route::post( 'update-collection-status', [ PlaylistController::class, 'updateCollectionStatus' ] )->name( 'admin.collection.updateCollectionStatus' );
+                Route::post( 'ckeUpload', [ PlaylistController::class, 'ckeUpload' ] )->name( 'admin.collection.ckeUpload' );
             } );
 
         } );

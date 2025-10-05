@@ -27,7 +27,7 @@
 </head>
 
 <style>
-    .card-inner{
+    .dt-container {
         overflow: hidden;
     }
 </style>
