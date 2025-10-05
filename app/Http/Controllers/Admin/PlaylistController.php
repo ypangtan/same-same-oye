@@ -16,7 +16,7 @@ class PlaylistController extends Controller
     public function index() {
 
         $this->data['header']['title'] = __( 'template.playlists' );
-        $this->data['content'] = 'admin.playlists.index';
+        $this->data['content'] = 'admin.playlist.index';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.playlists' ),
@@ -35,7 +35,7 @@ class PlaylistController extends Controller
     public function add() {
 
         $this->data['header']['title'] = __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.playlists' ) ) ] );
-        $this->data['content'] = 'admin.playlists.add';
+        $this->data['content'] = 'admin.playlist.add';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.playlists' ),
@@ -49,7 +49,7 @@ class PlaylistController extends Controller
     public function edit( Request $request ) {
 
         $this->data['header']['title'] = __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.playlists' ) ) ] );
-        $this->data['content'] = 'admin.playlists.edit';
+        $this->data['content'] = 'admin.playlist.edit';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.playlists' ),

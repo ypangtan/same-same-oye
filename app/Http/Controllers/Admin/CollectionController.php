@@ -16,7 +16,7 @@ class CollectionController extends Controller
     public function index() {
 
         $this->data['header']['title'] = __( 'template.collections' );
-        $this->data['content'] = 'admin.collections.index';
+        $this->data['content'] = 'admin.collection.index';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.collections' ),
@@ -35,7 +35,7 @@ class CollectionController extends Controller
     public function add() {
 
         $this->data['header']['title'] = __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.collections' ) ) ] );
-        $this->data['content'] = 'admin.collections.add';
+        $this->data['content'] = 'admin.collection.add';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.collections' ),
@@ -49,7 +49,7 @@ class CollectionController extends Controller
     public function edit( Request $request ) {
 
         $this->data['header']['title'] = __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.collections' ) ) ] );
-        $this->data['content'] = 'admin.collections.edit';
+        $this->data['content'] = 'admin.collection.edit';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.collections' ),

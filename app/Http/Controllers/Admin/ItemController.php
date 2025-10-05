@@ -16,7 +16,7 @@ class ItemController extends Controller
     public function index() {
 
         $this->data['header']['title'] = __( 'template.items' );
-        $this->data['content'] = 'admin.items.index';
+        $this->data['content'] = 'admin.item.index';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.items' ),
@@ -35,7 +35,7 @@ class ItemController extends Controller
     public function add() {
 
         $this->data['header']['title'] = __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.items' ) ) ] );
-        $this->data['content'] = 'admin.items.add';
+        $this->data['content'] = 'admin.item.add';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.items' ),
@@ -49,7 +49,7 @@ class ItemController extends Controller
     public function edit( Request $request ) {
 
         $this->data['header']['title'] = __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.items' ) ) ] );
-        $this->data['content'] = 'admin.items.edit';
+        $this->data['content'] = 'admin.item.edit';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.items' ),

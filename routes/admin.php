@@ -275,7 +275,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'ckeUpload', [ PlaylistController::class, 'ckeUpload' ] )->name( 'admin.playlist.ckeUpload' );
             } );
 
-
             Route::prefix( 'collections' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view collections' ] ], function() {
                     Route::get( '/', [ PlaylistController::class, 'index' ] )->name( 'admin.module_parent.collection.index' );
