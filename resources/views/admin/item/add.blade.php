@@ -156,7 +156,7 @@ window.cke_element = [ 'item_create_lyrics'];
             closeOnSelect: true,
 
             ajax: { 
-                url: '{{ route( 'admin.category.allCagetories' ) }}',
+                url: '{{ route( 'admin.category.allCategories' ) }}',
                 type: "post",
                 dataType: 'json',
                 delay: 250,

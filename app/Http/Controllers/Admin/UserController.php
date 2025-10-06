@@ -39,11 +39,8 @@ class UserController extends Controller
             '3' => __( 'user.apple_id' ),
         ];
 
-        $this->data['data']['rank'] = [
-            '1' => __( 'rank.member' ),
-            '2' => __( 'rank.silver' ),
-            '3' => __( 'rank.gold' ),
-            '4' => __( 'rank.premium' ),
+        $this->data['data']['membership'] = [
+            '1' => __( 'membership.member' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );

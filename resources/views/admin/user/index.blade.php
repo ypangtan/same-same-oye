@@ -82,14 +82,9 @@ $columns = [
     ],
     [
         'type' => 'select',
-        'options' => $data['rank'],
-        'id' => 'rank',
-        'title' => __( 'user.rank' ),
-    ],
-    [
-        'type' => 'default',
-        'id' => 'tier_progress',
-        'title' => __( 'user.tier_progress' ),
+        'options' => $data['membership'],
+        'id' => 'membership',
+        'title' => __( 'user.membership' ),
     ],
     [
         'type' => 'select',
@@ -152,8 +147,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'social_logins' },
             { data: 'phone_number' },
             { data: 'invitation_code' },
-            { data: 'current_rank' },
-            { data: 'total_accumulate_spending' },
+            { data: 'encrypted_id' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -274,6 +268,14 @@ var statusMapper = @json( $data['status'] ),
                     // `;
 
                     // return html ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "membership" ) }}' ),
+                
+                render: function( data, type, row, meta ) {
+                    return '-';
+                    return data ? statusMapper[data] : '-';
                 },
             },
             {

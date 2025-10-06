@@ -1,11 +1,11 @@
 <?php
-$user_create = 'user_create';
+$collection_create = 'collection_create';
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.add_x', [ 'title' => Str::singular( __( 'template.users' ) ) ] ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.add_x', [ 'title' => Str::singular( __( 'template.collections' ) ) ] ) }}</h3>
         </div><!-- .nk-block-head-content -->
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
@@ -15,161 +15,110 @@ $user_create = 'user_create';
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
-                <div class="mb-3 row">
-                    <label for="{{ $user_create }}_referral" class="col-sm-5 col-form-label">{{ __( 'user.referral' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $user_create }}_referral" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.users' ) ] ) }}"></select>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
+                        <button class="nav-link active" id="en_name-tab" data-bs-toggle="tab" data-bs-target="#en_name" type="button" role="tab" aria-controls="en_name" aria-selected="true"> English </button>
+                        <button class="nav-link" id="zh_name-tab" data-bs-toggle="tab" data-bs-target="#zh_name" type="button" role="tab" aria-controls="zh_name" aria-selected="false">  中文 </button>
                     </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $user_create }}_date_of_birth" class="col-sm-5 col-form-label">{{ __( 'user.date_of_birth' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="date" class="form-control" id="{{ $user_create }}_date_of_birth">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                @if( 1 == 2 )
-                <div class="mb-3 row">
-                    <label for="{{ $user_create }}_account_type" class="col-sm-5 col-form-label">{{ __( 'user.account_type' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-select" id="{{ $user_create }}_account_type" >
-                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'user.account_type' ) ] ) }}</option>
-                            <option value="1">{{ __( 'user.personal' ) }}</option>
-                            <option value="2">{{ __( 'user.company' ) }}</option>
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $user_create }}_username" class="col-sm-5 col-form-label">{{ __( 'user.username' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_username">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                @endif
-                <div class="mb-3 row">
-                    <label for="{{ $user_create }}_email" class="col-sm-5 col-form-label">{{ __( 'user.email' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_email">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $user_create }}_first_name" class="col-sm-5 col-form-label">{{ __( 'user.first_name' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_first_name">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $user_create }}_last_name" class="col-sm-5 col-form-label">{{ __( 'user.last_name' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_last_name">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $user_create }}_phone_number" class="col-sm-5 col-form-label">{{ __( 'user.phone_number' ) }}</label>
-                    <div class="col-sm-7">
-                        <div class="input-group">
-                            <select class="form-select flex-shrink-0" id="{{ $user_create }}_calling_code" style="max-width: 100px;">
-                                <option value="+60" selected>+60</option>
-                                <option value="+65">+65</option>
-                            </select>
-                            <input type="text" class="form-control" id="{{ $user_create }}_phone_number">
-                            <div class="invalid-feedback"></div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade pt-4 show active" id="en_name" role="tabpanel" aria-labelledby="en_name-tab">
+                        <div class="mb-3 row">
+                            <label for="{{ $collection_create }}_en_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( English )</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm" id="{{ $collection_create }}_en_name">
+                                <div class="invalid-feedback"></div>
+                            </div>
                         </div>
-                    </div>                    
-                </div>                
-                
+                    </div>
+                    <div class="tab-pane fade pt-4" id="zh_name" role="tabpanel" aria-labelledby="zh_name-tab">
+                        <div class="mb-3 row">
+                            <label for="{{ $collection_create }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( 中文 )</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm" id="{{ $collection_create }}_zh_name">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade pt-4" id="zh_name" role="tabpanel" aria-labelledby="zh_name-tab">
+                        <div class="mb-3 row">
+                            <label for="{{ $collection_create }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( 中文 )</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm" id="{{ $collection_create }}_zh_name">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="mb-3 row">
-                    <label for="{{ $user_create }}_password" class="col-sm-5 col-form-label">{{ __( 'user.password' ) }}</label>
+                    <label for="{{ $collection_create }}_category" class="col-sm-5 col-form-label">{{ __( 'collection.category' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="password" class="form-control" id="{{ $user_create }}_password" autocomplete="new-password">
+                        <select class="form-control select2" id="{{ $collection_create }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}"></select>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="{{ $collection_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'collection.min_membership_level' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="number" class="form-control" id="{{ $collection_create }}_membership_level">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_address_1" class="col-sm-5 col-form-label">{{ __( 'customer.address_1' ) }}</label>
+                <div class="mb-3 row">
+                    <label for="{{ $collection_create }}_priority" class="col-sm-5 col-form-label">{{ __( 'collection.priority' ) }}</label>
                     <div class="col-sm-7">
-                        <textarea class="form-control" id="{{ $user_create }}_address_1" style="min-height: 80px;" placeholder="{{ __( 'template.optional' ) }}"></textarea>
+                        <input type="number" class="form-control" id="{{ $collection_create }}_priority">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_address_2" class="col-sm-5 col-form-label">{{ __( 'customer.address_2' ) }}</label>
-                    <div class="col-sm-7">
-                        <textarea class="form-control" id="{{ $user_create }}_address_2" style="min-height: 80px;" placeholder="{{ __( 'template.optional' ) }}"></textarea>
-                        <div class="invalid-feedback"></div>
+                <div class="mb-3">
+                    <label>{{ __( 'collection.image' ) }}</label>
+                    <div class="dropzone mb-3" id="{{ $playlist_create }}_image" style="min-height: 0px;">
+                        <div class="dz-message needsclick">
+                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                        </div>
                     </div>
+                    <div class="invalid-feedback"></div>
                 </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_city" class="col-sm-5 col-form-label">{{ __( 'customer.city' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_city" placeholder="{{ __( 'template.optional' ) }}">
-                        <div class="invalid-feedback"></div>
+                <div class="row mb-3">
+                    <div>
+                        <label for="{{ $collection_create }}_playlists" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'collection.playlists' ) }}</label>
+                        <select class="form-select form-select-md" id="{{ $collection_create }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.playlists' ) ] ) }}">></select>
                     </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_state" class="col-sm-5 col-form-label">{{ __( 'customer.state' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-select" id="{{ $user_create }}_state" >
-                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'customer.state' ) ] ) }}</option>
-                            <option value="Johor">Johor</option>
-                            <option value="Kedah">Kedah</option>
-                            <option value="Kelantan">Kelantan</option>
-                            <option value="Malacca">Malacca</option>
-                            <option value="Negeri Sembilan">Negeri Sembilan</option>
-                            <option value="Pahang">Pahang</option>
-                            <option value="Penang">Penang</option>
-                            <option value="Perlis">Perlis</option>
-                            <option value="Sabah">Sabah</option>
-                            <option value="Sarawak">Sarawak</option>
-                            <option value="Selangor">Selangor</option>
-                            <option value="Terengganu">Terengganu</option>
-                            <option value="Kuala Lumpur">Kuala Lumpur</option>
-                            <option value="Labuan">Labuan</option>
-                            <option value="Putrajaya">Putrajaya</option>
-                            <option value="Perak">Perak</option>
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_postcode" class="col-sm-5 col-form-label">{{ __( 'customer.postcode' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_postcode" placeholder="{{ __( 'template.optional' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
+
+                    <div id="selected-playlists" class="d-flex flex-wrap gap-2 my-4"></div>
+
+                    <input type="hidden" name="tags" id="{{ $collection_create }}_hide_playlists">
                 </div>
                 <div class="text-end">
-                    <button id="{{ $user_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
+                    <button id="{{ $collection_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
-                    <button id="{{ $user_create }}_submit" type="button" class="btn btn-primary">{{ __( 'template.save_changes' ) }}</button>
+                    <button id="{{ $collection_create }}_submit" type="button" class="btn btn-primary">{{ __( 'template.save_changes' ) }}</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<link rel="stylesheet" href="{{ asset( 'admin/css/ckeditor/styles.css' ) }}">
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor.js' ) }}"></script>
+<script src="{{ asset( 'admin/js/ckeditor/upload-adapter.js' ) }}"></script>
+
+<script>
+window.ckeupload_path = '{{ route( 'admin.collection.ckeUpload' ) }}';
+window.csrf_token = '{{ csrf_token() }}';
+window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' ];
+</script>
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
+
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        let dc = '#{{ $user_create }}',
-                fileID = '';
+        let dc = '#{{ $collection_create }}',
+            fileID = '',
+            selectedPlaylists = [];
 
         $( dc + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.module_parent.user.index' ) }}';
-        } );
-
-        let dateOfBirth = $( dc + '_date_of_birth' ).flatpickr( {
-            disableMobile: true,
-            onClose: function( selected, dateStr, instance ) {
-                window[$( instance.element ).data('id')] = $( instance.element ).val();
-                dt_table.draw();
-            }
+            window.location.href = '{{ route( 'admin.module_parent.collection.index' ) }}';
         } );
 
         $( dc + '_submit' ).click( function() {
@@ -181,26 +130,18 @@ $user_create = 'user_create';
             } );
 
             let formData = new FormData();
-            // formData.append( 'username', $( dc + '_username' ).val() );
-            formData.append( 'referral_id', $( dc + '_referral' ).val() ?? '' );
-            formData.append( 'email', $( dc + '_email' ).val() );
-            formData.append( 'first_name', $( dc + '_first_name' ).val() );
-            formData.append( 'last_name', $( dc + '_last_name' ).val() );
-            formData.append( 'address_1', $( dc + '_address_1' ).val() );
-            formData.append( 'address_2', $( dc + '_address_2' ).val() );
-            formData.append( 'city', $( dc + '_city' ).val() );
-            formData.append( 'state', $( dc + '_state' ).val() );
-            formData.append( 'postcode', $( dc + '_postcode' ).val() );
-            formData.append( 'phone_number', $( dc + '_phone_number' ).val() );
-            formData.append( 'calling_code', $( dc + '_calling_code' ).val() );
-            formData.append( 'password', $( dc + '_password' ).val() );
-            formData.append( 'date_of_birth', $( dc + '_date_of_birth' ).val() );
-            // formData.append( 'account_type', $( dc + '_account_type' ).val() );
+            formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
+            formData.append( 'en_name', editors['collection_create_en_name'].getData()  );
+            formData.append( 'zh_name', editors['collection_create_zh_name'].getData() );
+            formData.append( 'priority', $( dc + '_priority' ).val() );
+            formData.append( 'membership_level', $( dc + '_membership_level' ).val() );
+            formData.append( 'image', fileID );
+            formData.append('playlists', JSON.stringify( selectedPlaylists ) );
             
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
-                url: '{{ route( 'admin.user.createUser' ) }}',
+                url: '{{ route( 'admin.collection.createCollection' ) }}',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -211,7 +152,7 @@ $user_create = 'user_create';
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.module_parent.user.index' ) }}';
+                        window.location.href = '{{ route( 'admin.module_parent.collection.index' ) }}';
                     } );
                 },
                 error: function( error ) {
@@ -230,7 +171,7 @@ $user_create = 'user_create';
             } );
         } );
         
-        $( dc + '_referral' ).select2({
+        $( dc + '_category' ).select2({
 
             theme: 'bootstrap-5',
             width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
@@ -238,13 +179,13 @@ $user_create = 'user_create';
             closeOnSelect: true,
 
             ajax: { 
-                url: '{{ route( 'admin.user.allUsers' ) }}',
+                url: '{{ route( 'admin.category.allCategories' ) }}',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
                     return {
-                        user: params.term, // search term
+                        name: params.term, // search term
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,
@@ -256,13 +197,10 @@ $user_create = 'user_create';
 
                     let processedResult = [];
 
-                    data.users.map( function( v, i ) {
+                    data.categories.map( function( v, i ) {
                         processedResult.push( {
-                            id: v.encrypted_id,
-                            text: v.email,
-                            first_name: v.first_name,
-                            last_name: v.last_name,
-                            phone_number: v.phone_number,
+                            id: v.id,
+                            text: v.name,
                         } );
                     } );
 
@@ -276,26 +214,112 @@ $user_create = 'user_create';
                 },
                 cache: true
             },
-            templateResult: function (data) {
-                if (data.loading) return data.text;
+        });
 
-                firstname = data?.first_name ?? '-';
-                lastname = data?.last_name ?? '-';
-                fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' );
-                const $container = $(`
-                    <div class="d-flex align-items-center">
-                        <span>${ fullname ? fullname : '-' }</span>
-                        ( <span>${data.phone_number}</span> )
-                    </div>
-                `);
-                return $container;
+        let assignPlaylistSelect2 = $( dc + '_playlists' ).select2({
+
+            theme: 'bootstrap-5',
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: true,
+
+            ajax: { 
+                url: '{{ route( 'admin.playlist.allPlaylists' ) }}',
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        title: params.term, // search term
+                        designation: 1,
+                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
+                        length: 10,
+                        _token: '{{ csrf_token() }}',
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    let processedResult = [];
+
+                    data.categories.map( function( v, i ) {
+                        processedResult.push( {
+                            id: v.id,
+                            text: v.title,
+                        } );
+                    } );
+
+                    return {
+                        results: processedResult,
+                        pagination: {
+                            more: ( params.page * 10 ) < data.recordsFiltered
+                        }
+                    };
+
+                },
+                cache: true
             },
+        });
 
-            templateSelection: function (data) {
-                return data.text || '';
+        $( dc + '_playlists' ).on('select2:select', function (e) {
+            let data = e.params.data;
+            
+            if (!selectedPlaylists.some(tag => tag.id === data.id)) {
+                selectedPlaylists.push( {id: data.id, text: data.text} );
+
+                $('#selected-playlists').append(`
+                    <span class="badge rounded-pill border px-3 py-2 d-flex align-items-center gap-2" data-id="${data.id}" style="font-size:14px;">
+                        ${data.text}
+                        <i class="icon icon-icon16-close remove-playlist click-action" style="font-size:23px;"></i>
+                    </span>
+                `);
+
+                updateHiddenInput();
             }
 
+            $('#assign_tag').val(null).trigger('change');
         });
+
+        $(document).on('click', '.remove-playlist', function() {
+            let id = $(this).closest('.badge').data('id');
+            selectedPlaylists = selectedPlaylists.filter(tag => tag.id !== id);
+            $(this).closest('.badge').remove();
+            updateHiddenInput();
+        });
+
+        $('#clearTags').on('click', function(e) {
+            e.preventDefault();
+            selectedPlaylists = [];
+            $('#selected-playlists').empty();
+            updateHiddenInput();
+        });
+
+        function updateHiddenInput() {
+            let ids = selectedPlaylists.map(tag => tag.id);
+            $( dc + '_hide_playlists' ).val(JSON.stringify(ids));
+        }
+        
+        Dropzone.autoDiscover = false;
+        const dropzone = new Dropzone( dc + '_image', { 
+            url: '{{ route( 'admin.collection.imageUpload' ) }}',
+            maxFiles: 1,
+            acceptedFiles: 'image/jpg,image/jpeg,image/png',
+            addRemoveLinks: true,
+            init: function() {
+                this.on("addedfile", function (file) {
+                    if (this.files.length > 1) {
+                        this.removeFile(this.files[0]);
+                    }
+                });
+            },
+            removedfile: function( file ) {
+                fileID = null;
+                file.previewElement.remove();
+            },
+            success: function( file, response ) {
+                fileID = response.file;
+            }
+        } );
 
     } );
 </script>

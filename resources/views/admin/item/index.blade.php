@@ -258,6 +258,51 @@ var statusMapper = @json( $data['status'] ),
                 },
             } );
         } );
+        
+        $( 'category' ).select2({
+
+            theme: 'bootstrap-5',
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: true,
+
+            ajax: { 
+                url: '{{ route( 'admin.category.allCategories' ) }}',
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        item: params.term, // search term
+                        designation: 1,
+                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
+                        length: 10,
+                        _token: '{{ csrf_token() }}',
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    let processedResult = [];
+
+                    data.categories.map( function( v, i ) {
+                        processedResult.push( {
+                            id: v.id,
+                            text: v.name,
+                        } );
+                    } );
+
+                    return {
+                        results: processedResult,
+                        pagination: {
+                            more: ( params.page * 10 ) < data.recordsFiltered
+                        }
+                    };
+
+                },
+                cache: true
+            },
+        });
     } );
 </script>
 

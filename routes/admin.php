@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\{
     AnnouncementRewardController,
     AppVersionController,
     BannerController,
+    CategoryController,
     ItemController,
     LuckyDrawController,
     ProductController,
@@ -292,6 +293,11 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-collection', [ PlaylistController::class, 'updateCollection' ] )->name( 'admin.collection.updateCollection' );
                 Route::post( 'update-collection-status', [ PlaylistController::class, 'updateCollectionStatus' ] )->name( 'admin.collection.updateCollectionStatus' );
                 Route::post( 'ckeUpload', [ PlaylistController::class, 'ckeUpload' ] )->name( 'admin.collection.ckeUpload' );
+            } );
+
+            Route::prefix( 'categories' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view categories' ] ], function() {
+                Route::post( 'all-categories', [ CategoryController::class, 'allCategories' ] )->name( 'admin.category.allCagetories' );
             } );
 
         } );

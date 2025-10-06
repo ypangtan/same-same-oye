@@ -85,9 +85,6 @@ class UserService
         if ( $users ) {
             $users->append( [
                 'encrypted_id',
-                'total_accumulate_spending',
-                'current_rank',
-                'required_points',
             ] );
 
             foreach( $users as $user ){
