@@ -40,15 +40,6 @@ $playlist_edit = 'playlist_edit';
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade pt-4" id="zh_name" role="tabpanel" aria-labelledby="zh_name-tab">
-                        <div class="mb-3 row">
-                            <label for="{{ $playlist_edit }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( 中文 )</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $playlist_edit }}_zh_name">
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="{{ $playlist_edit }}_category" class="col-sm-5 col-form-label">{{ __( 'playlist.category' ) }}</label>
@@ -376,5 +367,21 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             let ids = selectedItems.map(tag => tag.id);
             $( de + '_hide_items' ).val(JSON.stringify(ids));
         }
+
+        $('#selected-items').sortable({
+            tolerance: 'pointer',
+            cursor: 'move',
+            update: function(event, ui) {
+                // rebuild selectedItems order after sorting
+                let newOrder = [];
+                $('#selected-items .badge').each(function() {
+                    let id = $(this).data('id');
+                    let item = selectedItems.find(i => i.id === id);
+                    if (item) newOrder.push(item);
+                });
+                selectedItems = newOrder;
+                updateHiddenInput();
+            }
+        });
     } );
 </script>

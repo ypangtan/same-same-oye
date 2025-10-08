@@ -1,16 +1,16 @@
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.collections' ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.ads' ) }}</h3>
         </div><!-- .nk-block-head-content -->
-        @can( 'add collections' )
+        @can( 'add ads' )
         <div class="nk-block-head-content">
             <div class="toggle-wrap nk-block-tools-toggle">
                 <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
                 <div class="toggle-expand-content" data-content="pageMenu">
                     <ul class="nk-block-tools g-3">
                         <li class="nk-block-tools-opt">
-                            <a href="{{ route( 'admin.collection.add' ) }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
+                            <a href="{{ route( 'admin.ad.add' ) }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
                         </li>
                     </ul>
                 </div>
@@ -21,7 +21,7 @@
 </div><!-- .nk-block-head -->
 
 <?php
-$enableReorder = \Helper::needReorder( 'collections' );
+$enableReorder = \Helper::needReorder( 'ads' );
 
 $columns = [
     [
@@ -43,19 +43,13 @@ $columns = [
     [
         'type' => 'default',
         'id' => 'image',
-        'title' => __( 'collection.image' ),
+        'title' => __( 'ad.image' ),
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'collection.title' ) ] ),
-        'id' => 'title',
-        'title' => __( 'collection.title' ),
-    ],
-    [
-        'type' => 'select2',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'collection.category' ) ] ),
-        'id' => 'category',
-        'title' => __( 'collection.category' ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'ad.name' ) ] ),
+        'id' => 'name',
+        'title' => __( 'ad.name' ),
     ],
     [
         'type' => 'select',
@@ -80,7 +74,7 @@ if ( $enableReorder == 1 ) {
 }
 ?>
 
-<x-data-tables id="collection_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
+<x-data-tables id="ad_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
 
 <script>
 
@@ -94,7 +88,7 @@ window['{{ $column['id'] }}'] = '';
 
 var statusMapper = @json( $data['status'] ),
     dt_table,
-    dt_table_name = '#collection_table',
+    dt_table_name = '#ad_table',
     dt_table_config = {
         language: {
             'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
@@ -108,11 +102,11 @@ var statusMapper = @json( $data['status'] ),
             }
         },
         ajax: {
-            url: '{{ route( 'admin.collection.allCollections' ) }}',
+            url: '{{ route( 'admin.ad.allAds' ) }}',
             data: {
                 '_token': '{{ csrf_token() }}',
             },
-            dataSrc: 'collections',
+            dataSrc: 'ads',
         },
         lengthMenu: [[10, 25],[10, 25]],
         order: [[ 2, 'desc' ]],
@@ -121,8 +115,7 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: 'created_at' },
             { data: 'image_url' },
-            { data: 'title' },
-            { data: 'category' },
+            { data: 'name' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -161,17 +154,10 @@ var statusMapper = @json( $data['status'] ),
                 },
             },
             {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "name" ) }}' ),
                 
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "category" ) }}' ),
-                
-                render: function( data, type, row, meta ) {
-                    return data?.name ?? '-' ;
                 },
             },
             {
@@ -187,14 +173,14 @@ var statusMapper = @json( $data['status'] ),
                 className: 'text-center',
                 render: function( data, type, row, meta ) {
 
-                    @canany( [ 'edit collections', 'delete collections' ] )
+                    @canany( [ 'edit ads', 'delete ads' ] )
                     let edit, status = '', view = '';
 
-                    @can( 'edit collections' )
+                    @can( 'edit ads' )
                     edit = '<li class="dt-edit" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.edit' ) }}</span></a></li>';
                     @endcan
 
-                    @can( 'delete collections' )
+                    @can( 'delete ads' )
                     status = row['status'] == 10 ? 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="20"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="10"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
@@ -222,7 +208,7 @@ var statusMapper = @json( $data['status'] ),
     },
     table_no = 0,
     timeout = null,
-    reorderPath = '{{ route( 'admin.collection.updateOrder' ) }}';
+    reorderPath = '{{ route( 'admin.ad.updateOrder' ) }}';
 
     if ( parseInt( '{{ $enableReorder }}' ) == 1 ) {
 
@@ -259,13 +245,13 @@ var statusMapper = @json( $data['status'] ),
         } );
 
         $( document ).on( 'click', '.dt-edit', function() {
-            window.location.href = '{{ route( 'admin.collection.edit' ) }}?id=' + $( this ).data( 'id' );
+            window.location.href = '{{ route( 'admin.ad.edit' ) }}?id=' + $( this ).data( 'id' );
         } );
 
         $( document ).on( 'click', '.dt-status', function() {
 
             $.ajax( {
-                url: '{{ route( 'admin.collection.updateCollectionStatus' ) }}',
+                url: '{{ route( 'admin.ad.updateAdStatus' ) }}',
                 type: 'POST',
                 data: {
                     'id': $( this ).data( 'id' ),
@@ -279,51 +265,6 @@ var statusMapper = @json( $data['status'] ),
                 },
             } );
         } );
-
-        $( 'category' ).select2({
-
-            theme: 'bootstrap-5',
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            placeholder: $( this ).data( 'placeholder' ),
-            closeOnSelect: true,
-
-            ajax: { 
-                url: '{{ route( 'admin.category.allCategories' ) }}',
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        item: params.term, // search term
-                        designation: 1,
-                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
-                        length: 10,
-                        _token: '{{ csrf_token() }}',
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-
-                    let processedResult = [];
-
-                    data.categories.map( function( v, i ) {
-                        processedResult.push( {
-                            id: v.id,
-                            text: v.name,
-                        } );
-                    } );
-
-                    return {
-                        results: processedResult,
-                        pagination: {
-                            more: ( params.page * 10 ) < data.recordsFiltered
-                        }
-                    };
-
-                },
-                cache: true
-            },
-        });
     } );
 </script>
 

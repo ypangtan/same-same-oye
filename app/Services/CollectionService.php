@@ -163,8 +163,8 @@ class CollectionService
 
         $attributeName = [
             'category_id' => __( 'collection.category' ),
-            'en_name' => __( 'collection.en_name' ),
-            'zh_name' => __( 'collection.zh_name' ),
+            'en_name' => __( 'collection.name' ),
+            'zh_name' => __( 'collection.name' ),
             'image' => __( 'collection.image' ),
             'priority' => __( 'collection.priority' ),
             'membership_level' => __( 'collection.membership_level' ),
@@ -187,12 +187,16 @@ class CollectionService
                 'en_name' => $request->en_name,
                 'zh_name' => $request->zh_name,
                 'image' => $request->image,
-                'priority' => $request->priority ?? 0,
                 'membership_level' => $request->membership_level,
                 'status' => 10,
             ] );
 
-            $createCollection->playlists()->sync( $request->playlists ?? [] );
+            $syncData = [];
+            foreach ( $request->playlists as $index => $item ) {
+                $syncData[$item['id']] = ['priority' => $index + 1];
+            }
+
+            $createCollection->playlists()->sync( $syncData );
     
             DB::commit();
 
@@ -228,8 +232,8 @@ class CollectionService
 
         $attributeName = [
             'category_id' => __( 'collection.category' ),
-            'en_name' => __( 'collection.en_name' ),
-            'zh_name' => __( 'collection.zh_name' ),
+            'en_name' => __( 'collection.name' ),
+            'zh_name' => __( 'collection.name' ),
             'image' => __( 'collection.image' ),
             'priority' => __( 'collection.priority' ),
             'membership_level' => __( 'collection.membership_level' ),
@@ -251,11 +255,15 @@ class CollectionService
             $updateCollection->en_name = $request->en_name;
             $updateCollection->zh_name = $request->zh_name;
             $updateCollection->image = $request->image;
-            $updateCollection->priority = $request->priority ?? 0;
             $updateCollection->membership_level = $request->membership_level;
             $updateCollection->save();
 
-            $updateCollection->playlists()->sync( $request->playlists ?? [] );
+            $syncData = [];
+            foreach ( $request->playlists as $index => $item ) {
+                $syncData[$item['id']] = ['priority' => $index + 1];
+            }
+
+            $updateCollection->playlists()->sync( $syncData );
 
             DB::commit();
 
@@ -286,6 +294,64 @@ class CollectionService
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.collections' ) ) ] ),
         ] );
+    }
+
+    public static function updateOrder( $request ) {
+
+        $updates = $request->input('updates', []);
+        
+        foreach( $updates as $update ) {
+            $ad = Collection::find( \Helper::decode( $update['id'] ) );
+            if( $ad ) {
+                $ad->priority = $update['priority'];
+                $ad->save();
+            }
+        }
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.collections' ) ) ] ),
+        ] );
+    }
+
+    public static function getCollections( $request ) {
+        $collections = Collection::with( [
+            'playlists',
+            'playlists.items',
+        ] )->select( 'collections.*' );
+
+        $collections->where( 'status', 10 );
+        $collections->orderBy( 'priority', 'desc' );
+
+        $collection = $collections->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
+
+        $collections->getCollection()->transform(function ($collection) {
+            $collection->append( [
+                'encrypted_id'
+            ] );
+
+            if ($collection->relationLoaded('playlists')) {
+                $collection->playlists->transform(function ($playlist) {
+                    $playlist->append( [
+                        'encrypted_id'
+                    ] );
+
+                    if ($playlist->relationLoaded('items')) {
+                        $playlist->items->transform(function ($item) {
+                            $item->append( [
+                                'encrypted_id'
+                            ] );
+                            return $item;
+                        });
+                    }
+
+                    return $playlist;
+                });
+            }
+
+            return $collection;
+        });
+
+        return response()->json( $collection );
     }
 
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\{
+    AdController,
     UserController,
     MailContentController,
     WalletController,
@@ -15,7 +16,11 @@ use App\Http\Controllers\Api\{
     BannerController,
     AnnouncementController,
     AppVersionController,
+    CollectionController,
+    ItemController,
     LuckyDrawRewardController,
+    MusicRequestController,
+    PlaylistController,
     PointsController,
     RankController,
 };
@@ -48,7 +53,6 @@ Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
     Route::post( '/', [ UserController::class, 'registerUser' ] );
     Route::post( 'login', [ UserController::class, 'loginUser' ] );
     Route::post( 'login-social', [ UserController::class, 'loginUserSocial' ] );
-    Route::post( 'check-phone-number', [ UserController::class, 'checkPhoneNumber' ] );
     Route::post( 'forgot-password', [ UserController::class, 'forgotPasswordOtp' ] );
     Route::post( 'reset-password', [ UserController::class, 'resetPassword' ] );
 } );
@@ -80,9 +84,34 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( 'test-notification', [ UserController::class, 'testNotification' ] );
 
     } );
-    Route::prefix( 'announcements' )->middleware( 'log.cart.order' )->group( function() {
-        Route::get( '/', [ AnnouncementController::class, 'getAnnouncements' ] );
-        Route::post( 'close', [ AnnouncementController::class, 'claim' ] );
+
+    Route::prefix( 'collections' )->group( function() {
+        Route::post( '/get-all-collections', [ CollectionController::class, 'getCollections' ] );
+        Route::post( '/get-one-collection', [ CollectionController::class, 'getCollection' ] );
+    } );
+
+    Route::prefix( 'playlists' )->group( function() {
+        Route::post( '/get-all-playlists', [ PlaylistController::class, 'getPlaylists' ] );
+        Route::post( '/get-one-playlist', [ PlaylistController::class, 'getPlaylist' ] );
+    } );
+
+    Route::prefix( 'items' )->group( function() {
+        Route::post( '/get-all-items', [ ItemController::class, 'getItems' ] );
+        Route::post( '/get-one-item', [ ItemController::class, 'getItem' ] );
+    } );
+
+    Route::prefix( 'banners' )->group( function() {
+        Route::post( '/get-all-banners', [ BannerController::class, 'getBanners' ] );
+        Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
+    } );
+
+    Route::prefix( 'ads' )->group( function() {
+        Route::post( '/get-all-ads', [ AdController::class, 'getAds' ] );
+        Route::post( '/get-one-ad', [ AdController::class, 'getAd' ] );
+    } );
+
+    Route::prefix( 'music-requests' )->group( function() {
+        Route::post( '/create-music-requests', [ MusicRequestController::class, 'createMusicRequest' ] );
     } );
     
 });

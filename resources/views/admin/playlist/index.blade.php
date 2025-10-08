@@ -21,6 +21,8 @@
 </div><!-- .nk-block-head -->
 
 <?php
+$enableReorder = \Helper::needReorder( 'collections' );
+
 $columns = [
     [
         'type' => 'default',
@@ -67,6 +69,15 @@ $columns = [
         'title' => __( 'datatables.action' ),
     ],
 ];
+
+if ( $enableReorder == 1 ) {
+    array_unshift( $columns,  [
+        'type' => 'default',
+        'id' => 'dt_reorder',
+        'title' => '',
+        'reorder' => 'yes',
+    ] );
+}
 ?>
 
 <x-data-tables id="playlist_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
@@ -210,7 +221,31 @@ var statusMapper = @json( $data['status'] ),
         ],
     },
     table_no = 0,
-    timeout = null;
+    timeout = null
+    reorderPath = '{{ route( 'admin.playlist.updateOrder' ) }}';
+
+    if ( parseInt( '{{ $enableReorder }}' ) == 1 ) {
+
+        dt_table_config.rowReorder = {
+            selector: '.dt-reorder',
+            dataSrc: 'id',
+            update: false,
+        };
+
+        dt_table_config.order[0] = [ 3, 'desc' ],
+        dt_table_config.columns.unshift( {
+            data: 'encrypted_id'
+        } );
+        dt_table_config.columnDefs.unshift( {
+            targets: 0,
+            orderable: false,
+            render: function( data, type, row, meta ) {
+                return `<div class="dt-reorder"style="width: 100%" data-id="${data}" />
+                    <i class="align-middle feather" icon-name="move" style="color: #5f5f5f;"></i>
+                </div>`;
+            },
+        } );
+    }
 
     document.addEventListener( 'DOMContentLoaded', function() {
 

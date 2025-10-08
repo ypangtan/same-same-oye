@@ -88,4 +88,8 @@ class CollectionController extends Controller
 
         return FileService::ckeUpload( $request );
     }
+
+    public function updateOrder( Request $request ) {
+        return CollectionService::updateOrder( $request );
+    }
 }

@@ -29,6 +29,9 @@
     <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
+    {{-- datatable row sortable --}}
+    <script src="{{ asset( 'admin/js/rowReorder.datatable.min.js' ) . Helper::assetVersion() }}"></script>
+
     <script>
 
         window['core'] = {

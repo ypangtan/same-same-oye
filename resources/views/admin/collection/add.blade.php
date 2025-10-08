@@ -40,15 +40,6 @@ $collection_create = 'collection_create';
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade pt-4" id="zh_name" role="tabpanel" aria-labelledby="zh_name-tab">
-                        <div class="mb-3 row">
-                            <label for="{{ $collection_create }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( 中文 )</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $collection_create }}_zh_name">
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="{{ $collection_create }}_category" class="col-sm-5 col-form-label">{{ __( 'collection.category' ) }}</label>
@@ -298,6 +289,22 @@ window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' 
             let ids = selectedPlaylists.map(tag => tag.id);
             $( dc + '_hide_playlists' ).val(JSON.stringify(ids));
         }
+        
+        $('#selected-playlists').sortable({
+            tolerance: 'pointer',
+            cursor: 'move',
+            update: function(event, ui) {
+                // rebuild selectedPalylists order after sorting
+                let newOrder = [];
+                $('#selected-playlists .badge').each(function() {
+                    let id = $(this).data('id');
+                    let item = selectedPalylists.find(i => i.id === id);
+                    if (item) newOrder.push(item);
+                });
+                selectedPalylists = newOrder;
+                updateHiddenInput();
+            }
+        });
         
         Dropzone.autoDiscover = false;
         const dropzone = new Dropzone( dc + '_image', { 

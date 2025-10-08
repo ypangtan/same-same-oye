@@ -171,8 +171,8 @@ class PlaylistService
 
         $attributeName = [
             'category_id' => __( 'playlist.category' ),
-            'en_name' => __( 'playlist.en_name' ),
-            'zh_name' => __( 'playlist.zh_name' ),
+            'en_name' => __( 'playlist.name' ),
+            'zh_name' => __( 'playlist.name' ),
             'image' => __( 'playlist.image' ),
             'priority' => __( 'playlist.priority' ),
             'membership_level' => __( 'playlist.membership_level' ),
@@ -195,12 +195,16 @@ class PlaylistService
                 'en_name' => $request->en_name,
                 'zh_name' => $request->zh_name,
                 'image' => $request->image,
-                'priority' => $request->priority ?? 0,
                 'membership_level' => $request->membership_level,
                 'status' => 10,
             ] );
     
-            $createPlaylist->items()->sync( $request->items ?? [] );
+            $syncData = [];
+            foreach ( $request->items as $index => $item ) {
+                $syncData[$item['id']] = ['priority' => $index + 1];
+            }
+
+            $createPlaylist->items()->sync( $syncData );
 
             DB::commit();
 
@@ -236,8 +240,8 @@ class PlaylistService
 
         $attributeName = [
             'category_id' => __( 'playlist.category' ),
-            'en_name' => __( 'playlist.en_name' ),
-            'zh_name' => __( 'playlist.zh_name' ),
+            'en_name' => __( 'playlist.name' ),
+            'zh_name' => __( 'playlist.name' ),
             'image' => __( 'playlist.image' ),
             'priority' => __( 'playlist.priority' ),
             'membership_level' => __( 'playlist.membership_level' ),
@@ -259,11 +263,15 @@ class PlaylistService
             $updatePlaylist->en_name = $request->en_name;
             $updatePlaylist->zh_name = $request->zh_name;
             $updatePlaylist->image = $request->image;
-            $updatePlaylist->priority = $request->priority ?? 0;
             $updatePlaylist->membership_level = $request->membership_level;
             $updatePlaylist->save();
 
-            $updatePlaylist->items()->sync( $request->items ?? [] );
+            $syncData = [];
+            foreach ( $request->items as $index => $item ) {
+                $syncData[$item['id']] = ['priority' => $index + 1];
+            }
+
+            $updatePlaylist->items()->sync( $syncData );
 
             DB::commit();
 

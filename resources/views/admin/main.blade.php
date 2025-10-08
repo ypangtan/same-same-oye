@@ -133,7 +133,7 @@
                                                     <img src="https://ui-avatars.com/api/?background=ae4342&color=fff&name={{ auth()->user()->fullname }}" alt="" />
                                                 </div>
                                                 <div class="user-info d-none d-xl-block">
-                                                    <div class="user-status">Super Admin</div>
+                                                    <div class="user-status">{{ auth()->user()->getRoleNames()->first() ?? '-' }}</div>
                                                     <div class="user-name dropdown-indicator">{{ auth()->user()->fullname }}</div>
                                                 </div>
                                             </div>

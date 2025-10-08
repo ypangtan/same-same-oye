@@ -24,6 +24,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
         responsive: true,
         processing: true,
         serverSide: true,
+        rowReorder: dt_table_config.rowReorder ? dt_table_config.rowReorder : false,
         order: dt_table_config.order,
         ordering: true,
         scrollX: true,
@@ -219,8 +220,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
             let rawName = dt_table_name.replace('#', '');
             let lengthSelect2 = $('.dataTables_length select');
             lengthSelect2.addClass('custom-dropdown');
+            lucide.createIcons();
         },
         drawCallback: function (response) {
+            lucide.createIcons();
             if (response.json.subTotal != undefined) {
                 if (Array.isArray(response.json.subTotal)) {
                     $.each(response.json.subTotal, function (i, v) {
@@ -283,7 +286,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
             }
         }, 10); // 10ms delay
     });
-    
    
    $(dt_table_name).on('hide.bs.dropdown', function () {
         $('.dt-scroll-body').css( "overflow-y", "auto" );
@@ -349,5 +351,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
         window.location.href = newExportPath + '?' + url;
     } );
+
+    $( '.reorder-handle' ).on('mousedown touchstart', function() {
+        $(this).closest('tr').addClass('dragging-placeholder');
+    }).on('mouseup touchend', function() {
+        $('.dragging-placeholder').removeClass('dragging-placeholder');
+    });
+
+    $( dt_table_name ).on( 'row-reorder.dt', function( e, diff, edit ) {
+        const updates = diff.map(change => {
+            const id = $(change.node).find('.dt-reorder').data('id');
+            const position = change.newPosition;
+
+            return { id, position };
+        });
+
+        if ( updates.length ) {
+            $.ajax( {
+                url: reorderPath,
+                type: 'POST',
+                data: JSON.stringify( {
+                    _token: '{{ csrf_token() }}',
+                    updates: updates
+                } ),
+                success: function( res ) {
+                    dt_table.draw( false );
+                }
+            } );
+        }
+    });
 
 } );

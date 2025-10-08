@@ -1,11 +1,11 @@
 <?php
-$playlist_edit = 'playlist_edit';
+$collection_edit = 'collection_edit';
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.edit_x', [ 'title' => Str::singular( __( 'template.playlists' ) ) ] ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.edit_x', [ 'title' => Str::singular( __( 'template.collections' ) ) ] ) }}</h3>
         </div><!-- .nk-block-head-content -->
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
@@ -24,55 +24,46 @@ $playlist_edit = 'playlist_edit';
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade pt-4 show active" id="en_name" role="tabpanel" aria-labelledby="en_name-tab">
                         <div class="mb-3 row">
-                            <label for="{{ $playlist_edit }}_en_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( English )</label>
+                            <label for="{{ $collection_edit }}_en_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( English )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $playlist_edit }}_en_name">
+                                <input type="text" class="form-control form-control-sm" id="{{ $collection_edit }}_en_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade pt-4" id="zh_name" role="tabpanel" aria-labelledby="zh_name-tab">
                         <div class="mb-3 row">
-                            <label for="{{ $playlist_edit }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( 中文 )</label>
+                            <label for="{{ $collection_edit }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( 中文 )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $playlist_edit }}_zh_name">
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade pt-4" id="zh_name" role="tabpanel" aria-labelledby="zh_name-tab">
-                        <div class="mb-3 row">
-                            <label for="{{ $playlist_edit }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( 中文 )</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $playlist_edit }}_zh_name">
+                                <input type="text" class="form-control form-control-sm" id="{{ $collection_edit }}_zh_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $playlist_edit }}_category" class="col-sm-5 col-form-label">{{ __( 'playlist.category' ) }}</label>
+                    <label for="{{ $collection_edit }}_category" class="col-sm-5 col-form-label">{{ __( 'collection.category' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $playlist_edit }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}"></select>
+                        <select class="form-control select2" id="{{ $collection_edit }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}"></select>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $playlist_edit }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'playlist.min_membership_level' ) }}</label>
+                    <label for="{{ $collection_edit }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'collection.min_membership_level' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $playlist_edit }}_membership_level">
+                        <input type="number" class="form-control" id="{{ $collection_edit }}_membership_level">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $playlist_edit }}_priority" class="col-sm-5 col-form-label">{{ __( 'playlist.priority' ) }}</label>
+                    <label for="{{ $collection_edit }}_priority" class="col-sm-5 col-form-label">{{ __( 'collection.priority' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $playlist_edit }}_priority">
+                        <input type="number" class="form-control" id="{{ $collection_edit }}_priority">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label>{{ __( 'collection.image' ) }}</label>
-                    <div class="dropzone mb-3" id="{{ $playlist_edit }}_image" style="min-height: 0px;">
+                    <div class="dropzone mb-3" id="{{ $collection_edit }}_image" style="min-height: 0px;">
                         <div class="dz-message needsclick">
                             <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
                         </div>
@@ -81,18 +72,18 @@ $playlist_edit = 'playlist_edit';
                 </div>
                 <div class="row mb-3">
                     <div>
-                        <label for="{{ $playlist_edit }}_playlists" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'playlist.playlists' ) }}</label>
-                        <select class="form-select form-select-md" id="{{ $playlist_edit }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.playlists' ) ] ) }}">></select>
+                        <label for="{{ $collection_edit }}_playlists" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'collection.collections' ) }}</label>
+                        <select class="form-select form-select-md" id="{{ $collection_edit }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.collections' ) ] ) }}">></select>
                     </div>
 
                     <div id="selected-playlists" class="d-flex flex-wrap gap-2 my-4"></div>
 
-                    <input type="hidden" name="tags" id="{{ $playlist_edit }}_hide_playlists">
+                    <input type="hidden" name="tags" id="{{ $collection_edit }}_hide_playlists">
                 </div>
                 <div class="text-end">
-                    <button id="{{ $playlist_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
+                    <button id="{{ $collection_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
-                    <button id="{{ $playlist_edit }}_submit" type="button" class="btn btn-primary">{{ __( 'template.save_changes' ) }}</button>
+                    <button id="{{ $collection_edit }}_submit" type="button" class="btn btn-primary">{{ __( 'template.save_changes' ) }}</button>
                 </div>
             </div>
         </div>
@@ -104,21 +95,21 @@ $playlist_edit = 'playlist_edit';
 <script src="{{ asset( 'admin/js/ckeditor/upload-adapter.js' ) }}"></script>
 
 <script>
-window.ckeupload_path = '{{ route( 'admin.playlist.ckeUpload' ) }}';
+window.ckeupload_path = '{{ route( 'admin.collection.ckeUpload' ) }}';
 window.csrf_token = '{{ csrf_token() }}';
-window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
+window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
 </script>
 <script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
 
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        let de = '#{{ $playlist_edit }}',
+        let de = '#{{ $collection_edit }}',
             fileID = '',
             selectedPlaylists = [];
 
         $( de + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.module_parent.playlist.index' ) }}';
+            window.location.href = '{{ route( 'admin.module_parent.collection.index' ) }}';
         } );
 
         $( de + '_submit' ).click( function() {
@@ -132,16 +123,16 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
             formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
-            formData.append( 'en_name', editors['playlist_edit_en_name'].getData()  );
-            formData.append( 'zh_name', editors['playlist_edit_zh_name'].getData() );
+            formData.append( 'en_name', editors['collection_edit_en_name'].getData()  );
+            formData.append( 'zh_name', editors['collection_edit_zh_name'].getData() );
             formData.append( 'priority', $( de + '_priority' ).val() );
             formData.append( 'membership_level', $( de + '_membership_level' ).val() );
             formData.append( 'image', fileID );
-            formData.append('playlists', JSON.stringify( selectedPlaylists ) );
+            formData.append('collections', JSON.stringify( selectedPlaylists ) );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
-                url: '{{ route( 'admin.playlist.updatePlaylist' ) }}',
+                url: '{{ route( 'admin.collection.updateCollection' ) }}',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -152,7 +143,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.module_parent.playlist.index' ) }}';
+                        window.location.href = '{{ route( 'admin.module_parent.collection.index' ) }}';
                     } );
                 },
                 error: function( error ) {
@@ -172,16 +163,16 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
         } );
 
         Dropzone.autoDiscover = false;
-        getPlaylist();
+        getCollection();
 
-        function getPlaylist() {
+        function getCollection() {
 
             $( 'body' ).loading( {
                 message: '{{ __( 'template.loading' ) }}'
             } );
 
             $.ajax( {
-                url: '{{ route( 'admin.playlist.onePlaylist' ) }}',
+                url: '{{ route( 'admin.collection.oneCollection' ) }}',
                 type: 'POST',
                 data: {
                     'id': '{{ request( 'id' ) }}',
@@ -190,14 +181,14 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                 success: function( response ) {
                     $( de + '_priority' ).val( response.priority );
                     $( de + '_membership_level' ).val( response.membership_level );
-                    editors['playlist_edit_en_name'].setData( response.en_name ?? '' );
-                    editors['playlist_edit_zh_name'].setData( response.zh_name ?? '' );
+                    editors['collection_edit_en_name'].setData( response.en_name ?? '' );
+                    editors['collection_edit_zh_name'].setData( response.zh_name ?? '' );
 
                     imagePath = response.image_url;
                     fileID = response.image_url;
 
                     const dropzone = new Dropzone( de + '_image', { 
-                        url: '{{ route( 'admin.playlist.imageUpload' ) }}',
+                        url: '{{ route( 'admin.collection.imageUpload' ) }}',
                         maxFiles: 1,
                         acceptedFiles: 'image/jpg,image/jpeg,image/png',
                         addRemoveLinks: true,
@@ -226,15 +217,15 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                     selectedPlaylists = [];
                     $('#selected-playlists').empty();
                     
-                    $.each( response.playlists, function( i, v ) {
+                    $.each( response.collections, function( i, v ) {
                         data = v;
-                        if ( !selectedPlaylists.some( playlist => playlist.id === data.encrypted_id ) ) {
+                        if ( !selectedPlaylists.some( collection => collection.id === data.encrypted_id ) ) {
                             selectedPlaylists.push( {id: data.encrypted_id, text: data.name} );
                             
                             $('#selected-playlists').append(`
                                 <span class="badge px-2 py-2 d-flex align-items-center gap-2" data-id="${data.encrypted_id}" style="font-weight:normal; border-radius:4px; font-size:14px;>
                                     ${data.name}
-                                    <i class="icon icon-icon16-close remove-playlist click-action" style="font-size:20px;"></i>
+                                    <i class="icon icon-icon16-close remove-collection click-action" style="font-size:20px;"></i>
                                 </span>
                             `);
 
@@ -302,7 +293,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             closeOnSelect: true,
 
             ajax: { 
-                url: '{{ route( 'admin.playlist.allPlaylist' ) }}',
+                url: '{{ route( 'admin.collection.allPlaylist' ) }}',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
@@ -348,7 +339,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                 $('#selected-playlists').append(`
                     <span class="badge rounded-pill border px-3 py-2 d-flex align-items-center gap-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
-                        <i class="icon icon-icon16-close remove-playlist click-action" style="font-size:23px;"></i>
+                        <i class="icon icon-icon16-close remove-collection click-action" style="font-size:23px;"></i>
                     </span>
                 `);
 
@@ -358,7 +349,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             $('#assign_tag').val(null).trigger('change');
         });
 
-        $(document).on('click', '.remove-playlist', function() {
+        $(document).on('click', '.remove-collection', function() {
             let id = $(this).closest('.badge').data('id');
             selectedPlaylists = selectedPlaylists.filter(tag => tag.id !== id);
             $(this).closest('.badge').remove();
@@ -376,5 +367,21 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             let ids = selectedPlaylists.map(tag => tag.id);
             $( de + '_hide_playlists' ).val(JSON.stringify(ids));
         }
+        
+        $('#selected-playlists').sortable({
+            tolerance: 'pointer',
+            cursor: 'move',
+            update: function(event, ui) {
+                // rebuild selectedPalylists order after sorting
+                let newOrder = [];
+                $('#selected-playlists .badge').each(function() {
+                    let id = $(this).data('id');
+                    let item = selectedPalylists.find(i => i.id === id);
+                    if (item) newOrder.push(item);
+                });
+                selectedPalylists = newOrder;
+                updateHiddenInput();
+            }
+        });
     } );
 </script>

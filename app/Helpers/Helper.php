@@ -25,6 +25,7 @@ use App\Models\{
 use Illuminate\Support\Facades\{
     Crypt,
     Route,
+    Schema,
 };
 
 use Spatie\Permission\Models\{
@@ -90,6 +91,10 @@ class Helper {
         ];
 
         return $array;
+    }
+
+    public static function needReorder( $table ) {
+        return Schema::hasColumn( $table, 'priority' ) ? 1 : 2;
     }
 
     public static function numberFormat( $number, $decimal, $displayComma = false, $isRound = false ) {

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePlaylistsTable extends Migration
+class CreateBannersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreatePlaylistsTable extends Migration
      */
     public function up()
     {
-        Schema::create('playlists', function (Blueprint $table) {
+        Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('add_by')->nullable()->constrained('administrators')->onUpdate( 'restrict')->onDelete('cascade');
-            $table->foreignId('category_id')->nullable()->constrained('categories')->onUpdate( 'restrict')->onDelete('cascade');
             $table->string( 'en_name' )->nullable();
             $table->string( 'zh_name' )->nullable();
+            $table->string( 'en_desc' )->nullable();
+            $table->string( 'zh_desc' )->nullable();
             $table->string( 'image' )->nullable();
-            $table->tinyInteger( 'membership_level' )->default(0);
+            $table->unsignedInteger( 'priority' );
             $table->tinyInteger( 'status' )->default(10);
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ class CreatePlaylistsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('play_lists');
+        Schema::dropIfExists('banners');
     }
 }

@@ -24,6 +24,9 @@
     <link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
+    {{-- datatable row sortable --}}
+    <link href="{{ asset( 'admin/css/rowReorder.datatable.min.css' ) . Helper::assetVersion() }}" rel="stylesheet">
+
 </head>
 
 <style>

@@ -3,6 +3,7 @@
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 use App\Http\Controllers\Admin\{
+    AdController,
     AdministratorController,
     RoleController,
     AuditController,
@@ -28,11 +29,13 @@ use App\Http\Controllers\Admin\{
     AppVersionController,
     BannerController,
     CategoryController,
+    CollectionController,
     ItemController,
     LuckyDrawController,
     ProductController,
     SalesRecordController,
     MarketingNotificationController,
+    MusicRequestController,
     OtpLogController,
     PlaylistController,
     PopAnnouncementController,
@@ -278,26 +281,71 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
             Route::prefix( 'collections' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view collections' ] ], function() {
-                    Route::get( '/', [ PlaylistController::class, 'index' ] )->name( 'admin.module_parent.collection.index' );
+                    Route::get( '/', [ CollectionController::class, 'index' ] )->name( 'admin.module_parent.collection.index' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:add collections' ] ], function() {
-                    Route::get( 'add', [ PlaylistController::class, 'add' ] )->name( 'admin.collection.add' );
+                    Route::get( 'add', [ CollectionController::class, 'add' ] )->name( 'admin.collection.add' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:edit collections' ] ], function() {
-                    Route::get( 'edit/{id?}', [ PlaylistController::class, 'edit' ] )->name( 'admin.collection.edit' );
+                    Route::get( 'edit/{id?}', [ CollectionController::class, 'edit' ] )->name( 'admin.collection.edit' );
                 } );
 
-                Route::post( 'all-collections', [ PlaylistController::class, 'allCollections' ] )->name( 'admin.collection.allCollections' );
-                Route::post( 'one-collection', [ PlaylistController::class, 'oneCollection' ] )->name( 'admin.collection.oneCollection' );
-                Route::post( 'create-collection', [ PlaylistController::class, 'createCollection' ] )->name( 'admin.collection.createCollection' );
-                Route::post( 'update-collection', [ PlaylistController::class, 'updateCollection' ] )->name( 'admin.collection.updateCollection' );
-                Route::post( 'update-collection-status', [ PlaylistController::class, 'updateCollectionStatus' ] )->name( 'admin.collection.updateCollectionStatus' );
-                Route::post( 'ckeUpload', [ PlaylistController::class, 'ckeUpload' ] )->name( 'admin.collection.ckeUpload' );
+                Route::post( 'all-collections', [ CollectionController::class, 'allCollections' ] )->name( 'admin.collection.allCollections' );
+                Route::post( 'one-collection', [ CollectionController::class, 'oneCollection' ] )->name( 'admin.collection.oneCollection' );
+                Route::post( 'create-collection', [ CollectionController::class, 'createCollection' ] )->name( 'admin.collection.createCollection' );
+                Route::post( 'update-collection', [ CollectionController::class, 'updateCollection' ] )->name( 'admin.collection.updateCollection' );
+                Route::post( 'update-collection-status', [ CollectionController::class, 'updateCollectionStatus' ] )->name( 'admin.collection.updateCollectionStatus' );
+                Route::post( 'ckeUpload', [ CollectionController::class, 'ckeUpload' ] )->name( 'admin.collection.ckeUpload' );
+                Route::post( 'update-order', [ CollectionController::class, 'updateOrder' ] )->name( 'admin.collection.updateOrder' );
             } );
 
             Route::prefix( 'categories' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view categories' ] ], function() {
                 Route::post( 'all-categories', [ CategoryController::class, 'allCategories' ] )->name( 'admin.category.allCagetories' );
+            } );
+
+            Route::prefix( 'music_request' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view music_requests' ] ], function() {
+                    Route::get( '/', [ MusicRequestController::class, 'index' ] )->name( 'admin.module_parent.music_request.index' );
+                } );
+                Route::post( 'all-music-requests', [ MusicRequestController::class, 'allMusicRequests' ] )->name( 'admin.music_request.allMusicRequests' );
+            } );
+
+            Route::prefix( 'banner' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view banners' ] ], function() {
+                    Route::get( '/', [ BannerController::class, 'index' ] )->name( 'admin.module_parent.banner.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add banners' ] ], function() {
+                    Route::get( 'add', [ BannerController::class, 'add' ] )->name( 'admin.banner.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit banners' ] ], function() {
+                    Route::get( 'edit/{id?}', [ BannerController::class, 'edit' ] )->name( 'admin.banner.edit' );
+                } );
+
+                Route::post( 'all-banner', [ BannerController::class, 'allBanners' ] )->name( 'admin.banner.allBanners' );
+                Route::post( 'one-banner', [ BannerController::class, 'oneBanner' ] )->name( 'admin.banner.oneBanner' );
+                Route::post( 'create-banner', [ BannerController::class, 'createBanner' ] )->name( 'admin.banner.createBanner' );
+                Route::post( 'update-banner', [ BannerController::class, 'updateBanner' ] )->name( 'admin.banner.updateBanner' );
+                Route::post( 'update-banner-status', [ BannerController::class, 'updateBannerStatus' ] )->name( 'admin.banner.updateBannerStatus' );
+                Route::post( 'ckeUpload', [ BannerController::class, 'ckeUpload' ] )->name( 'admin.banner.ckeUpload' );
+            } );
+
+            Route::prefix( 'ad' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view ads' ] ], function() {
+                    Route::get( '/', [ AdController::class, 'index' ] )->name( 'admin.module_parent.ad.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add ads' ] ], function() {
+                    Route::get( 'add', [ AdController::class, 'add' ] )->name( 'admin.ad.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit ads' ] ], function() {
+                    Route::get( 'edit/{id?}', [ AdController::class, 'edit' ] )->name( 'admin.ad.edit' );
+                } );
+
+                Route::post( 'all-ad', [ AdController::class, 'allAds' ] )->name( 'admin.ad.allAds' );
+                Route::post( 'one-ad', [ AdController::class, 'oneAd' ] )->name( 'admin.ad.oneAd' );
+                Route::post( 'create-ad', [ AdController::class, 'createAd' ] )->name( 'admin.ad.createAd' );
+                Route::post( 'update-ad', [ AdController::class, 'updateAd' ] )->name( 'admin.ad.updateAd' );
+                Route::post( 'update-ad-status', [ AdController::class, 'updateAdStatus' ] )->name( 'admin.ad.updateAdStatus' );
+                Route::post( 'ckeUpload', [ AdController::class, 'ckeUpload' ] )->name( 'admin.ad.ckeUpload' );
             } );
 
         } );

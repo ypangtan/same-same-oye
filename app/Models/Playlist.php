@@ -38,7 +38,10 @@ class Playlist extends Model
     }
 
     public function items() {
-        return $this->belongsToMany( Item::class, 'playlist_items', 'playlist_id', 'item_id' );
+        return $this->belongsToMany( Item::class, 'playlist_items', 'playlist_id', 'item_id' )
+            ->where( 'items.status', 10 )
+            ->withPivot( 'priority' )
+            ->orderBy( 'playlist_items.priority' );
     }
 
     public function administrator() {

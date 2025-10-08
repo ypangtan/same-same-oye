@@ -1,0 +1,39 @@
+.dt-reorder {
+    cursor: move;
+}
+
+table.dt-rowReorder-float {
+    opacity: .8
+}
+
+div.dt-rowReorder-float-parent {
+    table-layout: fixed;
+    outline: 2px solid #888;
+    z-index: 2001;
+    position: absolute !important;
+    overflow: hidden;
+}
+
+div.dt-rowReorder-float-parent table.dataTable {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+div.dt-rowReorder-float-parent table.dataTable .user-img{
+    height: 45px !important;
+    border-radius: 100px;
+}
+
+tr.dt-rowReorder-moving {
+    outline: 2px solid #555;
+    outline-offset: -2px
+}
+
+body.dt-rowReorder-noOverflow {
+    overflow-x: hidden
+}
+
+table.dataTable td.reorder {
+    text-align: center;
+    cursor: move
+}

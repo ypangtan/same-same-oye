@@ -113,6 +113,7 @@ window['{{ $column['id'] }}'] = '';
 @endforeach
 
 var statusMapper = @json( $data['status'] ),
+    membershipMapper = @json( $data['membership'] ),
     dt_table,
     dt_table_name = '#user_table',
     dt_table_config = {
@@ -275,7 +276,7 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return '-';
-                    return data ? statusMapper[data] : '-';
+                    return data ? membershipMapper[data] : '-';
                 },
             },
             {

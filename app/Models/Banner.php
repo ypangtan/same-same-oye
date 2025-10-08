@@ -14,35 +14,19 @@ use Helper;
 
 use Carbon\Carbon;
 
-class Collection extends Model
+class Banner extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'add_by',
-        'category_id',
         'en_name',
         'zh_name',
+        'en_desc',
+        'zh_desc',
         'image',
         'priority',
-        'membership_level',
         'status',
     ];
-
-    public function category() {
-        return $this->belongsTo( Category::class, 'category_id' );
-    }
-
-    public function playlists() {
-        return $this->belongsToMany( Playlist::class, 'collection_playlists', 'playlist_id', 'collection_id' )
-            ->where( 'palylists.status', 10 )
-            ->withPivot( 'priority' )
-            ->orderBy( 'collection_playlists.priority' );
-    }
-
-    public function administrator() {
-        return $this->belongsTo( Administrator::class, 'add_by' );
-    }
 
     public function getNameAttribute() {
         $locale = app()->getLocale();
@@ -53,16 +37,12 @@ class Collection extends Model
         }
     }
 
-    public function getImageUrlAttribute() {
-        if( $this->attributes['image'] ) {
-            return asset( 'storage/' . $this->attributes['image'] );
+    public function getDescAttribute() {
+        $locale = app()->getLocale();
+        if( $locale == 'zh' ) {
+            return $this->attributes['zh_desc'] ?? $this->attributes['en_desc'];
         } else {
-            $playlist = $this->playLists()->where( 'status', 10 )->orderBy( 'priority', 'desc' )->orderBy( 'created_at', 'desc' )->first();
-            if( $playlist ) {
-                return $playlist->image_url;
-            } else {
-                return null;
-            }
+            return $this->attributes['en_desc'];
         }
     }
 
@@ -75,17 +55,16 @@ class Collection extends Model
     }
 
     protected static $logAttributes = [
-        'add_by',
-        'category_id',
         'en_name',
         'zh_name',
+        'en_desc',
+        'zh_desc',
         'image',
         'priority',
-        'membership_level',
         'status',
     ];
 
-    protected static $logName = 'collections';
+    protected static $logName = 'banners';
 
     protected static $logOnlyDirty = true;
 
