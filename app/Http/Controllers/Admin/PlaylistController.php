@@ -88,4 +88,11 @@ class PlaylistController extends Controller
 
         return FileService::ckeUpload( $request );
     }
+
+    public function imageUpload( Request $request ) {
+        $request->merge( [
+            'source' => 'image/playlist'
+        ] );
+        return FileService::imageUpload( $request );
+    }
 }

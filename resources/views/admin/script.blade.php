@@ -1,6 +1,7 @@
     <script src="{{ asset( 'admin/js/bundle.js' ) }}"></script>
     <script src="{{ asset( 'admin/js/scripts.js' ) }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     {{-- <script src="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.js"></script> --}}
     <script src="{{ asset( 'admin/js/jquery.loading.min.js' ) . Helper::assetVersion() }}"></script>
     <script src="{{ asset( 'admin/js/flatpickr-4.6.13.js' ) . Helper::assetVersion() }}"></script>
@@ -31,6 +32,9 @@
 
     {{-- datatable row sortable --}}
     <script src="{{ asset( 'admin/js/rowReorder.datatable.min.js' ) . Helper::assetVersion() }}"></script>
+
+    {{-- lucide --}}
+    <script src="{{ asset( 'admin/js/lucide.min.js' ) . Helper::assetVersion() }}"></script>
 
     <script>
 

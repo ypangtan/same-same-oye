@@ -33,6 +33,7 @@ class CollectionService
         $collection = Collection::with( [
             'category',
             'administrator',
+            'playlists',
         ] )->select( 'collections.*' );
 
         $filterObject = self::filter( $request, $collection );
@@ -43,7 +44,7 @@ class CollectionService
             $dir = $request->input( 'order.0.dir' ) ?? 'DESC';
             switch ( $request->input( 'order.0.column' ) ) {
                 default:
-                    $collection->orderBy( 'created_at', $dir );
+                    $collection->orderBy( 'priority', 'desc' );
                     break;
             }
         }
@@ -138,6 +139,7 @@ class CollectionService
         $collection = Collection::with( [
             'category',
             'administrator',
+            'playlists',
         ] )->find( Helper::decode( $request->id ) );
 
         $collection->append( [
@@ -145,6 +147,13 @@ class CollectionService
             'name',
             'image_url',
         ] );
+
+        foreach( $collection->playlists as $p ) {
+            $p->append( [
+                'encrypted_id',
+                'name',
+            ] );
+        }
 
         return response()->json( $collection );
     }
@@ -156,7 +165,6 @@ class CollectionService
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
-            'priority' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'playlists' => [ 'nullable' ],
         ] );
@@ -166,7 +174,6 @@ class CollectionService
             'en_name' => __( 'collection.name' ),
             'zh_name' => __( 'collection.name' ),
             'image' => __( 'collection.image' ),
-            'priority' => __( 'collection.priority' ),
             'membership_level' => __( 'collection.membership_level' ),
             'playlists' => __( 'collection.playlists' ),
         ];
@@ -191,8 +198,9 @@ class CollectionService
                 'status' => 10,
             ] );
 
+            $playlists = json_decode( $request->playlists, true );
             $syncData = [];
-            foreach ( $request->playlists as $index => $item ) {
+            foreach ( $playlists as $index => $item ) {
                 $syncData[$item['id']] = ['priority' => $index + 1];
             }
 
@@ -258,8 +266,9 @@ class CollectionService
             $updateCollection->membership_level = $request->membership_level;
             $updateCollection->save();
 
+            $playlists = json_decode( $request->playlists, true );
             $syncData = [];
-            foreach ( $request->playlists as $index => $item ) {
+            foreach ( $playlists as $index => $item ) {
                 $syncData[$item['id']] = ['priority' => $index + 1];
             }
 
@@ -298,12 +307,12 @@ class CollectionService
 
     public static function updateOrder( $request ) {
 
-        $updates = $request->input('updates', []);
-        
+        $updates = $request->input( 'updates' );
+
         foreach( $updates as $update ) {
             $ad = Collection::find( \Helper::decode( $update['id'] ) );
             if( $ad ) {
-                $ad->priority = $update['priority'];
+                $ad->priority = $update['position'];
                 $ad->save();
             }
         }

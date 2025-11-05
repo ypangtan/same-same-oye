@@ -89,6 +89,13 @@ class CollectionController extends Controller
         return FileService::ckeUpload( $request );
     }
 
+    public function imageUpload( Request $request ) {
+        $request->merge( [
+            'source' => 'image/collection'
+        ] );
+        return FileService::imageUpload( $request );
+    }
+
     public function updateOrder( Request $request ) {
         return CollectionService::updateOrder( $request );
     }

@@ -93,7 +93,8 @@ window.cke_element = [ 'item_create_lyrics'];
 
         let dc = '#{{ $item_create }}',
             fileID = '',
-            file2ID = '';
+            file2ID = '',
+            songPath = '';
 
         $( dc + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.item.index' ) }}';
@@ -110,7 +111,7 @@ window.cke_element = [ 'item_create_lyrics'];
             let formData = new FormData();
             formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
             formData.append( 'title', $( dc + '_title' ).val() ?? '' );
-            formData.append( 'lyrics', editors['item_edit_lyrics'].getData() );
+            formData.append( 'lyrics', editors['item_create_lyrics'].getData() );
             formData.append( 'file', file2ID );
             formData.append( 'image', fileID );
             formData.append( 'author', $( dc + '_author' ).val() ?? '' );
@@ -226,13 +227,6 @@ window.cke_element = [ 'item_create_lyrics'];
                         this.removeFile(this.files[0]);
                     }
                 });
-                if ( songPath ) {
-                    let myDropzone = this,
-                        mockFile = { name: 'Default', size: 1024, accepted: true };
-
-                    myDropzone.files.push( mockFile );
-                    myDropzone.displayExistingFile( mockFile, songPath );
-                }
             },
             removedfile: function( file ) {
                 file2ID = null;

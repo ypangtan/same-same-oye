@@ -21,7 +21,7 @@
 </div><!-- .nk-block-head -->
 
 <?php
-$enableReorder = \Helper::needReorder( 'collections' );
+$enableReorder = \Helper::needReorder( 'playlists' );
 
 $columns = [
     [
@@ -121,7 +121,7 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: 'created_at' },
             { data: 'image_url' },
-            { data: 'title' },
+            { data: 'name' },
             { data: 'category' },
             { data: 'status' },
             { data: 'encrypted_id' },
@@ -221,8 +221,7 @@ var statusMapper = @json( $data['status'] ),
         ],
     },
     table_no = 0,
-    timeout = null
-    reorderPath = '{{ route( 'admin.playlist.updateOrder' ) }}';
+    timeout = null;
 
     if ( parseInt( '{{ $enableReorder }}' ) == 1 ) {
 

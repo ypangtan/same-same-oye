@@ -74,12 +74,12 @@ $columns = [
         'id' => 'phone_number',
         'title' => __( 'user.phone_number' ),
     ],
-    [
-        'type' => 'input',
-        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.invitation_code' ) ] ),
-        'id' => 'referral',
-        'title' => __( 'user.invitation_code' ),
-    ],
+    // [
+    //     'type' => 'input',
+    //     'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.invitation_code' ) ] ),
+    //     'id' => 'referral',
+    //     'title' => __( 'user.invitation_code' ),
+    // ],
     [
         'type' => 'select',
         'options' => $data['membership'],
@@ -147,7 +147,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'email' },
             { data: 'social_logins' },
             { data: 'phone_number' },
-            { data: 'invitation_code' },
+            // { data: 'invitation_code' },
             { data: 'encrypted_id' },
             { data: 'status' },
             { data: 'encrypted_id' },
@@ -295,7 +295,7 @@ var statusMapper = @json( $data['status'] ),
                     @canany( [ 'edit users', 'delete users' ] )
                     let edit, status = '', view = '';
 
-                    view = '<li class="dt-view" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.my_friends' ) }}</span></a></li>';
+                    // view = '<li class="dt-view" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.my_friends' ) }}</span></a></li>';
 
                     @can( 'edit users' )
                     edit = '<li class="dt-edit" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.edit' ) }}</span></a></li>';
@@ -313,7 +313,6 @@ var statusMapper = @json( $data['status'] ),
                             <a class="dropdown-toggle btn btn-icon btn-trigger" href="#" type="button" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
-                                    `+view+`
                                     `+edit+`
                                     `+status+`
                                 </ul>
@@ -344,10 +343,6 @@ var statusMapper = @json( $data['status'] ),
 
         $( document ).on( 'click', '.dt-edit', function() {
             window.location.href = '{{ route( 'admin.user.edit' ) }}?id=' + $( this ).data( 'id' );
-        } );
-
-        $( document ).on( 'click', '.dt-view', function() {
-            window.location.href = '{{ route( 'admin.user.my_friend' ) }}?id=' + $( this ).data( 'id' );
         } );
 
         $( document ).on( 'click', '.dt-status', function() {

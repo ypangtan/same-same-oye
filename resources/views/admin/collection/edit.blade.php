@@ -72,11 +72,11 @@ $collection_edit = 'collection_edit';
                 </div>
                 <div class="row mb-3">
                     <div>
-                        <label for="{{ $collection_edit }}_playlists" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'collection.collections' ) }}</label>
-                        <select class="form-select form-select-md" id="{{ $collection_edit }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.collections' ) ] ) }}">></select>
+                        <label for="{{ $collection_edit }}_playlists" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'collection.playlists' ) }}</label>
+                        <select class="form-select form-select-md" id="{{ $collection_edit }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'collection.playlists' ) ] ) }}"></select>
                     </div>
 
-                    <div id="selected-playlists" class="d-flex flex-wrap gap-2 my-4"></div>
+                    <div id="selected-playlists" class="w-auto h-auto mb-2 gap-2 my-4"></div>
 
                     <input type="hidden" name="tags" id="{{ $collection_edit }}_hide_playlists">
                 </div>
@@ -128,7 +128,7 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
             formData.append( 'priority', $( de + '_priority' ).val() );
             formData.append( 'membership_level', $( de + '_membership_level' ).val() );
             formData.append( 'image', fileID );
-            formData.append('collections', JSON.stringify( selectedPlaylists ) );
+            formData.append('playlists', JSON.stringify( selectedPlaylists ) );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -216,15 +216,14 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
 
                     selectedPlaylists = [];
                     $('#selected-playlists').empty();
-                    
-                    $.each( response.collections, function( i, v ) {
+                    $.each( response.playlists, function( i, v ) {
                         data = v;
-                        if ( !selectedPlaylists.some( collection => collection.id === data.encrypted_id ) ) {
-                            selectedPlaylists.push( {id: data.encrypted_id, text: data.name} );
+                        if ( !selectedPlaylists.some( playlist => playlist.id === data.id ) ) {
+                            selectedPlaylists.push( {id: data['id'], text: data['name']} );
                             
                             $('#selected-playlists').append(`
-                                <span class="badge px-2 py-2 d-flex align-items-center gap-2" data-id="${data.encrypted_id}" style="font-weight:normal; border-radius:4px; font-size:14px;>
-                                    ${data.name}
+                                <span class="item-block px-2 py-2 d-flex align-items-center gap-2 mb-2 text-black" data-id="${data['id']}" style="font-weight:normal; border-radius:4px; font-size:14px;">
+                                    ${data['name']}
                                     <i class="icon icon-icon16-close remove-collection click-action" style="font-size:20px;"></i>
                                 </span>
                             `);
@@ -293,7 +292,7 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
             closeOnSelect: true,
 
             ajax: { 
-                url: '{{ route( 'admin.collection.allPlaylist' ) }}',
+                url: '{{ route( 'admin.playlist.allPlaylists' ) }}',
                 type: "post",
                 dataType: 'json',
                 delay: 250,
@@ -337,7 +336,7 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
                 selectedPlaylists.push( {id: data.id, text: data.text} );
 
                 $('#selected-playlists').append(`
-                    <span class="badge rounded-pill border px-3 py-2 d-flex align-items-center gap-2" data-id="${data.id}" style="font-size:14px;">
+                    <span class="item-block rounded-pill border px-3 py-2 d-flex align-items-center gap-2 mb-2 text-black" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
                         <i class="icon icon-icon16-close remove-collection click-action" style="font-size:23px;"></i>
                     </span>
@@ -350,9 +349,9 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
         });
 
         $(document).on('click', '.remove-collection', function() {
-            let id = $(this).closest('.badge').data('id');
+            let id = $(this).closest('.item-block').data('id');
             selectedPlaylists = selectedPlaylists.filter(tag => tag.id !== id);
-            $(this).closest('.badge').remove();
+            $(this).closest('.item-block').remove();
             updateHiddenInput();
         });
 
@@ -372,14 +371,14 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
             tolerance: 'pointer',
             cursor: 'move',
             update: function(event, ui) {
-                // rebuild selectedPalylists order after sorting
+                // rebuild selectedPlaylists order after sorting
                 let newOrder = [];
-                $('#selected-playlists .badge').each(function() {
+                $('#selected-playlists .item-block').each(function() {
                     let id = $(this).data('id');
-                    let item = selectedPalylists.find(i => i.id === id);
+                    let item = selectedPlaylists.find(i => i.id === id);
                     if (item) newOrder.push(item);
                 });
-                selectedPalylists = newOrder;
+                selectedPlaylists = newOrder;
                 updateHiddenInput();
             }
         });

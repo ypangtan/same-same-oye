@@ -255,4 +255,11 @@ class AdService
         ] );
     }
 
+    public static function getAds( $request ) {
+
+    }
+
+    public static function getAd ( $request ) {
+        
+    }
 }

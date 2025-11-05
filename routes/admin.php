@@ -255,9 +255,9 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'create-item', [ ItemController::class, 'createItem' ] )->name( 'admin.item.createItem' );
                 Route::post( 'update-item', [ ItemController::class, 'updateItem' ] )->name( 'admin.item.updateItem' );
                 Route::post( 'update-item-status', [ ItemController::class, 'updateItemStatus' ] )->name( 'admin.item.updateItemStatus' );
-                Route::post( 'cke-upload', [ ItemController::class, 'ckeUpload' ] )->name( 'admin.playlist.ckeUpload' );
-                Route::post( 'image-upload', [ ItemController::class, 'imageUpload' ] )->name( 'admin.playlist.imageUpload' );
-                Route::post( 'song-upload', [ ItemController::class, 'songUpload' ] )->name( 'admin.item.songUpload' );
+                Route::post( 'cke-upload', [ ItemController::class, 'ckeUpload' ] )->name( 'admin.item.ckeUpload' );
+                Route::post( 'image-upload', [ ItemController::class, 'imageUpload' ] )->name( 'admin.item.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+                Route::post( 'song-upload', [ ItemController::class, 'songUpload' ] )->name( 'admin.item.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
             } );
 
             Route::prefix( 'playlists' )->group( function() {
@@ -276,6 +276,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'create-playlist', [ PlaylistController::class, 'createPlaylist' ] )->name( 'admin.playlist.createPlaylist' );
                 Route::post( 'update-playlist', [ PlaylistController::class, 'updatePlaylist' ] )->name( 'admin.playlist.updatePlaylist' );
                 Route::post( 'update-playlist-status', [ PlaylistController::class, 'updatePlaylistStatus' ] )->name( 'admin.playlist.updatePlaylistStatus' );
+                Route::post( 'image-Upload', [ PlaylistController::class, 'imageUpload' ] )->name( 'admin.playlist.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'ckeUpload', [ PlaylistController::class, 'ckeUpload' ] )->name( 'admin.playlist.ckeUpload' );
             } );
 
@@ -296,11 +297,12 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-collection', [ CollectionController::class, 'updateCollection' ] )->name( 'admin.collection.updateCollection' );
                 Route::post( 'update-collection-status', [ CollectionController::class, 'updateCollectionStatus' ] )->name( 'admin.collection.updateCollectionStatus' );
                 Route::post( 'ckeUpload', [ CollectionController::class, 'ckeUpload' ] )->name( 'admin.collection.ckeUpload' );
-                Route::post( 'update-order', [ CollectionController::class, 'updateOrder' ] )->name( 'admin.collection.updateOrder' );
+                Route::post( 'image-Upload', [ CollectionController::class, 'imageUpload' ] )->name( 'admin.collection.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+                Route::post( 'update-order', [ CollectionController::class, 'updateOrder' ] )->name( 'admin.collection.updateOrder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
             } );
 
             Route::prefix( 'categories' )->group( function() {
-                Route::post( 'all-categories', [ CategoryController::class, 'allCategories' ] )->name( 'admin.category.allCagetories' );
+                Route::post( 'all-categories', [ CategoryController::class, 'allCategories' ] )->name( 'admin.category.allCategories' );
             } );
 
             Route::prefix( 'music_request' )->group( function() {

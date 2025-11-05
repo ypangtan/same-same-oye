@@ -63,7 +63,7 @@ $collection_create = 'collection_create';
                 </div>
                 <div class="mb-3">
                     <label>{{ __( 'collection.image' ) }}</label>
-                    <div class="dropzone mb-3" id="{{ $playlist_create }}_image" style="min-height: 0px;">
+                    <div class="dropzone mb-3" id="{{ $collection_create }}_image" style="min-height: 0px;">
                         <div class="dz-message needsclick">
                             <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
                         </div>
@@ -76,7 +76,7 @@ $collection_create = 'collection_create';
                         <select class="form-select form-select-md" id="{{ $collection_create }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.playlists' ) ] ) }}">></select>
                     </div>
 
-                    <div id="selected-playlists" class="d-flex flex-wrap gap-2 my-4"></div>
+                    <div id="selected-playlists" class="w-auto h-auto gap-2 my-2"></div>
 
                     <input type="hidden" name="tags" id="{{ $collection_create }}_hide_playlists">
                 </div>
@@ -233,10 +233,10 @@ window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' 
 
                     let processedResult = [];
 
-                    data.categories.map( function( v, i ) {
+                    data.playlists.map( function( v, i ) {
                         processedResult.push( {
                             id: v.id,
-                            text: v.title,
+                            text: v.name,
                         } );
                     } );
 
@@ -259,7 +259,7 @@ window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' 
                 selectedPlaylists.push( {id: data.id, text: data.text} );
 
                 $('#selected-playlists').append(`
-                    <span class="badge rounded-pill border px-3 py-2 d-flex align-items-center gap-2" data-id="${data.id}" style="font-size:14px;">
+                    <span class="item-block px-3 py-2 d-flex align-items-center gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
                         <i class="icon icon-icon16-close remove-playlist click-action" style="font-size:23px;"></i>
                     </span>
@@ -272,9 +272,9 @@ window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' 
         });
 
         $(document).on('click', '.remove-playlist', function() {
-            let id = $(this).closest('.badge').data('id');
+            let id = $(this).closest('.item-block').data('id');
             selectedPlaylists = selectedPlaylists.filter(tag => tag.id !== id);
-            $(this).closest('.badge').remove();
+            $(this).closest('.item-block').remove();
             updateHiddenInput();
         });
 
@@ -296,7 +296,7 @@ window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' 
             update: function(event, ui) {
                 // rebuild selectedPalylists order after sorting
                 let newOrder = [];
-                $('#selected-playlists .badge').each(function() {
+                $('#selected-playlists .item-block').each(function() {
                     let id = $(this).data('id');
                     let item = selectedPalylists.find(i => i.id === id);
                     if (item) newOrder.push(item);

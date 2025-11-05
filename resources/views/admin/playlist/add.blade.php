@@ -54,13 +54,6 @@ $playlist_create = 'playlist_create';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
-                    <label for="{{ $playlist_create }}_priority" class="col-sm-5 col-form-label">{{ __( 'playlist.priority' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $playlist_create }}_priority">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
                 <div class="mb-3">
                     <label>{{ __( 'playlist.image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $playlist_create }}_image" style="min-height: 0px;">
@@ -76,7 +69,7 @@ $playlist_create = 'playlist_create';
                         <select class="form-select form-select-md" id="{{ $playlist_create }}_items" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.items' ) ] ) }}">></select>
                     </div>
 
-                    <div id="selected-items" class="d-flex flex-wrap gap-2 my-4"></div>
+                    <div id="selected-items" class="w-auto h-auto gap-2 my-2"></div>
 
                     <input type="hidden" name="tags" id="{{ $playlist_create }}_hide_items">
                 </div>
@@ -124,7 +117,6 @@ window.cke_element = [ 'playlist_create_en_name', 'playlist_create_zh_name' ];
             formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
             formData.append( 'en_name', editors['playlist_create_en_name'].getData()  );
             formData.append( 'zh_name', editors['playlist_create_zh_name'].getData() );
-            formData.append( 'priority', $( dc + '_priority' ).val() );
             formData.append( 'membership_level', $( dc + '_membership_level' ).val() );
             formData.append( 'image', fileID );
             formData.append('items', JSON.stringify( selectedItems ) );
@@ -233,7 +225,7 @@ window.cke_element = [ 'playlist_create_en_name', 'playlist_create_zh_name' ];
 
                     let processedResult = [];
 
-                    data.categories.map( function( v, i ) {
+                    data.items.map( function( v, i ) {
                         processedResult.push( {
                             id: v.id,
                             text: v.title,
@@ -259,7 +251,7 @@ window.cke_element = [ 'playlist_create_en_name', 'playlist_create_zh_name' ];
                 selectedItems.push( {id: data.id, text: data.text} );
 
                 $('#selected-items').append(`
-                    <span class="badge rounded-pill border px-3 py-2 d-flex align-items-center gap-2" data-id="${data.id}" style="font-size:14px;">
+                    <span class="item-block rounded-pill border px-3 py-2 mb-2 d-flex align-items-center gap-2 text-black" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
                         <i class="icon icon-icon16-close remove-item click-action" style="font-size:23px;"></i>
                     </span>
@@ -272,9 +264,9 @@ window.cke_element = [ 'playlist_create_en_name', 'playlist_create_zh_name' ];
         });
 
         $(document).on('click', '.remove-item', function() {
-            let id = $(this).closest('.badge').data('id');
+            let id = $(this).closest('.item-block').data('id');
             selectedItems = selectedItems.filter(tag => tag.id !== id);
-            $(this).closest('.badge').remove();
+            $(this).closest('.item-block').remove();
             updateHiddenInput();
         });
 
@@ -318,7 +310,7 @@ window.cke_element = [ 'playlist_create_en_name', 'playlist_create_zh_name' ];
             update: function(event, ui) {
                 // rebuild selectedItems order after sorting
                 let newOrder = [];
-                $('#selected-items .badge').each(function() {
+                $('#selected-items .item-block').each(function() {
                     let id = $(this).data('id');
                     let item = selectedItems.find(i => i.id === id);
                     if (item) newOrder.push(item);

@@ -15,12 +15,12 @@ $user_edit = 'user_edit';
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
-                <div class="mb-3 row">
+                {{-- <div class="mb-3 row">
                     <label for="{{ $user_edit }}_referral" class="col-sm-5 col-form-label">{{ __( 'user.referral' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-control select2" id="{{ $user_edit }}_referral" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.users' ) ] ) }}"></select>
                     </div>
-                </div>
+                </div> --}}
                 <div class="mb-3 row">
                     <label for="{{ $user_edit }}_date_of_birth" class="col-sm-5 col-form-label">{{ __( 'user.date_of_birth' ) }}</label>
                     <div class="col-sm-7">
@@ -29,7 +29,6 @@ $user_edit = 'user_edit';
                     </div>
                 </div>
                 @if( 1 == 2 )
-
                 <div class="mb-3 row">
                     <label for="{{ $user_edit }}_account_type" class="col-sm-5 col-form-label">{{ __( 'user.account_type' ) }}</label>
                     <div class="col-sm-7">
@@ -90,60 +89,6 @@ $user_edit = 'user_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_edit }}_address_1" class="col-sm-5 col-form-label">{{ __( 'customer.address_1' ) }}</label>
-                    <div class="col-sm-7">
-                        <textarea class="form-control" id="{{ $user_edit }}_address_1" style="min-height: 80px;" placeholder="{{ __( 'template.optional' ) }}"></textarea>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_edit }}_address_2" class="col-sm-5 col-form-label">{{ __( 'customer.address_2' ) }}</label>
-                    <div class="col-sm-7">
-                        <textarea class="form-control" id="{{ $user_edit }}_address_2" style="min-height: 80px;" placeholder="{{ __( 'template.optional' ) }}"></textarea>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_edit }}_city" class="col-sm-5 col-form-label">{{ __( 'customer.city' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_edit }}_city" placeholder="{{ __( 'template.optional' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_edit }}_state" class="col-sm-5 col-form-label">{{ __( 'customer.state' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-select" id="{{ $user_edit }}_state" >
-                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'customer.state' ) ] ) }}</option>
-                            <option value="Johor">Johor</option>
-                            <option value="Kedah">Kedah</option>
-                            <option value="Kelantan">Kelantan</option>
-                            <option value="Malacca">Malacca</option>
-                            <option value="Negeri Sembilan">Negeri Sembilan</option>
-                            <option value="Pahang">Pahang</option>
-                            <option value="Penang">Penang</option>
-                            <option value="Perlis">Perlis</option>
-                            <option value="Sabah">Sabah</option>
-                            <option value="Sarawak">Sarawak</option>
-                            <option value="Selangor">Selangor</option>
-                            <option value="Terengganu">Terengganu</option>
-                            <option value="Kuala Lumpur">Kuala Lumpur</option>
-                            <option value="Labuan">Labuan</option>
-                            <option value="Putrajaya">Putrajaya</option>
-                            <option value="Perak">Perak</option>
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_edit }}_postcode" class="col-sm-5 col-form-label">{{ __( 'customer.postcode' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_edit }}_postcode" placeholder="{{ __( 'template.optional' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
                 <div class="text-end">
                     <button id="{{ $user_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -158,7 +103,7 @@ $user_edit = 'user_edit';
     document.addEventListener( 'DOMContentLoaded', function() {
 
         let de = '#{{ $user_edit }}',
-                fileID = '';
+            fileID = '';
 
         $( de + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.user.index' ) }}';
@@ -183,7 +128,7 @@ $user_edit = 'user_edit';
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
             // formData.append( 'username', $( de + '_username' ).val() );
-            formData.append( 'referral_id', $( de + '_referral' ).val() ?? '' );
+            // formData.append( 'referral_id', $( de + '_referral' ).val() ?? '' );
             formData.append( 'email', $( de + '_email' ).val() );
             formData.append( 'first_name', $( de + '_first_name' ).val() );
             formData.append( 'last_name', $( de + '_last_name' ).val() );
@@ -191,13 +136,7 @@ $user_edit = 'user_edit';
             formData.append( 'calling_code', $( de + '_calling_code' ).val() );
             formData.append( 'phone_number', $( de + '_phone_number' ).val() );
             formData.append( 'password', $( de + '_password' ).val() );
-            formData.append( 'address_1', $( de + '_address_1' ).val() );
-            formData.append( 'address_2', $( de + '_address_2' ).val() );
-            formData.append( 'city', $( de + '_city' ).val() );
-            formData.append( 'state', $( de + '_state' ).val() );
-            formData.append( 'postcode', $( de + '_postcode' ).val() );
             formData.append( 'date_of_birth', $( de + '_date_of_birth' ).val() );
-            // formData.append( 'account_type', $( de + '_account_type' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -254,19 +193,13 @@ $user_edit = 'user_edit';
                     // $( de + '_username' ).val( response.username );
                     $( de + '_calling_code' ).val( response.calling_code );
                     $( de + '_phone_number' ).val( response.phone_number );
-                    $( de + '_address_1' ).val( response.address_1 );
-                    $( de + '_address_2' ).val( response.address_2 );
-                    $( de + '_city' ).val( response.city );
-                    $( de + '_state' ).val( response.state );
-                    $( de + '_postcode' ).val( response.postcode );
-                    // $( de + '_account_type' ).val( response.account_type );
                     dateOfBirth.setDate( response.date_of_birth );
                     
-                    if( response.referral != null ){
-                        let option1 = new Option( response.referral.email, response.referral.encrypted_id, true, true );
-                        userSelect2.append( option1 );
-                        userSelect2.trigger( 'change' );
-                    }
+                    // if( response.referral != null ){
+                    //     let option1 = new Option( response.referral.email, response.referral.encrypted_id, true, true );
+                    //     userSelect2.append( option1 );
+                    //     userSelect2.trigger( 'change' );
+                    // }
 
                     $( 'body' ).loading( 'stop' );
                 },
@@ -274,72 +207,72 @@ $user_edit = 'user_edit';
         }
         
         
-        userSelect2 = $( de + '_referral' ).select2({
+        // userSelect2 = $( de + '_referral' ).select2({
 
-            theme: 'bootstrap-5',
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            placeholder: $( this ).data( 'placeholder' ),
-            closeOnSelect: true,
+        //     theme: 'bootstrap-5',
+        //     width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        //     placeholder: $( this ).data( 'placeholder' ),
+        //     closeOnSelect: true,
 
-            ajax: { 
-                url: '{{ route( 'admin.user.allUsers' ) }}',
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        user: params.term, // search term
-                        no_user: '{{ Request( 'id' ) }}',
-                        designation: 1,
-                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
-                        length: 10,
-                        _token: '{{ csrf_token() }}',
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
+        //     ajax: { 
+        //         url: '{{ route( 'admin.user.allUsers' ) }}',
+        //         type: "post",
+        //         dataType: 'json',
+        //         delay: 250,
+        //         data: function (params) {
+        //             return {
+        //                 user: params.term, // search term
+        //                 no_user: '{{ Request( 'id' ) }}',
+        //                 designation: 1,
+        //                 start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
+        //                 length: 10,
+        //                 _token: '{{ csrf_token() }}',
+        //             };
+        //         },
+        //         processResults: function (data, params) {
+        //             params.page = params.page || 1;
 
-                    let processedResult = [];
+        //             let processedResult = [];
 
-                    data.users.map( function( v, i ) {
-                        processedResult.push( {
-                            id: v.encrypted_id,
-                            text: v.email,
-                            first_name: v.first_name,
-                            last_name: v.last_name,
-                            phone_number: v.phone_number,
-                        } );
-                    } );
+        //             data.users.map( function( v, i ) {
+        //                 processedResult.push( {
+        //                     id: v.encrypted_id,
+        //                     text: v.email,
+        //                     first_name: v.first_name,
+        //                     last_name: v.last_name,
+        //                     phone_number: v.phone_number,
+        //                 } );
+        //             } );
 
-                    return {
-                        results: processedResult,
-                        pagination: {
-                            more: ( params.page * 10 ) < data.recordsFiltered
-                        }
-                    };
+        //             return {
+        //                 results: processedResult,
+        //                 pagination: {
+        //                     more: ( params.page * 10 ) < data.recordsFiltered
+        //                 }
+        //             };
 
-                },
-                cache: true
-            },
-            templateResult: function (data) {
-                if (data.loading) return data.text;
+        //         },
+        //         cache: true
+        //     },
+        //     templateResult: function (data) {
+        //         if (data.loading) return data.text;
 
-                firstname = data?.first_name ?? '-';
-                lastname = data?.last_name ?? '-';
-                fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' );
-                const $container = $(`
-                    <div class="d-flex align-items-center">
-                        <span>${ fullname ? fullname : '-' }</span>
-                        ( <span>${data.phone_number}</span> )
-                    </div>
-                `);
-                return $container;
-            },
+        //         firstname = data?.first_name ?? '-';
+        //         lastname = data?.last_name ?? '-';
+        //         fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' );
+        //         const $container = $(`
+        //             <div class="d-flex align-items-center">
+        //                 <span>${ fullname ? fullname : '-' }</span>
+        //                 ( <span>${data.phone_number}</span> )
+        //             </div>
+        //         `);
+        //         return $container;
+        //     },
 
-            templateSelection: function (data) {
-                return data.text || '';
-            }
+        //     templateSelection: function (data) {
+        //         return data.text || '';
+        //     }
 
-        });
+        // });
     } );
 </script>

@@ -21,7 +21,7 @@
 </div><!-- .nk-block-head -->
 
 <?php
-$enableReorder = \Helper::needReorder( 'collections' );
+$enableReorder = 1;
 
 $columns = [
     [
@@ -78,6 +78,7 @@ if ( $enableReorder == 1 ) {
         'reorder' => 'yes',
     ] );
 }
+
 ?>
 
 <x-data-tables id="collection_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
@@ -121,21 +122,21 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: 'created_at' },
             { data: 'image_url' },
-            { data: 'title' },
+            { data: 'name' },
             { data: 'category' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
         columnDefs: [
-                {
-                    // Add checkboxes to the first column
-                    targets: 0,
-                    orderable: false,
-                    className: 'text-center',
-                    render: function (data, type, row) {
-                        return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
-                    },
+            {
+                // Add checkboxes to the first column
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "select_row" ) }}' ),
+                orderable: false,
+                className: 'text-center',
+                render: function (data, type, row) {
+                    return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
                 },
+            },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "dt_no" ) }}' ),
                 orderable: false,
@@ -228,7 +229,7 @@ var statusMapper = @json( $data['status'] ),
 
         dt_table_config.rowReorder = {
             selector: '.dt-reorder',
-            dataSrc: 'id',
+            dataSrc: 'priority',
             update: false,
         };
 
@@ -245,6 +246,7 @@ var statusMapper = @json( $data['status'] ),
                 </div>`;
             },
         } );
+
     }
 
     document.addEventListener( 'DOMContentLoaded', function() {

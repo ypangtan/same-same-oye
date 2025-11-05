@@ -54,29 +54,22 @@ $playlist_edit = 'playlist_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row">
-                    <label for="{{ $playlist_edit }}_priority" class="col-sm-5 col-form-label">{{ __( 'playlist.priority' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $playlist_edit }}_priority">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
                 <div class="mb-3">
-                    <label>{{ __( 'item.image' ) }}</label>
-                    <div class="dropzone mb-3" id="{{ $item_create }}_image" style="min-height: 0px;">
+                    <label>{{ __( 'playlist.image' ) }}</label>
+                    <div class="dropzone mb-3" id="{{ $playlist_edit }}_image" style="min-height: 0px;">
                         <div class="dz-message needsclick">
                             <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
                         </div>
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class="row mb-3">
+                <div class="row mb-3 w-100">
                     <div>
                         <label for="{{ $playlist_edit }}_items" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'playlist.items' ) }}</label>
                         <select class="form-select form-select-md" id="{{ $playlist_edit }}_items" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.items' ) ] ) }}">></select>
                     </div>
 
-                    <div id="selected-items" class="d-flex flex-wrap gap-2 my-4"></div>
+                    <div id="selected-items" class="w-100 h-auto gap-2 my-4"></div>
 
                     <input type="hidden" name="tags" id="{{ $playlist_edit }}_hide_items">
                 </div>
@@ -125,7 +118,6 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
             formData.append( 'en_name', editors['playlist_edit_en_name'].getData()  );
             formData.append( 'zh_name', editors['playlist_edit_zh_name'].getData() );
-            formData.append( 'priority', $( de + '_priority' ).val() );
             formData.append( 'membership_level', $( de + '_membership_level' ).val() );
             formData.append( 'image', fileID );
             formData.append('items', JSON.stringify( selectedItems ) );
@@ -179,7 +171,6 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                     '_token': '{{ csrf_token() }}'
                 },
                 success: function( response ) {
-                    $( de + '_priority' ).val( response.priority );
                     $( de + '_membership_level' ).val( response.membership_level );
                     editors['playlist_edit_en_name'].setData( response.en_name ?? '' );
                     editors['playlist_edit_zh_name'].setData( response.zh_name ?? '' );
@@ -198,6 +189,13 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                                     this.removeFile(this.files[0]);
                                 }
                             });
+                            if ( imagePath ) {
+                                let myDropzone = this,
+                                    mockFile = { name: 'Default', size: 1024, accepted: true };
+
+                                myDropzone.files.push( mockFile );
+                                myDropzone.displayExistingFile( mockFile, imagePath );
+                            }
                         },
                         removedfile: function( file ) {
                             fileID = null;
@@ -219,14 +217,15 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                     
                     $.each( response.items, function( i, v ) {
                         data = v;
-                        if ( !selectedItems.some( item => item.id === data.encrypted_id ) ) {
-                            selectedItems.push( {id: data.encrypted_id, text: data.name} );
+                        console.log( v );
+                        if ( !selectedItems.some( item => item.id === data.id ) ) {
+                            selectedItems.push( {id: data.id, text: data.name} );
                             
                             $('#selected-items').append(`
-                                <span class="badge px-2 py-2 d-flex align-items-center gap-2" data-id="${data.encrypted_id}" style="font-weight:normal; border-radius:4px; font-size:14px;>
-                                    ${data.name}
-                                    <i class="icon icon-icon16-close remove-item click-action" style="font-size:20px;"></i>
-                                </span>
+                                <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
+                                    ${data.title}
+                                    <em class="icon ni ni-cross remove-item click-action"></em>
+                                    </span>
                             `);
 
                             updateHiddenInput();
@@ -311,7 +310,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
 
                     let processedResult = [];
 
-                    data.categories.map( function( v, i ) {
+                    data.items.map( function( v, i ) {
                         processedResult.push( {
                             id: v.id,
                             text: v.title,
@@ -337,7 +336,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                 selectedItems.push( {id: data.id, text: data.text} );
 
                 $('#selected-items').append(`
-                    <span class="badge rounded-pill border px-3 py-2 d-flex align-items-center gap-2" data-id="${data.id}" style="font-size:14px;">
+                    <span class="item-block rounded-pill border px-3 py-2 d-flex align-items-center gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
                         <i class="icon icon-icon16-close remove-item click-action" style="font-size:23px;"></i>
                     </span>
@@ -350,9 +349,9 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
         });
 
         $(document).on('click', '.remove-item', function() {
-            let id = $(this).closest('.badge').data('id');
+            let id = $(this).closest('.item-block').data('id');
             selectedItems = selectedItems.filter(tag => tag.id !== id);
-            $(this).closest('.badge').remove();
+            $(this).closest('.item-block').remove();
             updateHiddenInput();
         });
 
@@ -374,7 +373,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             update: function(event, ui) {
                 // rebuild selectedItems order after sorting
                 let newOrder = [];
-                $('#selected-items .badge').each(function() {
+                $('#selected-items .item-block').each(function() {
                     let id = $(this).data('id');
                     let item = selectedItems.find(i => i.id === id);
                     if (item) newOrder.push(item);

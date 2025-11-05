@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Services\{
+    CategoryService,
     CollectionService,
     FileManagerService,
     FileService,
@@ -14,6 +15,6 @@ use App\Services\{
 class CategoryController extends Controller
 {
     public function allCategories( Request $request ) {
-        return CollectionService::allCategories( $request );
+        return CategoryService::allCategories( $request );
     }
 }

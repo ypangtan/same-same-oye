@@ -361,8 +361,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
     $( dt_table_name ).on( 'row-reorder.dt', function( e, diff, edit ) {
         const updates = diff.map(change => {
             const id = $(change.node).find('.dt-reorder').data('id');
-            const position = change.newPosition;
-
+            const position = change.newData;
             return { id, position };
         });
 
@@ -370,10 +369,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
             $.ajax( {
                 url: reorderPath,
                 type: 'POST',
-                data: JSON.stringify( {
-                    _token: '{{ csrf_token() }}',
+                data: {
                     updates: updates
-                } ),
+                },
                 success: function( res ) {
                     dt_table.draw( false );
                 }

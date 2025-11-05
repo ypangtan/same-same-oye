@@ -30,10 +30,7 @@ class CategoryService
 {
     public static function allCategories( $request ) {
 
-        $category = Category::with( [
-            'category',
-            'administrator',
-        ] )->select( 'categories.*' );
+        $category = Category::select( 'categories.*' );
 
         $filterObject = self::filter( $request, $category );
         $category = $filterObject['model'];
@@ -59,7 +56,6 @@ class CategoryService
             $categories->append( [
                 'encrypted_id',
                 'name',
-                'image_url',
             ] );
         }
 
@@ -104,21 +100,8 @@ class CategoryService
 
         if ( !empty( $request->name ) ) {
             $model->where( function( $q ) use ( $request ) {
-                $q->where( 'en_name', 'LIKE', '%' . $request->name . '%' )
-                    ->orWhere( 'zh_name', 'LIKE', '%' . $request->name . '%' );
+                $q->where( 'multi_lang_name', 'LIKE', '%' . $request->name . '%' );
             } );
-            $filter = true;
-        }
-
-        if ( !empty( $request->admin ) ) {
-            $admin = \Helper::decode( $request->admin );
-            $model->where( 'add_by', $admin );
-            $filter = true;
-        }
-
-        if ( !empty( $request->category_id ) ) {
-            $category_id = \Helper::decode( $request->category_id );
-            $model->where( 'category_id', $category_id );
             $filter = true;
         }
 

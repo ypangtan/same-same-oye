@@ -39,7 +39,9 @@ class UserController extends Controller {
      * 
      * @bodyParam identifier string required The temporary user ID during request OTP. Example: eyJpdiI...
      * @bodyParam phone_number string required The phone_number for register. Example: 0123982334
-     * @bodyParam calling_code string required The calling_code for register. Example: +60
+     * @bodyParam email string required The email for register. Example: abc@gmail.com
+     * @bodyParam first_name string required The first_name for register. Example: tester
+     * @bodyParam last_name string required The last_name for register. Example: tan
      * @bodyParam otp_code string required The otp for register. Example: 123456
      * @bodyParam password string required The password for register. Example: abcd1234
      * @bodyParam password_confirmation string required The confirmation password. Example: abcd1234
@@ -65,8 +67,7 @@ class UserController extends Controller {
      * 
      * @group User API
      * 
-     * @bodyParam phone_number string required The phone_number for login. Example: 0123982334
-     * @bodyParam calling_code string required The calling_code for register. Example: +60
+     * @bodyParam email string required The email for login. Example: abc@gmail.com
      * @bodyParam password string required The password for login. Example: abcd1234
      * @bodyParam device_type integer optional The device type required with register_token. Example: 1
      * @bodyParam register_token string optional The device token to receive notification. Example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
@@ -116,7 +117,9 @@ class UserController extends Controller {
      * @group User API
      * 
      * @bodyParam phone_number string required The phone_number for register. Example: 0123982334
-     * @bodyParam calling_code string optional The calling for register. ( Default +60 ) Example: +60
+     * @bodyParam email string required The email for register. Example: abc@gmail.com
+     * @bodyParam first_name string required The first_name for register. Example: tester
+     * @bodyParam last_name string required The last_name for register. Example: tan
      * @bodyParam password string required The password for register. Example: abcd1234
      * @bodyParam password_confirmation string required The confirmation password. Example: abcd1234
      * @bodyParam invitation_code string The invitation code of referral. Example: AASSCC

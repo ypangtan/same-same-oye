@@ -156,10 +156,10 @@ class ItemService
             'category_id' => [ 'required', 'exists:categories,id' ],
             'title' => [ 'required' ],
             'lyrics' => [ 'nullable' ],
-            'file' => [ 'required' ],
+            'file' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'author' => [ 'nullable' ],
-            'membership_level' => [ 'nullable' ],
+            'membership_level' => [ 'required' ],
         ] );
 
         $attributeName = [
@@ -220,10 +220,10 @@ class ItemService
             'category_id' => [ 'required', 'exists:categories,id' ],
             'title' => [ 'required' ],
             'lyrics' => [ 'nullable' ],
-            'file' => [ 'required' ],
+            'file' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'author' => [ 'nullable' ],
-            'membership_level' => [ 'nullable' ],
+            'membership_level' => [ 'required' ],
         ] );
 
         $attributeName = [

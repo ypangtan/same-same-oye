@@ -386,21 +386,21 @@ class UserService
         }
 
         $validator = Validator::make( $request->all(), [
-            'referral_id' => [ 'nullable', 'exists:users,id' ],
-            'username' => [ 'nullable', 'alpha_dash', 'unique:users,username', new CheckASCIICharacter ],
-            'email' => [ 'nullable', 'bail', 'unique:users,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
-            'fullname' => [ 'nullable' ],
-            'calling_code' => [ 'nullable' ],
-            'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
+            // 'referral_id' => [ 'nullable', 'exists:users,id' ],
+            // 'username' => [ 'nullable', 'alpha_dash', 'unique:users,username', new CheckASCIICharacter ],
+            'email' => [ 'required', 'bail', 'unique:users,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
+            'first_name' => [ 'nullable' ],
+            'last_name' => [ 'nullable' ],
+            // 'calling_code' => [ 'nullable' ],
+            'nationality' => [ 'required', 'exists:countries,id' ],
+            'phone_number' => [ 'nullable', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
 
                 $defaultCallingCode = "+60";
 
-                $exist = User::where( 'status', 10 )
-                ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
-                ->where( function ( $query ) use ( $value ) {
-                    $query->where( 'phone_number', request( 'phone_number' ) )
-                        ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
-                } )->first();
+                $exist = User::where( function ( $query ) use ( $value ) {
+                        $query->where( 'phone_number', request( 'phone_number' ) )
+                            ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                    } )->first();
 
                 if ( $exist ) {
                     $fail( __( 'validation.exists' ) );
@@ -408,14 +408,17 @@ class UserService
                 }
             } ],
             'password' => [ 'required', Password::min( 8 ) ],
+            'age_group' => [ 'required' ],
         ] );
 
         $attributeName = [
-            'username' => __( 'user.username' ),
-            'email' => __( 'user.email' ),
-            'fullname' => __( 'user.fullname' ),
-            'password' => __( 'user.password' ),
+            'first_name' => __( 'user.firstname' ),
+            'last_name' => __( 'user.lastname' ),
             'phone_number' => __( 'user.phone_number' ),
+            'email' => __( 'user.email' ),
+            'password' => __( 'user.password' ),
+            'nationality' => __( 'user.nationality' ),
+            'age_group' => __( 'user.age_group' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -437,12 +440,7 @@ class UserService
                 'phone_number' => $request->phone_number,
                 'calling_code' => $request->calling_code ? $request->calling_code : null,
                 'password' => Hash::make( $request->password ),
-                'address_1' => $request->address_1,
-                'address_2' => $request->address_2,
-                'date_of_birth' => $request->date_of_birth,
-                'state' => $request->state,
-                'city' => $request->city,
-                'postcode' => $request->postcode,
+                'age_group' => $request->age_group,
                 'status' => 10,
                 'invitation_code' => strtoupper( \Str::random( 6 ) ),
             ];
@@ -451,18 +449,18 @@ class UserService
                 $upline = User::find( $request->referral_id );
                 $createUserObject['referral_id'] = $upline->id;
                 $createUserObject['referral_structure'] = $upline->referral_structure . '|' . $upline->id;
-                self::giveUplineVoucher( $request->referral_id );
+                // self::giveUplineVoucher( $request->referral_id );
             }
 
             $createUser = User::create( $createUserObject );
 
-            for ( $i = 1; $i <= 2; $i++ ) {
-                $userWallet = Wallet::create( [
-                    'user_id' => $createUser->id,
-                    'type' => $i,
-                    'balance' => 0,
-                ] );
-            }
+            // for ( $i = 1; $i <= 2; $i++ ) {
+            //     $userWallet = Wallet::create( [
+            //         'user_id' => $createUser->id,
+            //         'type' => $i,
+            //         'balance' => 0,
+            //     ] );
+            // }
 
             DB::commit();
 
@@ -1168,6 +1166,7 @@ class UserService
             } ],
             'password' => [ 'required', 'confirmed', Password::min( 8 ) ],
             'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
+            'age_group' => [ 'required' ],
             'register_token' => [ 'nullable' ],
             'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
@@ -1179,6 +1178,9 @@ class UserService
             'invitation_code' => __( 'user.invitation_code' ),
             'phone_number' => __( 'user.phone_number' ),
             'calling_code' => __( 'user.calling_code' ),
+            'first_name' => __( 'user.first_name' ),
+            'last_name' => __( 'user.last_name' ),
+            'age_group' => __( 'user.age_group' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -1199,6 +1201,7 @@ class UserService
                 'last_name' => $request->last_name,
                 'phone_number' => $request->phone_number,
                 'calling_code' => $request->calling_code ? $request->calling_code : "+60",
+                'age_group' => $request->age_group,
                 'password' => Hash::make( $request->password ),
                 'status' => 10,
                 'invitation_code' => strtoupper( \Str::random( 6 ) ),
@@ -1209,28 +1212,28 @@ class UserService
             if ( $referral ) {
                 $createUserObject['referral_id'] = $referral->id;
                 $createUserObject['referral_structure'] = $referral->referral_structure . '|' . $referral->id;
-                self::giveUplineVoucher( $referral->id );
+                // self::giveUplineVoucher( $referral->id );
             }
 
             $createUser = User::create( $createUserObject );
             
             // assign register bonus
-            $registerBonus = Option::getRegisterBonusSettings();
+            // $registerBonus = Option::getRegisterBonusSettings();
 
-            $userWallet = Wallet::create( [
-                'user_id' => $createUser->id,
-                'type' => 1,
-                'balance' => 0,
-            ] );
+            // $userWallet = Wallet::create( [
+            //     'user_id' => $createUser->id,
+            //     'type' => 1,
+            //     'balance' => 0,
+            // ] );
 
-            if ( $registerBonus ) {
-                WalletService::transact( $userWallet, [
-                    'amount' => $registerBonus->option_value,
-                    'remark' => 'Register Bonus',
-                    'type' => $userWallet->type,
-                    'transaction_type' => 20,
-                ] );
-            }
+            // if ( $registerBonus ) {
+            //     WalletService::transact( $userWallet, [
+            //         'amount' => $registerBonus->option_value,
+            //         'remark' => 'Register Bonus',
+            //         'type' => $userWallet->type,
+            //         'transaction_type' => 20,
+            //     ] );
+            // }
 
             // assign referral bonus
             // $referralBonus = Option::getReferralBonusSettings();
@@ -1293,21 +1296,13 @@ class UserService
         $request->merge( [ 'account' => 'test' ] );
 
         $request->validate( [
-            'phone_number' => 'required',
+            'email' => 'required',
             'password' => 'required',
             'account' => [ 'sometimes', function( $attributes, $value, $fail ) {
 
                 $defaultCallingCode = "+60";
 
-                $user = User::where('status', 10)
-                    ->where(function ($query) use ($defaultCallingCode) {
-                        $query->where('calling_code', request('calling_code') ?? $defaultCallingCode)
-                            ->orWhereNull('calling_code');
-                    })
-                    ->where(function ($query) {
-                        $query->where('phone_number', request('phone_number'))
-                            ->orWhere('phone_number', ltrim(request('phone_number'), '0'));
-                    })
+                $user = User::where('status', 10)->where('email', request('email'))
                     ->first();
             
                 if ( !$user ) {
@@ -1338,12 +1333,7 @@ class UserService
 
         $defaultCallingCode = "+60";
 
-        $user = User::where( 'status', 10 )
-        ->where( 'calling_code', $request->calling_code ? $request->calling_code : $defaultCallingCode )
-        ->where( function ( $query ) use ( $request ) {
-            $query->where( 'phone_number', $request->phone_number )
-                ->orWhere( 'phone_number', ltrim( $request->phone_number, '0' ) );
-        } )
+        $user = User::where('status', 10)->where('email', request('email'))
         ->first();
 
         // Register OneSignal
@@ -1721,6 +1711,10 @@ class UserService
     
             $validator = Validator::make( $request->all(), [
                 'request_type' => [ 'required', 'in:1' ],
+                'email' => [ 'required', 'bail', 'unique:users,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
+                'fullname' => [ 'nullable' ],
+                'first_name' => [ 'required' ],
+                'last_name' => [ 'required' ],
                 'calling_code' => [ 'nullable', 'exists:countries,calling_code' ],
                 'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) {
 
@@ -1739,8 +1733,9 @@ class UserService
                         return false;
                     }
                 } ],
-                'password' => [ empty( $request->identifier ) ? 'nullable' : 'nullable', 'confirmed', Password::min( 8 ) ],
-                'invitation_code' => [ 'nullable', 'exists:users,invitation_code' ],
+                'password' => [ empty( $request->identifier ) ? 'required' : 'nullable', 'confirmed', Password::min( 8 ) ],
+                'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
+                'age_group' => [ 'required' ],
             ] );
     
             $attributeName = [
@@ -1749,6 +1744,10 @@ class UserService
                 'password' => __( 'user.password' ),
                 'invitation_code' => __( 'user.invitation_code' ),
                 'calling_code' => __( 'user.calling_code' ),
+                'email' => __( 'user.email' ),
+                'first_name' => __( 'user.first_name' ),
+                'last_name' => __( 'user.last_name' ),
+                'age_group' => __( 'user.age_group' ),
             ];
     
             foreach ( $attributeName as $key => $aName ) {
@@ -1778,18 +1777,18 @@ class UserService
                 $normalizedPhone = preg_replace( '/^.*?(1)/', '$1', $request->phone_number );
 
                 // Mail::to( $request->email )->send(new OtpMail( $createTmpUser ));
-                $result = self::sendSMS( false, $phoneNumber, $createTmpUser['otp_code'], '' );
+                // $result = self::sendSMS( false, $phoneNumber, $createTmpUser['otp_code'], '' );
 
-                if( $result === 'false' ) {
-                    return response()->json([
-                        'message' => __('user.send_sms_fail'),
-                        'message_key' => 'send_sms_failed',
-                        'data' => null,
-                    ], 500 );
-                }
+                // if( $result === 'false' ) {
+                //     return response()->json([
+                //         'message' => __('user.send_sms_fail'),
+                //         'message_key' => 'send_sms_failed',
+                //         'data' => null,
+                //     ], 500 );
+                // }
                 
                 return response()->json( [
-                    'message' => $request->calling_code . $request->phone_number . ' request otp success',
+                    'message' => $request->email . ' request otp success',
                     'message_key' => 'request_otp_success',
                     'data' => [
                         'otp_code' => '#DEBUG - ' . $createTmpUser['otp_code'],

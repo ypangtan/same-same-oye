@@ -32,6 +32,7 @@ class PlaylistService
 
         $playlist = Playlist::with( [
             'collection',
+            'items',
             'category',
             'administrator',
         ] )->select( 'playlists.*' );
@@ -145,6 +146,7 @@ class PlaylistService
         $playlist = Playlist::with( [
             'collection',
             'category',
+            'items',
             'administrator',
         ] )->find( Helper::decode( $request->id ) );
 
@@ -164,7 +166,6 @@ class PlaylistService
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
-            'priority' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'items' => [ 'nullable' ],
         ] );
@@ -174,7 +175,6 @@ class PlaylistService
             'en_name' => __( 'playlist.name' ),
             'zh_name' => __( 'playlist.name' ),
             'image' => __( 'playlist.image' ),
-            'priority' => __( 'playlist.priority' ),
             'membership_level' => __( 'playlist.membership_level' ),
             'items' => __( 'playlist.items' ),
         ];
@@ -199,8 +199,9 @@ class PlaylistService
                 'status' => 10,
             ] );
     
+            $items = json_decode( $request->items, true );
             $syncData = [];
-            foreach ( $request->items as $index => $item ) {
+            foreach ( $items as $index => $item ) {
                 $syncData[$item['id']] = ['priority' => $index + 1];
             }
 
@@ -233,7 +234,6 @@ class PlaylistService
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
-            'priority' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'items' => [ 'nullable' ],
         ] );
@@ -243,7 +243,6 @@ class PlaylistService
             'en_name' => __( 'playlist.name' ),
             'zh_name' => __( 'playlist.name' ),
             'image' => __( 'playlist.image' ),
-            'priority' => __( 'playlist.priority' ),
             'membership_level' => __( 'playlist.membership_level' ),
             'items' => __( 'playlist.items' ),
         ];
@@ -266,8 +265,9 @@ class PlaylistService
             $updatePlaylist->membership_level = $request->membership_level;
             $updatePlaylist->save();
 
+            $items = json_decode( $request->items, true );
             $syncData = [];
-            foreach ( $request->items as $index => $item ) {
+            foreach ( $items as $index => $item ) {
                 $syncData[$item['id']] = ['priority' => $index + 1];
             }
 
