@@ -187,7 +187,7 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
                     editors['collection_edit_zh_name'].setData( response.zh_name ?? '' );
 
                     imagePath = response.image_url;
-                    fileID = response.image_url;
+                    fileID = response.image;
 
                     const dropzone = new Dropzone( de + '_image', { 
                         url: '{{ route( 'admin.collection.imageUpload' ) }}',

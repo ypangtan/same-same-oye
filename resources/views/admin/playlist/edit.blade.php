@@ -177,7 +177,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                     editors['playlist_edit_zh_name'].setData( response.zh_name ?? '' );
 
                     imagePath = response.image_url;
-                    fileID = response.image_url;
+                    fileID = response.image;
 
                     const dropzone = new Dropzone( de + '_image', { 
                         url: '{{ route( 'admin.playlist.imageUpload' ) }}',
