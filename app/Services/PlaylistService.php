@@ -36,7 +36,8 @@ class PlaylistService
             'item',
             'category',
             'administrator',
-        ] )->select( 'playlists.*' );
+        ] )->select( 'playlists.*' )
+            ->where( 'is_item', 0 );
 
         $filterObject = self::filter( $request, $playlist );
         $playlist = $filterObject['model'];
@@ -66,7 +67,7 @@ class PlaylistService
             ] );
         }
 
-        $totalRecord = Playlist::count();
+        $totalRecord = Playlist::where( 'is_item', 0 )->count();
 
         $data = [
             'playlists' => $playlists,
