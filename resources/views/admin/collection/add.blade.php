@@ -48,10 +48,11 @@ $collection_create = 'collection_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $collection_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'collection.min_membership_level' ) }}</label>
+                    <label for="{{ $collection_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'collection.membership_level' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $collection_create }}_membership_level">
-                        <div class="invalid-feedback"></div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $collection_create }}_membership_level" checked>
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3 row">
@@ -125,7 +126,7 @@ window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' 
             formData.append( 'en_name', editors['collection_create_en_name'].getData()  );
             formData.append( 'zh_name', editors['collection_create_zh_name'].getData() );
             formData.append( 'priority', $( dc + '_priority' ).val() );
-            formData.append( 'membership_level', $( dc + '_membership_level' ).val() );
+            formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID );
             formData.append('playlists', JSON.stringify( selectedPlaylists ) );
             

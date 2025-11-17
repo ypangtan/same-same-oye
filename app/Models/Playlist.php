@@ -26,15 +26,21 @@ class Playlist extends Model
         'image',
         'priority',
         'membership_level',
+        'is_item',
+        'item_id',
         'status',
     ];
+
+    public function item() {
+        return $this->belongsTo( Item::class, 'item_id' );
+    }
 
     public function category() {
         return $this->belongsTo( Category::class, 'category_id' );
     }
 
     public function collection() {
-        return $this->belongsToMany( Collection::class, 'collection_playlists', 'collection_id', 'playlist_id' );
+        return $this->belongsToMany( Collection::class, 'collection_playlists', 'playlist_id', 'collection_id' );
     }
 
     public function items() {

@@ -27,6 +27,10 @@ class PlaylistController extends Controller
      * 
      * @group Playlist API
      * 
+     * @bodyParam per_page string The total record per page. Example: 10
+     * @bodyParam category_id string The encrypted_id of the category. Example: 1
+     * @bodyParam collection_id string The encrypted_id of the collection. Example: 1
+     * 
      */
     public function getPlaylists( Request $request ) {
 

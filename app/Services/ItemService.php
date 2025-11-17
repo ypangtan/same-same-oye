@@ -14,6 +14,7 @@ use Illuminate\Validation\Rules\Password;
 use App\Models\{
     FileManager,
     Item,
+    Playlist,
     User,
     Role as RoleModel
 };
@@ -193,6 +194,17 @@ class ItemService
                 'membership_level' => $request->membership_level,
                 'status' => 10,
             ] );
+
+            $createPlaylist = Playlist::create( [
+                'add_by' => auth()->user()->id,
+                'category_id' => $request->category_id,
+                'en_name' => null,
+                'zh_name' => null,
+                'image' => null,
+                'membership_level' => $request->membership_level,
+                'is_item' => 1,
+                'item_id' => $createItem->id,
+            ] );
     
             DB::commit();
 
@@ -285,6 +297,89 @@ class ItemService
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.items' ) ) ] ),
         ] );
+    }
+
+    public static function getItems( $request ) {
+
+        if ( !empty( $request->playlist_id ) ) {
+            $request->merge( [
+                'playlist_id' => \Helper::decode( $request->playlist_id )
+            ] );
+        }
+
+        if ( !empty( $request->category_id ) ) {
+            $request->merge( [
+                'category_id' => \Helper::decode( $request->category_id )
+            ] );
+        }
+
+        $playlists = Item::select( 'playlists.*' )
+            ->when(!empty($request->playlist_id), function ($q) use ($request) {
+                $q->where(function ($sub) use ($request) {
+
+                    // single playlist
+                    $sub->whereHas('playlist', function ($sq) use ($request) {
+                        $sq->where('id', $request->playlist_id);
+                    });
+
+                    // OR list playlist
+                    $sub->orWhereHas('playlists', function ($sq) use ($request) {
+                        $sq->where('id', $request->playlist_id);
+                    });
+                });
+            } )
+            ->when( !empty( $request->category_id ), function ( $q ) use ( $request ) {
+                $q->where( 'category_id', $request->category_id );
+            } )
+            ->where( 'status', 10 );
+            
+        $playlists->orderBy( 'priority', 'desc' );
+
+        $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
+
+        $playlists->getCollection()->transform(function ($playlist) {
+            $playlist->append( [
+                'encrypted_id',
+                'image_url',
+            ] );
+
+            if ($playlist->relationLoaded('item')) {
+                $playlist->item->transform(function ($item) {
+                    $item->append( [
+                        'encrypted_id',
+                        'image_url',
+                    ] );
+                    return $item;
+                });
+            }
+
+            if ($playlist->relationLoaded('items')) {
+                $playlist->items->transform(function ($item) {
+                    $item->append( [
+                        'encrypted_id',
+                        'image_url',
+                    ] );
+                    return $item;
+                });
+            }
+
+
+            return $playlist;
+        });
+
+        return response()->json( $playlists );
+    }
+
+    public static function getItem( $request ) {
+
+        $item = Item::find( \Helper::decode( $request->id ) );
+
+        $item->append( [
+            'encrypted_id',
+            'image_url',
+        ] );
+  
+        return response()->json( $item );
     }
 
 }

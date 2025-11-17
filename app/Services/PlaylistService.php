@@ -33,6 +33,7 @@ class PlaylistService
         $playlist = Playlist::with( [
             'collection',
             'items',
+            'item',
             'category',
             'administrator',
         ] )->select( 'playlists.*' );
@@ -146,6 +147,7 @@ class PlaylistService
         $playlist = Playlist::with( [
             'collection',
             'category',
+            'item',
             'items',
             'administrator',
         ] )->find( Helper::decode( $request->id ) );
@@ -302,6 +304,102 @@ class PlaylistService
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.playlists' ) ) ] ),
         ] );
+    }
+
+    public static function getPlaylists( $request ) {
+
+        if ( !empty( $request->collection_id ) ) {
+            $request->merge( [
+                'collection_id' => \Helper::decode( $request->collection_id )
+            ] );
+        }
+
+        if ( !empty( $request->category_id ) ) {
+            $request->merge( [
+                'category_id' => \Helper::decode( $request->category_id )
+            ] );
+        }
+
+        $playlists = Playlist::with( [
+            'item',
+            'items',
+        ] )->select( 'playlists.*' )
+            ->when( !empty( $request->collection_id ), function ( $q ) use ( $request ) {
+                $q->whereHas( 'collection', function( $sq ) use ( $request ) {
+                    $sq->where( 'id', $request->collection_id );
+                } );
+            } )
+            ->when( !empty( $request->category_id ), function ( $q ) use( $request ) {
+                $q->where( 'category_id', $request->category_id );
+            } )
+            ->where( 'status', 10 );
+
+        $playlists->orderBy( 'priority', 'desc' );
+
+        $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
+
+        $playlists->getCollection()->transform(function ($playlist) {
+            $playlist->append( [
+                'encrypted_id',
+                'image_url',
+            ] );
+
+            if ($playlist->relationLoaded('item')) {
+                $playlist->item->transform(function ($item) {
+                    $item->append( [
+                        'encrypted_id',
+                        'image_url',
+                    ] );
+                    return $item;
+                });
+            }
+
+            if ($playlist->relationLoaded('items')) {
+                $playlist->items->transform(function ($item) {
+                    $item->append( [
+                        'encrypted_id',
+                        'image_url',
+                    ] );
+                    return $item;
+                });
+            }
+
+
+            return $playlist;
+        });
+
+        return response()->json( $playlists );
+    }
+
+    public static function getPlaylist( $request ) {
+
+        $playlist = Playlist::with( [
+            'item',
+            'items',
+        ] )->find( Helper::decode( $request->id ) );
+
+        $playlist->append( [
+            'encrypted_id',
+            'image_url',
+        ] );
+
+        if( $playlist->item ) {
+            $playlist->item->append( [
+                'encrypted_id',
+                'image_url',
+            ] );
+        }
+
+        if( $playlist->items ) {
+            foreach( $playlist->items as $item ) {
+                $item->append( [
+                    'encrypted_id',
+                    'image_url',
+                ] );
+            }
+        }
+  
+        return response()->json( $playlist );
     }
 
 }

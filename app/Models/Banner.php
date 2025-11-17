@@ -24,6 +24,7 @@ class Banner extends Model
         'en_desc',
         'zh_desc',
         'image',
+        'url',
         'priority',
         'status',
     ];
@@ -60,6 +61,7 @@ class Banner extends Model
         'en_desc',
         'zh_desc',
         'image',
+        'url',
         'priority',
         'status',
     ];

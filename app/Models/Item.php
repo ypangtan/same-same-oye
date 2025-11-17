@@ -42,6 +42,10 @@ class Item extends Model
         return $this->belongsToMany( Playlist::class, 'playlist_items', 'item_id', 'playlist_id' );
     }
 
+    public function playlist() {
+        return $this->belongsTo( Playlist::class, 'item_id' );
+    }
+
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
             return asset( 'storage/' . $this->attributes['image'] );

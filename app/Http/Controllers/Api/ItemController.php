@@ -27,6 +27,10 @@ class ItemController extends Controller
      * 
      * @group Item API
      * 
+     * @bodyParam per_page string The total record per page. Example: 10
+     * @bodyParam category_id string The encrypted_id of the category. Example: 1
+     * @bodyParam playlist_id string The encrypted_id of the playlist. Example: 1
+     * 
      */
     public function getItems( Request $request ) {
 

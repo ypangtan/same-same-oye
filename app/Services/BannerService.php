@@ -266,8 +266,20 @@ class BannerService
         $banner->orderBy( 'sequence' );
 
         $banners = $banner->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
-
+        $banners->getCollection()->each->append('encrypted_id');
+        
         return response()->json( $banners );
     }
 
+    public static function getBanner( $request ) {
+        $request->merge( [
+            'id' => \Helper::decode( $request->id )
+        ] );
+
+        $banner = Banner::find( $request->id );
+
+        return response()->json( [
+            'data' => $banner
+        ] );
+    }
 }

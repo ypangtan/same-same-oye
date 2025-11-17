@@ -120,6 +120,7 @@ class UserController extends Controller {
      * @bodyParam email string required The email for register. Example: abc@gmail.com
      * @bodyParam first_name string required The first_name for register. Example: tester
      * @bodyParam last_name string required The last_name for register. Example: tan
+     * @bodyParam age_group string required The age_group for register. Example: 10-18
      * @bodyParam password string required The password for register. Example: abcd1234
      * @bodyParam password_confirmation string required The confirmation password. Example: abcd1234
      * @bodyParam invitation_code string The invitation code of referral. Example: AASSCC

@@ -323,15 +323,25 @@ class CollectionService
     }
 
     public static function getCollections( $request ) {
+        
+        if ( !empty( $request->category_id ) ) {
+            $request->merge( [
+                'category_id' => \Helper::decode( $request->category_id )
+            ] );
+        }
+
         $collections = Collection::with( [
             'playlists',
+            'playlists.item',
             'playlists.items',
-        ] )->select( 'collections.*' );
-
-        $collections->where( 'status', 10 );
+        ] )->select( 'collections.*' )
+            ->when( !empty( $request->category_id ), function ( $q ) use ( $request ) {
+                $q->where( 'category_id', $request->category_id );
+            } )
+            ->where( 'status', 10 );
         $collections->orderBy( 'priority', 'desc' );
 
-        $collection = $collections->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
+        $collections = $collections->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
         $collections->getCollection()->transform(function ($collection) {
             $collection->append( [
@@ -341,13 +351,25 @@ class CollectionService
             if ($collection->relationLoaded('playlists')) {
                 $collection->playlists->transform(function ($playlist) {
                     $playlist->append( [
-                        'encrypted_id'
+                        'encrypted_id',
+                        'image_url',
                     ] );
+
+                    if ($playlist->relationLoaded('item')) {
+                        $playlist->item->transform(function ($item) {
+                            $item->append( [
+                                'encrypted_id',
+                                'image_url',
+                            ] );
+                            return $item;
+                        });
+                    }
 
                     if ($playlist->relationLoaded('items')) {
                         $playlist->items->transform(function ($item) {
                             $item->append( [
-                                'encrypted_id'
+                                'encrypted_id',
+                                'image_url',
                             ] );
                             return $item;
                         });
@@ -360,7 +382,42 @@ class CollectionService
             return $collection;
         });
 
-        return response()->json( $collection );
+        return response()->json( $collections );
     }
 
+    public static function getCollection( $request ) {
+        $collection = Collection::with( [
+            'playlists',
+            'playlists.item',
+            'playlists.items',
+        ] )->find( \Helper::decode( $request->id ) );
+
+        $collection->append( [ 'encrypted_id' ] );
+
+        if ( $collection->playlists ) {
+            foreach( $collection->playlists as $playlist ) {
+                $playlist->append( [ 'encrypted_id' ] );
+
+                if( $playlist->item ) {
+                    $playlist->item->append( [
+                        'encrypted_id',
+                        'image_url'
+                    ] );
+                }
+                if( $playlist->items ) {
+                    foreach ( $playlist->items as $item ) {
+                        $item->append( [
+                            'encrypted_id',
+                            'image_url'
+                        ] );
+                    }
+                }
+
+            }
+        }
+
+        return response()->json( [
+            'data' => $collection
+        ] );
+    }
 }

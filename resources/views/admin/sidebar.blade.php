@@ -86,7 +86,7 @@
                                         @endcan
                                         @can( 'view items' )
                                         <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\ItemController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.item.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.items' ) }}</span></a>
+                                            <a href="{{ route( 'admin.module_parent.item.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.songs' ) }}</span></a>
                                         </li>
                                         @endcan
                                     </ul>
