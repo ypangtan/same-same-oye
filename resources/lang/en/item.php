@@ -20,6 +20,7 @@ return [
     'membership_level' => 'Membership Level',
     'lyrics' => 'Lyrics',
     'author' => 'Author',
+    'song' => 'Song',
     'membership' => 'Membership',
 
 ];
