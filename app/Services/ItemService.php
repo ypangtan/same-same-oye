@@ -149,7 +149,7 @@ class ItemService
         ] );
 
         if( $item->category ) {
-            $item->category->append( 'encrypted_id' );
+            $item->category->append( 'name' );
         }
 
         return response()->json( $item );
