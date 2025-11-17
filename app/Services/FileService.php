@@ -44,7 +44,7 @@ class FileService
             'status' => 200,
             'data' => $createFile,
             'url' => asset( 'storage/' . $createFile->file ),
-            'file' => asset( 'storage/' . $createFile->file ),
+            'file' => $createFile->file,
         ] );
     }
 
@@ -60,7 +60,7 @@ class FileService
             'status' => 200,
             'data' => $createFile,
             'url' => asset( 'storage/' . $createFile->file ),
-            'file' => asset( 'storage/' . $createFile->file ),
+            'file' => $createFile->file,
         ] );
     }
 
@@ -76,7 +76,7 @@ class FileService
             'status' => 200,
             'data' => $createFile,
             'url' => asset( 'storage/' . $createFile->file ),
-            'file' => asset( 'storage/' . $createFile->file ),
+            'file' => $createFile->file,
         ] );
     }
 }
