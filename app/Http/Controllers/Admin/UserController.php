@@ -40,7 +40,8 @@ class UserController extends Controller
         ];
 
         $this->data['data']['membership'] = [
-            '1' => __( 'membership.member' ),
+            '1' => __( 'user.member' ),
+            '2' => __( 'user.premium' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );

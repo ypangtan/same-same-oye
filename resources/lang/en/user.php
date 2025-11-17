@@ -47,6 +47,9 @@ return [
     'user_wrong_user_password' => 'Wrong phone number or password',
     'user_wrong_user' => 'Wrong phone number',
     'tier_progress' => 'Tier Progress',
+    'membership' => 'Membership',
+    'member' => 'Member',
+    'premium' => 'Premium',
 
     'invalid_otp' => 'Invalid_otp',
     'invalid_phone_number' => 'Invalid phone number',
