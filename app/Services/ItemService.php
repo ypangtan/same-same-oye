@@ -146,6 +146,7 @@ class ItemService
 
         $item->append( [
             'image_url',
+            'song_url',
         ] );
 
         return response()->json( $item );

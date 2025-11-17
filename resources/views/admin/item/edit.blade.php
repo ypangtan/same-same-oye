@@ -176,7 +176,7 @@ window.cke_element = [ 'item_edit_lyrics'];
                     fileID = response.image_url;
 
                     songPath = response.song_url;
-                    file2ID = response.song_url;
+                    file2ID = response.song_url ?? '';
 
                     const dropzone = new Dropzone( de + '_image', { 
                         url: '{{ route( 'admin.item.imageUpload' ) }}',

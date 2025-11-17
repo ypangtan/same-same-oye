@@ -54,6 +54,14 @@ class Item extends Model
         }
     }
 
+    public function getSongUrlAttribute() {
+        if( $this->attributes['image'] ) {
+            return asset( 'storage/' . $this->attributes['image'] );
+        } else {
+            return null;
+        }
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

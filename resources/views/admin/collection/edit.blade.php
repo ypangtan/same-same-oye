@@ -181,7 +181,7 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
                 },
                 success: function( response ) {
                     $( de + '_priority' ).val( response.priority );
-                    $(de + '_membership_level').prop('checked', response.membership_level == 1);
+                    $( de + '_membership_level').prop('checked', response.membership_level == 1);
 
                     editors['collection_edit_en_name'].setData( response.en_name ?? '' );
                     editors['collection_edit_zh_name'].setData( response.zh_name ?? '' );
