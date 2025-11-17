@@ -26,7 +26,7 @@ $collection_edit = 'collection_edit';
                         <div class="mb-3 row">
                             <label for="{{ $collection_edit }}_en_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( English )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $collection_edit }}_en_name">
+                                <input type="text" class="form-control" id="{{ $collection_edit }}_en_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@ $collection_edit = 'collection_edit';
                         <div class="mb-3 row">
                             <label for="{{ $collection_edit }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( 中文 )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $collection_edit }}_zh_name">
+                                <input type="text" class="form-control" id="{{ $collection_edit }}_zh_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -124,8 +124,8 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
             formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
-            formData.append( 'en_name', editors['collection_edit_en_name'].getData()  );
-            formData.append( 'zh_name', editors['collection_edit_zh_name'].getData() );
+            formData.append( 'en_name', $( de + '_en_name' ).val() ?? '' );
+            formData.append( 'zh_name', $( de + '_zh_name' ).val() ?? '' );
             formData.append( 'priority', $( de + '_priority' ).val() );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID );
@@ -183,8 +183,8 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
                     $( de + '_priority' ).val( response.priority );
                     $( de + '_membership_level').prop('checked', response.membership_level == 1);
 
-                    editors['collection_edit_en_name'].setData( response.en_name ?? '' );
-                    editors['collection_edit_zh_name'].setData( response.zh_name ?? '' );
+                    $( de + '_en_name' ).setData( response.en_name ?? '' );
+                    $( de + '_zh_name' ).setData( response.zh_name ?? '' );
 
                     imagePath = response.image_url;
                     fileID = response.image;

@@ -26,7 +26,7 @@ $playlist_create = 'playlist_create';
                         <div class="mb-3 row">
                             <label for="{{ $playlist_create }}_en_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( English )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $playlist_create }}_en_name">
+                                <input type="text" class="form-control" id="{{ $playlist_create }}_en_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@ $playlist_create = 'playlist_create';
                         <div class="mb-3 row">
                             <label for="{{ $playlist_create }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( 中文 )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $playlist_create }}_zh_name">
+                                <input type="text" class="form-control" id="{{ $playlist_create }}_zh_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -84,17 +84,6 @@ $playlist_create = 'playlist_create';
     </div>
 </div>
 
-<link rel="stylesheet" href="{{ asset( 'admin/css/ckeditor/styles.css' ) }}">
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor.js' ) }}"></script>
-<script src="{{ asset( 'admin/js/ckeditor/upload-adapter.js' ) }}"></script>
-
-<script>
-window.ckeupload_path = '{{ route( 'admin.playlist.ckeUpload' ) }}';
-window.csrf_token = '{{ csrf_token() }}';
-window.cke_element = [ 'playlist_create_en_name', 'playlist_create_zh_name' ];
-</script>
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
-
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -116,8 +105,8 @@ window.cke_element = [ 'playlist_create_en_name', 'playlist_create_zh_name' ];
 
             let formData = new FormData();
             formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
-            formData.append( 'en_name', editors['playlist_create_en_name'].getData()  );
-            formData.append( 'zh_name', editors['playlist_create_zh_name'].getData() );
+            formData.append( 'en_name', $( dc + '_en_name' ).val() ?? '' );
+            formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID );
             formData.append('items', JSON.stringify( selectedItems ) );

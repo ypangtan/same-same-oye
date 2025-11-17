@@ -26,7 +26,7 @@ $playlist_edit = 'playlist_edit';
                         <div class="mb-3 row">
                             <label for="{{ $playlist_edit }}_en_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( English )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $playlist_edit }}_en_name">
+                                <input type="text" class="form-control" id="{{ $playlist_edit }}_en_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@ $playlist_edit = 'playlist_edit';
                         <div class="mb-3 row">
                             <label for="{{ $playlist_edit }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( 中文 )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $playlist_edit }}_zh_name">
+                                <input type="text" class="form-control" id="{{ $playlist_edit }}_zh_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -84,17 +84,6 @@ $playlist_edit = 'playlist_edit';
     </div>
 </div>
 
-<link rel="stylesheet" href="{{ asset( 'admin/css/ckeditor/styles.css' ) }}">
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor.js' ) }}"></script>
-<script src="{{ asset( 'admin/js/ckeditor/upload-adapter.js' ) }}"></script>
-
-<script>
-window.ckeupload_path = '{{ route( 'admin.playlist.ckeUpload' ) }}';
-window.csrf_token = '{{ csrf_token() }}';
-window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
-</script>
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
-
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -117,8 +106,8 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
             formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
-            formData.append( 'en_name', editors['playlist_edit_en_name'].getData()  );
-            formData.append( 'zh_name', editors['playlist_edit_zh_name'].getData() );
+            formData.append( 'en_name', $( de + '_en_name' ).val() ?? '' );
+            formData.append( 'zh_name', $( de + '_zh_name' ).val() ?? '' );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID );
             formData.append('items', JSON.stringify( selectedItems ) );
@@ -173,8 +162,8 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                 },
                 success: function( response ) {
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
-                    editors['playlist_edit_en_name'].setData( response.en_name ?? '' );
-                    editors['playlist_edit_zh_name'].setData( response.zh_name ?? '' );
+                    $( de + '_en_name' ).setData( response.en_name ?? '' );
+                    $( de + '_zh_name' ).setData( response.zh_name ?? '' );
 
                     imagePath = response.image_url;
                     fileID = response.image;

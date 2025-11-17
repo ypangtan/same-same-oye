@@ -26,7 +26,7 @@ $collection_create = 'collection_create';
                         <div class="mb-3 row">
                             <label for="{{ $collection_create }}_en_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( English )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $collection_create }}_en_name">
+                                <input type="text" class="form-control" id="{{ $collection_create }}_en_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@ $collection_create = 'collection_create';
                         <div class="mb-3 row">
                             <label for="{{ $collection_create }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'collection.name' ) }} ( 中文 )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm" id="{{ $collection_create }}_zh_name">
+                                <input type="text" class="form-control" id="{{ $collection_create }}_zh_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -124,8 +124,8 @@ window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' 
 
             let formData = new FormData();
             formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
-            formData.append( 'en_name', editors['collection_create_en_name'].getData()  );
-            formData.append( 'zh_name', editors['collection_create_zh_name'].getData() );
+            formData.append( 'en_name', $( dc + '_en_name' ).val() ?? '' );
+            formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
             formData.append( 'priority', $( dc + '_priority' ).val() );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID );
