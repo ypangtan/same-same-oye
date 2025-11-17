@@ -141,13 +141,16 @@ class ItemService
         $item = Item::with( [
             'category',
             'administrator',
-            'playLists',
         ] )->find( Helper::decode( $request->id ) );
 
         $item->append( [
             'image_url',
             'song_url',
         ] );
+
+        if( $item->category ) {
+            $item->category->append( 'encrypted_id' );
+        }
 
         return response()->json( $item );
     }
