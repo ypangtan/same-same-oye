@@ -19,4 +19,5 @@ return [
     'category' => 'Category',
     'membership_level' => 'Membership Level',
     'items' => 'Songs',
+    'membership' => 'Membership',
 ];

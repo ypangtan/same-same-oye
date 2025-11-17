@@ -48,7 +48,7 @@ $collection_create = 'collection_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $collection_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'collection.membership_level' ) }}</label>
+                    <label for="{{ $collection_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'collection.membership' ) }}</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="{{ $collection_create }}_membership_level" checked>

@@ -20,5 +20,6 @@ return [
     'membership_level' => 'Membership Level',
     'priority' => 'Priority',
     'playlists' => 'Playlists',
+    'membership' => 'Membership',
 
 ];
