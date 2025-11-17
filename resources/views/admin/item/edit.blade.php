@@ -173,10 +173,10 @@ window.cke_element = [ 'item_edit_lyrics'];
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
 
                     imagePath = response.image_url;
-                    fileID = response.image_url;
+                    fileID = response.image;
 
                     songPath = response.song_url;
-                    file2ID = response.song_url ?? '';
+                    file2ID = response.file;
 
                     const dropzone = new Dropzone( de + '_image', { 
                         url: '{{ route( 'admin.item.imageUpload' ) }}',
