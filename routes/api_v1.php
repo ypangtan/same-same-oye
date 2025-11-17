@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\{
     PlaylistController,
     PointsController,
     RankController,
+    UserPlaylistController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -103,6 +104,16 @@ Route::middleware( 'auth:user' )->group( function() {
     Route::prefix( 'banners' )->group( function() {
         Route::post( '/get-all-banners', [ BannerController::class, 'getBanners' ] );
         Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
+    } );
+
+    Route::prefix( 'user-playlist' )->group( function() {
+        Route::post( '/get-user-playlists', [ UserPlaylistController::class, 'getUserPlaylists' ] );
+        Route::post( '/get-user-playlist', [ UserPlaylistController::class, 'getUserPlaylist' ] );
+        Route::post( '/create-user-playList', [ UserPlaylistController::class, 'createUserPlayList' ] );
+        Route::post( '/update-user-playList', [ UserPlaylistController::class, 'updateUserPlayList' ] );
+        Route::post( '/delete-user-playList', [ UserPlaylistController::class, 'deleteUserPlayList' ] );
+        Route::post( '/add-song-to-user-playList', [ UserPlaylistController::class, 'addSongToUserPlayList' ] );
+        Route::post( '/remove-song-to-user-playList', [ UserPlaylistController::class, 'removeSongToUserPlayList' ] );
     } );
 
     Route::prefix( 'ads' )->group( function() {

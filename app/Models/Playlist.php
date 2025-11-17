@@ -95,7 +95,7 @@ class Playlist extends Model
         'status',
     ];
 
-    protected static $logName = 'play_lists';
+    protected static $logName = 'playlists';
 
     protected static $logOnlyDirty = true;
 
