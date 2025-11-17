@@ -64,13 +64,13 @@ $playlist_create = 'playlist_create';
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class="row mb-3">
+                <div class="row mb-3 w-100">
                     <div>
                         <label for="{{ $playlist_create }}_items" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'playlist.items' ) }}</label>
                         <select class="form-select form-select-md" id="{{ $playlist_create }}_items" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.items' ) ] ) }}">></select>
                     </div>
 
-                    <div id="selected-items" class="w-auto h-auto gap-2 my-2"></div>
+                    <div id="selected-items" class="w-100 h-auto gap-2 my-4"></div>
 
                     <input type="hidden" name="tags" id="{{ $playlist_create }}_hide_items">
                 </div>
