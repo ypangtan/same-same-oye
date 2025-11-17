@@ -73,6 +73,7 @@ return [
     'collections' => 'Collections',
     'playlists' => 'Playlists',
     'items' => 'Items',
+    'songs' => 'Songs',
 
     'loading' => 'Loading...',
     'add' => 'Add',

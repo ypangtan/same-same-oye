@@ -13,6 +13,10 @@ return [
     |
     */
 
-    'version' => 'Version',
-
+    'image' => 'Thumbnail',
+    'title' => 'Title',
+    'name' => 'Title',
+    'category' => 'Category',
+    'membership_level' => 'Membership Level',
+    'items' => 'Songs',
 ];
