@@ -45,8 +45,9 @@ $item_edit = 'item_edit';
                 <div class="mb-3 row">
                     <label for="{{ $item_edit }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'item.min_membership_level' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $item_edit }}_membership_level">
-                        <div class="invalid-feedback"></div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $collection_edit }}_membership_level">
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -115,7 +116,7 @@ window.cke_element = [ 'item_edit_lyrics'];
             formData.append( 'file', file2ID );
             formData.append( 'image', fileID );
             formData.append( 'author', $( de + '_author' ).val() ?? '' );
-            formData.append( 'membership_level', $( de + '_membership_level' ).val() ?? '' );
+            formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -168,8 +169,8 @@ window.cke_element = [ 'item_edit_lyrics'];
                 success: function( response ) {
                     $( de + '_title' ).val( response.title );
                     $( de + '_author' ).val( response.author );
-                    $( de + '_membership_level' ).val( response.membership_level );
                     editors['item_edit_lyrics'].setData( response.lyrics ?? '' );
+                    $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
 
                     imagePath = response.image_url;
                     fileID = response.image_url;

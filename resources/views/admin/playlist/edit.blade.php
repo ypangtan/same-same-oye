@@ -50,8 +50,9 @@ $playlist_edit = 'playlist_edit';
                 <div class="mb-3 row">
                     <label for="{{ $playlist_edit }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'playlist.min_membership_level' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $playlist_edit }}_membership_level">
-                        <div class="invalid-feedback"></div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $collection_edit }}_membership_level">
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -118,7 +119,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
             formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
             formData.append( 'en_name', editors['playlist_edit_en_name'].getData()  );
             formData.append( 'zh_name', editors['playlist_edit_zh_name'].getData() );
-            formData.append( 'membership_level', $( de + '_membership_level' ).val() );
+            formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID );
             formData.append('items', JSON.stringify( selectedItems ) );
             formData.append( '_token', '{{ csrf_token() }}' );
@@ -171,7 +172,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                     '_token': '{{ csrf_token() }}'
                 },
                 success: function( response ) {
-                    $( de + '_membership_level' ).val( response.membership_level );
+                    $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
                     editors['playlist_edit_en_name'].setData( response.en_name ?? '' );
                     editors['playlist_edit_zh_name'].setData( response.zh_name ?? '' );
 

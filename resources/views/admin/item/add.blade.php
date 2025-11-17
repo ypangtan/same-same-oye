@@ -45,8 +45,9 @@ $item_create = 'item_create';
                 <div class="mb-3 row">
                     <label for="{{ $item_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'item.min_membership_level' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $item_create }}_membership_level">
-                        <div class="invalid-feedback"></div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $item_create }}_membership_level" checked>
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -115,7 +116,7 @@ window.cke_element = [ 'item_create_lyrics'];
             formData.append( 'file', file2ID );
             formData.append( 'image', fileID );
             formData.append( 'author', $( dc + '_author' ).val() ?? '' );
-            formData.append( 'membership_level', $( dc + '_membership_level' ).val() ?? '' );
+            formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
