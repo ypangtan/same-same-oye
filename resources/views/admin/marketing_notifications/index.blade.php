@@ -170,7 +170,7 @@ $columns = [
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        return data ? data['en'] : '-';
+                        return data ? data : '-';
                     },
                 },
                 {
