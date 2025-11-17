@@ -218,7 +218,6 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                     
                     $.each( response.items, function( i, v ) {
                         data = v;
-                        console.log( v );
                         if ( !selectedItems.some( item => item.id === data.id ) ) {
                             selectedItems.push( {id: data.id, text: data.name} );
                             
@@ -231,8 +230,6 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
 
                             updateHiddenInput();
                         }
-
-                        $( de + '_items' ).val(null).trigger('change');
                     } );
 
                     $( 'body' ).loading( 'stop' );
@@ -346,7 +343,7 @@ window.cke_element = [ 'playlist_edit_en_name', 'playlist_edit_zh_name' ];
                 updateHiddenInput();
             }
 
-            $('#assign_tag').val(null).trigger('change');
+            $( de + '_items' ).val(null).trigger('change');
         });
 
         $(document).on('click', '.remove-item', function() {

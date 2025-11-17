@@ -261,7 +261,7 @@ window.cke_element = [ 'playlist_create_en_name', 'playlist_create_zh_name' ];
                 updateHiddenInput();
             }
 
-            $('#assign_tag').val(null).trigger('change');
+            $( dc + '_items' ).val(null).trigger('change');
         });
 
         $(document).on('click', '.remove-item', function() {

@@ -77,10 +77,11 @@ $collection_create = 'collection_create';
                         <select class="form-select form-select-md" id="{{ $collection_create }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.playlists' ) ] ) }}">></select>
                     </div>
 
-                    <div id="selected-playlists" class="w-auto h-auto gap-2 my-2"></div>
+                    <div id="selected-playlists" class="w-100 h-auto gap-2 my-4"></div>
 
                     <input type="hidden" name="tags" id="{{ $collection_create }}_hide_playlists">
                 </div>
+                
                 <div class="text-end">
                     <button id="{{ $collection_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -269,7 +270,7 @@ window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' 
                 updateHiddenInput();
             }
 
-            $('#assign_tag').val(null).trigger('change');
+            $( dc + '_playlists' ).val(null).trigger('change');
         });
 
         $(document).on('click', '.remove-playlist', function() {

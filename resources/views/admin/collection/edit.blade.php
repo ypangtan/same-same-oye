@@ -233,7 +233,6 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
                             updateHiddenInput();
                         }
 
-                        $( de + '_playlists' ).val(null).trigger('change');
                     } );
 
                     $( 'body' ).loading( 'stop' );
@@ -347,7 +346,7 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
                 updateHiddenInput();
             }
 
-            $('#assign_tag').val(null).trigger('change');
+            $( de + '_playlists' ).val(null).trigger('change');
         });
 
         $(document).on('click', '.remove-collection', function() {
