@@ -74,6 +74,7 @@ return [
     'playlists' => 'Playlists',
     'items' => 'Items',
     'songs' => 'Songs',
+    'category' => 'Category',
 
     'loading' => 'Loading...',
     'add' => 'Add',
