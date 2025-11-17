@@ -241,10 +241,10 @@ $playlist_create = 'playlist_create';
                 selectedItems.push( {id: data.id, text: data.text} );
 
                 $('#selected-items').append(`
-                    <span class="item-block rounded-pill border px-3 py-2 mb-2 d-flex align-items-center gap-2 text-black" data-id="${data.id}" style="font-size:14px;">
+                    <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
-                        <i class="icon icon-icon16-close remove-item click-action" style="font-size:23px;"></i>
-                    </span>
+                        <em class="icon ni ni-cross remove-item click-action"></em>
+                        </span>
                 `);
 
                 updateHiddenInput();
