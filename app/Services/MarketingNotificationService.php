@@ -215,11 +215,7 @@ class MarketingNotificationService {
 
             $file = FileManager::find( $request->image );
             if ( $file ) {
-                $fileName = explode( '/', $file->file );
-                $target = 'marketing_notification/' . $createAnnouncement->id . '/' . $fileName[1];
-                Storage::disk( 'public' )->move( $file->file, $target );
-
-                $createAnnouncement->image = $target;
+                $createAnnouncement->image = $file->file;
                 $createAnnouncement->save();
 
                 $file->status = 10;
@@ -252,16 +248,6 @@ class MarketingNotificationService {
         } catch ( \Throwable $th ) {
 
             DB::rollBack();
-
-            $file = FileManager::find( $request->image );
-            if ( $file ) {
-                $fileName = explode( '/', $file->file );
-                $target = 'marketing_notification/' . $createAnnouncement->id . '/' . $fileName[1];
-                if( !Storage::disk( 'public' )->exists( $file->file ) &&  Storage::disk( 'public' )->exists( $target ) ) {
-                    Storage::disk( 'public' )->move( $target, $file->file );
-                }
-            }
-
             return response()->json( [
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine()
             ], 500 );
@@ -332,12 +318,7 @@ class MarketingNotificationService {
                 if ( $file ) {
 
                     $old_photo = $updateAnnouncement->image;
-
-                    $fileName = explode( '/', $file->file );
-                    $target = 'marketing_notification/' . $updateAnnouncement->id . '/' . $fileName[1];
-                    Storage::disk( 'public' )->move( $file->file, $target );
-    
-                    $updateAnnouncement->image = $target;
+                    $updateAnnouncement->image = $file->file;
                     $updateAnnouncement->save();
     
                     $file->status = 10;
@@ -355,15 +336,6 @@ class MarketingNotificationService {
 
             DB::rollBack();
             
-            $file = FileManager::find( $request->image );
-            if ( $file ) {
-                $fileName = explode( '/', $file->file );
-                $target = 'marketing_notification/' . $updateAnnouncement->id . '/' . $fileName[1];
-                if( !Storage::disk( 'public' )->exists( $file->file ) &&  Storage::disk( 'public' )->exists( $target ) ) {
-                    Storage::disk( 'public' )->move( $target, $file->file );
-                }
-            }
-
             return response()->json( [
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine()
             ] );
