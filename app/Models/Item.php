@@ -55,8 +55,8 @@ class Item extends Model
     }
 
     public function getSongUrlAttribute() {
-        if( $this->attributes['image'] ) {
-            return asset( 'storage/' . $this->attributes['image'] );
+        if( $this->attributes['file'] ) {
+            return asset( 'storage/' . $this->attributes['file'] );
         } else {
             return null;
         }
