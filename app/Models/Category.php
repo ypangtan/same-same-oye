@@ -24,6 +24,10 @@ class Category extends Model
         'status',
     ];
 
+    protected $appends = [
+        'name',
+    ];
+
     public function getNameAttribute() {
         $locale = app()->getLocale();
         if( $locale == 'zh' ) {
