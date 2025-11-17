@@ -51,7 +51,7 @@ $playlist_create = 'playlist_create';
                     <label for="{{ $playlist_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'playlist.min_membership_level' ) }}</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $item_create }}_membership_level" checked>
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $playlist_create }}_membership_level" checked>
                         </div>
                     </div>
                 </div>

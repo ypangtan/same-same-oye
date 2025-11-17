@@ -46,7 +46,7 @@ $item_edit = 'item_edit';
                     <label for="{{ $item_edit }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'item.min_membership_level' ) }}</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $collection_edit }}_membership_level">
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $item_edit }}_membership_level">
                         </div>
                     </div>
                 </div>
