@@ -113,8 +113,8 @@ window.cke_element = [ 'item_edit_lyrics'];
             formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
             formData.append( 'title', $( de + '_title' ).val() ?? '' );
             formData.append( 'lyrics', editors['item_edit_lyrics'].getData() );
-            formData.append( 'file', file2ID );
-            formData.append( 'image', fileID );
+            formData.append( 'file', file2ID ?? '' );
+            formData.append( 'image', fileID ?? '' );
             formData.append( 'author', $( de + '_author' ).val() ?? '' );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( '_token', '{{ csrf_token() }}' );
@@ -198,7 +198,7 @@ window.cke_element = [ 'item_edit_lyrics'];
                             }
                         },
                         removedfile: function( file ) {
-                            fileID = null;
+                            fileID = '';
                             file.previewElement.remove();
                         },
                         success: function( file, response ) {
@@ -226,7 +226,7 @@ window.cke_element = [ 'item_edit_lyrics'];
                             }
                         },
                         removedfile: function( file ) {
-                            file2ID = null;
+                            file2ID = '';
                             file.previewElement.remove();
                         },
                         success: function( file, response ) {
