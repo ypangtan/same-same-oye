@@ -50,6 +50,7 @@ return [
     'membership' => 'Membership',
     'member' => 'Member',
     'premium' => 'Premium',
+    'age_group' => 'Age Group',
 
     'invalid_otp' => 'Invalid_otp',
     'invalid_phone_number' => 'Invalid phone number',

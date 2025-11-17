@@ -392,7 +392,7 @@ class UserService
             'first_name' => [ 'nullable' ],
             'last_name' => [ 'nullable' ],
             // 'calling_code' => [ 'nullable' ],
-            'nationality' => [ 'required', 'exists:countries,id' ],
+            'nationality' => [ 'nullable', 'exists:countries,id' ],
             'phone_number' => [ 'nullable', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
 
                 $defaultCallingCode = "+60";
@@ -408,7 +408,7 @@ class UserService
                 }
             } ],
             'password' => [ 'required', Password::min( 8 ) ],
-            'age_group' => [ 'required' ],
+            'age_group' => [ 'nullable' ],
         ] );
 
         $attributeName = [
