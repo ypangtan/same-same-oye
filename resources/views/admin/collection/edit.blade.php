@@ -183,8 +183,8 @@ window.cke_element = [ 'collection_edit_en_name', 'collection_edit_zh_name' ];
                     $( de + '_priority' ).val( response.priority );
                     $( de + '_membership_level').prop('checked', response.membership_level == 1);
 
-                    $( de + '_en_name' ).setData( response.en_name ?? '' );
-                    $( de + '_zh_name' ).setData( response.zh_name ?? '' );
+                    $( de + '_en_name' ).val( response.en_name ?? '' );
+                    $( de + '_zh_name' ).val( response.zh_name ?? '' );
 
                     imagePath = response.image_url;
                     fileID = response.image;
