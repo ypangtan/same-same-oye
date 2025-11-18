@@ -205,7 +205,7 @@ window.cke_element = [ 'item_edit_lyrics'];
                             fileID = response.file;
                         }
                     } );
-                    
+
                     const dropzone2 = new Dropzone(de + '_file', { 
                         url: '{{ route("admin.item.songUpload") }}',
                         maxFiles: 1,
@@ -214,7 +214,7 @@ window.cke_element = [ 'item_edit_lyrics'];
 
                         previewTemplate: `
                             <div class="dz-preview dz-file-preview" style="cursor:pointer;">
-                                <img src="{{ asset('admin/image/song.png') }}" 
+                                <img src="{{ asset('admin/images/song.png') }}" 
                                     style="width:60px;height:60px;object-fit:contain;">
                                 
                                 <div class="dz-details" style="margin-top:5px;">
