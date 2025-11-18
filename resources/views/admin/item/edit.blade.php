@@ -94,6 +94,7 @@ window.cke_element = [ 'item_edit_lyrics'];
 
         let de = '#{{ $item_edit }}',
             fileID = '',
+            song_file = '',
             file2ID = '';
 
         $( de + '_cancel' ).click( function() {
@@ -176,6 +177,7 @@ window.cke_element = [ 'item_edit_lyrics'];
                     fileID = response.image;
 
                     songPath = response.song_url;
+                    song_file = response.file_name;
                     file2ID = response.file;
 
                     const dropzone = new Dropzone( de + '_image', { 
@@ -268,6 +270,7 @@ window.cke_element = [ 'item_edit_lyrics'];
 
                         success: function(file, response) {
                             file2ID = response.file;
+                            song_file = response.file_name ?? '';
                             file._fileUrl = response.url;
 
                             file.previewElement.addEventListener("click", () => {

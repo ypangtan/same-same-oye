@@ -27,6 +27,7 @@ class Item extends Model
         'image',
         'author',
         'membership_level',
+        'file_name',
         'status',
     ];
 
@@ -79,6 +80,7 @@ class Item extends Model
         'image',
         'author',
         'membership_level',
+        'file_name',
         'status',
     ];
 

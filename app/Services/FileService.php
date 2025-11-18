@@ -45,6 +45,7 @@ class FileService
             'data' => $createFile,
             'url' => asset( 'storage/' . $createFile->file ),
             'file' => $createFile->file,
+            'file_name' => $createFile->name,
         ] );
     }
 
@@ -61,6 +62,7 @@ class FileService
             'data' => $createFile,
             'url' => asset( 'storage/' . $createFile->file ),
             'file' => $createFile->file,
+            'file_name' => $createFile->name,
         ] );
     }
 
@@ -77,6 +79,7 @@ class FileService
             'data' => $createFile,
             'url' => asset( 'storage/' . $createFile->file ),
             'file' => $createFile->file,
+            'file_name' => $createFile->name,
         ] );
     }
 }

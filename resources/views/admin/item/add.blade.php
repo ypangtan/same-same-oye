@@ -94,6 +94,7 @@ window.cke_element = [ 'item_create_lyrics'];
 
         let dc = '#{{ $item_create }}',
             fileID = '',
+            song_file = ''
             file2ID = '',
             songPath = '';
 
@@ -114,6 +115,7 @@ window.cke_element = [ 'item_create_lyrics'];
             formData.append( 'title', $( dc + '_title' ).val() ?? '' );
             formData.append( 'lyrics', editors['item_create_lyrics'].getData() );
             formData.append( 'file', file2ID );
+            formData.append( 'file_name', song_file );
             formData.append( 'image', fileID );
             formData.append( 'author', $( dc + '_author' ).val() ?? '' );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
@@ -257,6 +259,7 @@ window.cke_element = [ 'item_create_lyrics'];
 
             success: function(file, response) {
                 file2ID = response.file;
+                song_file = response.file_name ?? '';
                 file._fileUrl = response.url;
 
                 file.previewElement.addEventListener("click", () => {

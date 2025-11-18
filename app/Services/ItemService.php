@@ -196,6 +196,7 @@ class ItemService
                 'image' => $request->image,
                 'author' => $request->author,
                 'membership_level' => $request->membership_level,
+                'file_name' => $request->file_name,
                 'status' => 10,
             ] );
 
@@ -263,6 +264,7 @@ class ItemService
         try {
 
             $updateItem = Item::find( $request->id );
+            $updateItem->file_name = $request->file_name;
             $updateItem->category_id = $request->category_id;
             $updateItem->title = $request->title;
             $updateItem->lyrics = $request->lyrics;
