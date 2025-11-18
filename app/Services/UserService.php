@@ -439,6 +439,7 @@ class UserService
                 'last_name' => $request->last_name ?? null,
                 'email' => $request->email ? strtolower( $request->email ) : null,
                 'phone_number' => $request->phone_number,
+                'date_of_birth' => $request->date_of_birth,
                 'calling_code' => $request->calling_code ? $request->calling_code : null,
                 'password' => Hash::make( $request->password ),
                 'age_group' => $request->age_group,
