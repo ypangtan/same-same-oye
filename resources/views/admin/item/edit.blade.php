@@ -244,7 +244,6 @@ window.cke_element = [ 'item_edit_lyrics'];
                             if (songPath) {
 
                                 file_name = song_file ?? 'Default.mp3';
-                                console.log( file_name );
                                 let myDropzone = this,
                                     mockFile = { name: file_name, size: 1024, accepted: true };
 
@@ -259,7 +258,7 @@ window.cke_element = [ 'item_edit_lyrics'];
                                 mockFile._fileUrl = songPath;
 
                                 setTimeout(() => {
-                                    mockFile.previewElement.querySelector("[data-dz-name]").textContent = "Default.mp3";
+                                    mockFile.previewElement.querySelector("[data-dz-name]").textContent = file_name;
                                     mockFile.previewElement.addEventListener("click", () => {
                                         window.open(songPath, "_blank");
                                     });
