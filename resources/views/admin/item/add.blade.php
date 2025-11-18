@@ -217,42 +217,58 @@ window.cke_element = [ 'item_create_lyrics'];
             }
         } );
 
-        const dropzone2 = new Dropzone(dc + '_file', { 
+        const dropzone2 = new Dropzone(de + '_file', { 
             url: '{{ route("admin.item.songUpload") }}',
             maxFiles: 1,
             acceptedFiles: 'audio/mpeg,audio/mp3',
             addRemoveLinks: true,
+
             previewTemplate: `
-                <div class="dz-preview dz-file-preview">
-                    <div class="dz-details">
+                <div class="dz-preview dz-file-preview" style="cursor:pointer;">
+                    <img src="{{ asset('admin/image/song.png') }}" 
+                        style="width:60px;height:60px;object-fit:contain;">
+                    
+                    <div class="dz-details" style="margin-top:5px;">
                         <div class="dz-filename"><span data-dz-name></span></div>
                         <div class="dz-size" data-dz-size></div>
                     </div>
-                    <audio controls style="width: 100%; margin-top: 10px; display:none;"></audio>
-                    <a class="dz-remove" href="javascript:undefined;" data-dz-remove>Remove</a>
+
+                    <a class="dz-remove" href="javascript:undefined;" data-dz-remove style="color:red;">
+                        Remove
+                    </a>
                 </div>
             `,
+
             init: function() {
+
                 this.on("addedfile", function(file) {
                     if (this.files.length > 1) {
                         this.removeFile(this.files[0]);
                     }
+
+                    // clicking the preview opens the file
+                    file.previewElement.addEventListener("click", () => {
+                        if (file._fileUrl) window.open(file._fileUrl, "_blank");
+                    });
                 });
 
-                this.on("success", function(file, response) {
-                    file2ID = response.file;
+            },
 
-                    // Play the uploaded file
-                    const audio = file.previewElement.querySelector("audio");
-                    audio.src = response.url; // Your controller should return the file URL
-                    audio.style.display = "block";
-                });
+            removedfile: function(file) {
+                file2ID = "";
+                if (file.previewElement) file.previewElement.remove();
+            },
 
-                this.on("removedfile", function(file) {
-                    file2ID = null;
+            success: function(file, response) {
+                file2ID = response.file;
+                file._fileUrl = response.url;
+
+                file.previewElement.addEventListener("click", () => {
+                    window.open(response.url, "_blank");
                 });
             }
         });
+
 
     } );
 </script>

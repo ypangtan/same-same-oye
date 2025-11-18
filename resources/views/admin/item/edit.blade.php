@@ -205,11 +205,29 @@ window.cke_element = [ 'item_edit_lyrics'];
                             fileID = response.file;
                         }
                     } );
+                    
                     const dropzone2 = new Dropzone(de + '_file', { 
                         url: '{{ route("admin.item.songUpload") }}',
                         maxFiles: 1,
                         acceptedFiles: 'audio/mpeg,audio/mp3',
                         addRemoveLinks: true,
+
+                        previewTemplate: `
+                            <div class="dz-preview dz-file-preview" style="cursor:pointer;">
+                                <img src="{{ asset('admin/image/song.png') }}" 
+                                    style="width:60px;height:60px;object-fit:contain;">
+                                
+                                <div class="dz-details" style="margin-top:5px;">
+                                    <div class="dz-filename"><span data-dz-name></span></div>
+                                    <div class="dz-size" data-dz-size></div>
+                                </div>
+
+                                <a class="dz-remove" href="javascript:undefined;" data-dz-remove style="color:red;">
+                                    Remove
+                                </a>
+                            </div>
+                        `,
+
                         init: function() {
 
                             this.on("addedfile", function(file) {
@@ -217,33 +235,32 @@ window.cke_element = [ 'item_edit_lyrics'];
                                     this.removeFile(this.files[0]);
                                 }
 
-                                // Add audio player
-                                let audio = document.createElement("audio");
-                                audio.controls = true;
-                                audio.style.width = "100%";
-                                audio.style.marginTop = "10px";
-                                audio.src = ""; // Will fill later (existing or success upload)
-
-                                file.previewElement.appendChild(audio);
-                                file._audioElement = audio;
+                                // clicking the preview opens the file
+                                file.previewElement.addEventListener("click", () => {
+                                    if (file._fileUrl) window.open(file._fileUrl, "_blank");
+                                });
                             });
 
-                            // Load existing file
+                            // ---------- Existing file ----------
                             if (songPath) {
                                 let myDropzone = this,
-                                    mockFile = { name: "Default", size: 1024, accepted: true };
+                                    mockFile = { name: "Default.mp3", size: 1024, accepted: true };
 
                                 myDropzone.files.push(mockFile);
-                                myDropzone.displayExistingFile(mockFile, songPath);
 
-                                // Inject audio player for existing file
+                                // show image only (song.png)
+                                myDropzone.displayExistingFile(
+                                    mockFile, 
+                                    "{{ asset('admin/image/song.png') }}"
+                                );
+
+                                mockFile._fileUrl = songPath;
+
                                 setTimeout(() => {
-                                    let audio = document.createElement("audio");
-                                    audio.controls = true;
-                                    audio.style.width = "100%";
-                                    audio.style.marginTop = "10px";
-                                    audio.src = songPath;
-                                    mockFile.previewElement.appendChild(audio);
+                                    mockFile.previewElement.querySelector("[data-dz-name]").textContent = "Default.mp3";
+                                    mockFile.previewElement.addEventListener("click", () => {
+                                        window.open(songPath, "_blank");
+                                    });
                                 }, 50);
                             }
                         },
@@ -255,15 +272,14 @@ window.cke_element = [ 'item_edit_lyrics'];
 
                         success: function(file, response) {
                             file2ID = response.file;
+                            file._fileUrl = response.url;
 
-                            // Set player source after upload succeeds
-                            if (file._audioElement) {
-                                file._audioElement.src = response.url; // make sure controller returns "url"
-                            }
+                            file.previewElement.addEventListener("click", () => {
+                                window.open(response.url, "_blank");
+                            });
                         }
                     });
 
-                    
                     if( response.category != null ){
                         let option1 = new Option( response.category.name, response.category.id, true, true );
                         categorySelect2.append( option1 );
