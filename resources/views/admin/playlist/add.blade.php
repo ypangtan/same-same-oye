@@ -18,13 +18,13 @@ $playlist_create = 'playlist_create';
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
                         <button class="nav-link active" id="en_name-tab" data-bs-toggle="tab" data-bs-target="#en_name" type="button" role="tab" aria-controls="en_name" aria-selected="true"> English </button>
-                        <button class="nav-link" id="zh_name-tab" data-bs-toggle="tab" data-bs-target="#zh_name" type="button" role="tab" aria-controls="zh_name" aria-selected="false">  中文 </button>
+                        {{-- <button class="nav-link" id="zh_name-tab" data-bs-toggle="tab" data-bs-target="#zh_name" type="button" role="tab" aria-controls="zh_name" aria-selected="false">  中文 </button> --}}
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade pt-4 show active" id="en_name" role="tabpanel" aria-labelledby="en_name-tab">
                         <div class="mb-3 row">
-                            <label for="{{ $playlist_create }}_en_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( English )</label>
+                            <label for="{{ $playlist_create }}_en_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="{{ $playlist_create }}_en_name">
                                 <div class="invalid-feedback"></div>

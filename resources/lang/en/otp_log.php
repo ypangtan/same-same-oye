@@ -14,5 +14,5 @@ return [
     */
 
     'phone_number' => 'Phone Number',
-    'otp_code' => 'OTP COde',
+    'otp_code' => 'OTP Code',
 ];
