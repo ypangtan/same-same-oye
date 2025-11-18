@@ -244,7 +244,7 @@ window.cke_element = [ 'item_edit_lyrics'];
                             if (songPath) {
 
                                 file_name = song_file ?? 'Default.mp3';
-                                console.log( song_file );
+                                console.log( file_name );
                                 let myDropzone = this,
                                     mockFile = { name: file_name, size: 1024, accepted: true };
 
