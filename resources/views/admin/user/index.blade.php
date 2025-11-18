@@ -276,7 +276,7 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     // return '-';
-                    return data ? membershipMapper[data] : '-';
+                    return membershipMapper[data] ;
                 },
             },
             {
