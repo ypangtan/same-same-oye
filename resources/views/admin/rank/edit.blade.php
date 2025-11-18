@@ -7,7 +7,7 @@ $rank_edit = 'rank_edit';
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 row">
-                    <label for="{{ $rank_edit }}_name" class="col-sm-5 col-form-label">{{ __( 'rank.title' ) }} (English)</label>
+                    <label for="{{ $rank_edit }}_name" class="col-sm-5 col-form-label">{{ __( 'rank.title' ) }} </label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control form-control-sm" id="{{ $rank_edit }}_name">
                         <div class="invalid-feedback"></div>

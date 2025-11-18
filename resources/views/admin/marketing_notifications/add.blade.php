@@ -37,13 +37,12 @@ $announcement_create = 'announcement_create';
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-                <nav>
+                {{-- <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
                         <button class="nav-link active" id="en_title-tab" data-bs-toggle="tab" data-bs-target="#en_title" type="button" role="tab" aria-controls="en_title" aria-selected="true"> English </button>
-                        {{-- <button class="nav-link" id="zh_title-tab" data-bs-toggle="tab" data-bs-target="#zh_title" type="button" role="tab" aria-controls="zh_title" aria-selected="false">  中文 </button> --}}
+                        <button class="nav-link" id="zh_title-tab" data-bs-toggle="tab" data-bs-target="#zh_title" type="button" role="tab" aria-controls="zh_title" aria-selected="false">  中文 </button>
                     </div>
-                </nav>
-                
+                </nav> --}}
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade pt-4 show active" id="en_title" role="tabpanel" aria-labelledby="en_title-tab">
                         <div class="mb-3 row">
