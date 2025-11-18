@@ -52,6 +52,7 @@ class User extends Model
         'is_social_account',
         'platform',
         'age_group',
+        'membership',
         'rank_id',
     ];
 
@@ -258,6 +259,7 @@ class User extends Model
         'is_social_account',
         'platform',
         'age_group',
+        'membership',
         'rank_id',
     ];
 

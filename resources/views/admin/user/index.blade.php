@@ -148,20 +148,20 @@ var statusMapper = @json( $data['status'] ),
             // { data: 'social_logins' },
             { data: 'phone_number' },
             // { data: 'invitation_code' },
-            { data: 'encrypted_id' },
+            { data: 'membership' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
         columnDefs: [
-                {
-                    // Add checkboxes to the first column
-                    targets: 0,
-                    orderable: false,
-                    className: 'text-center',
-                    render: function (data, type, row) {
-                        return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
-                    },
+            {
+                // Add checkboxes to the first column
+                targets: 0,
+                orderable: false,
+                className: 'text-center',
+                render: function (data, type, row) {
+                    return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
                 },
+            },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "dt_no" ) }}' ),
                 orderable: false,
@@ -275,7 +275,7 @@ var statusMapper = @json( $data['status'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "membership" ) }}' ),
                 
                 render: function( data, type, row, meta ) {
-                    return '-';
+                    // return '-';
                     return data ? membershipMapper[data] : '-';
                 },
             },

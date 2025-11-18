@@ -217,25 +217,42 @@ window.cke_element = [ 'item_create_lyrics'];
             }
         } );
 
-        const dropzone2 = new Dropzone( dc + '_file', { 
-            url: '{{ route( 'admin.item.songUpload' ) }}',
+        const dropzone2 = new Dropzone(dc + '_file', { 
+            url: '{{ route("admin.item.songUpload") }}',
             maxFiles: 1,
             acceptedFiles: 'audio/mpeg,audio/mp3',
             addRemoveLinks: true,
+            previewTemplate: `
+                <div class="dz-preview dz-file-preview">
+                    <div class="dz-details">
+                        <div class="dz-filename"><span data-dz-name></span></div>
+                        <div class="dz-size" data-dz-size></div>
+                    </div>
+                    <audio controls style="width: 100%; margin-top: 10px; display:none;"></audio>
+                    <a class="dz-remove" href="javascript:undefined;" data-dz-remove>Remove</a>
+                </div>
+            `,
             init: function() {
-                this.on("addedfile", function (file) {
+                this.on("addedfile", function(file) {
                     if (this.files.length > 1) {
                         this.removeFile(this.files[0]);
                     }
                 });
-            },
-            removedfile: function( file ) {
-                file2ID = null;
-                file.previewElement.remove();
-            },
-            success: function( file, response ) {
-                file2ID = response.file;
+
+                this.on("success", function(file, response) {
+                    file2ID = response.file;
+
+                    // Play the uploaded file
+                    const audio = file.previewElement.querySelector("audio");
+                    audio.src = response.url; // Your controller should return the file URL
+                    audio.style.display = "block";
+                });
+
+                this.on("removedfile", function(file) {
+                    file2ID = null;
+                });
             }
-        } );
+        });
+
     } );
 </script>

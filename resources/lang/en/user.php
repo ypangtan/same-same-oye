@@ -48,7 +48,7 @@ return [
     'user_wrong_user' => 'Wrong phone number',
     'tier_progress' => 'Tier Progress',
     'membership' => 'Membership',
-    'member' => 'Member',
+    'member' => 'Free',
     'premium' => 'Premium',
     'age_group' => 'Age Group',
 
