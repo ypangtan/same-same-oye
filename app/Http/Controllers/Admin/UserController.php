@@ -40,8 +40,8 @@ class UserController extends Controller
         ];
 
         $this->data['data']['membership'] = [
-            '1' => __( 'user.member' ),
-            '2' => __( 'user.premium' ),
+            '0' => __( 'user.member' ),
+            '1' => __( 'user.premium' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
@@ -85,6 +85,11 @@ class UserController extends Controller
             '2' => __( 'rank.silver' ),
             '3' => __( 'rank.gold' ),
             '4' => __( 'rank.premium' ),
+        ];
+
+        $this->data['data']['membership'] = [
+            '0' => __( 'user.member' ),
+            '1' => __( 'user.premium' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
@@ -135,6 +140,11 @@ class UserController extends Controller
                 'text' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.users' ) ) ] ),
                 'class' => 'active',
             ],
+        ];
+
+        $this->data['data']['membership'] = [
+            '0' => __( 'user.member' ),
+            '1' => __( 'user.premium' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
