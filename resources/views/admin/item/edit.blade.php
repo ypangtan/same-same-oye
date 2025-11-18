@@ -221,10 +221,6 @@ window.cke_element = [ 'item_edit_lyrics'];
                                     <div class="dz-filename"><span data-dz-name></span></div>
                                     <div class="dz-size" data-dz-size></div>
                                 </div>
-
-                                <a class="dz-remove" href="javascript:undefined;" data-dz-remove style="color:red;">
-                                    Remove
-                                </a>
                             </div>
                         `,
 
