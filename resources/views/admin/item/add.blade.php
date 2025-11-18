@@ -226,7 +226,7 @@ window.cke_element = [ 'item_create_lyrics'];
             previewTemplate: `
                 <div class="dz-preview dz-file-preview" style="cursor:pointer;">
                     <img src="{{ asset('admin/images/song.png') }}" 
-                        style="width:60px;height:60px;object-fit:contain;">
+                        style="width:120px;height:120px;object-fit:contain;">
                     
                     <div class="dz-details" style="margin-top:5px;">
                         <div class="dz-filename"><span data-dz-name></span></div>
