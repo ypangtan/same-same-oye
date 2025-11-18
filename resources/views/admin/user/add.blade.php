@@ -148,7 +148,7 @@ $user_create = 'user_create';
                     <label for="{{ $user_create }}_membership" class="col-sm-5 col-form-label">{{ __( 'user.membership' ) }}</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $user_create }}_membership" checked>
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $user_create }}_membership">
                         </div>
                     </div>
                 </div>
