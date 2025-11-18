@@ -89,6 +89,14 @@ $user_edit = 'user_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $user_edit }}_membership" class="col-sm-5 col-form-label">{{ __( 'collection.membership' ) }}</label>
+                    <div class="col-sm-7">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $user_edit }}_membership">
+                        </div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $user_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -137,6 +145,7 @@ $user_edit = 'user_edit';
             formData.append( 'phone_number', $( de + '_phone_number' ).val() );
             formData.append( 'password', $( de + '_password' ).val() );
             formData.append( 'date_of_birth', $( de + '_date_of_birth' ).val() );
+            formData.append( 'membership', $( de + '_membership' ).is( ':checked' ) ? 1 : 0 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -187,6 +196,7 @@ $user_edit = 'user_edit';
                 },
                 success: function( response ) {
                     $( de + '_email' ).val( response.email );
+                    $( de + '_membership').prop('checked', response.membership == 1);
 
                     $( de + '_first_name' ).val( response.first_name );
                     $( de + '_last_name' ).val( response.last_name );

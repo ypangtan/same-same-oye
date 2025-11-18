@@ -144,6 +144,14 @@ $user_create = 'user_create';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $user_create }}_membership" class="col-sm-5 col-form-label">{{ __( 'user.membership' ) }}</label>
+                    <div class="col-sm-7">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $user_create }}_membership" checked>
+                        </div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $user_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -195,6 +203,7 @@ $user_create = 'user_create';
             formData.append( 'calling_code', $( dc + '_calling_code' ).val() );
             formData.append( 'password', $( dc + '_password' ).val() );
             formData.append( 'date_of_birth', $( dc + '_date_of_birth' ).val() );
+            formData.append( 'membership', $( dc + '_membership' ).is( ':checked' ) ? 1 : 0 );
             // formData.append( 'account_type', $( dc + '_account_type' ).val() );
             
             formData.append( '_token', '{{ csrf_token() }}' );

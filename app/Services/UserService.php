@@ -392,6 +392,7 @@ class UserService
             'first_name' => [ 'nullable' ],
             'last_name' => [ 'nullable' ],
             // 'calling_code' => [ 'nullable' ],
+            'membership' => [ 'nullable' ],
             'nationality' => [ 'nullable', 'exists:countries,id' ],
             'phone_number' => [ 'nullable', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
 
@@ -441,6 +442,7 @@ class UserService
                 'calling_code' => $request->calling_code ? $request->calling_code : null,
                 'password' => Hash::make( $request->password ),
                 'age_group' => $request->age_group,
+                'membership' => $request->membership,
                 'status' => 10,
                 'invitation_code' => strtoupper( \Str::random( 6 ) ),
             ];
@@ -551,6 +553,7 @@ class UserService
             $updateUser->city = $request->city ?? $updateUser->city;
             $updateUser->postcode = $request->postcode ?? $updateUser->postcode;
             $updateUser->date_of_birth = $request->date_of_birth;
+            $updateUser->membership = $request->membership;
             $updateUser->fullname = $request->fullname;
 
             if ( !empty( $request->password ) ) {

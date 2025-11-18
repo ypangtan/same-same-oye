@@ -51,6 +51,7 @@ return [
     'member' => 'Free',
     'premium' => 'Premium',
     'age_group' => 'Age Group',
+    'membership' => 'Membership',
 
     'invalid_otp' => 'Invalid_otp',
     'invalid_phone_number' => 'Invalid phone number',
