@@ -361,7 +361,7 @@ class Helper {
             $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
         }
 
-        $mobile = $callingCode . $phoneNumber;
+        // $mobile = $callingCode . $phoneNumber;
         // self::sendSMS( $mobile, $otp, $body );
 
         return [
