@@ -1334,12 +1334,12 @@ class UserService
                     return false;
                 }
             } ],
-            'email' => [ 'nullable', 'bail', 'unique:users,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
+            'email' => [ 'required', 'bail', 'unique:users,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
             'fullname' => [ 'nullable' ],
-            'first_name' => [ 'nullable' ],
-            'last_name' => [ 'nullable' ],
+            'first_name' => [ 'required' ],
+            'last_name' => [ 'required' ],
             'calling_code' => [ 'nullable', 'exists:countries,calling_code' ],
-            'phone_number' => [ 'nullable', 'digits_between:8,15', function( $attribute, $value, $fail ) {
+            'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) {
 
                 $defaultCallingCode = "+60";
 
@@ -1356,9 +1356,10 @@ class UserService
                     return false;
                 }
             } ],
-            'password' => [ 'required', 'confirmed', Password::min( 8 ) ],
+            'password' => [ 'required', 'confirmed', Password::min( 8 )->mixedCase()->numbers()->symbols() ],
             'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
             'age_group' => [ 'required' ],
+            'nationality' => [ 'required' ],
             'register_token' => [ 'nullable' ],
             'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
@@ -1373,6 +1374,7 @@ class UserService
             'first_name' => __( 'user.first_name' ),
             'last_name' => __( 'user.last_name' ),
             'age_group' => __( 'user.age_group' ),
+            'nationality' => __( 'user.nationality' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -1925,9 +1927,10 @@ class UserService
                         return false;
                     }
                 } ],
-                'password' => [ empty( $request->identifier ) ? 'required' : 'nullable', 'confirmed', Password::min( 8 ) ],
+                'password' => [ 'required', 'confirmed', Password::min( 8 )->mixedCase()->numbers()->symbols() ],
                 'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
                 'age_group' => [ 'required' ],
+                'nationality' => [ 'required' ],
             ] );
     
             $attributeName = [
@@ -1940,6 +1943,7 @@ class UserService
                 'first_name' => __( 'user.first_name' ),
                 'last_name' => __( 'user.last_name' ),
                 'age_group' => __( 'user.age_group' ),
+                'nationality' => __( 'user.nationality' ),
             ];
     
             foreach ( $attributeName as $key => $aName ) {
@@ -1950,12 +1954,6 @@ class UserService
     
             try {
                 $action = 'register';
-                if( $request->identifier ){
-                    $request->merge( [
-                        'identifier' => Crypt::decryptString( $request->identifier ),
-                    ] );
-                    $action = 'resend';
-                }
 
                 $createTmpUser = Helper::requestOtp( $action, [
                     'calling_code' => $request->calling_code,
@@ -2033,13 +2031,13 @@ class UserService
                             return false;
                         }
     
-                        $exist = TmpUser::where( 'phone_number', $current->phone_number )
-                                        ->where( 'status', 1 )
-                                        ->exists();
+                        // $exist = TmpUser::where( 'phone_number', $current->phone_number )
+                        //                 ->where( 'status', 1 )
+                        //                 ->exists();
 
-                        if ( !$exist ) {
-                            $fail( __( 'user.invalid_request' ) );
-                        }
+                        // if ( !$exist ) {
+                        //     $fail( __( 'user.invalid_request' ) );
+                        // }
                     },
                 ],
             ] );
