@@ -308,7 +308,7 @@ class Helper {
         
         else if ( $action == 'resend_forget_password' ) {
 
-            $callingCode = $data['calling_code'];
+            // $callingCode = $data['calling_code'];
             $tmpUser = $data['identifier'];
             $type = 2;
 

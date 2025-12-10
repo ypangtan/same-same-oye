@@ -52,6 +52,8 @@ return [
     'premium' => 'Premium',
     'age_group' => 'Age Group',
     'membership' => 'Membership',
+    'register' => 'Register',
+    'request_password_reset' => 'Request Password Reset',
 
     'invalid_otp' => 'Invalid_otp',
     'invalid_phone_number' => 'Invalid phone number',

@@ -1991,7 +1991,7 @@ class UserService
                     'message' => $request->email . ' request otp success',
                     'message_key' => 'request_otp_success',
                     'data' => [
-                        'otp_code' => '#DEBUG - ' . $createTmpUser['otp_code'],
+                        // 'otp_code' => '#DEBUG - ' . $createTmpUser['otp_code'],
                         'identifier' => $createTmpUser['identifier'],
                         'title' => $createTmpUser ? __( 'user.otp_email_success' ) : '',
                         'note' => $createTmpUser ? __( 'user.otp_email_success_note', [ 'title' => $phoneNumber ] ) : '',
@@ -2089,7 +2089,7 @@ class UserService
                 'message' => 'resend_otp_success',
                 'message_key' => 'resend_otp_success',
                 'data' => [
-                    'otp_code' => '#DEBUG - ' . $updateTmpUser['otp_code'],
+                    // 'otp_code' => '#DEBUG - ' . $updateTmpUser['otp_code'],
                     'identifier' => $updateTmpUser['identifier'],
                 ]
             ] );
