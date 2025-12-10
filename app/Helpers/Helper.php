@@ -244,12 +244,14 @@ class Helper {
     public static function requestOtp( $action, $data = [] ) {
 
         $expireOn = Carbon::now()->addMinutes( '10' );
+        $type = 1;
 
         if ( $action == 'register' ) {
 
             $callingCode = $data['calling_code'];
             $phoneNumber = $data['phone_number'];
             $email = $data['email'];
+            $type = 1;
 
             $createOtp = TmpUser::create( [
                 'calling_code' => $data['calling_code'],
@@ -268,6 +270,7 @@ class Helper {
 
             $callingCode = $data['calling_code'];
             $tmpUser = $data['identifier'];
+            $type = 1;
 
             $createOtp = TmpUser::find( $tmpUser );
             $createOtp->otp_code = mt_rand( 100000, 999999 );
@@ -275,6 +278,7 @@ class Helper {
             $createOtp->save();
 
             $phoneNumber = $createOtp->phone_number;
+            $email = $createOtp->email;
 
             $otp = $createOtp->otp_code;
             $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
@@ -285,6 +289,7 @@ class Helper {
             $callingCode = $data['calling_code'];
             $phoneNumber = $data['phone_number'];
             $email = $data['email'];      
+            $type = 2;
 
             // set previous to status 10
             $resetOtps = OtpAction::where( 'user_id', $data['id'] )->where( 'status', 1 )->update(['status' => 10]);
@@ -305,13 +310,14 @@ class Helper {
 
             $callingCode = $data['calling_code'];
             $tmpUser = $data['identifier'];
+            $type = 2;
 
-            $createOtp = OtpAction::find( $tmpUser );
+            $createOtp = OtpAction::with( 'user' )->find( $tmpUser );
             $createOtp->otp_code = mt_rand( 100000, 999999 );
             $createOtp->expire_on = $expireOn;
             $createOtp->save();
 
-            $phoneNumber = $createOtp->phone_number;
+            $email = $createOtp->user->email;      
 
             $otp = $createOtp->otp_code;
             $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
@@ -323,6 +329,7 @@ class Helper {
             $callingCode = $data['calling_code'];
             $phoneNumber = $data['phone_number'];
             $email = $data['email'];      
+            $type = 3;
             
             $createOtp = OtpAction::create( [
                 'user_id' => $data['id'],
@@ -341,6 +348,7 @@ class Helper {
             $callingCode = $currentUser->calling_code;
             $phoneNumber = $currentUser->phone_number;
             $email = $data['email'];      
+            $type = 1;
 
             $createOtp = OtpAction::create( [
                 'user_id' => $currentUser->id,
@@ -360,6 +368,8 @@ class Helper {
             'action' => $action,
             'identifier' => Crypt::encryptString( $createOtp->id ),
             'otp_code' => $createOtp->otp_code,
+            'type' => $type,
+            'email' => $email
         ];
     }
 

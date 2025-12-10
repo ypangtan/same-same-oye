@@ -866,12 +866,15 @@ class UserService
 
         DB::beginTransaction();
 
-        $request->merge( [
-            'phone_number' => ltrim($request->phone_number, '0'),
-        ] );
+        if( !empty( $request->phone_number ) ) {
+            $request->merge( [
+                'phone_number' => ltrim($request->phone_number, '0'),
+            ] );
+        }
 
         $validator = Validator::make( $request->all(), [
-            'phone_number' => [ 'required' , function( $attributes, $value, $fail ) {
+            'calling_code' => [ 'nullable', 'string', 'regex:/^\+\d{1,4}$/' ], // Basic international format
+            'phone_number' => [ 'nullable' , function( $attributes, $value, $fail ) {
 
                 $defaultCallingCode = "+60";
 
@@ -893,10 +896,16 @@ class UserService
                     return 0;
                 }
             } ],
+            'email' => [ $request->request_type == 1 ? 'required' : 'nullable', 'bail', 'exists:users,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
+            'request_type' => [ 'required', 'in:1,2' ],
+            'identifier' => [ $request->request_type == 2 ? 'required' : 'nullable' ],
         ] );
 
         $attributeName = [
             'phone_number' => __( 'user.phone_number' ),
+            'email' => __( 'user.email' ),
+            'request_type' => __( 'user.request_type' ),
+            'calling_code' => __( 'user.calling_code' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -910,37 +919,141 @@ class UserService
             $data['otp_code'] = '';
             $data['identifier'] = '';
 
-            $existingUser = User::where( 'calling_code', request( 'calling_code' ) )
-                ->where( 'phone_number', request( 'phone_number' ) )
-                ->orWhere('phone_number', ltrim(request('phone_number'), '0'))
-                ->first();
+            if( $request->request_type == 1 ) {
 
-            if ( $existingUser ) {
-                $forgotPassword = Helper::requestOtp( 'forgot_password', [
-                    'id' => $existingUser->id,
-                    'email' => $existingUser->email,
-                    'phone_number' => $existingUser->phone_number,
-                    'calling_code' => $existingUser->calling_code,
-                ] );
-                
-                DB::commit();
+                $existingUser = User::when( !empty( $request->phone_number ), function ( $q ) {
+                    $q->where( 'calling_code', request( 'calling_code' ) )
+                        ->where( 'phone_number', request( 'phone_number' ) )
+                        ->orWhere('phone_number', ltrim(request('phone_number'), '0'));
+                } )->when( !empty( $request->email ), function ( $q ) use ( $request ) {
+                        $q->where( 'email', $request->email );
+                    } )
+                    ->first();
 
-                $phoneNumber = $existingUser->calling_code . $existingUser->phone_number;
-                $result = self::sendSMS( false, $phoneNumber, $forgotPassword['otp_code'], '' );
+                if ( $existingUser ) {
+                    $data = Helper::requestOtp( 'forgot_password', [
+                        'id' => $existingUser->id,
+                        'email' => $existingUser->email,
+                        'phone_number' => $existingUser->phone_number,
+                        'calling_code' => $existingUser->calling_code,
+                    ] );
+                    
+                    DB::commit();
 
-                if( $result === 'false' ) {
+                    $phoneNumber = $existingUser->calling_code . $existingUser->phone_number;
+                    // $result = self::sendSMS( false, $phoneNumber, $forgotPassword['otp_code'], '' );
+
+                    // if( $result === 'false' ) {
+                    //     return response()->json([
+                    //         'message' => __('user.send_sms_fail'),
+                    //         'message_key' => 'send_sms_failed',
+                    //         'data' => null,
+                    //     ], 500 );
+                    // }
+                    
+                    $service = new MailService( $data );
+                    $result = $service->send();
+                    if( !$result || !isset( $result['status'] ) || $result['status'] != 200 ) {
+                        return response()->json([
+                            'message' => __('user.send_mail_fail'),
+                            'message_key' => 'send_sms_failed',
+                            'data' => null,
+                        ], 500 );
+                    }
+                    
+                    return response()->json( [
+                        'message' => 'Reset Password Otp Success',
+                        'message_key' => 'request_otp_success',
+                        'data' => [
+                            // 'otp_code' => '#DEBUG - ' . $data['otp_code'],
+                            'identifier' => $data['identifier'],
+                        ]
+                    ] );
+                } else {
                     return response()->json([
-                        'message' => __('user.send_sms_fail'),
+                        'message' => __('user.user_not_found'),
+                        'message_key' => 'get_user_failed',
+                        'data' => null,
+                    ],);
+                }
+            } else { // Resend
+
+                try {
+                    $request->merge( [
+                        'identifier' => Crypt::decryptString( $request->identifier ),
+                    ] );
+                } catch ( \Throwable $th ) {
+                    return response()->json( [
+                        'message' => __( 'validation.header_message' ),
+                        'errors' => [
+                            'identifier' => [ __( 'user.invalid_otp' ) ],
+                            'data' => $th->getMessage(),
+                        ]
+                    ], 422 );
+                }
+        
+                $validator = Validator::make( $request->all(), [
+                    'identifier' => [
+                        'required',
+                        function( $attribute, $value, $fail ) {
+                            $current = TmpUser::find( $value );
+                            
+                            if ( !$current ) {
+                                $fail( __( 'user.invalid_request' ) );
+                                return false;
+                            }
+                        },
+                    ],
+                ] );
+        
+                $attributeName = [
+                    'identifier' => __( 'user.phone_number' ),
+                ];
+        
+                foreach ( $attributeName as $key => $aName ) {
+                    $attributeName[$key] = strtolower( $aName );
+                }
+        
+                $validator->setAttributeNames( $attributeName )->validate();
+        
+                $currentTmp = OtpAction::with( [ 'user' ] )->find( $request->identifier );
+                $email = $currentTmp->user->email;
+        
+                $updateTmpUser = Helper::requestOtp( 'resend_forget_password', [
+                    'identifier' => $currentTmp->id,
+                    'title' => __( 'user.otp_email_success' ),
+                    'note' => __( 'user.otp_email_success_note', [ 'title' => $email ] ),
+                ] );
+        
+                DB::commit();
+                // $result = self::sendSMS( false, $phoneNumber, $updateTmpUser['otp_code'], '' );
+
+                // if( $result === 'false' ) {
+                //     return response()->json([
+                //         'message' => __('user.send_sms_fail'),
+                //         'message_key' => 'send_sms_failed',
+                //         'data' => null,
+                //     ], 500 );
+                // }
+        
+                $service = new MailService( $updateTmpUser );
+                $result = $service->send();
+                if( !$result || !isset( $result['status'] ) || $result['status'] != 200 ) {
+                    return response()->json([
+                        'message' => __('user.send_mail_fail'),
                         'message_key' => 'send_sms_failed',
                         'data' => null,
                     ], 500 );
                 }
-            } else {
-                return response()->json([
-                    'message' => __('user.user_not_found'),
-                    'message_key' => 'get_user_failed',
-                    'data' => null,
-                ],);
+
+                return response()->json( [
+                    'message' => 'resend_otp_success',
+                    'message_key' => 'resend_otp_success',
+                    'data' => [
+                        // 'otp_code' => '#DEBUG - ' . $updateTmpUser['otp_code'],
+                        'identifier' => $updateTmpUser['identifier'],
+                    ]
+                ] );
             }
 
         } catch ( \Throwable $th ) {
@@ -956,6 +1069,81 @@ class UserService
             'message' => 'Reset Password Otp Success',
             'message_key' => 'request_otp_success',
             'data' => $data,
+        ] );
+    }
+
+    public static function verifyOtp( $request ) {
+        DB::beginTransaction();
+
+        try {
+            $request->merge( [
+                'identifier' => Crypt::decryptString( $request->identifier ),
+            ] );
+        } catch ( \Throwable $th ) {
+            return response()->json( [
+                'message' =>  __( 'user.invalid_otp' ),
+            ], 500 );
+        }
+
+        $validator = Validator::make( $request->all(), [
+            'identifier' => [ 'required', function( $attribute, $value, $fail ) use ( $request, &$currentOtpAction ) {
+
+                $currentOtpAction = OtpAction::lockForUpdate()
+                    ->find( $value );
+
+                if ( !$currentOtpAction ) {
+                    $fail( __( 'user.invalid_otp' ) );
+                    return false;
+                }
+
+                if ( $currentOtpAction->status != 1 ) {
+                    $fail( __( 'user.invalid_otp' ) );
+                    return false;
+                }
+
+                if ( Carbon::parse( $currentOtpAction->expire_on )->isPast() ) {
+                    $fail( __( 'user.invalid_otp' ) );
+                    return false;
+                }
+
+                if ( $currentOtpAction->otp_code != $request->otp_code ) {
+                    $fail( __( 'user.invalid_otp' ) );
+                    return false;
+                }
+
+            } ],
+            'otp_code' => [ 'required' ],
+        ] );
+
+        $attributeName = [
+            'otp_code' => __( 'user.otp_code' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        try{
+            $currentOtpAction = OtpAction::lockForUpdate()
+                ->find( $request->identifier );
+            $currentOtpAction->status = 2;
+            $currentOtpAction->save();
+
+            DB::commit();
+            
+        } catch ( \Throwable $th ) {
+
+            DB::rollBack();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine()
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message_key'  => 'verify_otp_successful'
         ] );
     }
 
@@ -1042,20 +1230,20 @@ class UserService
                     return false;
                 }
 
-                if ( $currentOtpAction->status != 1 ) {
+                if ( $currentOtpAction->status != 2 ) {
                     $fail( __( 'user.invalid_otp' ) );
                     return false;
                 }
 
-                if ( Carbon::parse( $currentOtpAction->expire_on )->isPast() ) {
-                    $fail( __( 'user.invalid_otp' ) );
-                    return false;
-                }
+                // if ( Carbon::parse( $currentOtpAction->expire_on )->isPast() ) {
+                //     $fail( __( 'user.invalid_otp' ) );
+                //     return false;
+                // }
 
-                if ( $currentOtpAction->otp_code != $request->otp_code ) {
-                    $fail( __( 'user.invalid_otp' ) );
-                    return false;
-                }
+                // if ( $currentOtpAction->otp_code != $request->otp_code ) {
+                //     $fail( __( 'user.invalid_otp' ) );
+                //     return false;
+                // }
 
             } ],
             'password' => [ 'required', 'confirmed', Password::min( 8 ) ],
@@ -1790,6 +1978,16 @@ class UserService
                 //         'data' => null,
                 //     ], 500 );
                 // }
+
+                $service = new MailService( $createTmpUser );
+                $result = $service->send();
+                if( !$result || !isset( $result['status'] ) || $result['status'] != 200 ) {
+                    return response()->json([
+                        'message' => __('user.send_mail_fail'),
+                        'message_key' => 'send_sms_failed',
+                        'data' => null,
+                    ], 500 );
+                }
                 
                 return response()->json( [
                     'message' => $request->email . ' request otp success',
@@ -1868,15 +2066,26 @@ class UserService
             ] );
     
             DB::commit();
-            $result = self::sendSMS( false, $phoneNumber, $updateTmpUser['otp_code'], '' );
-
-            if( $result === 'false' ) {
+            
+            $service = new MailService( $updateTmpUser );
+            $result = $service->send();
+            if( !$result || !isset( $result['status'] ) || $result['status'] != 200 ) {
                 return response()->json([
-                    'message' => __('user.send_sms_fail'),
+                    'message' => __('user.send_mail_fail'),
                     'message_key' => 'send_sms_failed',
                     'data' => null,
                 ], 500 );
             }
+
+            // $result = self::sendSMS( false, $phoneNumber, $updateTmpUser['otp_code'], '' );
+
+            // if( $result === 'false' ) {
+            //     return response()->json([
+            //         'message' => __('user.send_sms_fail'),
+            //         'message_key' => 'send_sms_failed',
+            //         'data' => null,
+            //     ], 500 );
+            // }
     
             return response()->json( [
                 'message' => 'resend_otp_success',

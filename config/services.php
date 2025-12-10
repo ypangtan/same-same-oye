@@ -73,4 +73,9 @@ return [
         'username' => env( 'SMS_USERNAME' ),
         'password' => env( 'SMS_PASSWORD' ),
     ],
+
+    'brevo' => [
+        'key' => env( 'BREVO_API_KEY' ),
+        'mail' => env( 'BREVO_FROM_MAIL' ),
+    ],
 ];

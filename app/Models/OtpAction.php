@@ -26,6 +26,10 @@ class OtpAction extends Model
         'expire_on',
     ];
 
+    public function user() {
+        return $this->belongsTo( User::class, 'user_id' );
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

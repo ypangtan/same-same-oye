@@ -55,6 +55,8 @@ Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
     Route::post( 'login', [ UserController::class, 'loginUser' ] );
     Route::post( 'login-social', [ UserController::class, 'loginUserSocial' ] );
     Route::post( 'forgot-password', [ UserController::class, 'forgotPasswordOtp' ] );
+    Route::post( 'resend-forgot-password', [ UserController::class, 'resendForgotPasswordOtp' ] );
+    Route::post( 'verify-otp', [ UserController::class, 'verifyOtp' ] );
     Route::post( 'reset-password', [ UserController::class, 'resetPassword' ] );
 } );
 

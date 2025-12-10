@@ -142,33 +142,38 @@ class UserController extends Controller {
      * @group User API
      * 
      * @bodyParam identifier string required The temporary user ID during request OTP. Example: eyJpdiI...
-     * @bodyParam phone_number string required The phone_number for login. Example: 0123982334
      * @bodyParam request_type integer required The request type for OTP. Example: 2
      * 
      */
     public function resendOtp( Request $request ) {
+        $request->merge( [
+            'action' => 'resend'
+        ] );
 
-        if( $request->request_type == 1 ){
-
-            $request->merge( [
-                'action' => 'resend'
-            ] );
-
-            return UserService::requestOtp( $request );
-
-        }else{
-
-            $request->merge( [
-                'action' => 'resend_forget_password'
-            ] );
-
-            return UserService::forgotPasswordOtp( $request );
-        }
+        return UserService::requestOtp( $request );
     }
 
     /**
-     * 6. Get user
-     * @sort 5
+     * 6. Resend Forgot password OTP
+     * @sort 6
+     * 
+     * <strong>request_type</strong><br>
+     * 2: resend <br>
+     * 
+     * @group User API
+     * 
+     * @bodyParam identifier string required The temporary user ID during request OTP. Example: eyJpdiI...
+     * @bodyParam request_type integer required The request type for OTP. Example: 2
+     * 
+     */
+    public function resendForgotPasswordOtp( Request $request ) {
+
+        return UserService::forgotPasswordOtp( $request );
+    }
+
+    /**
+     * 7. Get user
+     * @sort 7
      * 
      * @group User API
      * 
@@ -182,8 +187,8 @@ class UserController extends Controller {
     }
 
     /**
-     * 7. Update user
-     * @sort 6
+     * 8. Update user
+     * @sort 8
      * 
      * 
      * @group User API
@@ -206,8 +211,8 @@ class UserController extends Controller {
     }
 
     /**
-     * 8. Update user password
-     * @sort 7
+     * 9. Update user password
+     * @sort 9
      * 
      * @group User API
      * 
@@ -224,16 +229,15 @@ class UserController extends Controller {
     }
 
     /**
-     * 9. Forgot Password (Request Otp)
-     * @sort 9
+     * 10. Forgot Password (Request Otp)
+     * @sort 10
      * 
      * Request an unique identifier to reset password.
      * 
      * @group User API
      * 
-     * @bodyParam phone_number string required The phone_number for login. Example: 0123982334
-     * @bodyParam calling_code string required The calling_code for register. Example: +60
-     * 
+     * @bodyParam email string The email to update. Example: john@email.com
+     * @bodyParam request_type integer required The request type for OTP. Example: 1
      * 
      */
     public function forgotPasswordOtp( Request $request ) {
@@ -242,11 +246,24 @@ class UserController extends Controller {
     }
 
     /**
-     * 10. Reset Password
-     * @sort 10
+     * 11. verify otp code for forgot password
+     * @sort 11
      * @group User API
      * 
-     * @bodyParam phone_number string required The phone_number for login. Example: 0123982334
+     * @bodyParam identifier string required The unique_identifier from forgot password. Example: WLnvrJw6YYK
+     * @bodyParam otp_code string The otp code to verify password reset. Example: 123456 
+     * 
+     */
+    public function verifyOtp( Request $request ) {
+
+        return UserService::verifyOtp( $request );
+    }
+
+    /**
+     * 12. Reset Password
+     * @sort 12
+     * @group User API
+     * 
      * @bodyParam identifier string required The unique_identifier from forgot password. Example: WLnvrJw6YYK
      * @bodyParam otp_code string The otp code to verify password reset. Example: 123456 
      * @bodyParam password string required The new password to perform password reset. Example: abcd1234
@@ -259,8 +276,8 @@ class UserController extends Controller {
     }
 
     /**
-     * 11. Delete Verification
-     * @sort 511
+     * 13. Delete Verification
+     * @sort 13
      * 
      * @group User API
      * 
@@ -275,8 +292,8 @@ class UserController extends Controller {
     }
 
     /**
-     * 12. Delete Confirm
-     * @sort 511
+     * 14. Delete Confirm
+     * @sort 14
      * 
      * @group User API
      * 
@@ -291,7 +308,7 @@ class UserController extends Controller {
     }
 
      /**
-     * 13. Get notifications
+     * 15. Get notifications
      * 
      * <strong>is_read</strong><br>
      * 0: New<br>
@@ -312,7 +329,7 @@ class UserController extends Controller {
     }
 
     /**
-     * 14. Update notification seen
+     * 16. Update notification seen
      * 
      * @group User API
      * 
@@ -328,7 +345,7 @@ class UserController extends Controller {
     }
 
     /**
-     * 14. Test notification
+     * 17. Test notification
      * 
      * @group User API
      * 
