@@ -1672,7 +1672,7 @@ class UserService
         return response()->json( [ 'data' => $user, 'token' => $user->createToken( 'x_api' )->plainTextToken ] );
     }
 
-    public static function getUser( $request, $filterClientCode ) {
+    public static function getUser() {
 
         $user = User::with( 'referral' )->find( auth()->user()->id );
 
@@ -1682,7 +1682,7 @@ class UserService
                 'updated_at',
             ] );
 
-            $user->append( [ 'referral_code', 'need_birthday_pop_announcement' ] );
+            $user->append( [ 'referral_code' ] );
 
             $user->profile_picture_path = $user->profile_picture_path_new;
             $user->profile_picture = $user->profile_picture_path_new;

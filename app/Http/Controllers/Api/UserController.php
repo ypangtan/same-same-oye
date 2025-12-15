@@ -183,7 +183,7 @@ class UserController extends Controller {
      */ 
     public function getUser( Request $request ) {
         
-        return UserService::getUser( $request, 0 );
+        return UserService::getUser();
     }
 
     /**
