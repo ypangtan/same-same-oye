@@ -1682,7 +1682,7 @@ class UserService
                 'updated_at',
             ] );
 
-            $user->append( ['total_accumulate_spending','current_rank','required_points', 'referral_code', 'need_birthday_pop_announcement' ] );
+            $user->append( [ 'referral_code', 'need_birthday_pop_announcement' ] );
 
             $user->profile_picture_path = $user->profile_picture_path_new;
             $user->profile_picture = $user->profile_picture_path_new;
