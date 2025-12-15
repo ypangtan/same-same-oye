@@ -1687,8 +1687,6 @@ class UserService
             $user->profile_picture_path = $user->profile_picture_path_new;
             $user->profile_picture = $user->profile_picture_path_new;
 
-            $user->points = $user->wallets->first()->balance;
-            unset($user->wallets);
         }
     
         // If user not found, return early with error response
