@@ -90,66 +90,26 @@ $user_create = 'user_create';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_address_1" class="col-sm-5 col-form-label">{{ __( 'customer.address_1' ) }}</label>
-                    <div class="col-sm-7">
-                        <textarea class="form-control" id="{{ $user_create }}_address_1" style="min-height: 80px;" placeholder="{{ __( 'template.optional' ) }}"></textarea>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_address_2" class="col-sm-5 col-form-label">{{ __( 'customer.address_2' ) }}</label>
-                    <div class="col-sm-7">
-                        <textarea class="form-control" id="{{ $user_create }}_address_2" style="min-height: 80px;" placeholder="{{ __( 'template.optional' ) }}"></textarea>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_city" class="col-sm-5 col-form-label">{{ __( 'customer.city' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_city" placeholder="{{ __( 'template.optional' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_state" class="col-sm-5 col-form-label">{{ __( 'customer.state' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-select" id="{{ $user_create }}_state" >
-                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'customer.state' ) ] ) }}</option>
-                            <option value="Johor">Johor</option>
-                            <option value="Kedah">Kedah</option>
-                            <option value="Kelantan">Kelantan</option>
-                            <option value="Malacca">Malacca</option>
-                            <option value="Negeri Sembilan">Negeri Sembilan</option>
-                            <option value="Pahang">Pahang</option>
-                            <option value="Penang">Penang</option>
-                            <option value="Perlis">Perlis</option>
-                            <option value="Sabah">Sabah</option>
-                            <option value="Sarawak">Sarawak</option>
-                            <option value="Selangor">Selangor</option>
-                            <option value="Terengganu">Terengganu</option>
-                            <option value="Kuala Lumpur">Kuala Lumpur</option>
-                            <option value="Labuan">Labuan</option>
-                            <option value="Putrajaya">Putrajaya</option>
-                            <option value="Perak">Perak</option>
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row d-none">
-                    <label for="{{ $user_create }}_postcode" class="col-sm-5 col-form-label">{{ __( 'customer.postcode' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_create }}_postcode" placeholder="{{ __( 'template.optional' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
                 <div class="mb-3 row">
                     <label for="{{ $user_create }}_membership" class="col-sm-5 col-form-label">{{ __( 'user.membership' ) }}</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="{{ $user_create }}_membership">
                         </div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="{{ $user_create }}_nationality" class="col-sm-5 col-form-label">{{ __( 'user.nationality' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $user_create }}_nationality">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="{{ $user_create }}_age_group" class="col-sm-5 col-form-label">{{ __( 'user.age_group' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $user_create }}_age_group">
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="text-end">
@@ -203,6 +163,8 @@ $user_create = 'user_create';
             formData.append( 'calling_code', $( dc + '_calling_code' ).val() );
             formData.append( 'password', $( dc + '_password' ).val() );
             formData.append( 'date_of_birth', $( dc + '_date_of_birth' ).val() );
+            formData.append( 'nationality', $( dc + '_nationality' ).val() );
+            formData.append( 'age_group', $( dc + '_age_group' ).val() );
             formData.append( 'membership', $( dc + '_membership' ).is( ':checked' ) ? 1 : 0 );
             // formData.append( 'account_type', $( dc + '_account_type' ).val() );
             

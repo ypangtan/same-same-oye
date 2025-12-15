@@ -97,6 +97,20 @@ $user_edit = 'user_edit';
                         </div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $user_edit }}_nationality" class="col-sm-5 col-form-label">{{ __( 'user.nationality' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $user_edit }}_nationality">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="{{ $user_edit }}_age_group" class="col-sm-5 col-form-label">{{ __( 'user.age_group' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $user_edit }}_age_group">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $user_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -145,6 +159,8 @@ $user_edit = 'user_edit';
             formData.append( 'phone_number', $( de + '_phone_number' ).val() );
             formData.append( 'password', $( de + '_password' ).val() );
             formData.append( 'date_of_birth', $( de + '_date_of_birth' ).val() );
+            formData.append( 'nationality', $( de + '_nationality' ).val() );
+            formData.append( 'age_group', $( de + '_age_group' ).val() );
             formData.append( 'membership', $( de + '_membership' ).is( ':checked' ) ? 1 : 0 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -203,6 +219,8 @@ $user_edit = 'user_edit';
                     // $( de + '_username' ).val( response.username );
                     $( de + '_calling_code' ).val( response.calling_code );
                     $( de + '_phone_number' ).val( response.phone_number );
+                    $( de + '_nationality' ).val( response.nationality );
+                    $( de + '_age_group' ).val( response.age_group );
                     dateOfBirth.setDate( response.date_of_birth );
                     
                     // if( response.referral != null ){

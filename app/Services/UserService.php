@@ -393,7 +393,7 @@ class UserService
             'last_name' => [ 'nullable' ],
             // 'calling_code' => [ 'nullable' ],
             'membership' => [ 'nullable' ],
-            'nationality' => [ 'nullable', 'exists:countries,id' ],
+            'nationality' => [ 'nullable' ],
             'phone_number' => [ 'nullable', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
 
                 $defaultCallingCode = "+60";
@@ -443,6 +443,7 @@ class UserService
                 'calling_code' => $request->calling_code ? $request->calling_code : null,
                 'password' => Hash::make( $request->password ),
                 'age_group' => $request->age_group,
+                'nationality' => $request->nationality,
                 'membership' => $request->membership,
                 'status' => 10,
                 'invitation_code' => strtoupper( \Str::random( 6 ) ),
@@ -456,14 +457,6 @@ class UserService
             }
 
             $createUser = User::create( $createUserObject );
-
-            // for ( $i = 1; $i <= 2; $i++ ) {
-            //     $userWallet = Wallet::create( [
-            //         'user_id' => $createUser->id,
-            //         'type' => $i,
-            //         'balance' => 0,
-            //     ] );
-            // }
 
             DB::commit();
 
@@ -521,6 +514,8 @@ class UserService
                 }
             } ],
             'password' => [ 'nullable', Password::min( 8 ) ],
+            'nationality' => [ 'nullable' ],
+            'age_group' => [ 'nullable' ],
         ] );
 
         $attributeName = [
@@ -529,6 +524,8 @@ class UserService
             'fullname' => __( 'user.fullname' ),
             'password' => __( 'user.password' ),
             'phone_number' => __( 'user.phone_number' ),
+            'nationality' => __( 'user.nationality' ),
+            'age_group' => __( 'user.age_group' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -555,6 +552,8 @@ class UserService
             $updateUser->postcode = $request->postcode ?? $updateUser->postcode;
             $updateUser->date_of_birth = $request->date_of_birth;
             $updateUser->membership = $request->membership;
+            $updateUser->nationality = $request->nationality;
+            $updateUser->age_group = $request->age_group;
             $updateUser->fullname = $request->fullname;
 
             if ( !empty( $request->password ) ) {
@@ -2096,7 +2095,6 @@ class UserService
         }
     }
     
-
     public static function createEnquiryMail( $request ) {
 
         $validator = Validator::make( $request->all(), [
@@ -2571,5 +2569,5 @@ class UserService
             }
         }
     }
-    
+
 }
