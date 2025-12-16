@@ -326,7 +326,7 @@ class ItemService
 
                     // single playlist
                     $sub->whereHas('playlist', function ($sq) use ($request) {
-                        $sq->where('id', $request->playlist_id);
+                        $sq->where('playlists.id', $request->playlist_id);
                     });
 
                     // OR list playlist
@@ -342,7 +342,7 @@ class ItemService
 
             })
             ->when(!empty($request->category_id), function ($q) use ($request) {
-                $q->where('category_id', $request->category_id);
+                $q->where('items.category_id', $request->category_id);
             })
             ->where('items.status', 10);
 
