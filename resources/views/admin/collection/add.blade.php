@@ -92,17 +92,6 @@ $collection_create = 'collection_create';
     </div>
 </div>
 
-<link rel="stylesheet" href="{{ asset( 'admin/css/ckeditor/styles.css' ) }}">
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor.js' ) }}"></script>
-<script src="{{ asset( 'admin/js/ckeditor/upload-adapter.js' ) }}"></script>
-
-<script>
-window.ckeupload_path = '{{ route( 'admin.collection.ckeUpload' ) }}';
-window.csrf_token = '{{ csrf_token() }}';
-window.cke_element = [ 'collection_create_en_name', 'collection_create_zh_name' ];
-</script>
-<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
-
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
