@@ -345,13 +345,16 @@ class CollectionService
 
         $collections->getCollection()->transform(function ($collection) {
             $collection->append( [
-                'encrypted_id'
+                'name',
+                'image_url',
+                'encrypted_id',
             ] );
 
             if ( $collection->relationLoaded('playlists') && $collection->playlists ) {
                 $collection->playlists->transform(function ($playlist) {
                     $playlist->append( [
                         'encrypted_id',
+                        'name',
                         'image_url',
                     ] );
 
