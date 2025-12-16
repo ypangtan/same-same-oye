@@ -345,7 +345,6 @@ class PlaylistService
 
         $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
-        dd( $playlists );
 
         $playlists->getCollection()->transform(function ($playlist) {
             $playlist->append( [
@@ -355,6 +354,7 @@ class PlaylistService
             ] );
 
             if ($playlist->relationLoaded('item')) {
+                dd( $playlist->item );
                 $playlist->item->transform(function ($item) {
                     $item->append( [
                         'encrypted_id',
