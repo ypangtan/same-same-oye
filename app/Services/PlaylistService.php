@@ -67,7 +67,7 @@ class PlaylistService
             ] );
         }
 
-        $totalRecord = Playlist::where( 'is_item', 0 )->count();
+        $totalRecord = Playlist::where( 'playlists.is_item', 0 )->count();
 
         $data = [
             'playlists' => $playlists,

@@ -67,7 +67,7 @@ class Playlist extends Model
         if( $this->attributes['image'] ) {
             return asset( 'storage/' . $this->attributes['image'] );
         } else {
-            $item = $this->items()->where( 'status', 10 )->orderBy( 'priority', 'desc' )->orderBy( 'created_at', 'desc' )->first();
+            $item = $this->items()->first();
             if( $item && $item->item ) {
                 return $item->item->image_url;
             } else {
