@@ -321,21 +321,27 @@ class PlaylistService
             ] );
         }
 
-        $playlists = Playlist::with( [
-            'item',
-            'items',
-        ] )->select( 'playlists.*' )
-            ->when( !empty( $request->collection_id ), function ( $q ) use ( $request ) {
-                $q->whereHas( 'collection', function( $sq ) use ( $request ) {
-                    $sq->where( 'id', $request->collection_id );
-                } );
-            } )
-            ->when( !empty( $request->category_id ), function ( $q ) use( $request ) {
-                $q->where( 'category_id', $request->category_id );
-            } )
-            ->where( 'status', 10 );
+        $playlists = Playlist::with([
+                'item',
+                'items',
+        ])->select('playlists.*')
+            ->when(!empty($request->collection_id), function ($q) use ($request) {
+                $q->join('playlist_collections as pc', function ($join) use ($request) {
+                    $join->on('pc.playlist_id', '=', 'playlists.id')
+                        ->where('pc.collection_id', $request->collection_id)
+                        ->where('pc.status', 10);
+                });
+            })
+            ->when(!empty($request->category_id), function ($q) use ($request) {
+                $q->where('category_id', $request->category_id);
+            })
+            ->where('playlists.status', 10);
 
-        $playlists->orderBy( 'priority', 'desc' );
+        if (empty($request->collection_id)) {
+            $playlists->orderBy('playlists.created_at', 'desc');
+        } else {
+            $playlists->orderBy('pc.priority', 'asc'); // 或 desc
+        }
 
         $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
@@ -343,6 +349,7 @@ class PlaylistService
             $playlist->append( [
                 'encrypted_id',
                 'image_url',
+                'name',
             ] );
 
             if ($playlist->relationLoaded('item')) {
