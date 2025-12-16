@@ -337,8 +337,7 @@ class ItemService
                 // join pivot 排序
                 $q->join('playlist_items', 'items.id', '=', 'playlist_items.item_id')
                     ->where('playlist_items.playlist_id', $request->playlist_id)
-                    ->orderBy('playlist_items.priority', 'asc')
-                    ->distinct('items.id');
+                    ->orderBy('playlist_items.priority', 'asc');
             })
             ->when(!empty($request->category_id), fn($q) => $q->where('items.category_id', $request->category_id))
             ->where('items.status', 10);
