@@ -354,17 +354,13 @@ class PlaylistService
             ] );
 
             if ( $playlist->relationLoaded('item') && $playlist->item ) {
-                $playlist->item->transform(function ($item) {
-                    $item->append( [
-                        'encrypted_id',
-                        'image_url',
-                    ] );
-                    return $item;
-                });
+                $playlist->item->append( [
+                    'encrypted_id',
+                    'image_url',
+                ] );
             }
 
             if ( $playlist->relationLoaded('items') && $playlist->items ) {
-                dd( $playlist->items );
                 $playlist->items->transform(function ($item) {
                     $item->append( [
                         'encrypted_id',
