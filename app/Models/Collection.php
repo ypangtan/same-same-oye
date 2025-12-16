@@ -57,7 +57,7 @@ class Collection extends Model
         if( $this->attributes['image'] ) {
             return asset( 'storage/' . $this->attributes['image'] );
         } else {
-            $playlist = $this->playLists()->where( 'status', 10 )->orderBy( 'priority', 'desc' )->orderBy( 'created_at', 'desc' )->first();
+            $playlist = $this->playLists()->first();
             if( $playlist ) {
                 return $playlist->image_url;
             } else {
