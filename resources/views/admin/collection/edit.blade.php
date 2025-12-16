@@ -300,7 +300,7 @@ $collection_edit = 'collection_edit';
 
                     let processedResult = [];
 
-                    data.categories.map( function( v, i ) {
+                    data.playlists.map( function( v, i ) {
                         processedResult.push( {
                             id: v.id,
                             text: v.title,
