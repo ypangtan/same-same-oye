@@ -77,9 +77,9 @@ $collection_edit = 'collection_edit';
                         <select class="form-select form-select-md" id="{{ $collection_edit }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'collection.playlists' ) ] ) }}"></select>
                     </div>
 
-                    <div id="selected-playlists" class="w-auto h-auto mb-2 gap-2 my-4"></div>
+                    <div id="selected-playlists" class="w-100 h-auto gap-2 my-4"></div>
 
-                    <input type="hidden" name="tags" id="{{ $collection_edit }}_hide_playlists">
+                    <input type="hidden" name="tags" id="{{ $collection_create }}_hide_playlists">
                 </div>
                 <div class="text-end">
                     <button id="{{ $collection_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
