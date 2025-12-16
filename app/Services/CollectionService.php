@@ -348,24 +348,21 @@ class CollectionService
                 'encrypted_id'
             ] );
 
-            if ($collection->relationLoaded('playlists')) {
+            if ( $collection->relationLoaded('playlists') && $collection->playlists ) {
                 $collection->playlists->transform(function ($playlist) {
                     $playlist->append( [
                         'encrypted_id',
                         'image_url',
                     ] );
 
-                    if ($playlist->relationLoaded('item')) {
-                        $playlist->item->transform(function ($item) {
-                            $item->append( [
-                                'encrypted_id',
-                                'image_url',
-                            ] );
-                            return $item;
-                        });
+                    if ( $playlist->relationLoaded('item') && $playlist->item ) {
+                        $playlist->item->append( [
+                            'encrypted_id',
+                            'image_url',
+                        ] );
                     }
 
-                    if ($playlist->relationLoaded('items')) {
+                    if ( $playlist->relationLoaded('items')  && $playlist->items ) {
                         $playlist->items->transform(function ($item) {
                             $item->append( [
                                 'encrypted_id',
