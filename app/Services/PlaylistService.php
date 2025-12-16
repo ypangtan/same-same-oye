@@ -47,7 +47,7 @@ class PlaylistService
             $dir = $request->input( 'order.0.dir' ) ?? 'DESC';
             switch ( $request->input( 'order.0.column' ) ) {
                 default:
-                    $playlist->orderBy( 'created_at', $dir );
+                    $playlist->orderBy( 'playlists.created_at', $dir );
                     break;
             }
         }
@@ -108,32 +108,32 @@ class PlaylistService
 
         if ( !empty( $request->name ) ) {
             $model->where( function( $q ) use ( $request ) {
-                $q->where( 'en_name', 'LIKE', '%' . $request->name . '%' )
-                    ->orWhere( 'zh_name', 'LIKE', '%' . $request->name . '%' );
+                $q->where( 'playlists.en_name', 'LIKE', '%' . $request->name . '%' )
+                    ->orWhere( 'playlists.zh_name', 'LIKE', '%' . $request->name . '%' );
             } );
             $filter = true;
         }
 
         if ( !empty( $request->admin ) ) {
             $admin = \Helper::decode( $request->admin );
-            $model->where( 'add_by', $admin );
+            $model->where( 'playlists.add_by', $admin );
             $filter = true;
         }
 
         if ( !empty( $request->collection ) ) {
             $collection = \Helper::decode( $request->collection );
-            $model->where( 'collection_id', $collection );
+            $model->where( 'playlists.collection_id', $collection );
             $filter = true;
         }
 
         if ( !empty( $request->category_id ) ) {
             $category_id = \Helper::decode( $request->category_id );
-            $model->where( 'category_id', $category_id );
+            $model->where( 'playlists.category_id', $category_id );
             $filter = true;
         }
 
         if( !empty( $request->status ) ) {
-            $model->where( 'status', $request->status );
+            $model->where( 'playlists.status', $request->status );
             $filter = true;
         }
 
