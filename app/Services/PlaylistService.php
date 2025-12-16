@@ -357,6 +357,7 @@ class PlaylistService
                 $playlist->item->append( [
                     'encrypted_id',
                     'image_url',
+                    'file_url',
                 ] );
             }
 
@@ -365,6 +366,7 @@ class PlaylistService
                     $item->append( [
                         'encrypted_id',
                         'image_url',
+                        'file_url',
                     ] );
                     return $item;
                 });
@@ -387,12 +389,14 @@ class PlaylistService
         $playlist->append( [
             'encrypted_id',
             'image_url',
+            'name',
         ] );
 
         if( $playlist->item ) {
             $playlist->item->append( [
                 'encrypted_id',
                 'image_url',
+                'file_url',
             ] );
         }
 
@@ -401,6 +405,7 @@ class PlaylistService
                 $item->append( [
                     'encrypted_id',
                     'image_url',
+                    'file_url',
                 ] );
             }
         }

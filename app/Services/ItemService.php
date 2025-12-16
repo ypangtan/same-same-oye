@@ -319,8 +319,9 @@ class ItemService
             ] );
         }
 
-        $playlists = Item::select( 'playlists.*' )
+        $playlists = Item::select('items.*')
             ->when(!empty($request->playlist_id), function ($q) use ($request) {
+
                 $q->where(function ($sub) use ($request) {
 
                     // single playlist
@@ -333,43 +334,30 @@ class ItemService
                         $sq->where('id', $request->playlist_id);
                     });
                 });
-            } )
-            ->when( !empty( $request->category_id ), function ( $q ) use ( $request ) {
-                $q->where( 'category_id', $request->category_id );
-            } )
-            ->where( 'status', 10 );
-            
-        $playlists->orderBy( 'priority', 'desc' );
 
+                // join playlist_items pivot table to order by priority
+                $q->join('playlist_items', 'items.id', '=', 'playlist_items.item_id')
+                ->where('playlist_items.playlist_id', $request->playlist_id)
+                ->orderBy('playlist_items.priority', 'asc');
+
+            })
+            ->when(!empty($request->category_id), function ($q) use ($request) {
+                $q->where('category_id', $request->category_id);
+            })
+            ->where('items.status', 10);
+
+        if (empty($request->playlist_id)) {
+            $playlists->orderBy('items.created_at', 'desc');
+        }
+        
         $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
         $playlists->getCollection()->transform(function ($playlist) {
             $playlist->append( [
                 'encrypted_id',
                 'image_url',
+                'file_url',
             ] );
-
-            if ($playlist->relationLoaded('item')) {
-                $playlist->item->transform(function ($item) {
-                    $item->append( [
-                        'encrypted_id',
-                        'image_url',
-                    ] );
-                    return $item;
-                });
-            }
-
-            if ($playlist->relationLoaded('items')) {
-                $playlist->items->transform(function ($item) {
-                    $item->append( [
-                        'encrypted_id',
-                        'image_url',
-                    ] );
-                    return $item;
-                });
-            }
-
-
             return $playlist;
         });
 
@@ -383,6 +371,7 @@ class ItemService
         $item->append( [
             'encrypted_id',
             'image_url',
+            'file_url',
         ] );
   
         return response()->json( $item );

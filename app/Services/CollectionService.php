@@ -362,6 +362,7 @@ class CollectionService
                         $playlist->item->append( [
                             'encrypted_id',
                             'image_url',
+                            'file_url',
                         ] );
                     }
 
@@ -370,6 +371,7 @@ class CollectionService
                             $item->append( [
                                 'encrypted_id',
                                 'image_url',
+                                'file_url',
                             ] );
                             return $item;
                         });
@@ -392,23 +394,33 @@ class CollectionService
             'playlists.items',
         ] )->find( \Helper::decode( $request->id ) );
 
-        $collection->append( [ 'encrypted_id' ] );
+        $collection->append( [
+            'name',
+            'image_url',
+            'encrypted_id',
+        ] );
 
         if ( $collection->playlists ) {
             foreach( $collection->playlists as $playlist ) {
-                $playlist->append( [ 'encrypted_id' ] );
+                $playlist->append( [ 
+                    'encrypted_id',
+                    'name',
+                    'image_url',
+                ] );
 
                 if( $playlist->item ) {
                     $playlist->item->append( [
                         'encrypted_id',
-                        'image_url'
-                    ] );
+                        'image_url',
+                        'file_url',
+                    ] );    
                 }
                 if( $playlist->items ) {
                     foreach ( $playlist->items as $item ) {
                         $item->append( [
                             'encrypted_id',
-                            'image_url'
+                            'image_url',
+                            'file_url',
                         ] );
                     }
                 }

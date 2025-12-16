@@ -55,6 +55,14 @@ class Item extends Model
         }
     }
 
+    public function getFileUrlAttribute() {
+        if( $this->attributes['file'] ) {
+            return asset( 'storage/' . $this->attributes['file'] );
+        } else {
+            return null;
+        }
+    }
+
     public function getSongUrlAttribute() {
         if( $this->attributes['file'] ) {
             return asset( 'storage/' . $this->attributes['file'] );
