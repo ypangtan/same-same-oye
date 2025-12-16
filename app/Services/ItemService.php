@@ -319,37 +319,34 @@ class ItemService
             ] );
         }
 
-        $playlists = Item::select('items.*')
+        $items = Item::select('items.*')
             ->when(!empty($request->playlist_id), function ($q) use ($request) {
-
                 $q->where(function ($sub) use ($request) {
 
-                    // single playlist
+                    // 单个 playlist
                     $sub->whereHas('playlist', function ($sq) use ($request) {
                         $sq->where('playlists.id', $request->playlist_id);
                     });
 
-                    // OR list playlist
+                    // 多对多 playlist
                     $sub->orWhereHas('playlists', function ($sq) use ($request) {
-                        $sq->where('id', $request->playlist_id);
+                        $sq->where('playlists.id', $request->playlist_id);
                     });
                 });
 
-                // join playlist_items pivot table to order by priority
+                // join pivot 排序
                 $q->join('playlist_items', 'items.id', '=', 'playlist_items.item_id')
                     ->where('playlist_items.playlist_id', $request->playlist_id)
-                    ->orderBy('playlist_items.priority', 'asc');
-
+                    ->orderBy('playlist_items.priority', 'asc')
+                    ->distinct('items.id');
             })
-            ->when(!empty($request->category_id), function ($q) use ($request) {
-                $q->where('items.category_id', $request->category_id);
-            })
+            ->when(!empty($request->category_id), fn($q) => $q->where('items.category_id', $request->category_id))
             ->where('items.status', 10);
 
-        if ( empty($request->playlist_id ) ) {
-            $playlists->orderBy('items.created_at', 'desc');
+        if (empty($request->playlist_id)) {
+            $items->orderBy('items.created_at', 'desc');
         }
-        
+                
         $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
         $playlists->getCollection()->transform(function ($playlist) {
