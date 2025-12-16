@@ -345,6 +345,8 @@ class PlaylistService
 
         $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
+        dd( $playlists );
+
         $playlists->getCollection()->transform(function ($playlist) {
             $playlist->append( [
                 'encrypted_id',
