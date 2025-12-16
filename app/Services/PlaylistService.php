@@ -354,7 +354,6 @@ class PlaylistService
             ] );
 
             if ( $playlist->relationLoaded('item') && $playlist->item ) {
-                dd( $playlist->item );
                 $playlist->item->transform(function ($item) {
                     $item->append( [
                         'encrypted_id',
@@ -365,6 +364,7 @@ class PlaylistService
             }
 
             if ( $playlist->relationLoaded('items') && $playlist->items ) {
+                dd( $playlist->items );
                 $playlist->items->transform(function ($item) {
                     $item->append( [
                         'encrypted_id',
