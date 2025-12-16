@@ -303,7 +303,7 @@ $collection_edit = 'collection_edit';
                     data.playlists.map( function( v, i ) {
                         processedResult.push( {
                             id: v.id,
-                            text: v.title,
+                            text: v.name,
                         } );
                     } );
 
