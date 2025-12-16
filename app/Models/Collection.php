@@ -35,7 +35,7 @@ class Collection extends Model
 
     public function playlists() {
         return $this->belongsToMany( Playlist::class, 'collection_playlists', 'collection_id', 'playlist_id' )
-            ->where( 'palylists.status', 10 )
+            ->where( 'playlists.status', 10 )
             ->withPivot( 'priority' )
             ->orderBy( 'collection_playlists.priority' );
     }
