@@ -326,7 +326,7 @@ class PlaylistService
                 'items',
         ])->select('playlists.*')
             ->when(!empty($request->collection_id), function ($q) use ($request) {
-                $q->join('playlist_collections as pc', function ($join) use ($request) {
+                $q->join('collection_playlists as pc', function ($join) use ($request) {
                     $join->on('pc.playlist_id', '=', 'playlists.id')
                         ->where('pc.collection_id', $request->collection_id)
                         ->where('pc.status', 10);
