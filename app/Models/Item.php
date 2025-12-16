@@ -44,7 +44,7 @@ class Item extends Model
     }
 
     public function playlist() {
-        return $this->belongsTo( Playlist::class, 'item_id' );
+        return $this->hasMany( Playlist::class, 'item_id' );
     }
 
     public function getImageUrlAttribute() {

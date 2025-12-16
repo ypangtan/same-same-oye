@@ -337,8 +337,8 @@ class ItemService
 
                 // join playlist_items pivot table to order by priority
                 $q->join('playlist_items', 'items.id', '=', 'playlist_items.item_id')
-                ->where('playlist_items.playlist_id', $request->playlist_id)
-                ->orderBy('playlist_items.priority', 'asc');
+                    ->where('playlist_items.playlist_id', $request->playlist_id)
+                    ->orderBy('playlist_items.priority', 'asc');
 
             })
             ->when(!empty($request->category_id), function ($q) use ($request) {
@@ -346,7 +346,7 @@ class ItemService
             })
             ->where('items.status', 10);
 
-        if (empty($request->playlist_id)) {
+        if ( empty($request->playlist_id ) ) {
             $playlists->orderBy('items.created_at', 'desc');
         }
         
