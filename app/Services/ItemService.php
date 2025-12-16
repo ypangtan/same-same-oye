@@ -347,18 +347,18 @@ class ItemService
             $items->orderBy('items.created_at', 'desc');
         }
                 
-        $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
+        $items = $items->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
-        $playlists->getCollection()->transform(function ($playlist) {
-            $playlist->append( [
+        $items->getCollection()->transform(function ($item) {
+            $item->append( [
                 'encrypted_id',
                 'image_url',
                 'file_url',
             ] );
-            return $playlist;
+            return $item;
         });
 
-        return response()->json( $playlists );
+        return response()->json( $items );
     }
 
     public static function getItem( $request ) {
