@@ -68,6 +68,21 @@ Route::prefix( 'pop_announcements' )->group( function() {
     Route::get( '/', [ AnnouncementController::class, 'getAllPopAnnouncements' ] );
 } );
 
+Route::prefix( 'collections' )->group( function() {
+    Route::post( '/get-all-collections', [ CollectionController::class, 'getCollections' ] );
+    Route::post( '/get-one-collection', [ CollectionController::class, 'getCollection' ] );
+} );
+
+Route::prefix( 'playlists' )->group( function() {
+    Route::post( '/get-all-playlists', [ PlaylistController::class, 'getPlaylists' ] );
+    Route::post( '/get-one-playlist', [ PlaylistController::class, 'getPlaylist' ] );
+} );
+
+Route::prefix( 'items' )->group( function() {
+    Route::post( '/get-all-items', [ ItemController::class, 'getItems' ] );
+    Route::post( '/get-one-item', [ ItemController::class, 'getItem' ] );
+} );
+
 /* End Public route */
 
 /* Start Protected route */
@@ -86,21 +101,6 @@ Route::middleware( 'auth:user' )->group( function() {
 
         Route::post( 'test-notification', [ UserController::class, 'testNotification' ] );
 
-    } );
-
-    Route::prefix( 'collections' )->group( function() {
-        Route::post( '/get-all-collections', [ CollectionController::class, 'getCollections' ] );
-        Route::post( '/get-one-collection', [ CollectionController::class, 'getCollection' ] );
-    } );
-
-    Route::prefix( 'playlists' )->group( function() {
-        Route::post( '/get-all-playlists', [ PlaylistController::class, 'getPlaylists' ] );
-        Route::post( '/get-one-playlist', [ PlaylistController::class, 'getPlaylist' ] );
-    } );
-
-    Route::prefix( 'items' )->group( function() {
-        Route::post( '/get-all-items', [ ItemController::class, 'getItems' ] );
-        Route::post( '/get-one-item', [ ItemController::class, 'getItem' ] );
     } );
 
     Route::prefix( 'banners' )->group( function() {
