@@ -219,7 +219,7 @@ window.cke_element = [ 'item_create_lyrics'];
             }
         } );
 
-        const dropzone2 = new Dropzone(de + '_file', { 
+        const dropzone2 = new Dropzone( dc + '_file', { 
             url: '{{ route("admin.item.songUpload") }}',
             maxFiles: 1,
             acceptedFiles: 'audio/mpeg,audio/mp3',
