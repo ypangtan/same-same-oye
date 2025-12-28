@@ -162,7 +162,7 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
-                className: 'd-none',
+                visible: false,
                 render: function( data, type, row, meta ) {
                     return '-' ;
                 },
