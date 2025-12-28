@@ -212,7 +212,7 @@ $parent_route = $data['parent_route'] ?? null;
                     $( de + '_en_name' ).val( response.en_name ?? '' );
                     $( de + '_zh_name' ).val( response.zh_name ?? '' );
 
-                    imagePath = response.image_url;
+                    imagePath = response.image_path;
                     fileID = response.image;
 
                     if( response.color ) {
