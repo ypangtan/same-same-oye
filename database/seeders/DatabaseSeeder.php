@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call( [
             AdministratorSeeder::class,
             CountrySeeder::class,
-            // CategorySeeder::class,
+            TypeSeeder::class,
             AppVersionSeeder::class,
         ] );
     }
