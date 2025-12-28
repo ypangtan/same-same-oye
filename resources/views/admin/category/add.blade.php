@@ -97,7 +97,7 @@ $parent_route = $data['parent_route'] ?? null;
                 <div class="mb-3 row">
                     <label for="{{ $category_create }}_color" class="col-sm-4 col-form-label">{{ __( 'category.color' ) }}</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="{{ $category_create }}_color" autocomplete="off">
+                        <input type="text" class="form-control col-sm-4" id="{{ $category_create }}_color" autocomplete="off">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
