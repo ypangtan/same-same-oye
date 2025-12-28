@@ -94,7 +94,7 @@ window.cke_element = [ 'item_edit_desc'];
             file2ID = '';
 
         $( de + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.module_parent.item.index' ) }}';
+            window.location.href = '{{ $parent_route }}';
         } );
 
         $( de + '_submit' ).click( function() {
@@ -129,7 +129,7 @@ window.cke_element = [ 'item_edit_desc'];
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.module_parent.item.index' ) }}';
+                        window.location.href = '{{ $parent_route }}';
                     } );
                 },
                 error: function( error ) {
