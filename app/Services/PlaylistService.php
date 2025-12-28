@@ -35,6 +35,7 @@ class PlaylistService
             'items',
             'item',
             'category',
+            'type',
             'administrator',
         ] )->select( 'playlists.*' )
             ->where( 'is_item', 0 );
@@ -148,6 +149,7 @@ class PlaylistService
         $playlist = Playlist::with( [
             'collection',
             'category',
+            'type',
             'item',
             'items',
             'administrator',

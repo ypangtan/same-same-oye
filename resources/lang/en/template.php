@@ -75,6 +75,9 @@ return [
     'items' => 'Items',
     'songs' => 'Songs',
     'category' => 'Category',
+    'musics' => 'Musics',
+    'podcasts' => 'Podcasts',
+    'talks' => 'Talks',
 
     'loading' => 'Loading...',
     'add' => 'Add',

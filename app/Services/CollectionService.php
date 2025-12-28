@@ -31,7 +31,7 @@ class CollectionService
     public static function allCollections( $request ) {
 
         $collection = Collection::with( [
-            'type_id',
+            'type',
             'administrator',
             'playlists',
         ] )->select( 'collections.*' );
