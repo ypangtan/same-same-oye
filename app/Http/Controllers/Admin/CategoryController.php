@@ -17,22 +17,11 @@ class CategoryController extends Controller
 
         $this->data['header']['title'] = __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.categories' ) ) ] );
         $this->data['content'] = 'admin.category.add';
-        $this->data['breadcrumb'] = [
-            [
-                'url' => route( 'admin.dashboard' ),
-                'text' => __( 'template.dashboard' ),
-                'class' => '',
-            ],
-            [
-                'url' => route( 'admin.module_parent.category.index' ),
-                'text' => __( 'template.categories' ),
-                'class' => '',
-            ],
-            [
-                'url' => '',
-                'text' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.categories' ) ) ] ),
-                'class' => 'active',
-            ],
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.categories' ),
+            'title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.categories' ) ) ] ),
+            'mobile_title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.categories' ) ) ] ),
         ];
 
         $this->data['data']['type'] = $request->type ?? null;
@@ -45,22 +34,11 @@ class CategoryController extends Controller
 
         $this->data['header']['title'] = __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.categories' ) ) ] );
         $this->data['content'] = 'admin.category.edit';
-        $this->data['breadcrumb'] = [
-            [
-                'url' => route( 'admin.dashboard' ),
-                'text' => __( 'template.dashboard' ),
-                'class' => '',
-            ],
-            [
-                'url' => route( 'admin.module_parent.category.index' ),
-                'text' => __( 'template.categories' ),
-                'class' => '',
-            ],
-            [
-                'url' => '',
-                'text' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.categories' ) ) ] ),
-                'class' => 'active',
-            ],
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.categories' ),
+            'title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.categories' ) ) ] ),
+            'mobile_title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.categories' ) ) ] ),
         ];
         
         $this->data['data']['type'] = $request->type ?? null;
