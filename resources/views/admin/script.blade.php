@@ -36,6 +36,10 @@
     {{-- lucide --}}
     <script src="{{ asset( 'admin/js/lucide.min.js' ) . Helper::assetVersion() }}"></script>
 
+    {{-- color picker --}}
+    <script src="{{ asset('admin/js/evol-colorpicker.js') . Helper::assetVersion() }}"></script>
+    <script src="{{ asset('admin/js/evol-colorpicker.min.js') . Helper::assetVersion() }}"></script>
+
     <script>
 
         window['core'] = {

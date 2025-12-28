@@ -27,6 +27,10 @@
     {{-- datatable row sortable --}}
     <link href="{{ asset( 'admin/css/rowReorder.datatable.min.css' ) . Helper::assetVersion() }}" rel="stylesheet">
 
+    {{-- color picker --}}
+    <link rel="stylesheet" href="{{ asset( 'admin/css/evol-colorpicker.css' ) . Helper::assetVersion() }}">
+    <link rel="stylesheet" href="{{ asset( 'admin/css/evol-colorpicker.min.css' ) . Helper::assetVersion() }}">
+
 </head>
 
 <style>
