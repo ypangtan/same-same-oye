@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\{
     PlaylistController,
     PointsController,
     RankController,
+    TypeController,
     UserPlaylistController,
 };
 
@@ -67,6 +68,10 @@ Route::prefix( 'app_versions' )->group( function() {
 
 Route::prefix( 'categories' )->group( function() {
     Route::get( '/', [ CategoryController::class, 'getCategories' ] );
+} );
+
+Route::prefix( 'types' )->group( function() {
+    Route::get( '/', [ TypeController::class, 'getTypes' ] );
 } );
 
 Route::prefix( 'pop_announcements' )->group( function() {
