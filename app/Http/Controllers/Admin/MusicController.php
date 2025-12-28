@@ -29,7 +29,7 @@ class MusicController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
         
-        $this->data['data']['types'] = '1';
+        $this->data['data']['type'] = '1';
         $this->data['data']['parent_route'] = route( 'admin.music.item' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -51,7 +51,7 @@ class MusicController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '1';
+        $this->data['data']['type'] = '1';
         $this->data['data']['parent_route'] = route( 'admin.music.playlist' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -73,7 +73,7 @@ class MusicController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '1';
+        $this->data['data']['type'] = '1';
         $this->data['data']['parent_route'] = route( 'admin.music.collection' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -95,7 +95,7 @@ class MusicController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '1';
+        $this->data['data']['type'] = '1';
         $this->data['data']['parent_route'] = route( 'admin.music.category' );
 
         return view( 'admin.main' )->with( $this->data );   

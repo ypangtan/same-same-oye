@@ -29,7 +29,7 @@ class TalkController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
         
-        $this->data['data']['types'] = '3';
+        $this->data['data']['type'] = '3';
         $this->data['data']['parent_route'] = route( 'admin.talk.item' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -51,7 +51,7 @@ class TalkController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '3';
+        $this->data['data']['type'] = '3';
         $this->data['data']['parent_route'] = route( 'admin.talk.playlist' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -73,7 +73,7 @@ class TalkController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '3';
+        $this->data['data']['type'] = '3';
         $this->data['data']['parent_route'] = route( 'admin.talk.collection' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -95,7 +95,7 @@ class TalkController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '3';
+        $this->data['data']['type'] = '3';
         $this->data['data']['parent_route'] = route( 'admin.talk.category' );
 
         return view( 'admin.main' )->with( $this->data );   

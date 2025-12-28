@@ -29,7 +29,7 @@ class PodcastController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
         
-        $this->data['data']['types'] = '2';
+        $this->data['data']['type'] = '2';
         $this->data['data']['parent_route'] = route( 'admin.podcast.item' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -51,7 +51,7 @@ class PodcastController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '2';
+        $this->data['data']['type'] = '2';
         $this->data['data']['parent_route'] = route( 'admin.podcast.playlist' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -73,7 +73,7 @@ class PodcastController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '2';
+        $this->data['data']['type'] = '2';
         $this->data['data']['parent_route'] = route( 'admin.podcast.collection' );
 
         return view( 'admin.main' )->with( $this->data );   
@@ -95,7 +95,7 @@ class PodcastController extends Controller
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $this->data['data']['types'] = '2';
+        $this->data['data']['type'] = '2';
         $this->data['data']['parent_route'] = route( 'admin.podcast.category' );
 
         return view( 'admin.main' )->with( $this->data );   
