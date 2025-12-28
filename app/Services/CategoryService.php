@@ -60,7 +60,11 @@ class CategoryService
             ] );
         }
 
-        $totalRecord = Category::count();
+        if( !empty( $request->type ) ) {
+            $totalRecord = Category::where( 'type_id', $request->type )->count();
+        } else {
+            $totalRecord = Category::count();
+        }
 
         $data = [
             'categories' => $categories,
@@ -109,6 +113,10 @@ class CategoryService
         if( !empty( $request->status ) ) {
             $model->where( 'status', $request->status );
             $filter = true;
+        }
+
+        if( !empty( $request->type ) ) {
+            $model->where( 'type_id', $request->type );
         }
 
         return [

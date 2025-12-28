@@ -57,6 +57,12 @@ $columns = [
     ],
     [
         'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'category.type' ) ] ),
+        'id' => 'type',
+        'title' => __( 'category.type' ),
+    ],
+    [
+        'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'item.author' ) ] ),
         'id' => 'author',
         'title' => __( 'item.author' ),
@@ -105,6 +111,7 @@ var statusMapper = @json( $data['status'] ),
         ajax: {
             url: '{{ route( 'admin.item.allItems' ) }}',
             data: {
+                'type': '{{ $type }}',
                 '_token': '{{ csrf_token() }}',
             },
             dataSrc: 'items',
@@ -117,6 +124,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'created_at' },
             { data: 'image_url' },
             { data: 'title' },
+            { data: null },
             { data: 'author' },
             { data: 'status' },
             { data: 'encrypted_id' },
@@ -146,6 +154,13 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
+                visiable: false,
+                render: function( data, type, row, meta ) {
+                    return '-' ;
                 },
             },
             {
@@ -219,6 +234,9 @@ var statusMapper = @json( $data['status'] ),
     timeout = null;
 
     document.addEventListener( 'DOMContentLoaded', function() {
+
+        $( '#type' ).val( '{{ $type }}' );
+        window['type'] = '{{ $type }}';
 
         $( '#created_date' ).flatpickr( {
             mode: 'range',

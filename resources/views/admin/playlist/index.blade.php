@@ -57,6 +57,12 @@ $columns = [
         'title' => __( 'playlist.title' ),
     ],
     [
+        'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'category.type' ) ] ),
+        'id' => 'type',
+        'title' => __( 'category.type' ),
+    ],
+    [
         'type' => 'select2',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'playlist.category' ) ] ),
         'id' => 'category',
@@ -115,6 +121,7 @@ var statusMapper = @json( $data['status'] ),
         ajax: {
             url: '{{ route( 'admin.playlist.allPlaylists' ) }}',
             data: {
+                'type': '{{ $type }}',
                 '_token': '{{ csrf_token() }}',
             },
             dataSrc: 'playlists',
@@ -127,6 +134,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'created_at' },
             { data: 'image_url' },
             { data: 'name' },
+            { data: null },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -155,6 +163,13 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
+                visiable: false,
+                render: function( data, type, row, meta ) {
+                    return '-' ;
                 },
             },
             {
@@ -251,6 +266,9 @@ var statusMapper = @json( $data['status'] ),
     }
 
     document.addEventListener( 'DOMContentLoaded', function() {
+
+        $( '#type' ).val( '{{ $type }}' );
+        window['type'] = '{{ $type }}';
 
         $( '#created_date' ).flatpickr( {
             mode: 'range',

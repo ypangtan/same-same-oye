@@ -57,6 +57,12 @@ $columns = [
         'title' => __( 'collection.title' ),
     ],
     [
+        'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'category.type' ) ] ),
+        'id' => 'type',
+        'title' => __( 'category.type' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -110,6 +116,7 @@ var statusMapper = @json( $data['status'] ),
         ajax: {
             url: '{{ route( 'admin.collection.allCollections' ) }}',
             data: {
+                'type': '{{ $type }}',
                 '_token': '{{ csrf_token() }}',
             },
             dataSrc: 'collections',
@@ -122,6 +129,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'created_at' },
             { data: 'image_url' },
             { data: 'name' },
+            { data: null },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -150,6 +158,13 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
+                visiable: false,
+                render: function( data, type, row, meta ) {
+                    return '-' ;
                 },
             },
             {
@@ -241,6 +256,9 @@ var statusMapper = @json( $data['status'] ),
     }
 
     document.addEventListener( 'DOMContentLoaded', function() {
+
+        $( '#type' ).val( '{{ $type }}' );
+        window['type'] = '{{ $type }}';
 
         $( '#created_date' ).flatpickr( {
             mode: 'range',

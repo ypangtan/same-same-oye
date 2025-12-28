@@ -64,7 +64,11 @@ class CollectionService
             ] );
         }
 
-        $totalRecord = Collection::count();
+        if( !empty( $request->type ) ) {
+            $totalRecord = Collection::where( 'type_id', $request->type )->count();
+        } else {
+            $totalRecord = Collection::count();
+        }
 
         $data = [
             'collections' => $collections,
@@ -117,15 +121,13 @@ class CollectionService
             $filter = true;
         }
 
-        if ( !empty( $request->type_id ) ) {
-            $type_id = \Helper::decode( $request->type_id );
-            $model->where( 'type_id', $type_id );
-            $filter = true;
-        }
-
         if( !empty( $request->status ) ) {
             $model->where( 'status', $request->status );
             $filter = true;
+        }
+        
+        if( !empty( $request->type ) ) {
+            $model->where( 'type_id', $request->type );
         }
 
         return [

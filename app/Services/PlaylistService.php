@@ -68,7 +68,11 @@ class PlaylistService
             ] );
         }
 
-        $totalRecord = Playlist::where( 'playlists.is_item', 0 )->count();
+        if( !empty( $request->type ) ) {
+            $totalRecord = Playlist::where( 'playlists.is_item', 0 )->where( 'type_id', $request->type )->count();
+        } else {
+            $totalRecord = Playlist::where( 'playlists.is_item', 0 )->count();
+        }
 
         $data = [
             'playlists' => $playlists,
@@ -136,6 +140,10 @@ class PlaylistService
         if( !empty( $request->status ) ) {
             $model->where( 'playlists.status', $request->status );
             $filter = true;
+        }
+        
+        if( !empty( $request->type ) ) {
+            $model->where( 'type_id', $request->type );
         }
 
         return [

@@ -64,7 +64,11 @@ class ItemService
             ] );
         }
 
-        $totalRecord = Item::count();
+        if( !empty( $request->type ) ) {
+            $totalRecord = Item::where( 'type_id', $request->type )->count();
+        } else {
+            $totalRecord = Item::count();
+        }
 
         $data = [
             'items' => $items,
@@ -118,11 +122,9 @@ class ItemService
             $model->where( 'add_by', $admin );
             $filter = true;
         }
-
-        if ( !empty( $request->type ) ) {
-            $type = \Helper::decode( $request->type );
-            $model->where( 'type_id', $type );
-            $filter = true;
+        
+        if( !empty( $request->type ) ) {
+            $model->where( 'type_id', $request->type );
         }
 
         if( !empty( $request->status ) ) {
