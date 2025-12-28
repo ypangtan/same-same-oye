@@ -1,5 +1,7 @@
 <?php
 $collection_create = 'collection_create';
+$type = $data['type'] ?? null;
+$parent_route = $data['parent_route'] ?? route( 'admin.module_parent.collection.index' );
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
@@ -42,24 +44,11 @@ $collection_create = 'collection_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $collection_create }}_category" class="col-sm-5 col-form-label">{{ __( 'collection.category' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $collection_create }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}"></select>
-                    </div>
-                </div>
-                <div class="mb-3 row">
                     <label for="{{ $collection_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'collection.membership' ) }}</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="{{ $collection_create }}_membership_level" checked>
                         </div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $collection_create }}_priority" class="col-sm-5 col-form-label">{{ __( 'collection.priority' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $collection_create }}_priority">
-                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -100,7 +89,7 @@ $collection_create = 'collection_create';
             selectedPlaylists = [];
 
         $( dc + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.module_parent.collection.index' ) }}';
+            window.location.href = '{{ $parent_route }}';
         } );
 
         $( dc + '_submit' ).click( function() {
@@ -112,10 +101,9 @@ $collection_create = 'collection_create';
             } );
 
             let formData = new FormData();
-            formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
+            formData.append( 'type_id', '{{ $type }}' );
             formData.append( 'en_name', $( dc + '_en_name' ).val() ?? '' );
             formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
-            formData.append( 'priority', $( dc + '_priority' ).val() );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID );
             formData.append('playlists', JSON.stringify( selectedPlaylists ) );
@@ -134,7 +122,7 @@ $collection_create = 'collection_create';
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.module_parent.collection.index' ) }}';
+                        window.location.href = '{{ $parent_route }}';
                     } );
                 },
                 error: function( error ) {
@@ -153,51 +141,6 @@ $collection_create = 'collection_create';
             } );
         } );
         
-        $( dc + '_category' ).select2({
-
-            theme: 'bootstrap-5',
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            placeholder: $( this ).data( 'placeholder' ),
-            closeOnSelect: true,
-
-            ajax: { 
-                url: '{{ route( 'admin.category.allCategories' ) }}',
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        name: params.term, // search term
-                        designation: 1,
-                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
-                        length: 10,
-                        _token: '{{ csrf_token() }}',
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-
-                    let processedResult = [];
-
-                    data.categories.map( function( v, i ) {
-                        processedResult.push( {
-                            id: v.id,
-                            text: v.name,
-                        } );
-                    } );
-
-                    return {
-                        results: processedResult,
-                        pagination: {
-                            more: ( params.page * 10 ) < data.recordsFiltered
-                        }
-                    };
-
-                },
-                cache: true
-            },
-        });
-
         let assignPlaylistSelect2 = $( dc + '_playlists' ).select2({
 
             theme: 'bootstrap-5',

@@ -20,9 +20,14 @@ class UserPlaylist extends Model
 
     protected $fillable = [
         'user_id',
+        'type_id',
         'name',
         'status',
     ];
+
+    public function type() {
+        return $this->belongsTo( Type::class, 'type_id' );
+    }
 
     public function items() {
         return $this->belongsToMany( Item::class, 'user_playlist_items', 'user_playlist_id', 'item_id' )
@@ -39,6 +44,7 @@ class UserPlaylist extends Model
 
     protected static $logAttributes = [
         'user_id',
+        'type_id',
         'name',
         'status',
     ];

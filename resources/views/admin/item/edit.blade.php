@@ -1,5 +1,7 @@
 <?php
 $item_edit = 'item_edit';
+$type = $data['type'] ?? null;
+$parent_route = $data['parent_route'] ?? route( 'admin.module_parent.item.index' );
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
@@ -16,12 +18,6 @@ $item_edit = 'item_edit';
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
                 <div class="mb-3 row">
-                    <label for="{{ $item_edit }}_category" class="col-sm-5 col-form-label">{{ __( 'item.category' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $item_edit }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}"></select>
-                    </div>
-                </div>
-                <div class="mb-3 row">
                     <label for="{{ $item_edit }}_title" class="col-sm-5 col-form-label">{{ __( 'item.title' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $item_edit }}_title">
@@ -36,9 +32,9 @@ $item_edit = 'item_edit';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $item_edit }}_lyrics" class="col-sm-5 col-form-label">{{ __( 'item.lyrics' ) }}</label>
+                    <label for="{{ $item_edit }}_desc" class="col-sm-5 col-form-label">{{ __( 'item.desc' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $item_edit }}_lyrics">
+                        <input type="text" class="form-control" id="{{ $item_edit }}_desc">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -85,7 +81,7 @@ $item_edit = 'item_edit';
 <script>
 window.ckeupload_path = '{{ route( 'admin.item.ckeUpload' ) }}';
 window.csrf_token = '{{ csrf_token() }}';
-window.cke_element = [ 'item_edit_lyrics'];
+window.cke_element = [ 'item_edit_desc'];
 </script>
 <script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
 
@@ -111,9 +107,9 @@ window.cke_element = [ 'item_edit_lyrics'];
 
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
-            formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
+            formData.append( 'type_id', '{{ $type }}' );
             formData.append( 'title', $( de + '_title' ).val() ?? '' );
-            formData.append( 'lyrics', editors['item_edit_lyrics'].getData() );
+            formData.append( 'desc', editors['item_edit_desc'].getData() );
             formData.append( 'file', file2ID ?? '' );
             formData.append( 'file_name', song_file ?? '' );
             formData.append( 'image', fileID ?? '' );
@@ -171,7 +167,7 @@ window.cke_element = [ 'item_edit_lyrics'];
                 success: function( response ) {
                     $( de + '_title' ).val( response.title );
                     $( de + '_author' ).val( response.author );
-                    editors['item_edit_lyrics'].setData( response.lyrics ?? '' );
+                    editors['item_edit_desc'].setData( response.desc ?? '' );
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
 
                     imagePath = response.image_url;

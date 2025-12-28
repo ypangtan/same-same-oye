@@ -6,16 +6,16 @@ $parent_route = $data['parent_route'] ?? null;
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.items' ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.categories' ) }}</h3>
         </div><!-- .nk-block-head-content -->
-        @can( 'add items' )
+        @can( 'add categories' )
         <div class="nk-block-head-content">
             <div class="toggle-wrap nk-block-tools-toggle">
                 <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
                 <div class="toggle-expand-content" data-content="pageMenu">
                     <ul class="nk-block-tools g-3">
                         <li class="nk-block-tools-opt">
-                            <a href="{{ route( 'admin.item.add' ) . '?type=' . $type . '&parent_route=' . $parent_route }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
+                            <a href="{{ route( 'admin.category.add' ) . '?type=' . $type . '&parent_route=' . $parent_route }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
                         </li>
                     </ul>
                 </div>
@@ -26,6 +26,7 @@ $parent_route = $data['parent_route'] ?? null;
 </div><!-- .nk-block-head -->
 
 <?php
+$enableReorder = 2;
 
 $columns = [
     [
@@ -45,21 +46,10 @@ $columns = [
         'title' => __( 'datatables.created_date' ),
     ],
     [
-        'type' => 'default',
-        'id' => 'image',
-        'title' => __( 'item.image' ),
-    ],
-    [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'item.title' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'category.title' ) ] ),
         'id' => 'title',
-        'title' => __( 'item.title' ),
-    ],
-    [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'item.author' ) ] ),
-        'id' => 'author',
-        'title' => __( 'item.author' ),
+        'title' => __( 'category.title' ),
     ],
     [
         'type' => 'select',
@@ -73,9 +63,18 @@ $columns = [
         'title' => __( 'datatables.action' ),
     ],
 ];
+
+if ( $enableReorder == 1 ) {
+    array_unshift( $columns,  [
+        'type' => 'default',
+        'id' => 'dt_reorder',
+        'title' => '',
+        'reorder' => 'yes',
+    ] );
+}
 ?>
 
-<x-data-tables id="item_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
+<x-data-tables id="category_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
 
 <script>
 
@@ -89,7 +88,7 @@ window['{{ $column['id'] }}'] = '';
 
 var statusMapper = @json( $data['status'] ),
     dt_table,
-    dt_table_name = '#item_table',
+    dt_table_name = '#category_table',
     dt_table_config = {
         language: {
             'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
@@ -103,11 +102,11 @@ var statusMapper = @json( $data['status'] ),
             }
         },
         ajax: {
-            url: '{{ route( 'admin.item.allItems' ) }}',
+            url: '{{ route( 'admin.category.allCategories' ) }}',
             data: {
                 '_token': '{{ csrf_token() }}',
             },
-            dataSrc: 'items',
+            dataSrc: 'categories',
         },
         lengthMenu: [[10, 25],[10, 25]],
         order: [[ 2, 'desc' ]],
@@ -115,9 +114,7 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: null },
             { data: 'created_at' },
-            { data: 'image_url' },
-            { data: 'title' },
-            { data: 'author' },
+            { data: 'name' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -149,24 +146,10 @@ var statusMapper = @json( $data['status'] ),
                 },
             },
             {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "image" ) }}' ),
-                
-                render: function( data, type, row, meta ) {
-                    return data ? `<image src='${data}'>` : '-' ;
-                },
-            },
-            {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
                 
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "author" ) }}' ),
-                
-                render: function( data, type, row, meta ) {
-                    return data ? data : '-' ;
                 },
             },
             {
@@ -182,14 +165,14 @@ var statusMapper = @json( $data['status'] ),
                 className: 'text-center',
                 render: function( data, type, row, meta ) {
 
-                    @canany( [ 'edit items', 'delete items' ] )
+                    @canany( [ 'edit categories', 'delete categories' ] )
                     let edit, status = '', view = '';
 
-                    @can( 'edit items' )
+                    @can( 'edit categories' )
                     edit = '<li class="dt-edit" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.edit' ) }}</span></a></li>';
                     @endcan
 
-                    @can( 'delete items' )
+                    @can( 'delete categories' )
                     status = row['status'] == 10 ? 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="20"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="10"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
@@ -218,6 +201,29 @@ var statusMapper = @json( $data['status'] ),
     table_no = 0,
     timeout = null;
 
+    if ( parseInt( '{{ $enableReorder }}' ) == 1 ) {
+
+        dt_table_config.rowReorder = {
+            selector: '.dt-reorder',
+            dataSrc: 'id',
+            update: false,
+        };
+
+        dt_table_config.order[0] = [ 3, 'desc' ],
+        dt_table_config.columns.unshift( {
+            data: 'encrypted_id'
+        } );
+        dt_table_config.columnDefs.unshift( {
+            targets: 0,
+            orderable: false,
+            render: function( data, type, row, meta ) {
+                return `<div class="dt-reorder"style="width: 100%" data-id="${data}" />
+                    <i class="align-middle feather" icon-name="move" style="color: #5f5f5f;"></i>
+                </div>`;
+            },
+        } );
+    }
+
     document.addEventListener( 'DOMContentLoaded', function() {
 
         $( '#created_date' ).flatpickr( {
@@ -230,13 +236,13 @@ var statusMapper = @json( $data['status'] ),
         } );
 
         $( document ).on( 'click', '.dt-edit', function() {
-            window.location.href = '{{ route( 'admin.item.edit' ) }}?id=' + $( this ).data( 'id' ) + '&type=' + '{{ $type }}' + '&parent_route=' + '{{ $parent_route }}';
+            window.location.href = '{{ route( 'admin.category.edit' ) }}?id=' + $( this ).data( 'id' ) + '&type=' + '{{ $type }}' + '&parent_route=' + '{{ $parent_route }}';
         } );
 
         $( document ).on( 'click', '.dt-status', function() {
 
             $.ajax( {
-                url: '{{ route( 'admin.item.updateItemStatus' ) }}',
+                url: '{{ route( 'admin.category.updateCategoryStatus' ) }}',
                 type: 'POST',
                 data: {
                     'id': $( this ).data( 'id' ),

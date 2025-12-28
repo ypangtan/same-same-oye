@@ -1,5 +1,7 @@
 <?php
 $collection_edit = 'collection_edit';
+$type = $data['type'] ?? null;
+$parent_route = $data['parent_route'] ?? route( 'admin.module_parent.collection.index' );
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
@@ -42,24 +44,11 @@ $collection_edit = 'collection_edit';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $collection_edit }}_category" class="col-sm-5 col-form-label">{{ __( 'collection.category' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $collection_edit }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}"></select>
-                    </div>
-                </div>
-                <div class="mb-3 row">
                     <label for="{{ $collection_edit }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'collection.membership' ) }}</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="{{ $collection_edit }}_membership_level">
                         </div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $collection_edit }}_priority" class="col-sm-5 col-form-label">{{ __( 'collection.priority' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="number" class="form-control" id="{{ $collection_edit }}_priority">
-                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -99,7 +88,7 @@ $collection_edit = 'collection_edit';
             selectedPlaylists = [];
 
         $( de + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.module_parent.collection.index' ) }}';
+            window.location.href = '{{ $parent_route }}';
         } );
 
         $( de + '_submit' ).click( function() {
@@ -112,10 +101,9 @@ $collection_edit = 'collection_edit';
 
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
-            formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
+            formData.append( 'type_id', '{{ $type }}' );
             formData.append( 'en_name', $( de + '_en_name' ).val() ?? '' );
             formData.append( 'zh_name', $( de + '_zh_name' ).val() ?? '' );
-            formData.append( 'priority', $( de + '_priority' ).val() );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID );
             formData.append('playlists', JSON.stringify( selectedPlaylists ) );
@@ -133,7 +121,7 @@ $collection_edit = 'collection_edit';
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.module_parent.collection.index' ) }}';
+                        window.location.href = '{{ $parent_route }}';
                     } );
                 },
                 error: function( error ) {
@@ -199,12 +187,6 @@ $collection_edit = 'collection_edit';
                         }
                     } );
 
-                    if( response.category != null ){
-                        let option1 = new Option( response.category.name, response.category.id, true, true );
-                        categorySelect2.append( option1 );
-                        categorySelect2.trigger( 'change' );
-                    }
-
                     selectedPlaylists = [];
                     $('#selected-playlists').empty();
                     $.each( response.playlists, function( i, v ) {
@@ -228,51 +210,6 @@ $collection_edit = 'collection_edit';
                 },
             } );
         }
-        
-        categorySelect2 = $( de + '_category' ).select2({
-
-            theme: 'bootstrap-5',
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            placeholder: $( this ).data( 'placeholder' ),
-            closeOnSelect: true,
-
-            ajax: { 
-                url: '{{ route( 'admin.category.allCategories' ) }}',
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        name: params.term, // search term
-                        designation: 1,
-                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
-                        length: 10,
-                        _token: '{{ csrf_token() }}',
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-
-                    let processedResult = [];
-
-                    data.categories.map( function( v, i ) {
-                        processedResult.push( {
-                            id: v.id,
-                            text: v.name,
-                        } );
-                    } );
-
-                    return {
-                        results: processedResult,
-                        pagination: {
-                            more: ( params.page * 10 ) < data.recordsFiltered
-                        }
-                    };
-
-                },
-                cache: true
-            },
-        });
 
         let assignPlaylistSelect2 = $( de + '_playlists' ).select2({
 

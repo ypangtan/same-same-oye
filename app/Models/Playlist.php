@@ -21,6 +21,7 @@ class Playlist extends Model
     protected $fillable = [
         'add_by',
         'category_id',
+        'type_id',
         'en_name',
         'zh_name',
         'image',
@@ -36,7 +37,8 @@ class Playlist extends Model
     }
 
     public function category() {
-        return $this->belongsTo( Category::class, 'category_id' );
+        return $this->belongsToMany( Category::class, 'playlist_categories', 'playlist_id', 'category_id' )
+            ->where( 'categories.status', 10 );
     }
 
     public function collection() {
@@ -87,11 +89,14 @@ class Playlist extends Model
     protected static $logAttributes = [
         'add_by',
         'category_id',
+        'type_id',
         'en_name',
         'zh_name',
         'image',
         'priority',
         'membership_level',
+        'is_item',
+        'item_id',
         'status',
     ];
 

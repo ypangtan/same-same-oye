@@ -67,12 +67,6 @@ class User extends Model
         return $this->hasMany( WalletTransaction::class, 'user_id');
     }
 
-    public function getNeedBirthdayPopAnnouncementAttribute() {
-        $voucher = UserVoucher::where( 'type', 2 )->where( 'user_id', $this->attributes['id'] )->exists();
-
-        return $voucher;
-    }
-
     public function referral() {
         return $this->belongsTo( User::class, 'referral_id' );
     }

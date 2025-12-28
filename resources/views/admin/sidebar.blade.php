@@ -67,31 +67,98 @@
                                     </li>
                                 @endcan
                                 
-                                @canany( [ 'view items', 'view playlists', 'view collections' ] )
-                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\CollectionController' || $controller == 'App\Http\Controllers\Admin\PlaylistController' || $controller == 'App\Http\Controllers\Admin\ItemController' ) ? 'active current-page' : '' }}">
+                                @canany( [ 'view items', 'view playlists', 'view collections', 'view categories' ] )
+                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\MusicController' ) ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
-                                        <span class="nk-menu-text">{{ __( 'template.songs' ) }}</span>
+                                        <span class="nk-menu-text">{{ __( 'template.musics' ) }}</span>
                                     </a>
                                     <ul class="nk-menu-sub">
                                         @can( 'view collections' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\CollectionController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.collection.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.collections' ) }}</span></a>
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'collection' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.music.collection' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.collections' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view playlists' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PlaylistController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.playlist.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.playlists' ) }}</span></a>
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'playlist' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.music.playlist' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.playlists' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view items' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\ItemController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.item.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.songs' ) }}</span></a>
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'item' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.music.item' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.musics' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view categories' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'category' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.music.category' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.categories' ) }}</span></a>
                                         </li>
                                         @endcan
                                     </ul>
                                 </li>
-                                @endcan
+                                @endcanany
+                                
+                                @canany( [ 'view items', 'view playlists', 'view collections', 'view categories' ] )
+                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\PodcastController' ) ? 'active current-page' : '' }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
+                                        <span class="nk-menu-text">{{ __( 'template.podcasts' ) }}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @can( 'view collections' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'collection' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.podcast.collection' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.collections' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view playlists' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'playlist' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.podcast.playlist' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.playlists' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view items' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'item' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.podcast.item' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.podcasts' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view categories' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'category' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.podcast.category' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.categories' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                                @endcanany
+                                
+                                @canany( [ 'view items', 'view playlists', 'view collections', 'view categories' ] )
+                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\TalkController' ) ? 'active current-page' : '' }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
+                                        <span class="nk-menu-text">{{ __( 'template.talks' ) }}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @can( 'view collections' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'collection' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.talk.collection' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.collections' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view playlists' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'playlist' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.talk.playlist' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.playlists' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view items' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'item' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.talk.item' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.talks' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view categories' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'category' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.talk.category' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.categories' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                                @endcanany
                                 
                                 @canany( [ 'view marketing_notifications', 'view pop_announcements' ] )
                                 <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\MarketingNotificationController' || $controller == 'App\Http\Controllers\Admin\PopAnnouncementController') ? 'active current-page' : '' }}">

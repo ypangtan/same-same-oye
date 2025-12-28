@@ -31,7 +31,7 @@ class CollectionService
     public static function allCollections( $request ) {
 
         $collection = Collection::with( [
-            'category',
+            'type_id',
             'administrator',
             'playlists',
         ] )->select( 'collections.*' );
@@ -117,9 +117,9 @@ class CollectionService
             $filter = true;
         }
 
-        if ( !empty( $request->category_id ) ) {
-            $category_id = \Helper::decode( $request->category_id );
-            $model->where( 'category_id', $category_id );
+        if ( !empty( $request->type_id ) ) {
+            $type_id = \Helper::decode( $request->type_id );
+            $model->where( 'type_id', $type_id );
             $filter = true;
         }
 
@@ -137,7 +137,7 @@ class CollectionService
     public static function oneCollection( $request ) {
 
         $collection = Collection::with( [
-            'category',
+            'type',
             'administrator',
             'playlists',
         ] )->find( Helper::decode( $request->id ) );
@@ -161,7 +161,7 @@ class CollectionService
     public static function createCollection( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'category_id' => [ 'required', 'exists:categories,id' ],
+            'type_id' => [ 'required', 'exists:types,id' ],
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
@@ -170,7 +170,7 @@ class CollectionService
         ] );
 
         $attributeName = [
-            'category_id' => __( 'collection.category' ),
+            'type_id' => __( 'collection.type' ),
             'en_name' => __( 'collection.name' ),
             'zh_name' => __( 'collection.name' ),
             'image' => __( 'collection.image' ),
@@ -190,11 +190,12 @@ class CollectionService
 
             $createCollection = Collection::create( [
                 'add_by' => auth()->user()->id,
-                'category_id' => $request->category_id,
+                'type_id' => $request->type_id,
                 'en_name' => $request->en_name,
                 'zh_name' => $request->zh_name,
                 'image' => $request->image,
                 'membership_level' => $request->membership_level,
+                'priority' => Collection::max( 'priority' ) + 1,
                 'status' => 10,
             ] );
 
@@ -229,17 +230,16 @@ class CollectionService
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'category_id' => [ 'required', 'exists:categories,id' ],
+            'type_id' => [ 'required', 'exists:types,id' ],
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
-            'priority' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'playlists' => [ 'nullable' ],
         ] );
 
         $attributeName = [
-            'category_id' => __( 'collection.category' ),
+            'type_id' => __( 'collection.type' ),
             'en_name' => __( 'collection.name' ),
             'zh_name' => __( 'collection.name' ),
             'image' => __( 'collection.image' ),
@@ -259,7 +259,7 @@ class CollectionService
         try {
 
             $updateCollection = Collection::find( $request->id );
-            $updateCollection->category_id = $request->category_id;
+            $updateCollection->type_id = $request->type_id;
             $updateCollection->en_name = $request->en_name;
             $updateCollection->zh_name = $request->zh_name;
             $updateCollection->image = $request->image;
@@ -324,9 +324,9 @@ class CollectionService
 
     public static function getCollections( $request ) {
         
-        if ( !empty( $request->category_id ) ) {
+        if ( !empty( $request->type_id ) ) {
             $request->merge( [
-                'category_id' => \Helper::decode( $request->category_id )
+                'type_id' => \Helper::decode( $request->type_id )
             ] );
         }
 
@@ -335,8 +335,8 @@ class CollectionService
             'playlists.item',
             'playlists.items',
         ] )->select( 'collections.*' )
-            ->when( !empty( $request->category_id ), function ( $q ) use ( $request ) {
-                $q->where( 'category_id', $request->category_id );
+            ->when( !empty( $request->type_id ), function ( $q ) use ( $request ) {
+                $q->where( 'type_id', $request->type_id );
             } )
             ->where( 'status', 10 );
         $collections->orderBy( 'priority', 'desc' );

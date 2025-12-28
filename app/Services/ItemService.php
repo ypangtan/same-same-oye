@@ -32,7 +32,7 @@ class ItemService
     public static function allItems( $request ) {
 
         $item = Item::with( [
-            'category',
+            'type',
             'administrator',
             'playLists',
         ] )->select( 'items.*' );
@@ -119,9 +119,9 @@ class ItemService
             $filter = true;
         }
 
-        if ( !empty( $request->category ) ) {
-            $category = \Helper::decode( $request->category );
-            $model->where( 'category_id', $category );
+        if ( !empty( $request->type ) ) {
+            $type = \Helper::decode( $request->type );
+            $model->where( 'type_id', $type );
             $filter = true;
         }
 
@@ -139,7 +139,7 @@ class ItemService
     public static function oneItem( $request ) {
 
         $item = Item::with( [
-            'category',
+            'type',
             'administrator',
         ] )->find( Helper::decode( $request->id ) );
 
@@ -148,8 +148,8 @@ class ItemService
             'song_url',
         ] );
 
-        if( $item->category ) {
-            $item->category->append( 'name' );
+        if( $item->type ) {
+            $item->type->append( 'name' );
         }
 
         return response()->json( $item );
@@ -158,7 +158,8 @@ class ItemService
     public static function createItem( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'category_id' => [ 'required', 'exists:categories,id' ],
+            'type_id' => [ 'required', 'exists:types,id' ],
+            // 'category_id' => [ 'required' ],
             'title' => [ 'required' ],
             'lyrics' => [ 'nullable' ],
             'file' => [ 'nullable' ],
@@ -168,7 +169,8 @@ class ItemService
         ] );
 
         $attributeName = [
-            'category_id' => __( 'item.category' ),
+            'type_id' => __( 'item.type' ),
+            // 'category_id' => __( 'item.category' ),
             'title' => __( 'item.title' ),
             'lyrics' => __( 'item.lyrics' ),
             'file' => __( 'item.file' ),
@@ -189,7 +191,7 @@ class ItemService
 
             $createItem = Item::create( [
                 'add_by' => auth()->user()->id,
-                'category_id' => $request->category_id,
+                'type_id' => $request->type_id,
                 'title' => $request->title,
                 'lyrics' => $request->lyrics,
                 'file' => $request->file,
@@ -200,16 +202,7 @@ class ItemService
                 'status' => 10,
             ] );
 
-            $createPlaylist = Playlist::create( [
-                'add_by' => auth()->user()->id,
-                'category_id' => $request->category_id,
-                'en_name' => null,
-                'zh_name' => null,
-                'image' => null,
-                'membership_level' => $request->membership_level,
-                'is_item' => 1,
-                'item_id' => $createItem->id,
-            ] );
+            // $createItem->categories()->attach( $request->category_id );
     
             DB::commit();
 
@@ -234,7 +227,8 @@ class ItemService
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'category_id' => [ 'required', 'exists:categories,id' ],
+            'type_id' => [ 'required', 'exists:types,id' ],
+            // 'category_id' => [ 'required' ],
             'title' => [ 'required' ],
             'lyrics' => [ 'nullable' ],
             'file' => [ 'nullable' ],
@@ -244,6 +238,7 @@ class ItemService
         ] );
 
         $attributeName = [
+            'type_id' => __( 'item.type' ),
             'category_id' => __( 'item.category' ),
             'title' => __( 'item.title' ),
             'lyrics' => __( 'item.lyrics' ),
@@ -265,7 +260,7 @@ class ItemService
 
             $updateItem = Item::find( $request->id );
             $updateItem->file_name = $request->file_name;
-            $updateItem->category_id = $request->category_id;
+            $updateItem->type_id = $request->type_id;
             $updateItem->title = $request->title;
             $updateItem->lyrics = $request->lyrics;
             $updateItem->file = $request->file;
@@ -313,49 +308,47 @@ class ItemService
             ] );
         }
 
-        if ( !empty( $request->category_id ) ) {
+        if ( !empty( $request->type_id ) ) {
             $request->merge( [
-                'category_id' => \Helper::decode( $request->category_id )
+                'type_id' => \Helper::decode( $request->type_id )
             ] );
         }
 
-        $items = Item::select('items.*')
-            ->when(!empty($request->playlist_id), function ($q) use ($request) {
-                $q->where(function ($sub) use ($request) {
-
-                    // 单个 playlist
-                    $sub->whereHas('playlist', function ($sq) use ($request) {
-                        $sq->where('playlists.id', $request->playlist_id);
-                    });
-
-                    // 多对多 playlist
-                    $sub->orWhereHas('playlists', function ($sq) use ($request) {
-                        $sq->where('playlists.id', $request->playlist_id);
-                    });
-                });
+        $items = Item::select( 'items.*' )
+            ->when( !empty( $request->playlist_id ), function ( $q ) use ( $request ) {
+                $q->whereHas( 'playlists', function ( $sub ) use ( $request ) {
+                    $sub->where( 'playlists.id', $request->playlist_id );
+                } );
 
                 // join pivot 排序
-                $q->join('playlist_items', 'items.id', '=', 'playlist_items.item_id')
-                    ->where('playlist_items.playlist_id', $request->playlist_id)
-                    ->orderBy('playlist_items.priority', 'asc');
-            })
-            ->when(!empty($request->category_id), fn($q) => $q->where('items.category_id', $request->category_id))
-            ->where('items.status', 10);
+                $q->join( 'playlist_items', 'items.id', '=', 'playlist_items.item_id' )
+                    ->where( 'playlist_items.playlist_id', $request->playlist_id )
+                    ->orderBy( 'playlist_items.priority', 'asc' );
+            } )
+            ->when( !empty( $request->type_id ), function( $q ) use ( $request ) {
+                $q->where( 'items.type_id', $request->type_id );
+            } )
+            ->where( 'items.status', 10 );
 
-        if (empty($request->playlist_id)) {
-            $items->orderBy('items.created_at', 'desc');
+        if ( empty( $request->playlist_id ) ) {
+            $items->orderBy( 'items.created_at', 'desc' );
+        }
+
+        if( auth()->user()->membership == 0 ) {
+            // for membership level filter
+            $items->where( 'items.membership_level', 0 );
         }
                 
         $items = $items->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
-        $items->getCollection()->transform(function ($item) {
+        $items->getCollection()->transform( function ( $item ) {
             $item->append( [
                 'encrypted_id',
                 'image_url',
                 'file_url',
             ] );
             return $item;
-        });
+        } );
 
         return response()->json( $items );
     }

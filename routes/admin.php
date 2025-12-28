@@ -35,11 +35,14 @@ use App\Http\Controllers\Admin\{
     ProductController,
     SalesRecordController,
     MarketingNotificationController,
+    MusicController,
     MusicRequestController,
     OtpLogController,
     PlaylistController,
+    PodcastController,
     PopAnnouncementController,
     RankController,
+    TalkController,
 };
 
 use App\Models\{
@@ -240,14 +243,11 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             } );
 
             Route::prefix( 'items' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view items' ] ], function() {
-                    Route::get( '/', [ ItemController::class, 'index' ] )->name( 'admin.module_parent.item.index' );
-                } );
                 Route::group( [ 'middleware' => [ 'permission:add items' ] ], function() {
-                    Route::get( 'add', [ ItemController::class, 'add' ] )->name( 'admin.item.add' );
+                    Route::get( 'add', [ ItemController::class, 'add' ] )->name( 'admin.module_parent.item.add' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:edit items' ] ], function() {
-                    Route::get( 'edit/{id?}', [ ItemController::class, 'edit' ] )->name( 'admin.item.edit' );
+                    Route::get( 'edit', [ ItemController::class, 'edit' ] )->name( 'admin.item.edit' );
                 } );
 
                 Route::post( 'all-items', [ ItemController::class, 'allItems' ] )->name( 'admin.item.allItems' );
@@ -261,14 +261,11 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             } );
 
             Route::prefix( 'playlists' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view playlists' ] ], function() {
-                    Route::get( '/', [ PlaylistController::class, 'index' ] )->name( 'admin.module_parent.playlist.index' );
-                } );
                 Route::group( [ 'middleware' => [ 'permission:add playlists' ] ], function() {
-                    Route::get( 'add', [ PlaylistController::class, 'add' ] )->name( 'admin.playlist.add' );
+                    Route::get( 'add', [ PlaylistController::class, 'add' ] )->name( 'admin.module_parent.playlist.add' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:edit playlists' ] ], function() {
-                    Route::get( 'edit/{id?}', [ PlaylistController::class, 'edit' ] )->name( 'admin.playlist.edit' );
+                    Route::get( 'edit', [ PlaylistController::class, 'edit' ] )->name( 'admin.playlist.edit' );
                 } );
 
                 Route::post( 'all-playlists', [ PlaylistController::class, 'allPlaylists' ] )->name( 'admin.playlist.allPlaylists' );
@@ -281,14 +278,11 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             } );
 
             Route::prefix( 'collections' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view collections' ] ], function() {
-                    Route::get( '/', [ CollectionController::class, 'index' ] )->name( 'admin.module_parent.collection.index' );
-                } );
                 Route::group( [ 'middleware' => [ 'permission:add collections' ] ], function() {
-                    Route::get( 'add', [ CollectionController::class, 'add' ] )->name( 'admin.collection.add' );
+                    Route::get( 'add', [ CollectionController::class, 'add' ] )->name( 'admin.module_parent.collection.add' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:edit collections' ] ], function() {
-                    Route::get( 'edit/{id?}', [ CollectionController::class, 'edit' ] )->name( 'admin.collection.edit' );
+                    Route::get( 'edit', [ CollectionController::class, 'edit' ] )->name( 'admin.collection.edit' );
                 } );
 
                 Route::post( 'all-collections', [ CollectionController::class, 'allCollections' ] )->name( 'admin.collection.allCollections' );
@@ -301,8 +295,66 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-order', [ CollectionController::class, 'updateOrder' ] )->name( 'admin.collection.updateOrder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
             } );
 
+            Route::prefix( 'music' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view items' ] ], function() {
+                    Route::get( 'item', [ MusicController::class, 'item' ] )->name( 'admin.music.item' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add playlists' ] ], function() {
+                    Route::get( 'playlist', [ MusicController::class, 'playlist' ] )->name( 'admin.music.playlist' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit collections' ] ], function() {
+                    Route::get( 'collection', [ MusicController::class, 'collection' ] )->name( 'admin.music.collection' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit categories' ] ], function() {
+                    Route::get( 'category', [ MusicController::class, 'category' ] )->name( 'admin.music.category' );
+                } );
+            } );
+
+            Route::prefix( 'podcast' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view items' ] ], function() {
+                    Route::get( 'item', [ PodcastController::class, 'item' ] )->name( 'admin.podcast.item' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add playlists' ] ], function() {
+                    Route::get( 'playlist', [ PodcastController::class, 'playlist' ] )->name( 'admin.podcast.playlist' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit collections' ] ], function() {
+                    Route::get( 'collection', [ PodcastController::class, 'collection' ] )->name( 'admin.podcast.collection' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit categories' ] ], function() {
+                    Route::get( 'category', [ PodcastController::class, 'category' ] )->name( 'admin.podcast.category' );
+                } );
+            } );
+
+            Route::prefix( 'talk' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view items' ] ], function() {
+                    Route::get( 'item', [ TalkController::class, 'item' ] )->name( 'admin.talk.item' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add playlists' ] ], function() {
+                    Route::get( 'playlist', [ TalkController::class, 'playlist' ] )->name( 'admin.talk.playlist' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit collections' ] ], function() {
+                    Route::get( 'collection', [ TalkController::class, 'collection' ] )->name( 'admin.talk.collection' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit categories' ] ], function() {
+                    Route::get( 'category', [ TalkController::class, 'category' ] )->name( 'admin.talk.category' );
+                } );
+            } );
+
             Route::prefix( 'categories' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:add categories' ] ], function() {
+                    Route::get( 'add', [ CategoryController::class, 'add' ] )->name( 'admin.module_parent.category.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit categories' ] ], function() {
+                    Route::get( 'edit', [ CategoryController::class, 'edit' ] )->name( 'admin.category.edit' );
+                } );
+    
                 Route::post( 'all-categories', [ CategoryController::class, 'allCategories' ] )->name( 'admin.category.allCategories' );
+                Route::post( 'one-category', [ CategoryController::class, 'oneCategory' ] )->name( 'admin.category.oneCategory' );
+                Route::post( 'create-category', [ CategoryController::class, 'createCategory' ] )->name( 'admin.category.createCategory' );
+                Route::post( 'update-category', [ CategoryController::class, 'updateCategory' ] )->name( 'admin.category.updateCategory' );
+                Route::post( 'update-category-status', [ CategoryController::class, 'updateCategoryStatus' ] )->name( 'admin.category.updateCategoryStatus' );
+                Route::post( 'image-upload', [ CategoryController::class, 'imageUpload' ] )->name( 'admin.category.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+            
             } );
 
             Route::prefix( 'music_request' )->group( function() {

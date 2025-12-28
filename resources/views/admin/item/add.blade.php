@@ -1,5 +1,7 @@
 <?php
 $item_create = 'item_create';
+$type = $data['type'] ?? null;
+$parent_route = $data['parent_route'] ?? route( 'admin.module_parent.item.index' );
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
@@ -16,12 +18,6 @@ $item_create = 'item_create';
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
                 <div class="mb-3 row">
-                    <label for="{{ $item_create }}_category" class="col-sm-5 col-form-label">{{ __( 'item.category' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $item_create }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}"></select>
-                    </div>
-                </div>
-                <div class="mb-3 row">
                     <label for="{{ $item_create }}_title" class="col-sm-5 col-form-label">{{ __( 'item.title' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $item_create }}_title">
@@ -36,9 +32,9 @@ $item_create = 'item_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $item_create }}_lyrics" class="col-sm-5 col-form-label">{{ __( 'item.lyrics' ) }}</label>
+                    <label for="{{ $item_create }}_desc" class="col-sm-5 col-form-label">{{ __( 'item.desc' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $item_create }}_lyrics">
+                        <input type="text" class="form-control" id="{{ $item_create }}_desc">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -85,7 +81,7 @@ $item_create = 'item_create';
 <script>
 window.ckeupload_path = '{{ route( 'admin.item.ckeUpload' ) }}';
 window.csrf_token = '{{ csrf_token() }}';
-window.cke_element = [ 'item_create_lyrics'];
+window.cke_element = [ 'item_create_desc'];
 </script>
 <script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
 
@@ -111,9 +107,9 @@ window.cke_element = [ 'item_create_lyrics'];
             } );
 
             let formData = new FormData();
-            formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
+            formData.append( 'type_id', '{{ $type }}' );
             formData.append( 'title', $( dc + '_title' ).val() ?? '' );
-            formData.append( 'lyrics', editors['item_create_lyrics'].getData() );
+            formData.append( 'desc', editors['item_create_desc'].getData() );
             formData.append( 'file', file2ID );
             formData.append( 'file_name', song_file );
             formData.append( 'image', fileID );
@@ -267,7 +263,6 @@ window.cke_element = [ 'item_create_lyrics'];
                 });
             }
         });
-
 
     } );
 </script>

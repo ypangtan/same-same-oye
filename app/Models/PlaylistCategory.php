@@ -14,40 +14,15 @@ use Helper;
 
 use Carbon\Carbon;
 
-class Category extends Model
+class PlaylistCategory extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'en_name',
-        'zh_name',
-        'type_id',
-        'image',
-        'color',
+        'playlist_id',
+        'category_id',
         'status',
     ];
-
-    protected $appends = [
-        'name',
-        'image_path',
-    ];
-
-    public function getNameAttribute() {
-        $locale = app()->getLocale();
-        if( $locale == 'zh' ) {
-            return $this->attributes['zh_name'] ?? $this->attributes['en_name'];
-        } else {
-            return $this->attributes['en_name'];
-        }
-    }
-
-    public function getImageUrlAttribute() {
-        if( $this->attributes['image'] ) {
-            return asset( 'storage/' . $this->attributes['image'] );
-        } else {
-            return null;
-        }
-    }
 
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
@@ -58,15 +33,12 @@ class Category extends Model
     }
 
     protected static $logAttributes = [
-        'en_name',
-        'zh_name',
-        'type_id',
-        'image',
-        'color',
+        'playlist_id',
+        'category_id',
         'status',
     ];
 
-    protected static $logName = 'categories';
+    protected static $logName = 'playlist_categories';
 
     protected static $logOnlyDirty = true;
 

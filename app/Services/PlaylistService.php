@@ -165,7 +165,7 @@ class PlaylistService
     public static function createPlaylist( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'category_id' => [ 'required', 'exists:categories,id' ],
+            'type_id' => [ 'required', 'exists:types,id' ],
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
@@ -174,7 +174,7 @@ class PlaylistService
         ] );
 
         $attributeName = [
-            'category_id' => __( 'playlist.category' ),
+            'type_id' => __( 'playlist.type' ),
             'en_name' => __( 'playlist.name' ),
             'zh_name' => __( 'playlist.name' ),
             'image' => __( 'playlist.image' ),
@@ -194,7 +194,7 @@ class PlaylistService
 
             $createPlaylist = Playlist::create( [
                 'add_by' => auth()->user()->id,
-                'category_id' => $request->category_id,
+                'type_id' => $request->type_id,
                 'en_name' => $request->en_name,
                 'zh_name' => $request->zh_name,
                 'image' => $request->image,
@@ -233,7 +233,7 @@ class PlaylistService
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'category_id' => [ 'required', 'exists:categories,id' ],
+            'type_id' => [ 'required', 'exists:types,id' ],
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
@@ -242,7 +242,7 @@ class PlaylistService
         ] );
 
         $attributeName = [
-            'category_id' => __( 'playlist.category' ),
+            'type_id' => __( 'playlist.type' ),
             'en_name' => __( 'playlist.name' ),
             'zh_name' => __( 'playlist.name' ),
             'image' => __( 'playlist.image' ),
@@ -261,7 +261,7 @@ class PlaylistService
         try {
 
             $updatePlaylist = Playlist::find( $request->id );
-            $updatePlaylist->category_id = $request->category_id;
+            $updatePlaylist->type_id = $request->type_id;
             $updatePlaylist->en_name = $request->en_name;
             $updatePlaylist->zh_name = $request->zh_name;
             $updatePlaylist->image = $request->image;
@@ -315,9 +315,9 @@ class PlaylistService
             ] );
         }
 
-        if ( !empty( $request->category_id ) ) {
+        if ( !empty( $request->type_id ) ) {
             $request->merge( [
-                'category_id' => \Helper::decode( $request->category_id )
+                'type_id' => \Helper::decode( $request->type_id )
             ] );
         }
 
@@ -332,10 +332,15 @@ class PlaylistService
                         ->where('pc.status', 10);
                 });
             })
-            ->when(!empty($request->category_id), function ($q) use ($request) {
-                $q->where('category_id', $request->category_id);
+            ->when(!empty($request->type_id), function ($q) use ($request) {
+                $q->where('playlists.type_id', $request->type_id);
             })
             ->where('playlists.status', 10);
+
+        if( auth()->user()->membership == 0 ) {
+            // for membership level filter
+            $playlists->where( 'playlists.membership_level', 0 );
+        }
 
         if (empty($request->collection_id)) {
             $playlists->orderBy('playlists.created_at', 'desc');

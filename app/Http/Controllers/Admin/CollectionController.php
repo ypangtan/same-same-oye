@@ -13,24 +13,6 @@ use App\Services\{
 
 class CollectionController extends Controller
 {
-    public function index() {
-
-        $this->data['header']['title'] = __( 'template.collections' );
-        $this->data['content'] = 'admin.collection.index';
-        $this->data['breadcrumbs'] = [
-            'enabled' => true,
-            'main_title' => __( 'template.collections' ),
-            'title' => __( 'template.list' ),
-            'mobile_title' => __( 'template.collections' ),
-        ];
-        
-        $this->data['data']['status'] = [
-            '10' => __( 'datatables.activated' ),
-            '20' => __( 'datatables.suspended' ),
-        ];
-
-        return view( 'admin.main' )->with( $this->data );   
-    }
 
     public function add() {
 
@@ -42,6 +24,8 @@ class CollectionController extends Controller
             'title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.collections' ) ) ] ),
             'mobile_title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.collections' ) ) ] ),
         ];
+        $this->data['data']['type'] = $request->type ?? null;
+        $this->data['data']['parent_route'] = $request->parent_route ?? null;
 
         return view( 'admin.main' )->with( $this->data );  
     }
@@ -56,6 +40,8 @@ class CollectionController extends Controller
             'title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.collections' ) ) ] ),
             'mobile_title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.collections' ) ) ] ),
         ];
+        $this->data['data']['type'] = $request->type ?? null;
+        $this->data['data']['parent_route'] = $request->parent_route ?? null;
 
         return view( 'admin.main' )->with( $this->data );  
     }

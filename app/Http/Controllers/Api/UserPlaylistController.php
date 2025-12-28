@@ -30,7 +30,7 @@ class UserPlaylistController extends Controller {
      * @group UserPlaylist API
      * 
      * @bodyParam per_page string The total record per page. Example: 10
-     * 
+     * @bodyParam type string The id of type for user playlist. Example: 1
      */
     public function getUserPlaylists( Request $request ) {
 
@@ -64,6 +64,7 @@ class UserPlaylistController extends Controller {
      * @group UserPlaylist API
      * 
      * @bodyParam name string The name of user playlist. Example: abc
+     * @bodyParam type string The id of type for user playlist. Example: 1
      * 
      */
     public function createUserPlayList( Request $request ) {
@@ -82,6 +83,7 @@ class UserPlaylistController extends Controller {
      * 
      * @bodyParam id string The encrypted_id pf user playlist. Example: 10
      * @bodyParam name string The name of user playlist. Example: abc
+     * @bodyParam type string The id of type for user playlist. Example: 1
      * 
      */
     public function updateUserPlayList( Request $request ) {
@@ -140,6 +142,23 @@ class UserPlaylistController extends Controller {
     public function removeSongToUserPlayList( Request $request ) {
 
         return UserPlaylistService::removeSongToUserPlayList( $request );
+    }
+
+    /**
+     * 8. Copy Playlist To User PlayList
+     * 
+     * @sort 8
+     * 
+     * @authenticated
+     * 
+     * @group UserPlaylist API
+     * 
+     * @bodyParam playlist_id string The encrypted_id of playlist. Example: 10
+     * 
+     */
+    public function addPlaylistToUserPlayList( Request $request ) {
+
+        return UserPlaylistService::addPlaylistToUserPlayList( $request );
     }
 
 }

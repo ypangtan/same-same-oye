@@ -1,13 +1,54 @@
 <?php
-$playlist_edit = 'playlist_edit';
+$category_edit = 'category_edit';
 $type = $data['type'] ?? null;
-$parent_route = $data['parent_route'] ?? route( 'admin.module_parent.playlist.index' );
+$parent_route = $data['parent_route'] ?? null;
 ?>
+<style>
+    .evo-pop {
+        background: #fff !important;
+        border: 1px solid #ddd !important;
+        border-radius: 6px !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+        padding: 8px !important;
+        width: auto !important;
+        z-index: 9999 !important;
+    }
+
+    .evo-pop-overlay {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.25);
+        z-index: 9998;
+    }
+
+    .evo-cp-wrap{
+        width: auto !important;
+        display: flex;
+        height: auto;
+        align-items: center;
+        gap: 4px;
+        position: relative;
+    }
+
+    .evo-pointer, .evo-colorind{
+        position: absolute;
+        left: 100%;
+        margin-left: 4px;
+    }
+
+    .evo-pop{
+        top: 100%;
+        height: auto;
+    }
+</style>
+<div class="evo-pop-overlay d-none"></div>
 
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.edit_x', [ 'title' => Str::singular( __( 'template.playlists' ) ) ] ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.edit_x', [ 'title' => Str::singular( __( 'template.categorys' ) ) ] ) }}</h3>
         </div><!-- .nk-block-head-content -->
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
@@ -26,60 +67,43 @@ $parent_route = $data['parent_route'] ?? route( 'admin.module_parent.playlist.in
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade pt-4 show active" id="en_name" role="tabpanel" aria-labelledby="en_name-tab">
                         <div class="mb-3 row">
-                            <label for="{{ $playlist_edit }}_en_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} </label>
+                            <label for="{{ $category_edit }}_en_name" class="col-sm-4 col-form-label">{{ __( 'category.name' ) }} </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="{{ $playlist_edit }}_en_name">
+                                <input type="text" class="form-control" id="{{ $category_edit }}_en_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade pt-4" id="zh_name" role="tabpanel" aria-labelledby="zh_name-tab">
                         <div class="mb-3 row">
-                            <label for="{{ $playlist_edit }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'playlist.name' ) }} ( 中文 )</label>
+                            <label for="{{ $category_edit }}_zh_name" class="col-sm-4 col-form-label">{{ __( 'category.name' ) }} ( 中文 )</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="{{ $playlist_edit }}_zh_name">
+                                <input type="text" class="form-control" id="{{ $category_edit }}_zh_name">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="mb-3 row">
-                    <label for="{{ $playlist_edit }}_category" class="col-sm-5 col-form-label">{{ __( 'playlist.category' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $playlist_edit }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}" multiple></select>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $playlist_edit }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'playlist.membership' ) }}</label>
-                    <div class="col-sm-7">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $playlist_edit }}_membership_level">
-                        </div>
-                    </div>
-                </div>
                 <div class="mb-3">
-                    <label>{{ __( 'playlist.image' ) }}</label>
-                    <div class="dropzone mb-3" id="{{ $playlist_edit }}_image" style="min-height: 0px;">
+                    <label>{{ __( 'category.image' ) }}</label>
+                    <div class="dropzone mb-3" id="{{ $category_edit }}_image" style="min-height: 0px;">
                         <div class="dz-message needsclick">
                             <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
                         </div>
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class="row mb-3 w-100">
-                    <div>
-                        <label for="{{ $playlist_edit }}_items" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'playlist.items' ) }}</label>
-                        <select class="form-select form-select-md" id="{{ $playlist_edit }}_items" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.items' ) ] ) }}">></select>
+                <div class="mb-3">
+                    <label for="{{ $tag_add }}_color" class="col-sm-4 col-form-label">{{ __( 'tag.color' ) }}</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="{{ $tag_add }}_color" autocomplete="off">
+                        <div class="invalid-feedback"></div>
                     </div>
-
-                    <div id="selected-items" class="w-100 h-auto gap-2 my-4"></div>
-
-                    <input type="hidden" name="tags" id="{{ $playlist_edit }}_hide_items">
                 </div>
                 <div class="text-end">
-                    <button id="{{ $playlist_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
+                    <button id="{{ $category_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
-                    <button id="{{ $playlist_edit }}_submit" type="button" class="btn btn-primary">{{ __( 'template.save_changes' ) }}</button>
+                    <button id="{{ $category_edit }}_submit" type="button" class="btn btn-primary">{{ __( 'template.save_changes' ) }}</button>
                 </div>
             </div>
         </div>
@@ -89,9 +113,32 @@ $parent_route = $data['parent_route'] ?? route( 'admin.module_parent.playlist.in
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        let de = '#{{ $playlist_edit }}',
-            fileID = '',
-            selectedItems = [];
+        let de = '#{{ $category_edit }}',
+            fileID = '';
+
+        const $cp = $( ue + '_color' ).colorpicker({
+            appendTo: 'body',
+            hideButton: false
+        });
+
+        $cp.on('click', function () {
+            $cp.colorpicker('showPalette');
+            $('.evo-pop-overlay').removeClass('d-none');
+        });
+
+        $( '.evo-colorind' ).click( function () {
+            $cp.colorpicker('showPalette');
+            $('.evo-pop-overlay').removeClass('d-none');
+        } );
+
+        $cp.on('change', function (ev, color) {
+            $('.evo-pop-overlay').addClass('d-none');
+        });
+
+        $('.evo-pop-overlay').on('click', function () {
+            $cp.colorpicker('hidePalette');
+            $(this).addClass('d-none');
+        });
 
         $( de + '_cancel' ).click( function() {
             window.location.href = '{{ $parent_route }}';
@@ -108,16 +155,14 @@ $parent_route = $data['parent_route'] ?? route( 'admin.module_parent.playlist.in
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
             formData.append( 'type_id', '{{ $type }}' );
-            formData.append( 'category_id', $( de + '_category' ).val() ?? '' );
             formData.append( 'en_name', $( de + '_en_name' ).val() ?? '' );
-            formData.append( 'zh_name', $( de + '_zh_name' ).val() ?? '' );
-            formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
+            // formData.append( 'zh_name', $( de + '_zh_name' ).val() ?? '' );
+            formData.append( 'color', $( de + '_color').val() );
             formData.append( 'image', fileID );
-            formData.append('items', JSON.stringify( selectedItems ) );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
-                url: '{{ route( 'admin.playlist.updatePlaylist' ) }}',
+                url: '{{ route( 'admin.category.updateCategory' ) }}',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -148,31 +193,31 @@ $parent_route = $data['parent_route'] ?? route( 'admin.module_parent.playlist.in
         } );
 
         Dropzone.autoDiscover = false;
-        getPlaylist();
+        getCategory();
 
-        function getPlaylist() {
+        function getCategory() {
 
             $( 'body' ).loading( {
                 message: '{{ __( 'template.loading' ) }}'
             } );
 
             $.ajax( {
-                url: '{{ route( 'admin.playlist.onePlaylist' ) }}',
+                url: '{{ route( 'admin.category.oneCategory' ) }}',
                 type: 'POST',
                 data: {
                     'id': '{{ request( 'id' ) }}',
                     '_token': '{{ csrf_token() }}'
                 },
                 success: function( response ) {
-                    $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
                     $( de + '_en_name' ).val( response.en_name ?? '' );
                     $( de + '_zh_name' ).val( response.zh_name ?? '' );
 
                     imagePath = response.image_url;
                     fileID = response.image;
+                    $cp.colorpicker( 'val', response.color ).trigger( 'change' );
 
                     const dropzone = new Dropzone( de + '_image', { 
-                        url: '{{ route( 'admin.playlist.imageUpload' ) }}',
+                        url: '{{ route( 'admin.category.imageUpload' ) }}',
                         maxFiles: 1,
                         acceptedFiles: 'image/jpg,image/jpeg,image/png',
                         addRemoveLinks: true,
@@ -196,31 +241,6 @@ $parent_route = $data['parent_route'] ?? route( 'admin.module_parent.playlist.in
                         },
                         success: function( file, response ) {
                             fileID = response.file;
-                        }
-                    } );
-
-                    if( response.category != null ){
-                        let option1 = new Option( response.category.name, response.category.id, true, true );
-                        categorySelect2.append( option1 );
-                        categorySelect2.trigger( 'change' );
-                    }
-
-                    selectedItems = [];
-                    $('#selected-items').empty();
-                    
-                    $.each( response.items, function( i, v ) {
-                        data = v;
-                        if ( !selectedItems.some( item => item.id === data.id ) ) {
-                            selectedItems.push( {id: data.id, text: data.name} );
-                            
-                            $('#selected-items').append(`
-                                <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
-                                    ${data.title}
-                                    <em class="icon ni ni-cross remove-item click-action"></em>
-                                    </span>
-                            `);
-
-                            updateHiddenInput();
                         }
                     } );
 

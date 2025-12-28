@@ -46,6 +46,14 @@ class Helper {
         return '?v=1.06';
     }
 
+    public static function displayType() {
+        return [
+            '1' => __( 'item.display_type_1' ),
+            '2' => __( 'item.display_type_2' ),
+            '3' => __( 'item.display_type_3' ),
+        ];
+    }
+
     public static function wallets() {
         return [
             '1' => __( 'wallet.wallet_1' ),

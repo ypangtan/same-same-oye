@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\{
 
 use App\Services\{
     AnnouncementService,
+    CategoryService,
     PlaylistService,
     PopAnnouncementService,
     VoucherService
@@ -20,32 +21,19 @@ use App\Models\{
     Announcement
 };
 
-class PlaylistController extends Controller
+class CategoryController extends Controller
 {
     /**
-     * 1. Get all Playlists 
+     * 1. Get all Categories 
      * 
-     * @group Playlist API
+     * @group Category API
      * 
      * @bodyParam per_page string The total record per page. Example: 10
      * @bodyParam type_id string The encrypted_id of the type. Example: 1
-     * @bodyParam collection_id string The encrypted_id of the collection. Example: 1
      * 
      */
-    public function getPlaylists( Request $request ) {
+    public function getCategories( Request $request ) {
 
-        return PlaylistService::getPlaylists( $request );
+        return CategoryService::getCategories( $request );
     }
-
-    /**
-     * 2. Get one Playlist 
-     * 
-     * @group Playlist API
-     * 
-     */
-    public function getPlaylist( Request $request ) {
-
-        return PlaylistService::getPlaylist( $request );
-    }
-
 }

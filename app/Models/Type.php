@@ -14,40 +14,13 @@ use Helper;
 
 use Carbon\Carbon;
 
-class Category extends Model
+class Type extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'en_name',
-        'zh_name',
-        'type_id',
-        'image',
-        'color',
-        'status',
+
     ];
-
-    protected $appends = [
-        'name',
-        'image_path',
-    ];
-
-    public function getNameAttribute() {
-        $locale = app()->getLocale();
-        if( $locale == 'zh' ) {
-            return $this->attributes['zh_name'] ?? $this->attributes['en_name'];
-        } else {
-            return $this->attributes['en_name'];
-        }
-    }
-
-    public function getImageUrlAttribute() {
-        if( $this->attributes['image'] ) {
-            return asset( 'storage/' . $this->attributes['image'] );
-        } else {
-            return null;
-        }
-    }
 
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
@@ -58,15 +31,10 @@ class Category extends Model
     }
 
     protected static $logAttributes = [
-        'en_name',
-        'zh_name',
-        'type_id',
-        'image',
-        'color',
-        'status',
+
     ];
 
-    protected static $logName = 'categories';
+    protected static $logName = 'Type';
 
     protected static $logOnlyDirty = true;
 

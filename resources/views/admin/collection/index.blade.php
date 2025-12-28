@@ -1,3 +1,8 @@
+<?php
+$type = $data['type'] ?? null;
+$parent_route = $data['parent_route'] ?? null;
+?>
+
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
@@ -10,7 +15,7 @@
                 <div class="toggle-expand-content" data-content="pageMenu">
                     <ul class="nk-block-tools g-3">
                         <li class="nk-block-tools-opt">
-                            <a href="{{ route( 'admin.collection.add' ) }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
+                            <a href="{{ route( 'admin.collection.add' ) . '?type=' . $type . '&parent_route=' . $parent_route }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
                         </li>
                     </ul>
                 </div>
@@ -50,12 +55,6 @@ $columns = [
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'collection.title' ) ] ),
         'id' => 'title',
         'title' => __( 'collection.title' ),
-    ],
-    [
-        'type' => 'select2',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'collection.category' ) ] ),
-        'id' => 'category',
-        'title' => __( 'collection.category' ),
     ],
     [
         'type' => 'select',
@@ -123,7 +122,6 @@ var statusMapper = @json( $data['status'] ),
             { data: 'created_at' },
             { data: 'image_url' },
             { data: 'name' },
-            { data: 'category' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -166,13 +164,6 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "category" ) }}' ),
-                
-                render: function( data, type, row, meta ) {
-                    return data?.name ?? '-' ;
                 },
             },
             {
@@ -261,7 +252,7 @@ var statusMapper = @json( $data['status'] ),
         } );
 
         $( document ).on( 'click', '.dt-edit', function() {
-            window.location.href = '{{ route( 'admin.collection.edit' ) }}?id=' + $( this ).data( 'id' );
+            window.location.href = '{{ route( 'admin.collection.edit' ) }}?id=' + $( this ).data( 'id' ) + '&type=' + '{{ $type }}' + '&parent_route=' + '{{ $parent_route }}';
         } );
 
         $( document ).on( 'click', '.dt-status', function() {
@@ -281,51 +272,6 @@ var statusMapper = @json( $data['status'] ),
                 },
             } );
         } );
-
-        $( 'category' ).select2({
-
-            theme: 'bootstrap-5',
-            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            placeholder: $( this ).data( 'placeholder' ),
-            closeOnSelect: true,
-
-            ajax: { 
-                url: '{{ route( 'admin.category.allCategories' ) }}',
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        item: params.term, // search term
-                        designation: 1,
-                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
-                        length: 10,
-                        _token: '{{ csrf_token() }}',
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-
-                    let processedResult = [];
-
-                    data.categories.map( function( v, i ) {
-                        processedResult.push( {
-                            id: v.id,
-                            text: v.name,
-                        } );
-                    } );
-
-                    return {
-                        results: processedResult,
-                        pagination: {
-                            more: ( params.page * 10 ) < data.recordsFiltered
-                        }
-                    };
-
-                },
-                cache: true
-            },
-        });
     } );
 </script>
 

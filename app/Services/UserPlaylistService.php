@@ -35,6 +35,10 @@ class UserPlaylistService
             'items',
         ] )->select( 'user_playlists.*' );
 
+        if( !empty( $request->type ) ) {
+            $playlists->where( 'user_playlists.type', $request->type );
+        }
+
         $playlists->orderBy( 'created_at', 'desc' );
 
         $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
@@ -281,6 +285,56 @@ class UserPlaylistService
 
             $playlist  = UserPlaylist::find( $request->user_playlist_id );
             $playlist ->items()->detach( $request->song_id );
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.user_playlists' ) ) ] ),
+        ] );
+    }
+
+    public static function addPlaylistToUserPlayList( $request ) {
+
+        $request->merge( [
+            'playlist_id' => \Helper::decode( $request->playlist_id )
+        ] );
+
+        $validator = Validator::make( $request->all(), [
+            'playlist_id' => [ 'required', 'exists:playlists,id' ],
+        ] );
+
+        $attributeName = [
+            'playlist_id' => __( 'playlist.playlist' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+        
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            $playlist = Playlist::with( 'items' )->find( $request->playlist_id );
+
+            $userPlaylist = UserPlaylist::create( [
+                'user_id' => auth()->user()->id,
+                'name' => $playlist->name,
+                'type_id' => $playlist->type_id,
+                'status' => 10,
+            ] );
+            $userPlaylist->items()->attach( $playlist->items->pluck( 'id' )->toArray() );
 
             DB::commit();
 

@@ -13,24 +13,6 @@ use App\Services\{
 
 class ItemController extends Controller
 {
-    public function index() {
-
-        $this->data['header']['title'] = __( 'template.items' );
-        $this->data['content'] = 'admin.item.index';
-        $this->data['breadcrumbs'] = [
-            'enabled' => true,
-            'main_title' => __( 'template.items' ),
-            'title' => __( 'template.list' ),
-            'mobile_title' => __( 'template.items' ),
-        ];
-        
-        $this->data['data']['status'] = [
-            '10' => __( 'datatables.activated' ),
-            '20' => __( 'datatables.suspended' ),
-        ];
-
-        return view( 'admin.main' )->with( $this->data );   
-    }
 
     public function add() {
 
@@ -42,6 +24,9 @@ class ItemController extends Controller
             'title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.items' ) ) ] ),
             'mobile_title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.items' ) ) ] ),
         ];
+
+        $this->data['data']['type'] = $request->type ?? null;
+        $this->data['data']['parent_route'] = $request->parent_route ?? null;
 
         return view( 'admin.main' )->with( $this->data );  
     }
@@ -56,6 +41,9 @@ class ItemController extends Controller
             'title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.items' ) ) ] ),
             'mobile_title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.items' ) ) ] ),
         ];
+
+        $this->data['data']['type'] = $request->type ?? null;
+        $this->data['data']['parent_route'] = $request->parent_route ?? null;
 
         return view( 'admin.main' )->with( $this->data );  
     }

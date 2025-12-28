@@ -1,3 +1,8 @@
+<?php
+$type = $data['type'] ?? null;
+$parent_route = $data['parent_route'] ?? null;
+?>
+
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
@@ -10,7 +15,7 @@
                 <div class="toggle-expand-content" data-content="pageMenu">
                     <ul class="nk-block-tools g-3">
                         <li class="nk-block-tools-opt">
-                            <a href="{{ route( 'admin.playlist.add' ) }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
+                            <a href="{{ route( 'admin.playlist.add' ) . '?type=' . $type . '&parent_route=' . $parent_route }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
                         </li>
                     </ul>
                 </div>
@@ -122,7 +127,6 @@ var statusMapper = @json( $data['status'] ),
             { data: 'created_at' },
             { data: 'image_url' },
             { data: 'name' },
-            { data: 'category' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -258,7 +262,7 @@ var statusMapper = @json( $data['status'] ),
         } );
 
         $( document ).on( 'click', '.dt-edit', function() {
-            window.location.href = '{{ route( 'admin.playlist.edit' ) }}?id=' + $( this ).data( 'id' );
+            window.location.href = '{{ route( 'admin.playlist.edit' ) }}?id=' + $( this ).data( 'id' ) + '&type=' + '{{ $type }}' + '&parent_route=' + '{{ $parent_route }}';
         } );
 
         $( document ).on( 'click', '.dt-status', function() {

@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\{
     BannerController,
     AnnouncementController,
     AppVersionController,
+    CategoryController,
     CollectionController,
     ItemController,
     LuckyDrawRewardController,
@@ -62,6 +63,10 @@ Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
 
 Route::prefix( 'app_versions' )->group( function() {
     Route::get( '/', [ AppVersionController::class, 'lastestAppVersion' ] );
+} );
+
+Route::prefix( 'categories' )->group( function() {
+    Route::get( '/', [ CategoryController::class, 'getCategories' ] );
 } );
 
 Route::prefix( 'pop_announcements' )->group( function() {

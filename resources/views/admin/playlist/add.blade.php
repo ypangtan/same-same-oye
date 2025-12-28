@@ -1,5 +1,7 @@
 <?php
 $playlist_create = 'playlist_create';
+$type = $data['type'] ?? null;
+$parent_route = $data['parent_route'] ?? null;
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
@@ -44,7 +46,7 @@ $playlist_create = 'playlist_create';
                 <div class="mb-3 row">
                     <label for="{{ $playlist_create }}_category" class="col-sm-5 col-form-label">{{ __( 'playlist.category' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $playlist_create }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}"></select>
+                        <select class="form-control select2" id="{{ $playlist_create }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}" multiple></select>
                     </div>
                 </div>
                 <div class="mb-3 row">
@@ -92,7 +94,7 @@ $playlist_create = 'playlist_create';
             selectedItems = [];
 
         $( dc + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.module_parent.playlist.index' ) }}';
+            window.location.href = '{{ $parent_route }}';
         } );
 
         $( dc + '_submit' ).click( function() {
@@ -104,6 +106,7 @@ $playlist_create = 'playlist_create';
             } );
 
             let formData = new FormData();
+            formData.append( 'type_id', '{{ $type }}' );
             formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
             formData.append( 'en_name', $( dc + '_en_name' ).val() ?? '' );
             formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
@@ -125,7 +128,7 @@ $playlist_create = 'playlist_create';
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.module_parent.playlist.index' ) }}';
+                        window.location.href = '{{ $parent_route }}';
                     } );
                 },
                 error: function( error ) {
@@ -149,7 +152,8 @@ $playlist_create = 'playlist_create';
             theme: 'bootstrap-5',
             width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
             placeholder: $( this ).data( 'placeholder' ),
-            closeOnSelect: true,
+            closeOnSelect: false,
+            multiple: true,
 
             ajax: { 
                 url: '{{ route( 'admin.category.allCategories' ) }}',
