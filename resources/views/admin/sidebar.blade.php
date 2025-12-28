@@ -66,6 +66,7 @@
                                         </a>
                                     </li>
                                 @endcan
+                                {{ dd( $data ) }}
                                 @canany( [ 'view items', 'view playlists', 'view collections', 'view categories' ] )
                                 <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\MusicController' || 
                                     ( isset( $data, $data['type'] ) && $data['type'] == '1' )
