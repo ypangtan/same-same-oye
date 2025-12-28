@@ -220,6 +220,8 @@ class PlaylistService
 
             $createPlaylist->items()->sync( $syncData );
 
+            $createPlaylist->category()->sync( $request->category );
+
             DB::commit();
 
         } catch ( \Throwable $th ) {
@@ -285,6 +287,7 @@ class PlaylistService
             }
 
             $updatePlaylist->items()->sync( $syncData );
+            $updatePlaylist->category()->sync( $request->category );
 
             DB::commit();
 
