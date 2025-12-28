@@ -226,6 +226,7 @@ $parent_route = $data['parent_route'] ?? '';
                 data: function (params) {
                     return {
                         title: params.term, // search term
+                        type: '{{ $type }}',
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,

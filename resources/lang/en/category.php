@@ -13,15 +13,6 @@ return [
     |
     */
 
-    'image' => 'Thumbnail',
     'title' => 'Title',
-    'name' => 'Title',
-    'category' => 'Category',
-    'membership_level' => 'Membership Level',
-    'lyrics' => 'Lyrics',
-    'author' => 'Author',
-    'song' => 'Song',
-    'membership' => 'Membership',
-    'desc' => 'Description',
 
 ];

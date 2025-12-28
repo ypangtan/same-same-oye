@@ -63,12 +63,6 @@ $columns = [
         'title' => __( 'category.type' ),
     ],
     [
-        'type' => 'select2',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'playlist.category' ) ] ),
-        'id' => 'category',
-        'title' => __( 'playlist.category' ),
-    ],
-    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -184,13 +178,6 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "category" ) }}' ),
-                
-                render: function( data, type, row, meta ) {
-                    return data?.name ?? '-' ;
                 },
             },
             {
