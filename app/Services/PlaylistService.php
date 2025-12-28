@@ -220,7 +220,11 @@ class PlaylistService
 
             $createPlaylist->items()->sync( $syncData );
 
-            $category = explode( ',', $request->category_id );
+            if( !empty( $request->category_id ) ) {
+                $category = explode( ',', $request->category_id );
+            } else {
+                $category = [];
+            }
             $createPlaylist->category()->sync( $category );
 
             DB::commit();
@@ -289,7 +293,11 @@ class PlaylistService
 
             $updatePlaylist->items()->sync( $syncData );
 
-            $category = explode( ',', $request->category_id );
+            if( !empty( $request->category_id ) ) {
+                $category = explode( ',', $request->category_id );
+            } else {
+                $category = [];
+            }
             $updatePlaylist->category()->sync( $category );
 
             DB::commit();
