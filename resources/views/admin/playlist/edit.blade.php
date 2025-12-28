@@ -199,11 +199,11 @@ $parent_route = $data['parent_route'] ?? '';
                         }
                     } );
 
-                    if( response.category != null ){
-                        let option1 = new Option( response.category.name, response.category.id, true, true );
+                    $.each( response.category, function( i, v ) {
+                        let option1 = new Option( v.name, v.id, true, true );
                         categorySelect2.append( option1 );
                         categorySelect2.trigger( 'change' );
-                    }
+                    } );
 
                     selectedItems = [];
                     $('#selected-items').empty();
