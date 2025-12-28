@@ -139,15 +139,15 @@ var statusMapper = @json( $data['status'] ),
             { data: 'encrypted_id' },
         ],
         columnDefs: [
-                {
-                    // Add checkboxes to the first column
-                    targets: 0,
-                    orderable: false,
-                    className: 'text-center',
-                    render: function (data, type, row) {
-                        return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
-                    },
+            {
+                // Add checkboxes to the first column
+                targets: 0,
+                orderable: false,
+                className: 'text-center',
+                render: function (data, type, row) {
+                    return `<input type="checkbox" class="select-row" data-id="${row.encrypted_id}">`;
                 },
+            },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "dt_no" ) }}' ),
                 orderable: false,
@@ -167,7 +167,7 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
-                visiable: false,
+                className: 'd-none',
                 render: function( data, type, row, meta ) {
                     return '-' ;
                 },

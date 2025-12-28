@@ -41,7 +41,7 @@ class Category extends Model
         }
     }
 
-    public function getImageUrlAttribute() {
+    public function getImagePathAttribute() {
         if( $this->attributes['image'] ) {
             return asset( 'storage/' . $this->attributes['image'] );
         } else {
