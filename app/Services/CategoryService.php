@@ -168,8 +168,8 @@ class CategoryService
         try {
 
             $createcategory = Category::create( [
-                'en_title' => $request->en_title,
-                'zh_title' => $request->zh_title,
+                'en_name' => $request->en_name,
+                'zh_name' => $request->zh_name,
                 'image' => $request->image,
                 'color' => $request->color,
                 'type_id' => $request->type_id,
