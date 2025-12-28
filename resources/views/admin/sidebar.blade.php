@@ -77,22 +77,30 @@
                                     </a>
                                     <ul class="nk-menu-sub">
                                         @can( 'view collections' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'collection' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'collection' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '1' && $controller == 'App\Http\Controllers\Admin\CollectionController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.music.collection' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.collections' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view playlists' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'playlist' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'playlist' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '1' && $controller == 'App\Http\Controllers\Admin\PlaylistController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.music.playlist' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.playlists' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view items' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'item' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'item' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '1' && $controller == 'App\Http\Controllers\Admin\ItemController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.music.item' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.musics' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view categories' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'category' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\MusicController' && $action == 'category' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '1' && $controller == 'App\Http\Controllers\Admin\CategoryController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.music.category' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.categories' ) }}</span></a>
                                         </li>
                                         @endcan
@@ -110,22 +118,30 @@
                                     </a>
                                     <ul class="nk-menu-sub">
                                         @can( 'view collections' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'collection' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'collection' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '2' && $controller == 'App\Http\Controllers\Admin\CollectionController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.podcast.collection' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.collections' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view playlists' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'playlist' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'playlist' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '2' && $controller == 'App\Http\Controllers\Admin\PlaylistController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.podcast.playlist' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.playlists' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view items' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'item' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'item' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '2' && $controller == 'App\Http\Controllers\Admin\ItemController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.podcast.item' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.podcasts' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view categories' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'category' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\PodcastController' && $action == 'category' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '2' && $controller == 'App\Http\Controllers\Admin\CategoryController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.podcast.category' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.categories' ) }}</span></a>
                                         </li>
                                         @endcan
@@ -143,22 +159,30 @@
                                     </a>
                                     <ul class="nk-menu-sub">
                                         @can( 'view collections' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'collection' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'collection' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '3' && $controller == 'App\Http\Controllers\Admin\CollectionController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.talk.collection' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.collections' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view playlists' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'playlist' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'playlist' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '3' && $controller == 'App\Http\Controllers\Admin\PlaylistController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.talk.playlist' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.playlists' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view items' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'item' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'item' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '3' && $controller == 'App\Http\Controllers\Admin\ItemController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.talk.item' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.talks' ) }}</span></a>
                                         </li>
                                         @endcan
                                         @can( 'view categories' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'category' ? 'active current-page' : '' }}">
+                                        <li class="nk-menu-item {{ ( ( $controller == 'App\Http\Controllers\Admin\TalkController' && $action == 'category' ) ||
+                                            ( isset( $data, $data['type'] ) && $data['type'] == '3' && $controller == 'App\Http\Controllers\Admin\CategoryController' )
+                                            ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.talk.category' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.categories' ) }}</span></a>
                                         </li>
                                         @endcan
