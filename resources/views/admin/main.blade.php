@@ -4,7 +4,7 @@
     <div class="nk-app-root">
         <!-- main @s -->
         <div class="nk-main ">
-            <?php echo view( 'admin/sidebar', [ 'controller' => @$controller, 'action' => @$action ] );?>
+            <?php echo view( 'admin/sidebar', [ 'controller' => @$controller, 'action' => @$action, 'data' => @$data ] );?>
             <?php
             echo $controller;
             ?>
