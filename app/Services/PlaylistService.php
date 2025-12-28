@@ -220,7 +220,7 @@ class PlaylistService
 
             $createPlaylist->items()->sync( $syncData );
 
-            $createPlaylist->category()->sync( $request->category );
+            $createPlaylist->category()->sync( $request->category_id );
 
             DB::commit();
 
@@ -287,7 +287,7 @@ class PlaylistService
             }
 
             $updatePlaylist->items()->sync( $syncData );
-            $updatePlaylist->category()->sync( $request->category );
+            $updatePlaylist->category()->sync( $request->category_id );
 
             DB::commit();
 
