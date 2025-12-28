@@ -56,7 +56,6 @@ class CategoryService
         if ( $categories ) {
             $categories->append( [
                 'encrypted_id',
-                'name',
             ] );
         }
 
@@ -136,9 +135,6 @@ class CategoryService
         if( $category ) {
             $category->append( [
                 'encrypted_id',
-                'image_path',
-                'title',
-                'text',
             ] );
         }
 
