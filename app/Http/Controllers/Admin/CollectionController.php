@@ -14,7 +14,7 @@ use App\Services\{
 class CollectionController extends Controller
 {
 
-    public function add() {
+    public function add( Request $request ) {
 
         $this->data['header']['title'] = __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.collections' ) ) ] );
         $this->data['content'] = 'admin.collection.add';

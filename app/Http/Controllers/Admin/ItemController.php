@@ -14,7 +14,7 @@ use App\Services\{
 class ItemController extends Controller
 {
 
-    public function add() {
+    public function add( Request $request ) {
 
         $this->data['header']['title'] = __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.items' ) ) ] );
         $this->data['content'] = 'admin.item.add';
