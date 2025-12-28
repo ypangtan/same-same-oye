@@ -68,7 +68,9 @@
                                 @endcan
                                 
                                 @canany( [ 'view items', 'view playlists', 'view collections', 'view categories' ] )
-                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\MusicController' ) ? 'active current-page' : '' }}">
+                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\MusicController' || 
+                                    ( isset( $data, $data['type'] ) && $data['type'] == '1' )
+                                    ) ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
                                         <span class="nk-menu-text">{{ __( 'template.musics' ) }}</span>
@@ -99,7 +101,9 @@
                                 @endcanany
                                 
                                 @canany( [ 'view items', 'view playlists', 'view collections', 'view categories' ] )
-                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\PodcastController' ) ? 'active current-page' : '' }}">
+                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\PodcastController' || 
+                                        ( isset( $data, $data['type'] ) && $data['type'] == '2' )
+                                    ) ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
                                         <span class="nk-menu-text">{{ __( 'template.podcasts' ) }}</span>
@@ -130,7 +134,9 @@
                                 @endcanany
                                 
                                 @canany( [ 'view items', 'view playlists', 'view collections', 'view categories' ] )
-                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\TalkController' ) ? 'active current-page' : '' }}">
+                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\TalkController' ||
+                                    ( isset( $data, $data['type'] ) && $data['type'] == '3' )
+                                    ) ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
                                         <span class="nk-menu-text">{{ __( 'template.talks' ) }}</span>
