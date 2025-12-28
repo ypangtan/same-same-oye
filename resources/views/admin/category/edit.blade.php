@@ -116,7 +116,7 @@ $parent_route = $data['parent_route'] ?? null;
         let de = '#{{ $category_edit }}',
             fileID = '';
 
-        const $cp = $( ue + '_color' ).colorpicker({
+        const $cp = $( de + '_color' ).colorpicker({
             appendTo: 'body',
             hideButton: false
         });
