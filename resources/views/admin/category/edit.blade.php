@@ -214,7 +214,10 @@ $parent_route = $data['parent_route'] ?? null;
 
                     imagePath = response.image_url;
                     fileID = response.image;
-                    $cp.colorpicker( 'val', response.color ).trigger( 'change' );
+
+                    if( response.color ) {
+                        $cp.colorpicker( 'val', response.color ).trigger( 'change' );
+                    }
 
                     const dropzone = new Dropzone( de + '_image', { 
                         url: '{{ route( 'admin.category.imageUpload' ) }}',
