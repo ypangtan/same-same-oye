@@ -14,5 +14,8 @@ return [
     */
 
     'title' => 'Title',
+    'name' => 'Title',
+    'image' => 'Image',
+    'color' => 'Color',
 
 ];
