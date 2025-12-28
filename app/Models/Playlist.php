@@ -32,6 +32,10 @@ class Playlist extends Model
         'status',
     ];
 
+    public function type() {
+        return $this->belongsTo( Type::class, 'type_id' );
+    }
+
     public function item() {
         return $this->belongsTo( Item::class, 'item_id' );
     }
