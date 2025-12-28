@@ -1,7 +1,7 @@
 <?php
 $playlist_edit = 'playlist_edit';
 $type = $data['type'] ?? null;
-$parent_route = $data['parent_route'] ?? route( 'admin.module_parent.playlist.index' );
+$parent_route = $data['parent_route'] ?? '';
 ?>
 
 <div class="nk-block-head nk-block-head-sm">

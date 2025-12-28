@@ -1,7 +1,7 @@
 <?php
 $collection_edit = 'collection_edit';
 $type = $data['type'] ?? null;
-$parent_route = $data['parent_route'] ?? route( 'admin.module_parent.collection.index' );
+$parent_route = $data['parent_route'] ?? '';
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
