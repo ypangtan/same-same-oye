@@ -257,7 +257,7 @@ var statusMapper = @json( $data['status'] ),
 
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        $( '#type' ).val( '{{ $type }}' );
+        $( '#type' ).val( '{{ $type }}' ).addClass( 'd-none' );
         window['type'] = '{{ $type }}';
 
         $( '#created_date' ).flatpickr( {
