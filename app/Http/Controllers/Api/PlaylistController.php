@@ -42,6 +42,8 @@ class PlaylistController extends Controller
      * 
      * @group Playlist API
      * 
+     * @bodyParam id string The encrypted_id of the playlist. Example: 52
+     * 
      */
     public function getPlaylist( Request $request ) {
 

@@ -42,6 +42,8 @@ class ItemController extends Controller
      * 
      * @group Item API
      * 
+     * @bodyParam id string The encrypted_id of the item. Example: 52
+     * 
      */
     public function getItem( Request $request ) {
 
