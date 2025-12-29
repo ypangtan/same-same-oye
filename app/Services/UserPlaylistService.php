@@ -48,7 +48,6 @@ class UserPlaylistService
         $playlists->getCollection()->transform(function ($playlist) {
             $playlist->append( [
                 'encrypted_id',
-                'image_url',
             ] );
 
             if ($playlist->relationLoaded('items')) {
@@ -56,6 +55,7 @@ class UserPlaylistService
                     $item->append( [
                         'encrypted_id',
                         'image_url',
+                        'song_url',
                     ] );
                     return $item;
                 });

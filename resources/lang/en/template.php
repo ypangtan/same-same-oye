@@ -78,6 +78,7 @@ return [
     'musics' => 'Musics',
     'podcasts' => 'Podcasts',
     'talks' => 'Talks',
+    'user_playlists' => 'User Playlists',
 
     'loading' => 'Loading...',
     'add' => 'Add',
