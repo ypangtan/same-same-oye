@@ -38,7 +38,7 @@ class UserPlaylistService
         ] )->select( 'user_playlists.*' );
 
         if( !empty( $request->type_id ) ) {
-            $playlists->where( 'user_playlists.type_id', $request->type_id );
+            $playlists->where( 'user_playlists.type_id', \Helper::decode( $request->type_id ) );
         }
 
         $playlists->orderBy( 'created_at', 'desc' );
