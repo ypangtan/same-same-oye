@@ -341,11 +341,6 @@ class ItemService
         if ( empty( $request->playlist_id ) ) {
             $items->orderBy( 'items.created_at', 'desc' );
         }
-
-        if( auth()->user()->membership == 0 ) {
-            // for membership level filter
-            $items->where( 'items.membership_level', 0 );
-        }
                 
         $items = $items->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
