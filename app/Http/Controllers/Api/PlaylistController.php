@@ -28,7 +28,7 @@ class PlaylistController extends Controller
      * @group Playlist API
      * 
      * @bodyParam per_page string The total record per page. Example: 10
-     * @bodyParam type_id string The encrypted_id of the type. Example: 1
+     * @bodyParam type_id string The encrypted_id of the type. Example: 52
      * @bodyParam collection_id string The encrypted_id of the collection. Example: 1
      * 
      */

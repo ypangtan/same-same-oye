@@ -13,10 +13,12 @@ use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
     FileManager,
+    Item,
     Playlist,
     User,
     Role as RoleModel,
-    UserPlaylist
+    UserPlaylist,
+    UserPlaylistItem
 };
 
 use App\Rules\CheckASCIICharacter;
@@ -35,8 +37,8 @@ class UserPlaylistService
             'items',
         ] )->select( 'user_playlists.*' );
 
-        if( !empty( $request->type ) ) {
-            $playlists->where( 'user_playlists.type', $request->type );
+        if( !empty( $request->type_id ) ) {
+            $playlists->where( 'user_playlists.type_id', $request->type_id );
         }
 
         $playlists->orderBy( 'created_at', 'desc' );
@@ -91,12 +93,20 @@ class UserPlaylistService
 
     public static function createUserPlayList( $request ) {
 
+        if( !empty( $request->type_id ) ) {
+            $request->merge( [
+                'type_id' => \Helper::decode( $request->type_id )
+            ] );
+        }
+
         $validator = Validator::make( $request->all(), [
             'name' => [ 'required' ],
+            'type_id' => [ 'required', 'exists:types,id'],
         ] );
 
         $attributeName = [
             'name' => __( 'playlist.name' ),
+            'type_id' => __( 'playlist.type' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -112,6 +122,7 @@ class UserPlaylistService
             $createPlaylist = UserPlaylist::create( [
                 'user_id' => auth()->user()->id,
                 'name' => $request->name,
+                'type_id' => $request->type_id,
                 'status' => 10,
             ] );
 
@@ -137,12 +148,20 @@ class UserPlaylistService
             'id' => \Helper::decode( $request->id )
         ] );
 
+        if( !empty( $request->type_id ) ) {
+            $request->merge( [
+                'type_id' => \Helper::decode( $request->type_id )
+            ] );
+        }
+
         $validator = Validator::make( $request->all(), [
             'name' => [ 'required' ],
+            'type_id' => [ 'required', 'exists:types,id'],
         ] );
 
         $attributeName = [
             'name' => __( 'playlist.name' ),
+            'type_id' => __( 'playlist.type' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -157,6 +176,7 @@ class UserPlaylistService
 
             $createPlaylist = UserPlaylist::find( $request->id );
             $createPlaylist->name = $request->name;
+            $createPlaylist->type_id = $request->type_id;
             $createPlaylist->save();
 
             DB::commit();
@@ -216,8 +236,17 @@ class UserPlaylistService
 
         $validator = Validator::make( $request->all(), [
             'user_playlist_id' => [ 'required', 'exists:user_playlists,id' ],
-            'song_id' => [ 'required', 'exists:items,id' ],
-        ] );
+            'song_id' => [ 'required', 'exists:items,id', function ( $attribute, $value, $fail ) use ( $request ) {
+                $playlist = UserPlaylist::find( $request->user_playlist_id );
+                $song = Item::find( $value );
+                if( $playlist && $song ) {
+                    if( $playlist->type != $song->type ) {
+                        $fail( __( 'playlist.playlist_type_mismatch' ) );
+                        return false;
+                    }
+                }
+            } ],
+        ]);
 
         $attributeName = [
             'user_playlist_id' => __( 'playlist.user_playlist' ),
@@ -256,21 +285,15 @@ class UserPlaylistService
     public static function removeSongToUserPlayList( $request ) {
 
         $request->merge( [
-            'song_id' => \Helper::decode( $request->song_id )
-        ] );
-
-        $request->merge( [
-            'user_playlist_id' => \Helper::decode( $request->user_playlist_id )
+            'id' => \Helper::decode( $request->id )
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'user_playlist_id' => [ 'required', 'exists:user_playlists,id' ],
-            'song_id' => [ 'required', 'exists:items,id' ],
+            'id' => [ 'required', 'exists:user_playlist_items,id' ],
         ] );
 
         $attributeName = [
-            'user_playlist_id' => __( 'playlist.user_playlist' ),
-            'song_id' => __( 'playlist.song' ),
+            'id' => __( 'playlist.user_playlist_item' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -283,8 +306,8 @@ class UserPlaylistService
 
         try {
 
-            $playlist  = UserPlaylist::find( $request->user_playlist_id );
-            $playlist ->items()->detach( $request->song_id );
+            $playlist = UserPlaylistItem::find( $request->id );
+            $playlist->delete();
 
             DB::commit();
 

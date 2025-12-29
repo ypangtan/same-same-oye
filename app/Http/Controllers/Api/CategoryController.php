@@ -29,7 +29,7 @@ class CategoryController extends Controller
      * @group Category API
      * 
      * @bodyParam per_page string The total record per page. Example: 10
-     * @bodyParam type_id string The encrypted_id of the type. Example: 1
+     * @bodyParam type_id string The encrypted_id of the type. Example: 52
      * 
      */
     public function getCategories( Request $request ) {

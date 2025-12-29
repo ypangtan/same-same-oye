@@ -126,6 +126,7 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( '/delete-user-playList', [ UserPlaylistController::class, 'deleteUserPlayList' ] );
         Route::post( '/add-song-to-user-playList', [ UserPlaylistController::class, 'addSongToUserPlayList' ] );
         Route::post( '/remove-song-to-user-playList', [ UserPlaylistController::class, 'removeSongToUserPlayList' ] );
+        Route::post( '/add-playlist-to-user-playList', [ UserPlaylistController::class, 'addPlaylistToUserPlayList' ] );
     } );
 
     Route::prefix( 'ads' )->group( function() {

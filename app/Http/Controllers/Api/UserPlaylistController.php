@@ -46,7 +46,7 @@ class UserPlaylistController extends Controller {
      * 
      * @group UserPlaylist API
      * 
-     * @bodyParam id string The encrypted_id pf user playlist. Example: 10
+     * @bodyParam id string The encrypted_id of user playlist. Example: 10
      * 
      */
     public function getUserPlaylist( Request $request ) {
@@ -81,7 +81,7 @@ class UserPlaylistController extends Controller {
      * 
      * @group UserPlaylist API
      * 
-     * @bodyParam id string The encrypted_id pf user playlist. Example: 10
+     * @bodyParam id string The encrypted_id of user playlist. Example: 10
      * @bodyParam name string The name of user playlist. Example: abc
      * @bodyParam type string The id of type for user playlist. Example: 1
      * 
@@ -100,7 +100,7 @@ class UserPlaylistController extends Controller {
      * 
      * @group UserPlaylist API
      * 
-     * @bodyParam id string The encrypted_id pf user playlist. Example: 10
+     * @bodyParam id string The encrypted_id of user playlist. Example: 10
      * 
      */
     public function deleteUserPlayList( Request $request ) {
@@ -117,8 +117,8 @@ class UserPlaylistController extends Controller {
      * 
      * @group UserPlaylist API
      * 
-     * @bodyParam user_playlist_id string The encrypted_id pf user playlist. Example: 10
-     * @bodyParam song_id string The encrypted_id pf song. Example: 10
+     * @bodyParam user_playlist_id string The encrypted_id of user playlist. Example: 10
+     * @bodyParam song_id string The encrypted_id of song. Example: 10
      * 
      */
     public function addSongToUserPlayList( Request $request ) {
@@ -135,8 +135,8 @@ class UserPlaylistController extends Controller {
      * 
      * @group UserPlaylist API
      * 
-     * @bodyParam user_playlist_id string The encrypted_id pf user playlist. Example: 10
-     * @bodyParam song_id string The encrypted_id pf song. Example: 10
+     * @bodyParam user_playlist_id string The encrypted_id of user playlist. Example: 10
+     * @bodyParam song_id string The encrypted_id of song. Example: 10
      * 
      */
     public function removeSongToUserPlayList( Request $request ) {
