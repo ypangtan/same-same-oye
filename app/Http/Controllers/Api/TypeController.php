@@ -28,7 +28,7 @@ class TypeController extends Controller
      * 
      * @group Type API
      * 
-     * @bodyParam per_page string The total record per page. Example: 10
+     * @bodyParam per_page string The total record per page ( default 10 ). Example: 10
      * 
      */
     public function getTypes( Request $request ) {
