@@ -76,7 +76,6 @@ class UserPlaylistService
 
         $playlist->append( [
             'encrypted_id',
-            'image_url',
         ] );
 
         if( $playlist->items ) {
@@ -84,6 +83,7 @@ class UserPlaylistService
                 $item->append( [
                     'encrypted_id',
                     'image_url',
+                    'song_url',
                 ] );
             }
         }
