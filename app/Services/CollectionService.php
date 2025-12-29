@@ -341,6 +341,12 @@ class CollectionService
                 $q->where( 'type_id', $request->type_id );
             } )
             ->where( 'status', 10 );
+            
+        if( !auth()->check() || auth()->user()->membership == 0 ) {
+            // for membership level filter
+            $collections->where( 'collections.membership_level', 0 );
+        }
+
         $collections->orderBy( 'priority', 'desc' );
 
         $collections = $collections->paginate( empty( $request->per_page ) ? 100 : $request->per_page );

@@ -41,6 +41,8 @@ class CollectionController extends Controller
      * 
      * @group Collection API
      * 
+     * @bodyParam id string The encrypted_id of the collection. Example: 52
+     * 
      */
     public function getCollection( Request $request ) {
 

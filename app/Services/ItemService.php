@@ -332,6 +332,12 @@ class ItemService
             } )
             ->where( 'items.status', 10 );
 
+        
+        if( !auth()->check() || auth()->user()->membership == 0 ) {
+            // for membership level filter
+            $items->where( 'items.membership_level', 0 );
+        }
+
         if ( empty( $request->playlist_id ) ) {
             $items->orderBy( 'items.created_at', 'desc' );
         }
