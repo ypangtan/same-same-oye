@@ -67,15 +67,15 @@ Route::prefix( 'app_versions' )->group( function() {
 } );
 
 Route::prefix( 'categories' )->group( function() {
-    Route::get( '/', [ CategoryController::class, 'getCategories' ] );
+    Route::post( '/', [ CategoryController::class, 'getCategories' ] );
 } );
 
 Route::prefix( 'types' )->group( function() {
-    Route::get( '/', [ TypeController::class, 'getTypes' ] );
+    Route::post( '/', [ TypeController::class, 'getTypes' ] );
 } );
 
 Route::prefix( 'pop_announcements' )->group( function() {
-    Route::get( '/', [ AnnouncementController::class, 'getAllPopAnnouncements' ] );
+    Route::post( '/', [ AnnouncementController::class, 'getAllPopAnnouncements' ] );
 } );
 
 Route::prefix( 'collections' )->group( function() {
