@@ -59,7 +59,7 @@ class UserPlaylistService
                     ] );
                     
                     if( $item->pivot && $item->pivot->id ) {
-                        $item->pivot->id = \Helper::encode( $item->pivot->id );
+                        $item->pivot->encrypted_id = \Helper::encode( $item->pivot->id );
                     }
                     return $item;
                 });
@@ -91,7 +91,7 @@ class UserPlaylistService
                 ] );
 
                 if( $item->pivot && $item->pivot->id ) {
-                    $item->pivot->id = \Helper::encode( $item->pivot->id );
+                    $item->pivot->encrypted_id = \Helper::encode( $item->pivot->id );
                 }
             }
         }

@@ -135,8 +135,7 @@ class UserPlaylistController extends Controller {
      * 
      * @group UserPlaylist API
      * 
-     * @bodyParam user_playlist_id string The encrypted_id of user playlist. Example: 10
-     * @bodyParam song_id string The encrypted_id of song. Example: 10
+     * @bodyParam id string The encrypted_id of user playlist item( in item->pivot ). Example: 10
      * 
      */
     public function removeSongToUserPlayList( Request $request ) {
