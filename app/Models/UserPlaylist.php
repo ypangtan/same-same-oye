@@ -31,7 +31,10 @@ class UserPlaylist extends Model
 
     public function items() {
         return $this->belongsToMany( Item::class, 'user_playlist_items', 'user_playlist_id', 'item_id' )
-            ->where( 'items.status', 10 );
+            ->where( 'items.status', 10 )
+            ->withPivot( [
+                'id'
+            ] );
     }
 
     public function getEncryptedIdAttribute() {

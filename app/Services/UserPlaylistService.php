@@ -57,6 +57,10 @@ class UserPlaylistService
                         'image_url',
                         'song_url',
                     ] );
+                    
+                    if( $item->pivot && $item->pivot->id ) {
+                        $item->pivot->id = \Helper::encode( $item->pivot->id );
+                    }
                     return $item;
                 });
             }
@@ -85,6 +89,10 @@ class UserPlaylistService
                     'image_url',
                     'song_url',
                 ] );
+
+                if( $item->pivot && $item->pivot->id ) {
+                    $item->pivot->id = \Helper::encode( $item->pivot->id );
+                }
             }
         }
   
