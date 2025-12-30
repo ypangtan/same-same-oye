@@ -53,7 +53,7 @@ $parent_route = $data['parent_route'] ?? null;
                     <label for="{{ $playlist_create }}_membership_level" class="col-sm-5 col-form-label">{{ __( 'playlist.membership' ) }}</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $playlist_create }}_membership_level" checked>
+                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $playlist_create }}_membership_level">
                         </div>
                     </div>
                 </div>
