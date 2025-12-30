@@ -20,6 +20,7 @@ class Item extends Model
 
     protected $fillable = [
         'add_by',
+        'type_id',
         'category_id',
         'title',
         'lyrics',
@@ -87,6 +88,7 @@ class Item extends Model
 
     protected static $logAttributes = [
         'add_by',
+        'type_id',
         'category_id',
         'title',
         'lyrics',
