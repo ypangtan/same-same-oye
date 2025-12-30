@@ -95,7 +95,7 @@ window.cke_element = [ 'item_create_desc'];
             songPath = '';
 
         $( dc + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.module_parent.item.index' ) }}';
+            window.location.href = '{{ $parent_route) }}';
         } );
 
         $( dc + '_submit' ).click( function() {
@@ -129,7 +129,7 @@ window.cke_element = [ 'item_create_desc'];
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.module_parent.item.index' ) }}';
+                        window.location.href = '{{ $parent_route) }}';
                     } );
                 },
                 error: function( error ) {
