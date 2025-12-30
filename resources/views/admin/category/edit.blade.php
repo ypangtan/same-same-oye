@@ -158,7 +158,7 @@ $parent_route = $data['parent_route'] ?? null;
             formData.append( 'en_name', $( de + '_en_name' ).val() ?? '' );
             // formData.append( 'zh_name', $( de + '_zh_name' ).val() ?? '' );
             formData.append( 'color', $( de + '_color').val() );
-            formData.append( 'image', fileID );
+            formData.append( 'image', fileID ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {

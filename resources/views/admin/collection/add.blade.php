@@ -105,7 +105,7 @@ $parent_route = $data['parent_route'] ?? '';
             formData.append( 'en_name', $( dc + '_en_name' ).val() ?? '' );
             formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
-            formData.append( 'image', fileID );
+            formData.append( 'image', fileID ?? '' );
             formData.append('playlists', JSON.stringify( selectedPlaylists ) );
             
             formData.append( '_token', '{{ csrf_token() }}' );
