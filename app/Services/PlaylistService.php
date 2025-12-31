@@ -367,7 +367,7 @@ class PlaylistService
             })
             ->when(!empty($request->category_id), function ($q) use ($request) {
                 $q->whereHas('category', function( $sq ) use ( $request ) {
-                    $sq->where( 'id', $request->category_id );
+                    $sq->where( 'categories.id', $request->category_id );
                 });
             })
             ->where('playlists.status', 10);
