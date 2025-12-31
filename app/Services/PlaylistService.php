@@ -345,6 +345,12 @@ class PlaylistService
             ] );
         }
 
+        if ( !empty( $request->category_id ) ) {
+            $request->merge( [
+                'category_id' => \Helper::decode( $request->category_id )
+            ] );
+        }
+
         $playlists = Playlist::with([
                 'item',
                 'items',
@@ -358,6 +364,11 @@ class PlaylistService
             })
             ->when(!empty($request->type_id), function ($q) use ($request) {
                 $q->where('playlists.type_id', $request->type_id);
+            })
+            ->when(!empty($request->category_id), function ($q) use ($request) {
+                $q->whereHas('category', function( $sq ) use ( $request ) {
+                    $sq->where( 'id', $request->category_id );
+                });
             })
             ->where('playlists.status', 10);
 
