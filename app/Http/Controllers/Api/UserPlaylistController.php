@@ -31,7 +31,6 @@ class UserPlaylistController extends Controller {
      * 
      * @bodyParam per_page string The total record per page. Example: 10
      * @bodyParam type_id string The encrypted_id of the type. Example: 52
-     * @bodyParam category_id string The encrypted_id of the category. Example: 52
      */
     public function getUserPlaylists( Request $request ) {
 
