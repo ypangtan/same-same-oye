@@ -398,9 +398,9 @@ class UserService
 
                 $defaultCallingCode = "+60";
 
-                $exist = User::where( function ( $query ) use ( $value ) {
-                        $query->where( 'phone_number', request( 'phone_number' ) )
-                            ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                $exist = User::where( function ( $query ) use ( $value, $request ) {
+                        $query->where( 'phone_number', $request->phone_number )
+                            ->orWhere( 'phone_number', ltrim( $request->phone_number, '0' ) );
                     } )->first();
 
                 if ( $exist ) {
@@ -502,10 +502,10 @@ class UserService
 
                 $exist = User::where( 'id', '!=', $request->id )
                     ->where( 'status', 10 )
-                    ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
-                    ->where( function ( $query ) use ( $value ) {
-                        $query->where( 'phone_number', request( 'phone_number' ) )
-                            ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                    ->where( 'calling_code', $request->calling_code ? $request->calling_code : $defaultCallingCode )
+                    ->where( function ( $query ) use ( $value, $request ) {
+                        $query->where( 'phone_number', $request->phone_number )
+                            ->orWhere( 'phone_number', ltrim( $request->phone_number, '0' ) );
                     } )->first();
 
                 if ( $exist ) {
@@ -873,12 +873,12 @@ class UserService
 
         $validator = Validator::make( $request->all(), [
             'calling_code' => [ 'nullable', 'string', 'regex:/^\+\d{1,4}$/' ], // Basic international format
-            'phone_number' => [ 'nullable' , function( $attributes, $value, $fail ) {
+            'phone_number' => [ 'nullable' , function( $attributes, $value, $fail ) use ( $request ) {
 
                 $defaultCallingCode = "+60";
 
                 $user = User::where( 'status', 10 )
-                        ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
+                        ->where( 'calling_code', $request->phone_number ? $request->phone_number : $defaultCallingCode )
                         ->where( function ( $query ) use ( $value ) {
                             $query->where( 'phone_number', $value )
                                 ->orWhere( 'phone_number', ltrim( $value, '0' ) );
@@ -920,10 +920,10 @@ class UserService
 
             if( $request->request_type == 1 ) {
 
-                $existingUser = User::when( !empty( $request->phone_number ), function ( $q ) {
-                    $q->where( 'calling_code', request( 'calling_code' ) )
-                        ->where( 'phone_number', request( 'phone_number' ) )
-                        ->orWhere('phone_number', ltrim(request('phone_number'), '0'));
+                $existingUser = User::when( !empty( $request->phone_number ), function ( $q ) use ( $request ) {
+                    $q->where( 'calling_code', $request->calling_code )
+                        ->where( 'phone_number', $request->phone_number )
+                        ->orWhere('phone_number', ltrim( $request->phone_number, '0'));
                 } )->when( !empty( $request->email ), function ( $q ) use ( $request ) {
                         $q->where( 'email', $request->email );
                     } )
@@ -1338,15 +1338,15 @@ class UserService
             'first_name' => [ 'required' ],
             'last_name' => [ 'required' ],
             'calling_code' => [ 'nullable', 'exists:countries,calling_code' ],
-            'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) {
+            'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
 
                 $defaultCallingCode = "+60";
 
                 $exist = User::where( 'status', 10 )
-                ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
-                ->where( function ( $query ) use ( $value ) {
-                    $query->where( 'phone_number', request( 'phone_number' ) )
-                        ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                ->where( 'calling_code', $request->calling_code ? $request->calling_code : $defaultCallingCode )
+                ->where( function ( $query ) use ( $value, $request ) {
+                    $query->where( 'phone_number', $request->phone_number )
+                        ->orWhere( 'phone_number', ltrim( $request->phone_number, '0' ) );
                 } )
                 ->first();
                 
@@ -1491,11 +1491,11 @@ class UserService
         $request->validate( [
             'email' => 'required',
             'password' => 'required',
-            'account' => [ 'sometimes', function( $attributes, $value, $fail ) {
+            'account' => [ 'sometimes', function( $attributes, $value, $fail ) use ( $request ) {
 
                 $defaultCallingCode = "+60";
 
-                $user = User::where('status', 10)->where('email', request('email'))
+                $user = User::where('status', 10)->where('email', $request->email )
                     ->first();
             
                 if ( !$user ) {
@@ -1503,7 +1503,7 @@ class UserService
                     return 0;
                 }
 
-                if ( !Hash::check( request( 'password' ), $user->password ) ) {
+                if ( !Hash::check( $request->password, $user->password ) ) {
                     $fail( __( 'user.user_wrong_user_password' ) );
                     return 0;
                 }
@@ -1526,7 +1526,7 @@ class UserService
 
         $defaultCallingCode = "+60";
 
-        $user = User::where('status', 10)->where('email', request('email'))
+        $user = User::where('status', 10)->where('email', $request->email )
         ->first();
 
         // Register OneSignal
@@ -1556,14 +1556,14 @@ class UserService
     public static function loginUserSocial( $request ) {
 
         $request->validate( [
-            'identifier' => [ 'required', function( $attributes, $value, $fail ) {
+            'identifier' => [ 'required', function( $attributes, $value, $fail ) use ( $request ) {
                 $user = User::where( 'email', $value )->where( 'is_social_account', 0 )->first();
                 if ( $user ) {
                     $fail( __( 'Email has been Registered' ) );
                 }
                 $userSocial = UserSocial::where( 'identifier', $value )->first();
                 if ( $userSocial ) {
-                    if ( $userSocial->platform != request( 'platform' ) ) {
+                    if ( $userSocial->platform != $request->platform ) {
                         $fail( __( 'Email has been registered in other platform' ) );
                     }
                 }
@@ -1597,8 +1597,8 @@ class UserService
                 ] );
 
                 $createUserSocial = UserSocial::create( [
-                    'platform' => request( 'platform' ),
-                    'identifier' => request( 'identifier' ),
+                    'platform' => $request->platform,
+                    'identifier' => $request->identifier,
                     'uuid' => $createUser->id,
                     'user_id' => $createUser->id,
                 ] );
@@ -1713,15 +1713,15 @@ class UserService
             'first_name' => [ 'nullable' ],
             'last_name' => [ 'nullable' ],
             'email' => [ 'nullable', 'unique:users,email,' . auth()->user()->id, ],
-            'phone_number' => [ 'nullable', function( $attribute, $value, $fail ) {
+            'phone_number' => [ 'nullable', function( $attribute, $value, $fail ) use ( $request ) {
 
                 $defaultCallingCode = "+60";
 
                 $exist = User::where( 'status', 10 )
-                ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
-                ->where( function ( $query ) use ( $value ) {
-                    $query->where( 'phone_number', request( 'phone_number' ) )
-                        ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                ->where( 'calling_code', $request->calling_code ? $request->calling_code : $defaultCallingCode )
+                ->where( function ( $query ) use ( $value, $request ) {
+                    $query->where( 'phone_number', $request->phone_number )
+                        ->orWhere( 'phone_number', ltrim( $request->phone_number, '0' ) );
                 } )
                 ->where( 'id', '!=', auth()->user()->id )
                 ->first();
@@ -1907,15 +1907,15 @@ class UserService
                 'first_name' => [ 'required' ],
                 'last_name' => [ 'required' ],
                 'calling_code' => [ 'nullable', 'exists:countries,calling_code' ],
-                'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) {
+                'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use( $request ) {
 
                     $defaultCallingCode = "+60";
 
                     $exist = User::where( 'status', 10 )
-                    ->where( 'calling_code', request( 'calling_code' ) ? request( 'calling_code' ) : $defaultCallingCode )
-                    ->where( function ( $query ) use ( $value ) {
-                        $query->where( 'phone_number', request( 'phone_number' ) )
-                            ->orWhere( 'phone_number', ltrim( request( 'phone_number' ), '0' ) );
+                    ->where( 'calling_code', $request->calling_code ? $request->calling_code : $defaultCallingCode )
+                    ->where( function ( $query ) use ( $value, $request ) {
+                        $query->where( 'phone_number', $request->phone_number )
+                            ->orWhere( 'phone_number', ltrim( $request->phone_number, '0' ) );
                     } )
                     ->first();
                     
@@ -2305,8 +2305,8 @@ class UserService
             $query->on( 'user_notification_seens.user_id', '=', DB::raw( auth()->user()->id ) );
         } );
 
-        $notifications->when( !empty( $request->type ), function( $query ) {
-            return $query->where( 'user_notifications.type', request( 'type' ) );
+        $notifications->when( !empty( $request->type ), function( $query ) use ( $request ) {
+            return $query->where( 'user_notifications.type', $request->type );
         } );
 
         $notifications->when( $request->has( 'is_read' ), function( $query ) use ( $request ) {
