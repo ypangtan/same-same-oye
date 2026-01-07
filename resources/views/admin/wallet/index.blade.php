@@ -290,7 +290,7 @@ $columns = [
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + ( data.phone_number ? ( data.calling_code ? data.calling_code + " " : "+60 " ) + data.phone_number : '-' );
+                        return ( data.first_name ?? '-' ) + ' ' + ( data.last_name ?? '' ) + '<br>' + ( data.email ? data.email : '-' );
                     },
                 },
                 {

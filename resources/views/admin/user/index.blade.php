@@ -238,7 +238,7 @@ var statusMapper = @json( $data['status'] ),
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "phone_number" ) }}' ),
                 render: function( data, type, row, meta ) {
-                    return data ? ( row.calling_code ? row.calling_code + " " : "+60 " ) + data : '-' ;
+                    return data ? data : '-' ;
                 },
             },
             {
