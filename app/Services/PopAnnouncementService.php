@@ -136,6 +136,7 @@ class PopAnnouncementService
             'en_title' => [ 'required' ],
             'zh_title' => [ 'nullable' ],
             'image' => [ 'required' ],
+            'url' => [ 'nullable' ],
             'en_text' => [ 'nullable' ],
             'zh_text' => [ 'nullable' ],
         ] );
@@ -144,6 +145,7 @@ class PopAnnouncementService
             'en_title' => __( 'announcement.title' ),
             'zh_title' => __( 'announcement.title' ),
             'image' => __( 'announcement.image' ),
+            'url' => __( 'announcement.image' ),
             'en_text' => __( 'announcement.text' ),
             'zh_text' => __( 'announcement.text' ),
         ];
@@ -162,6 +164,7 @@ class PopAnnouncementService
                 'en_title' => $request->en_title,
                 'zh_title' => $request->zh_title,
                 'image' => $request->image,
+                'url' => $request->url,
                 'en_text' => $request->en_text,
                 'zh_text' => $request->zh_text,
             ] );
@@ -190,6 +193,7 @@ class PopAnnouncementService
         $validator = Validator::make( $request->all(), [
             'en_title' => [ 'required' ],
             'zh_title' => [ 'nullable' ],
+            'url' => [ 'nullable' ],
             'image' => [ 'required' ],
             'en_text' => [ 'nullable' ],
             'zh_text' => [ 'nullable' ],
@@ -201,6 +205,7 @@ class PopAnnouncementService
             'en_text' => __( 'announcement.text' ),
             'zh_text' => __( 'announcement.text' ),
             'image' => __( 'announcement.image' ),
+            'url' => __( 'announcement.url' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -219,6 +224,7 @@ class PopAnnouncementService
             if( $updaterank->image != $request->image ) {
                 Storage::disk('public')->delete( $updaterank->image );
             }
+            $updaterank->url = $request->url;
             $updaterank->image = $request->image;
             $updaterank->en_text = $request->en_text;
             $updaterank->zh_text = $request->zh_text;
