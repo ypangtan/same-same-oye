@@ -145,7 +145,7 @@ class PopAnnouncementService
             'en_title' => __( 'announcement.title' ),
             'zh_title' => __( 'announcement.title' ),
             'image' => __( 'announcement.image' ),
-            'url' => __( 'announcement.image' ),
+            'url' => __( 'announcement.url' ),
             'en_text' => __( 'announcement.text' ),
             'zh_text' => __( 'announcement.text' ),
         ];
