@@ -94,9 +94,9 @@ class UserController extends Controller {
      * 
      * @group User API
      * 
-     * @bodyParam identifier string required The email for social login. Example: ifei@mail.com
+     * @bodyParam identifier string required The email for social login. Example: sso@mail.com
      * @bodyParam platform interger required The platform for login. Example: 1
-     * @bodyParam email string optional The email for user social login. Example: ifei@mail.com
+     * @bodyParam email string optional The email for user social login. Example: sso@mail.com
      * @bodyParam device_type integer optional The device type required with register_token. Example: 1
      * @bodyParam register_token string optional The device token to receive notification. Example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
      * 
