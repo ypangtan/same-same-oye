@@ -271,7 +271,7 @@ class Helper {
             ] );
 
             $otp = $createOtp->otp_code;
-            $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for SSO ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
         else if ( $action == 'resend' ) {
@@ -289,7 +289,7 @@ class Helper {
             $email = $createOtp->email;
 
             $otp = $createOtp->otp_code;
-            $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for SSO ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
         else if ( $action == 'forgot_password' ) {
@@ -310,7 +310,7 @@ class Helper {
             ] );
 
             $otp = $createOtp->otp_code;
-            $body = 'Your OTP for IFEI forgot password is ' . $createOtp->otp_code;
+            $body = 'Your OTP for SSO forgot password is ' . $createOtp->otp_code;
 
         }
         
@@ -328,7 +328,7 @@ class Helper {
             $email = $createOtp->user->email;      
 
             $otp = $createOtp->otp_code;
-            $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for SSO ' . $action . ' is ' . $createOtp->otp_code;
 
         } 
         
@@ -347,7 +347,7 @@ class Helper {
             ] );
 
             $otp = $createOtp->otp_code;
-            $body = 'Your OTP for IFEI update account is ' . $createOtp->otp_code;
+            $body = 'Your OTP for SSO update account is ' . $createOtp->otp_code;
 
         }else {
 
@@ -366,7 +366,7 @@ class Helper {
             ] );
             
             $otp = $createOtp->otp_code;
-            $body = 'Your OTP for IFEI ' . $action . ' is ' . $createOtp->otp_code;
+            $body = 'Your OTP for SSO ' . $action . ' is ' . $createOtp->otp_code;
         }
 
         // $mobile = $callingCode . $phoneNumber;
@@ -449,13 +449,13 @@ class Helper {
                             ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
                             ? $message['message']['en']
                             : $message['message']
-                            : 'IFEI',
+                            : 'SSO',
 
                         'zh' => ( is_array( $message ) && isset( $message['message'] ) )
                             ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
                             ? $message['message']['zh']
                             : $message['message']
-                            : 'IFEI',
+                            : 'SSO',
                     ],
                     'include_player_ids' => [
                         $device->register_token
@@ -509,13 +509,13 @@ class Helper {
                         ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
                         ? $message['message']['en']
                         : $message['message']
-                        : 'IFEI',
+                        : 'SSO',
 
                     'zh' => ( is_array( $message ) && isset( $message['message'] ) )
                         ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
                         ? $message['message']['zh']
                         : $message['message']
-                        : 'IFEI',
+                        : 'SSO',
                 ],
                 'include_player_ids' => $devices,
                 'data' => [

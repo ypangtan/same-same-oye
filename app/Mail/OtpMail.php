@@ -34,7 +34,7 @@ class OtpMail extends Mailable
     public function build()
     {
         // from
-        return $this->from('support@ifei.my', 'IFei')
+        return $this->from('support@SSO.my', 'SSO')
         ->subject($this->getSubject())
         ->view('admin/mail/otp')
         ->with(['data' => $this->data]);
