@@ -335,9 +335,11 @@ class UserPlaylistService
 
     public static function addPlaylistToUserPlayList( $request ) {
 
-        $request->merge( [
-            'playlist_id' => \Helper::decode( $request->playlist_id )
-        ] );
+        if ( !empty( $request->playlist_id ) ) {
+            $request->merge( [
+                'playlist_id' => \Helper::decode( $request->playlist_id )
+            ] );
+        }
 
         $validator = Validator::make( $request->all(), [
             'playlist_id' => [ 'required', 'exists:playlists,id' ],
