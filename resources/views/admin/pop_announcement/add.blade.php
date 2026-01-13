@@ -50,7 +50,7 @@ $voucherTypes = $data['voucher_type'];
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-md-12">
                         {{-- <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
@@ -93,6 +93,14 @@ $voucherTypes = $data['voucher_type'];
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3 row">
+                    <label for="{{ $pop_announcement_create }}_url" class="col-sm-5 col-form-label">{{ __( 'pop_announcement.url' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $pop_announcement_create }}_url">
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
 
@@ -140,6 +148,7 @@ window.cke_element = [ 'pop_announcement_create_en_text', 'pop_announcement_crea
             formData.append( 'zh_title', $( fc + '_zh_title' ).val() );
             formData.append( 'en_text', editors['pop_announcement_create_en_text'].getData() );
             formData.append( 'zh_text', editors['pop_announcement_create_zh_text'].getData() );
+            formData.append( 'url', $( fc + '_url' ).val() );
             formData.append( 'image', fileID );
             formData.append( '_token', '{{ csrf_token() }}' );
 

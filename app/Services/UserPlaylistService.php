@@ -316,7 +316,7 @@ class UserPlaylistService
 
             $playlist = UserPlaylistItem::find( $request->id );
             $playlist->delete();
-
+            
             DB::commit();
 
         } catch ( \Throwable $th ) {

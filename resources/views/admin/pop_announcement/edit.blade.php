@@ -96,6 +96,13 @@ $pop_announcementTypes = $data['voucher_type'];
                         </div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $pop_announcement_edit }}_url" class="col-sm-5 col-form-label">{{ __( 'pop_announcement.url' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $pop_announcement_edit }}_url">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $pop_announcement_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -143,6 +150,7 @@ window.cke_element = [ 'pop_announcement_edit_en_text', 'pop_announcement_edit_z
             formData.append( 'en_text', editors['pop_announcement_edit_en_text'].getData() );
             formData.append( 'zh_text', editors['pop_announcement_edit_zh_text'].getData() );
             formData.append( 'image', fileID );
+            formData.append( 'url', $( fe + '_url' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -196,6 +204,7 @@ window.cke_element = [ 'pop_announcement_edit_en_text', 'pop_announcement_edit_z
                     
                     $( fe + '_en_title' ).val( response.en_title );
                     $( fe + '_zh_title' ).val( response.zh_title );
+                    $( fe + '_url' ).val( response.url );
                     editors['pop_announcement_edit_en_text'].setData( response.en_text ?? '' );
                     editors['pop_announcement_edit_zh_text'].setData( response.zh_text ?? '' );
 
