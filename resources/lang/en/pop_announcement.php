@@ -16,4 +16,5 @@ return [
     'image' => 'Image',
     'title' => 'Title',
     'text' => 'Text',
+    'url' => 'url',
 ];
