@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageService;
 use DateTimeInterface;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -71,6 +72,9 @@ class Playlist extends Model
 
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
+            if( StorageService::exists( $this->attributes['image'] ) ) {
+                return StorageService::get( $this->attributes['image'] );
+            }
             return asset( 'storage/' . $this->attributes['image'] );
         } else {
             $item = $this->items()->first();

@@ -67,17 +67,19 @@ class FileService
     }
 
     public static function songUpload( $request ) {
-     
+
+        $path = StorageService::upload( 'song', $request->file( 'file' ) );
+
         $createFile = FileManager::create( [
             'name' => $request->file( 'file' )->getClientOriginalName(),
-            'file' => $request->file( 'file' )->store( 'song', [ 'disk' => 'public' ] ),
+            'file' => $path,
             'type' => 4,
         ] );
 
         return response()->json( [
             'status' => 200,
             'data' => $createFile,
-            'url' => asset( 'storage/' . $createFile->file ),
+            'url' => StorageService::get( $path ),
             'file' => $createFile->file,
             'file_name' => $createFile->name,
         ] );
