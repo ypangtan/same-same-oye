@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\{
     PlaylistController,
     PointsController,
     RankController,
+    SearchController,
     TypeController,
     UserPlaylistController,
 };
@@ -91,6 +92,7 @@ Route::prefix( 'playlists' )->group( function() {
 Route::prefix( 'items' )->group( function() {
     Route::post( '/get-all-items', [ ItemController::class, 'getItems' ] );
     Route::post( '/get-one-item', [ ItemController::class, 'getItem' ] );
+    Route::post( '/search', [ SearchController::class, 'search' ] );
 } );
 
 /* End Public route */
