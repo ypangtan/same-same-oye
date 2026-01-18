@@ -26,6 +26,13 @@ class PlaylistObserver
     }
 
     public function updated( Playlist $playlist ) {
+        
+        if( $playlist->isDirty( 'status' ) ) {
+            if( $playlist->status != 10 ) {
+                $playlist->searchPlaylists()->where( 'playlist_id', $playlist->id )->delete();
+            }
+        }
+
         if( $playlist->isDirty( 'en_name' ) ) {
             $playlist->searchPlaylists()->updateOrCreate( [
                 'playlist_id' => $playlist->id,

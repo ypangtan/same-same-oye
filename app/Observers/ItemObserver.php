@@ -19,6 +19,12 @@ class ItemObserver
 
     public function updated(Item $item) {
 
+        if( $item->isDirty( 'status' ) ) {
+            if( $item->status != 10 ) {
+                $item->searchItems()->where( 'item_id', $item->id )->delete();
+            }
+        }
+
         if( $item->isDirty( 'title' ) ) {
             $item->searchItems()->updateOrCreate( [
                 'item_id' => $item->id,
