@@ -34,7 +34,7 @@ class Playlist extends Model
         'status',
     ];
 
-    public function searchPlaylist() {
+    public function searchPlaylists() {
         return $this->hasMany( SearchItem::class, 'playlist_id' );
     }
 

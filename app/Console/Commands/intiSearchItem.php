@@ -49,18 +49,18 @@ class intiSearchItem extends Command
 
         $playlists = Playlist::where( 'status', 10 )->get();
         foreach( $playlists as $playlist ) {
-            $playlist->searchPlaylist()->create( [
+            $playlist->searchPlaylists()->create( [
                 'keyword' => $playlist->en_name,
                 'playlist_id' => $playlist->id,
             ] );
 
             foreach( $playlist->items as $item ) {
-                $playlist->searchPlaylist()->create( [
+                $playlist->searchPlaylists()->create( [
                     'keyword' => $item->title,
                     'playlist_id' => $playlist->id,
                 ] );
 
-                $playlist->searchPlaylist()->create( [
+                $playlist->searchPlaylists()->create( [
                     'keyword' => $item->author,
                     'playlist_id' => $playlist->id,
                 ] );
@@ -69,12 +69,12 @@ class intiSearchItem extends Command
 
         $items = Item::where( 'status', 10 )->get();
         foreach( $items as $item ) {
-            $item->searchItem()->create( [
+            $item->searchItems()->create( [
                 'keyword' => $item->title,
                 'item_id' => $item->id,
             ] );
 
-            $item->searchItem()->create( [
+            $item->searchItems()->create( [
                 'keyword' => $item->author,
                 'item_id' => $item->id,
             ] );

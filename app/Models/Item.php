@@ -35,7 +35,7 @@ class Item extends Model
         'status',
     ];
 
-    public function searchItem() {
+    public function searchItems() {
         return $this->hasMany( SearchItem::class, 'item_id' );
     }
 
