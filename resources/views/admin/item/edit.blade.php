@@ -185,9 +185,6 @@ window.cke_element = [ 'item_edit_desc'];
                         maxFiles: 1,
                         acceptedFiles: 'image/jpg,image/jpeg,image/png',
                         addRemoveLinks: true,
-                        thumbnailWidth: 200,
-                        thumbnailHeight: 200,
-                        thumbnailMethod: 'contain',
                         init: function() {
                             this.on("addedfile", function (file) {
                                 if (this.files.length > 1) {
