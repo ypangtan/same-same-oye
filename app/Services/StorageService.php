@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Storage;
 class StorageService
 {
     public static function upload( $path, $file ) {
-        return Storage::disk('r2')->put( $path, $file );
+        $extension = $file->getClientOriginalExtension();
+        $safeName = time() . '_' . uniqid() . '.' . $extension;
+        $fullPath = $path . '/' . $safeName;
+        return Storage::disk('r2')->put( $fullPath, file_get_contents( $file ) );
     }
 
     public static function delete( $path ) {
