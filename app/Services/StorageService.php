@@ -31,7 +31,19 @@ class StorageService
         return Storage::disk('r2')->exists( $path );
     }
 
-    public static function get( $path ) {
-        return Storage::disk('r2')->url( $path );
+    public static function get( $path ) {$disk = Storage::disk('r2');
+    
+        if (method_exists($disk, 'temporaryUrl')) {
+            return $disk->temporaryUrl($path, now()->addHours(24));
+        }
+        
+        // 方法 2: 使用配置的公开 URL
+        $publicUrl = config('filesystems.disks.r2.url');
+        if ($publicUrl) {
+            return $publicUrl . '/' . $path;
+        }
+        
+        // 方法 3: 使用 url() 方法
+        return $disk->url($path);
     }
 }
