@@ -10,7 +10,16 @@ class StorageService
         $extension = $file->getClientOriginalExtension();
         $safeName = time() . '_' . uniqid() . '.' . $extension;
         $fullPath = $path . '/' . $safeName;
-        return Storage::disk('r2')->put( $fullPath, file_get_contents( $file ) );
+        $uploaded = Storage::disk('r2')->put( $fullPath, file_get_contents( $file ) );
+
+        if ($uploaded) {
+            return [
+                'path' => $fullPath,
+                'original_name' => $file->getClientOriginalName(),
+            ];
+        }
+
+        return false;
     }
 
     public static function delete( $path ) {
