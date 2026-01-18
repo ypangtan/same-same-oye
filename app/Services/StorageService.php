@@ -18,8 +18,7 @@ class StorageService
         $result = Storage::disk('r2')->put($path, $file, $safeName);
 
         return [
-            'result' => $result,
-            'path' => $path . '/' . $safeName,
+            'path' => $result,
             'original_name' => $originalName,
         ];
     }
