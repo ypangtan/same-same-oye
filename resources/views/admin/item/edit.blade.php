@@ -193,7 +193,7 @@ window.cke_element = [ 'item_edit_desc'];
                             });
                             if ( imagePath ) {
                                 let myDropzone = this,
-                                    mockFile = { name: 'Default', size: 1024, accepted: true };
+                                    mockFile = { name: 'Default', size: 12345, accepted: true };
 
                                 myDropzone.emit("addedfile", mockFile);
                                 myDropzone.emit("thumbnail", mockFile, imagePath);
