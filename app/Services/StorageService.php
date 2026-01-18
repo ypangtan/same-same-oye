@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 class StorageService
 {
     public static function upload( $path, $file ) {
-        $extension = $file->getClientOriginalExtension();
+        $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
         $safeName = time() . '_' . uniqid() . '.' . $extension;
         $fullPath = $path . '/' . $safeName;
         $uploaded = Storage::disk('r2')->put( $fullPath, file_get_contents( $file ) );
