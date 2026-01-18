@@ -172,7 +172,6 @@ window.cke_element = [ 'item_edit_desc'];
                     editors['item_edit_desc'].setData( response.desc ?? '' );
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
 
-                    imagePath = response.image_url;
                     fileID = response.image;
 
                     songPath = response.song_url;
@@ -180,6 +179,7 @@ window.cke_element = [ 'item_edit_desc'];
                     song_file_type = response.file_type;
                     file2ID = response.file;
 
+                    imagePath = response.image_url;
                     const dropzone = new Dropzone( de + '_image', { 
                         url: '{{ route( 'admin.item.imageUpload' ) }}',
                         maxFiles: 1,
@@ -195,8 +195,10 @@ window.cke_element = [ 'item_edit_desc'];
                                 let myDropzone = this,
                                     mockFile = { name: 'Default', size: 1024, accepted: true };
 
+                                myDropzone.emit("addedfile", mockFile);
+                                myDropzone.emit("thumbnail", mockFile, imagePath);
+                                myDropzone.emit("complete", mockFile);
                                 myDropzone.files.push( mockFile );
-                                myDropzone.displayExistingFile( mockFile, imagePath );
                             }
                         },
                         removedfile: function( file ) {
