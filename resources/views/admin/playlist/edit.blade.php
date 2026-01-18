@@ -350,6 +350,7 @@ $parent_route = $data['parent_route'] ?? '';
             selectedItems = selectedItems.filter(tag => tag.id !== id);
             $(this).closest('.item-block').remove();
             updateHiddenInput();
+            $('#selected-items').find('.item-block').length === 0 ? file_type = '' : null;
         });
 
         $('#clearTags').on('click', function(e) {
@@ -357,6 +358,7 @@ $parent_route = $data['parent_route'] ?? '';
             selectedItems = [];
             $('#selected-items').empty();
             updateHiddenInput();
+            file_type = '';
         });
 
         function updateHiddenInput() {
