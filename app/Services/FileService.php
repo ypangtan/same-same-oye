@@ -70,7 +70,15 @@ class FileService
     public static function songUpload( $request ) {
 
         $path = StorageService::upload( 'song', $request->file( 'file' ) );
-
+        $mimeType = $request->file( 'file' )->getMimeType();
+            
+        if (str_starts_with($mimeType, 'audio/')) {
+            $file_type = 1;
+        } elseif (str_starts_with($mimeType, 'video/')) {
+            $file_type = 2;
+        } else {
+            $file_type = 4;
+        }
         $createFile = FileManager::create( [
             'name' => $request->file( 'file' )->getClientOriginalName(),
             'file' => $path,
@@ -80,6 +88,7 @@ class FileService
         return response()->json( [
             'status' => 200,
             'data' => $createFile,
+            'file_type' => $file_type,
             'url' => StorageService::get( $path ),
             'file' => $createFile->file,
             'file_name' => $createFile->name,
