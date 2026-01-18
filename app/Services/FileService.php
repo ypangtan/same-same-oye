@@ -79,6 +79,7 @@ class FileService
         return response()->json( [
             'status' => 200,
             'data' => $createFile,
+            'result' => $path,
             // 'url' => StorageService::get( $path['path'] ),
             'file' => $createFile->file,
             'file_name' => $createFile->name,
