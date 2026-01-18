@@ -15,8 +15,6 @@ use App\Services\SearchService;
 
 class SearchController extends Controller {
 
-    public function __construct() {}
-
     /**
      * 1. Search
      * 
