@@ -90,6 +90,7 @@ window.cke_element = [ 'item_edit_desc'];
 
         let de = '#{{ $item_edit }}',
             fileID = '',
+            song_file_type = '',
             song_file = '',
             file2ID = '';
 
@@ -112,6 +113,7 @@ window.cke_element = [ 'item_edit_desc'];
             formData.append( 'desc', editors['item_edit_desc'].getData() );
             formData.append( 'file', file2ID ?? '' );
             formData.append( 'file_name', song_file ?? '' );
+            formData.append( 'file_type', song_file_type ?? '' );
             formData.append( 'image', fileID ?? '' );
             formData.append( 'author', $( de + '_author' ).val() ?? '' );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
@@ -175,6 +177,7 @@ window.cke_element = [ 'item_edit_desc'];
 
                     songPath = response.song_url;
                     song_file = response.file_name;
+                    song_file_type = response.file_type;
                     file2ID = response.file;
 
                     const dropzone = new Dropzone( de + '_image', { 
@@ -224,13 +227,10 @@ window.cke_element = [ 'item_edit_desc'];
                         `,
 
                         init: function() {
-
                             this.on("addedfile", function(file) {
                                 if (this.files.length > 1) {
                                     this.removeFile(this.files[0]);
                                 }
-
-                                // clicking the preview opens the file
                                 file.previewElement.addEventListener("click", () => {
                                     if (file._fileUrl) window.open(file._fileUrl, "_blank");
                                 });
@@ -245,7 +245,6 @@ window.cke_element = [ 'item_edit_desc'];
 
                                 myDropzone.files.push(mockFile);
 
-                                // show image only (song.png)
                                 myDropzone.displayExistingFile(
                                     mockFile, 
                                     "{{ asset('admin/image/song.png') }}"
@@ -269,6 +268,7 @@ window.cke_element = [ 'item_edit_desc'];
 
                         success: function(file, response) {
                             file2ID = response.file;
+                            song_file_type = response.file_type ?? '';
                             song_file = response.file_name ?? '';
                             file._fileUrl = response.url;
 

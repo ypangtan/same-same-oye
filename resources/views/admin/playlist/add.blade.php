@@ -91,6 +91,7 @@ $parent_route = $data['parent_route'] ?? null;
 
         let dc = '#{{ $playlist_create }}',
             fileID = '',
+            file_type = '',
             selectedItems = [];
 
         $( dc + '_cancel' ).click( function() {
@@ -112,6 +113,7 @@ $parent_route = $data['parent_route'] ?? null;
             formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID ?? '' );
+            formData.append( 'file_type', file_type ?? '' );
             formData.append('items', JSON.stringify( selectedItems ) );
             
             formData.append( '_token', '{{ csrf_token() }}' );
@@ -210,6 +212,7 @@ $parent_route = $data['parent_route'] ?? null;
                     return {
                         title: params.term, // search term
                         type: '{{ $type }}',
+                        file_type: file_type ?? '',
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,
@@ -225,6 +228,7 @@ $parent_route = $data['parent_route'] ?? null;
                         processedResult.push( {
                             id: v.id,
                             text: v.title,
+                            file_type: v.file_type,
                         } );
                     } );
 
@@ -242,15 +246,16 @@ $parent_route = $data['parent_route'] ?? null;
 
         $( dc + '_items' ).on('select2:select', function (e) {
             let data = e.params.data;
+            file_type = e.params.data.file_type;
             
             if (!selectedItems.some(tag => tag.id === data.id)) {
-                selectedItems.push( {id: data.id, text: data.text} );
+                selectedItems.push( {id: data.id, text: data.text, file_type: data.file_type} );
 
                 $('#selected-items').append(`
                     <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
                         <em class="icon ni ni-cross remove-item click-action"></em>
-                        </span>
+                    </span>
                 `);
 
                 updateHiddenInput();

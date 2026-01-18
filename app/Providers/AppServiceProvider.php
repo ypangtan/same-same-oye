@@ -6,6 +6,18 @@ use Illuminate\Support\ServiceProvider;
 
 use Spatie\Activitylog\Models\Activity;
 
+use App\Models\{
+    Item,
+    Playlist,
+    Collection
+};
+
+use App\Observers\{
+    ItemObserver,
+    PlaylistObserver,
+    CollectionObserver
+};
+
 require_once( 'BrowserDetection.php' );
 
 class AppServiceProvider extends ServiceProvider
@@ -42,5 +54,9 @@ class AppServiceProvider extends ServiceProvider
         if( $this->app->environment( 'production' ) ) {
             \URL::forceScheme( 'https' );
         }
+
+        Item::observe(ItemObserver::class);
+        Playlist::observe(PlaylistObserver::class);
+        Collection::observe(CollectionObserver::class);
     }
 }

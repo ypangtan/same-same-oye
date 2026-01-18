@@ -24,17 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->command( 'check:expired-voucher' )->timezone('Asia/Kuala_Lumpur')
-        ->dailyAt('00:00');
-        $schedule->command( 'check:user-checkin' )->timezone('Asia/Kuala_Lumpur')
-        ->dailyAt('00:03');
-        $schedule->command( 'user:check-points-expired' )->timezone('Asia/Kuala_Lumpur')
-        ->dailyAt('00:05');
-        $schedule->command( 'user:check-points-expiry-alert' )->timezone('Asia/Kuala_Lumpur')
-        ->dailyAt('00:10');
         $schedule->command( 'check:user-birthday' )->timezone( 'Asia/Kuala_Lumpur' )
         ->dailyAt( '00:15' );
+
+        $schedule->command('search:update-hot-keywords')->timezone( 'Asia/Kuala_Lumpur' )->hourly();
     }
 
     /**

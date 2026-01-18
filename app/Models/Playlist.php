@@ -30,6 +30,7 @@ class Playlist extends Model
         'membership_level',
         'is_item',
         'item_id',
+        'file_type',
         'status',
     ];
 
@@ -105,6 +106,7 @@ class Playlist extends Model
         'membership_level',
         'is_item',
         'item_id',
+        'file_type',
         'status',
     ];
 

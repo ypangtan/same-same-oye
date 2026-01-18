@@ -22,6 +22,7 @@
         "laravel/tinker": "^2.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "maatwebsite/excel": "^3.1",
+        "overtrue/laravel-pinyin": "^4.0",
         "phpoffice/phpspreadsheet": "^1.28",
         "pragmarx/google2fa-qrcode": "^3.0",
         "rap2hpoutre/fast-excel": "^5.4",

@@ -132,6 +132,10 @@ class ItemService
             $filter = true;
         }
 
+        if( !empty( $request->file_type ) ) {
+            $model->where( 'file_type', $request->file_type );
+        }
+
         return [
             'filter' => $filter,
             'model' => $model,
@@ -161,7 +165,6 @@ class ItemService
 
         $validator = Validator::make( $request->all(), [
             'type_id' => [ 'required', 'exists:types,id' ],
-            // 'category_id' => [ 'required' ],
             'title' => [ 'required' ],
             'lyrics' => [ 'nullable' ],
             'file' => [ 'nullable' ],
@@ -172,7 +175,6 @@ class ItemService
 
         $attributeName = [
             'type_id' => __( 'item.type' ),
-            // 'category_id' => __( 'item.category' ),
             'title' => __( 'item.title' ),
             'lyrics' => __( 'item.lyrics' ),
             'file' => __( 'item.file' ),
@@ -190,7 +192,6 @@ class ItemService
         DB::beginTransaction();
 
         try {
-
             $createItem = Item::create( [
                 'add_by' => auth()->user()->id,
                 'type_id' => $request->type_id,
@@ -201,11 +202,10 @@ class ItemService
                 'author' => $request->author,
                 'membership_level' => $request->membership_level,
                 'file_name' => $request->file_name,
+                'file_type' => $request->file_type,
                 'status' => 10,
             ] );
 
-            // $createItem->categories()->attach( $request->category_id );
-    
             DB::commit();
 
         } catch ( \Throwable $th ) {
@@ -262,6 +262,7 @@ class ItemService
 
             $updateItem = Item::find( $request->id );
             $updateItem->file_name = $request->file_name;
+            $updateItem->file_type = $request->file_type;
             $updateItem->type_id = $request->type_id;
             $updateItem->title = $request->title;
             $updateItem->lyrics = $request->lyrics;

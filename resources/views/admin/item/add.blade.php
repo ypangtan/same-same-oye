@@ -90,7 +90,8 @@ window.cke_element = [ 'item_create_desc'];
 
         let dc = '#{{ $item_create }}',
             fileID = '',
-            song_file = ''
+            song_file = '',
+            song_file_type = '',
             file2ID = '',
             songPath = '';
 
@@ -112,6 +113,7 @@ window.cke_element = [ 'item_create_desc'];
             formData.append( 'desc', editors['item_create_desc'].getData() );
             formData.append( 'file', file2ID ?? '' );
             formData.append( 'file_name', song_file ?? '' );
+            formData.append( 'file_type', song_file_type ?? '' );
             formData.append( 'image', fileID ?? '' );
             formData.append( 'author', $( dc + '_author' ).val() ?? '' );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
@@ -218,9 +220,8 @@ window.cke_element = [ 'item_create_desc'];
         const dropzone2 = new Dropzone( dc + '_file', { 
             url: '{{ route("admin.item.songUpload") }}',
             maxFiles: 1,
-            acceptedFiles: 'audio/mpeg,audio/mp3',
+            acceptedFiles: 'audio/mpeg,audio/mp3,video/mp4,video/webm,video/ogg,video/avi,video/mov,video/quicktime',
             addRemoveLinks: true,
-
             previewTemplate: `
                 <div class="dz-preview dz-file-preview" style="cursor:pointer;">
                     <img src="{{ asset('admin/images/song.png') }}" 
@@ -232,30 +233,24 @@ window.cke_element = [ 'item_create_desc'];
                     </div>
                 </div>
             `,
-
             init: function() {
-
                 this.on("addedfile", function(file) {
                     if (this.files.length > 1) {
                         this.removeFile(this.files[0]);
                     }
-
-                    // clicking the preview opens the file
                     file.previewElement.addEventListener("click", () => {
                         if (file._fileUrl) window.open(file._fileUrl, "_blank");
                     });
                 });
-
             },
-
             removedfile: function(file) {
                 file2ID = "";
                 if (file.previewElement) file.previewElement.remove();
             },
-
             success: function(file, response) {
                 file2ID = response.file;
                 song_file = response.file_name ?? '';
+                song_file_type = response.file_type ?? '';
                 file._fileUrl = response.url;
 
                 file.previewElement.addEventListener("click", () => {

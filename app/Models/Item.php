@@ -29,6 +29,7 @@ class Item extends Model
         'author',
         'membership_level',
         'file_name',
+        'file_type',
         'status',
     ];
 
@@ -97,6 +98,7 @@ class Item extends Model
         'author',
         'membership_level',
         'file_name',
+        'file_type',
         'status',
     ];
 

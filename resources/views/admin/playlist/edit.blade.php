@@ -91,6 +91,7 @@ $parent_route = $data['parent_route'] ?? '';
 
         let de = '#{{ $playlist_edit }}',
             fileID = '',
+            file_type = '',
             selectedItems = [];
 
         $( de + '_cancel' ).click( function() {
@@ -113,6 +114,7 @@ $parent_route = $data['parent_route'] ?? '';
             formData.append( 'zh_name', $( de + '_zh_name' ).val() ?? '' );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID ?? '' );
+            formData.append( 'file_type', file_type ?? '' );
             formData.append('items', JSON.stringify( selectedItems ) );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -170,6 +172,7 @@ $parent_route = $data['parent_route'] ?? '';
 
                     imagePath = response.image_url;
                     fileID = response.image;
+                    file_type = response.file_type;
 
                     const dropzone = new Dropzone( de + '_image', { 
                         url: '{{ route( 'admin.playlist.imageUpload' ) }}',
@@ -211,7 +214,7 @@ $parent_route = $data['parent_route'] ?? '';
                     $.each( response.items, function( i, v ) {
                         data = v;
                         if ( !selectedItems.some( item => item.id === data.id ) ) {
-                            selectedItems.push( {id: data.id, text: data.name} );
+                            selectedItems.push( {id: data.id, text: data.name, file_type: data.file_type} );
                             
                             $('#selected-items').append(`
                                 <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
@@ -292,6 +295,7 @@ $parent_route = $data['parent_route'] ?? '';
                     return {
                         title: params.term, // search term
                         type: '{{ $type }}',
+                        file_type: file_type ?? '',
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,

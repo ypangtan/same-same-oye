@@ -209,6 +209,7 @@ class PlaylistService
                 'zh_name' => $request->zh_name,
                 'image' => $request->image,
                 'membership_level' => $request->membership_level,
+                'file_type' => $request->file_type,
                 'status' => 10,
             ] );
     
@@ -283,6 +284,7 @@ class PlaylistService
             $updatePlaylist->zh_name = $request->zh_name;
             $updatePlaylist->image = $request->image;
             $updatePlaylist->membership_level = $request->membership_level;
+            $updatePlaylist->file_type = $request->file_type;
             $updatePlaylist->save();
 
             $items = json_decode( $request->items, true );
