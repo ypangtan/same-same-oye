@@ -10,7 +10,6 @@ class StorageService
         $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
         $safeName = time() . '_' . uniqid() . '.' . $extension;
         $fullPath = $path . '/' . $safeName;
-        dd( $fullPath );
         $uploaded = Storage::disk('r2')->put( $fullPath, file_get_contents( $file ) );
 
         if ($uploaded) {
