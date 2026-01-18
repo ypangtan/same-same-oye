@@ -71,8 +71,8 @@ class FileService
         $path = StorageService::upload( 'song', $request->file( 'file' ) );
 
         $createFile = FileManager::create( [
-            'name' => $path['original_name'],
-            'file' => $path['path'],
+            'name' => $request->file( 'file' )->getClientOriginalName(),
+            'file' => $path,
             'type' => 4,
         ] );
 
@@ -80,7 +80,7 @@ class FileService
             'status' => 200,
             'data' => $createFile,
             'result' => $path,
-            'url' => StorageService::get( $path['path'] ),
+            'url' => StorageService::get( $path),
             'file' => $createFile->file,
             'file_name' => $createFile->name,
         ] );
