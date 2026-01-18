@@ -70,18 +70,18 @@ class intiSearchItem extends Command
 
         $playlists = Playlist::where( 'status', 10 )->get();
         foreach( $playlists as $playlist ) {
-            $playlist->searchItem()->create( [
+            $playlist->searchPlaylist()->create( [
                 'keyword' => $playlist->en_name,
                 'playlist_id' => $playlist->id,
             ] );
 
             foreach( $playlist->items as $item ) {
-                $playlist->searchItem()->create( [
+                $playlist->searchPlaylist()->create( [
                     'keyword' => $item->title,
                     'playlist_id' => $playlist->id,
                 ] );
 
-                $playlist->searchItem()->create( [
+                $playlist->searchPlaylist()->create( [
                     'keyword' => $item->author,
                     'playlist_id' => $playlist->id,
                 ] );
