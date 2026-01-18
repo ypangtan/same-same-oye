@@ -7,19 +7,21 @@ use Illuminate\Support\Facades\Storage;
 class StorageService
 {
     public static function upload( $path, $file ) {
-        $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
-        $safeName = time() . '_' . uniqid() . '.' . $extension;
-        $fullPath = $path . '/' . $safeName;
-        $uploaded = Storage::disk('r2')->put( $fullPath, file_get_contents( $file ) );
-
-        if ($uploaded) {
-            return [
-                'path' => $fullPath,
-                'original_name' => $file->getClientOriginalName(),
-            ];
+        $originalName = $file->getClientOriginalName();
+        if (!mb_check_encoding($originalName, 'UTF-8')) {
+            $originalName = mb_convert_encoding($originalName, 'UTF-8', 'auto');
         }
+        
+        $extension = $file->getClientOriginalExtension();
+        $safeName = time() . '_' . uniqid() . '.' . $extension;
+        
+        $result = Storage::disk('r2')->put($path, $file, $safeName);
 
-        return false;
+        return [
+            'result' => $result,
+            'path' => $path . '/' . $safeName,
+            'original_name' => $originalName,
+        ];
     }
 
     public static function delete( $path ) {
