@@ -32,6 +32,6 @@ class StorageService
     }
 
     public static function get( $path ) {
-        return Storage::disk('r2')->get( $path );
+        return Storage::disk('r2')->url( $path );
     }
 }
