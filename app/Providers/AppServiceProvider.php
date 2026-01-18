@@ -57,6 +57,5 @@ class AppServiceProvider extends ServiceProvider
 
         Item::observe(ItemObserver::class);
         Playlist::observe(PlaylistObserver::class);
-        Collection::observe(CollectionObserver::class);
     }
 }

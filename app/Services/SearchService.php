@@ -30,7 +30,6 @@ class SearchService {
         $search = SearchItem::with( [
             'item',
             'playlist',
-            'collection',
         ] )->where( 'keyword', 'like', '%' . $text . '%' );
 
         $search = $search->where( function ( $query ) use ( $request ) {
@@ -40,8 +39,6 @@ class SearchService {
                         $ssq->where( 'category_id', $request->input( 'category_id' ) );
                     } )->orWhereHas( 'playlist', function ( $ssq ) use ( $request ) {
                         $ssq->where( 'category_id', $request->input( 'category_id' ) );
-                    } )->orWhereHas( 'collection', function ( $ssq ) use ( $request ) {
-                        $ssq->where( 'category_id', $request->input( 'category_id' ) );
                     } );
                 } );
             } );
@@ -50,8 +47,6 @@ class SearchService {
                     $sq->whereHas( 'item', function ( $ssq ) use ( $request ) {
                         $ssq->where( 'type_id', $request->input( 'type_id' ) );
                     } )->orWhereHas( 'playlist', function ( $ssq ) use ( $request ) {
-                        $ssq->where( 'type_id', $request->input( 'type_id' ) );
-                    } )->orWhereHas( 'collection', function ( $ssq ) use ( $request ) {
                         $ssq->where( 'type_id', $request->input( 'type_id' ) );
                     } );
                 } );

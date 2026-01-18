@@ -47,33 +47,6 @@ class intiSearchItem extends Command
             $searchItem->delete();
         }
 
-        $collections = Collection::where( 'status', 10 )->get();
-        foreach( $collections as $collection ) {
-            $collection->searchCollection()->create( [
-                'keyword' => $collection->en_name,
-                'collection_id' => $collection->id,
-            ] );
-
-            foreach( $collection->playlists as $playlist ) {
-                $collection->searchCollection()->create( [
-                    'keyword' => $playlist->en_name,
-                    'collection_id' => $collection->id,
-                ] );
-
-                foreach( $playlist->items as $item ) {
-                    $collection->searchCollection()->create( [
-                        'keyword' => $item->title,
-                        'collection_id' => $collection->id,
-                    ] );
-
-                    $collection->searchCollection()->create( [
-                        'keyword' => $item->author,
-                        'collection_id' => $collection->id,
-                    ] );
-                }
-            }
-        }
-
         $playlists = Playlist::where( 'status', 10 )->get();
         foreach( $playlists as $playlist ) {
             $playlist->searchPlaylist()->create( [
