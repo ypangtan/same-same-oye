@@ -34,6 +34,10 @@ class Playlist extends Model
         'status',
     ];
 
+    public function searchPlaylist() {
+        return $this->hasMany( SearchItem::class, 'playlist_id' );
+    }
+
     public function type() {
         return $this->belongsTo( Type::class, 'type_id' );
     }

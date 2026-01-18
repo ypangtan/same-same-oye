@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageService;
 use DateTimeInterface;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,6 +30,10 @@ class Collection extends Model
         'membership_level',
         'status',
     ];
+
+    public function searchCollection() {
+        return $this->hasMany( SearchItem::class, 'collection_id' );
+    }
 
     public function type() {
         return $this->belongsTo( Type::class, 'type_id' );
@@ -60,6 +65,9 @@ class Collection extends Model
 
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
+            if( StorageService::exists( $this->attributes['file'] ) ) {
+                return StorageService::get( $this->attributes['file'] );
+            }
             return asset( 'storage/' . $this->attributes['image'] );
         } else {
             $playlist = $this->playLists()->first();

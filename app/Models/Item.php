@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageService;
 use DateTimeInterface;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ use Spatie\Activitylog\LogOptions;
 use Helper;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class Item extends Model
 {
@@ -32,6 +34,10 @@ class Item extends Model
         'file_type',
         'status',
     ];
+
+    public function searchItem() {
+        return $this->hasMany( SearchItem::class, 'item_id' );
+    }
 
     public function type() {
         return $this->belongsTo( Type::class, 'type_id' );
@@ -57,6 +63,9 @@ class Item extends Model
 
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
+            if( StorageService::exists( $this->attributes['image'] ) ) {
+                return StorageService::get( $this->attributes['image'] );
+            }
             return asset( 'storage/' . $this->attributes['image'] );
         } else {
             return null;
@@ -65,6 +74,9 @@ class Item extends Model
 
     public function getFileUrlAttribute() {
         if( $this->attributes['file'] ) {
+            if( StorageService::exists( $this->attributes['file'] ) ) {
+                return StorageService::get( $this->attributes['file'] );
+            }
             return asset( 'storage/' . $this->attributes['file'] );
         } else {
             return null;
@@ -73,6 +85,9 @@ class Item extends Model
 
     public function getSongUrlAttribute() {
         if( $this->attributes['file'] ) {
+            if( StorageService::exists( $this->attributes['file'] ) ) {
+                return StorageService::get( $this->attributes['file'] );
+            }
             return asset( 'storage/' . $this->attributes['file'] );
         } else {
             return null;

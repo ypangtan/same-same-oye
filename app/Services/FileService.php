@@ -50,17 +50,18 @@ class FileService
     }
 
     public static function imageUpload( $request ) {
+        $path = StorageService::upload( $request->source ?? 'image', $request->file( 'file' ) );
      
         $createFile = FileManager::create( [
             'name' => $request->file( 'file' )->getClientOriginalName(),
-            'file' => $request->file( 'file' )->store( ( $request->source ?? 'image' ) , [ 'disk' => 'public' ] ),
+            'file' => $path,
             'type' => 3,
         ] );
 
         return response()->json( [
             'status' => 200,
             'data' => $createFile,
-            'url' => asset( 'storage/' . $createFile->file ),
+            'url' => StorageService::get( $path ),
             'file' => $createFile->file,
             'file_name' => $createFile->name,
         ] );
@@ -79,8 +80,7 @@ class FileService
         return response()->json( [
             'status' => 200,
             'data' => $createFile,
-            'result' => $path,
-            'url' => StorageService::get( $path),
+            'url' => StorageService::get( $path ),
             'file' => $createFile->file,
             'file_name' => $createFile->name,
         ] );
