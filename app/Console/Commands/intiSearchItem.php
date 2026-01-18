@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Collection;
 use App\Models\Item;
 use App\Models\Playlist;
+use App\Models\SearchItem;
 use Illuminate\Console\Command;
 
 class intiSearchItem extends Command
@@ -40,6 +41,11 @@ class intiSearchItem extends Command
      */
     public function handle()
     {
+
+        $searchItems = SearchItem::all();
+        foreach( $searchItems as $searchItem ) {
+            $searchItem->delete();
+        }
 
         $collections = Collection::where( 'status', 10 )->get();
         foreach( $collections as $collection ) {
