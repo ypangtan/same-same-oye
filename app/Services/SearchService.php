@@ -24,6 +24,19 @@ use Carbon\Carbon;
 class SearchService {
     
     public static function search( $request ) {
+
+        if( !empty( $request->category_id ) ) {
+            $request->merge( [
+                'category_id' => Helper::decode( $request->category_id )
+            ] );
+        }
+
+        if( !empty( $request->type_id ) ) {
+            $request->merge( [
+                'type_id' => Helper::decode( $request->type_id )
+            ] );
+        }
+
         $per_page = $request->input( 'per_page', 10 );
         $text = $request->text ?? '';
 
