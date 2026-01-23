@@ -19,17 +19,9 @@ class StorageService
     }
 
     public static function get( $path ) {
-        $disk = Storage::disk('r2');
-    
-        if (method_exists($disk, 'temporaryUrl')) {
-            return $disk->temporaryUrl($path, now()->addHours(24));
-        }
-        
-        $publicUrl = config('filesystems.disks.r2.url');
-        if ($publicUrl) {
+        $publicUrl = config( 'filesystems.disks.r2.url' );
+        if ( $publicUrl ) {
             return $publicUrl . '/' . $path;
         }
-        
-        return $disk->url($path);
     }
 }
