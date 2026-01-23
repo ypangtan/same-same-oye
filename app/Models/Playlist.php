@@ -77,10 +77,12 @@ class Playlist extends Model
 
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
-            if( StorageService::exists( $this->attributes['image'] ) ) {
-                return StorageService::get( $this->attributes['image'] );
+            $localPath = storage_path ('app/public/' . $this->attributes['image'] );
+            if ( file_exists( $localPath ) ) {
+                return asset( 'storage/' . $this->attributes['image'] );
             }
-            return asset( 'storage/' . $this->attributes['image'] );
+
+            return StorageService::get( $this->attributes['image'] );
         } else {
             $item = $this->items()->first();
             if( $item && $item->item ) {

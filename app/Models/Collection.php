@@ -65,9 +65,9 @@ class Collection extends Model
 
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
-            $localPath = asset( 'storage/' . $this->attributes['image'] );
+            $localPath = storage_path ('app/public/' . $this->attributes['image'] );
             if ( file_exists( $localPath ) ) {
-                return $localPath;
+                return asset( 'storage/' . $this->attributes['image'] );
             }
         
             return StorageService::get( $this->attributes['image'] );

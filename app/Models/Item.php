@@ -63,10 +63,12 @@ class Item extends Model
 
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
-            if( StorageService::exists( $this->attributes['image'] ) ) {
-                return StorageService::get( $this->attributes['image'] );
+            $localPath = storage_path ('app/public/' . $this->attributes['image'] );
+            if ( file_exists( $localPath ) ) {
+                return asset( 'storage/' . $this->attributes['image'] );
             }
-            return asset( 'storage/' . $this->attributes['image'] );
+
+            return StorageService::get( $this->attributes['image'] );
         } else {
             return null;
         }
@@ -74,10 +76,12 @@ class Item extends Model
 
     public function getFileUrlAttribute() {
         if( $this->attributes['file'] ) {
-            if( StorageService::exists( $this->attributes['file'] ) ) {
-                return StorageService::get( $this->attributes['file'] );
+            $localPath = storage_path ('app/public/' . $this->attributes['file'] );
+            if ( file_exists( $localPath ) ) {
+                return asset( 'storage/' . $this->attributes['file'] );
             }
-            return asset( 'storage/' . $this->attributes['file'] );
+
+            return StorageService::get( $this->attributes['file'] );
         } else {
             return null;
         }
@@ -85,10 +89,12 @@ class Item extends Model
 
     public function getSongUrlAttribute() {
         if( $this->attributes['file'] ) {
-            if( StorageService::exists( $this->attributes['file'] ) ) {
-                return StorageService::get( $this->attributes['file'] );
+            $localPath = storage_path ('app/public/' . $this->attributes['file'] );
+            if ( file_exists( $localPath ) ) {
+                return asset( 'storage/' . $this->attributes['file'] );
             }
-            return asset( 'storage/' . $this->attributes['file'] );
+            
+            return StorageService::get( $this->attributes['file'] );
         } else {
             return null;
         }
