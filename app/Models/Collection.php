@@ -28,6 +28,7 @@ class Collection extends Model
         'image',
         'priority',
         'membership_level',
+        'display_type',
         'status',
     ];
 
