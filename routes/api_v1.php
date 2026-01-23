@@ -95,6 +95,11 @@ Route::prefix( 'items' )->group( function() {
     Route::post( '/search', [ SearchController::class, 'search' ] );
 } );
 
+Route::prefix( 'banners' )->group( function() {
+    Route::post( '/get-all-banners', [ BannerController::class, 'getBanners' ] );
+    Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
+} );
+
 /* End Public route */
 
 /* Start Protected route */
@@ -113,11 +118,6 @@ Route::middleware( 'auth:user' )->group( function() {
 
         Route::post( 'test-notification', [ UserController::class, 'testNotification' ] );
 
-    } );
-
-    Route::prefix( 'banners' )->group( function() {
-        Route::post( '/get-all-banners', [ BannerController::class, 'getBanners' ] );
-        Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
     } );
 
     Route::prefix( 'user-playlist' )->group( function() {
