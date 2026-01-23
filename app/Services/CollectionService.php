@@ -333,7 +333,9 @@ class CollectionService
         }
 
         $collections = Collection::with( [
-            'playlists',
+            'playlists' => function ( $q ) {
+                $q->limit( 10 );
+            },
             // 'playlists.item',
             // 'playlists.items',
         ] )->select( 'collections.*' )
@@ -397,7 +399,9 @@ class CollectionService
 
     public static function getCollection( $request ) {
         $collection = Collection::with( [
-            'playlists',
+            'playlists' => function ( $q ) {
+                $q->limit( 10 );
+            },
             // 'playlists.item',
             // 'playlists.items',
         ] )->find( \Helper::decode( $request->id ) );
