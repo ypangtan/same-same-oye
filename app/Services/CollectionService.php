@@ -334,8 +334,8 @@ class CollectionService
 
         $collections = Collection::with( [
             'playlists',
-            'playlists.item',
-            'playlists.items',
+            // 'playlists.item',
+            // 'playlists.items',
         ] )->select( 'collections.*' )
             ->when( !empty( $request->type_id ), function ( $q ) use ( $request ) {
                 $q->where( 'type_id', $request->type_id );
@@ -366,24 +366,24 @@ class CollectionService
                         'image_url',
                     ] );
 
-                    if ( $playlist->relationLoaded('item') && $playlist->item ) {
-                        $playlist->item->append( [
-                            'encrypted_id',
-                            'image_url',
-                            'file_url',
-                        ] );
-                    }
+                    // if ( $playlist->relationLoaded('item') && $playlist->item ) {
+                    //     $playlist->item->append( [
+                    //         'encrypted_id',
+                    //         'image_url',
+                    //         'file_url',
+                    //     ] );
+                    // }
 
-                    if ( $playlist->relationLoaded('items')  && $playlist->items ) {
-                        $playlist->items->transform(function ($item) {
-                            $item->append( [
-                                'encrypted_id',
-                                'image_url',
-                                'file_url',
-                            ] );
-                            return $item;
-                        });
-                    }
+                    // if ( $playlist->relationLoaded('items')  && $playlist->items ) {
+                    //     $playlist->items->transform(function ($item) {
+                    //         $item->append( [
+                    //             'encrypted_id',
+                    //             'image_url',
+                    //             'file_url',
+                    //         ] );
+                    //         return $item;
+                    //     });
+                    // }
 
                     return $playlist;
                 });
@@ -398,8 +398,8 @@ class CollectionService
     public static function getCollection( $request ) {
         $collection = Collection::with( [
             'playlists',
-            'playlists.item',
-            'playlists.items',
+            // 'playlists.item',
+            // 'playlists.items',
         ] )->find( \Helper::decode( $request->id ) );
 
         $collection->append( [
@@ -416,22 +416,22 @@ class CollectionService
                     'image_url',
                 ] );
 
-                if( $playlist->item ) {
-                    $playlist->item->append( [
-                        'encrypted_id',
-                        'image_url',
-                        'file_url',
-                    ] );    
-                }
-                if( $playlist->items ) {
-                    foreach ( $playlist->items as $item ) {
-                        $item->append( [
-                            'encrypted_id',
-                            'image_url',
-                            'file_url',
-                        ] );
-                    }
-                }
+                // if( $playlist->item ) {
+                //     $playlist->item->append( [
+                //         'encrypted_id',
+                //         'image_url',
+                //         'file_url',
+                //     ] );    
+                // }
+                // if( $playlist->items ) {
+                //     foreach ( $playlist->items as $item ) {
+                //         $item->append( [
+                //             'encrypted_id',
+                //             'image_url',
+                //             'file_url',
+                //         ] );
+                //     }
+                // }
 
             }
         }
