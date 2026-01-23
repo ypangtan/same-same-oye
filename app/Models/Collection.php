@@ -65,10 +65,12 @@ class Collection extends Model
 
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
-            if( StorageService::exists( $this->attributes['image'] ) ) {
-                return StorageService::get( $this->attributes['image'] );
+            $localPath = asset( 'storage/' . $this->attributes['image'] );
+            if ( file_exists( $localPath ) ) {
+                return $localPath;
             }
-            return asset( 'storage/' . $this->attributes['image'] );
+        
+            return StorageService::get( $this->attributes['image'] );
         } else {
             $playlist = $this->playLists()->first();
             if( $playlist ) {
