@@ -274,6 +274,10 @@ var statusMapper = @json( $data['status'] ),
 
         $( document ).on( 'click', '.dt-delete', function() {
 
+            $( 'body' ).loading( {
+                message: '{{ __( 'template.loading' ) }}'
+            } );
+
             $.ajax( {
                 url: '{{ route( 'admin.item.deleteItem' ) }}',
                 type: 'POST',
@@ -285,6 +289,7 @@ var statusMapper = @json( $data['status'] ),
                     dt_table.draw( false );
                     $( '#modal_success .caption-text' ).html( response.message );
                     modalSuccess.toggle();
+                    $( 'body' ).loading( 'stop' );
                 },
             } );
         } );
