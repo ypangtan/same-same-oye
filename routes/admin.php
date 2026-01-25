@@ -292,7 +292,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'create-collection', [ CollectionController::class, 'createCollection' ] )->name( 'admin.collection.createCollection' );
                 Route::post( 'update-collection', [ CollectionController::class, 'updateCollection' ] )->name( 'admin.collection.updateCollection' );
                 Route::post( 'update-collection-status', [ CollectionController::class, 'updateCollectionStatus' ] )->name( 'admin.collection.updateCollectionStatus' );
-                Route::post( 'delete-collection', [ CollectionController::class, 'deleteCollection' ] )->name( 'admin.collection.delete`Collection' );
+                Route::post( 'delete-collection', [ CollectionController::class, 'deleteCollection' ] )->name( 'admin.collection.deleteCollection' );
                 Route::post( 'ckeUpload', [ CollectionController::class, 'ckeUpload' ] )->name( 'admin.collection.ckeUpload' );
                 Route::post( 'image-Upload', [ CollectionController::class, 'imageUpload' ] )->name( 'admin.collection.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'update-order', [ CollectionController::class, 'updateOrder' ] )->name( 'admin.collection.updateOrder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
