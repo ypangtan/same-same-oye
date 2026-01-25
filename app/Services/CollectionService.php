@@ -320,7 +320,11 @@ class CollectionService
         ] );
 
         $updateCollection = Collection::find( $request->id );
-        StorageService::delete( $updateCollection->image );
+        
+        $localPath = storage_path ('app/public/' . $updateCollection->image );
+        if ( !file_exists( $localPath ) ) {
+            StorageService::delete( $updateCollection->image );
+        }
         $updateCollection->delete();
 
         return response()->json( [

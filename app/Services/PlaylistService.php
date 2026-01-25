@@ -340,7 +340,11 @@ class PlaylistService
         ] );
 
         $updatePlaylist = Playlist::find( $request->id );
-        StorageService::delete( $updatePlaylist->image );
+        
+        $localPath = storage_path ('app/public/' . $updatePlaylist->image );
+        if ( !file_exists( $localPath ) ) {
+            StorageService::delete( $updatePlaylist->image );
+        }
         $updatePlaylist->delete();
 
         return response()->json( [

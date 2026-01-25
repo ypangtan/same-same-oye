@@ -311,8 +311,16 @@ class ItemService
         ] );
 
         $updateItem = Item::find( $request->id );
-        StorageService::delete( $updateItem->file );
-        StorageService::delete( $updateItem->image );
+        
+        $localPath = storage_path ('app/public/' . $updateItem->file );
+        if ( !file_exists( $localPath ) ) {
+            StorageService::delete( $updateItem->file );
+        }
+        
+        $localPath = storage_path ('app/public/' . $updateItem->image );
+        if ( !file_exists( $localPath ) ) {
+            StorageService::delete( $updateItem->image );
+        }
         $updateItem->delete();
 
         return response()->json( [
