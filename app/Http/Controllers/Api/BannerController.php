@@ -41,7 +41,7 @@ class BannerController extends Controller
      */
     public function getBanner( Request $request ) {
 
-        return BannerService::getBanner( $request );
+        return BannerService::oneBannerClient( $request );
     }
 
 }

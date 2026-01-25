@@ -198,7 +198,7 @@ var statusMapper = @json( $data['status'] ),
                 render: function( data, type, row, meta ) {
 
                     @canany( [ 'edit items', 'delete items' ] )
-                    let edit, status = '', view = '';
+                    let edit, status = '', view = '', dt_delete = '';
 
                     @can( 'edit items' )
                     edit = '<li class="dt-edit" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.edit' ) }}</span></a></li>';
@@ -208,6 +208,8 @@ var statusMapper = @json( $data['status'] ),
                     status = row['status'] == 10 ? 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="20"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="10"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
+                    
+                    dt_delete = '<li class="dt-delete" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-trash"></em><span>{{ __( 'datatables.delete' ) }}</span></a></li>';
                     @endcan
                     
                     let html = 
@@ -218,6 +220,7 @@ var statusMapper = @json( $data['status'] ),
                                 <ul class="link-list-opt">
                                     `+edit+`
                                     `+status+`
+                                    `+dt_delete+`
                                 </ul>
                             </div>
                         </div>
@@ -259,6 +262,23 @@ var statusMapper = @json( $data['status'] ),
                 data: {
                     'id': $( this ).data( 'id' ),
                     'status': $( this ).data( 'status' ),
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function( response ) {
+                    dt_table.draw( false );
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.toggle();
+                },
+            } );
+        } );
+
+        $( document ).on( 'click', '.dt-delete', function() {
+
+            $.ajax( {
+                url: '{{ route( 'admin.item.deleteItem' ) }}',
+                type: 'POST',
+                data: {
+                    'id': $( this ).data( 'id' ),
                     '_token': '{{ csrf_token() }}'
                 },
                 success: function( response ) {

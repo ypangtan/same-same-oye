@@ -211,14 +211,14 @@
                                 </li>
                                 @endcan
 
-                                {{-- @can( 'view ranks' )
-                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\RankController' ? 'active current-page' : '' }}">
-                                        <a href="{{ route( 'admin.module_parent.rank.index' ) }}" class="nk-menu-link">
+                                @can( 'view banners' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\BannerController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.banner.index' ) }}" class="nk-menu-link">
                                             <span class="nk-menu-icon"><em class="icon fa fa-signal"></em></span>
-                                            <span class="nk-menu-text">{{ __( 'template.ranks' ) }}</span>
+                                            <span class="nk-menu-text">{{ __( 'template.banners' ) }}</span>
                                         </a>
                                     </li>
-                                @endcan --}}
+                                @endcan
 
                                 @can( 'view settings' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SettingController' ? 'active current-page' : '' }}">

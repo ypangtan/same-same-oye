@@ -27,6 +27,11 @@ class CollectionController extends Controller
         $this->data['data']['type'] = $request->type ?? null;
         $this->data['data']['parent_route'] = $request->parent_route ?? null;
 
+        $this->data['data']['display_types'] = [
+            [ 'value' => '1', 'label' => __( 'collection.type_1' ) ],
+            [ 'value' => '2', 'label' => __( 'collection.type_2' ) ],
+        ];
+
         return view( 'admin.main' )->with( $this->data );  
     }
 
@@ -42,6 +47,11 @@ class CollectionController extends Controller
         ];
         $this->data['data']['type'] = $request->type ?? null;
         $this->data['data']['parent_route'] = $request->parent_route ?? null;
+
+        $this->data['data']['display_types'] = [
+            [ 'value' => '1', 'label' => __( 'collection.type_1' ) ],
+            [ 'value' => '2', 'label' => __( 'collection.type_2' ) ],
+        ];
 
         return view( 'admin.main' )->with( $this->data );  
     }
@@ -64,6 +74,10 @@ class CollectionController extends Controller
 
     public function updateCollectionStatus( Request $request ) {
         return CollectionService::updateCollectionStatus( $request );
+    }
+
+    public function deleteCollection( Request $request ) {
+        return CollectionService::deleteCollection( $request );
     }
 
     public function ckeUpload( Request $request ) {

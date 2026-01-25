@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageService;
 use DateTimeInterface;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,8 +27,23 @@ class Banner extends Model
         'image',
         'url',
         'priority',
+        'title',
+        'description',
+        'sequence',
         'status',
     ];
+
+    public function getImagePathAttribute() {
+        if( $this->attributes['image'] ) {
+            $localPath = storage_path ( 'app/public/' . $this->attributes['image'] );
+            if ( file_exists( $localPath ) ) {
+                return asset( 'storage/' . $this->attributes['image'] );
+            }
+        
+            return StorageService::get( $this->attributes['image'] );
+        }
+        return '';
+    }
 
     public function getNameAttribute() {
         $locale = app()->getLocale();
@@ -63,6 +79,7 @@ class Banner extends Model
         'image',
         'url',
         'priority',
+        'sequence',
         'status',
     ];
 

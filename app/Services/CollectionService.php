@@ -168,6 +168,7 @@ class CollectionService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
+            'display_type' => [ 'required', 'in:1,2,3' ],
             'playlists' => [ 'nullable' ],
         ] );
 
@@ -177,6 +178,7 @@ class CollectionService
             'zh_name' => __( 'collection.name' ),
             'image' => __( 'collection.image' ),
             'membership_level' => __( 'collection.membership_level' ),
+            'display_type' => __( 'collection.display_type' ),
             'playlists' => __( 'collection.playlists' ),
         ];
 
@@ -197,6 +199,7 @@ class CollectionService
                 'zh_name' => $request->zh_name,
                 'image' => $request->image,
                 'membership_level' => $request->membership_level,
+                'display_type' => $request->display_type,
                 'priority' => Collection::max( 'priority' ) + 1,
                 'status' => 10,
             ] );
@@ -237,6 +240,7 @@ class CollectionService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
+            'display_type' => [ 'required', 'in:1,2,3' ],
             'playlists' => [ 'nullable' ],
         ] );
 
@@ -247,6 +251,7 @@ class CollectionService
             'image' => __( 'collection.image' ),
             'priority' => __( 'collection.priority' ),
             'membership_level' => __( 'collection.membership_level' ),
+            'display_type' => __( 'collection.display_type' ),
             'playlists' => __( 'collection.playlists' ),
         ];
 
@@ -266,6 +271,7 @@ class CollectionService
             $updateCollection->zh_name = $request->zh_name;
             $updateCollection->image = $request->image;
             $updateCollection->membership_level = $request->membership_level;
+            $updateCollection->display_type = $request->display_type;
             $updateCollection->save();
 
             $playlists = json_decode( $request->playlists, true );
@@ -301,6 +307,21 @@ class CollectionService
         $updateCollection = Collection::find( $request->id );
         $updateCollection->status = $request->status;
         $updateCollection->save();
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.collections' ) ) ] ),
+        ] );
+    }
+
+    public static function deleteCollection( $request ) {
+        
+        $request->merge( [
+            'id' => \Helper::decode( $request->id ),
+        ] );
+
+        $updateCollection = Collection::find( $request->id );
+        StorageService::delete( $updateCollection->image );
+        $updateCollection->delete();
 
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.collections' ) ) ] ),

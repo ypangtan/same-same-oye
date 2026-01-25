@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\{
     DB,
     Hash,
+    Storage,
     Validator,
 };
 
@@ -297,6 +298,22 @@ class ItemService
         $updateItem = Item::find( $request->id );
         $updateItem->status = $request->status;
         $updateItem->save();
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.items' ) ) ] ),
+        ] );
+    }
+
+    public static function deleteItem( $request ) {
+        
+        $request->merge( [
+            'id' => \Helper::decode( $request->id ),
+        ] );
+
+        $updateItem = Item::find( $request->id );
+        StorageService::delete( $updateItem->file );
+        StorageService::delete( $updateItem->image );
+        $updateItem->delete();
 
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.items' ) ) ] ),

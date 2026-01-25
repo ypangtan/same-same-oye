@@ -333,6 +333,21 @@ class PlaylistService
         ] );
     }
 
+    public static function deletePlaylist( $request ) {
+        
+        $request->merge( [
+            'id' => \Helper::decode( $request->id ),
+        ] );
+
+        $updatePlaylist = Playlist::find( $request->id );
+        StorageService::delete( $updatePlaylist->image );
+        $updatePlaylist->delete();
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.playlists' ) ) ] ),
+        ] );
+    }
+
     public static function getPlaylists( $request ) {
 
         if ( !empty( $request->collection_id ) ) {

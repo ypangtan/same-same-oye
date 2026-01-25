@@ -68,6 +68,10 @@ class PlaylistController extends Controller
         return PlaylistService::updatePlaylistStatus( $request );
     }
 
+    public function deletePlaylist( Request $request ) {
+        return PlaylistService::deletePlaylist( $request );
+    }
+
     public function ckeUpload( Request $request ) {
 
         $request->merge( [

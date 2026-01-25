@@ -255,6 +255,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'create-item', [ ItemController::class, 'createItem' ] )->name( 'admin.item.createItem' );
                 Route::post( 'update-item', [ ItemController::class, 'updateItem' ] )->name( 'admin.item.updateItem' );
                 Route::post( 'update-item-status', [ ItemController::class, 'updateItemStatus' ] )->name( 'admin.item.updateItemStatus' );
+                Route::post( 'delete-item', [ ItemController::class, 'deleteItem' ] )->name( 'admin.item.deleteItem' );
                 Route::post( 'cke-upload', [ ItemController::class, 'ckeUpload' ] )->name( 'admin.item.ckeUpload' );
                 Route::post( 'image-upload', [ ItemController::class, 'imageUpload' ] )->name( 'admin.item.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'song-upload', [ ItemController::class, 'songUpload' ] )->name( 'admin.item.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
@@ -273,6 +274,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'create-playlist', [ PlaylistController::class, 'createPlaylist' ] )->name( 'admin.playlist.createPlaylist' );
                 Route::post( 'update-playlist', [ PlaylistController::class, 'updatePlaylist' ] )->name( 'admin.playlist.updatePlaylist' );
                 Route::post( 'update-playlist-status', [ PlaylistController::class, 'updatePlaylistStatus' ] )->name( 'admin.playlist.updatePlaylistStatus' );
+                Route::post( 'delete-playlist', [ PlaylistController::class, 'deletePlaylist' ] )->name( 'admin.playlist.deletePlaylist' );
                 Route::post( 'image-Upload', [ PlaylistController::class, 'imageUpload' ] )->name( 'admin.playlist.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'ckeUpload', [ PlaylistController::class, 'ckeUpload' ] )->name( 'admin.playlist.ckeUpload' );
             } );
@@ -290,6 +292,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'create-collection', [ CollectionController::class, 'createCollection' ] )->name( 'admin.collection.createCollection' );
                 Route::post( 'update-collection', [ CollectionController::class, 'updateCollection' ] )->name( 'admin.collection.updateCollection' );
                 Route::post( 'update-collection-status', [ CollectionController::class, 'updateCollectionStatus' ] )->name( 'admin.collection.updateCollectionStatus' );
+                Route::post( 'delete-collection', [ CollectionController::class, 'deleteCollection' ] )->name( 'admin.collection.delete`Collection' );
                 Route::post( 'ckeUpload', [ CollectionController::class, 'ckeUpload' ] )->name( 'admin.collection.ckeUpload' );
                 Route::post( 'image-Upload', [ CollectionController::class, 'imageUpload' ] )->name( 'admin.collection.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'update-order', [ CollectionController::class, 'updateOrder' ] )->name( 'admin.collection.updateOrder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
@@ -364,7 +367,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'all-music-requests', [ MusicRequestController::class, 'allMusicRequests' ] )->name( 'admin.music_request.allMusicRequests' );
             } );
 
-            Route::prefix( 'banner' )->group( function() {
+            Route::prefix( 'banners' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view banners' ] ], function() {
                     Route::get( '/', [ BannerController::class, 'index' ] )->name( 'admin.module_parent.banner.index' );
                 } );
@@ -372,17 +375,21 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                     Route::get( 'add', [ BannerController::class, 'add' ] )->name( 'admin.banner.add' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:edit banners' ] ], function() {
-                    Route::get( 'edit/{id?}', [ BannerController::class, 'edit' ] )->name( 'admin.banner.edit' );
+                    Route::get( 'edit', [ BannerController::class, 'edit' ] )->name( 'admin.banner.edit' );
                 } );
-
-                Route::post( 'all-banner', [ BannerController::class, 'allBanners' ] )->name( 'admin.banner.allBanners' );
+    
+                Route::post( 'update-banner-url', [ BannerController::class, 'updateBannerUrl' ] )->name( 'admin.banner.updateBannerUrl' );
+                Route::post( 'update-order', [ BannerController::class, 'updateOrder' ] )->name( 'admin.banner.updateOrder' );
+                Route::post( 'all-banners', [ BannerController::class, 'allBanners' ] )->name( 'admin.banner.allBanners' );
                 Route::post( 'one-banner', [ BannerController::class, 'oneBanner' ] )->name( 'admin.banner.oneBanner' );
                 Route::post( 'create-banner', [ BannerController::class, 'createBanner' ] )->name( 'admin.banner.createBanner' );
                 Route::post( 'update-banner', [ BannerController::class, 'updateBanner' ] )->name( 'admin.banner.updateBanner' );
+                Route::post( 'delete-banner', [ BannerController::class, 'deleteBanner' ] )->name( 'admin.banner.deleteBanner' );
                 Route::post( 'update-banner-status', [ BannerController::class, 'updateBannerStatus' ] )->name( 'admin.banner.updateBannerStatus' );
+                Route::post( 'remove-banner-gallery-image', [ BannerController::class, 'removeBannerGalleryImage' ] )->name( 'admin.banner.removeBannerGalleryImage' );
                 Route::post( 'ckeUpload', [ BannerController::class, 'ckeUpload' ] )->name( 'admin.banner.ckeUpload' );
             } );
-
+            
             Route::prefix( 'ad' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view ads' ] ], function() {
                     Route::get( '/', [ AdController::class, 'index' ] )->name( 'admin.module_parent.ad.index' );

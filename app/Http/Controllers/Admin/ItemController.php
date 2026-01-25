@@ -68,6 +68,10 @@ class ItemController extends Controller
         return ItemService::updateItemStatus( $request );
     }
 
+    public function deleteItem( Request $request ) {
+        return ItemService::deleteItem( $request );
+    }
+
     public function songUpload( Request $request ) {
         return FileService::songUpload( $request );
     }

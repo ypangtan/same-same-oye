@@ -51,6 +51,19 @@ $parent_route = $data['parent_route'] ?? '';
                         </div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $collection_create }}_display_type" class="col-sm-5 col-form-label">{{ __( 'collection.display_type' ) }}</label>
+                    <div class="col-sm-7">
+                        <div class="form-check form-switch">
+                            <select class="form-select" id="{{ $collection_create }}_display_type">
+                                <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'collection.display_type' ) ] ) }}</option>
+                            @foreach( $data['display_types'] as $type )
+                                <option value="{{ $type['value'] }}">{{ $type['title'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="mb-3">
                     <label>{{ __( 'collection.image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $collection_create }}_image" style="min-height: 0px;">
@@ -104,6 +117,7 @@ $parent_route = $data['parent_route'] ?? '';
             formData.append( 'type_id', '{{ $type }}' );
             formData.append( 'en_name', $( dc + '_en_name' ).val() ?? '' );
             formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
+            formData.append( 'display_type', $( dc + '_display_type' ).val() ?? '' );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID ?? '' );
             formData.append('playlists', JSON.stringify( selectedPlaylists ) );
