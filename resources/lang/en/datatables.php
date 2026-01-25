@@ -46,7 +46,7 @@ return [
     'success' => 'Success',
     'failed' => 'Failed',
     'activate' => 'Activate',
-    'delete' => 'Deleted',
+    'delete' => 'Delete',
     'activated' => 'Activated',
     'suspend' => 'Suspend',
     'suspended' => 'Suspended',
