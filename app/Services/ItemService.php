@@ -168,9 +168,11 @@ class ItemService
             'type_id' => [ 'required', 'exists:types,id' ],
             'title' => [ 'required' ],
             'lyrics' => [ 'nullable' ],
-            'file' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'author' => [ 'nullable' ],
+            'file' => [ $request->upload_type == 1 ? 'required' : 'nullable' ],
+            'url' => [ $request->upload_type == 2 ? 'required' : 'nullable' ],
+            'upload_type' => [ 'required', 'in:1,2' ],
             'membership_level' => [ 'required' ],
         ] );
 
@@ -181,6 +183,8 @@ class ItemService
             'file' => __( 'item.file' ),
             'image' => __( 'item.image' ),
             'author' => __( 'item.author' ),
+            'upload_type' => __( 'item.upload_type' ),
+            'url' => __( 'item.url' ),
             'membership_level' => __( 'item.membership_level' ),
         ];
 
@@ -198,12 +202,15 @@ class ItemService
                 'type_id' => $request->type_id,
                 'title' => $request->title,
                 'lyrics' => $request->lyrics,
-                'file' => $request->file,
                 'image' => $request->image,
                 'author' => $request->author,
                 'membership_level' => $request->membership_level,
-                'file_name' => $request->file_name,
-                'file_type' => $request->file_type,
+                'membership_level' => $request->membership_level,
+                'file' => !empty( $request->file ) ? $request->file : null,
+                'file_name' => !empty( $request->file_name ) ? $request->file_name : null,
+                'file_type' => !empty( $request->file_type ) ? $request->file_type : null,
+                'url' => !empty( $request->url ) ? $request->url : null,
+                'upload_type' => !empty( $request->upload_type ) ? $request->upload_type : null,
                 'status' => 10,
             ] );
 
@@ -234,9 +241,11 @@ class ItemService
             // 'category_id' => [ 'required' ],
             'title' => [ 'required' ],
             'lyrics' => [ 'nullable' ],
-            'file' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'author' => [ 'nullable' ],
+            'file' => [ $request->upload_type == 1 ? 'required' : 'nullable' ],
+            'url' => [ $request->upload_type == 2 ? 'required' : 'nullable' ],
+            'upload_type' => [ 'required', 'in:1,2' ],
             'membership_level' => [ 'required' ],
         ] );
 
@@ -248,6 +257,8 @@ class ItemService
             'file' => __( 'item.file' ),
             'image' => __( 'item.image' ),
             'author' => __( 'item.author' ),
+            'upload_type' => __( 'item.upload_type' ),
+            'url' => __( 'item.url' ),
             'membership_level' => __( 'item.membership_level' ),
         ];
 
@@ -267,10 +278,14 @@ class ItemService
             $updateItem->type_id = $request->type_id;
             $updateItem->title = $request->title;
             $updateItem->lyrics = $request->lyrics;
-            $updateItem->file = $request->file;
             $updateItem->image = $request->image;
             $updateItem->author = $request->author;
             $updateItem->membership_level = $request->membership_level;
+            $updateItem->file = !empty( $request->file ) ? $request->file : null;
+            $updateItem->file_type = !empty( $request->url ) ? $request->file_type : null;
+            $updateItem->file_name = !empty( $request->file_name ) ? $request->file_name : null;
+            $updateItem->url = !empty( $request->url ) ? $request->url : null;
+            $updateItem->upload_type = !empty( $request->upload_type ) ? $request->upload_type : null;
             $updateItem->save();
 
             DB::commit();

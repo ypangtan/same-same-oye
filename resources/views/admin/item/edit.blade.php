@@ -46,7 +46,18 @@ $parent_route = $data['parent_route'] ?? '';
                         </div>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 row">
+                    <label for="{{ $item_edit }}_upload_type" class="col-sm-5 col-form-label">{{ __( 'item.upload_type' ) }}</label>
+                    <div class="col-sm-7">
+                        <div class="form-check form-switch">
+                            <select class="form-select" id="{{ $item_edit }}_upload_type">
+                                <option value="1" selected>{{ __( 'item.upload_file' ) }}</option>
+                                <option value="2">{{ __( 'item.upload_url' ) }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 row item-file">
                     <label>{{ __( 'item.song' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $item_edit }}_file" style="min-height: 0px;">
                         <div class="dz-message needsclick">
@@ -54,6 +65,14 @@ $parent_route = $data['parent_route'] ?? '';
                         </div>
                     </div>
                     <div class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3 row d-none item-url">
+                    <label for="{{ $item_edit }}_url" class="col-sm-5 col-form-label">{{ __( 'item.url' ) }}</label>
+                    <div class="col-sm-7">
+                        <div class="form-check form-switch">
+                            <input type="text" class="form-control" id="{{ $item_edit }}_url">
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label>{{ __( 'item.image' ) }}</label>
@@ -94,6 +113,18 @@ window.cke_element = [ 'item_edit_desc'];
             song_file = '',
             file2ID = '';
 
+        $( de + '_type' ).change( function() {
+            let selectedType = $( this ).val();
+
+            if ( selectedType == 1 ) {
+                $( '.item-file' ).removeClass( 'd-none' );
+                $( '.item-url' ).addClass( 'd-none' );
+            } else {
+                $( '.item-file' ).addClass( 'd-none' );
+                $( '.item-url' ).removeClass( 'd-none' );
+            }
+        } );
+
         $( de + '_cancel' ).click( function() {
             window.location.href = '{{ $parent_route }}';
         } );
@@ -116,6 +147,8 @@ window.cke_element = [ 'item_edit_desc'];
             formData.append( 'file_type', song_file_type ?? '' );
             formData.append( 'image', fileID ?? '' );
             formData.append( 'author', $( de + '_author' ).val() ?? '' );
+            formData.append( 'upload_type', $( de + '_upload_type' ).val() ?? '' );
+            formData.append( 'url', $( de + '_url' ).val() ?? '' );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -169,6 +202,8 @@ window.cke_element = [ 'item_edit_desc'];
                 success: function( response ) {
                     $( de + '_title' ).val( response.title );
                     $( de + '_author' ).val( response.author );
+                    $( de + '_upload_type' ).val( response.upload_type );
+                    $( de + '_url' ).val( response.url );
                     editors['item_edit_desc'].setData( response.desc ?? '' );
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
 

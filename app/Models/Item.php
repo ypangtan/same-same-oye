@@ -32,6 +32,8 @@ class Item extends Model
         'membership_level',
         'file_name',
         'file_type',
+        'upload_type',
+        'url',
         'status',
     ];
 
@@ -83,7 +85,7 @@ class Item extends Model
 
             return StorageService::get( $this->attributes['file'] );
         } else {
-            return null;
+            return $this->attributes['url'];
         }
     }
 
@@ -96,7 +98,7 @@ class Item extends Model
             
             return StorageService::get( $this->attributes['file'] );
         } else {
-            return null;
+            return $this->attributes['url'];
         }
     }
 
@@ -120,6 +122,8 @@ class Item extends Model
         'membership_level',
         'file_name',
         'file_type',
+        'upload_type',
+        'url',
         'status',
     ];
 
