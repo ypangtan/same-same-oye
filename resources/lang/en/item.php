@@ -23,5 +23,7 @@ return [
     'song' => 'Song',
     'membership' => 'Membership',
     'desc' => 'Description',
+    'upload_file' => 'Upload File',
+    'upload_url' => 'Upload URL',
 
 ];

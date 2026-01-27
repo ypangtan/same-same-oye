@@ -113,7 +113,7 @@ window.cke_element = [ 'item_edit_desc'];
             song_file = '',
             file2ID = '';
 
-        $( de + '_type' ).change( function() {
+        $( de + '_upload_type' ).change( function() {
             let selectedType = $( this ).val();
 
             if ( selectedType == 1 ) {

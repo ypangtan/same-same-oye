@@ -114,7 +114,7 @@ window.cke_element = [ 'item_create_desc'];
             file2ID = '',
             songPath = '';
 
-        $( dc + '_type' ).change( function() {
+        $( dc + '_upload_type' ).change( function() {
             let selectedType = $( this ).val();
 
             if ( selectedType == 1 ) {
