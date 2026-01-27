@@ -57,6 +57,11 @@ class User extends Model
         'rank_id',
     ];
 
+    public function subscriptions()
+    {
+        return $this->hasMany( UserSubscription::class, 'user_id' );
+    }
+
     public function wallets()
     {
         return $this->hasMany(Wallet::class, 'user_id');

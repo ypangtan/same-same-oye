@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\{
     AppVersionController,
     CategoryController,
     CollectionController,
+    InAppPurchaseController,
     ItemController,
     LuckyDrawRewardController,
     MusicRequestController,
@@ -100,6 +101,10 @@ Route::prefix( 'banners' )->group( function() {
     Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
 } );
 
+Route::prefix( 'plans' )->group( function() {
+    Route::post( '/get-plans', [ InAppPurchaseController::class, 'getPlans' ] );
+} );
+
 /* End Public route */
 
 /* Start Protected route */
@@ -139,7 +144,13 @@ Route::middleware( 'auth:user' )->group( function() {
     Route::prefix( 'music-requests' )->group( function() {
         Route::post( '/create-music-requests', [ MusicRequestController::class, 'createMusicRequest' ] );
     } );
-    
+
+    Route::prefix( 'in-app-purchase' )->group( function() {
+        Route::post( '/verify-payment', [ InAppPurchaseController::class, 'verifyPayment' ] );
+        Route::get( '/get-current-subscription', [ InAppPurchaseController::class, 'getCurrentSubscription' ] );
+        Route::get( '/cancel-subscription', [ InAppPurchaseController::class, 'cancelSubscription' ] );
+    } );
+        
 });
 
 

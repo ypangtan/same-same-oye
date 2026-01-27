@@ -1,0 +1,161 @@
+<?php
+
+namespace App\Models;
+
+use DateTimeInterface;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
+use Helper;
+
+use Carbon\Carbon;
+
+class UserSubscription extends Model
+{
+    use HasFactory, LogsActivity;
+
+    protected $fillable = [
+        'user_id',
+        'subscription_plan_id',
+        'start_date',
+        'end_date',
+        'cancelled_at',
+        'platform',
+        'platform_transaction_id',
+        'platform_receipt',
+        'status',
+    ];
+
+    public function statusList() {
+        return [
+            10 => 'active',
+            20 => 'expired',
+            30 => 'refunded',
+            40 => 'cancelled',
+        ];
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function plan() {
+        return $this->belongsTo(SubscriptionPlan::class, 'subscription_plan_id');
+    }
+
+    public function transactions() {
+        return $this->hasMany(PaymentTransaction::class);
+    }
+
+    public function isActive() {
+        return $this->status === 10 
+            && $this->end_date 
+            && $this->end_date->isFuture();
+    }
+
+    public function isExpired() {
+        return $this->end_date && $this->end_date->isPast();
+    }
+
+    public function activate( $endDate, $autoRenew = true) {
+        $this->update( [
+            'status' => 10,
+            'start_date' => now(),
+            'end_date' => $endDate,
+            'auto_renew' => $autoRenew,
+        ] );
+
+        return $this;
+    }
+
+    public function renew( $days)  {
+        $newEndDate = $this->end_date && $this->end_date->isFuture()
+            ? $this->end_date->addDays($days)
+            : now()->addDays($days);
+
+        $this->update([
+            'status' => 'active',
+            'end_date' => $newEndDate,
+            'last_renewal_check' => now(),
+        ]);
+
+        return $this;
+    }
+
+    public function cancel() {
+        $this->update([
+            'status' => 40,
+            'cancelled_at' => now(),
+            'auto_renew' => false,
+        ]);
+
+        return $this;
+    }
+
+    public function markAsExpired() {
+        $this->update([
+            'status' => 20,
+        ]);
+
+        return $this;
+    }
+
+    public function refund() {
+        $this->update( [
+            'status' => 30,
+            'auto_renew' => false,
+        ] );
+
+        return $this;
+    }
+
+    public function scopeActive( $query ) {
+        return $query->where( 'status', 10 )
+                    ->where('end_date', '>', now());
+    }
+
+    public function scopeNeedsRenewalCheck( $query ) {
+        return $query->where( 'status', 10 )
+                    ->where('auto_renew', true)
+                    ->where(function($q) {
+                        $q->whereNull('last_renewal_check')
+                          ->orWhere('last_renewal_check', '<', now()->subHours(6));
+                    });
+    }
+
+    public function getEncryptedIdAttribute() {
+        return Helper::encode( $this->attributes['id'] );
+    }
+
+    protected function serializeDate( DateTimeInterface $date ) {
+        return $date->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' );
+    }
+
+    protected static $logAttributes = [
+        'user_id',
+        'subscription_plan_id',
+        'start_date',
+        'end_date',
+        'cancelled_at',
+        'platform',
+        'platform_transaction_id',
+        'platform_receipt',
+        'status',
+    ];
+
+    protected static $logName = 'user_subscriptions';
+
+    protected static $logOnlyDirty = true;
+
+    public function getActivitylogOptions(): LogOptions {
+        return LogOptions::defaults()->logFillable();
+    }
+
+    public function getDescriptionForEvent( string $eventName ): string {
+        return "{$eventName} ";
+    }
+}
