@@ -26,4 +26,7 @@ return [
     'upload_file' => 'Upload File',
     'upload_url' => 'Upload URL',
 
+    'upload_type' => 'Upload Type',
+    'url' => 'URL',
+
 ];
