@@ -17,7 +17,6 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "hashids/hashids": "^4.1",
-        "imdhemy/laravel-purchases": "1.12",
         "laravel/fortify": "^1.16",
         "laravel/framework": "^8.0",
         "laravel/sanctum": "^2.15",
