@@ -202,7 +202,7 @@ window.cke_element = [ 'item_edit_desc'];
                 success: function( response ) {
                     $( de + '_title' ).val( response.title );
                     $( de + '_author' ).val( response.author );
-                    $( de + '_upload_type' ).val( response.upload_type );
+                    $( de + '_upload_type' ).val( response.upload_type ).trigger( 'change' );
                     $( de + '_url' ).val( response.url );
                     editors['item_edit_desc'].setData( response.desc ?? '' );
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
