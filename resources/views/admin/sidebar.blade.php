@@ -189,6 +189,15 @@
                                     </ul>
                                 </li>
                                 @endcanany
+
+                                @can( 'view subscription_plans' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SubscriptionPlanController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.subscription_plan.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-report-profit"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.subscription_plans' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
                                 
                                 @canany( [ 'view marketing_notifications', 'view pop_announcements' ] )
                                 <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\MarketingNotificationController' || $controller == 'App\Http\Controllers\Admin\PopAnnouncementController') ? 'active current-page' : '' }}">
@@ -214,7 +223,7 @@
                                 @can( 'view banners' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\BannerController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.banner.index' ) }}" class="nk-menu-link">
-                                            <span class="nk-menu-icon"><em class="icon fa fa-signal"></em></span>
+                                            <span class="nk-menu-icon"><em class="icon ni ni-flag-fill"></em></span>
                                             <span class="nk-menu-text">{{ __( 'template.banners' ) }}</span>
                                         </a>
                                     </li>
