@@ -56,7 +56,6 @@ $parent_route = $data['parent_route'] ?? '';
                     <div class="col-sm-7">
                         <div class="form-check form-switch">
                             <select class="form-select" id="{{ $collection_edit }}_display_type">
-                                {{ dd( $data['display_types'] ); }}
                                 @foreach( $data['display_types'] as $key => $type )
                                 <option value="{{ $type['value'] }}">{{ $type['title'] }}</option>
                                 @endforeach
