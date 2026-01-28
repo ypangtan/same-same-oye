@@ -57,8 +57,10 @@ $parent_route = $data['parent_route'] ?? '';
                         <div class="form-check form-switch">
                             <select class="form-select" id="{{ $collection_edit }}_display_type">
                                 @foreach( $data['display_types'] as $key => $type )
-                                {{ dump( $type ); }}
-                                <option value="{{ $type['value'] }}">{{ $type['title'] }}</option>
+                                @php
+                                    dump($type); // See what each $type contains
+                                @endphp
+                                {{-- <option value="{{ $type['value'] }}">{{ $type['title'] }}</option> --}}
                                 @endforeach
                             </select>
                         </div>
