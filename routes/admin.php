@@ -42,6 +42,7 @@ use App\Http\Controllers\Admin\{
     PodcastController,
     PopAnnouncementController,
     RankController,
+    SubscriptionPlanController,
     TalkController,
 };
 
@@ -388,6 +389,24 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-banner-status', [ BannerController::class, 'updateBannerStatus' ] )->name( 'admin.banner.updateBannerStatus' );
                 Route::post( 'remove-banner-gallery-image', [ BannerController::class, 'removeBannerGalleryImage' ] )->name( 'admin.banner.removeBannerGalleryImage' );
                 Route::post( 'ckeUpload', [ BannerController::class, 'ckeUpload' ] )->name( 'admin.banner.ckeUpload' );
+            } );
+
+            Route::prefix( 'subscription_plans' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view subscription_plans' ] ], function() {
+                    Route::get( '/', [ SubscriptionPlanController::class, 'index' ] )->name( 'admin.module_parent.subscription_plan.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add subscription_plans' ] ], function() {
+                    Route::get( 'add', [ SubscriptionPlanController::class, 'add' ] )->name( 'admin.subscription_plan.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit subscription_plans' ] ], function() {
+                    Route::get( 'edit', [ SubscriptionPlanController::class, 'edit' ] )->name( 'admin.subscription_plan.edit' );
+                } );
+    
+                Route::post( 'all-subscription-plans', [ SubscriptionPlanController::class, 'allSubscriptionPlans' ] )->name( 'admin.subscription_plan.allSubscriptionPlans' );
+                Route::post( 'one-subscription-plan', [ SubscriptionPlanController::class, 'oneSubscriptionPlan' ] )->name( 'admin.subscription_plan.oneSubscriptionPlan' );
+                Route::post( 'create-subscription-plan', [ SubscriptionPlanController::class, 'createSubscriptionPlan' ] )->name( 'admin.subscription_plan.createSubscriptionPlan' );
+                Route::post( 'update-subscription-plan', [ SubscriptionPlanController::class, 'updateSubscriptionPlan' ] )->name( 'admin.subscription_plan.updateSubscriptionPlan' );
+                Route::post( 'update-subscription-plan-status', [ SubscriptionPlanController::class, 'updateSubscriptionPlanStatus' ] )->name( 'admin.subscription_plan.updateSubscriptionPlanStatus' );
             } );
             
             Route::prefix( 'ad' )->group( function() {
