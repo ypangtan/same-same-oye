@@ -141,17 +141,23 @@ class SubscriptionPlanService
     public static function createSubscriptionPlan( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'en_name' => [ 'required' ],
-            'zh_name' => [ 'nullable' ],
-            'image' => [ 'required' ],
-            'color' => [ 'required' ],
+            'name' => [ 'required' ],
+            'description' => [ 'nullable' ],
+            'price' => [ 'required' ],
+            'duration_in_days' => [ 'required' ],
+            'ios_product_id' => [ 'required' ],
+            'android_product_id' => [ 'required' ],
+            'huawei_product_id' => [ 'nullable' ],
         ] );
 
         $attributeName = [
-            'en_name' => __( 'subscription_plan.name' ),
-            'zh_name' => __( 'subscription_plan.name' ),
-            'image' => __( 'subscription_plan.image' ),
-            'color' => __( 'subscription_plan.color' ),
+            'name' => __( 'subscription_plan.name' ),
+            'description' => __( 'subscription_plan.description' ),
+            'price' => __( 'subscription_plan.price' ),
+            'duration_in_days' => __( 'subscription_plan.duration_in_days' ),
+            'ios_product_id' => __( 'subscription_plan.ios_product_id' ),
+            'android_product_id' => __( 'subscription_plan.android_product_id' ),
+            'huawei_product_id' => __( 'subscription_plan.huawei_product_id' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -165,11 +171,13 @@ class SubscriptionPlanService
         try {
 
             $createSubscriptionPlan = SubscriptionPlan::create( [
-                'en_name' => $request->en_name,
-                'zh_name' => $request->zh_name,
-                'image' => $request->image,
-                'color' => $request->color,
-                'type_id' => $request->type_id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'price' => $request->price,
+                'duration_in_days' => $request->duration_in_days,
+                'ios_product_id' => $request->ios_product_id,
+                'android_product_id' => $request->android_product_id,
+                'huawei_product_id' => $request->huawei_product_id,
             ] );
             DB::commit();
 
@@ -193,18 +201,25 @@ class SubscriptionPlanService
             'id' => Helper::decode( $request->id ),
         ] );
 
+        
         $validator = Validator::make( $request->all(), [
-            'en_name' => [ 'required' ],
-            'zh_name' => [ 'nullable' ],
-            'image' => [ 'required' ],
-            'color' => [ 'required' ],
+            'name' => [ 'required' ],
+            'description' => [ 'nullable' ],
+            'price' => [ 'required' ],
+            'duration_in_days' => [ 'required' ],
+            'ios_product_id' => [ 'required' ],
+            'android_product_id' => [ 'required' ],
+            'huawei_product_id' => [ 'nullable' ],
         ] );
 
         $attributeName = [
-            'en_name' => __( 'subscription_plan.name' ),
-            'zh_name' => __( 'subscription_plan.name' ),
-            'color' => __( 'subscription_plan.color' ),
-            'image' => __( 'subscription_plan.image' ),
+            'name' => __( 'subscription_plan.name' ),
+            'description' => __( 'subscription_plan.description' ),
+            'price' => __( 'subscription_plan.price' ),
+            'duration_in_days' => __( 'subscription_plan.duration_in_days' ),
+            'ios_product_id' => __( 'subscription_plan.ios_product_id' ),
+            'android_product_id' => __( 'subscription_plan.android_product_id' ),
+            'huawei_product_id' => __( 'subscription_plan.huawei_product_id' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -218,14 +233,13 @@ class SubscriptionPlanService
         try {
 
             $updateSubscriptionPlan = SubscriptionPlan::find( $request->id );
-            $updateSubscriptionPlan->en_name = $request->en_name;
-            $updateSubscriptionPlan->zh_name = $request->zh_name;
-            $updateSubscriptionPlan->type_id = $request->type_id;
-            if( $updateSubscriptionPlan->image != $request->image ) {
-                Storage::disk('public')->delete( $updateSubscriptionPlan->image );
-            }
-            $updateSubscriptionPlan->image = $request->image;
-            $updateSubscriptionPlan->color = $request->color;
+            $updateSubscriptionPlan->name = $request->name;
+            $updateSubscriptionPlan->description = $request->description;
+            $updateSubscriptionPlan->price = $request->price;
+            $updateSubscriptionPlan->duration_in_days = $request->duration_in_days;
+            $updateSubscriptionPlan->ios_product_id = $request->ios_product_id;
+            $updateSubscriptionPlan->android_product_id = $request->android_product_id;
+            $updateSubscriptionPlan->huawei_product_id = $request->huawei_product_id;
             $updateSubscriptionPlan->save();
 
             DB::commit();
