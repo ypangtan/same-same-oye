@@ -105,7 +105,7 @@ var statusMapper = {
             }
         },
         ajax: {
-            url: '{{ route( 'admin.subscription_plan.allPopAnnouncements' ) }}',
+            url: '{{ route( 'admin.subscription_plan.allSubscriptionPlans' ) }}',
             data: {
                 '_token': '{{ csrf_token() }}',
             },
