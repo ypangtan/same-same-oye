@@ -24,4 +24,5 @@ return [
 
     'type_1' => 'Type 1',
     'type_2' => 'Type 2',
+    'display_type' => 'Display Type',
 ];
