@@ -53,8 +53,6 @@ class CollectionController extends Controller
             [ 'value' => '2', 'title' => __( 'collection.type_2' ) ],
         ];
 
-        {{ dd( $this->data['data']['display_types'] ); }}
-
         return view( 'admin.main' )->with( $this->data );  
     }
 

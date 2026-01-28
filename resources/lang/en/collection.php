@@ -22,4 +22,6 @@ return [
     'playlists' => 'Playlists',
     'membership' => 'Membership',
 
+    'type_1' => 'Type 1',
+    'type_2' => 'Type 2',
 ];
