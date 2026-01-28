@@ -79,6 +79,7 @@ return [
     'podcasts' => 'Podcasts',
     'talks' => 'Talks',
     'user_playlists' => 'User Playlists',
+    'subscription_plans' => 'Subscription Plans',
 
     'loading' => 'Loading...',
     'add' => 'Add',
