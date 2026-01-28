@@ -2,6 +2,7 @@
 $collection_edit = 'collection_edit';
 $type = $data['type'] ?? null;
 $parent_route = $data['parent_route'] ?? '';
+dd( $data );
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
