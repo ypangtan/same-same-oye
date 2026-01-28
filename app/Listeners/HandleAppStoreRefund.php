@@ -2,17 +2,17 @@
 
 namespace App\Listeners;
 
-use Imdhemy\Purchases\Events\AppStore\Cancel;
+use Imdhemy\Purchases\Events\AppStore\Refund;
 use App\Models\UserSubscription;
 use App\Models\PaymentTransaction;
 use Illuminate\Support\Facades\Log;
 
-class HandleAppStoreSubscriptionCanceled
+class HandleAppStoreRefund
 {
     /**
      * Handle the event.
      */
-    public function handle(Cancel $event)
+    public function handle(Refund $event)
     {
         try {
             // ✅ 正确的 API 用法（1.12 版本）
@@ -21,7 +21,7 @@ class HandleAppStoreSubscriptionCanceled
 
             $uniqueIdentifier = $subscription->getUniqueIdentifier(); // original_transaction_id
 
-            Log::channel('payment')->info('App Store subscription canceled', [
+            Log::channel('payment')->info('App Store refund received', [
                 'original_transaction_id' => $uniqueIdentifier,
             ]);
 
@@ -31,16 +31,15 @@ class HandleAppStoreSubscriptionCanceled
                 ->first();
 
             if (!$userSubscription) {
-                Log::channel('payment')->warning('Subscription not found for cancellation', [
+                Log::channel('payment')->warning('Subscription not found for refund', [
                     'original_transaction_id' => $uniqueIdentifier,
                 ]);
                 return;
             }
 
-            // 取消订阅
+            // 标记订阅为已退款
             $userSubscription->update([
-                'status' => 30, // cancelled
-                'cancelled_at' => now(),
+                'status' => 40, // refunded
                 'auto_renew' => false,
             ]);
 
@@ -50,27 +49,27 @@ class HandleAppStoreSubscriptionCanceled
                 $productId = $userSubscription->plan->ios_product_id ?? 'unknown';
             }
 
-            // 记录取消事件
+            // 记录退款事件
             PaymentTransaction::create([
                 'user_id' => $userSubscription->user_id,
                 'user_subscription_id' => $userSubscription->id,
-                'transaction_id' => 'cancel_ios_' . time() . '_' . $userSubscription->id,
+                'transaction_id' => 'refund_ios_' . time() . '_' . $userSubscription->id,
                 'original_transaction_id' => $uniqueIdentifier,
                 'amount' => 0,
                 'currency' => 'MYR',
                 'platform' => 1, // iOS
                 'product_id' => $productId,
-                'status' => 10, // success
+                'status' => 40, // refunded
                 'verified_at' => now(),
-                'event_type' => 'CANCELLATION',
+                'event_type' => 'REFUND',
             ]);
 
-            Log::channel('payment')->info('Subscription cancelled successfully', [
+            Log::channel('payment')->info('Subscription refunded successfully', [
                 'subscription_id' => $userSubscription->id,
             ]);
 
         } catch (\Exception $e) {
-            Log::channel('payment')->error('Failed to handle App Store subscription cancellation', [
+            Log::channel('payment')->error('Failed to handle App Store refund', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);

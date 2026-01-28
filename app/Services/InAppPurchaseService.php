@@ -10,7 +10,7 @@ use Exception;
 
 class InAppPurchaseService {
 
-    public static function verifyPayment( Request $request ) {
+    public static function verifyPayment( $request ) {
 
         $validator = Validator::make( $request->all(), [
             'platform' => [ 'required', 'in:1,2,3' ],
@@ -94,9 +94,16 @@ class InAppPurchaseService {
         ] );
     }
 
-    public static function getPlans() {
-        $plans = SubscriptionPlan::where( 'status', 10 )->get();
+    public static function getPlans( $request ) {
 
+        $per_page = $request->per_page ?? 10;
+        $plans = SubscriptionPlan::where( 'status', 10 )->paginate( $per_page );
+
+        if ( $plans ) {
+            $plans->append( [
+                'encrypted_id',
+            ] );
+        }
         return response()->json( [
             'plans' => $plans,
         ] );

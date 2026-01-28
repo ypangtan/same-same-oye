@@ -69,6 +69,7 @@ class InAppPurchaseController extends Controller {
      * 
      * @authenticated
      * 
+     * 
      */
     public function cancelSubscription() {
 
@@ -80,10 +81,12 @@ class InAppPurchaseController extends Controller {
      * 
      * @group In App Purchase API
      * 
+     * @bodyParam per_page string The per_page. Example: 10
+     * 
      */
-    public function getPlans() {
+    public function getPlans( Request $request ) {
 
-        return InAppPurchaseService::getPlans();
+        return InAppPurchaseService::getPlans( $request );
     }
 
 }
