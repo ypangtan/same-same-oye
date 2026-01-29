@@ -22,13 +22,8 @@ class PaymentService {
         try {
             $user = User::find( $user_id );
             $receiptData = $data['receipt_data'];
-            $productId = $data['product_id'];
-
-            // 查找订阅方案
-            $plan = SubscriptionPlan::findByPlatformProductId('ios', $productId);
-            if (!$plan) {
-                throw new Exception("Invalid product ID: {$productId}");
-            }
+            $plan = SubscriptionPlan::find( $data['plan_id'] );
+            $productId = $plan->ios_product_id;
 
             // 验证收据
             $response = Subscription::appStore()
@@ -106,7 +101,8 @@ class PaymentService {
     public static function verifyAndroidPurchase( $user_id, $data ) {
         try {
             $user = User::find( $user_id );
-            $productId = $data['product_id'];
+            $plan = SubscriptionPlan::find( $data['plan_id'] );
+            $productId = $plan->android_product_id;
             $purchaseToken = $data['purchase_token'];
             $packageName = config('liap.google_play_package_name');
 
@@ -192,6 +188,8 @@ class PaymentService {
         try {
             // TODO: 
             $user = User::find( $user_id );
+            $plan = SubscriptionPlan::find( $data['plan_id'] );
+            $productId = $plan->huawei_product_id;
             
             throw new Exception("Huawei IAP verification not implemented yet");
 

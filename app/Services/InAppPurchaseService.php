@@ -23,10 +23,16 @@ class InAppPurchaseService {
             ], 500 );
         }
 
+        if( !empty( $request->plan_id ) ) {
+            $request->merge( [
+                'plan_id' => \Helper::decode( $request->plan_id ),
+            ] );
+        }
+
         $validator = Validator::make( $request->all(), [
             'platform' => [ 'required', 'in:1,2,3' ],
             'receipt_data' => [ $request->platform == 1 ? 'required' : 'nullable' ],
-            'product_id' => [ 'required' ],
+            'plan_id' => [ 'required', 'exists:subscription_plans,id' ],
             'purchase_token' => [ in_array( $request->platform, [2,3] ) ? 'required' : 'nullable' ],
             'purchase_data' => [ $request->platform == 3 ? 'required' : 'nullable' ],
             'signature' => [ $request->platform == 3 ? 'required' : 'nullable' ],
@@ -35,7 +41,7 @@ class InAppPurchaseService {
         $attributeName = [
             'platform' => __( 'payment.platform' ),
             'receipt_data' => __( 'payment.receipt_data' ),
-            'product_id' => __( 'payment.product_id' ),
+            'plan_id' => __( 'payment.plan' ),
             'purchase_token' => __( 'payment.purchase_token' ),
             'purchase_data' => __( 'payment.purchase_data' ),
             'signature' => __( 'payment.signature' ),

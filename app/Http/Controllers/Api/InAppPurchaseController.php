@@ -37,7 +37,7 @@ class InAppPurchaseController extends Controller {
      * 
      * @bodyParam platform string The platform. Example: 1
      * @bodyParam receipt_data string The receipt_data required when ios. Example: 1
-     * @bodyParam product_id string The product_id. Example: 1
+     * @bodyParam plan_id string The encrypted id of subscription plan. Example: 1
      * @bodyParam purchase_token string The purchase_token required when Android and huawei. Example: 1
      * @bodyParam purchase_data string The purchase_data required when huawei. Example: 1
      * @bodyParam signature string The signature required when huawei. Example: 1
