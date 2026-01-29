@@ -80,15 +80,14 @@ class InAppPurchaseService {
         } catch ( Exception $e ) {
             
             $createlog->response = json_encode( [
-                'message' => 'Verification failed',
-                'error' => $e->getMessage(),
+                'message' => $e->getMessage(),
             ] );
             $createlog->status = 20;
             $createlog->save();
 
             return response()->json([
-                'message' => 'Verification failed',
-                'error' => $e->getMessage(),
+                'message_key' => 'Verification failed',
+                'message' => $e->getMessage(),
             ], 500 );
         }
     }
