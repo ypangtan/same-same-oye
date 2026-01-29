@@ -135,6 +135,13 @@ return [
             'path' => storage_path('logs/user_pre_auth.log'),
             'level' => 'info',
         ],
+
+        'payment' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/payment.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
     ],
 
 ];
