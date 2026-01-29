@@ -1,7 +1,5 @@
 <?php
 $subscription_plan_edit = 'subscription_plan_edit';
-$discountTypes = $data['discount_types'];
-$subscription_planTypes = $data['voucher_type'];
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
