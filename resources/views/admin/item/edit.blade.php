@@ -74,6 +74,17 @@ $parent_route = $data['parent_route'] ?? '';
                         </div>
                     </div>
                 </div>
+                <div class="mb-3 row d-none item-url">
+                    <label for="{{ $item_edit }}_url_type" class="col-sm-5 col-form-label">{{ __( 'item.url_type' ) }}</label>
+                    <div class="col-sm-7">
+                        <div class="form-check form-switch">
+                            <select class="form-select" id="{{ $item_edit }}_url_type">
+                                <option value="1" selected>{{ __( 'item.video' ) }}</option>
+                                <option value="2">{{ __( 'item.live' ) }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="mb-3">
                     <label>{{ __( 'item.image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $item_edit }}_image" style="min-height: 0px;">
@@ -149,6 +160,7 @@ window.cke_element = [ 'item_edit_desc'];
             formData.append( 'author', $( de + '_author' ).val() ?? '' );
             formData.append( 'upload_type', $( de + '_upload_type' ).val() ?? '' );
             formData.append( 'url', $( de + '_url' ).val() ?? '' );
+            formData.append( 'url_type', $( de + '_url_type' ).val() ?? '' );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -204,6 +216,7 @@ window.cke_element = [ 'item_edit_desc'];
                     $( de + '_author' ).val( response.author );
                     $( de + '_upload_type' ).val( response.upload_type ).trigger( 'change' );
                     $( de + '_url' ).val( response.url );
+                    $( de + '_url_type' ).val( response.url_type );
                     editors['item_edit_desc'].setData( response.desc ?? '' );
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
 

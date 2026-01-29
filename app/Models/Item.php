@@ -34,6 +34,7 @@ class Item extends Model
         'file_type',
         'upload_type',
         'url',
+        'url_type',
         'status',
     ];
 
@@ -124,6 +125,7 @@ class Item extends Model
         'file_type',
         'upload_type',
         'url',
+        'url_type',
         'status',
     ];
 

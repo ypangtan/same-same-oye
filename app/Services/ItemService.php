@@ -173,6 +173,7 @@ class ItemService
             'file' => [ $request->upload_type == 1 ? 'required' : 'nullable' ],
             'url' => [ $request->upload_type == 2 ? 'required' : 'nullable' ],
             'upload_type' => [ 'required', 'in:1,2' ],
+            'url_type' => [ $request->upload_type == 2 ? 'required' : 'nullable', 'in:1,2' ],
             'membership_level' => [ 'required' ],
         ] );
 
@@ -185,6 +186,7 @@ class ItemService
             'author' => __( 'item.author' ),
             'upload_type' => __( 'item.upload_type' ),
             'url' => __( 'item.url' ),
+            'url_type' => __( 'item.url_type' ),
             'membership_level' => __( 'item.membership_level' ),
         ];
 
@@ -211,6 +213,7 @@ class ItemService
                 'file_type' => $request->upload_type == 1 ? ( !empty( $request->file_type ) ? $request->file_type : null ) : 2,
                 'url' => !empty( $request->url ) ? $request->url : null,
                 'upload_type' => $request->upload_type,
+                'url_type' => $request->url_type,
                 'status' => 10,
             ] );
 
@@ -246,6 +249,7 @@ class ItemService
             'file' => [ $request->upload_type == 1 ? 'required' : 'nullable' ],
             'url' => [ $request->upload_type == 2 ? 'required' : 'nullable' ],
             'upload_type' => [ 'required', 'in:1,2' ],
+            'url_type' => [ $request->upload_type == 2 ? 'required' : 'nullable', 'in:1,2' ],
             'membership_level' => [ 'required' ],
         ] );
 
@@ -259,6 +263,7 @@ class ItemService
             'author' => __( 'item.author' ),
             'upload_type' => __( 'item.upload_type' ),
             'url' => __( 'item.url' ),
+            'url_type' => __( 'item.url_type' ),
             'membership_level' => __( 'item.membership_level' ),
         ];
 
@@ -286,6 +291,7 @@ class ItemService
             $updateItem->file_name = !empty( $request->file_name ) ? $request->file_name : null;
             $updateItem->url = !empty( $request->url ) ? $request->url : null;
             $updateItem->upload_type = $request->upload_type;
+            $updateItem->url_type = !empty( $request->url_type ) ? $request->url_type : 1;
             $updateItem->save();
 
             DB::commit();

@@ -24,5 +24,10 @@ return [
 
     'type_1' => 'Type 1',
     'type_2' => 'Type 2',
+    'type_3' => 'Type 3',
+    'type_4' => 'Type 4',
+    'type_5' => 'Type 5',
+    'type_6' => 'Type 6',
+    'type_7' => 'Type 7',
     'display_type' => 'Display Type',
 ];

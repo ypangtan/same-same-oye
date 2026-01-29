@@ -29,4 +29,8 @@ return [
     'upload_type' => 'Upload Type',
     'url' => 'URL',
 
+    'url_type' => 'URL Type',
+    'video' => 'Video',
+    'live' => 'Live',
+
 ];

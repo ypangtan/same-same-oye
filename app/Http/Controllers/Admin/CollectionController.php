@@ -30,6 +30,11 @@ class CollectionController extends Controller
         $this->data['data']['display_types'] = [
             [ 'value' => '1', 'title' => __( 'collection.type_1' ) ],
             [ 'value' => '2', 'title' => __( 'collection.type_2' ) ],
+            [ 'value' => '3', 'title' => __( 'collection.type_3' ) ],
+            [ 'value' => '4', 'title' => __( 'collection.type_4' ) ],
+            [ 'value' => '5', 'title' => __( 'collection.type_5' ) ],
+            [ 'value' => '6', 'title' => __( 'collection.type_6' ) ],
+            [ 'value' => '7', 'title' => __( 'collection.type_7' ) ],
         ];
 
         return view( 'admin.main' )->with( $this->data );  
@@ -51,6 +56,11 @@ class CollectionController extends Controller
         $this->data['data']['display_types'] = [
             [ 'value' => '1', 'title' => __( 'collection.type_1' ) ],
             [ 'value' => '2', 'title' => __( 'collection.type_2' ) ],
+            [ 'value' => '3', 'title' => __( 'collection.type_3' ) ],
+            [ 'value' => '4', 'title' => __( 'collection.type_4' ) ],
+            [ 'value' => '5', 'title' => __( 'collection.type_5' ) ],
+            [ 'value' => '6', 'title' => __( 'collection.type_6' ) ],
+            [ 'value' => '7', 'title' => __( 'collection.type_7' ) ],
         ];
 
         return view( 'admin.main' )->with( $this->data );  

@@ -57,7 +57,7 @@ $parent_route = $data['parent_route'] ?? '';
                         <div class="form-check form-switch">
                             <select class="form-select" id="{{ $collection_create }}_display_type">
                                 <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'collection.display_type' ) ] ) }}</option>
-                            @foreach( $data['display_types'] as $value )
+                                @foreach( $data['display_types'] as $value )
                                 <option value="{{ $value['value'] ?? '' }}">{{ $value['title'] ?? '' }}</option>
                                 @endforeach
                             </select>
