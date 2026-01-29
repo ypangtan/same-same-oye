@@ -139,7 +139,7 @@ return [
         'payment' => [
             'driver' => 'daily',
             'path' => storage_path('logs/payment.log'),
-            'level' => 'info',
+            'level' => 'debug',
             'days' => 30,
         ],
     ],
