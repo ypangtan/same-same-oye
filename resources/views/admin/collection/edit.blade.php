@@ -92,6 +92,28 @@ $parent_route = $data['parent_route'] ?? '';
     </div>
 </div>
 
+<div class="card">
+    <div class="card-inner">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <h5 class="card-title mb-4">{{ __( 'collection.display_type_guide' ) }}</h5>
+                <div class="row">
+                    @foreach( $data['display_types'] as $key => $value)
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="mb-3 row">
+                                <p class="text-center" style="font-weight:bold;">{{ __( 'collection.type_' . ( $key + 1 ) ) }}</p>
+                                <div class="col-sm-7 mx-auto">
+                                    <img src="{{ asset( 'admin/images/display_types/' . ( $key + 1 ) . '.png' ) }}" alt="{{ $value['title'] ?? '' }}" class="img-fluid">
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
