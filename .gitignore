@@ -16,3 +16,4 @@ docs/
 public/docs/
 .scribe
 composer.lock
+*.p8
