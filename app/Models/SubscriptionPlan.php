@@ -50,7 +50,7 @@ class SubscriptionPlan extends Model
             return null;
         }
 
-        return static::where($column, $productId)->where('is_active', true)->first();
+        return static::where($column, $productId)->where('status', 10)->first();
     }
 
     public function subscriptions() {
