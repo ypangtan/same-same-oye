@@ -86,7 +86,6 @@ class InAppPurchaseService {
             $createlog->save();
 
             return response()->json([
-                'message_key' => 'Verification failed',
                 'message' => $e->getMessage(),
             ], 500 );
         }
