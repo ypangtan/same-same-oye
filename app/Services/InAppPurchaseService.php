@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\PaymentLog;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,6 +12,16 @@ use Exception;
 class InAppPurchaseService {
 
     public static function verifyPayment( $request ) {
+        try{
+            $createlog = PaymentLog::create( [
+                'request' => json_encode( $request->all() ),
+            ] );
+
+        }catch( \Throwable $e){
+            return response()->json( [
+                'message' => $e->getMessage() . ' in line: ' . $e->getLine(),
+            ], 500 );
+        }
 
         $validator = Validator::make( $request->all(), [
             'platform' => [ 'required', 'in:1,2,3' ],
@@ -54,9 +65,21 @@ class InAppPurchaseService {
 
             }
 
+            $createlog->response = json_encode( $result );
+            $createlog->status = 10;
+            $createlog->save();
+
             return response()->json( $result, 200 );
 
         } catch ( Exception $e ) {
+            
+            $createlog->response = json_encode( [
+                'message' => 'Verification failed',
+                'error' => $e->getMessage(),
+            ] );
+            $createlog->status = 20;
+            $createlog->save();
+
             return response()->json([
                 'message' => 'Verification failed',
                 'error' => $e->getMessage(),
