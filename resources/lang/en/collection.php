@@ -30,4 +30,6 @@ return [
     'type_6' => 'Type 6',
     'type_7' => 'Type 7',
     'display_type' => 'Display Type',
+
+    'display_type_guide' => 'Display Type Guide',
 ];
