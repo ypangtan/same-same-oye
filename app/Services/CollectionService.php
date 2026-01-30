@@ -168,7 +168,7 @@ class CollectionService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'display_type' => [ 'required', 'in:1,2,3' ],
+            'display_type' => [ 'required', 'in:1,2,3,4,5,6,7' ],
             'playlists' => [ 'nullable' ],
         ] );
 
@@ -240,7 +240,7 @@ class CollectionService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'display_type' => [ 'required', 'in:1,2,3' ],
+            'display_type' => [ 'required', 'in:1,2,3,4,5,6,7' ],
             'playlists' => [ 'nullable' ],
         ] );
 
