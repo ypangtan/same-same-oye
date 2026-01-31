@@ -55,6 +55,7 @@ class User extends Model
         'nationality',
         'membership',
         'rank_id',
+        'is_first_login',
     ];
 
     public function subscriptions()
@@ -149,6 +150,7 @@ class User extends Model
         'nationality',
         'membership',
         'rank_id',
+        'is_first_login',
     ];
 
     protected static $logName = 'users';

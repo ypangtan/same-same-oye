@@ -115,8 +115,7 @@ class InAppPurchaseService {
                 'platform' => $subscription->platform,
                 'start_date' => $subscription->start_date,
                 'end_date' => $subscription->end_date,
-                'auto_renew' => $subscription->auto_renew,
-                'is_active' => $subscription->isActive(),
+                'is_active' => $subscription->is_active(),
             ],
         ] );
     }

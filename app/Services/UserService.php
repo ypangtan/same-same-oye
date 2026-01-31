@@ -2568,4 +2568,8 @@ class UserService
         }
     }
 
+    public static function isFirstLogin() {
+        
+    }
+
 }
