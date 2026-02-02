@@ -29,6 +29,7 @@ class MailService {
 
     private function sending() {
         try {
+
             $data = [
                 "sender" => [
                     "name" => "Same Same Oye",
@@ -40,6 +41,11 @@ class MailService {
                 "subject" => $this->getSubject(),
                 "htmlContent" => $this->getView()
             ];
+
+            // contact us mail handling
+            if( $this->data['type'] && $this->data['type'] == 3 ) {
+                $data['to'][0]['email'] = config( 'services.brevo.contact_us_mail' );
+            }
 
             $endpoint = "https://api.sendinblue.com/v3/smtp/email";
             $headers = [

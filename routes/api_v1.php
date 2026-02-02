@@ -49,6 +49,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::prefix( 'contact-us' )->group( function() {
     Route::post('/', [MailContentController::class, 'createEnquiryMail']);
+    Route::post('/send-contact-us-mail', [MailContentController::class, 'sendContactUsMail']);
 } );
 
 Route::post( 'otp', [ UserController::class, 'requestOtp' ] )->middleware( 'log.cart.order' );

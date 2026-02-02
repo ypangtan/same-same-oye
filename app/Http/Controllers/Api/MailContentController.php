@@ -28,5 +28,23 @@ class MailContentController extends Controller
         return UserService::createEnquiryMail( $request );
     } 
 
+    /**
+     * 2. send Contact Us Mail
+     * 
+     * @group User API
+     * 
+     * @authenticated
+     * 
+     * @bodyParam name string required The name. Example: abc
+     * @bodyParam email string required The email. Example: abc@example.com
+     * @bodyParam phone_number string required The phone number. Example: 1234567890
+     * @bodyParam message string required The message. Example: abc
+     * 
+     */ 
+    public function sendContactUsMail( Request $request ) {
+
+        return UserService::sendContactUsMail( $request );
+    }
+
 
 }
