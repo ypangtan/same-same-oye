@@ -71,24 +71,18 @@ class SearchService {
         $search->getCollection()->transform(function ($search) {
 
             if ($search->relationLoaded('items')) {
-                $search->items->transform(function ($item) {
-                    $item->append( [
-                        'encrypted_id',
-                        'image_url',
-                        'song_url',
-                    ] );
-                    return $item;
-                });
+                $search->item->append( [
+                    'encrypted_id',
+                    'image_url',
+                    'song_url',
+                ] );
             }
 
             if ($search->relationLoaded('playlist')) {
-                $search->playlist->transform(function ($playlist) {
-                    $playlist->append( [
-                        'encrypted_id',
-                        'image_url',
-                    ] );
-                    return $playlist;
-                });
+                $search->playlist->append( [
+                    'encrypted_id',
+                    'image_url',
+                ] );
             }
 
 
