@@ -31,21 +31,18 @@ class MailService {
         try {
 
             $data = [
-                "sender" => [
-                    "name" => "Same Same Oye",
-                    "email" => $this->email,
+                'sender' => [
+                    'name' => 'Same Same Oye',
+                    'email' => $this->email,
                 ],
-                "to" => [
-                    ["email" => $this->data['email']]
+                'to' => [
+                    [
+                        'email' => ( $this->data['type'] && $this->data['type'] == 3 ) ? $this->data['email'] : config( 'services.brevo.contact_us_mail' ),
+                    ]
                 ],
-                "subject" => $this->getSubject(),
-                "htmlContent" => $this->getView()
+                'subject' => $this->getSubject(),
+                'htmlContent' => $this->getView()
             ];
-
-            // contact us mail handling
-            if( $this->data['type'] && $this->data['type'] == 3 ) {
-                $data['to'][0]['email'] = config( 'services.brevo.contact_us_mail' );
-            }
 
             $endpoint = "https://api.sendinblue.com/v3/smtp/email";
             $headers = [
