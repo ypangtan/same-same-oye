@@ -30,9 +30,21 @@ class PaymentService {
                 ->receiptData($receiptData)
                 ->verifyRenewable();
 
+            $status = $response->getStatus();
+
+            // 处理状态码 21007 (沙盒收据发到了生产环境)
+            if ($status === 21007) {
+                Log::channel('payment')->warning('Sandbox receipt sent to production');
+            }
+
+            // 处理状态码 21008 (生产收据发到了沙盒环境)
+            if ($status === 21008) {
+                Log::channel('payment')->warning('Production receipt sent to sandbox environment');
+            }
+
             // 检查验证状态
-            if ($response->getStatus() !== 0) {
-                throw new Exception("Receipt verification failed with status: " . $response->getStatus());
+            if ($status !== 0) {
+                throw new Exception("Receipt verification failed with status: " . $status);
             }
 
             // 获取最新的收据信息
