@@ -70,7 +70,7 @@ class SearchService {
 
         $search->getCollection()->transform(function ($search) {
 
-            if ($search->relationLoaded('items')) {
+            if ($search->relationLoaded('item')) {
                 $search->item->append( [
                     'encrypted_id',
                     'image_url',
