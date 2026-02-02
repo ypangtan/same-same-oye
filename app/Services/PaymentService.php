@@ -25,6 +25,13 @@ class PaymentService {
             $plan = SubscriptionPlan::find( $data['plan_id'] );
             $productId = $plan->ios_product_id;
 
+            Log::channel('payment')->info('Starting iOS verification', [
+                'user_id' => $user_id,
+                'plan_id' => $data['plan_id'],
+                'receipt_length' => strlen($receiptData),
+                'sandbox_mode' => config('purchase.appstore_sandbox'),
+            ]);
+            
             // 验证收据
             $response = Subscription::appStore()
                 ->receiptData($receiptData)
