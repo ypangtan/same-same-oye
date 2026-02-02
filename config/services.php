@@ -77,6 +77,6 @@ return [
     'brevo' => [
         'key' => env( 'BREVO_API_KEY' ),
         'mail' => env( 'BREVO_FROM_MAIL' ),
-        'CONTACT_US_MAIL' => env( 'CONTACT_US_MAIL' ),
+        'contact_us_mail' => env( 'CONTACT_US_MAIL' ),
     ],
 ];
