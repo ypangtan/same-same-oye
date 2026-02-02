@@ -19,7 +19,11 @@ class ContactUs extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-
+        'name',
+        'email',
+        'phone_number',
+        'message',
+        'status',
     ];
 
     public function getEncryptedIdAttribute() {
@@ -31,7 +35,11 @@ class ContactUs extends Model
     }
 
     protected static $logAttributes = [
-
+        'name',
+        'email',
+        'phone_number',
+        'message',
+        'status',
     ];
 
     protected static $logName = 'ContactUs';
