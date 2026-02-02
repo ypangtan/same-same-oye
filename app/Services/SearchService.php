@@ -71,11 +71,11 @@ class SearchService {
         $search->getCollection()->transform(function ($value) {
 
             if ($value->relationLoaded('item')) {
-                $value->item->append( [
-                    'encrypted_id',
+                // $value->item->append( [
+                    // 'encrypted_id',
                     // 'image_url',
                     // 'song_url',
-                ] );
+                // ] );
             }
 
             if ($value->relationLoaded('playlist')) {
