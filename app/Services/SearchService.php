@@ -73,8 +73,8 @@ class SearchService {
             if ($value->relationLoaded('item')) {
                 $value->item->append( [
                     'encrypted_id',
-                    'image_url',
-                    'song_url',
+                    // 'image_url',
+                    // 'song_url',
                 ] );
             }
 
