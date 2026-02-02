@@ -81,7 +81,7 @@ class SearchService {
             if ($value->relationLoaded('playlist')) {
                 $value->playlist->append( [
                     'encrypted_id',
-                    'image_url',
+                    // 'image_url',
                 ] );
             }
 
