@@ -31,7 +31,7 @@ class MailContentController extends Controller
     /**
      * 2. send Contact Us Mail
      * 
-     * @group User API
+     * @group Contact-Us API
      * 
      * @authenticated
      * 
