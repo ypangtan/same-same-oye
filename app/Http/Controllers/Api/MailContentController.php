@@ -33,8 +33,6 @@ class MailContentController extends Controller
      * 
      * @group Contact-Us API
      * 
-     * @authenticated
-     * 
      * @bodyParam name string required The name. Example: abc
      * @bodyParam email string required The email. Example: abc@example.com
      * @bodyParam phone_number string required The phone number. Example: 1234567890
