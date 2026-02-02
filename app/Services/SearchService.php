@@ -67,7 +67,34 @@ class SearchService {
         } );
 
         $search = $search->paginate( $per_page );
-        
+
+        $search->getCollection()->transform(function ($search) {
+
+            if ($search->relationLoaded('items')) {
+                $search->items->transform(function ($item) {
+                    $item->append( [
+                        'encrypted_id',
+                        'image_url',
+                        'song_url',
+                    ] );
+                    return $item;
+                });
+            }
+
+            if ($search->relationLoaded('playlist')) {
+                $search->playlist->transform(function ($playlist) {
+                    $playlist->append( [
+                        'encrypted_id',
+                        'image_url',
+                    ] );
+                    return $playlist;
+                });
+            }
+
+
+            return $search;
+        });
+
         return $search;
     }
 }

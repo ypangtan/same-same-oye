@@ -24,11 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command( 'check:user-birthday' )->timezone( 'Asia/Kuala_Lumpur' )->dailyAt( '00:15' );
+        // $schedule->command( 'check:user-birthday' )->timezone( 'Asia/Kuala_Lumpur' )->dailyAt( '00:15' );
 
         // $schedule->command('search:update-hot-keywords')->timezone( 'Asia/Kuala_Lumpur' )->hourly();
         
-        $schedule->command('subscriptions:check-expired')->hourly()->withoutOverlapping();
+        $schedule->command('subscriptions:check-expired')->timezone( 'Asia/Kuala_Lumpur' )->dailyAt( '00:15' );
     }
 
     /**

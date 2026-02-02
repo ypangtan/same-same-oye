@@ -41,7 +41,7 @@ class CheckExpiredSubscriptions extends Command
 
         // 查找所有已过期但状态还是 active 的订阅
         $expiredSubscriptions = UserSubscription::where( 'status', 10 )
-            ->where('end_date', '<', now())
+            ->whereDate( 'end_date', '<', now() )
             ->get();
 
         $count = 0;

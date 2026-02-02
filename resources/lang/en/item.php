@@ -19,7 +19,7 @@ return [
     'category' => 'Category',
     'membership_level' => 'Membership Level',
     'lyrics' => 'Lyrics',
-    'author' => 'Author',
+    'author' => 'Artist',
     'song' => 'Song',
     'membership' => 'Membership',
     'desc' => 'Description',

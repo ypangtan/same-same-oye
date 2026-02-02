@@ -20,8 +20,8 @@ class CreateUserSubscriptionsTable extends Migration
             $table->timestamp( 'start_date' )->nullable();
             $table->timestamp( 'end_date' )->nullable();
             $table->timestamp( 'cancelled_at' )->nullable();
-            $table->tinyInteger( 'platform' )->default(1);
-            $table->string( 'platform_transaction_id' )->unique();
+            $table->tinyInteger( 'platform' )->default(1)->nullable();
+            $table->string( 'platform_transaction_id' )->unique()->nullable();
             $table->text( 'platform_receipt' )->nullable();
             $table->tinyInteger( 'status' )->default(10);
             $table->timestamps();

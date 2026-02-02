@@ -27,6 +27,7 @@ class UserSubscription extends Model
         'platform',
         'platform_transaction_id',
         'platform_receipt',
+        'type',
         'status',
     ];
 
@@ -66,7 +67,6 @@ class UserSubscription extends Model
             'status' => 10,
             'start_date' => now(),
             'end_date' => $endDate,
-            'auto_renew' => $autoRenew,
         ] );
 
         return $this;
@@ -78,10 +78,15 @@ class UserSubscription extends Model
             : now()->addDays($days);
 
         $this->update([
-            'status' => 'active',
+            'status' => 10,
             'end_date' => $newEndDate,
-            'last_renewal_check' => now(),
         ]);
+
+        $user = $this->user;
+        if ($user) {
+            $user->membership = 1;
+            $user->save();
+        }
 
         return $this;
     }
@@ -90,8 +95,13 @@ class UserSubscription extends Model
         $this->update([
             'status' => 40,
             'cancelled_at' => now(),
-            'auto_renew' => false,
         ]);
+
+        $user = $this->user;
+        if ($user) {
+            $user->membership = 0;
+            $user->save();
+        }
 
         return $this;
     }
@@ -101,14 +111,25 @@ class UserSubscription extends Model
             'status' => 20,
         ]);
 
+        $user = $this->user;
+        if ($user) {
+            $user->membership = 0;
+            $user->save();
+        }
+
         return $this;
     }
 
     public function refund() {
         $this->update( [
             'status' => 30,
-            'auto_renew' => false,
         ] );
+
+        $user = $this->user;
+        if ($user) {
+            $user->membership = 0;
+            $user->save();
+        }
 
         return $this;
     }
@@ -116,15 +137,6 @@ class UserSubscription extends Model
     public function scopeActive( $query ) {
         return $query->where( 'status', 10 )
                     ->where('end_date', '>', now());
-    }
-
-    public function scopeNeedsRenewalCheck( $query ) {
-        return $query->where( 'status', 10 )
-                    ->where('auto_renew', true)
-                    ->where(function($q) {
-                        $q->whereNull('last_renewal_check')
-                          ->orWhere('last_renewal_check', '<', now()->subHours(6));
-                    });
     }
 
     public function getEncryptedIdAttribute() {

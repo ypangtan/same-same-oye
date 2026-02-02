@@ -110,8 +110,8 @@ class MailService {
                 return view( 'admin.mail.otp', [ 'data' => $this->data ] )->render();
             case 2:
                 return view( 'admin.mail.otp', [ 'data' => $this->data ] )->render();
-            // case 100:
-            //     return view( 'admin.mail.order', [ 'data' => $this->data ] )->render();
+            case 3:
+                return view( 'admin.mail.contact_us', [ 'data' => $this->data ] )->render();
             default:
                 return view( 'admin.mail.otp', [ 'data' => $this->data ] )->render();
         }
@@ -125,30 +125,14 @@ class MailService {
             case 2:
                 $this->data['subject'] = __( 'user.request_password_reset' );
                 break;
-            // case 100:
-            //     $this->data['subject'] =  $this->getOrderStatusSubject();
-            //     break;
+            case 3:
+                $this->data['subject'] = __( 'user.contact_us' );
+                break;
             default:
                 $this->data['subject'] = __( 'user.register' );
                 break;
         }
         return $this->data['subject'];
-    }
-
-    private function getOrderStatusSubject() {
-        $status = $this->data['order_status'] ?? null;
-
-        if ($status === null) {
-            return $this->data['subject'] = __('order.status_update');
-        }
-
-        $statusList = \Helper::orderStatus();
-
-        if (isset($statusList[$status])) {
-            return $this->data['subject'] = __('order.notification_status_update') . ': ' . $statusList[$status];
-        }
-
-        return $this->data['subject'] = __('order.status_update');
     }
 
     public function resend() {

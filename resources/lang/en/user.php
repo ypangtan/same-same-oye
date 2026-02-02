@@ -55,6 +55,10 @@ return [
     'register' => 'Register',
     'request_password_reset' => 'Request Password Reset',
     'nationality' => 'Nationality',
+    'contact_us' => 'Contact Us',
+    'phone_number' => 'Phone Number',
+    'message' => 'Message',
+    'type' => 'Type',
 
     'invalid_otp' => 'Invalid_otp',
     'invalid_phone_number' => 'Invalid phone number',

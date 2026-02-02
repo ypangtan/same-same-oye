@@ -19,6 +19,7 @@ use App\Mail\OtpMail;
 use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
+    ContactUs,
     User,
     OtpAction,
     TmpUser,
@@ -34,6 +35,7 @@ use App\Models\{
     UserNotificationUser,
     UserDevice,
     UserSocial,
+    UserSubscription,
     UserVoucher,
     Voucher,
 };
@@ -1537,6 +1539,8 @@ class UserService
         $token = $user->createToken( 'user_token' )->plainTextToken;
         $user->token = $token;
 
+        self::isFirstLogin( $user->id );
+
         return response()->json( [
             'message' => __( 'user.login_success' ),
             'message_key' => 'login_success',
@@ -2569,7 +2573,83 @@ class UserService
     }
 
     public static function isFirstLogin() {
+        $user = User::find( auth()->user()->id );
+        if( $user->is_first_login == 10 ) {
+
+            // $days = Option::where( 'option_name', 'trial_period_days' )->first();
+
+            // $userSubscription = UserSubscription::create( [
+            //     'user_id' => $user->id,
+            //     'subscription_plan_id' => null,
+            //     'status' => 10,
+            //     'start_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
+            //     'end_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addDays( $days ? $days->option_value : 14 ),
+            //     'type' => 2,
+            // ] );
+        }
+    }
+
+    public static function sendContactUsMail( $request ) {
+
+        $validator = Validator::make( $request->all(), [
+            'name' => [ 'required' ],
+            'email' => [ 'required' ],
+            'phone_number' => [ 'required' ],
+            'message' => [ 'required' ],
+        ] );
+
+        $attributeName = [
+            'name' => __( 'user.name' ),
+            'email' => __( 'user.email' ),
+            'phone_number' => __( 'user.phone_number' ),
+            'message' => __( 'user.message' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
         
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            $createContactUs = ContactUs::create( [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'message' => $request->message,
+            ] );
+
+            $data = [
+                'type' => 3,
+                'email' => $createContactUs->email,
+            ];
+            $service = new MailService( $data );
+            $result = $service->send();
+            if( !$result || !isset( $result['status'] ) || $result['status'] != 200 ) {
+                return response()->json([
+                    'message' => __('user.send_mail_fail'),
+                    'message_key' => 'send_mail_failed',
+                    'data' => null,
+                ], 500 );
+            }
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.contact_us' ) ) ] ),
+        ] );
     }
 
 }
