@@ -70,7 +70,7 @@ class SearchService {
 
         $search->getCollection()->transform(function ($value) {
 
-            if ($value->relationLoaded('item')) {
+            if ( $value->relationLoaded('item') && $value->item ) {
                 $value->item->append( [
                     'encrypted_id',
                     'image_url',
@@ -78,12 +78,12 @@ class SearchService {
                 ] );
             }
 
-            // if ($value->relationLoaded('playlist')) {
-            //     $value->playlist->append( [
-            //         'encrypted_id',
-            //         // 'image_url',
-            //     ] );
-            // }
+            if ( $value->relationLoaded('playlist') && $value->playlist ) {
+                $value->playlist->append( [
+                    'encrypted_id',
+                    'image_url',
+                ] );
+            }
 
 
             return $value;
