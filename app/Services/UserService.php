@@ -1539,7 +1539,7 @@ class UserService
         $token = $user->createToken( 'user_token' )->plainTextToken;
         $user->token = $token;
 
-        self::isFirstLogin( $user->id );
+        // self::isFirstLogin( $user->id );
 
         return response()->json( [
             'message' => __( 'user.login_success' ),
