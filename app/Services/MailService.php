@@ -37,7 +37,7 @@ class MailService {
                 ],
                 'to' => [
                     [
-                        'email' => ( $this->data['type'] && $this->data['type'] == 3 ) ? $this->data['email'] : config( 'services.brevo.contact_us_mail' ),
+                        'email' => ( $this->data['type'] && $this->data['type'] == 3 ) ? config( 'services.brevo.contact_us_mail' ) : $this->data['email'],
                     ]
                 ],
                 'subject' => $this->getSubject(),
