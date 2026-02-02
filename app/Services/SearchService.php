@@ -68,25 +68,25 @@ class SearchService {
 
         $search = $search->paginate( $per_page );
 
-        $search->getCollection()->transform(function ($search) {
+        $search->getCollection()->transform(function ($value) {
 
-            if ($search->relationLoaded('item')) {
-                $search->item->append( [
+            if ($value->relationLoaded('item')) {
+                $value->item->append( [
                     'encrypted_id',
                     'image_url',
                     'song_url',
                 ] );
             }
 
-            if ($search->relationLoaded('playlist')) {
-                $search->playlist->append( [
+            if ($value->relationLoaded('playlist')) {
+                $value->playlist->append( [
                     'encrypted_id',
                     'image_url',
                 ] );
             }
 
 
-            return $search;
+            return $value;
         });
 
         return $search;
