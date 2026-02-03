@@ -21,14 +21,18 @@ class PaymentService {
 
     public static function verifyIOSPurchase( $user_id, $data ) {
         try {
-            // $decoded = base64_decode($data['receipt_data']);
-            // return $decoded;
 
             $user = User::find( $user_id );
             $receiptData = $data['receipt_data'];
             $plan = SubscriptionPlan::find( $data['plan_id'] );
             $productId = $plan->ios_product_id;
-            
+
+            // ── 判斷是 JWS（StoreKit 2）還是傳統 receipt（StoreKit 1）──
+            // JWS: 三段 dot 分隔，開頭是 eyJhbGci
+            // 傳統: 一段 base64，開頭是 MII
+            if (self::isJWS($receiptData)) {
+                return self::verifyJWS($receiptData, $user, $plan);
+            }
 
             // plugin 没有处理sandbox和生产环境切换，这里手动处理
             $isSandbox = config('liap.appstore_sandbox', true);
@@ -264,5 +268,185 @@ class PaymentService {
         }
 
         return $subscription;
+    }
+
+    
+    private static function isJWS( string $data ) {
+        return substr_count($data, '.') === 2 && str_starts_with($data, 'eyJhbGci');
+    }
+
+    /**
+     * StoreKit 2 JWS 驗證流程
+     */
+    private static function verifyJWS(string $jws, User $user, SubscriptionPlan $plan): array
+    {
+        // Step 1: 拆開三段
+        $parts = explode('.', $jws);
+        if (count($parts) !== 3) {
+            throw new Exception('Invalid JWS format');
+        }
+
+        [$headerB64, $payloadB64, $signatureB64] = $parts;
+
+        // Step 2: Decode header，拿 x5c cert chain
+        $header = json_decode(self::base64url_decode($headerB64), true);
+        if (empty($header['x5c']) || empty($header['alg'])) {
+            throw new Exception('JWS header missing x5c or alg');
+        }
+
+        // Step 3: 驗證 certificate chain
+        self::verifyCertChain($header['x5c']);
+
+        // Step 4: 用 leaf cert 驗證 signature
+        $leafPem = self::x5cToPem($header['x5c'][0]);
+        $signedData = $headerB64 . '.' . $payloadB64;
+        $signature = self::base64url_decode($signatureB64);
+
+        $algo = match($header['alg']) {
+            'ES256' => OPENSSL_ALGO_SHA256,
+            'ES384' => OPENSSL_ALGO_SHA384,
+            'ES512' => OPENSSL_ALGO_SHA512,
+            default => throw new Exception('Unsupported JWS algorithm: ' . $header['alg']),
+        };
+
+        $pubKey = openssl_pkey_get_public($leafPem);
+        if (!$pubKey) {
+            throw new Exception('Failed to extract public key from leaf cert');
+        }
+
+        if (openssl_verify($signedData, $signature, $pubKey, $algo) !== 1) {
+            throw new Exception('JWS signature verification failed');
+        }
+        openssl_pkey_free($pubKey);
+
+        // Step 5: Decode payload
+        $payload = json_decode(self::base64url_decode($payloadB64), true);
+
+        // Step 6: 驗證 payload
+        self::validateJWSPayload($payload, $plan);
+
+        // ── 以下和原來的流程一樣：檢查重複、建立訂閱、記錄交易 ──
+
+        $transactionId         = $payload['transactionId'];
+        $originalTransactionId = $payload['originalTransactionId'];
+        $expiresDate           = Carbon::createFromTimestampMs($payload['expiresDate']);
+
+        // 检查交易是否已存在
+        if ( PaymentTransaction::exists($transactionId) ) {
+            return [
+                'success' => true,
+                'message' => 'Transaction already processed',
+                'subscription' => $user->subscriptions()->where('platform', 'ios')->active()->first(),
+            ];
+        }
+
+        // 创建或更新订阅
+        $isRenew = ($payload['transactionReason'] ?? '') === 'RENEWAL';
+        $subscription = self::createOrUpdateSubscription(
+            $user->id, $plan->id, 1, $originalTransactionId, $expiresDate, $isRenew
+        );
+
+        // 记录交易
+        $transaction = PaymentTransaction::create([
+            'user_id'                  => $user->id,
+            'user_subscription_id'     => $subscription->id,
+            'transaction_id'           => $transactionId,
+            'original_transaction_id'  => $originalTransactionId,
+            'amount'                   => $payload['price'] ?? 0,
+            'currency'                 => $payload['currency'] ?? 'MYR',
+            'platform'                 => 1,
+            'product_id'               => $payload['productId'],
+            'receipt_data'             => $jws,
+            'status'                   => 10,
+            'verified_at'              => now(),
+            'verification_response'    => json_encode($payload),
+        ]);
+
+        Log::channel('payment')->info('iOS purchase verified (JWS / StoreKit 2)', [
+            'user_id'       => $user->id,
+            'transaction_id' => $transactionId,
+            'environment'   => $payload['environment'],
+        ]);
+
+        return [
+            'success'      => true,
+            'message'      => 'Subscription activated successfully',
+            'subscription' => $subscription->fresh(),
+            'transaction'  => $transaction,
+        ];
+    }
+
+    /**
+     * 驗證 cert chain 是否鏈接到 Apple Root Cert
+     */
+    private static function verifyCertChain(array $x5c): void
+    {
+        if (count($x5c) < 3) {
+            throw new Exception('JWS cert chain too short, expected 3 certs');
+        }
+
+        $leaf         = self::x5cToPem($x5c[0]);
+        $intermediate = self::x5cToPem($x5c[1]);
+        $root         = self::x5cToPem($x5c[2]);
+
+        // 確認 leaf 由 intermediate 簽署
+        if (openssl_x509_verify($leaf, $intermediate) !== 1) {
+            throw new Exception('Leaf cert not signed by intermediate');
+        }
+
+        // 確認 intermediate 由 root 簽署
+        if (openssl_x509_verify($intermediate, $root) !== 1) {
+            throw new Exception('Intermediate cert not signed by root');
+        }
+
+        // 確認 root cert 的 Subject 包含 "Apple Inc"
+        $rootInfo = openssl_x509_parse($root);
+        if (!str_contains($rootInfo['subject']['O'] ?? '', 'Apple')) {
+            throw new Exception('Root cert is not issued by Apple');
+        }
+
+        // (Optional) 如果你放了本地的 Apple Root Cert，可以開啟以下比較
+        // $localRoot = file_get_contents(storage_path('app/certs/AppleIncRootCertificate.pem'));
+        // if (openssl_x509_fingerprint($root) !== openssl_x509_fingerprint($localRoot)) {
+        //     throw new Exception('Root cert fingerprint does not match local Apple Root Cert');
+        // }
+    }
+
+    /**
+     * 驗證 JWS payload 裡的欄位
+     */
+    private static function validateJWSPayload(array $payload, SubscriptionPlan $plan): void
+    {
+        // bundleId
+        $expectedBundleId = config('iap.bundle_id', 'com.sama2oye.ios');
+        if ($payload['bundleId'] !== $expectedBundleId) {
+            throw new Exception("Bundle ID mismatch: expected {$expectedBundleId}, got {$payload['bundleId']}");
+        }
+
+        // productId
+        if ($payload['productId'] !== $plan->ios_product_id) {
+            throw new Exception("Product ID mismatch: expected {$plan->ios_product_id}, got {$payload['productId']}");
+        }
+
+        // environment (Sandbox vs Production)
+        $isSandbox   = config('iap.sandbox', true);
+        $expectedEnv = $isSandbox ? 'Sandbox' : 'Production';
+        if ($payload['environment'] !== $expectedEnv) {
+            throw new Exception("Environment mismatch: expected {$expectedEnv}, got {$payload['environment']}");
+        }
+    }
+
+    // ─── Utility methods ───
+
+    private static function base64url_decode(string $data): string
+    {
+        return base64_decode(str_replace(['-', '_'], ['+', '/'], $data));
+    }
+
+    private static function x5cToPem(string $certB64): string
+    {
+        return "-----BEGIN CERTIFICATE-----\n"
+            . chunk_split($certB64, 64, "\n")
+            . "-----END CERTIFICATE-----";
     }
 }
