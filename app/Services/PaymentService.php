@@ -253,7 +253,7 @@ class PaymentService {
         // 构建请求 payload
         $payload = [
             'receipt-data' => $receipt,
-            'password' => env('APPLE_SHARED_SECRET'), // App Store 订阅共享密钥
+            'password' => config( 'liap.appstore_password' ), // App Store 订阅共享密钥
             'exclude-old-transactions' => true
         ];
 
