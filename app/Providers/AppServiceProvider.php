@@ -17,9 +17,13 @@ use App\Observers\{
     PlaylistObserver,
     CollectionObserver
 };
-
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use Psr\Http\Message\{
+    RequestInterface,
+    ResponseInterface
+};
 
 require_once( 'BrowserDetection.php' );
 
@@ -61,35 +65,28 @@ class AppServiceProvider extends ServiceProvider
         Item::observe(ItemObserver::class);
         Playlist::observe(PlaylistObserver::class);
 
-        
-        if( !$this->app->environment( 'production' ) ) {
-           Http::macro('logRequests', function () {
-                return Http::withOptions([
-                    'debug' => true,
-                ]);
-            });
+        app()->singleton(HandlerStack::class, function () {
+            $stack = HandlerStack::create();
             
-            // 或者全局监听 HTTP 请求
-            Http::globalRequestMiddleware(function ($request) {
-                Log::channel('payment')->info('HTTP Request', [
-                    'method' => $request->method(),
-                    'url' => (string) $request->url(),
-                    'headers' => $request->headers(),
-                    'body' => $request->body(),
-                ]);
-                
-                return $request;
-            });
+            $stack->push(Middleware::tap(
+                function (RequestInterface $request) {
+                    Log::channel('payment')->info('=== HTTP Request ===', [
+                        'method' => $request->getMethod(),
+                        'url' => (string) $request->getUri(),
+                        'headers' => $request->getHeaders(),
+                        'body' => (string) $request->getBody(),
+                    ]);
+                },
+                function (RequestInterface $request, $options, ResponseInterface $response) {
+                    Log::channel('payment')->info('=== HTTP Response ===', [
+                        'url' => (string) $request->getUri(),
+                        'status' => $response->getStatusCode(),
+                        'body' => (string) $response->getBody(),
+                    ]);
+                }
+            ));
             
-            Http::globalResponseMiddleware(function ($response) {
-                Log::channel('payment')->info('HTTP Response', [
-                    'status' => $response->status(),
-                    'url' => (string) $response->effectiveUri(),
-                    'body' => $response->body(),
-                ]);
-                
-                return $response;
-            });
-        }
+            return $stack;
+        });
     }
 }
