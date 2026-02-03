@@ -45,7 +45,6 @@ $setting = 'setting';
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        getSettings();
         getAppVersionSettings();
 
         let s = '#{{ $setting }}';
@@ -79,26 +78,6 @@ $setting = 'setting';
                 }
             } );
         } );
-
-        function getSettings() {
-
-            $.ajax( {
-                url: '{{ route( 'admin.setting.bonusSettings' ) }}',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                },
-                success: function( response ) {
-                    if ( response ) {
-                        response.forEach(item => {
-                            // if (item.option_name === "TAXES") {
-                            //     $( s + '_taxes').val( item.option_value );
-                            // }
-                        });
-                    }
-                },
-            } );
-        }
 
         function getAppVersionSettings() {
 
