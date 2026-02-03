@@ -22,106 +22,33 @@ class PaymentService {
     public static function verifyIOSPurchase( $user_id, $data ) {
         try {
 
-            $user = User::find( $user_id );
-            $receiptData = $data['receipt_data'];
-            $plan = SubscriptionPlan::find( $data['plan_id'] );
-            $productId = $plan->ios_product_id;
+            $user = User::findOrFail($user_id);
+            $plan = SubscriptionPlan::findOrFail($data['plan_id']);
+            $jws  = $data['receipt_data'];
 
-            // ── 判斷是 JWS（StoreKit 2）還是傳統 receipt（StoreKit 1）──
-            if (self::isJWS($receiptData)) {
-                return self::verifyJWS($receiptData, $user, $plan);
-            }
-            
-            if (!str_starts_with($receiptData, 'MI')) {
-                throw new Exception('Unsupported iOS receipt format');
+            if (!self::isJWS($jws)) {
+                throw new Exception('Invalid receipt format: not a StoreKit 2 JWS');
             }
 
-            // ── 以下是原來的 imdhemy 流程（StoreKit 1）──
-            $isSandbox = config('liap.appstore_sandbox', true);
-            $client = AppStoreClientFactory::create($isSandbox);
+            // Step 1: 本地验证 JWS
+            $payload = self::verifyJWSLocal($jws, $plan);
 
-            $response = Subscription::appStore( $client )
-                ->receiptData($receiptData)
-                ->verifyRenewable();
+            // Step 2: 调用 Apple Server API 验证
+            $applePayload = self::verifyJWSServer($payload['signedTransactionInfo']);
 
-            $status = $response->getStatus();
-
-            if ($status === 21007) {
-                Log::channel('payment')->warning('Sandbox receipt sent to production');
+            // Step 3: 对比交易信息
+            if ($applePayload['transactionId'] !== $payload['transactionId']) {
+                throw new Exception('Transaction mismatch between local and Apple server');
             }
 
-            if ($status === 21008) {
-                Log::channel('payment')->warning('Production receipt sent to sandbox environment');
-            }
-
-            if ($status !== 0) {
-                throw new Exception("Receipt verification failed with status: " . $status);
-            }
-
-            $latestReceipt = $response->getLatestReceiptInfo();
-            if (empty($latestReceipt)) {
-                throw new Exception("No receipt info found");
-            }
-
-            $receiptInfo = $latestReceipt[0];
-            $transactionId = $receiptInfo->getTransactionId();
-            $originalTransactionId = $receiptInfo->getOriginalTransactionId();
-            $expiresDate = $receiptInfo->getExpiresDate();
-
-            if ( PaymentTransaction::exists( $transactionId ) ) {
-                return [
-                    'success' => true,
-                    'message' => 'Transaction already processed',
-                    'subscription' => $user->subscriptions()->where('platform', 1)->active()->first(),
-                ];
-            }
-
-            $expiredDate = Carbon::createFromTimestamp( $expiresDate->getTimestamp() );
-            $isRenew = $receiptInfo->getAutoRenewStatus() === '1';
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiredDate, $isRenew );
-
-            $transaction = PaymentTransaction::create([
-                'user_id' => $user->id,
-                'user_subscription_id' => $subscription->id,
-                'transaction_id' => $transactionId,
-                'original_transaction_id' => $originalTransactionId,
-                'amount' => 0,
-                'currency' => 'USD',
-                'platform' => 1,
-                'product_id' => $productId,
-                'receipt_data' => $receiptData,
-                'status' => 10,
-                'verified_at' => now(),
-                'verification_response' => json_encode($response->toArray()),
-            ]);
-
-            Log::channel('payment')->info('iOS purchase verified (legacy receipt)', [
-                'user_id' => $user->id,
-                'transaction_id' => $transactionId,
-            ]);
-
-            return [
-                'success' => true,
-                'message' => 'Subscription activated successfully',
-                'subscription' => $subscription->fresh(),
-                'transaction' => $transaction,
-            ];
+            // Step 4: 创建/更新订阅 & 交易记录
+            return self::createSubscriptionFromPayload($user, $plan, $payload, $jws);
 
         } catch (Exception $e) {
-            Log::channel('payment')->error('iOS verification failed', [
+            Log::channel('payment')->error('iOS JWS verification failed', [
+                'user_id' => $user_id,
                 'error' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'class' => get_class($e),
-                'trace' => $e->getTraceAsString(),
-                'previous' => $e->getPrevious() ? [
-                    'message' => $e->getPrevious()->getMessage(),
-                    'file' => $e->getPrevious()->getFile(),
-                    'line' => $e->getPrevious()->getLine(),
-                    'class' => get_class($e->getPrevious()),
-                ] : null,
             ]);
-
             throw $e;
         }
     }
@@ -160,7 +87,7 @@ class PaymentService {
                 ];
             }
 
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiresDate, $autoRenewing );
+            $subscription = self::createOrUpdateSubscriptionAndroid( $user_id, $plan->id, 2, $orderId, $expiresDate, $autoRenewing );
 
             $transaction = PaymentTransaction::create([
                 'user_id' => $user->id,
@@ -223,7 +150,7 @@ class PaymentService {
         }
     }
 
-    protected static function createOrUpdateSubscription( $user_id, $plan_id, $platform, $transactionId, $endDate, $autoRenew = true ) {
+    protected static function createOrUpdateSubscriptionAndroid( $user_id, $plan_id, $platform, $transactionId, $endDate, $autoRenew = true ) {
         $user = User::find( $user_id );
         $plan = SubscriptionPlan::find( $plan_id );
 
@@ -257,20 +184,7 @@ class PaymentService {
     // ─────────────────────────────────────────────
     // StoreKit 2 JWS 相關
     // ─────────────────────────────────────────────
-
-    private static function isJWS( string $data ) {
-        $parts = explode('.', $data);
-        if (count($parts) !== 3) {
-            return false;
-        }
-
-        $header = json_decode(self::base64url_decode($parts[0]), true);
-        return isset($header['x5c'], $header['alg']);
-    }
-
-    private static function verifyJWS(string $jws, User $user, SubscriptionPlan $plan): array
-    {
-        // Step 1: 拆開三段
+    private static function verifyJWSLocal(string $jws, SubscriptionPlan $plan) {
         $parts = explode('.', $jws);
         if (count($parts) !== 3) {
             throw new Exception('Invalid JWS format');
@@ -278,16 +192,15 @@ class PaymentService {
 
         [$headerB64, $payloadB64, $signatureB64] = $parts;
 
-        // Step 2: Decode header，拿 x5c cert chain
         $header = json_decode(self::base64url_decode($headerB64), true);
         if (empty($header['x5c']) || empty($header['alg'])) {
             throw new Exception('JWS header missing x5c or alg');
         }
 
-        // Step 3: 驗證 certificate chain
+        // Verify certificate chain
         self::verifyCertChain($header['x5c']);
 
-        // Step 4: 用 leaf cert 驗證 signature
+        // Verify signature using leaf cert
         $leafPem     = self::x5cToPem($header['x5c'][0]);
         $signedData  = $headerB64 . '.' . $payloadB64;
         $signature   = self::base64url_decode($signatureB64);
@@ -309,19 +222,60 @@ class PaymentService {
         }
         openssl_pkey_free($pubKey);
 
-        // Step 5: Decode payload
+        // Decode payload
         $payload = json_decode(self::base64url_decode($payloadB64), true);
 
-        // Step 6: 驗證 payload 欄位
+        // Validate payload fields
         self::validateJWSPayload($payload, $plan);
 
-        // ── 處理訂閱和交易記錄 ──
+        return $payload;
+    }
 
+    /**
+     * Call Apple Server API to validate signedTransactionInfo
+     */
+    private static function verifyJWSServer(string $signedTransactionInfo) {
+        $client = new Client([
+            'base_uri' => 'https://buy.itunes.apple.com/', // Production URL
+            'timeout' => 5,
+        ]);
+
+        $url = config('liap.appstore_sandbox', true)
+            ? 'https://sandbox.itunes.apple.com/verifyReceipt'
+            : 'https://buy.itunes.apple.com/verifyReceipt';
+
+        $response = $client->post($url, [
+            'json' => [
+                'signedTransactionInfo' => $signedTransactionInfo,
+            ],
+        ]);
+
+        $json = json_decode($response->getBody()->getContents(), true);
+
+        if (empty($json) || !isset($json['status']) || $json['status'] !== 0) {
+            throw new Exception('Apple server verification failed: ' . json_encode($json));
+        }
+
+        // signedTransactionInfo inside response
+        if (empty($json['signedTransactionInfo'])) {
+            throw new Exception('Apple server response missing signedTransactionInfo');
+        }
+
+        return json_decode(base64_decode($json['signedTransactionInfo']), true);
+    }
+
+    /**
+     * Create or update subscription & transaction
+     */
+    private static function createSubscriptionFromPayload(User $user, SubscriptionPlan $plan, array $payload, string $jws) {
         $transactionId         = $payload['transactionId'];
         $originalTransactionId = $payload['originalTransactionId'];
         $expiresDate           = Carbon::createFromTimestampMs($payload['expiresDate']);
+        $isRenew               = ($payload['transactionReason'] ?? '') === 'RENEWAL';
+        $amount                = ($payload['price'] ?? 0) / 100;
+        $currency              = $payload['currency'] ?? 'MYR';
 
-        if ( PaymentTransaction::exists($transactionId) ) {
+        if (PaymentTransaction::exists($transactionId)) {
             return [
                 'success' => true,
                 'message' => 'Transaction already processed',
@@ -329,16 +283,9 @@ class PaymentService {
             ];
         }
 
-        $isRenew = ($payload['transactionReason'] ?? '') === 'RENEWAL';
         $subscription = self::createOrUpdateSubscription(
             $user->id, $plan->id, 1, $originalTransactionId, $expiresDate, $isRenew
         );
-
-        // Apple price 是 milliunits → 除以 100 才是正常金額
-        // 例如 24900 = 249.00 MYR... 不對，24900 milliunits = 24.90 MYR (price 的單位是 1/1000)
-        // Apple docs: price is in the smallest currency unit (e.g., cents)
-        // MYR 沒有 sub-unit，所以直接除 100
-        $amount = ($payload['price'] ?? 0) / 100;
 
         $transaction = PaymentTransaction::create([
             'user_id'                  => $user->id,
@@ -346,7 +293,7 @@ class PaymentService {
             'transaction_id'           => $transactionId,
             'original_transaction_id'  => $originalTransactionId,
             'amount'                   => $amount,
-            'currency'                 => $payload['currency'] ?? 'MYR',
+            'currency'                 => $currency,
             'platform'                 => 1,
             'product_id'               => $payload['productId'],
             'receipt_data'             => $jws,
@@ -360,7 +307,7 @@ class PaymentService {
             'transaction_id' => $transactionId,
             'environment'    => $payload['environment'],
             'amount'         => $amount,
-            'currency'       => $payload['currency'] ?? 'MYR',
+            'currency'       => $currency,
         ]);
 
         return [
@@ -369,6 +316,47 @@ class PaymentService {
             'subscription' => $subscription->fresh(),
             'transaction'  => $transaction,
         ];
+    }
+
+    // ─── Helper / Validation ───
+
+    private static function createOrUpdateSubscription(int $user_id, int $plan_id, int $platform, string $transactionId, Carbon $endDate, bool $autoRenew = true)
+    {
+        $user = User::findOrFail($user_id);
+
+        $subscription = $user->subscriptions()
+            ->where('platform', $platform)
+            ->where('platform_transaction_id', $transactionId)
+            ->first();
+
+        if ($subscription) {
+            $subscription->update([
+                'status' => 10,
+                'end_date' => $endDate,
+                'auto_renew' => $autoRenew,
+            ]);
+        } else {
+            $subscription = UserSubscription::create([
+                'user_id' => $user->id,
+                'subscription_plan_id' => $plan_id,
+                'status' => 10,
+                'start_date' => now(),
+                'end_date' => $endDate,
+                'platform' => $platform,
+                'platform_transaction_id' => $transactionId,
+                'auto_renew' => $autoRenew,
+            ]);
+        }
+
+        return $subscription;
+    }
+
+    private static function isJWS(string $data): bool
+    {
+        $parts = explode('.', $data);
+        if (count($parts) !== 3) return false;
+        $header = json_decode(self::base64url_decode($parts[0]), true);
+        return isset($header['x5c'], $header['alg']);
     }
 
     private static function verifyCertChain(array $x5c): void
@@ -395,20 +383,16 @@ class PaymentService {
         }
     }
 
-    private static function validateJWSPayload(array $payload, SubscriptionPlan $plan): void
-    {
-        // bundleId — 用和原來同一個 config namespace (liap)
+    private static function validateJWSPayload(array $payload, SubscriptionPlan $plan) {
         $expectedBundleId = config('liap.ios_bundle_id', 'com.sama2oye.ios');
         if ($payload['bundleId'] !== $expectedBundleId) {
             throw new Exception("Bundle ID mismatch: expected {$expectedBundleId}, got {$payload['bundleId']}");
         }
 
-        // productId
         if ($payload['productId'] !== $plan->ios_product_id) {
             throw new Exception("Product ID mismatch: expected {$plan->ios_product_id}, got {$payload['productId']}");
         }
 
-        // environment — 用和原來同一個 config (liap.appstore_sandbox)
         $isSandbox   = config('liap.appstore_sandbox', true);
         $expectedEnv = $isSandbox ? 'Sandbox' : 'Production';
         if ($payload['environment'] !== $expectedEnv) {
@@ -416,15 +400,11 @@ class PaymentService {
         }
     }
 
-    // ─── Utility ───
-
-    private static function base64url_decode(string $data): string
-    {
+    private static function base64url_decode(string $data) {
         return base64_decode(str_replace(['-', '_'], ['+', '/'], $data));
     }
 
-    private static function x5cToPem(string $certB64): string
-    {
+    private static function x5cToPem(string $certB64) {
         return "-----BEGIN CERTIFICATE-----\n"
             . chunk_split($certB64, 64, "\n")
             . "-----END CERTIFICATE-----";
