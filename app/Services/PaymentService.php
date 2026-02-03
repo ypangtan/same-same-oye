@@ -28,7 +28,7 @@ class PaymentService {
             // ── 判断收据类型 ──
             if (self::isJWS($receipt)) {
                 // -------- StoreKit 2 --------
-                $payload = self::verifyJWSLocal($receipt);
+                $payload = self::verifyJWSLocal($receipt, $plan);
 
                 $transactionId = $payload['transactionId'] ?? $payload['originalTransactionId'] ?? null;
                 if (!$transactionId) throw new Exception('Missing transactionId in JWS');
