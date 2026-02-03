@@ -31,8 +31,7 @@ class PaymentService {
                 $payload = PaymentService::verifyIOSServer($receipt, $plan);
 
                 $payloadData = [
-                    'transactionId' => $transactionId,
-                    'originalTransactionId' => $payload['originalTransactionId'] ?? $transactionId,
+                    'originalTransactionId' => $payload['originalTransactionId'],
                     'expiresDate' => $payload['expiresDate'] ?? now()->addMonth()->timestamp * 1000,
                     'productId' => $payload['productId'],
                     'environment' => $payload['environment'] ?? 'Production',
