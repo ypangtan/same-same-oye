@@ -29,9 +29,7 @@ class PaymentService {
 
             // plugin 没有处理sandbox和生产环境切换，这里手动处理
             $isSandbox = config('liap.appstore_sandbox', true);
-            $client = $isSandbox
-                ? AppStoreClientFactory::createForITunesSandbox()
-                : AppStoreClientFactory::createForITunes();
+            $client = AppStoreClientFactory::create($isSandbox);
 
             // 验证收据
             $response = Subscription::appStore( $client )
