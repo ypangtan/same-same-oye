@@ -28,42 +28,50 @@ class PaymentService {
             // ── 判断收据类型 ──
             if (self::isJWS($receipt)) {
                 // -------- StoreKit 2 --------
-                // $payload = self::verifyJWSLocal($receipt, $plan);
-                // $applePayload = self::verifyJWSServer($payload['signedTransactionInfo']);
-                
-                $applePayload = self::verifyJWSServer($receipt);
-                $transactionId = $applePayload['transactionId'] ?? $applePayload['originalTransactionId'] ?? null;
+                $payload = self::verifyJWSLocal($receipt);
 
-                if (!$transactionId) {
-                    throw new Exception('Apple server did not return a transactionId');
+                $transactionId = $payload['transactionId'] ?? $payload['originalTransactionId'] ?? null;
+                if (!$transactionId) throw new Exception('Missing transactionId in JWS');
+
+                // 2️⃣ 转成 Base64 给 Apple server 验证
+                $base64Receipt = $payload['transactionInfo'] ?? null;
+                if (!$base64Receipt) throw new Exception('Missing transactionInfo for Apple server verification');
+
+                $appleResponse = self::verifyReceiptAppleServer($base64Receipt);
+
+                // 3️⃣ 对比 Apple server 和本地 payload
+                if (($appleResponse['transaction_id'] ?? '') !== $transactionId) {
+                    throw new Exception('Apple server verification mismatch');
                 }
 
-                $payload = [
+                $payloadData = [
                     'transactionId' => $transactionId,
-                    'originalTransactionId' => $applePayload['originalTransactionId'] ?? $transactionId,
-                    'expiresDate' => $applePayload['expiresDate'] ?? now()->addMonth()->timestamp * 1000,
-                    'productId' => $applePayload['productId'],
-                    'environment' => $applePayload['environment'] ?? 'Production',
+                    'originalTransactionId' => $payload['originalTransactionId'] ?? $transactionId,
+                    'expiresDate' => $payload['expiresDate'] ?? now()->addMonth()->timestamp * 1000,
+                    'productId' => $payload['productId'],
+                    'environment' => $payload['environment'] ?? 'Production',
                     'price' => $plan->price * 100,
                     'currency' => 'MYR',
-                    'transactionReason' => $applePayload['type'] ?? 'INITIAL_PURCHASE',
+                    'transactionReason' => $payload['type'] ?? 'INITIAL_PURCHASE',
                 ];
+
+                return self::createSubscriptionFromPayload($user, $plan, $payloadData, $receipt);
 
             } else {
                 // -------- StoreKit 1 --------
                 $applePayload = self::verifyReceiptAppleServer($receipt);
                 self::validateReceiptPayload($applePayload, $plan);
-                $payload = [
-                    'transactionId'          => $applePayload['transaction_id'] ?? $applePayload['original_transaction_id'],
-                    'originalTransactionId'  => $applePayload['original_transaction_id'],
-                    'expiresDate'            => $applePayload['expires_date_ms'] ?? now()->addMonth()->timestamp * 1000,
-                    'productId'              => $applePayload['product_id'],
-                    'environment'            => $applePayload['environment'] ?? 'Production',
-                    'price'                  => $plan->price * 100,
-                    'currency'               => 'MYR',
-                    'transactionReason'      => 'INITIAL_PURCHASE',
+                $payloadData = [
+                    'transactionId' => $applePayload['transaction_id'] ?? $applePayload['original_transaction_id'],
+                    'originalTransactionId' => $applePayload['original_transaction_id'],
+                    'expiresDate' => $applePayload['expires_date_ms'] ?? now()->addMonth()->timestamp * 1000,
+                    'productId' => $applePayload['product_id'],
+                    'environment' => $applePayload['environment'] ?? 'Production',
+                    'price' => $plan->price * 100,
+                    'currency' => 'MYR',
+                    'transactionReason' => 'INITIAL_PURCHASE',
                 ];
-
+                return self::createSubscriptionFromPayload($user, $plan, $payloadData, $receipt);
                 // 如果你想本地也做验签，可以在这里解析 Base64 receipt 进行简单校验
             }
 
@@ -78,7 +86,6 @@ class PaymentService {
             throw $e;
         }
     }
-
 
     public static function verifyAndroidPurchase( $user_id, $data ) {
         try {
