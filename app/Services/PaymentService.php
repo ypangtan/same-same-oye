@@ -254,7 +254,7 @@ class PaymentService {
     /**
      * Call Apple Server API to validate signedTransactionInfo
      */
-    private static function verifyJWSServer(string $jws) {
+    private static function verifyJWSServer( $jws ) {
         $isSandbox = config('liap.appstore_sandbox', true);
 
         $url = $isSandbox
@@ -265,8 +265,8 @@ class PaymentService {
 
         $response = $client->post($url, [
             'json' => [
-                'receipt-data' => $jws,                    // 这里是完整的 JWS
-                'password' => config('liap.appstore_shared_secret'),
+                'receipt-data' => $jws,
+                'password' => config('liap.appstore_password'),
                 'exclude-old-transactions' => false,
             ],
         ]);
@@ -428,7 +428,7 @@ class PaymentService {
         $response = $client->post($url, [
             'json' => [
                 'receipt-data' => $receiptData,
-                'password' => config('liap.appstore_shared_secret'),
+                'password' => config('liap.appstore_password'),
                 'exclude-old-transactions' => false
             ],
         ]);
