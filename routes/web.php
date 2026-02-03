@@ -51,6 +51,35 @@ Route::get('.well-known/apple-app-site-association', function () {
     return response()->json($data);
 });
 
+Route::get('/test-ios-verify', function () {
+    // 直接从数据库拿最近的 receipt_data
+    $receipt = \App\Models\PaymentTransaction::latest()->first();
+
+    if (!$receipt) {
+        return response()->json(['error' => 'No PaymentTransaction record found']);
+    }
+
+    $receiptData = $receipt->receipt_data;
+    $password = env('APPSTORE_PASSWORD', '');
+
+    $sandboxUrl = 'https://sandbox.itunes.apple.com/verifyReceipt';
+
+    $response = \Illuminate\Support\Facades\Http::post($sandboxUrl, [
+        'receipt-data' => $receiptData,
+        'password' => $password,
+        'exclude-old-transactions' => true,
+    ]);
+
+    return response()->json([
+        'apple_status' => $response->json('status'),
+        'receipt_length' => strlen($receiptData),
+        'receipt_preview' => substr($receiptData, 0, 80),
+        'receipt_end' => substr($receiptData, -80),
+        'password_set' => !empty($password),
+        'full_response' => $response->json(),
+    ]);
+});
+
 Route::get('/register', function (Request $request) {    
     $userAgent = $request->header('User-Agent');
 
