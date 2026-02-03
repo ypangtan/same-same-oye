@@ -31,6 +31,10 @@ class PaymentService {
             if (self::isJWS($receiptData)) {
                 return self::verifyJWS($receiptData, $user, $plan);
             }
+            
+            if (!str_starts_with($receiptData, 'MI')) {
+                throw new Exception('Unsupported iOS receipt format');
+            }
 
             // ── 以下是原來的 imdhemy 流程（StoreKit 1）──
             $isSandbox = config('liap.appstore_sandbox', true);
