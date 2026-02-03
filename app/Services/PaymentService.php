@@ -15,7 +15,7 @@ use Imdhemy\Purchases\Facades\{
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Imdhemy\AppStore\ClientFactory as AppStoreClientFactory;
+use GuzzleHttp\Client;
 
 class PaymentService {
 
@@ -256,7 +256,7 @@ class PaymentService {
      */
     private static function verifyJWSServer(string $signedTransactionInfo) {
         $client = new Client([
-            'base_uri' => 'https://buy.itunes.apple.com/', // Production URL
+            'base_uri' => 'https://buy.itunes.apple.com/',
             'timeout' => 5,
         ]);
 
