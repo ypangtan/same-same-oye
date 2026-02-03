@@ -15,6 +15,7 @@ use Imdhemy\Purchases\Facades\{
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Imdhemy\AppStore\ClientFactory as AppStoreClientFactory;
 
 class PaymentService {
 
@@ -25,8 +26,15 @@ class PaymentService {
             $plan = SubscriptionPlan::find( $data['plan_id'] );
             $productId = $plan->ios_product_id;
             
+
+            // plugin 没有处理sandbox和生产环境切换，这里手动处理
+            $isSandbox = config('liap.appstore_sandbox', true);
+            $client = $isSandbox
+                ? AppStoreClientFactory::createForITunesSandbox()
+                : AppStoreClientFactory::createForITunes();
+
             // 验证收据
-            $response = Subscription::appStore()
+            $response = Subscription::appStore( $client )
                 ->receiptData($receiptData)
                 ->verifyRenewable();
 
