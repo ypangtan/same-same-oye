@@ -21,8 +21,6 @@ class PaymentService {
 
     public static function verifyIOSPurchase( $user_id, $data ) {
         try {
-            // $decoded = base64_decode($data['receipt_data']);
-            // return $decoded;
 
             $user = User::find( $user_id );
             $receiptData = $data['receipt_data'];
