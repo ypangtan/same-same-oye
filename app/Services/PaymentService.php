@@ -254,35 +254,44 @@ class PaymentService {
     /**
      * Call Apple Server API to validate signedTransactionInfo
      */
-    private static function verifyJWSServer(string $signedTransactionInfo) {
-        $client = new Client([
-            'base_uri' => 'https://buy.itunes.apple.com/',
-            'timeout' => 5,
-        ]);
+    private static function verifyJWSServer(string $jws) {
+        $isSandbox = config('liap.appstore_sandbox', true);
 
-        $url = config('liap.appstore_sandbox', true)
+        $url = $isSandbox
             ? 'https://sandbox.itunes.apple.com/verifyReceipt'
             : 'https://buy.itunes.apple.com/verifyReceipt';
 
+        $client = new \GuzzleHttp\Client(['timeout' => 5]);
+
         $response = $client->post($url, [
             'json' => [
-                'signedTransactionInfo' => $signedTransactionInfo,
+                'receipt-data' => $jws,                    // 这里是完整的 JWS
+                'password' => config('liap.appstore_shared_secret'),
+                'exclude-old-transactions' => false,
             ],
         ]);
 
         $json = json_decode($response->getBody()->getContents(), true);
 
-        if (empty($json) || !isset($json['status']) || $json['status'] !== 0) {
-            throw new Exception('Apple server verification failed: ' . json_encode($json));
+        if (empty($json) || !isset($json['status'])) {
+            throw new \Exception('Apple server returned invalid response');
         }
 
-        // signedTransactionInfo inside response
-        if (empty($json['signedTransactionInfo'])) {
-            throw new Exception('Apple server response missing signedTransactionInfo');
+        // Apple 返回非 0 状态码，表示验证失败
+        if ($json['status'] !== 0) {
+            throw new \Exception('Apple server verification failed: ' . json_encode($json));
         }
 
-        return json_decode(base64_decode($json['signedTransactionInfo']), true);
+        // 返回最新的交易信息
+        $latest = end($json['latest_receipt_info'] ?? $json['receipt']['in_app'] ?? []);
+
+        if (!$latest) {
+            throw new \Exception('No transaction info found in Apple response');
+        }
+
+        return $latest;
     }
+
 
     /**
      * Create or update subscription & transaction
