@@ -440,6 +440,10 @@ class PaymentService {
     }
 
     private static function base64url_decode(string $data) {
+        $remainder = strlen($data) % 4;
+        if ($remainder) {
+            $data .= str_repeat('=', 4 - $remainder);
+        }
         return base64_decode(str_replace(['-', '_'], ['+', '/'], $data));
     }
 
