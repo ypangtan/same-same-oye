@@ -104,6 +104,16 @@ class PaymentService {
             Log::channel('payment')->error('iOS verification failed', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'class' => get_class($e),
+                'trace' => $e->getTraceAsString(),
+                'previous' => $e->getPrevious() ? [
+                    'message' => $e->getPrevious()->getMessage(),
+                    'file' => $e->getPrevious()->getFile(),
+                    'line' => $e->getPrevious()->getLine(),
+                    'class' => get_class($e->getPrevious()),
+                ] : null,
             ]);
 
             throw $e;
