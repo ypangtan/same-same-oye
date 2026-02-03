@@ -58,13 +58,6 @@ class SettingController extends Controller
             'mobile_title' => __( 'template.settings' ),
         ];
 
-        $this->data['data']['reward_types'] = [
-            '1' => __('checkin_reward.points'),
-            '2' => __('checkin_reward.voucher'),
-        ];
-
-        // $this->data['data']['settings'] = SettingService::settings();
-
         return view( 'admin.main' )->with( $this->data );
     }
 
@@ -73,44 +66,18 @@ class SettingController extends Controller
         return SettingService::settings();
     }
     
-    public function bonusSettings( Request $request ) {
-
-        return SettingService::bonusSettings();
-    }
-    
     public function lastestAppVersion( Request $request ) {
 
         return AppVersionService::lastestAppVersion( $request );
     }
-    
-    public function giftSettings( Request $request ) {
-
-        return SettingService::giftSettings();
-    }
-
     public function maintenanceSettings( Request $request ) {
 
         return SettingService::maintenanceSettings();
     }
 
-    public function updateBonusSetting( Request $request ) {
-
-        return SettingService::updateBonusSetting( $request );
-    }
-
     public function updateMaintenanceSetting( Request $request ) {
 
         return SettingService::updateMaintenanceSetting( $request );
-    }
-
-    public function updateBirthdayGiftSetting( Request $request ) {
-
-        return SettingService::updateBirthdayGiftSetting( $request );
-    }
-
-    public function updateReferralGiftSetting( Request $request ) {
-
-        return SettingService::updateReferralGiftSetting( $request );
     }
 
     public function updateAppVersionSetting( Request $request ) {
