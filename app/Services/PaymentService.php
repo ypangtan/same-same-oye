@@ -102,7 +102,6 @@ class PaymentService {
 
         } catch (Exception $e) {
             Log::channel('payment')->error('iOS verification failed', [
-                'user_id' => $user->id,
                 'error' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
