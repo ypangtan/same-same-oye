@@ -28,12 +28,26 @@ class PaymentService {
             // ── 判断收据类型 ──
             if (self::isJWS($receipt)) {
                 // -------- StoreKit 2 --------
-                $payload = self::verifyJWSLocal($receipt, $plan);
-                $applePayload = self::verifyJWSServer($payload['signedTransactionInfo']);
+                // $payload = self::verifyJWSLocal($receipt, $plan);
+                // $applePayload = self::verifyJWSServer($payload['signedTransactionInfo']);
+                
+                $applePayload = self::verifyJWSServer($receipt);
+                $transactionId = $applePayload['transactionId'] ?? $applePayload['originalTransactionId'] ?? null;
 
-                if ($applePayload['transactionId'] !== $payload['transactionId']) {
-                    throw new Exception('Transaction mismatch between local and Apple server');
+                if (!$transactionId) {
+                    throw new Exception('Apple server did not return a transactionId');
                 }
+
+                $payload = [
+                    'transactionId' => $transactionId,
+                    'originalTransactionId' => $applePayload['originalTransactionId'] ?? $transactionId,
+                    'expiresDate' => $applePayload['expiresDate'] ?? now()->addMonth()->timestamp * 1000,
+                    'productId' => $applePayload['productId'],
+                    'environment' => $applePayload['environment'] ?? 'Production',
+                    'price' => $plan->price * 100,
+                    'currency' => 'MYR',
+                    'transactionReason' => $applePayload['type'] ?? 'INITIAL_PURCHASE',
+                ];
 
             } else {
                 // -------- StoreKit 1 --------
