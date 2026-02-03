@@ -193,17 +193,14 @@ class PaymentService {
         [$headerB64, $payloadB64, $signatureB64] = $parts;
 
         $header = json_decode(self::base64url_decode($headerB64), true);
-        if (empty($header['x5c']) || empty($header['alg'])) {
-            throw new Exception('JWS header missing x5c or alg');
-        }
 
-        // Verify certificate chain
+        // 验证证书链
         self::verifyCertChain($header['x5c']);
 
-        // Verify signature using leaf cert
-        $leafPem     = self::x5cToPem($header['x5c'][0]);
-        $signedData  = $headerB64 . '.' . $payloadB64;
-        $signature   = self::base64url_decode($signatureB64);
+        // 验签
+        $leafPem = self::x5cToPem($header['x5c'][0]);
+        $signedData = $headerB64 . '.' . $payloadB64;
+        $signature = self::base64url_decode($signatureB64);
 
         $algo = match($header['alg']) {
             'ES256' => OPENSSL_ALGO_SHA256,
@@ -213,19 +210,15 @@ class PaymentService {
         };
 
         $pubKey = openssl_pkey_get_public($leafPem);
-        if (!$pubKey) {
-            throw new Exception('Failed to extract public key from leaf cert');
-        }
+        if (!$pubKey) throw new Exception('Failed to extract public key');
 
         if (openssl_verify($signedData, $signature, $pubKey, $algo) !== 1) {
             throw new Exception('JWS signature verification failed');
         }
         openssl_pkey_free($pubKey);
 
-        // Decode payload
         $payload = json_decode(self::base64url_decode($payloadB64), true);
 
-        // Validate payload fields
         self::validateJWSPayload($payload, $plan);
 
         return $payload;
@@ -351,10 +344,10 @@ class PaymentService {
         return $subscription;
     }
 
-    private static function isJWS(string $data): bool
-    {
+    private static function isJWS(string $data) {
         $parts = explode('.', $data);
         if (count($parts) !== 3) return false;
+
         $header = json_decode(self::base64url_decode($parts[0]), true);
         return isset($header['x5c'], $header['alg']);
     }
