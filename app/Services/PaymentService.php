@@ -252,20 +252,23 @@ class PaymentService {
     }
 
     /**
-     * Call Apple Server API to validate signedTransactionInfo
+     * Call Apple /verifyReceipt API to validate signedTransactionInfo (StoreKit 2 JWS)
      */
-    private static function verifyJWSServer( $jws ) {
+    private static function verifyJWSServer(string $signedTransactionInfo) {
+        // Sandbox 或 Production
         $isSandbox = config('liap.appstore_sandbox', true);
-
         $url = $isSandbox
             ? 'https://sandbox.itunes.apple.com/verifyReceipt'
             : 'https://buy.itunes.apple.com/verifyReceipt';
 
         $client = new \GuzzleHttp\Client(['timeout' => 5]);
 
+        // Base64 encode signedTransactionInfo
+        $receiptData = base64_encode($signedTransactionInfo);
+
         $response = $client->post($url, [
             'json' => [
-                'receipt-data' => $jws,
+                'receipt-data' => $receiptData,
                 'password' => config('liap.appstore_password'),
                 'exclude-old-transactions' => false,
             ],
@@ -284,14 +287,12 @@ class PaymentService {
 
         // 返回最新的交易信息
         $latest = end($json['latest_receipt_info'] ?? $json['receipt']['in_app'] ?? []);
-
         if (!$latest) {
             throw new \Exception('No transaction info found in Apple response');
         }
 
         return $latest;
     }
-
 
     /**
      * Create or update subscription & transaction
