@@ -26,6 +26,8 @@ class PaymentService {
             $plan = SubscriptionPlan::findOrFail($data['plan_id']);
             $jws  = $data['receipt_data'];
 
+            return $jws;
+
             if (!self::isJWS($jws)) {
                 throw new Exception('Invalid receipt format: not a StoreKit 2 JWS');
             }
