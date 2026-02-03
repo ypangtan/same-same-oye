@@ -28,21 +28,7 @@ class PaymentService {
             // ── 判断收据类型 ──
             if (self::isJWS($receipt)) {
                 // -------- StoreKit 2 --------
-                $payload = self::verifyJWSLocal($receipt, $plan);
-
-                $transactionId = $payload['transactionId'] ?? $payload['originalTransactionId'] ?? null;
-                if (!$transactionId) throw new Exception('Missing transactionId in JWS');
-
-                // 2️⃣ 转成 Base64 给 Apple server 验证
-                $base64Receipt = $payload['transactionInfo'] ?? null;
-                if (!$base64Receipt) throw new Exception('Missing transactionInfo for Apple server verification');
-
-                $appleResponse = self::verifyReceiptAppleServer($base64Receipt);
-
-                // 3️⃣ 对比 Apple server 和本地 payload
-                if (($appleResponse['transaction_id'] ?? '') !== $transactionId) {
-                    throw new Exception('Apple server verification mismatch');
-                }
+                $payload = PaymentService::verifyIOSServer($receipt, $plan);
 
                 $payloadData = [
                     'transactionId' => $transactionId,
@@ -257,6 +243,47 @@ class PaymentService {
 
         return $payload;
     }
+    
+    public static function verifyIOSServer(string $receipt, string $plan)
+    {
+        // Apple sandbox or production URL
+        // $appleUrl = 'https://buy.itunes.apple.com/verifyReceipt'; // 正式环境
+        $appleUrl = 'https://sandbox.itunes.apple.com/verifyReceipt'; // 测试环境
+
+        // 构建请求 payload
+        $payload = [
+            'receipt-data' => $receipt,
+            'password' => env('APPLE_SHARED_SECRET'), // App Store 订阅共享密钥
+            'exclude-old-transactions' => true
+        ];
+
+        $ch = curl_init($appleUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        if (!isset($result['status'])) {
+            throw new \Exception("Invalid Apple response");
+        }
+
+        if ($result['status'] != 0) {
+            throw new \Exception("Apple server verification failed: " . json_encode($result));
+        }
+
+        // 验证成功，检查 product_id 是否对应 plan
+        $latestReceipt = $result['latest_receipt_info'][0] ?? null;
+        if (!$latestReceipt || $latestReceipt['product_id'] !== $plan) {
+            throw new \Exception("Product mismatch or receipt invalid");
+        }
+
+        return $latestReceipt;
+    }
+
 
     /**
      * Call Apple /verifyReceipt API to validate signedTransactionInfo (StoreKit 2 JWS)
