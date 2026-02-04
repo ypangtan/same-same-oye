@@ -52,8 +52,8 @@ class PaymentService {
             $receiptInfo = $latestReceipt[0];
             $transactionId = $receiptInfo->getTransactionId();
             $originalTransactionId = $receiptInfo->getOriginalTransactionId();
-            $expiresDateObj = $receiptInfo->getExpiresDate();
-            $expiredDate = Carbon::parse( $expiresDateObj->toDateTime() )->timezone('Asia/Kuala_Lumpur');
+
+            $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
 
             // 检查交易是否已存在
             if ( PaymentTransaction::exists( $transactionId ) ) {
