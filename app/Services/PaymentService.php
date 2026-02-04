@@ -50,6 +50,7 @@ class PaymentService {
             }
 
             $receiptInfo = $latestReceipt[0];
+            return $receiptInfo;
             $transactionId = $receiptInfo->getTransactionId();
             $originalTransactionId = $receiptInfo->getOriginalTransactionId();
             $expiresDate = $receiptInfo->getExpiresDate();
@@ -65,7 +66,6 @@ class PaymentService {
 
             // 创建或更新订阅
             if( $expiresDate ) {
-                return $expiresDate;
                 $expiredDate = Carbon::createFromTimestamp( $expiresDate->getTimestamp() );
             }
             $isRenew = $receiptInfo->getAutoRenewStatus() === '1';
