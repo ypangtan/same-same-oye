@@ -97,14 +97,10 @@ class PaymentService {
                 $isRenew = $receiptInfo->getAutoRenewStatus() === '1';
 
                 // 记录交易
-
-
                 $payloadData = [
-                    'transactionId' => $applePayload['transaction_id'] ?? $applePayload['original_transaction_id'],
-                    'originalTransactionId' => $applePayload['original_transaction_id'],
-                    'expiresDate' => $applePayload['expires_date_ms'] ?? now()->addMonth()->timestamp * 1000,
-                    'productId' => $applePayload['product_id'],
-                    'environment' => $applePayload['environment'] ?? 'Production',
+                    'transactionId' => $transactionId,
+                    'originalTransactionId' => $originalTransactionId,
+                    'productId' => $productId,
                     'price' => $plan->price * 100,
                     'currency' => 'MYR',
                     'transactionReason' => 'INITIAL_PURCHASE',
