@@ -19,6 +19,7 @@ use App\Mail\OtpMail;
 use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
+    AgeGroup,
     ContactUs,
     User,
     OtpAction,
@@ -1521,7 +1522,7 @@ class UserService
         $defaultCallingCode = "+60";
 
         $user = User::where('status', 10)->where('email', $request->email )
-        ->first();
+            ->first();
 
         // Register OneSignal
         if ( !empty( $request->register_token ) ) {
@@ -1531,7 +1532,7 @@ class UserService
         $token = $user->createToken( 'user_token' )->plainTextToken;
         $user->token = $token;
 
-        // self::isFirstLogin( $user->id );
+        self::isFirstLogin( $user->id );
 
         return response()->json( [
             'message' => __( 'user.login_success' ),
@@ -2134,8 +2135,7 @@ class UserService
         }
     }
 
-    public static function deleteVerification($request)
-    {
+    public static function deleteVerification($request) {
         $validator = Validator::make($request->all(), [
             'password' => ['required'],
         ], [
@@ -2527,10 +2527,9 @@ class UserService
         }
     }
 
-    public static function isFirstLogin() {
-        $user = User::find( auth()->user()->id );
+    public static function isFirstLogin( $user_id ) {
+        $user = User::find( $user_id );
         if( $user->is_first_login == 10 ) {
-
             $days = Option::where( 'option_name', 'trial_period_days' )->first();
 
             $userSubscription = UserSubscription::create( [
@@ -2615,6 +2614,21 @@ class UserService
 
         return response()->json( [
             'message' => 'Enquiry Received!',
+        ] );
+    }
+
+    public static function ageGroups() {
+        $ageGroups = [
+            '10-17',
+        ];
+
+        return $ageGroups;
+    }
+
+    public static function getAgeGroups() {
+
+        return response()->json( [
+            'data' => self::ageGroups(),
         ] );
     }
 
