@@ -144,7 +144,8 @@ class SubscriptionPlanService
             'name' => [ 'required' ],
             'description' => [ 'nullable' ],
             'price' => [ 'required' ],
-            'duration_in_days' => [ 'required' ],
+            'duration_in_days' => [ 'required_without:duration_in_months' ],
+            'duration_in_months' => [ 'required_without:duration_in_days' ],
             'ios_product_id' => [ 'required' ],
             'android_product_id' => [ 'required' ],
             'huawei_product_id' => [ 'nullable' ],
@@ -155,6 +156,7 @@ class SubscriptionPlanService
             'description' => __( 'subscription_plan.description' ),
             'price' => __( 'subscription_plan.price' ),
             'duration_in_days' => __( 'subscription_plan.duration_in_days' ),
+            'duration_in_months' => __( 'subscription_plan.duration_in_months' ),
             'ios_product_id' => __( 'subscription_plan.ios_product_id' ),
             'android_product_id' => __( 'subscription_plan.android_product_id' ),
             'huawei_product_id' => __( 'subscription_plan.huawei_product_id' ),
@@ -175,6 +177,8 @@ class SubscriptionPlanService
                 'description' => $request->description,
                 'price' => $request->price,
                 'duration_in_days' => $request->duration_in_days,
+                'duration_in_months' => $request->duration_in_months,
+                'duration_in_years' => $request->duration_in_years,
                 'ios_product_id' => $request->ios_product_id,
                 'android_product_id' => $request->android_product_id,
                 'huawei_product_id' => $request->huawei_product_id,
@@ -206,7 +210,8 @@ class SubscriptionPlanService
             'name' => [ 'required' ],
             'description' => [ 'nullable' ],
             'price' => [ 'required' ],
-            'duration_in_days' => [ 'required' ],
+            'duration_in_days' => [ 'required_without:duration_in_months' ],
+            'duration_in_months' => [ 'required_without:duration_in_days' ],
             'ios_product_id' => [ 'required' ],
             'android_product_id' => [ 'required' ],
             'huawei_product_id' => [ 'nullable' ],
@@ -217,6 +222,7 @@ class SubscriptionPlanService
             'description' => __( 'subscription_plan.description' ),
             'price' => __( 'subscription_plan.price' ),
             'duration_in_days' => __( 'subscription_plan.duration_in_days' ),
+            'duration_in_months' => __( 'subscription_plan.duration_in_months' ),
             'ios_product_id' => __( 'subscription_plan.ios_product_id' ),
             'android_product_id' => __( 'subscription_plan.android_product_id' ),
             'huawei_product_id' => __( 'subscription_plan.huawei_product_id' ),
@@ -237,6 +243,8 @@ class SubscriptionPlanService
             $updateSubscriptionPlan->description = $request->description;
             $updateSubscriptionPlan->price = $request->price;
             $updateSubscriptionPlan->duration_in_days = $request->duration_in_days;
+            $updateSubscriptionPlan->duration_in_months = $request->duration_in_months;
+            $updateSubscriptionPlan->duration_in_years = $request->duration_in_years;
             $updateSubscriptionPlan->ios_product_id = $request->ios_product_id;
             $updateSubscriptionPlan->android_product_id = $request->android_product_id;
             $updateSubscriptionPlan->huawei_product_id = $request->huawei_product_id;

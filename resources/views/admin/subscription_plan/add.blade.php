@@ -40,6 +40,22 @@ $subscription_plan_create = 'subscription_plan_create';
                     </div>
                 </div>
                 
+                <div class="mb-3 row d-none">
+                    <label for="{{ $subscription_plan_create }}_duration_in_years" class="col-sm-5 col-form-label">{{ __( 'subscription_plan.duration_in_years' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="number" class="form-control" id="{{ $subscription_plan_create }}_duration_in_years">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3 row">
+                    <label for="{{ $subscription_plan_create }}_duration_in_months" class="col-sm-5 col-form-label">{{ __( 'subscription_plan.duration_in_months' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="number" class="form-control" id="{{ $subscription_plan_create }}_duration_in_months">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                
                 <div class="mb-3 row">
                     <label for="{{ $subscription_plan_create }}_duration_in_days" class="col-sm-5 col-form-label">{{ __( 'subscription_plan.duration_in_days' ) }}</label>
                     <div class="col-sm-7">
@@ -104,7 +120,9 @@ $subscription_plan_create = 'subscription_plan_create';
             formData.append( 'name', $( fc + '_name' ).val() );
             formData.append( 'description', $( fc + '_description' ).val() );
             formData.append( 'price', $( fc + '_price' ).val() );
-            formData.append( 'duration_in_days', $( fc + '_duration_in_days' ).val() );
+            formData.append( 'duration_in_years', $( fc + '_duration_in_years' ).val() ?? 0 );
+            formData.append( 'duration_in_months', $( fc + '_duration_in_months' ).val() ?? 0 );
+            formData.append( 'duration_in_days', $( fc + '_duration_in_days' ).val() ?? 0 );
             formData.append( 'ios_product_id', $( fc + '_ios_product_id' ).val() );
             formData.append( 'android_product_id', $( fc + '_android_product_id' ).val() );
             formData.append( 'huawei_product_id', $( fc + '_huawei_product_id' ).val() );
