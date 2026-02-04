@@ -234,7 +234,6 @@ class PaymentService {
             $subscription->update([
                 'status' => 10,
                 'end_date' => $endDate,
-                'platform_transaction_id' => $transactionId,
                 'auto_renew' => $autoRenew,
             ]);
         } else {
