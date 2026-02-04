@@ -56,33 +56,33 @@ class PaymentService {
             $expiredDate = Carbon::parse( $expiresDateObj->toDateTime() )->timezone('Asia/Kuala_Lumpur');
 
             // 检查交易是否已存在
-            // if ( PaymentTransaction::exists( $transactionId ) ) {
-            //     return [
-            //         'success' => true,
-            //         'message' => 'Transaction already processed',
-            //         'subscription' => $user->subscriptions()->where('platform', 1 )->isActive()->first(),
-            //     ];
-            // }
+            if ( PaymentTransaction::exists( $transactionId ) ) {
+                return [
+                    'success' => true,
+                    'message' => 'Transaction already processed',
+                    'subscription' => $user->subscriptions()->where('platform', 1 )->isActive()->first(),
+                ];
+            }
 
             // 创建或更新订阅
             $isRenew = true;
             $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiredDate, $isRenew );
 
             // 记录交易
-            // $transaction = PaymentTransaction::create([
-            //     'user_id' => $user->id,
-            //     'user_subscription_id' => $subscription->id,
-            //     'transaction_id' => $transactionId,
-            //     'original_transaction_id' => $originalTransactionId,
-            //     'amount' => 0,
-            //     'currency' => 'MYR',
-            //     'platform' => 1,
-            //     'product_id' => $productId,
-            //     'receipt_data' => $receiptData,
-            //     'status' => 10,
-            //     'verified_at' => now(),
-            //     'verification_response' => json_encode($response->toArray()),
-            // ]);
+            $transaction = PaymentTransaction::create([
+                'user_id' => $user->id,
+                'user_subscription_id' => $subscription->id,
+                'transaction_id' => $transactionId,
+                'original_transaction_id' => $originalTransactionId,
+                'amount' => 0,
+                'currency' => 'MYR',
+                'platform' => 1,
+                'product_id' => $productId,
+                'receipt_data' => $receiptData,
+                'status' => 10,
+                'verified_at' => now(),
+                'verification_response' => json_encode($response->toArray()),
+            ]);
 
             Log::channel('payment')->info('iOS purchase verified', [
                 'user_id' => $user->id,
@@ -93,7 +93,7 @@ class PaymentService {
                 'success' => true,
                 'message' => 'Subscription activated successfully',
                 'subscription' => $subscription->fresh(),
-                // 'transaction' => $transaction,
+                'transaction' => $transaction,
             ];
 
         } catch (Exception $e) {
