@@ -17,6 +17,8 @@ return [
     'description' => 'Description',
     'price' => 'Price',
     'duration_in_days' => 'Duration in Days',
+    'duration_in_months' => 'Duration in Months',
+    'duration_in_years' => 'Duration in Years',
     'ios_product_id' => 'IOS Product ID',
     'android_product_id' => 'Android Product ID',
     'huawei_product_id' => 'Huawei Product ID',
