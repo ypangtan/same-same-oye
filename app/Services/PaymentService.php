@@ -117,13 +117,13 @@ class PaymentService {
 
     public static function verifyAndroidPurchase( $user_id, $data ) {
         try {
+
+            $credentialsPath = config('liap.google_application_credentials');
             
-        $credentialsPath = config('liap.google_application_credentials');
-        
-        // 检查文件是否存在
-        if (!file_exists($credentialsPath)) {
-            throw new \Exception('Google Play 凭据文件不存在: ' . $credentialsPath);
-        }
+            // 检查文件是否存在
+            if (!file_exists($credentialsPath)) {
+                throw new \Exception('Google Play 凭据文件不存在: ' . $credentialsPath);
+            }
         
             $user = User::find( $user_id );
             $plan = SubscriptionPlan::find( $data['plan_id'] );
