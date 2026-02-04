@@ -55,6 +55,11 @@ $columns = [
         'title' => __( 'subscription_plan.duration_in_days' ),
     ],
     [
+        'type' => 'default',
+        'id' => 'duration_in_months',
+        'title' => __( 'subscription_plan.duration_in_months' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -120,6 +125,7 @@ var statusMapper = {
             { data: 'name' },
             { data: 'price' },
             { data: 'duration_in_days' },
+            { data: 'duration_in_months' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -165,6 +171,12 @@ var statusMapper = {
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "duration_in_days" ) }}' ),
+                render: function( data, type, row, meta ) {
+                    return  data ?? '-';
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "duration_in_months" ) }}' ),
                 render: function( data, type, row, meta ) {
                     return  data ?? '-';
                 },
