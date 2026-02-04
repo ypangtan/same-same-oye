@@ -182,7 +182,7 @@ class PaymentService {
                 ->acknowledge();
 
             Log::channel('payment')->info('Android purchase verified', [
-                'user_id' => $user->id,
+                'user_id' => $user_id,
                 'transaction_id' => $orderId,
             ]);
 
@@ -195,7 +195,7 @@ class PaymentService {
 
         } catch (Exception $e) {
             Log::channel('payment')->error('Android verification failed', [
-                'user_id' => $user->id,
+                'user_id' => $user_id,
                 'error' => $e->getMessage(),
             ]);
 
