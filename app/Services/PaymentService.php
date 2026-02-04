@@ -50,8 +50,8 @@ class PaymentService {
             }
 
             $receiptInfo = $latestReceipt[0];
-            $transactionId = $receiptInfo->getTransactionId();
-            $originalTransactionId = $receiptInfo->getOriginalTransactionId();
+            $transactionId = $receiptInfo->transaction_id ?? '';
+            $originalTransactionId = $receiptInfo->original_transaction_id ?? '';
             $expiresDate = $receiptInfo->expires_date ? Carbon::parse( $receiptInfo->expires_date )->timezone( 'Asia/Kuala_Lumpur' ) : null;
 
             // 检查交易是否已存在
