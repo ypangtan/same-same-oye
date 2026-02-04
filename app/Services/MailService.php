@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\{
     MailAction,
+    Option,
     OtpLog,
     User,
 };
@@ -30,6 +31,9 @@ class MailService {
     private function sending() {
         try {
 
+            $option = Option::where( 'option_name', 'contact_us_email' )->first();
+            $contactUsMail = $option ? $option->option_value : config( 'services.brevo.contact_us_mail' );
+
             $data = [
                 'sender' => [
                     'name' => 'Same Same Oye',
@@ -37,7 +41,7 @@ class MailService {
                 ],
                 'to' => [
                     [
-                        'email' => ( $this->data['type'] && $this->data['type'] == 3 ) ? config( 'services.brevo.contact_us_mail' ) : $this->data['email'],
+                        'email' => ( $this->data['type'] && $this->data['type'] == 3 ) ? $contactUsMail : $this->data['email'],
                     ]
                 ],
                 'subject' => $this->getSubject(),

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             TypeSeeder::class,
             AppVersionSeeder::class,
             OptionSeeder::class,
+            OptionSeeder2::class,
         ] );
     }
 }

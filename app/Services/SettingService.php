@@ -52,6 +52,7 @@ class SettingService {
     public static function settings() {
 
         $settings = Option::whereIn( 'option_name', [
+            'contact_us_email',
         ] )->get();
 
         return $settings;
@@ -119,6 +120,10 @@ class SettingService {
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.app_versions' ) ) ] ),
         ] );
+    }
+
+    public function updateContactUsEmailSetting( $request ) {
+        
     }
 
 }
