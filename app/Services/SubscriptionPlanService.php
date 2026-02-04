@@ -176,9 +176,9 @@ class SubscriptionPlanService
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
-                'duration_in_days' => $request->duration_in_days,
-                'duration_in_months' => $request->duration_in_months,
-                'duration_in_years' => $request->duration_in_years,
+                'duration_in_days' => $request->duration_in_days ?? 0,
+                'duration_in_months' => $request->duration_in_months ?? 0,
+                'duration_in_years' => $request->duration_in_years ?? 0,
                 'ios_product_id' => $request->ios_product_id,
                 'android_product_id' => $request->android_product_id,
                 'huawei_product_id' => $request->huawei_product_id,
@@ -242,9 +242,9 @@ class SubscriptionPlanService
             $updateSubscriptionPlan->name = $request->name;
             $updateSubscriptionPlan->description = $request->description;
             $updateSubscriptionPlan->price = $request->price;
-            $updateSubscriptionPlan->duration_in_days = $request->duration_in_days;
-            $updateSubscriptionPlan->duration_in_months = $request->duration_in_months;
-            $updateSubscriptionPlan->duration_in_years = $request->duration_in_years;
+            $updateSubscriptionPlan->duration_in_days = $request->duration_in_days ?? 0;
+            $updateSubscriptionPlan->duration_in_months = $request->duration_in_months ?? 0;
+            $updateSubscriptionPlan->duration_in_years = $request->duration_in_years ?? 0;
             $updateSubscriptionPlan->ios_product_id = $request->ios_product_id;
             $updateSubscriptionPlan->android_product_id = $request->android_product_id;
             $updateSubscriptionPlan->huawei_product_id = $request->huawei_product_id;
