@@ -86,16 +86,16 @@ class InAppPurchaseService {
 
             return response()->json([
                 'message' => $e->getMessage(),
-                // 'file' => $e->getFile(),
-                // 'line' => $e->getLine(),
-                // 'class' => get_class($e),
-                // 'trace' => $e->getTraceAsString(),
-                // 'previous' => $e->getPrevious() ? [
-                //     'message' => $e->getPrevious()->getMessage(),
-                //     'file' => $e->getPrevious()->getFile(),
-                //     'line' => $e->getPrevious()->getLine(),
-                //     'class' => get_class($e->getPrevious()),
-                // ] : null,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'class' => get_class($e),
+                'trace' => $e->getTraceAsString(),
+                'previous' => $e->getPrevious() ? [
+                    'message' => $e->getPrevious()->getMessage(),
+                    'file' => $e->getPrevious()->getFile(),
+                    'line' => $e->getPrevious()->getLine(),
+                    'class' => get_class($e->getPrevious()),
+                ] : null,
             ], 500 );
         }
     }
