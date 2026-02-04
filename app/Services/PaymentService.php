@@ -123,12 +123,6 @@ class PaymentService {
             $purchaseToken = $data['purchase_token'];
             $packageName = config('liap.google_play_package_name');
 
-            // 查找订阅方案
-            $plan = SubscriptionPlan::findByPlatformProductId( 2, $productId );
-            if (!$plan) {
-                throw new Exception("Invalid product ID: {$productId}");
-            }
-
             // 验证订阅
             $response = Subscription::googlePlay()
                 ->packageName($packageName)
