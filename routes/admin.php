@@ -192,6 +192,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'maintenance-settings', [ SettingController::class, 'maintenanceSettings' ] )->name( 'admin.setting.maintenanceSettings' );
                 Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
                 Route::post( 'update-app-version-setting', [ SettingController::class, 'updateAppVersionSetting' ] )->name( 'admin.setting.updateAppVersionSetting' );
+                Route::post( 'update-contact-us-email-setting', [ SettingController::class, 'updateContactUsEmailSetting' ] )->name( 'admin.setting.updateContactUsEmailSetting' );
             } );
             
             Route::prefix( 'pop-announcements' )->group( function() {

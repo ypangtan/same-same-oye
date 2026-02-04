@@ -146,6 +146,25 @@ $setting = 'setting';
                 },
             } );
         }
+
+        function getSettings() {
+                $.ajax( {
+                url: '{{ route( 'admin.setting.settings' ) }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    if ( response ) {
+                        response.forEach(item => {
+                            if (item.option_name === "contact_us_email") {
+                                $( s + '_contact_us_email').val( item.option_value );
+                            }
+                        });
+                    }
+                },
+            } );
+        }
     } );
 </script>
 

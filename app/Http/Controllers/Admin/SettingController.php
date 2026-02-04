@@ -84,4 +84,9 @@ class SettingController extends Controller
 
         return SettingService::updateAppVersionSetting( $request );
     }
+
+    public function updateContactUsEmailSetting( Request $request ) {
+
+        return SettingService::updateContactUsEmailSetting( $request );
+    }
 }
