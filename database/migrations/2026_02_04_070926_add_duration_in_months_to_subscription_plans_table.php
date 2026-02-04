@@ -13,7 +13,7 @@ class AddDurationInMonthsToSubscriptionPlansTable extends Migration
      */
     public function up()
     {
-        Schema::table('months_to_subscription_plans', function (Blueprint $table) {
+        Schema::table('subscription_plans', function (Blueprint $table) {
             $table->integer('duration_in_months')->default(0);
             $table->integer('duration_in_years')->default(0);
         });
@@ -26,7 +26,7 @@ class AddDurationInMonthsToSubscriptionPlansTable extends Migration
      */
     public function down()
     {
-        Schema::table('months_to_subscription_plans', function (Blueprint $table) {
+        Schema::table('subscription_plans', function (Blueprint $table) {
             $table->dropColumn( 'duration_in_months' );
             $table->dropColumn( 'duration_in_years' );
         });
