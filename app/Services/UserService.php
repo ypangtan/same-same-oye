@@ -2588,6 +2588,9 @@ class UserService
             $data = [
                 'type' => 3,
                 'email' => $createContactUs->email,
+                'name' => $createContactUs->name,
+                'phone_number' => $createContactUs->phone_number,
+                'message' => $createContactUs->message,
             ];
             $service = new MailService( $data );
             $result = $service->send();
