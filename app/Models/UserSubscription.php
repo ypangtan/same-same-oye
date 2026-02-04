@@ -68,7 +68,7 @@ class UserSubscription extends Model
         return $this->end_date && $this->end_date->isPast();
     }
 
-    public function renew( $days)  {
+    public function renew( $days )  {
         $newEndDate = $this->end_date && $this->end_date->isFuture()
             ? $this->end_date->addDays($days)
             : now()->addDays($days);

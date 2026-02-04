@@ -236,6 +236,8 @@ class PaymentService {
                 'end_date' => $endDate,
                 'auto_renew' => $autoRenew,
             ]);
+
+            $subscription->checkPlanValidity();
         } else {
             // 创建新订阅
             $subscription = UserSubscription::create([
