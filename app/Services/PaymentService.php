@@ -53,7 +53,8 @@ class PaymentService {
             // return $receiptInfo;
             $transactionId = $receiptInfo->transaction_id ?? '';
             $originalTransactionId = $receiptInfo->original_transaction_id ?? '';
-            $expiresDate = $receiptInfo->expires_date ? Carbon::parse( $receiptInfo->expires_date )->timezone( 'Asia/Kuala_Lumpur' ) : null;
+            $expiresDateObj = $receiptInfo->getExpiresDate();
+            $expiredDate = Carbon::parse( $expiresDateObj->toDateTime() )->timezone('Asia/Kuala_Lumpur');
 
             // 检查交易是否已存在
             if ( PaymentTransaction::exists( $transactionId ) ) {
@@ -65,9 +66,6 @@ class PaymentService {
             }
 
             // 创建或更新订阅
-            if( $expiresDate ) {
-                $expiredDate = Carbon::createFromTimestamp( $expiresDate->getTimestamp() );
-            }
             $isRenew = true;
             $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiredDate, $isRenew );
 
