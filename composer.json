@@ -15,7 +15,6 @@
         "fakerphp/faker": "^1.5",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
-        "google/apiclient": "2.15",
         "guzzlehttp/guzzle": "^7.0.1",
         "hashids/hashids": "^4.1",
         "imdhemy/laravel-purchases": "^1.12",
