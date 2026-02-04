@@ -15,7 +15,7 @@ use Imdhemy\Purchases\Facades\{
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use GuzzleHttp\Client;
+use Imdhemy\AppStore\ClientFactory as AppStoreClientFactory;
 
 class PaymentService {
 
@@ -24,6 +24,7 @@ class PaymentService {
             $user = User::findOrFail($user_id);
             $plan = SubscriptionPlan::findOrFail($data['plan_id']);
             $receipt = $data['receipt_data'];
+            $productId = $plan->ios_product_id;
 
             // ── 判断收据类型 ──
             if (self::isJWS($receipt)) {
@@ -44,8 +45,60 @@ class PaymentService {
 
             } else {
                 // -------- StoreKit 1 --------
-                $applePayload = self::verifyReceiptAppleServer($receipt);
-                self::validateReceiptPayload($applePayload, $plan);
+                    
+                // plugin 没有处理sandbox和生产环境切换，这里手动处理
+                $isSandbox = config('liap.appstore_sandbox', true);
+                $client = AppStoreClientFactory::create($isSandbox);
+
+                // 验证收据
+                $response = Subscription::appStore( $client )
+                    ->receiptData($receipt)
+                    ->verifyRenewable();
+
+                $status = $response->getStatus();
+
+                // 处理状态码 21007 (沙盒收据发到了生产环境)
+                if ($status === 21007) {
+                    Log::channel('payment')->warning('Sandbox receipt sent to production');
+                }
+
+                // 处理状态码 21008 (生产收据发到了沙盒环境)
+                if ($status === 21008) {
+                    Log::channel('payment')->warning('Production receipt sent to sandbox environment');
+                }
+
+                // 检查验证状态
+                if ($status !== 0) {
+                    throw new Exception("Receipt verification failed with status: " . $status);
+                }
+
+                // 获取最新的收据信息
+                $latestReceipt = $response->getLatestReceiptInfo();
+                if (empty($latestReceipt)) {
+                    throw new Exception("No receipt info found");
+                }
+
+                $receiptInfo = $latestReceipt[0];
+                $transactionId = $receiptInfo->getTransactionId();
+                $originalTransactionId = $receiptInfo->getOriginalTransactionId();
+                $expiresDate = $receiptInfo->getExpiresDate();
+
+                // 检查交易是否已存在
+                if ( PaymentTransaction::exists( $transactionId ) ) {
+                    return [
+                        'success' => true,
+                        'message' => 'Transaction already processed',
+                        'subscription' => $user->subscriptions()->where('platform', 'ios')->active()->first(),
+                    ];
+                }
+
+                // 创建或更新订阅
+                $expiredDate = Carbon::createFromTimestamp( $expiresDate->getTimestamp() );
+                $isRenew = $receiptInfo->getAutoRenewStatus() === '1';
+
+                // 记录交易
+
+
                 $payloadData = [
                     'transactionId' => $applePayload['transaction_id'] ?? $applePayload['original_transaction_id'],
                     'originalTransactionId' => $applePayload['original_transaction_id'],
