@@ -65,7 +65,7 @@ class PaymentService {
 
             // 创建或更新订阅
             if( $expiresDate ) {
-                return $expiredDate;
+                return $expiresDate;
                 $expiredDate = Carbon::createFromTimestamp( $expiresDate->getTimestamp() );
             }
             $isRenew = $receiptInfo->getAutoRenewStatus() === '1';
