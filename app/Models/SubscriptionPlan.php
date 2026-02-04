@@ -33,18 +33,18 @@ class SubscriptionPlan extends Model
     
     public function getProductIdForPlatform( $platform ) {
         return match( $platform ) {
-            'ios' => $this->ios_product_id,
-            'android' => $this->android_product_id,
-            'huawei' => $this->huawei_product_id,
+            '1' => $this->ios_product_id,
+            '2' => $this->android_product_id,
+            '3' => $this->huawei_product_id,
             default => null,
         };
     }
 
     public static function findByPlatformProductId( $platform, $productId) {
         $column = match( $platform ) {
-            'ios' => 'ios_product_id',
-            'android' => 'android_product_id',
-            'huawei' => 'huawei_product_id',
+            '1' => 'ios_product_id',
+            '2' => 'android_product_id',
+            '3' => 'huawei_product_id',
             default => null,
         };
 
