@@ -18,7 +18,7 @@ return [
     'routing' => [
         'signed' => false,
         'middleware' => ['api'],
-        'prefix' => 'liap',
+        'prefix' => '',
     ],
 
     /*
