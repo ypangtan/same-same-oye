@@ -58,4 +58,7 @@ return [
     'app_version_settings' => 'App Version Settings',
     'enable_force_logout' => 'Enable Force Logout',
     'app_version' => 'App Version',
+
+    'contact_us_email' => 'Contact Us Email',
+    'contact_us_email_settings' => 'Contact Us Email Settings',
 ];

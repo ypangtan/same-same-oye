@@ -122,8 +122,44 @@ class SettingService {
         ] );
     }
 
-    public function updateContactUsEmailSetting( $request ) {
-        
+    public static function updateContactUsEmailSetting( $request ){
+
+        $validator = Validator::make( $request->all(), [
+            'contact_us_email' => [ 'required' ],
+        ] );
+
+        $attributeName = [
+            'contact_us_email' => __( 'setting.contact_us_email' ),
+        ];
+
+        foreach( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            $option = Option::firstOrNew( 'option_name', 'contact_us_email' );
+            $option->option_value = $request->contact_us_email;
+            $option->save();
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.app_versions' ) ) ] ),
+        ] );
     }
 
 }
