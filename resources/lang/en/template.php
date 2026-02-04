@@ -80,6 +80,8 @@ return [
     'talks' => 'Talks',
     'user_playlists' => 'User Playlists',
     'subscription_plans' => 'Subscription Plans',
+    'app_versions' => 'App Versions',
+    'contact_us_email' => 'Contact Us Email',
 
     'loading' => 'Loading...',
     'add' => 'Add',

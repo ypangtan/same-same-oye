@@ -159,7 +159,7 @@ class SettingService {
         }
 
         return response()->json( [
-            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.app_versions' ) ) ] ),
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.contact_us_email' ) ) ] ),
         ] );
     }
 
