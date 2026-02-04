@@ -67,7 +67,7 @@ class PaymentService {
             if( $expiresDate ) {
                 $expiredDate = Carbon::createFromTimestamp( $expiresDate->getTimestamp() );
             }
-            $isRenew = $receiptInfo->getAutoRenewStatus() === '1';
+            $isRenew = true;
             $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiredDate, $isRenew );
 
             // 记录交易
