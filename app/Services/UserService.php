@@ -2614,7 +2614,7 @@ class UserService
         }
 
         return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'user.contact_us' ) ) ] ),
+            'message' => 'Enquiry Received!',
         ] );
     }
 
