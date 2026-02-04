@@ -66,7 +66,7 @@ class PaymentService {
 
             // 创建或更新订阅
             $isRenew = true;
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiredDate, $isRenew, $receiptData );
+            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiredDate, $isRenew );
 
             // // 记录交易
             // $transaction = PaymentTransaction::create([
@@ -220,7 +220,7 @@ class PaymentService {
         }
     }
 
-    protected static function createOrUpdateSubscription( $user_id, $plan_id, $platform, $transactionId, $endDate, $autoRenew = true, $receiptData = null ) {
+    protected static function createOrUpdateSubscription( $user_id, $plan_id, $platform, $transactionId, $endDate, $autoRenew = true ) {
         $user = User::find( $user_id );
         $plan = SubscriptionPlan::find( $plan_id );
 
@@ -236,7 +236,6 @@ class PaymentService {
                 'end_date' => $endDate,
                 'platform_transaction_id' => $transactionId,
                 'auto_renew' => $autoRenew,
-                'platform_receipt' => $receiptData,
             ]);
         } else {
             // 创建新订阅
@@ -248,7 +247,6 @@ class PaymentService {
                 'end_date' => $endDate,
                 'platform' => $platform,
                 'platform_transaction_id' => $transactionId,
-                'platform_receipt' => $receiptData,
                 'auto_renew' => $autoRenew,
             ]);
         }
