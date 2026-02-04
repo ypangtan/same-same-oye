@@ -39,7 +39,7 @@ class HandleAppStoreRefund
 
             // 标记订阅为已退款
             $userSubscription->update([
-                'status' => 40, // refunded
+                'status' => 30, // refunded
                 'auto_renew' => false,
             ]);
 
@@ -59,7 +59,7 @@ class HandleAppStoreRefund
                 'currency' => 'MYR',
                 'platform' => 1, // iOS
                 'product_id' => $productId,
-                'status' => 40, // refunded
+                'status' => 30, // refunded
                 'verified_at' => now(),
                 'event_type' => 'REFUND',
             ]);

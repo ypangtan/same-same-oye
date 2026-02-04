@@ -52,6 +52,12 @@ class UserSubscription extends Model
         return $this->hasMany(PaymentTransaction::class);
     }
 
+    public function scopeIsActive($query) {
+        return $query->where('status', 10)
+            ->whereNotNull('end_date')
+            ->where('end_date', '>', now());
+    }
+
     public function isActive() {
         return $this->status === 10 
             && $this->end_date 
@@ -109,28 +115,9 @@ class UserSubscription extends Model
     }
 
     private function checkPlanValidity() {
-        $user = $this->user;
-        $have_plan = false;
-        if ( $user && $user->subscriptions ) {
-            foreach( $user->subscriptions as $subscription ) {
-                if( $subscription->isActive() ) {
-                    $have_plan = true;
-                }
-            }
-        }
-
-        if( $have_plan ) {
-            $user->membership = 1;
-            $user->save();
-        } else {
-            $user->membership = 0;
-            $user->save();
-        }
-    }
-
-    public function scopeActive( $query ) {
-        return $query->where( 'status', 10 )
-                    ->where('end_date', '>', now());
+        $user = $this->user()->with('subscriptions')->first();
+        $have_plan = $user->subscriptions()->isActive()->exists();
+        $user->update(['membership' => $have_plan ? 1 : 0]);
     }
 
     public function getEncryptedIdAttribute() {

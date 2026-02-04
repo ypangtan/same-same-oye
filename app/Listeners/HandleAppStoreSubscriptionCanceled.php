@@ -39,7 +39,7 @@ class HandleAppStoreSubscriptionCanceled
 
             // 取消订阅
             $userSubscription->update([
-                'status' => 30, // cancelled
+                'status' => 40, // cancelled
                 'cancelled_at' => now(),
                 'auto_renew' => false,
             ]);

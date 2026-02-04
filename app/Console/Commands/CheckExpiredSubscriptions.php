@@ -44,12 +44,9 @@ class CheckExpiredSubscriptions extends Command
             ->whereDate( 'end_date', '<', now() )
             ->get();
 
-        $count = 0;
-
         foreach ($expiredSubscriptions as $subscription) {
             try {
                 $subscription->markAsExpired();
-                $count++;
 
                 Log::channel('payment')->info('Subscription marked as expired', [
                     'subscription_id' => $subscription->id,
