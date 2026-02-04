@@ -1450,14 +1450,6 @@ class UserService
             $currentTmpUser->status = 10;
             $currentTmpUser->save();
 
-            self::createUserNotification(
-                $createUser->id,
-                'notification.register_success',
-                'notification.register_success_content',
-                'register',
-                'home'
-            );
-
             // Register OneSignal
             if ( !empty( $request->register_token ) ) {
                 self::registerOneSignal( $createUser->id, $request->device_type, $request->register_token );
@@ -1641,14 +1633,6 @@ class UserService
                 //         ] );
                 //     }
                 // }
-
-                self::createUserNotification(
-                    $createUser->id,
-                    'notification.register_success',
-                    'notification.register_success_content',
-                    'register',
-                    'home'
-                );
     
                 // Register OneSignal
                 if ( !empty( $request->register_token ) ) {
@@ -2392,6 +2376,7 @@ class UserService
             'user_id' => $user,
         ] );
 
+        self::sendNotification( $createUserNotificationUser->user, $key, $content );
     }
 
     private static function sendNotification( $user, $key, $message ) {
@@ -2402,7 +2387,7 @@ class UserService
         $messageContent['id'] = $user->id;
         $messageContent['message'] = $message;
 
-        Helper::sendNotification( $user->user_id, $messageContent );
+        \Helper::sendNotification( $user->user_id, $messageContent );
         
     }
 
@@ -2541,51 +2526,29 @@ class UserService
             ], 500);
         }
     }
-    
-    public static function giveUplineVoucher( $upline_id ) {
-        $upline = User::find( $upline_id );
-        if ( $upline ) {
-            $gift = ReferralGiftSetting::where( 'status', 10 )->first();
-            if( $gift ) {
-                if( $gift->reward_type == 2 ) {
-                    $voucher = Voucher::find( $gift->voucher_id );
-                    if( $voucher ) {
-                        $createUserVoucher = UserVoucher::create( [
-                            'user_id' => $upline->id, 
-                            'voucher_id' => $voucher->id,
-                            'expired_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subDays( $gift->expiry_day ),
-                            'total_left' => 1,
-                            'type' => 3,
-                            'secret_code' => strtoupper( \Str::random( 8 ) ),
-                        ] );
-                    }
-                } else {
-                    //  give point
-                    WalletService::transact( $upline->wallets->where('type', 1)->first(), [
-                        'amount' => $gift->reward_value,
-                        'remark' => 'Referral Rewards',
-                        'type' => 1,
-                        'transaction_type' => 27,
-                    ] );
-                }
-            }
-        }
-    }
 
     public static function isFirstLogin() {
         $user = User::find( auth()->user()->id );
         if( $user->is_first_login == 10 ) {
 
-            // $days = Option::where( 'option_name', 'trial_period_days' )->first();
+            $days = Option::where( 'option_name', 'trial_period_days' )->first();
 
-            // $userSubscription = UserSubscription::create( [
-            //     'user_id' => $user->id,
-            //     'subscription_plan_id' => null,
-            //     'status' => 10,
-            //     'start_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
-            //     'end_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addDays( $days ? $days->option_value : 14 ),
-            //     'type' => 2,
-            // ] );
+            $userSubscription = UserSubscription::create( [
+                'user_id' => $user->id,
+                'subscription_plan_id' => null,
+                'status' => 10,
+                'start_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
+                'end_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addDays( $days ? $days->option_value : 14 ),
+                'type' => 2,
+            ] );
+            
+            self::createUserNotification(
+                $user->id,
+                'notification.first_login_title',
+                'notification.first_login_content',
+                'first_login',
+                'home'
+            );
         }
     }
 

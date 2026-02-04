@@ -62,16 +62,6 @@ class UserSubscription extends Model
         return $this->end_date && $this->end_date->isPast();
     }
 
-    public function activate( $endDate, $autoRenew = true) {
-        $this->update( [
-            'status' => 10,
-            'start_date' => now(),
-            'end_date' => $endDate,
-        ] );
-
-        return $this;
-    }
-
     public function renew( $days)  {
         $newEndDate = $this->end_date && $this->end_date->isFuture()
             ? $this->end_date->addDays($days)
@@ -82,11 +72,7 @@ class UserSubscription extends Model
             'end_date' => $newEndDate,
         ]);
 
-        $user = $this->user;
-        if ($user) {
-            $user->membership = 1;
-            $user->save();
-        }
+        self::checkPlanValidity();
 
         return $this;
     }
@@ -97,11 +83,7 @@ class UserSubscription extends Model
             'cancelled_at' => now(),
         ]);
 
-        $user = $this->user;
-        if ($user) {
-            $user->membership = 0;
-            $user->save();
-        }
+        self::checkPlanValidity();
 
         return $this;
     }
@@ -111,11 +93,7 @@ class UserSubscription extends Model
             'status' => 20,
         ]);
 
-        $user = $this->user;
-        if ($user) {
-            $user->membership = 0;
-            $user->save();
-        }
+        self::checkPlanValidity();
 
         return $this;
     }
@@ -125,13 +103,29 @@ class UserSubscription extends Model
             'status' => 30,
         ] );
 
+        self::checkPlanValidity();
+
+        return $this;
+    }
+
+    private function checkPlanValidity() {
         $user = $this->user;
-        if ($user) {
+        $have_plan = false;
+        if ( $user && $user->subscriptions ) {
+            foreach( $user->subscriptions as $subscription ) {
+                if( $subscription->isActive() ) {
+                    $have_plan = true;
+                }
+            }
+        }
+
+        if( $have_plan ) {
+            $user->membership = 1;
+            $user->save();
+        } else {
             $user->membership = 0;
             $user->save();
         }
-
-        return $this;
     }
 
     public function scopeActive( $query ) {

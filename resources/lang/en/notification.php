@@ -17,49 +17,22 @@ return [
     'no_notification' => 'No notifications',
     'mark_all_as_read' => 'Mark all as read',
     'notification_seen' => 'Updated notification seen',
-    'register_success' => 'Register Success',
-    'register_success_content' => 'Welcome to Same Same Oye!',
     
-    'topup_success' => 'Topup Success',
-    'topup_success_content' => 'Topup Success!',
+    'first_login_title' => 'Welcome aboard',
+    'first_login_content' => 'Welcome aboard. Your 14-day free trial has started. Explore all features now.',
     
-    'topup_failed' => 'Topup Failed',
-    'topup_failed_content' => 'Topup Failed! Please Try Again',
+    'subscribed_success_title' => 'Subscribed successfully',
+    'subscribed_success_content' => 'Your subscription is active. Enjoy full access to all features.',
     
-    'user_bundle_success' => 'User Bundle Purchase Success',
-    'user_bundle_success_content' => 'User Bundle Purchase Success!',
+    'subscription_payment_failed_title' => 'Subscription payment failed',
+    'subscription_payment_failed_content' => 'We couldn’t process your payment. Update your payment method to continue access.',
     
-    'user_bundle_failed' => 'User Bundle Purchase Failed',
-    'user_bundle_failed_content' => 'User Bundle Purchase Failed! Please Try Again',
+    'subscription_payment_cancelled_title' => 'Subscription payment cancelled',
+    'subscription_payment_cancelled_content' => 'Your payment was cancelled. Complete payment to activate your subscription.',
     
-    'user_order_success' => 'Order Success',
-    'user_order_success_content' => 'Order Success!',
+    'subscription_cancelled_title' => 'Subscription cancelled',
+    'subscription_cancelled_content' => 'Your subscription has ended. Subscribe again anytime to regain full access.',
     
-    'user_order_failed' => 'Order Failed',
-    'user_order_failed_content' => 'Order Failed! Please Try Again',
-    
-    'user_voucher_success' => 'Claim Voucher Success',
-    'user_voucher_success_content' => 'Claim Voucher Success!',
-    
-    'user_checkin_success' => 'Checkin Success',
-    'user_checkin_success_content' => 'Checkin Success! Same Same Oye Welcomes You Today',
-    
-    'user_checkin_reset' => 'Checkin Reset',
-    'user_checkin_reset_content' => 'Oops, your checkin has been reset',
-
-    'points_expiry_alert' => 'Points Expired Soon',
-    'points_expiry_alert_content' => 'Dear User, your points :amount will be expired in :days days',
-
-    'points_expired' => 'Points Expired',
-    'points_expired_content' => 'Dear User, your points :amount has expired',
-
-    // template
-    // 'topup_success' => 'Topup Success',
-    // 'topup_success_content' => 'Topup Success! Enjoy Your Froyo Now!',
-    
-    // 'topup_failed' => 'Topup Failed',
-    // 'topup_failed_content' => 'Topup Failed! Please Try Again',
-
-    'user_birthday' => '🎉 Happy Birthday! 🎉',
-    'user_birthday_content' => 'Wishing you a year filled with love, light, and endless happiness.<br>Thank you for being part of our journey — you make us shine brighter. 💖<br><br>With warm wishes,<br>I Fei & I BEAUTE ✨',
+    'trial_last_day_title' => 'Free Trial almost Over',
+    'trial_last_day_content' => 'Today is the last day of your free trial. Subscribe now to keep uninterrupted access.',
 ];
