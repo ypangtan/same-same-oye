@@ -78,7 +78,7 @@ class PaymentService {
                 'transaction_id' => $transactionId,
                 'original_transaction_id' => $originalTransactionId,
                 'amount' => 0,
-                'currency' => 'USD',
+                'currency' => 'MYR',
                 'platform' => 1,
                 'product_id' => $productId,
                 'receipt_data' => $receiptData,
