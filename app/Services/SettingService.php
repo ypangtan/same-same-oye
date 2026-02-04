@@ -142,7 +142,7 @@ class SettingService {
 
         try {
 
-            $option = Option::firstOrNew( 'option_name', 'contact_us_email' );
+            $option = Option::updateOrCreate( 'option_name', 'contact_us_email' );
             $option->option_value = $request->contact_us_email;
             $option->save();
 
