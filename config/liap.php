@@ -18,7 +18,8 @@ return [
     'routing' => [
         'signed' => false,
         'middleware' => ['api'],
-        'prefix' => 'liap',
+        'app-store' => 'liap/notifications/appstore',
+        'google-play' => 'liap/notifications/google-play', 
     ],
 
     /*
