@@ -50,7 +50,6 @@ class PaymentService {
             }
 
             $receiptInfo = $latestReceipt[0];
-            // return $receiptInfo;
             $transactionId = $receiptInfo->getTransactionId();
             $originalTransactionId = $receiptInfo->getOriginalTransactionId();
             $expiresDateObj = $receiptInfo->getExpiresDate();
@@ -61,7 +60,7 @@ class PaymentService {
                 return [
                     'success' => true,
                     'message' => 'Transaction already processed',
-                    'subscription' => $user->subscriptions()->where('platform', 'ios')->active()->first(),
+                    'subscription' => $user->subscriptions()->where('platform', 1 )->active()->first(),
                 ];
             }
 
