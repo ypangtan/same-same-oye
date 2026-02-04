@@ -60,7 +60,7 @@ class PaymentService {
                 return [
                     'success' => true,
                     'message' => 'Transaction already processed',
-                    'subscription' => $user->subscriptions()->where('platform', 1 )->isActive()->first(),
+                    'subscription' => $user->subscriptions()->where( 'platform_transaction_id', $originalTransactionId )->first(),
                 ];
             }
 
