@@ -79,6 +79,8 @@ class PaymentService {
                     throw new Exception("No receipt info found");
                 }
 
+                return $latestReceipt;
+
                 $receiptInfo = $latestReceipt[0];
                 $transactionId = $receiptInfo->getTransactionId();
                 $originalTransactionId = $receiptInfo->getOriginalTransactionId();
