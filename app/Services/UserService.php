@@ -2530,6 +2530,9 @@ class UserService
     public static function isFirstLogin( $user_id ) {
         $user = User::find( $user_id );
         if( $user->is_first_login == 10 ) {
+            $user->is_first_login = 20;
+            $user->save();
+            
             $days = Option::where( 'option_name', 'trial_period_days' )->first();
 
             $userSubscription = UserSubscription::create( [

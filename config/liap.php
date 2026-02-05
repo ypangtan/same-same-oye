@@ -84,10 +84,10 @@ return [
         |--------------------------------------------------------------------------
         */
         \Imdhemy\Purchases\Events\GooglePlay\SubscriptionRenewed::class => [
-            \App\Listeners\HandleGooglePlaySubscriptionRenewed::class,
+            // \App\Listeners\HandleGooglePlaySubscriptionRenewed::class,
         ],
         \Imdhemy\Purchases\Events\GooglePlay\SubscriptionCanceled::class => [
-            \App\Listeners\HandleGooglePlaySubscriptionCanceled::class,
+            // \App\Listeners\HandleGooglePlaySubscriptionCanceled::class,
         ],
         \Imdhemy\Purchases\Events\GooglePlay\SubscriptionRevoked::class => [
             // 处理订阅撤销（例如退款）
