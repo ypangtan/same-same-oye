@@ -2588,7 +2588,12 @@ class UserService
 
     public static function ageGroups() {
         $ageGroups = [
-            '10-17',
+            '10-18',
+            '19-25',
+            '26-30',
+            '31-35',
+            '36-40',
+            '41-50',
         ];
 
         return $ageGroups;
