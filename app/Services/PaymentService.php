@@ -196,7 +196,7 @@ class PaymentService {
 
             // 确认购买（告诉 Google 已经处理）
             $ackRequest = new SubscriptionPurchasesAcknowledgeRequest();
-            $androidPublisher->purchases_subscriptions->acknowledge( $packageName, $lineItem->getProductId(), $purchaseToken, $ackRequest );
+            $androidPublisher->purchases_subscriptions->acknowledge( $packageName, $productId, $purchaseToken, $ackRequest );
 
             Log::channel('payment')->info('Android purchase verified', [
                 'user_id' => $user_id,
