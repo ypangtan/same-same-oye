@@ -166,7 +166,7 @@ class PaymentService {
             $orderId = $subscriptionPurchase->getLatestOrderId();
 
             return [
-                'data' => $subscriptionPurchase->getLineItems()
+                'data' => $orderId
             ];
 
             // 获取订阅信息
