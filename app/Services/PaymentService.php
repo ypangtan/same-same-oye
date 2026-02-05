@@ -20,11 +20,14 @@ use Imdhemy\AppStore\ClientFactory as AppStoreClientFactory;
 use Google\Client as GoogleClient;
 use Google\Service\AndroidPublisher;
 use Google\Service\AndroidPublisher\SubscriptionPurchasesAcknowledgeRequest;
+use Illuminate\Support\Facades\DB;
 
 class PaymentService {
 
     public static function verifyIOSPurchase( $user_id, $data ) {
         try {
+            DB::beginTransaction();
+
             $user = User::find( $user_id );
             $receiptData = $data['receipt_data'];
             $plan = SubscriptionPlan::find( $data['plan_id'] );
@@ -93,6 +96,7 @@ class PaymentService {
                 'transaction_id' => $transactionId,
             ]);
 
+            DB::commit();
             return [
                 'success' => true,
                 'message' => 'Subscription activated successfully',
@@ -101,6 +105,7 @@ class PaymentService {
             ];
 
         } catch (Exception $e) {
+            DB::rollBack();
             Log::channel('payment')->error('iOS verification failed', [
                 'error' => $e->getMessage(),
                 'file' => $e->getFile(),
@@ -121,6 +126,7 @@ class PaymentService {
 
     public static function verifyAndroidPurchase( $user_id, $data ) {
         try {
+            DB::beginTransaction();
 
             $credentialsPath = config('liap.google_application_credentials');
             
@@ -197,6 +203,7 @@ class PaymentService {
                 'transaction_id' => $orderId,
             ]);
 
+            DB::commit();
             return [
                 'success' => true,
                 'message' => 'Subscription activated successfully',
@@ -205,6 +212,7 @@ class PaymentService {
             ];
 
         } catch (Exception $e) {
+            DB::rollBack();
             Log::channel('payment')->error('Android verification failed', [
                 'user_id' => $user_id,
                 'error' => $e->getMessage(),
