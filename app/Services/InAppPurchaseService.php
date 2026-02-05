@@ -106,7 +106,7 @@ class InAppPurchaseService {
         
         $subscription = $user->subscriptions()
             ->with('plan')
-            ->active()
+            ->isActive()
             ->first();
 
         if (!$subscription) {
@@ -125,7 +125,7 @@ class InAppPurchaseService {
                 'platform' => $subscription->platform,
                 'start_date' => $subscription->start_date,
                 'end_date' => $subscription->end_date,
-                'is_active' => $subscription->is_active(),
+                'is_active' => $subscription->isActive(),
             ],
         ] );
     }
@@ -148,7 +148,7 @@ class InAppPurchaseService {
     public static function cancelSubscription() {
         $user = User::find( auth()->user()->id );
         
-        $subscription = $user->subscriptions()->active()->first();
+        $subscription = $user->subscriptions()->isActive()->first();
 
         if (!$subscription) {
             return response()->json([

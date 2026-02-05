@@ -228,7 +228,7 @@ class PaymentService {
                     ]);
 
                     throw new \Exception('Failed to acknowledge Android subscription');
-    }
+                }
             }
 
             Log::channel('payment')->info('Android purchase verified', [
