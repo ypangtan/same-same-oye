@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Models\CallbackLog;
 use Imdhemy\Purchases\Events\AppStore\Refund;
 use App\Models\UserSubscription;
 use App\Models\PaymentTransaction;
@@ -15,6 +16,11 @@ class HandleAppStoreRefund
     public function handle(Refund $event)
     {
         try {
+            $createLog = CallbackLog::create([
+                'platform' => 'ios',
+                'payload' => json_encode( $event->getServerNotification() ),
+            ]);
+
             // ✅ 正确的 API 用法（1.12 版本）
             $notification = $event->getServerNotification();
             $subscription = $notification->getSubscription();

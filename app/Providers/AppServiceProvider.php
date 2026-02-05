@@ -9,12 +9,14 @@ use Spatie\Activitylog\Models\Activity;
 use App\Models\{
     Item,
     Playlist,
-    Collection
+    Collection,
+    UserSubscription
 };
 
 use App\Observers\{
     ItemObserver,
     PlaylistObserver,
+    UserSubscriptionObserver,
 };
 
 require_once( 'BrowserDetection.php' );
@@ -56,6 +58,7 @@ class AppServiceProvider extends ServiceProvider
 
         Item::observe(ItemObserver::class);
         Playlist::observe(PlaylistObserver::class);
+        UserSubscription::observe(UserSubscriptionObserver::class);
 
     }
 }

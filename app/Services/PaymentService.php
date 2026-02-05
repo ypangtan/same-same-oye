@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\{
+    CallbackLog,
     SubscriptionPlan,
     UserSubscription,
     PaymentTransaction,
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\{
     DB,
     Log,
 };
+use PHPUnit\Framework\Constraint\Callback;
 
 class PaymentService {
 
@@ -61,8 +63,10 @@ class PaymentService {
             $receiptInfo = $latestReceipt[0];
             $transactionId = $receiptInfo->getTransactionId();
             $originalTransactionId = $receiptInfo->getOriginalTransactionId();
+            $expiryDate = Carbon::createFromTimestampMs( $receiptInfo->getExpiresDateMs() )
+                ->setTimezone('Asia/Kuala_Lumpur');
 
-            $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
+            // $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
 
             // 检查交易是否已存在
             if ( PaymentTransaction::exists( $transactionId ) ) {
@@ -75,7 +79,7 @@ class PaymentService {
 
             // 创建或更新订阅
             $isRenew = true;
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiredDate, $isRenew );
+            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiryDate, $isRenew );
 
             // // 记录交易
             $transaction = PaymentTransaction::create([
@@ -89,7 +93,7 @@ class PaymentService {
                 'product_id' => $productId,
                 'receipt_data' => $receiptData,
                 'status' => 10,
-                'verified_at' => now(),
+                'verified_at' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
                 'verification_response' => json_encode($response->toArray()),
             ]);
 
@@ -166,7 +170,9 @@ class PaymentService {
             $lineItem = $subscriptionPurchase->getLineItems()[0];
             $orderId = $subscriptionPurchase->getLatestOrderId();
             $productId = $lineItem->getProductId();
-            $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
+            $expiryDate = Carbon::createFromTimestampMs( $lineItem->getExpiryTimeMillis() )
+                ->setTimezone('Asia/Kuala_Lumpur');
+            // $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
             
             // check state payment
             if ($subscriptionPurchase->getSubscriptionState() !== 'SUBSCRIPTION_STATE_ACTIVE') {
@@ -198,7 +204,7 @@ class PaymentService {
                 'product_id' => $productId,
                 'receipt_data' => json_encode( [ 'purchase_token' => $purchaseToken ] ),
                 'status' => 10,
-                'verified_at' => now(),
+                'verified_at' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
                 'verification_response' => json_encode( $subscriptionPurchase ),
             ]);
 
@@ -288,7 +294,6 @@ class PaymentService {
             $subscription->update([
                 'status' => 10,
                 'end_date' => $endDate,
-                'auto_renew' => $autoRenew,
             ]);
         } else {
             // 创建新订阅
@@ -300,12 +305,114 @@ class PaymentService {
                 'end_date' => $endDate,
                 'platform' => $platform,
                 'platform_transaction_id' => $transactionId,
-                'auto_renew' => $autoRenew,
             ]);
         }
 
-        $subscription->checkPlanValidity();
-
         return $subscription;
     }
+
+    public static function verifySubscriptionV2($packageName, $subscriptionId, $purchaseToken) {
+        $credentialsPath = config('liap.google_application_credentials');
+            
+        // 检查文件是否存在
+        if (!file_exists($credentialsPath)) {
+            throw new \Exception('Google Play 凭据文件不存在: ' . $credentialsPath);
+        }
+        
+        $client = new GoogleClient();
+        $client->setAuthConfig($credentialsPath);
+        $client->setScopes([
+            AndroidPublisher::ANDROIDPUBLISHER,
+        ]);
+
+        $service = new AndroidPublisher($client);
+
+        try {
+            $subscriptionData = $service
+                ->purchases_subscriptionsv2
+                ->get( $packageName, $subscriptionId, $purchaseToken );
+
+            if ($subscriptionData) {
+                // 更新用户订阅表
+                $userSubscription = UserSubscription::where('purchase_token', $purchaseToken)->first();
+                if ($userSubscription) {
+                    switch( $subscriptionData->getSubscriptionState() ) {
+                        case 'SUBSCRIPTION_STATE_ACTIVE': // 活跃
+                            $userSubscription->status = 10; // 激活
+                            break;
+                        case 'SUBSCRIPTION_STATE_CANCELED': // 已取消
+                            $userSubscription->status = 40; // 取消
+                            break;
+                        case 'SUBSCRIPTION_STATE_EXPIRED': // 已过期
+                            $userSubscription->status = 20; // 过期
+                            break;
+                        case 'SUBSCRIPTION_STATE_IN_GRACE_PERIOD': // 宽限期
+                        case 'SUBSCRIPTION_STATE_PAUSED': // 暂停
+                            break;
+                    }
+                    $lineItems = $subscriptionData->getLineItems();
+                    $expiryMillis = $lineItems[0]->getExpiryTimeMillis();
+                    $userSubscription->end_date = Carbon::createFromTimestampMs( $expiryMillis )->timezone( 'Asia/Kuala_Lumpur' );
+                    $userSubscription->save();
+                }
+            }
+
+        } catch ( Exception $e ) {
+            \Log::channel( 'payment' )->error('Google subscription verify failed: '.$e->getMessage());
+            return null;
+        }
+    }
+
+    public static function callbackAndroid( $request ) {
+        
+        try{
+            DB::beginTransaction();
+
+            $createLog = CallbackLog::create([
+                'platform' => 'android',
+                'payload' => json_encode( $request->all() ),
+            ]);
+
+            $message = $request->input('message');
+            $data = json_decode(base64_decode($message['data']), true);
+
+            switch ($data['eventType']) {
+                case 'SUBSCRIPTION_RECOVERED':
+                case 'SUBSCRIPTION_RENEWED':
+                    // 查询最新订阅状态
+                    PaymentService::verifySubscriptionV2(
+                        $data['packageName'],
+                        $data['subscriptionId'],
+                        $data['purchaseToken']
+                    );
+                    break;
+
+                case 'SUBSCRIPTION_CANCELED':
+                case 'SUBSCRIPTION_REVOKED':
+                    // 标记用户订阅为取消
+                    PaymentService::verifySubscriptionV2(
+                        $data['packageName'],
+                        $data['subscriptionId'],
+                        $data['purchaseToken']
+                    );
+                    break;
+            }
+
+            DB::commit();
+
+            return response()->json( ['status' => 'success'], 200 );
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::channel('payment')->error('Android callback failed', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json( [ 
+                'message' => $e->getMessage()
+            ], 500 );
+        }
+    }
+
 }

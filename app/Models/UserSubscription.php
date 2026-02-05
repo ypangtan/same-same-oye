@@ -78,8 +78,6 @@ class UserSubscription extends Model
             'end_date' => $newEndDate,
         ]);
 
-        self::checkPlanValidity();
-
         return $this;
     }
 
@@ -89,8 +87,6 @@ class UserSubscription extends Model
             'cancelled_at' => now(),
         ]);
 
-        self::checkPlanValidity();
-
         return $this;
     }
 
@@ -99,8 +95,6 @@ class UserSubscription extends Model
             'status' => 20,
         ]);
 
-        self::checkPlanValidity();
-
         return $this;
     }
 
@@ -108,8 +102,6 @@ class UserSubscription extends Model
         $this->update( [
             'status' => 30,
         ] );
-
-        self::checkPlanValidity();
 
         return $this;
     }
