@@ -113,6 +113,7 @@ class InAppPurchaseService {
             return response()->json( [
                 'has_subscription' => false,
                 'message' => 'No active subscription',
+                'subscription' => $subscription,
             ] );
         }
 
