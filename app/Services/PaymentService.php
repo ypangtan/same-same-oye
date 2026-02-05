@@ -165,7 +165,9 @@ class PaymentService {
             $lineItem = $subscriptionPurchase->getLineItems()[0];
             $orderId = $subscriptionPurchase->getLatestOrderId();
 
-            return $lineItem;
+            return [
+                'data' => $subscriptionPurchase->getLineItems()
+            ];
 
             // 获取订阅信息
             // $expiryTimeMillis = $response->getExpiryTimeMillis();
@@ -204,11 +206,7 @@ class PaymentService {
             ]);
 
             // 确认购买（告诉 Google 已经处理）
-            Subscription::googlePlay()
-                ->packageName($packageName)
-                ->id($productId)
-                ->token($purchaseToken)
-                ->acknowledge();
+            $androidPublisher->purchases_subscriptions->acknowledge( $packageName, $lineItem->getProductId(), $purchaseToken );
 
             Log::channel('payment')->info('Android purchase verified', [
                 'user_id' => $user_id,
