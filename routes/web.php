@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\ApiController;
+use App\Http\Controllers\Admin\AppStoreWebhookController;
+use App\Http\Controllers\Admin\WebhookController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Calculation\Web;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +53,9 @@ Route::get('.well-known/apple-app-site-association', function () {
     
     return response()->json($data);
 });
+
+Route::post( '/liap/notifications', [ WebhookController::class, 'ios']  );
+Route::post( '/google/rtdn', [ WebhookController::class, 'android' ] );
 
 Route::get('/register', function (Request $request) {    
     $userAgent = $request->header('User-Agent');

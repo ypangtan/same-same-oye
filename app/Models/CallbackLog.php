@@ -17,6 +17,8 @@ use Carbon\Carbon;
 class CallbackLog extends Model
 {
     use HasFactory, LogsActivity;
+    
+    protected $connection = 'api_log';
 
     protected $fillable = [
         'platform',

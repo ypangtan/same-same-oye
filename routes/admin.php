@@ -433,11 +433,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
         
     } );
 
-    Route::post('/google/rtdn', function(\Illuminate\Http\Request $request) {
-        return response()->json(['status' => 'ok']);
-    });
-
-
     // Public Route
     Route::get( 'lang/{lang}', function( $lang ) {
 

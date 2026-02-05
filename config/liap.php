@@ -105,13 +105,13 @@ return [
         |--------------------------------------------------------------------------
         */
         \Imdhemy\Purchases\Events\AppStore\DidRenew::class => [
-            \App\Listeners\HandleAppStoreSubscriptionRenewed::class,
+            // \App\Listeners\HandleAppStoreSubscriptionRenewed::class,
         ],
         \Imdhemy\Purchases\Events\AppStore\Cancel::class => [
-            \App\Listeners\HandleAppStoreSubscriptionCanceled::class,
+            // \App\Listeners\HandleAppStoreSubscriptionCanceled::class,
         ],
         \Imdhemy\Purchases\Events\AppStore\Refund::class => [
-            \App\Listeners\HandleAppStoreRefund::class,
+            // \App\Listeners\HandleAppStoreRefund::class,
         ],
         \Imdhemy\Purchases\Events\AppStore\DidFailToRenew::class => [
             // 处理续费失败

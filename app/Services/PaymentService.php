@@ -23,8 +23,13 @@ use Illuminate\Support\Facades\{
     Http,
     DB,
     Log,
+    Cache,
 };
-use PHPUnit\Framework\Constraint\Callback;
+
+use Firebase\JWT\{
+    JWT,
+    JWK,
+};
 
 class PaymentService {
 
@@ -415,4 +420,93 @@ class PaymentService {
         }
     }
 
+    public static function callbackIos( $request ) {
+        try{
+            DB::beginTransaction();
+
+            $createLog = CallbackLog::create([
+                'platform' => 'ios',
+                'payload' => json_encode( $request->all() ),
+            ]);
+
+            $signedPayload = $request->input('signedPayload');
+
+            if (!$signedPayload) {
+                return response()->json(['error' => 'Missing signedPayload'], 400);
+            }
+
+            $payload = self::decodeAndVerify($signedPayload);
+
+            // 用 original_transaction_id 作为唯一订阅标识
+            $originalTransactionId =
+                $payload->data->signedTransactionInfo->originalTransactionId
+                ?? null;
+
+            if ($originalTransactionId) {
+                self::syncSubscription($originalTransactionId);
+            }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            Log::channel('payment')->error('iOS callback failed', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json( [ 
+                'message' => $e->getMessage()
+            ], 500 );
+        }
+    }
+
+    public static function decodeAndVerify(string $signedPayload): \stdClass {
+        $keys = Cache::remember('apple_jwks', 3600, function () {
+            return Http::get('https://appleid.apple.com/auth/keys')->json();
+        });
+
+        return JWT::decode(
+            $signedPayload,
+            JWK::parseKeySet($keys),
+            ['ES256']
+        );
+    }
+
+    /**
+     * 同步订阅状态（唯一真相）
+     */
+    public static function syncSubscription(string $originalTransactionId) {
+        $userSubscription = UserSubscription::where(
+            'original_transaction_id',
+            $originalTransactionId
+        )->first();
+
+        if (!$userSubscription) {
+            return;
+        }
+
+        // 🔥 关键：调用 Imdhemy 再 verify
+        $receiptData = Subscription::verify($userSubscription->receipt_data);
+
+        $latest = collect($receiptData->getLatestReceiptInfo())
+            ->sortByDesc('expires_date_ms')
+            ->first();
+
+        if (!$latest) {
+            return;
+        }
+
+        $expiresAt = Carbon::createFromTimestampMs(
+            $latest['expires_date_ms']
+        )->timezone('Asia/Kuala_Lumpur');
+
+        // 状态判断
+        if ( $expiresAt->isFuture() ) {
+            $userSubscription->status = 10; // active
+        } else {
+            $userSubscription->status = 20; // expired
+        }
+
+        $userSubscription->end_date = $expiresAt;
+        $userSubscription->save();
+    }
 }
