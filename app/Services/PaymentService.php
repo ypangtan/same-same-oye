@@ -17,6 +17,9 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Imdhemy\AppStore\ClientFactory as AppStoreClientFactory;
 
+use Google\Client as GoogleClient;
+use Google\Service\AndroidPublisher;
+
 class PaymentService {
 
     public static function verifyIOSPurchase( $user_id, $data ) {
@@ -132,19 +135,49 @@ class PaymentService {
             $packageName = config('liap.google_play_package_name');
 
             // 验证订阅
-            $response = Subscription::googlePlay()
-                ->packageName($packageName)
-                ->id($productId)
-                ->token($purchaseToken)
-                ->get();
+            // $response = Subscription::googlePlay()
+            //     ->packageName($packageName)
+            //     ->id($productId)
+            //     ->token($purchaseToken)
+            //     ->get();
+
+            
+            $client = new GoogleClient();
+            $client->setAuthConfig($credentialsPath);
+            $client->setScopes([
+                AndroidPublisher::ANDROIDPUBLISHER,
+            ]);
+
+            $androidPublisher = new AndroidPublisher($client);
+
+            /**
+             * 2️⃣ 调用 subscriptionsv2.get
+             */
+            $subscriptionPurchase = $androidPublisher
+                ->purchases_subscriptionsv2
+            ->get($packageName, $purchaseToken);
+
+            
+            if (empty($subscriptionPurchase->getLineItems())) {
+                throw new \Exception('Invalid subscription purchase (no line items)');
+            }
+
+            $lineItem = $subscriptionPurchase->getLineItems()[0];
+            $expiryTime = Carbon::parse( $lineItem->getExpiryTime() );
+            $startTime = Carbon::parse( $lineItem->getStartTime() );
+            $autoRenewing = $lineItem->getAutoRenewingPlan() !== null;
+
+            $orderId = $subscriptionPurchase->getLatestOrderId();
+
+            return $lineItem;
 
             // 获取订阅信息
-            $expiryTimeMillis = $response->getExpiryTimeMillis();
-            $startTimeMillis = $response->getStartTimeMillis();
-            $orderId = $response->getOrderId();
-            $autoRenewing = $response->getAutoRenewing();
+            // $expiryTimeMillis = $response->getExpiryTimeMillis();
+            // $startTimeMillis = $response->getStartTimeMillis();
+            // $orderId = $response->getOrderId();
+            // $autoRenewing = $response->getAutoRenewing();
 
-            $expiresDate = Carbon::createFromTimestampMs($expiryTimeMillis);
+            $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
 
             // 检查交易是否已存在
             if (PaymentTransaction::exists($orderId)) {
@@ -156,7 +189,7 @@ class PaymentService {
             }
 
             // 创建或更新订阅
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiresDate, $autoRenewing );
+            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate, $autoRenewing );
 
             // 记录交易
             $transaction = PaymentTransaction::create([
