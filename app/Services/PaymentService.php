@@ -135,13 +135,6 @@ class PaymentService {
             $packageName = config('liap.google_play_package_name');
 
             // 验证订阅
-            // $response = Subscription::googlePlay()
-            //     ->packageName($packageName)
-            //     ->id($productId)
-            //     ->token($purchaseToken)
-            //     ->get();
-
-            
             $client = new GoogleClient();
             $client->setAuthConfig($credentialsPath);
             $client->setScopes([
@@ -161,10 +154,8 @@ class PaymentService {
             }
 
             // 获取订阅信息
-            return json_encode( $subscriptionPurchase );
             $lineItem = $subscriptionPurchase->getLineItems()[0];
             $orderId = $subscriptionPurchase->getLatestOrderId();
-
             $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
 
             // 检查交易是否已存在
@@ -186,14 +177,14 @@ class PaymentService {
                 'user_subscription_id' => $subscription->id,
                 'transaction_id' => $orderId,
                 'original_transaction_id' => $orderId,
-                'amount' => 0, // Google 不直接提供价格
-                'currency' => 'USD',
+                'amount' => 0,
+                'currency' => 'MYR',
                 'platform' => 2,
                 'product_id' => $productId,
-                'receipt_data' => json_encode(['purchase_token' => $purchaseToken]),
+                'receipt_data' => json_encode( [ 'purchase_token' => $purchaseToken ] ),
                 'status' => 10,
                 'verified_at' => now(),
-                'verification_response' => json_encode( $subscriptionPurchase->toArray() ),
+                'verification_response' => json_encode( $subscriptionPurchase ),
             ]);
 
             // 确认购买（告诉 Google 已经处理）
