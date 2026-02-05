@@ -118,15 +118,7 @@ class InAppPurchaseService {
 
         return response()->json( [
             'has_subscription' => true,
-            'subscription' => [
-                'id' => $subscription->id,
-                'plan_name' => $subscription->plan->name,
-                'status' => $subscription->status,
-                'platform' => $subscription->platform,
-                'start_date' => $subscription->start_date,
-                'end_date' => $subscription->end_date,
-                'is_active' => $subscription->isActive(),
-            ],
+            'subscription' => $subscription,
         ] );
     }
 
