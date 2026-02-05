@@ -226,7 +226,9 @@ $age_groups = $data['age_groups'] ?? [];
                     $( de + '_calling_code' ).val( response.calling_code );
                     $( de + '_phone_number' ).val( response.phone_number );
                     $( de + '_age_group' ).val( response.age_group );
-                    dateOfBirth.setDate( response.date_of_birth );
+                    if( response.date_of_birth != null ) {
+                        dateOfBirth.setDate( response.date_of_birth );
+                    }
                     
                     if( response.nationality != null ){
                         let option1 = new Option( response.nationality, response.nationality, true, true );
