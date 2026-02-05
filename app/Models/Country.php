@@ -11,5 +11,5 @@ class Country extends Model
 {
     use HasFactory, HasTranslations;
 
-    public $translatable = [ 'country_name' ];
+    public $translatable = [ 'country_name', 'nationality' ];
 }

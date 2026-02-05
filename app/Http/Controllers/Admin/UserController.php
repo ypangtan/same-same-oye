@@ -117,6 +117,13 @@ class UserController extends Controller
             ],
         ];
 
+        $this->data['data']['membership'] = [
+            '0' => __( 'user.member' ),
+            '1' => __( 'user.premium' ),
+        ];
+
+        $this->data['data']['age_group'] = UserService::ageGroups();
+
         return view( 'admin.main' )->with( $this->data );
     }
 
@@ -146,6 +153,8 @@ class UserController extends Controller
             '0' => __( 'user.member' ),
             '1' => __( 'user.premium' ),
         ];
+
+        $this->data['data']['age_group'] = UserService::ageGroups();
 
         return view( 'admin.main' )->with( $this->data );
     }
