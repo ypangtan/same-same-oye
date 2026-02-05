@@ -240,8 +240,8 @@ class PaymentService {
             return [
                 'success' => true,
                 'message' => 'Subscription activated successfully',
-                'subscription' => $subscription->fresh(),
-                'transaction' => $transaction,
+                // 'subscription' => $subscription->fresh(),
+                // 'transaction' => $transaction,
             ];
 
         } catch (Exception $e) {
