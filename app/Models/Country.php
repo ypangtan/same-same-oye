@@ -25,7 +25,7 @@ class Country extends Model
     ];
 
     public function getEncryptedIdAttribute() {
-        return Helper::encode( $this->attributes['id'] );
+        return \Helper::encode( $this->attributes['id'] );
     }
 
 }
