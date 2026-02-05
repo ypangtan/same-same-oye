@@ -446,7 +446,7 @@ class UserService
                 'calling_code' => $request->calling_code ? $request->calling_code : null,
                 'password' => Hash::make( $request->password ),
                 'age_group' => $request->age_group,
-                'nationality' => $request->nationality,
+                'nationality' => ucwords( strtolower( $request->nationality ) ),
                 'membership' => $request->membership,
                 'status' => 10,
                 'invitation_code' => strtoupper( \Str::random( 6 ) ),
@@ -555,7 +555,7 @@ class UserService
             $updateUser->postcode = $request->postcode ?? $updateUser->postcode;
             $updateUser->date_of_birth = $request->date_of_birth;
             $updateUser->membership = $request->membership;
-            $updateUser->nationality = $request->nationality;
+            $updateUser->nationality = ucwords( strtolower( $request->nationality ) );
             $updateUser->age_group = $request->age_group;
             $updateUser->fullname = $request->fullname;
 
@@ -1398,6 +1398,7 @@ class UserService
                 'phone_number' => $request->phone_number,
                 'calling_code' => $request->calling_code ? $request->calling_code : "+60",
                 'age_group' => $request->age_group,
+                'nationality' => ucwords( strtolower( $request->nationality ) ),
                 'password' => Hash::make( $request->password ),
                 'status' => 10,
                 'invitation_code' => strtoupper( \Str::random( 6 ) ),
@@ -1408,44 +1409,9 @@ class UserService
             if ( $referral ) {
                 $createUserObject['referral_id'] = $referral->id;
                 $createUserObject['referral_structure'] = $referral->referral_structure . '|' . $referral->id;
-                // self::giveUplineVoucher( $referral->id );
             }
 
             $createUser = User::create( $createUserObject );
-            
-            // assign register bonus
-            // $registerBonus = Option::getRegisterBonusSettings();
-
-            // $userWallet = Wallet::create( [
-            //     'user_id' => $createUser->id,
-            //     'type' => 1,
-            //     'balance' => 0,
-            // ] );
-
-            // if ( $registerBonus ) {
-            //     WalletService::transact( $userWallet, [
-            //         'amount' => $registerBonus->option_value,
-            //         'remark' => 'Register Bonus',
-            //         'type' => $userWallet->type,
-            //         'transaction_type' => 20,
-            //     ] );
-            // }
-
-            // assign referral bonus
-            // $referralBonus = Option::getReferralBonusSettings();
-            // if( $referral && $registerBonus){
-
-            //     $referralWallet = $referral->wallets->where('type',1)->first();
-
-            //     if( $referralWallet ) {
-            //         WalletService::transact( $referralWallet, [
-            //             'amount' => $referralBonus->option_value,
-            //             'remark' => 'Register Bonus',
-            //             'type' => $referralWallet->type,
-            //             'transaction_type' => 22,
-            //         ] );
-            //     }
-            // }
 
             $currentTmpUser = TmpUser::find( $request->identifier );
             $currentTmpUser->status = 10;
