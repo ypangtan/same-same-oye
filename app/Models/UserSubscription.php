@@ -114,7 +114,7 @@ class UserSubscription extends Model
         return $this;
     }
 
-    private function checkPlanValidity() {
+    public function checkPlanValidity() {
         $user = $this->user()->with('subscriptions')->first();
         $have_plan = $user->subscriptions()->isActive()->exists();
         $user->update(['membership' => $have_plan ? 1 : 0]);
