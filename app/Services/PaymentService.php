@@ -163,10 +163,6 @@ class PaymentService {
             }
 
             $lineItem = $subscriptionPurchase->getLineItems()[0];
-            $expiryTime = Carbon::parse( $lineItem->getExpiryTime() );
-            $startTime = Carbon::parse( $lineItem->getStartTime() );
-            $autoRenewing = $lineItem->getAutoRenewingPlan() !== null;
-
             $orderId = $subscriptionPurchase->getLatestOrderId();
 
             return $lineItem;
