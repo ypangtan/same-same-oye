@@ -203,11 +203,11 @@ class PaymentService {
             // ]);
 
             // 确认购买（告诉 Google 已经处理）plugin 没有处理确认购买，这里手动处理
-            if ($subscriptionPurchase->getAcknowledgementState() === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED') {
-                Log::channel('payment')->info('Subscription already acknowledged', [
-                    'purchaseToken' => $purchaseToken,
-                ]);
-            } else {
+            // if ($subscriptionPurchase->getAcknowledgementState() === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED') {
+            //     Log::channel('payment')->info('Subscription already acknowledged', [
+            //         'purchaseToken' => $purchaseToken,
+            //     ]);
+            // } else {
                 $accessTokenData = $client->fetchAccessTokenWithAssertion();
                 if (empty($accessTokenData['access_token'])) {
                     throw new \Exception('Failed to fetch Google access token');
@@ -229,7 +229,7 @@ class PaymentService {
 
                     throw new \Exception('Failed to acknowledge Android subscription');
                 }
-            }
+            // }
 
             Log::channel('payment')->info('Android purchase verified', [
                 'user_id' => $user_id,
