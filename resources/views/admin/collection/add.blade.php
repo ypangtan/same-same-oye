@@ -76,7 +76,7 @@ $parent_route = $data['parent_route'] ?? '';
                 <div class="row mb-3">
                     <div>
                         <label for="{{ $collection_create }}_playlists" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'collection.playlists' ) }}</label>
-                        <select class="form-select form-select-md" id="{{ $collection_create }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.playlists' ) ] ) }}">></select>
+                        <select class="form-select form-select-md" id="{{ $collection_create }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.playlists' ) ] ) }}"></select>
                     </div>
 
                     <div id="selected-playlists" class="w-100 h-auto gap-2 my-4"></div>

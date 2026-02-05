@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\{
     AppVersionController,
     CategoryController,
     CollectionController,
+    CountryController,
     InAppPurchaseController,
     ItemController,
     LuckyDrawRewardController,
@@ -67,6 +68,10 @@ Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
 
 Route::prefix( 'app_versions' )->group( function() {
     Route::get( '/', [ AppVersionController::class, 'lastestAppVersion' ] );
+} );
+
+Route::prefix( 'country' )->group( function() {
+    Route::get( '/', [ CountryController::class, 'getCountries' ] );
 } );
 
 Route::prefix( 'categories' )->group( function() {

@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\{
     BannerController,
     CategoryController,
     CollectionController,
+    CountryController,
     ItemController,
     LuckyDrawController,
     ProductController,
@@ -427,6 +428,10 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-ad', [ AdController::class, 'updateAd' ] )->name( 'admin.ad.updateAd' );
                 Route::post( 'update-ad-status', [ AdController::class, 'updateAdStatus' ] )->name( 'admin.ad.updateAdStatus' );
                 Route::post( 'ckeUpload', [ AdController::class, 'ckeUpload' ] )->name( 'admin.ad.ckeUpload' );
+            } );
+            
+            Route::prefix( 'country' )->group( function() {
+                Route::post( 'all-countries', [ CountryController::class, 'allCountries' ] )->name( 'admin.country.allCountries' );
             } );
 
         } );

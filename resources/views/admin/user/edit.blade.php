@@ -100,14 +100,19 @@ $user_edit = 'user_edit';
                 <div class="mb-3 row">
                     <label for="{{ $user_edit }}_nationality" class="col-sm-5 col-form-label">{{ __( 'user.nationality' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_edit }}_nationality">
+                        <select class="form-select form-select-md" id="{{ $user_edit }}_nationality" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'user.nationality' ) ] ) }}"></select>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="{{ $user_edit }}_age_group" class="col-sm-5 col-form-label">{{ __( 'user.age_group' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $user_edit }}_age_group">
+                        <select class="form-select" id="{{ $user_edit }}_age_group" >
+                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'user.age_group' ) ] ) }}</option>
+                            @foreach( $age_groups as $age_group )
+                                <option value="{{ $age_group }}">{{ $age_group }}</option>
+                            @endforeach
+                        </select>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -159,8 +164,8 @@ $user_edit = 'user_edit';
             formData.append( 'phone_number', $( de + '_phone_number' ).val() );
             formData.append( 'password', $( de + '_password' ).val() );
             formData.append( 'date_of_birth', $( de + '_date_of_birth' ).val() );
-            formData.append( 'nationality', $( de + '_nationality' ).val() );
-            formData.append( 'age_group', $( de + '_age_group' ).val() );
+            formData.append( 'nationality', $( de + '_nationality' ).val() ?? '' );
+            formData.append( 'age_group', $( de + '_age_group' ).val() ?? '' );
             formData.append( 'membership', $( de + '_membership' ).is( ':checked' ) ? 1 : 0 );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -219,88 +224,64 @@ $user_edit = 'user_edit';
                     // $( de + '_username' ).val( response.username );
                     $( de + '_calling_code' ).val( response.calling_code );
                     $( de + '_phone_number' ).val( response.phone_number );
-                    $( de + '_nationality' ).val( response.nationality );
                     $( de + '_age_group' ).val( response.age_group );
                     dateOfBirth.setDate( response.date_of_birth );
                     
-                    // if( response.referral != null ){
-                    //     let option1 = new Option( response.referral.email, response.referral.encrypted_id, true, true );
-                    //     userSelect2.append( option1 );
-                    //     userSelect2.trigger( 'change' );
-                    // }
+                    if( response.nationality != null ){
+                        let option1 = new Option( response.nationality, response.nationality, true, true );
+                        nationalitySelect2.append( option1 );
+                        nationalitySelect2.trigger( 'change' );
+                    }
 
                     $( 'body' ).loading( 'stop' );
                 },
             } );
         }
         
-        
-        // userSelect2 = $( de + '_referral' ).select2({
+        nationalitySelect2 = $( de + '_nationality' ).select2({
 
-        //     theme: 'bootstrap-5',
-        //     width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        //     placeholder: $( this ).data( 'placeholder' ),
-        //     closeOnSelect: true,
+            theme: 'bootstrap-5',
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: true,
 
-        //     ajax: { 
-        //         url: '{{ route( 'admin.user.allUsers' ) }}',
-        //         type: "post",
-        //         dataType: 'json',
-        //         delay: 250,
-        //         data: function (params) {
-        //             return {
-        //                 user: params.term, // search term
-        //                 no_user: '{{ Request( 'id' ) }}',
-        //                 designation: 1,
-        //                 start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
-        //                 length: 10,
-        //                 _token: '{{ csrf_token() }}',
-        //             };
-        //         },
-        //         processResults: function (data, params) {
-        //             params.page = params.page || 1;
+            ajax: { 
+                url: '{{ route( 'admin.country.allCountries' ) }}',
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        nationality: params.term, // search term
+                        designation: 1,
+                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
+                        length: 10,
+                        _token: '{{ csrf_token() }}',
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
 
-        //             let processedResult = [];
+                    let processedResult = [];
 
-        //             data.users.map( function( v, i ) {
-        //                 processedResult.push( {
-        //                     id: v.encrypted_id,
-        //                     text: v.email,
-        //                     first_name: v.first_name,
-        //                     last_name: v.last_name,
-        //                     phone_number: v.phone_number,
-        //                 } );
-        //             } );
+                    data.countries.map( function( v, i ) {
+                        processedResult.push( {
+                            id: v.nationality,
+                            text: v.nationality,
+                        } );
+                    } );
 
-        //             return {
-        //                 results: processedResult,
-        //                 pagination: {
-        //                     more: ( params.page * 10 ) < data.recordsFiltered
-        //                 }
-        //             };
+                    return {
+                        results: processedResult,
+                        pagination: {
+                            more: ( params.page * 10 ) < data.recordsFiltered
+                        }
+                    };
 
-        //         },
-        //         cache: true
-        //     },
-        //     templateResult: function (data) {
-        //         if (data.loading) return data.text;
+                },
+                cache: true
+            },
 
-        //         firstname = data?.first_name ?? '-';
-        //         lastname = data?.last_name ?? '-';
-        //         fullname = ( firstname ? firstname : '' ) + ' ' + ( lastname ? lastname : '' );
-        //         const $container = $(`
-        //             <div class="d-flex align-items-center">
-        //                 <span>${ fullname ? fullname : '-' }</span>
-        //                 ( <span>${data.phone_number}</span> )
-        //             </div>
-        //         `);
-        //         return $container;
-        //     },
-
-        //     templateSelection: function (data) {
-        //         return data.text || '';
-        //     }
-
-        // });
+        });
     } );
 </script>
