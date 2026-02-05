@@ -141,16 +141,17 @@ class InAppPurchaseService {
     public static function cancelSubscription() {
         $user = User::find( auth()->user()->id );
         
-        $subscription = $user->subscriptions()->isActive()->first();
+        $subscription = $user->subscriptions()->isActive()->get();
 
-        if (!$subscription) {
+        if ( $subscription->isEmpty() ) {
             return response()->json([
                 'message' => 'No active subscription found',
             ], 500);
         }
 
-        $subscription->cancel();
-
+        foreach ( $subscription as $sub ) {
+            $sub->cancel();
+        }
         return response()->json([
             'message' => 'Subscription cancelled successfully',
             'subscription' => $subscription->fresh(),
