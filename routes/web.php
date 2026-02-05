@@ -54,8 +54,8 @@ Route::get('.well-known/apple-app-site-association', function () {
     return response()->json($data);
 });
 
-Route::post( '/liap/notifications', [ WebhookController::class, 'ios']  );
-Route::post( '/google/rtdn', [ WebhookController::class, 'android' ] );
+Route::post( '/ios/notifications', [ WebhookController::class, 'ios']  );
+Route::post( '/android/notifications', [ WebhookController::class, 'android' ] );
 
 Route::get('/register', function (Request $request) {    
     $userAgent = $request->header('User-Agent');
