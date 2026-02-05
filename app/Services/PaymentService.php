@@ -153,32 +153,22 @@ class PaymentService {
             /**
              * 2️⃣ 调用 subscriptionsv2.get
              */
-            $subscriptionPurchase = $androidPublisher
-                ->purchases_subscriptionsv2
-            ->get($packageName, $purchaseToken);
+            $subscriptionPurchase = $androidPublisher->purchases_subscriptionsv2->get($packageName, $purchaseToken);
 
             
-            if (empty($subscriptionPurchase->getLineItems())) {
+            if ( empty( $subscriptionPurchase->getLineItems() ) ) {
                 throw new \Exception('Invalid subscription purchase (no line items)');
             }
 
+            // 获取订阅信息
+            return json_encode( $subscriptionPurchase->toArray() );
             $lineItem = $subscriptionPurchase->getLineItems()[0];
             $orderId = $subscriptionPurchase->getLatestOrderId();
-
-            return [
-                'data' => $orderId
-            ];
-
-            // 获取订阅信息
-            // $expiryTimeMillis = $response->getExpiryTimeMillis();
-            // $startTimeMillis = $response->getStartTimeMillis();
-            // $orderId = $response->getOrderId();
-            // $autoRenewing = $response->getAutoRenewing();
 
             $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
 
             // 检查交易是否已存在
-            if (PaymentTransaction::exists($orderId)) {
+            if ( PaymentTransaction::exists($orderId) ) {
                 return [
                     'success' => true,
                     'message' => 'Transaction already processed',
@@ -187,7 +177,8 @@ class PaymentService {
             }
 
             // 创建或更新订阅
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate, $autoRenewing );
+            $isRenew = true;
+            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate, $isRenew );
 
             // 记录交易
             $transaction = PaymentTransaction::create([
@@ -202,7 +193,7 @@ class PaymentService {
                 'receipt_data' => json_encode(['purchase_token' => $purchaseToken]),
                 'status' => 10,
                 'verified_at' => now(),
-                'verification_response' => json_encode($response->toArray()),
+                'verification_response' => json_encode( $subscriptionPurchase->toArray() ),
             ]);
 
             // 确认购买（告诉 Google 已经处理）
