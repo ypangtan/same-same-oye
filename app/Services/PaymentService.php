@@ -14,13 +14,15 @@ use Imdhemy\Purchases\Facades\{
 };
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Imdhemy\AppStore\ClientFactory as AppStoreClientFactory;
-
 use Google\Client as GoogleClient;
 use Google\Service\AndroidPublisher;
-use Google\Service\AndroidPublisher\SubscriptionPurchasesAcknowledgeRequest;
-use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\{
+    Http,
+    DB,
+    Log,
+};
 
 class PaymentService {
 
@@ -163,7 +165,13 @@ class PaymentService {
             // 获取订阅信息
             $lineItem = $subscriptionPurchase->getLineItems()[0];
             $orderId = $subscriptionPurchase->getLatestOrderId();
+            $productId = $lineItem->getProductId();
             $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
+            
+            // check state payment
+            if ($subscriptionPurchase->getSubscriptionState() !== 'SUBSCRIPTION_STATE_ACTIVE') {
+                throw new \Exception('Subscription not active');
+            }
 
             // 检查交易是否已存在
             if ( PaymentTransaction::exists($orderId) ) {
@@ -194,9 +202,34 @@ class PaymentService {
                 'verification_response' => json_encode( $subscriptionPurchase ),
             ]);
 
-            // 确认购买（告诉 Google 已经处理）
-            $ackRequest = new SubscriptionPurchasesAcknowledgeRequest();
-            $androidPublisher->purchases_subscriptionsv2->acknowledge( $packageName, $productId, $purchaseToken, $ackRequest );
+            // 确认购买（告诉 Google 已经处理）plugin 没有处理确认购买，这里手动处理
+            if ($subscriptionPurchase->getAcknowledgementState() === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED') {
+                Log::channel('payment')->info('Subscription already acknowledged', [
+                    'purchaseToken' => $purchaseToken,
+                ]);
+            } else {
+                $accessTokenData = $client->fetchAccessTokenWithAssertion();
+                if (empty($accessTokenData['access_token'])) {
+                    throw new \Exception('Failed to fetch Google access token');
+                }
+
+                $accessToken = $accessTokenData['access_token'];
+                $ackResponse = Http::withToken($accessToken)
+                    ->post(
+                        "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/{$packageName}/purchases/subscriptionsv2/tokens/{$purchaseToken}:acknowledge",
+                        [
+                            'developerPayload' => 'ack-from-backend',
+                        ]
+                    );
+
+                if ( !$ackResponse->successful()) {
+                    Log::channel('payment')->error('Android subscription v2 acknowledge failed', [
+                        'response' => $ackResponse->body(),
+                    ]);
+
+                    throw new \Exception('Failed to acknowledge Android subscription');
+                }
+            }
 
             Log::channel('payment')->info('Android purchase verified', [
                 'user_id' => $user_id,
