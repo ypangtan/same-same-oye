@@ -161,7 +161,7 @@ class PaymentService {
             }
 
             // 获取订阅信息
-            return json_encode( $subscriptionPurchase->toArray() );
+            return json_encode( $subscriptionPurchase );
             $lineItem = $subscriptionPurchase->getLineItems()[0];
             $orderId = $subscriptionPurchase->getLatestOrderId();
 
