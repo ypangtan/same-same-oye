@@ -1,5 +1,6 @@
 <?php
 $user_edit = 'user_edit';
+$age_groups = $data['age_groups'] ?? [];
 ?>
 
 <div class="nk-block-head nk-block-head-sm">
