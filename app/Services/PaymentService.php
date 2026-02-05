@@ -169,9 +169,9 @@ class PaymentService {
             $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
             
             // check state payment
-            // if ($subscriptionPurchase->getSubscriptionState() !== 'SUBSCRIPTION_STATE_ACTIVE') {
-            //     throw new \Exception('Subscription not active');
-            // }
+            if ($subscriptionPurchase->getSubscriptionState() !== 'SUBSCRIPTION_STATE_ACTIVE') {
+                throw new \Exception( 'Subscription not active, ' . $subscriptionPurchase->getSubscriptionState() );
+            }
 
             // 检查交易是否已存在
             if ( PaymentTransaction::exists($orderId) ) {
