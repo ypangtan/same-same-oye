@@ -174,33 +174,33 @@ class PaymentService {
             // }
 
             // 检查交易是否已存在
-            if ( PaymentTransaction::exists($orderId) ) {
-                return [
-                    'success' => true,
-                    'message' => 'Transaction already processed',
-                    'subscription' => $user->subscriptions()->where( 'platform', 2 )->isActive()->first(),
-                ];
-            }
+            // if ( PaymentTransaction::exists($orderId) ) {
+            //     return [
+            //         'success' => true,
+            //         'message' => 'Transaction already processed',
+            //         'subscription' => $user->subscriptions()->where( 'platform', 2 )->isActive()->first(),
+            //     ];
+            // }
 
-            // 创建或更新订阅
-            $isRenew = true;
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate, $isRenew );
+            // // 创建或更新订阅
+            // $isRenew = true;
+            // $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate, $isRenew );
 
-            // 记录交易
-            $transaction = PaymentTransaction::create([
-                'user_id' => $user->id,
-                'user_subscription_id' => $subscription->id,
-                'transaction_id' => $orderId,
-                'original_transaction_id' => $orderId,
-                'amount' => 0,
-                'currency' => 'MYR',
-                'platform' => 2,
-                'product_id' => $productId,
-                'receipt_data' => json_encode( [ 'purchase_token' => $purchaseToken ] ),
-                'status' => 10,
-                'verified_at' => now(),
-                'verification_response' => json_encode( $subscriptionPurchase ),
-            ]);
+            // // 记录交易
+            // $transaction = PaymentTransaction::create([
+            //     'user_id' => $user->id,
+            //     'user_subscription_id' => $subscription->id,
+            //     'transaction_id' => $orderId,
+            //     'original_transaction_id' => $orderId,
+            //     'amount' => 0,
+            //     'currency' => 'MYR',
+            //     'platform' => 2,
+            //     'product_id' => $productId,
+            //     'receipt_data' => json_encode( [ 'purchase_token' => $purchaseToken ] ),
+            //     'status' => 10,
+            //     'verified_at' => now(),
+            //     'verification_response' => json_encode( $subscriptionPurchase ),
+            // ]);
 
             // 确认购买（告诉 Google 已经处理）plugin 没有处理确认购买，这里手动处理
             if ($subscriptionPurchase->getAcknowledgementState() === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED') {
