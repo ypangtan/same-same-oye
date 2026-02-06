@@ -84,16 +84,57 @@ class IosCallbackService {
     }
 
     public static function decodeAndVerify(string $signedPayload): \stdClass {
-        // 获取 Apple 的公钥
-        $keys = Cache::remember('apple_jwks', 3600, function () {
-            return Http::get('https://appleid.apple.com/auth/keys')->json();
-        });
+        try {
+            // 清除缓存测试
+            Cache::forget('apple_jwks');
+            
+            // 获取 Apple 的公钥
+            $jwksData = Cache::remember('apple_jwks', 3600, function () {
+                $response = Http::timeout(10)->get('https://appleid.apple.com/auth/keys');
+                
+                if (!$response->successful()) {
+                    throw new \Exception('Failed to fetch Apple JWKS');
+                }
+                
+                return $response->json();
+            });
 
-        // 使用 JWK::parseKeySet 解析整个 keyset
-        $keySet = JWK::parseKeySet($keys);
+            Log::info('Apple JWKS Response', ['data' => $jwksData]);
 
-        // JWT::decode 会自动根据 header 中的 kid 选择正确的 key
-        return JWT::decode($signedPayload, $keySet);
+            // 验证 JWKS 格式
+            if (!isset($jwksData['keys']) || empty($jwksData['keys'])) {
+                throw new \Exception('Invalid JWKS format: missing keys array');
+            }
+
+            // 使用 parseKeySet - 这是 v6.x 推荐的方式
+            $keySet = JWK::parseKeySet($jwksData);
+            
+            Log::info('Parsed KeySet', ['kid_list' => array_keys($keySet)]);
+
+            // 解码前先检查 JWT 格式
+            $parts = explode('.', $signedPayload);
+            if (count($parts) !== 3) {
+                throw new \Exception('Invalid JWT format: expected 3 parts, got ' . count($parts));
+            }
+
+            // 解码 header 查看
+            $header = json_decode(JWT::urlsafeB64Decode($parts[0]), true);
+            Log::info('JWT Header', ['header' => $header]);
+
+            if (!isset($header['kid'])) {
+                throw new \Exception('JWT header missing kid field');
+            }
+
+            // 解码 JWT - parseKeySet 返回的 keySet 可以直接使用
+            return JWT::decode($signedPayload, $keySet);
+            
+        } catch (\Exception $e) {
+            Log::error('JWT verification failed', [
+                'error' => $e->getMessage(),
+                'payload_preview' => substr($signedPayload, 0, 50) . '...'
+            ]);
+            throw $e;
+        }
     }
 
     /**
