@@ -312,6 +312,14 @@ class PaymentService {
                 'platform' => $platform,
                 'platform_transaction_id' => $transactionId,
             ]);
+            
+            UserService::createUserNotification(
+                $user->id,
+                'notification.subscribed_success_title',
+                'notification.subscribed_success_content',
+                'subscription_success',
+                'subscription'
+            );
         }
 
         return $subscription;
