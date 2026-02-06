@@ -59,14 +59,14 @@ class PaymentService {
             }
 
             $receiptInfo = $latestReceipt[0];
-            $rawData = $receiptInfo->toArray();
-            return $rawData;
             $transactionId = $receiptInfo->getTransactionId();
             $originalTransactionId = $receiptInfo->getOriginalTransactionId();
-            $expiryDate = Carbon::createFromTimestampMs( $receiptInfo->getExpiresDate() )
+
+            $rawData = $receiptInfo->toArray();
+            $expiryDate = Carbon::createFromTimestampMs( $rawData->expires_date_ms )
                 ->timezone('Asia/Kuala_Lumpur');
 
-
+            return $expiryDate;
             // $expiryDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
 
             // 检查交易是否已存在
