@@ -15,4 +15,5 @@ return [
 
     'phone_number' => 'Phone Number',
     'otp_code' => 'OTP Code',
+    'email' => 'Email',
 ];

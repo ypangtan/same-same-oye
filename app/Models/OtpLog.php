@@ -23,6 +23,7 @@ class OtpLog extends Model
         'method',
         'raw_response',
         'phone_number',
+        'email',
         'otp_code',
         'status',
     ];
@@ -40,6 +41,7 @@ class OtpLog extends Model
         'method',
         'raw_response',
         'phone_number',
+        'email',
         'otp_code',
         'status',
     ];
