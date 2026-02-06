@@ -208,7 +208,7 @@ class PaymentService {
                 'currency' => 'MYR',
                 'platform' => 2,
                 'product_id' => $productId,
-                'receipt_data' => json_encode( [ 'purchase_token' => $purchaseToken ] ),
+                'receipt_data' => $purchaseToken,
                 'status' => 10,
                 'verified_at' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
                 'verification_response' => json_encode( $subscriptionPurchase ),

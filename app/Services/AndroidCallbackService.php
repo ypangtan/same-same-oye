@@ -58,7 +58,18 @@ class AndroidCallbackService {
 
             if ($subscriptionData) {
                 // 更新用户订阅表
-                $userSubscription = UserSubscription::where('purchase_token', $purchaseToken)->first();
+
+                $payment = PaymentTransaction::where( 'receipt_data', $purchaseToken )->first();
+
+                if( !$payment ) {
+                    Log::channel('payment')->warning('User subscription not found', [
+                        'purchase_token' => $purchaseToken,
+                        'subscription_id' => $subscriptionId
+                    ]);
+                    return ;
+                }
+
+                $userSubscription = UserSubscription::find( $payment->user_subscription_id );
                 
                 if (!$userSubscription) {
                     Log::channel('payment')->warning('User subscription not found', [
