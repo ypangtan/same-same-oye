@@ -120,7 +120,8 @@ class UserController extends Controller {
      * @bodyParam email string required The email for register. Example: abc@gmail.com
      * @bodyParam first_name string required The first_name for register. Example: tester
      * @bodyParam last_name string required The last_name for register. Example: tan
-     * @bodyParam age_group string required The age_group for register. Example: 10-18
+     * @bodyParam age_group string required The age_group for register. Example: 10-15
+     * @bodyParam nationality string required The nationality for register. Example: malaysian
      * @bodyParam password string required The password for register. Example: abcd1234
      * @bodyParam password_confirmation string required The confirmation password. Example: abcd1234
      * @bodyParam invitation_code string The invitation code of referral. Example: AASSCC
@@ -202,6 +203,8 @@ class UserController extends Controller {
      * @bodyParam date_of_birth string The date of birth to update. Example: 2022-01-01
      * @bodyParam to_remove integer Indicate remove photo or not. Example: 1
      * @bodyParam invitation_code string The invitation_code of upline. Example: abcdef
+     * @bodyParam age_group string required The age_group for register. Example: 10-15
+     * @bodyParam nationality string required The nationality for register. Example: malaysian
      * @bodyParam profile_picture file The photo to update. Will create when empty
      * 
      */
