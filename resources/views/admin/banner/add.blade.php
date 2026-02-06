@@ -187,11 +187,11 @@
         // Start a new debounce timer (500ms after last key event)
         bannerUrlTimer[bannerId] = setTimeout(() => {
             // Skip if input is empty or unchanged (optional optimization)
-            if (!newUrl.trim()) return;
+            // if (!newUrl.trim()) return;
 
             let formData = new FormData();
             formData.append('id', bannerId);
-            formData.append('url', newUrl);
+            formData.append('url', newUrl ?? '');
             formData.append('_token', '{{ csrf_token() }}');
 
             $.ajax({
