@@ -172,6 +172,7 @@ class PaymentService {
             $orderId = $subscriptionPurchase->getLatestOrderId();
             $productId = $lineItem->getProductId();
             
+            return get_class_methods( $lineItem[0] );
             $expiryTime = $lineItem[0]->getExpiryTime();
             if ($expiryTime) {
                 $expiredDate = Carbon::parse($expiryTime)->timezone('Asia/Kuala_Lumpur');
