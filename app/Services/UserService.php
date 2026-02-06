@@ -1653,8 +1653,6 @@ class UserService
             ]);
         }
 
-        $user->nationality = strtolower( $user->nationality );
-    
         // Success response
         return response()->json([
             'message' => '',
