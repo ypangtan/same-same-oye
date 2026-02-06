@@ -144,7 +144,7 @@ class AndroidCallbackService {
                         'user_id' => $user->id ?? null,
                         'user_subscription_id' => $userSubscription->id
                     ]);
-                } elseif ($eventType === 'SUBSCRIPTION_RENEWED') {
+                } elseif ($eventType === 'SUBSCRIPTION_RENEWED' || $eventType === 'SUBSCRIPTION_PURCHASED') {
                     // 续订成功（可以选择不发通知，避免打扰）
                     if ($user) {
                         UserService::createUserNotification(
