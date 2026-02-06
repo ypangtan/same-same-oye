@@ -1652,6 +1652,8 @@ class UserService
                 'data' => null,
             ]);
         }
+
+        $user->nationality = strtolower( $user->nationality );
     
         // Success response
         return response()->json([
