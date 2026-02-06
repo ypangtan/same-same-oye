@@ -85,53 +85,42 @@ class IosCallbackService {
 
     public static function decodeAndVerify(string $signedPayload): \stdClass {
         try {
-            // 清除缓存测试
-            Cache::forget('apple_jwks');
-            
-            // 获取 Apple 的公钥
-            $jwksData = Cache::remember('apple_jwks', 3600, function () {
-                $response = Http::timeout(10)->get('https://appleid.apple.com/auth/keys');
-                
-                if (!$response->successful()) {
-                    throw new \Exception('Failed to fetch Apple JWKS');
-                }
-                
-                return $response->json();
-            });
-
-            Log::info('Apple JWKS Response', ['data' => $jwksData]);
-
-            // 验证 JWKS 格式
-            if (!isset($jwksData['keys']) || empty($jwksData['keys'])) {
-                throw new \Exception('Invalid JWKS format: missing keys array');
-            }
-
-            // 使用 parseKeySet - 这是 v6.x 推荐的方式
-            $keySet = JWK::parseKeySet($jwksData);
-            
-            Log::info('Parsed KeySet', ['kid_list' => array_keys($keySet)]);
-
-            // 解码前先检查 JWT 格式
+            // Apple 的 JWT 可能包含 x5c (certificate chain)
             $parts = explode('.', $signedPayload);
-            if (count($parts) !== 3) {
-                throw new \Exception('Invalid JWT format: expected 3 parts, got ' . count($parts));
-            }
-
-            // 解码 header 查看
             $header = json_decode(JWT::urlsafeB64Decode($parts[0]), true);
-            Log::info('JWT Header', ['header' => $header]);
+            
+            Log::info('JWT Header Full', ['header' => $header]);
 
-            if (!isset($header['kid'])) {
-                throw new \Exception('JWT header missing kid field');
+            // 检查是否有 x5c (certificate chain)
+            if (isset($header['x5c']) && is_array($header['x5c'])) {
+                // 使用证书链中的第一个证书
+                $cert = "-----BEGIN CERTIFICATE-----\n" . 
+                        chunk_split($header['x5c'][0], 64, "\n") . 
+                        "-----END CERTIFICATE-----";
+                
+                Log::info('Using certificate from x5c');
+                
+                // 从证书提取公钥
+                $publicKey = openssl_pkey_get_public($cert);
+                
+                if ($publicKey === false) {
+                    throw new \Exception('Failed to extract public key from certificate');
+                }
+
+                // 使用公钥解码
+                return JWT::decode(
+                    $signedPayload, 
+                    new Key($publicKey, $header['alg'] ?? 'ES256')
+                );
             }
 
-            // 解码 JWT - parseKeySet 返回的 keySet 可以直接使用
-            return JWT::decode($signedPayload, $keySet);
+            // 如果没有 x5c，回退到使用 JWKS
+            throw new \Exception('No x5c in header and no kid found');
             
         } catch (\Exception $e) {
-            Log::error('JWT verification failed', [
+            Log::error('JWT decode error', [
                 'error' => $e->getMessage(),
-                'payload_preview' => substr($signedPayload, 0, 50) . '...'
+                'payload_start' => substr($signedPayload, 0, 100)
             ]);
             throw $e;
         }
