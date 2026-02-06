@@ -187,7 +187,7 @@ class AndroidCallbackService {
                 $userSubscription->status = 20; // 过期
                 
                 // 📱 发送订阅过期通知（如果是被撤销）
-                if ($eventType === 'SUBSCRIPTION_REVOKED' && $user) {
+                if ( $user ) {
                     UserService::createUserNotification(
                         $user->id,
                         'notification.subscription_cancelled_title',
