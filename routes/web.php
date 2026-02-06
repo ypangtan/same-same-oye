@@ -54,8 +54,8 @@ Route::get('.well-known/apple-app-site-association', function () {
     return response()->json($data);
 });
 
-Route::post( '/ios/notification', [ WebhookController::class, 'ios']  );
-Route::post( '/android/notification', [ WebhookController::class, 'android' ] );
+Route::post( '/ios/notification', [ WebhookController::class, 'ios']  )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+Route::post( '/android/notification', [ WebhookController::class, 'android' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
 
 Route::get('/register', function (Request $request) {    
     $userAgent = $request->header('User-Agent');
