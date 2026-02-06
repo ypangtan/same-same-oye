@@ -62,7 +62,7 @@ class AndroidCallbackService {
                 $payment = PaymentTransaction::where( 'receipt_data', $purchaseToken )->first();
 
                 if( !$payment ) {
-                    Log::channel('payment')->warning('User subscription not found', [
+                    Log::channel('payment')->warning('Payment Transaction not found', [
                         'purchase_token' => $purchaseToken,
                         'subscription_id' => $subscriptionId
                     ]);
