@@ -34,7 +34,7 @@ use Firebase\JWT\{
 
 class AndroidCallbackService {
 
-    public static function verifySubscriptionV2( $packageName, $subscriptionId, $purchaseToken, $eventType = null ) {
+    public static function verifySubscriptionV2($packageName, $subscriptionId, $purchaseToken, $eventType = null) {
         $credentialsPath = config('liap.google_application_credentials');
             
         // 检查文件是否存在
@@ -51,53 +51,65 @@ class AndroidCallbackService {
         $service = new AndroidPublisher($client);
 
         try {
+            // ✅ Correct: Use only purchaseToken (which contains the subscription info)
             $subscriptionData = $service
                 ->purchases_subscriptionsv2
-                ->get($packageName, $subscriptionId, $purchaseToken);
+                ->get($packageName, $purchaseToken); // Only 2 params!
 
             if ($subscriptionData) {
                 // 更新用户订阅表
                 $userSubscription = UserSubscription::where('purchase_token', $purchaseToken)->first();
                 
-                if ($userSubscription) {
-                    $user = $userSubscription->user;
-                    $subscriptionState = $subscriptionData->getSubscriptionState();
-                    
-                    // 处理订阅状态并发送通知
-                    self::handleAndroidSubscriptionState(
-                        $userSubscription, 
-                        $subscriptionState, 
-                        $eventType,
-                        $user
-                    );
-                    
-                    // 更新到期时间
-                    $lineItems = $subscriptionData->getLineItems();
-                    if (!empty($lineItems)) {
-                        $expiryTime = $lineItems[0]->getExpiryTime();
-                        if ($expiryTime) {
-                            $userSubscription->end_date = Carbon::parse($expiryTime)
-                                ->timezone('Asia/Kuala_Lumpur');
-                        }
-                    }
-                    
-                    $userSubscription->save();
-                    
-                    Log::channel('payment')->info('Android subscription verified', [
-                        'user_id' => $user->id ?? null,
-                        'subscription_state' => $subscriptionState,
-                        'event_type' => $eventType,
-                        'purchase_token' => $purchaseToken
+                if (!$userSubscription) {
+                    Log::channel('payment')->warning('User subscription not found', [
+                        'purchase_token' => $purchaseToken,
+                        'subscription_id' => $subscriptionId
                     ]);
+                    return null;
                 }
+                
+                $user = $userSubscription->user;
+                $subscriptionState = $subscriptionData->getSubscriptionState();
+                
+                // 处理订阅状态并发送通知
+                self::handleAndroidSubscriptionState(
+                    $userSubscription, 
+                    $subscriptionState, 
+                    $eventType,
+                    $user
+                );
+                
+                // 更新到期时间
+                $lineItems = $subscriptionData->getLineItems();
+                if (!empty($lineItems)) {
+                    $expiryTime = $lineItems[0]->getExpiryTime();
+                    if ($expiryTime) {
+                        $userSubscription->end_date = Carbon::parse($expiryTime)
+                            ->timezone('Asia/Kuala_Lumpur');
+                    }
+                }
+                
+                $userSubscription->save();
+                
+                Log::channel('payment')->info('Android subscription verified', [
+                    'user_id' => $user->id ?? null,
+                    'subscription_state' => $subscriptionState,
+                    'event_type' => $eventType,
+                    'purchase_token' => $purchaseToken
+                ]);
+                
+                return $subscriptionData;
             }
 
         } catch (Exception $e) {
-            Log::channel('payment')->error('Google subscription verify failed: ' . $e->getMessage());
+            Log::channel('payment')->error('Google subscription verify failed: ' . $e->getMessage(), [
+                'purchase_token' => $purchaseToken,
+                'subscription_id' => $subscriptionId,
+                'error' => $e->getMessage()
+            ]);
             return null;
         }
     }
-
     /**
      * 处理 Android 订阅状态并发送通知
      */
@@ -205,6 +217,7 @@ class AndroidCallbackService {
                 break;
         }
     }
+
     public static function callbackAndroid($request) {
         try{ 
             $createLog = CallbackLog::create([
