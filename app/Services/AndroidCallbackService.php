@@ -207,13 +207,20 @@ class AndroidCallbackService {
     }
 
     public static function callbackAndroid($request) {
-        try {
-            DB::beginTransaction();
 
+        try{ 
             $createLog = CallbackLog::create([
                 'platform' => 'android',
                 'payload' => json_encode($request->all()),
             ]);
+        } catch ( \Throwable $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500); 
+        }
+
+        try {
+            DB::beginTransaction();
 
             $message = $request->input('message');
             $data = json_decode(base64_decode($message['data']), true);

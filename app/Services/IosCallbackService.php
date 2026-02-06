@@ -31,13 +31,18 @@ use Firebase\JWT\{
 class IosCallbackService {
 
     public static function callbackIos( $request ) {
-        try{
-            DB::beginTransaction();
-
+        try{ 
             $createLog = CallbackLog::create([
                 'platform' => 'ios',
-                'payload' => json_encode( $request->all() ),
+                'payload' => json_encode($request->all()),
             ]);
+        } catch ( \Throwable $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500); 
+        }
+        try{
+            DB::beginTransaction();
 
             $signedPayload = $request->input('signedPayload');
 
