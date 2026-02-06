@@ -35,7 +35,7 @@ class UserPlaylistService
 
         $playlists = UserPlaylist::with( [
             'items',
-        ] )->select( 'user_playlists.*' );
+        ] )->select( 'user_playlists.*' )->where( 'user_id', auth()->user()->id );
 
         if( !empty( $request->type_id ) ) {
             $playlists->where( 'user_playlists.type_id', \Helper::decode( $request->type_id ) );
