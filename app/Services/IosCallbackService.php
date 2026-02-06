@@ -276,8 +276,6 @@ class IosCallbackService {
             default => 'Unknown reason'
         };
         
-        $userSubscription->cancellation_reason = $reason;
-        
         // 📱 根据原因发送不同通知
         if ($user) {
             if ($subtype === 'VOLUNTARY') {

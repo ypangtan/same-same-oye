@@ -205,9 +205,7 @@ class AndroidCallbackService {
                 break;
         }
     }
-
     public static function callbackAndroid($request) {
-
         try{ 
             $createLog = CallbackLog::create([
                 'platform' => 'android',
@@ -225,65 +223,43 @@ class AndroidCallbackService {
             $message = $request->input('message');
             $data = json_decode(base64_decode($message['data']), true);
 
-            $eventType = $data['eventType'] ?? null;
+            // Extract subscription notification
+            $subscriptionNotification = $data['subscriptionNotification'] ?? null;
             
-            // 记录详细的事件类型
+            if (!$subscriptionNotification) {
+                Log::channel('payment')->warning('No subscription notification in webhook');
+                DB::commit();
+                return response()->json(['status' => 'success'], 200);
+            }
+
+            $notificationType = $subscriptionNotification['notificationType'] ?? null;
+            
+            // Map notificationType to eventType
+            $eventType = self::mapNotificationTypeToEvent($notificationType);
+            
+            // Record detailed event type
             Log::channel('payment')->info('Android webhook received', [
+                'notification_type' => $notificationType,
                 'event_type' => $eventType,
                 'package_name' => $data['packageName'] ?? null,
-                'subscription_id' => $data['subscriptionId'] ?? null
+                'subscription_id' => $subscriptionNotification['subscriptionId'] ?? null
             ]);
 
-            switch ($eventType) {
-                case 'SUBSCRIPTION_PURCHASED':
-                case 'SUBSCRIPTION_RECOVERED':
-                case 'SUBSCRIPTION_RENEWED':
-                case 'SUBSCRIPTION_IN_GRACE_PERIOD':
-                case 'SUBSCRIPTION_RESTARTED':
-                case 'SUBSCRIPTION_PRICE_CHANGE_CONFIRMED':
-                    // 查询最新订阅状态
-                    self::verifySubscriptionV2(
-                        $data['packageName'],
-                        $data['subscriptionId'],
-                        $data['purchaseToken'],
-                        $eventType
-                    );
-                    break;
-
-                case 'SUBSCRIPTION_CANCELED':
-                case 'SUBSCRIPTION_REVOKED':
-                case 'SUBSCRIPTION_EXPIRED':
-                case 'SUBSCRIPTION_PAUSED':
-                case 'SUBSCRIPTION_PAUSE_SCHEDULE_CHANGED':
-                case 'SUBSCRIPTION_DEFERRED':
-                    // 标记用户订阅为取消/过期
-                    self::verifySubscriptionV2(
-                        $data['packageName'],
-                        $data['subscriptionId'],
-                        $data['purchaseToken'],
-                        $eventType
-                    );
-                    break;
-                    
-                case 'SUBSCRIPTION_ON_HOLD':
-                    // 订阅被暂停（支付问题）
-                    self::verifySubscriptionV2(
-                        $data['packageName'],
-                        $data['subscriptionId'],
-                        $data['purchaseToken'],
-                        $eventType
-                    );
-                    break;
-
-                default:
-                    Log::channel('payment')->warning('Unknown Android event type', [
-                        'event_type' => $eventType
-                    ]);
-                    break;
+            // Process based on event type
+            if ($eventType) {
+                self::verifySubscriptionV2(
+                    $data['packageName'],
+                    $subscriptionNotification['subscriptionId'],
+                    $subscriptionNotification['purchaseToken'],
+                    $eventType
+                );
+            } else {
+                Log::channel('payment')->warning('Unknown Android notification type', [
+                    'notification_type' => $notificationType
+                ]);
             }
 
             DB::commit();
-
             return response()->json(['status' => 'success'], 200);
 
         } catch (Exception $e) {
@@ -298,5 +274,25 @@ class AndroidCallbackService {
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    private static function mapNotificationTypeToEvent(?int $notificationType): ?string {
+        $mapping = [
+            1 => 'SUBSCRIPTION_RECOVERED',
+            2 => 'SUBSCRIPTION_RENEWED',
+            3 => 'SUBSCRIPTION_CANCELED',
+            4 => 'SUBSCRIPTION_PURCHASED',
+            5 => 'SUBSCRIPTION_ON_HOLD',
+            6 => 'SUBSCRIPTION_IN_GRACE_PERIOD',
+            7 => 'SUBSCRIPTION_RESTARTED',
+            8 => 'SUBSCRIPTION_PRICE_CHANGE_CONFIRMED',
+            9 => 'SUBSCRIPTION_DEFERRED',
+            10 => 'SUBSCRIPTION_PAUSED',
+            11 => 'SUBSCRIPTION_PAUSE_SCHEDULE_CHANGED',
+            12 => 'SUBSCRIPTION_REVOKED',
+            13 => 'SUBSCRIPTION_EXPIRED',
+        ];
+
+        return $mapping[$notificationType] ?? null;
     }
 }
