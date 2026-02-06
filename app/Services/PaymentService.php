@@ -59,10 +59,12 @@ class PaymentService {
             }
 
             $receiptInfo = $latestReceipt[0];
+            return (get_class_methods($receiptInfo));
             $transactionId = $receiptInfo->getTransactionId();
             $originalTransactionId = $receiptInfo->getOriginalTransactionId();
-            $expiryDate = Carbon::createFromTimestampMs($transactionPayload->expiresDate)
+            $expiryDate = Carbon::createFromTimestampMs($receiptInfo->expiresDate)
                 ->timezone('Asia/Kuala_Lumpur');
+
 
             // $expiryDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
 
