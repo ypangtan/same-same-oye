@@ -1688,6 +1688,8 @@ class UserService
             } ],
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
+            'nationality' => ['required'],
+            'age_group' => ['required'],
             'profile_picture' => [ 'nullable', 'file', 'max:30720', 'mimes:jpg,jpeg,png,heic' ],
             'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
         ] );
@@ -1699,6 +1701,8 @@ class UserService
             'first_name' => __( 'user.first_name' ),
             'last_name' => __( 'user.last_name' ),
             'phone_number' => __( 'user.phone_number' ),
+            'nationality' => __( 'user.nationality' ),
+            'age_group' => __( 'user.age_group' ),
             'invitation_code' => __( 'user.invitation_code' ),
         ];
 
@@ -1756,6 +1760,8 @@ class UserService
         $updateUser->phone_number = $request->phone_number;
         $updateUser->date_of_birth = $request->date_of_birth;
         $updateUser->email = $request->email;
+        $updateUser->nationality = ucwords( strtolower( $request->nationality ) );
+        $updateUser->age_group = $request->age_group;
 
         if ( $request->to_remove == 1 && $updateUser->profile_picture ) {
             Storage::disk( 'public' )->delete( $updateUser->profile_picture );
