@@ -200,6 +200,7 @@ class AndroidCallbackService {
                 Log::channel('payment')->info('Subscription expired', [
                     'user_id' => $user->id ?? null,
                     'user_subscription_id' => $userSubscription->id,
+                    'subscriptionState' => $subscriptionState,
                     'event_type' => $eventType
                 ]);
                 break;
