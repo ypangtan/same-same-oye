@@ -66,7 +66,7 @@ class PaymentService {
             $expiryDate = Carbon::createFromTimestampMs( $rawData['expires_date_ms'] )
                 ->timezone('Asia/Kuala_Lumpur');
 
-            return $expiryDate;
+            return $expiryDate->format( 'Y-m-d' );
             // $expiryDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
 
             // 检查交易是否已存在
