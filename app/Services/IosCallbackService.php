@@ -84,29 +84,16 @@ class IosCallbackService {
     }
 
     public static function decodeAndVerify(string $signedPayload): \stdClass {
+        // 获取 Apple 的公钥
         $keys = Cache::remember('apple_jwks', 3600, function () {
             return Http::get('https://appleid.apple.com/auth/keys')->json();
         });
 
-        // ✅ v6.x 正确用法：使用 Key 对象包装密钥
-        $keySet = [];
-        foreach ($keys['keys'] as $key) {
-            $keySet[$key['kid']] = new Key(
-                JWK::parseKey($key), 
-                $key['alg'] ?? 'ES256'
-            );
-        }
+        // 使用 JWK::parseKeySet 解析整个 keyset
+        $keySet = JWK::parseKeySet($keys);
 
-        // 解码 JWT header 获取 kid
-        $tks = explode('.', $signedPayload);
-        $headb64 = $tks[0];
-        $header = json_decode(JWT::urlsafeB64Decode($headb64));
-        
-        if (!isset($keySet[$header->kid])) {
-            throw new \Exception('Unable to find a key for kid: ' . $header->kid);
-        }
-
-        return JWT::decode($signedPayload, $keySet[$header->kid]);
+        // JWT::decode 会自动根据 header 中的 kid 选择正确的 key
+        return JWT::decode($signedPayload, $keySet);
     }
 
     /**
