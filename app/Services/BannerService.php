@@ -158,7 +158,7 @@ class BannerService
     public static function updateBannerUrl( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'url' => [ 'required' ],
+            'url' => [ 'nullable' ],
         ] );
 
         $attributeName = [
