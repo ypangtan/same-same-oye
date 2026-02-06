@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\AndroidCallbackService;
 use App\Services\IosCallbackService;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
@@ -17,6 +18,6 @@ class WebhookController extends Controller
     }
 
     public function android( Request $request ) {
-        return PaymentService::callbackAndroid( $request );
+        return AndroidCallbackService::callbackAndroid( $request );
     }
 }
