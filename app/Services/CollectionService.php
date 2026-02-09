@@ -169,7 +169,7 @@ class CollectionService
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'display_type' => [ 'required', 'in:1,2,3,4,5,6,7' ],
-            'playlists' => [ 'nullable' ],
+            'playlists' => [ 'required' ],
         ] );
 
         $attributeName = [
@@ -241,7 +241,7 @@ class CollectionService
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'display_type' => [ 'required', 'in:1,2,3,4,5,6,7' ],
-            'playlists' => [ 'nullable' ],
+            'playlists' => [ 'required' ],
         ] );
 
         $attributeName = [

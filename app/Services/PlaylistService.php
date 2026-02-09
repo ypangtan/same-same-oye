@@ -180,7 +180,7 @@ class PlaylistService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'items' => [ 'nullable' ],
+            'items' => [ 'required' ],
         ] );
 
         $attributeName = [
@@ -256,7 +256,7 @@ class PlaylistService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'items' => [ 'nullable' ],
+            'items' => [ 'required' ],
         ] );
 
         $attributeName = [
