@@ -122,11 +122,16 @@
             } );
 
             $( document ).on( 'focus', '.form-select', function() {
-                console.log( 'focus select' );
                 if ( $( this ).hasClass( 'is-invalid' ) ) {
                     $( this ).removeClass( 'is-invalid' ).nextAll( 'div.invalid-feedback' ).text( '' );
                 }
-            } );
+            } ); 
+
+            $( document ).on( 'focus', '.select2-container', function() {
+                if ( $( this ).parent().find( '.form-select' ).hasClass( 'is-invalid' ) ) {
+                    $( this ).parent().find( '.form-select' ).removeClass( 'is-invalid' ).nextAll( 'div.invalid-feedback' ).text( '' );
+                }
+            } ); 
 
             $( document ).on( 'hidden.bs.modal', '.modal', function() {
                 $( '.modal .form-control' ).removeClass( 'is-invalid' ).val( '' ).nextAll( 'div.invalid-feedback' ).text( '' );
