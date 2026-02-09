@@ -122,6 +122,7 @@
             } );
 
             $( document ).on( 'focus', '.form-select', function() {
+                console.log( 'focus select' );
                 if ( $( this ).hasClass( 'is-invalid' ) ) {
                     $( this ).removeClass( 'is-invalid' ).nextAll( 'div.invalid-feedback' ).text( '' );
                 }
