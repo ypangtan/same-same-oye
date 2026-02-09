@@ -169,7 +169,13 @@ class CollectionService
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'display_type' => [ 'required', 'in:1,2,3,4,5,6,7' ],
-            'playlists' => [ 'required' ],
+            'playlists' => [ 'required', function ( $attribute, $value, $fail ) {
+                $playlists = json_decode( $value, true );
+                if ( empty( $playlists ) || !is_array( $playlists ) || count( $playlists ) == 0 ) {
+                    $fail( __( 'validation.required' ) );
+                    return false;
+                }
+            } ],
         ] );
 
         $attributeName = [
@@ -241,7 +247,13 @@ class CollectionService
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'display_type' => [ 'required', 'in:1,2,3,4,5,6,7' ],
-            'playlists' => [ 'required' ],
+            'playlists' => [ 'required', function ( $attribute, $value, $fail ) {
+                $playlists = json_decode( $value, true );
+                if ( empty( $playlists ) || !is_array( $playlists ) || count( $playlists ) == 0 ) {
+                    $fail( __( 'validation.required' ) );
+                    return false;
+                }
+            } ],
         ] );
 
         $attributeName = [

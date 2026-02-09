@@ -180,7 +180,13 @@ class PlaylistService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'items' => [ 'required' ],
+            'items' => [ 'required', function ( $attribute, $value, $fail ) {
+                $items = json_decode( $value, true );
+                if ( empty( $items ) || !is_array( $items ) || count( $items ) == 0 ) {
+                    $fail( __( 'validation.required' ) );
+                    return false;
+                }
+            } ],
         ] );
 
         $attributeName = [
@@ -256,7 +262,13 @@ class PlaylistService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'items' => [ 'required' ],
+            'items' => [ 'required', function ( $attribute, $value, $fail ) {
+                $items = json_decode( $value, true );
+                if ( empty( $items ) || !is_array( $items ) || count( $items ) == 0 ) {
+                    $fail( __( 'validation.required' ) );
+                    return false;
+                }
+            } ],
         ] );
 
         $attributeName = [
