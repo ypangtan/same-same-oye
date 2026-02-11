@@ -495,7 +495,7 @@ class UserService
             'email' => [ 'nullable', 'bail', 'unique:users,email,' . $request->id, 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
             'fullname' => [ 'nullable' ],
             'calling_code' => [ 'nullable' ],
-            'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
+            'phone_number' => [ 'nullable', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
                 
                 // $exist = User::where( 'phone_number', $value )
                 //     ->where( 'id', '!=', $request->id )
@@ -1341,7 +1341,7 @@ class UserService
             'first_name' => [ 'required' ],
             'last_name' => [ 'required' ],
             'calling_code' => [ 'nullable', 'exists:countries,calling_code' ],
-            'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
+            'phone_number' => [ 'nullable', 'digits_between:8,15', function( $attribute, $value, $fail ) use ( $request ) {
 
                 $defaultCallingCode = "+60";
 
@@ -1868,7 +1868,7 @@ class UserService
                 'first_name' => [ 'required' ],
                 'last_name' => [ 'required' ],
                 'calling_code' => [ 'nullable', 'exists:countries,calling_code' ],
-                'phone_number' => [ 'required', 'digits_between:8,15', function( $attribute, $value, $fail ) use( $request ) {
+                'phone_number' => [ 'nullable', 'digits_between:8,15', function( $attribute, $value, $fail ) use( $request ) {
 
                     $defaultCallingCode = "+60";
 
