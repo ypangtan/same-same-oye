@@ -232,9 +232,9 @@ $parent_route = $data['parent_route'] ?? '';
                             selectedPlaylists.push( {id: data['id'], text: data['name']} );
                             
                             $('#selected-playlists').append(`
-                                <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data['id']}" style="font-size:14px;">
+                                <span class="playlist-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data['id']}" style="font-size:14px;">
                                     ${data['name']}
-                                    <em class="icon ni ni-cross remove-item click-action"></em>
+                                    <em class="icon ni ni-cross remove-playlist click-action"></em>
                                 </span>
                             `);
 
@@ -301,9 +301,9 @@ $parent_route = $data['parent_route'] ?? '';
                 selectedPlaylists.push( {id: data.id, text: data.text} );
 
                 $('#selected-playlists').append(`
-                    <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
+                    <span class="playlist-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
-                        <em class="icon ni ni-cross remove-item click-action"></em>
+                        <em class="icon ni ni-cross remove-playlist click-action"></em>
                     </span>
                 `);
 
@@ -313,10 +313,10 @@ $parent_route = $data['parent_route'] ?? '';
             $( de + '_playlists' ).val(null).trigger('change');
         });
 
-        $(document).on('click', '.remove-collection', function() {
-            let id = $(this).closest('.item-block').data('id');
+        $(document).on('click', '.remove-playlist', function() {
+            let id = $(this).closest('.playlist-block').data('id');
             selectedPlaylists = selectedPlaylists.filter(tag => tag.id !== id);
-            $(this).closest('.item-block').remove();
+            $(this).closest('.playlist-block').remove();
             updateHiddenInput();
         });
 
@@ -338,7 +338,7 @@ $parent_route = $data['parent_route'] ?? '';
             update: function(event, ui) {
                 // rebuild selectedPlaylists order after sorting
                 let newOrder = [];
-                $('#selected-playlists .item-block').each(function() {
+                $('#selected-playlists .playlist-block').each(function() {
                     let id = $(this).data('id');
                     let item = selectedPlaylists.find(i => i.id === id);
                     if (item) newOrder.push(item);

@@ -233,7 +233,7 @@ $parent_route = $data['parent_route'] ?? '';
                 $('#selected-playlists').append(`
                     <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
-                        <em class="icon ni ni-cross remove-item click-action"></em>
+                        <em class="icon ni ni-cross remove-playlist click-action"></em>
                     </span>
                 `);
                 updateHiddenInput();
