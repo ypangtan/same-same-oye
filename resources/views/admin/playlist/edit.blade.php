@@ -196,6 +196,7 @@ $parent_route = $data['parent_route'] ?? '';
                                 }
                             });
                             if ( imagePath ) {
+                                console.log( imagePath );
                                 let myDropzone = this,
                                     mockFile = { name: 'Default', size: 1024, accepted: true };
 
