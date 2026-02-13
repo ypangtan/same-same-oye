@@ -182,6 +182,12 @@ $parent_route = $data['parent_route'] ?? '';
                         addRemoveLinks: true,
                         init: function() {
                             this.on("addedfile", function (file) {
+                                if (file.previewElement) {
+                                    let img = file.previewElement.querySelector("img");
+                                    if (img) {
+                                        img.crossOrigin = "anonymous";
+                                    }
+                                }
                                 if (this.files.length > 1) {
                                     this.removeFile(this.files[0]);
                                 }
