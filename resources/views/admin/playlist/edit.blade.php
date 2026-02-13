@@ -180,40 +180,19 @@ $parent_route = $data['parent_route'] ?? '';
                         maxFiles: 1,
                         acceptedFiles: 'image/jpg,image/jpeg,image/png',
                         addRemoveLinks: true,
+                        createImageThumbnails: false,
                         init: function() {
                             this.on("addedfile", function (file) {
                                 if (this.files.length > 1) {
                                     this.removeFile(this.files[0]);
                                 }
                             });
-
-                            this.on("thumbnail", function(file, dataUrl) {
-                                if (file.previewElement) {
-                                    let img = file.previewElement.querySelector("img");
-                                    if (img) {
-                                        img.crossOrigin = "anonymous";
-                                    }
-                                }
-                            });
                             if ( imagePath ) {
-                                console.log( imagePath );
                                 let myDropzone = this,
                                     mockFile = { name: 'Default', size: 1024, accepted: true };
 
                                 myDropzone.files.push( mockFile );
                                 myDropzone.displayExistingFile( mockFile, imagePath );
-                                
-                                setTimeout(() => {
-                                    if (mockFile.previewElement) {
-                                        let img = mockFile.previewElement.querySelector('img');
-                                        if (img) {
-                                            let src = img.src;
-                                            img.crossOrigin = "anonymous";
-                                            img.src = '';
-                                            img.src = src;
-                                        }
-                                    }
-                                }, 100);
                             }
                         },
                         removedfile: function( file ) {
