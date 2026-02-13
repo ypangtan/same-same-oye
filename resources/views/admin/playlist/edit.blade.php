@@ -182,14 +182,17 @@ $parent_route = $data['parent_route'] ?? '';
                         addRemoveLinks: true,
                         init: function() {
                             this.on("addedfile", function (file) {
+                                if (this.files.length > 1) {
+                                    this.removeFile(this.files[0]);
+                                }
+                            });
+
+                            this.on("thumbnail", function(file, dataUrl) {
                                 if (file.previewElement) {
                                     let img = file.previewElement.querySelector("img");
                                     if (img) {
                                         img.crossOrigin = "anonymous";
                                     }
-                                }
-                                if (this.files.length > 1) {
-                                    this.removeFile(this.files[0]);
                                 }
                             });
                             if ( imagePath ) {
@@ -198,6 +201,18 @@ $parent_route = $data['parent_route'] ?? '';
 
                                 myDropzone.files.push( mockFile );
                                 myDropzone.displayExistingFile( mockFile, imagePath );
+                                
+                                setTimeout(() => {
+                                    if (mockFile.previewElement) {
+                                        let img = mockFile.previewElement.querySelector('img');
+                                        if (img) {
+                                            let src = img.src;
+                                            img.crossOrigin = "anonymous";
+                                            img.src = '';
+                                            img.src = src;
+                                        }
+                                    }
+                                }, 100);
                             }
                         },
                         removedfile: function( file ) {
