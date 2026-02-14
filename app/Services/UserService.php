@@ -1360,8 +1360,8 @@ class UserService
             } ],
             'password' => [ 'required', 'confirmed', Password::min( 8 )->mixedCase()->numbers()->symbols() ],
             'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
-            'age_group' => [ 'required' ],
-            'nationality' => [ 'required' ],
+            'age_group' => [ 'nullable' ],
+            'nationality' => [ 'nullable' ],
             'register_token' => [ 'nullable' ],
             'device_type' => [ 'required_with:register_token', 'in:1,2' ],
         ] );
@@ -1688,8 +1688,8 @@ class UserService
             } ],
             'date_of_birth' => ['nullable', 'date'],
             'to_remove' => ['nullable', 'in:1,2'],
-            'nationality' => ['required'],
-            'age_group' => ['required'],
+            'nationality' => ['nullable'],
+            'age_group' => ['nullable'],
             'profile_picture' => [ 'nullable', 'file', 'max:30720', 'mimes:jpg,jpeg,png,heic' ],
             'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
         ] );
@@ -1887,8 +1887,8 @@ class UserService
                 } ],
                 'password' => [ 'required', 'confirmed', Password::min( 8 )->mixedCase()->numbers()->symbols() ],
                 'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
-                'age_group' => [ 'required' ],
-                'nationality' => [ 'required' ],
+                'age_group' => [ 'nullable' ],
+                'nationality' => [ 'nullable' ],
             ] );
     
             $attributeName = [
