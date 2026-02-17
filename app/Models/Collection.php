@@ -51,7 +51,7 @@ class Collection extends Model
             ->orderBy( 'collection_playlists.priority' );
 
         
-        if( !auth()->check() || auth()->user()->membership == 0 ) {
+        if( !auth()->check() || auth()->user()->membership == 0 && !auth('admin')->check() ) {
             $playlists->where( 'playlists.membership_level', 0 );
         }
 
