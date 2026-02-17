@@ -2090,7 +2090,7 @@ class UserService
             $data = [
                 'type' => 3,
                 'email' => $createContactUs->email,
-                'name' => $createContactUs->fullname,
+                'name' => $createContactUs->name,
                 'phone_number' => $createContactUs->phone_number,
                 'message' => $createContactUs->message,
             ];
