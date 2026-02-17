@@ -17,11 +17,16 @@ class OptionalAuth
     public function handle(Request $request, Closure $next)
     {
         try {
-        $user = auth('user')->user();
-        if ($user) {
-            auth('user')->setUser($user);
-        }
+            $token = $request->bearerToken();
+            
+            if ($token) {
+                $user = User::where('api_token', $token)->first();
+                if ($user) {
+                    auth('user')->setUser($user);
+                }
+            }
         } catch (\Exception $e) {
+
         }
 
         return $next($request);
