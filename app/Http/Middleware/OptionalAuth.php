@@ -19,19 +19,11 @@ class OptionalAuth extends Middleware
      * @param  string[]  ...$guards
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$guards)
-    {
-
-        $user = null;
-
-        foreach ($guards as $guard) {
-            if ($guardUser = Auth::guard($guard)->user()) {
-                $user = $guardUser;
-                break;
-            }
+    public function handle($request, Closure $next, ...$guards) {
+        $user = auth('user')->user();
+        if ($user) {
+            return parent::handle($request, $next, ...$guards);
         }
-
-        return parent::handle($request, $next, ...$guards);
     }
 
     /**
