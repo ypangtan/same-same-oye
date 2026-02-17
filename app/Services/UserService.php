@@ -2080,31 +2080,44 @@ class UserService
 
         try {
 
-            $mailContent = MailContent::create( [
-                'fullname' => $request->fullname,
+            $createContactUs = ContactUs::create( [
+                'name' => $request->fullname,
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
-                'remarks' =>$request->message,
+                'message' => $request->message,
             ] );
-            
-            DB::commit();
 
-            // Mail::to( config( 'services.mail.receiver' ) )->send(new EnquiryEmail( $mailContent ));
-            
-            return response()->json( [
-                'data' => [
-                    'message_key' => 'Enquiry Received!',
-                    'message_key' => 'enquiry_received',
-                ]
-            ] );
+            $data = [
+                'type' => 3,
+                'email' => $createContactUs->email,
+                'name' => $createContactUs->fullname,
+                'phone_number' => $createContactUs->phone_number,
+                'message' => $createContactUs->message,
+            ];
+            $service = new MailService( $data );
+            $result = $service->send();
+            if( !$result || !isset( $result['status'] ) || $result['status'] != 200 ) {
+                return response()->json([
+                    'message' => __('user.send_mail_fail'),
+                    'message_key' => 'send_mail_failed',
+                    'data' => null,
+                ], 500 );
+            }
+
+            DB::commit();
 
         } catch ( \Throwable $th ) {
 
+            DB::rollback();
+
             return response()->json( [
                 'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-                'message_key' => 'create_enquiry_failed',
             ], 500 );
         }
+
+        return response()->json( [
+            'message' => 'Enquiry Received!',
+        ] );
     }
 
     public static function deleteVerification($request) {
