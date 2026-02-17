@@ -386,9 +386,7 @@ class PlaylistService
 
         $playlists = Playlist::with([
             'item',
-            'items' => function ( $q ) {
-                $q->limit( 10 );
-            },
+            'items',
         ])->select('playlists.*')
             ->when(!empty($request->collection_id), function ($q) use ($request) {
                 $q->join('collection_playlists as pc', function ($join) use ($request) {
@@ -458,9 +456,7 @@ class PlaylistService
 
         $playlist = Playlist::with( [
             'item',
-            'items' => function ( $q ) {
-                $q->limit( 10 );
-            },
+            'items',
         ] )->find( Helper::decode( $request->id ) );
 
         $playlist->append( [
