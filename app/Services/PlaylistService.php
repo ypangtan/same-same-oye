@@ -389,11 +389,10 @@ class PlaylistService
             'items',
         ])->select('playlists.*')
             ->when(!empty($request->collection_id), function ($q) use ($request) {
-                $q->join('collection_playlists as pc', function ($join) use ($request) {
-                    $join->on('pc.playlist_id', '=', 'playlists.id')
-                        ->where('pc.collection_id', $request->collection_id)
-                        ->where('pc.status', 10);
-                });
+                $q->whereHas( 'collection_platlists', function ( $q ) use ( $request ) {
+                    $q->where( 'collection_id', $request->collection_id )
+                        ->where( 'status', 10 );
+                } );
             })
             ->when(!empty($request->type_id), function ($q) use ($request) {
                 $q->where('playlists.type_id', $request->type_id);
@@ -410,10 +409,10 @@ class PlaylistService
             $playlists->where( 'playlists.membership_level', 0 );
         }
 
-        if (empty($request->collection_id)) {
+        if ( empty( $request->collection_id ) ) {
             $playlists->orderBy('playlists.created_at', 'desc');
         } else {
-            $playlists->orderBy('pc.priority', 'asc'); // 或 desc
+            // $playlists->orderBy('pc.priority', 'asc'); // 或 desc
         }
 
         $playlists = $playlists->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
