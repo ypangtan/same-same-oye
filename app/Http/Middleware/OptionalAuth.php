@@ -2,28 +2,53 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Guest;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Auth;
 use Closure;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
-class OptionalAuth
+class OptionalAuth extends Middleware
 {
+    
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param  \Closure  $next
+     * @param  string[]  ...$guards
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next, ...$guards)
     {
-        try {
-            $user = auth('user')->user();
-            if ($user) {
-                auth('user')->setUser($user);
+
+        $user = null;
+
+        foreach ($guards as $guard) {
+            if ($guardUser = Auth::guard($guard)->user()) {
+                $user = $guardUser;
+                break;
             }
-        } catch (\Exception $e) {
         }
 
-        return $next($request);
+        return parent::handle($request, $next, ...$guards);
+    }
+
+    /**
+     * Get the path the user should be redirected to when they are not authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string|null
+     */
+    protected function redirectTo( $request )
+    {
+        if ( !$request->expectsJson() ) {
+
+            if ( request()->is( 'backoffice/*' ) ) {
+                return route( 'admin.login' );
+            }
+            
+            return route( 'web.login' );
+        }
     }
 }
