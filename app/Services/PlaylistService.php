@@ -406,7 +406,7 @@ class PlaylistService
             ->where('playlists.status', 10);
 
         return response()->json( [
-            'ab' => auth()->user()
+            'ab' => auth()->user(),
             'check' => auth()->check()
         ] );
 
