@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
@@ -15,9 +18,9 @@ use Helper;
 
 use Carbon\Carbon;
 
-class User extends Model
+class User extends Model implements AuthenticatableContract
 {
-    use HasFactory, LogsActivity, HasApiTokens;
+    use HasFactory, LogsActivity, HasApiTokens, Authenticatable;
 
     protected $hidden = ['password'];
 
