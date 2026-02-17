@@ -405,6 +405,11 @@ class PlaylistService
             })
             ->where('playlists.status', 10);
 
+        return response()->json( [
+            'ab' => auth()->user()
+            'check' => auth()->check()
+        ] );
+
         if( !auth()->check() || auth()->user()->membership == 0 ) {
             // for membership level filter
             $playlists->where( 'playlists.membership_level', 0 );
