@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class OptionalAuth
 {
@@ -19,11 +20,15 @@ class OptionalAuth
     {
         try {
             $token = $request->bearerToken();
-            
+
             if ($token) {
-                $user = User::where('api_token', $token)->first();
-                if ($user) {
-                    auth('user')->setUser($user);
+                $accessToken = PersonalAccessToken::findToken($token);
+
+                if ($accessToken) {
+                    $user = $accessToken->tokenable;
+                    if ($user) {
+                        auth()->setUser($user);
+                    }
                 }
             }
         } catch (\Exception $e) {
