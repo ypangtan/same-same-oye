@@ -85,23 +85,6 @@ Route::prefix( 'types' )->group( function() {
 Route::prefix( 'pop_announcements' )->group( function() {
     Route::post( '/', [ AnnouncementController::class, 'getAllPopAnnouncements' ] );
 } );
-
-Route::prefix( 'collections' )->group( function() {
-    Route::post( '/get-all-collections', [ CollectionController::class, 'getCollections' ] );
-    Route::post( '/get-one-collection', [ CollectionController::class, 'getCollection' ] );
-} );
-
-Route::prefix( 'playlists' )->group( function() {
-    Route::post( '/get-all-playlists', [ PlaylistController::class, 'getPlaylists' ] );
-    Route::post( '/get-one-playlist', [ PlaylistController::class, 'getPlaylist' ] );
-} );
-
-Route::prefix( 'items' )->group( function() {
-    Route::post( '/get-all-items', [ ItemController::class, 'getItems' ] );
-    Route::post( '/get-one-item', [ ItemController::class, 'getItem' ] );
-    Route::post( '/search', [ SearchController::class, 'search' ] );
-} );
-
 Route::prefix( 'banners' )->group( function() {
     Route::post( '/get-all-banners', [ BannerController::class, 'getBanners' ] );
     Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
@@ -109,6 +92,24 @@ Route::prefix( 'banners' )->group( function() {
 
 Route::prefix( 'plans' )->group( function() {
     Route::post( '/get-plans', [ InAppPurchaseController::class, 'getPlans' ] );
+} );
+
+Route::middleware( 'auth.optional' )->group( function() {
+    Route::prefix( 'collections' )->group( function() {
+        Route::post( '/get-all-collections', [ CollectionController::class, 'getCollections' ] );
+        Route::post( '/get-one-collection', [ CollectionController::class, 'getCollection' ] );
+    } );
+
+    Route::prefix( 'playlists' )->group( function() {
+        Route::post( '/get-all-playlists', [ PlaylistController::class, 'getPlaylists' ] );
+        Route::post( '/get-one-playlist', [ PlaylistController::class, 'getPlaylist' ] );
+    } );
+
+    Route::prefix( 'items' )->group( function() {
+        Route::post( '/get-all-items', [ ItemController::class, 'getItems' ] );
+        Route::post( '/get-one-item', [ ItemController::class, 'getItem' ] );
+        Route::post( '/search', [ SearchController::class, 'search' ] );
+    } );
 } );
 
 /* End Public route */
