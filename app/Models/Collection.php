@@ -45,10 +45,17 @@ class Collection extends Model
     }
 
     public function playlists() {
-        return $this->belongsToMany( Playlist::class, 'collection_playlists', 'collection_id', 'playlist_id' )
+        $playlists = $this->belongsToMany( Playlist::class, 'collection_playlists', 'collection_id', 'playlist_id' )
             ->where( 'playlists.status', 10 )
             ->withPivot( 'priority' )
             ->orderBy( 'collection_playlists.priority' );
+
+        
+        if( !auth()->check() || auth()->user()->membership == 0 ) {
+            $playlists->where( 'playlists.membership_level', 0 );
+        }
+
+        return $playlists;
     }
 
     public function administrator() {

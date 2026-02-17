@@ -407,7 +407,7 @@ class PlaylistService
 
         if( !auth()->check() || auth()->user()->membership == 0 ) {
             // for membership level filter
-            // $playlists->where( 'playlists.membership_level', 0 );
+            $playlists->where( 'playlists.membership_level', 0 );
         }
 
         if ( empty( $request->collection_id ) ) {
