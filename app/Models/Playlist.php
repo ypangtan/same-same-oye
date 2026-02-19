@@ -63,7 +63,7 @@ class Playlist extends Model
 
             
         if( !auth()->check() || auth()->user()->membership == 0 && !auth('admin')->check() ) {
-            $items->where( 'playlists.membership_level', 0 );
+            $items->where( 'items.membership_level', 0 );
         }
 
         return $items;
