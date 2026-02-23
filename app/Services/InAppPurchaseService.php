@@ -80,6 +80,9 @@ class InAppPurchaseService {
             
             $createlog->response = json_encode( [
                 'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'class' => get_class($e),
             ] );
             $createlog->status = 20;
             $createlog->save();
