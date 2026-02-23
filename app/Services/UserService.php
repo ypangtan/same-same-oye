@@ -2368,9 +2368,8 @@ class UserService
 
         $messageContent = array();
 
-        $messageContent['key'] = $key;
         $messageContent['id'] = $user;
-        $messageContent['message'] = $message;
+        $messageContent['message'] = __( $message );
 
         \Helper::sendNotification( $user, $messageContent );
         
