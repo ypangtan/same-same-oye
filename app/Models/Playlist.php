@@ -59,7 +59,7 @@ class Playlist extends Model
         $items = $this->belongsToMany( Item::class, 'playlist_items', 'playlist_id', 'item_id' )
             ->where( 'items.status', 10 )
             ->withPivot( 'playlist_items.priority' )
-            ->orderBy( 'playlist_items.priority' );
+            ->orderBy( 'playlist_items.priority', 'asc' );
 
             
         if( !auth()->check() || auth()->user()->membership == 0 && !auth('admin')->check() ) {
