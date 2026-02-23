@@ -59,7 +59,6 @@ class InAppPurchaseService {
                     break;
                 case 2:
                     $result = PaymentService::verifyAndroidPurchase( auth()->user()->id, $request->all() );
-                    return $result;
                     break;
                 case 3:
                     $result = PaymentService::verifyHuaweiPurchase( auth()->user()->id, $request->all() );
