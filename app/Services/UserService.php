@@ -2361,7 +2361,7 @@ class UserService
             'user_id' => $user,
         ] );
 
-        self::sendNotification( $createUserNotificationUser->user, $key, $content );
+        self::sendNotification( $user, $key, $content );
     }
 
     private static function sendNotification( $user, $key, $message ) {
@@ -2372,7 +2372,19 @@ class UserService
         $messageContent['id'] = $user->id;
         $messageContent['message'] = $message;
 
-        \Helper::sendNotification( $user->user_id, $messageContent );
+        \Helper::sendNotification( $user->id, $messageContent );
+        
+    }
+
+    public static function testSendNotification() {
+
+        $messageContent = array();
+
+        $messageContent['key'] = null;
+        $messageContent['id'] = 15;
+        $messageContent['message'] = 'test message';
+
+        \Helper::sendNotification( 15, $messageContent );
         
     }
 
