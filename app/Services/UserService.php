@@ -2381,10 +2381,10 @@ class UserService
         $messageContent = array();
 
         $messageContent['key'] = null;
-        $messageContent['id'] = 15;
+        $messageContent['id'] = 1;
         $messageContent['message'] = 'test message';
 
-        \Helper::sendNotification( 15, $messageContent );
+        \Helper::sendNotification( 1, $messageContent );
         
     }
 
