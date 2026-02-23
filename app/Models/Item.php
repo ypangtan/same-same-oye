@@ -57,7 +57,7 @@ class Item extends Model
     public function playlists() {
         return $this->belongsToMany( Playlist::class, 'playlist_items', 'item_id', 'playlist_id' )
             ->where( 'playlists.status', 10 )
-            ->withPivot( 'playlist_items.priority' );
+            ->withPivot( 'playlist_items.priority', 'asc' );
     }
 
     public function playlist() {

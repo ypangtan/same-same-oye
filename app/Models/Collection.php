@@ -48,7 +48,7 @@ class Collection extends Model
         $playlists = $this->belongsToMany( Playlist::class, 'collection_playlists', 'collection_id', 'playlist_id' )
             ->where( 'playlists.status', 10 )
             ->withPivot( 'priority' )
-            ->orderBy( 'collection_playlists.priority' );
+            ->orderBy( 'collection_playlists.priority', 'asc' );
 
         
         if( !auth()->check() || auth()->user()->membership == 0 && !auth('admin')->check() ) {

@@ -44,7 +44,7 @@ class CollectionService
             $dir = $request->input( 'order.0.dir' ) ?? 'DESC';
             switch ( $request->input( 'order.0.column' ) ) {
                 default:
-                    $collection->orderBy( 'priority', 'desc' );
+                    $collection->orderBy( 'priority', 'asc' );
                     break;
             }
         }
@@ -381,7 +381,7 @@ class CollectionService
             $collections->where( 'collections.membership_level', 0 );
         }
 
-        $collections->orderBy( 'priority', 'desc' );
+        $collections->orderBy( 'priority', 'asc' );
 
         $collections = $collections->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
