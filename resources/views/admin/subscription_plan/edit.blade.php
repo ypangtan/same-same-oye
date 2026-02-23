@@ -87,6 +87,14 @@ $subscription_plan_edit = 'subscription_plan_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+
+                <div class="mb-3 row">
+                    <label for="{{ $subscription_plan_edit }}_max_member" class="col-sm-5 col-form-label">{{ __( 'subscription_plan.max_member' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $subscription_plan_edit }}_max_member">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $subscription_plan_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -126,6 +134,7 @@ $subscription_plan_edit = 'subscription_plan_edit';
             formData.append( 'ios_product_id', $( fe + '_ios_product_id' ).val() );
             formData.append( 'android_product_id', $( fe + '_android_product_id' ).val() );
             formData.append( 'huawei_product_id', $( fe + '_huawei_product_id' ).val() );
+            formData.append( 'max_member', $( fe + '_max_member' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -183,6 +192,7 @@ $subscription_plan_edit = 'subscription_plan_edit';
                     $( fe + '_ios_product_id' ).val( response.ios_product_id );
                     $( fe + '_android_product_id' ).val( response.android_product_id );
                     $( fe + '_huawei_product_id' ).val( response.huawei_product_id );
+                    $( fe + '_max_member' ).val( response.max_member );
 
                     $( 'body' ).loading( 'stop' );
                 },

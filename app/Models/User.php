@@ -109,6 +109,11 @@ class User extends Model implements AuthenticatableContract
         }
     }
 
+    public function checkPlanValidity() {
+        $have_plan = $this->subscriptions()->isActive()->exists();
+        $this->update(['membership' => $have_plan ? 1 : 0]);
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

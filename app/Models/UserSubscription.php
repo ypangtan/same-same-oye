@@ -40,6 +40,10 @@ class UserSubscription extends Model
         ];
     }
 
+    public function member() {
+        return $this->hasMany( SubscriptionGroupMember::class, 'user_subscription_id' );
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -62,6 +66,30 @@ class UserSubscription extends Model
         return $this->status === 10 
             && $this->end_date 
             && $this->end_date->isFuture();
+    }
+    
+    public function scopeIsGroup($query) {
+        return $query->whereHas( 'plan', function ( $q ) {
+            $q->where( 'max_member', '>', 1 );
+        } );
+    }
+    
+    public function scopeNotHitMaxMember($query) {
+        return $query->whereHas('plan', function ($q) {
+            $q->where('max_member', '>', 1);
+        })->whereRaw('
+            (SELECT COUNT(*) FROM subscription_group_members 
+            WHERE subscription_group_members.user_subscription_id = user_subscriptions.id) 
+            < 
+            (SELECT max_member FROM subscription_plans 
+            WHERE subscription_plans.id = user_subscriptions.subscription_plan_id)
+        ');
+    }
+
+    public function scopeUserNotInAnyGroup($query, $userId) {
+        return $query->whereDoesntHave('member', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        });
     }
 
     public function isExpired() {
@@ -106,10 +134,14 @@ class UserSubscription extends Model
         return $this;
     }
 
-    public function checkPlanValidity() {
-        $user = $this->user()->with('subscriptions')->first();
-        $have_plan = $user->subscriptions()->isActive()->exists();
-        $user->update(['membership' => $have_plan ? 1 : 0]);
+    public function getMemberCountAttribute() {
+        return $this->member()->count();
+    }
+
+    public function getMaxMemberCountAttribute() {
+        $plan = $this->plan()->first();
+
+        return $plan ? $plan->max_member : 0;
     }
 
     public function getEncryptedIdAttribute() {

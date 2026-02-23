@@ -10,12 +10,14 @@ use App\Models\{
     Item,
     Playlist,
     Collection,
+    SubscriptionGroupMember,
     UserSubscription
 };
 
 use App\Observers\{
     ItemObserver,
     PlaylistObserver,
+    SubscriptionGroupMemberObserver,
     UserSubscriptionObserver,
 };
 
@@ -59,6 +61,7 @@ class AppServiceProvider extends ServiceProvider
         Item::observe(ItemObserver::class);
         Playlist::observe(PlaylistObserver::class);
         UserSubscription::observe(UserSubscriptionObserver::class);
+        SubscriptionGroupMember::observe(SubscriptionGroupMemberObserver::class);
 
     }
 }

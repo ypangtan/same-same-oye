@@ -28,6 +28,7 @@ class SubscriptionPlan extends Model
         'ios_product_id',
         'android_product_id',
         'huawei_product_id',
+        'max_member',
         'status',
     ];
     
@@ -77,6 +78,7 @@ class SubscriptionPlan extends Model
         'ios_product_id',
         'android_product_id',
         'huawei_product_id',
+        'max_member',
         'status',
     ];
 

@@ -149,6 +149,7 @@ class SubscriptionPlanService
             'ios_product_id' => [ 'required' ],
             'android_product_id' => [ 'required' ],
             'huawei_product_id' => [ 'nullable' ],
+            'max_member' => [ 'required', 'min:1' ],
         ] );
 
         $attributeName = [
@@ -160,6 +161,7 @@ class SubscriptionPlanService
             'ios_product_id' => __( 'subscription_plan.ios_product_id' ),
             'android_product_id' => __( 'subscription_plan.android_product_id' ),
             'huawei_product_id' => __( 'subscription_plan.huawei_product_id' ),
+            'max_member' => __( 'subscription_plan.max_member' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -182,6 +184,7 @@ class SubscriptionPlanService
                 'ios_product_id' => $request->ios_product_id,
                 'android_product_id' => $request->android_product_id,
                 'huawei_product_id' => $request->huawei_product_id,
+                'max_member' => $request->max_member,
             ] );
             DB::commit();
 
@@ -215,6 +218,7 @@ class SubscriptionPlanService
             'ios_product_id' => [ 'required' ],
             'android_product_id' => [ 'required' ],
             'huawei_product_id' => [ 'nullable' ],
+            'max_member' => [ 'required', 'min:1' ],
         ] );
 
         $attributeName = [
@@ -226,6 +230,7 @@ class SubscriptionPlanService
             'ios_product_id' => __( 'subscription_plan.ios_product_id' ),
             'android_product_id' => __( 'subscription_plan.android_product_id' ),
             'huawei_product_id' => __( 'subscription_plan.huawei_product_id' ),
+            'max_member' => __( 'subscription_plan.max_member' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -248,6 +253,7 @@ class SubscriptionPlanService
             $updateSubscriptionPlan->ios_product_id = $request->ios_product_id;
             $updateSubscriptionPlan->android_product_id = $request->android_product_id;
             $updateSubscriptionPlan->huawei_product_id = $request->huawei_product_id;
+            $updateSubscriptionPlan->max_member = $request->max_member;
             $updateSubscriptionPlan->save();
 
             DB::commit();

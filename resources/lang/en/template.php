@@ -82,6 +82,7 @@ return [
     'subscription_plans' => 'Subscription Plans',
     'app_versions' => 'App Versions',
     'contact_us_email' => 'Contact Us Email',
+    'subscription_group_members' => 'Subscription Group Members',
 
     'loading' => 'Loading...',
     'add' => 'Add',
