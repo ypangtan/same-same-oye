@@ -423,7 +423,7 @@ class Helper {
             foreach( $devices as $device ){
                 $header = [
                     'Content-Type: application/json; charset=utf-8',
-                    'Authorization: KEY ' . config( 'services.os.api_key' ),
+                    'Authorization: Key ' . config( 'services.os.api_key' ),
                 ];
     
                 $json = [
