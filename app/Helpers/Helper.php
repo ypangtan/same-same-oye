@@ -469,7 +469,12 @@ class Helper {
                     ]
                 ];
     
+                \Log::info( '[OneSignal] Sending notification - Payload: ' . json_encode($json) );
+                \Log::info( '[OneSignal] Headers: ' . json_encode($header) );
+
                 $sendNotification = Helper::curlPost( 'https://onesignal.com/api/v1/notifications', json_encode( $json ), $header );
+
+                \Log::info( 'oneSignal log : ' . $sendNotification );
             }
         }    
 
