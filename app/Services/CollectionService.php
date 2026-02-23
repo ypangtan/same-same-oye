@@ -372,6 +372,7 @@ class CollectionService
         $collections = Collection::with( [
             'playlists',
         ] )->select( 'collections.*' )
+            ->whereHas( 'playlists' )
             ->when( !empty( $request->type_id ), function ( $q ) use ( $request ) {
                 $q->where( 'type_id', $request->type_id );
             } )
