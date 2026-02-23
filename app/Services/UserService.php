@@ -2376,18 +2376,6 @@ class UserService
         
     }
 
-    public static function testSendNotification() {
-
-        $messageContent = array();
-
-        $messageContent['key'] = null;
-        $messageContent['id'] = 1;
-        $messageContent['message'] = 'test message';
-
-        \Helper::sendNotification( 1, $messageContent );
-        
-    }
-
     private static function sendSMS( $customMessage = false, $mobile, $otp, $message = '' ) {
 
         $url = config( 'services.sms.sms_url' );

@@ -13,7 +13,6 @@ use App\Services\{
 class DashboardController extends Controller
 {
     public function index( Request $request ) {
-        UserService::testSendNotification();
         
         $this->data['header']['title'] = __( 'template.dashboard' );
         $this->data['content'] = 'admin.dashboard.index';
