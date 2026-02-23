@@ -441,16 +441,14 @@ class Helper {
                     ],
 
                     'headings' => [
-                        'en' => ( is_array( $message ) && isset( $message['message'] ) )
-                            ? ( ( is_array( $message['message'] ) && isset( $message['message'] ) )
-                            ? $message['message']['en']
-                            : $message['message'] )
+                        'en' => ( is_array( $message ) && isset( $message['title'] ) )
+                            ? ( ( is_array( $message['title'] ) && isset( $message['title'] ) ) ? $message['title']['en'] : $message['title'] )
                             : 'SSO',
 
-                        'zh' => ( is_array( $message ) && isset( $message['message'] ) )
-                            ? ( ( is_array( $message['message'] ) && isset( $message['message'] ) )
-                            ? $message['message']['zh']
-                            : $message['message'] )
+                        'zh' => ( is_array( $message ) && isset( $message['title'] ) )
+                            ? ( ( is_array( $message['title'] ) && isset( $message['title'] ) )
+                            ? $message['title']['zh']
+                            : $message['title'] )
                             : 'SSO',
                     ],
                     'include_player_ids' => [

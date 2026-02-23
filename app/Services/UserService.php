@@ -2361,16 +2361,17 @@ class UserService
             'user_id' => $user,
         ] );
 
-        self::sendNotification( $user, $key, $content );
+        self::sendNotification( $user, $title, $content );
     }
 
-    private static function sendNotification( $user, $key, $message ) {
+    private static function sendNotification( $user, $title, $message ) {
 
         $messageContent = array();
 
-        $messageContent['key'] = $key;
+        $messageContent['key'] = null;
         $messageContent['id'] = $user;
         $messageContent['message'] = __( $message );
+        $messageContent['title'] = __( $title );
 
         \Helper::sendNotification( $user, $messageContent );
         
