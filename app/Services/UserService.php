@@ -2368,6 +2368,7 @@ class UserService
 
         $messageContent = array();
 
+        $messageContent['key'] = $key;
         $messageContent['id'] = $user;
         $messageContent['message'] = __( $message );
 
