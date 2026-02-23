@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageService;
 use DateTimeInterface;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -95,21 +96,17 @@ class User extends Model implements AuthenticatableContract
     }
 
     public function getProfilePicturePathNewAttribute() {
-        return $this->attributes['profile_picture'] ? asset( 'storage/' . $this->attributes['profile_picture'] ) : asset( 'admin/images/profile_image.png' ) . Helper::assetVersion();
-    }
+        
+        if( $this->attributes['profile_picture'] ) {
+            $localPath = storage_path ('app/public/' . $this->attributes['profile_picture'] );
+            if ( file_exists( $localPath ) ) {
+                return asset( 'storage/' . $this->attributes['profile_picture'] );
+            }
 
-    public function groups() {
-        return $this->hasManyThrough( User::class, UserStructure::class, 'referral_id', 'id', 'id', 'user_id' );
-    }
-
-    public function uplines() {
-        return $this->hasManyThrough( User::class, UserStructure::class, 'user_id', 'id', 'id', 'referral_id' )
-            ->orderBy( 'level', 'ASC' );
-    }
-
-    public function rank()
-    {
-        return $this->belongsTo(Rank::class, 'rank_id');
+            return StorageService::get( $this->attributes['profile_picture'] );
+        } else {
+            return asset( 'admin/images/profile_image.png' );
+        }
     }
 
     public function getEncryptedIdAttribute() {

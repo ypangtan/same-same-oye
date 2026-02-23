@@ -1690,7 +1690,7 @@ class UserService
             'to_remove' => ['nullable', 'in:1,2'],
             'nationality' => ['nullable'],
             'age_group' => ['nullable'],
-            'profile_picture' => [ 'nullable', 'file', 'max:30720', 'mimes:jpg,jpeg,png,heic' ],
+            'profile_picture' => [ 'nullable', 'file' ],
             'invitation_code' => [ 'sometimes', 'nullable', 'exists:users,invitation_code' ],
         ] );
 
@@ -1764,25 +1764,21 @@ class UserService
         $updateUser->age_group = $request->age_group;
 
         if ( $request->to_remove == 1 && $updateUser->profile_picture ) {
-            Storage::disk( 'public' )->delete( $updateUser->profile_picture );
+            StorageService::delete( $updateUser->profile_picture );
             $updateUser->profile_picture = null;
         }
 
         if( $request->file( 'profile_picture' ) ) {
-            
             if( $updateUser->profile_picture  ) {
-                Storage::disk( 'public' )->delete( $updateUser->profile_picture );
+                StorageService::delete( $updateUser->profile_picture );
             }
 
-            $updateUser->profile_picture = $request->file( 'profile_picture' )->store( 'users/' . $updateUser->id, [ 'disk' => 'public' ] );
+            $path = StorageService::upload( 'users', $request->file( 'profile_picture' ) );
+            $updateUser->profile_picture = $path;
         }
 
         if( !empty( $request->invitation_code ) ) {
             $upline = User::where( 'invitation_code', $request->invitation_code )->first();
-            if( $updateUser->referral_id == null ) {
-                self::giveUplineVoucher( $upline->id );
-            }
-
             $updateUser->referral_id = $upline->id;
             $updateUser->referral_structure = $upline->referral_structure . '|' . $upline->id;
         }
