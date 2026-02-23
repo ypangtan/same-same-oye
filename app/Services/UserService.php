@@ -2369,10 +2369,10 @@ class UserService
         $messageContent = array();
 
         $messageContent['key'] = $key;
-        $messageContent['id'] = $user->id;
+        $messageContent['id'] = $user;
         $messageContent['message'] = $message;
 
-        \Helper::sendNotification( $user->id, $messageContent );
+        \Helper::sendNotification( $user, $messageContent );
         
     }
 
