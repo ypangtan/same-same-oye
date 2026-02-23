@@ -328,6 +328,7 @@ $parent_route = $data['parent_route'] ?? '';
                         processedResult.push( {
                             id: v.id,
                             text: v.title,
+                            file_type: v.file_type,
                         } );
                     } );
 
