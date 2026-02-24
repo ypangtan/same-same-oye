@@ -168,7 +168,7 @@ $age_groups = $data['age_groups'] ?? [];
             formData.append( 'date_of_birth', $( dc + '_date_of_birth' ).val() );
             formData.append( 'nationality', $( dc + '_nationality' ).val() ?? '' );
             formData.append( 'age_group', $( dc + '_age_group' ).val() ?? '' );
-            formData.append( 'membership', $( dc + '_membership' ).is( ':checked' ) ? 1 : 0 );
+            formData.append( 'membership', $( dc + '_membership' ).val() ?? '0' );
             // formData.append( 'account_type', $( dc + '_account_type' ).val() );
             
             formData.append( '_token', '{{ csrf_token() }}' );

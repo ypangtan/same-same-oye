@@ -170,7 +170,7 @@ $age_groups = $data['age_groups'] ?? [];
             formData.append( 'date_of_birth', $( de + '_date_of_birth' ).val() );
             formData.append( 'nationality', $( de + '_nationality' ).val() ?? '' );
             formData.append( 'age_group', $( de + '_age_group' ).val() ?? '' );
-            formData.append( 'membership', $( de + '_membership' ).is( ':checked' ) ? 1 : 0 );
+            formData.append( 'membership', $( de + '_membership' ).val() ?? '0' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -221,7 +221,7 @@ $age_groups = $data['age_groups'] ?? [];
                 },
                 success: function( response ) {
                     $( de + '_email' ).val( response.email );
-                    $( de + '_membership').prop('checked', response.membership == 1);
+                    $( de + '_membership').val( response.membership );
 
                     $( de + '_first_name' ).val( response.first_name );
                     $( de + '_last_name' ).val( response.last_name );
