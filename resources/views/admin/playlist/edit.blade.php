@@ -44,7 +44,7 @@ $parent_route = $data['parent_route'] ?? '';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $playlist_editt }}_desc" class="col-sm-5 col-form-label">{{ __( 'playlist.desc' ) }}</label>
+                    <label for="{{ $playlist_edit }}_desc" class="col-sm-5 col-form-label">{{ __( 'playlist.desc' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control" id="{{ $playlist_edit }}_desc">
                         <div class="invalid-feedback"></div>
