@@ -87,7 +87,13 @@ class Item extends Model
 
         $minutes = floor( $this->attributes['duration'] / 60 );
         $seconds = $this->attributes['duration'] % 60;
-        return sprintf( '%d:%02d', $minutes, $seconds );
+        if( $minutes && $seconds ) {
+            return sprintf( '%d mins %02d sec', $minutes, $seconds );
+        } else if ( $minutes ) {
+            return sprintf( '%d mins', $minutes );
+        } else {
+            return sprintf( '%02d sec', $minutes, $seconds );
+        }
     }
 
     public function getFileUrlAttribute() {
