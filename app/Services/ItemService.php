@@ -212,6 +212,7 @@ class ItemService
                 'file_name' => !empty( $request->file_name ) ? $request->file_name : null,
                 'file_type' => $request->upload_type == 1 ? ( !empty( $request->file_type ) ? $request->file_type : null ) : 2,
                 'url' => !empty( $request->url ) ? $request->url : null,
+                'duration' => $request->duration,
                 'upload_type' => $request->upload_type,
                 'url_type' => $request->url_type,
                 'status' => 10,
@@ -291,6 +292,7 @@ class ItemService
             $updateItem->file_name = !empty( $request->file_name ) ? $request->file_name : null;
             $updateItem->url = !empty( $request->url ) ? $request->url : null;
             $updateItem->upload_type = $request->upload_type;
+            $updateItem->duration = $request->duration;
             $updateItem->url_type = !empty( $request->url_type ) ? $request->url_type : 1;
             $updateItem->save();
 

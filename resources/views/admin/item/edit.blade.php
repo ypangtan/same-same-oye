@@ -122,6 +122,7 @@ window.cke_element = [ 'item_edit_desc'];
             fileID = '',
             song_file_type = '',
             song_file = '',
+            duration = '',
             file2ID = '';
 
         $( de + '_upload_type' ).change( function() {
@@ -156,6 +157,7 @@ window.cke_element = [ 'item_edit_desc'];
             formData.append( 'file', file2ID ?? '' );
             formData.append( 'file_name', song_file ?? '' );
             formData.append( 'file_type', song_file_type ?? '' );
+            formData.append( 'duration', duration ?? '' );
             formData.append( 'image', fileID ?? '' );
             formData.append( 'author', $( de + '_author' ).val() ?? '' );
             formData.append( 'upload_type', $( de + '_upload_type' ).val() ?? '' );
@@ -220,6 +222,7 @@ window.cke_element = [ 'item_edit_desc'];
                     editors['item_edit_desc'].setData( response.desc ?? '' );
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
 
+                    duration = response.duration ?? '';
                     fileID = response.image;
 
                     songPath = response.song_url;
@@ -319,6 +322,7 @@ window.cke_element = [ 'item_edit_desc'];
                         success: function(file, response) {
                             file2ID = response.file;
                             song_file_type = response.file_type ?? '';
+                            duration = response.duration ?? '';
                             song_file = response.file_name ?? '';
                             file._fileUrl = response.url;
 

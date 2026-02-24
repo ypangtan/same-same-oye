@@ -32,6 +32,7 @@ class Item extends Model
         'membership_level',
         'file_name',
         'file_type',
+        'duration',
         'upload_type',
         'url',
         'url_type',
@@ -75,6 +76,17 @@ class Item extends Model
         } else {
             return null;
         }
+    }
+
+    public function getDisplayDurationAttribute() {
+
+        if( !$this->attributes['duration'] ) {
+            return '-';
+        }
+
+        $minutes = floor( $this->attributes['duration'] / 60 );
+        $seconds = $this->attributes['duration'] % 60;
+        return sprintf( '%d:%02d', $minutes, $seconds );
     }
 
     public function getFileUrlAttribute() {
@@ -123,6 +135,7 @@ class Item extends Model
         'membership_level',
         'file_name',
         'file_type',
+        'duration',
         'upload_type',
         'url',
         'url_type',
