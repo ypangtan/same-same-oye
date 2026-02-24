@@ -441,6 +441,7 @@ class PlaylistService
                         'encrypted_id',
                         'image_url',
                         'file_url',
+                        'display_duration',
                     ] );
                     return $item;
                 });
@@ -480,6 +481,7 @@ class PlaylistService
                     'encrypted_id',
                     'image_url',
                     'file_url',
+                    'display_duration',
                 ] );
             }
         }

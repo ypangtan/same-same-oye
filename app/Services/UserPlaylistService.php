@@ -56,6 +56,7 @@ class UserPlaylistService
                         'encrypted_id',
                         'image_url',
                         'song_url',
+                        'display_duration',
                     ] );
                     
                     if( $item->pivot && $item->pivot->id ) {
@@ -88,6 +89,7 @@ class UserPlaylistService
                     'encrypted_id',
                     'image_url',
                     'song_url',
+                    'display_duration',
                 ] );
 
                 if( $item->pivot && $item->pivot->id ) {

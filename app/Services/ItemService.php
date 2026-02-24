@@ -398,6 +398,7 @@ class ItemService
                 'encrypted_id',
                 'image_url',
                 'file_url',
+                'display_duration',
             ] );
             return $item;
         } );
@@ -413,6 +414,7 @@ class ItemService
             'encrypted_id',
             'image_url',
             'file_url',
+            'display_duration',
         ] );
   
         return response()->json( $item );
