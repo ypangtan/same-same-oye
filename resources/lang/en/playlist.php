@@ -21,6 +21,7 @@ return [
     'items' => 'Songs',
     'membership' => 'Membership',
     'user_playlist_item' => 'User Playlist Item',
+    'desc' => 'Description',
 
     'playlist_type_mismatch' => 'The type of the song does not match the type of the playlist.',
 ];

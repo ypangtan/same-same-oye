@@ -178,6 +178,7 @@ class PlaylistService
             'type_id' => [ 'required', 'exists:types,id' ],
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
+            'desc' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'items' => [ 'required', function ( $attribute, $value, $fail ) {
@@ -193,6 +194,7 @@ class PlaylistService
             'type_id' => __( 'playlist.type' ),
             'en_name' => __( 'playlist.name' ),
             'zh_name' => __( 'playlist.name' ),
+            'desc' => __( 'playlist.desc' ),
             'image' => __( 'playlist.image' ),
             'membership_level' => __( 'playlist.membership_level' ),
             'items' => __( 'playlist.items' ),
@@ -213,6 +215,7 @@ class PlaylistService
                 'type_id' => $request->type_id,
                 'en_name' => $request->en_name,
                 'zh_name' => $request->zh_name,
+                'desc' => $request->desc,
                 'image' => $request->image,
                 'membership_level' => $request->membership_level,
                 'file_type' => $request->file_type,
@@ -260,6 +263,7 @@ class PlaylistService
             'type_id' => [ 'required', 'exists:types,id' ],
             'en_name' => [ 'required' ],
             'zh_name' => [ 'nullable' ],
+            'desc' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
             'items' => [ 'required', function ( $attribute, $value, $fail ) {
@@ -275,6 +279,7 @@ class PlaylistService
             'type_id' => __( 'playlist.type' ),
             'en_name' => __( 'playlist.name' ),
             'zh_name' => __( 'playlist.name' ),
+            'desc' => __( 'playlist.desc' ),
             'image' => __( 'playlist.image' ),
             'membership_level' => __( 'playlist.membership_level' ),
             'items' => __( 'playlist.items' ),
@@ -294,6 +299,7 @@ class PlaylistService
             $updatePlaylist->type_id = $request->type_id;
             $updatePlaylist->en_name = $request->en_name;
             $updatePlaylist->zh_name = $request->zh_name;
+            $updatePlaylist->desc = $request->desc;
             $updatePlaylist->image = $request->image;
             $updatePlaylist->membership_level = $request->membership_level;
             $updatePlaylist->file_type = $request->file_type;

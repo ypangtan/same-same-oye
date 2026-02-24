@@ -26,6 +26,7 @@ class Item extends Model
         'category_id',
         'title',
         'lyrics',
+        'desc',
         'file',
         'image',
         'author',

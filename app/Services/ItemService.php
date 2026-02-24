@@ -167,7 +167,7 @@ class ItemService
         $validator = Validator::make( $request->all(), [
             'type_id' => [ 'required', 'exists:types,id' ],
             'title' => [ 'required' ],
-            'lyrics' => [ 'nullable' ],
+            'desc' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'author' => [ 'nullable' ],
             'file' => [ $request->upload_type == 1 ? 'required' : 'nullable' ],
@@ -180,7 +180,7 @@ class ItemService
         $attributeName = [
             'type_id' => __( 'item.type' ),
             'title' => __( 'item.title' ),
-            'lyrics' => __( 'item.lyrics' ),
+            'desc' => __( 'item.desc' ),
             'file' => __( 'item.file' ),
             'image' => __( 'item.image' ),
             'author' => __( 'item.author' ),
@@ -203,7 +203,7 @@ class ItemService
                 'add_by' => auth()->user()->id,
                 'type_id' => $request->type_id,
                 'title' => $request->title,
-                'lyrics' => $request->lyrics,
+                'desc' => $request->desc,
                 'image' => $request->image,
                 'author' => $request->author,
                 'membership_level' => $request->membership_level,
@@ -244,7 +244,7 @@ class ItemService
             'type_id' => [ 'required', 'exists:types,id' ],
             // 'category_id' => [ 'required' ],
             'title' => [ 'required' ],
-            'lyrics' => [ 'nullable' ],
+            'desc' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'author' => [ 'nullable' ],
             'file' => [ $request->upload_type == 1 ? 'required' : 'nullable' ],
@@ -258,7 +258,7 @@ class ItemService
             'type_id' => __( 'item.type' ),
             'category_id' => __( 'item.category' ),
             'title' => __( 'item.title' ),
-            'lyrics' => __( 'item.lyrics' ),
+            'desc' => __( 'item.desc' ),
             'file' => __( 'item.file' ),
             'image' => __( 'item.image' ),
             'author' => __( 'item.author' ),
@@ -283,7 +283,7 @@ class ItemService
             $updateItem->file_type = $request->file_type;
             $updateItem->type_id = $request->type_id;
             $updateItem->title = $request->title;
-            $updateItem->lyrics = $request->lyrics;
+            $updateItem->desc = $request->desc;
             $updateItem->image = $request->image;
             $updateItem->author = $request->author;
             $updateItem->membership_level = $request->membership_level;

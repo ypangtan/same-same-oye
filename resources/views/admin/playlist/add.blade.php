@@ -44,6 +44,13 @@ $parent_route = $data['parent_route'] ?? null;
                     </div>
                 </div>
                 <div class="mb-3 row">
+                    <label for="{{ $playlist_create }}_desc" class="col-sm-5 col-form-label">{{ __( 'playlist.desc' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $playlist_create }}_desc">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
                     <label for="{{ $playlist_create }}_category" class="col-sm-5 col-form-label">{{ __( 'playlist.category' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-control select2" id="{{ $playlist_create }}_category" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.category' ) ] ) }}" multiple></select>
@@ -87,6 +94,17 @@ $parent_route = $data['parent_route'] ?? null;
     </div>
 </div>
 
+<link rel="stylesheet" href="{{ asset( 'admin/css/ckeditor/styles.css' ) }}">
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor.js' ) }}"></script>
+<script src="{{ asset( 'admin/js/ckeditor/upload-adapter.js' ) }}"></script>
+
+<script>
+window.ckeupload_path = '{{ route( 'admin.playlist.ckeUpload' ) }}';
+window.csrf_token = '{{ csrf_token() }}';
+window.cke_element = [ 'playlist_create_desc'];
+</script>
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
+
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -112,6 +130,7 @@ $parent_route = $data['parent_route'] ?? null;
             formData.append( 'category_id', $( dc + '_category' ).val() ?? '' );
             formData.append( 'en_name', $( dc + '_en_name' ).val() ?? '' );
             formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
+            formData.append( 'desc', editors['playlist_create_desc'].getData() );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID ?? '' );
             formData.append( 'file_type', file_type ?? '' );
