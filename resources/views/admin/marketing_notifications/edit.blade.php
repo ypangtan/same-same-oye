@@ -108,7 +108,7 @@ $announcement_edit = 'announcement_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                <div class="mb-3 row d-none">
+                <div class="mb-3 row">
                     <label for="{{ $announcement_edit }}_users" class="col-sm-4 col-form-label">{{ __( 'template.users' ) }}</label>
                     <div class="col-sm-8">
                         <input class="form-check-input" type="checkbox" id="{{ $announcement_edit }}_all_users">
