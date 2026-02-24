@@ -88,8 +88,8 @@ $age_groups = $data['age_groups'] ?? [];
                     <label for="{{ $user_create }}_membership" class="col-sm-5 col-form-label">{{ __( 'user.membership' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select" id="{{ $user_create }}_membership" >
-                            <option value="0">{{ __( 'user.member' ) }}</option>
-                            <option value="1">{{ __( 'user.premium' ) }}</option>
+                            <option value="0">{{ __( 'user.free' ) }}</option>
+                            <option value="1">{{ __( 'user.paid' ) }}</option>
                             <option value="2">{{ __( 'user.trial' ) }}</option>
                         </select>
                         <div class="invalid-feedback"></div>
