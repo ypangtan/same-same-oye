@@ -16,12 +16,6 @@ $age_groups = $data['age_groups'] ?? [];
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
-                {{-- <div class="mb-3 row">
-                    <label for="{{ $user_create }}_referral" class="col-sm-5 col-form-label">{{ __( 'user.referral' ) }}</label>
-                    <div class="col-sm-7">
-                        <select class="form-control select2" id="{{ $user_create }}_referral" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.users' ) ] ) }}"></select>
-                    </div>
-                </div> --}}
                 <div class="mb-3 row">
                     <label for="{{ $user_create }}_date_of_birth" class="col-sm-5 col-form-label">{{ __( 'user.date_of_birth' ) }}</label>
                     <div class="col-sm-7">
@@ -82,8 +76,7 @@ $age_groups = $data['age_groups'] ?? [];
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>                    
-                </div>                
-                
+                </div>
                 <div class="mb-3 row">
                     <label for="{{ $user_create }}_password" class="col-sm-5 col-form-label">{{ __( 'user.password' ) }}</label>
                     <div class="col-sm-7">
@@ -94,9 +87,12 @@ $age_groups = $data['age_groups'] ?? [];
                 <div class="mb-3 row">
                     <label for="{{ $user_create }}_membership" class="col-sm-5 col-form-label">{{ __( 'user.membership' ) }}</label>
                     <div class="col-sm-7">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $user_create }}_membership">
-                        </div>
+                        <select class="form-select" id="{{ $user_create }}_membership" >
+                            <option value="0">{{ __( 'user.member' ) }}</option>
+                            <option value="1">{{ __( 'user.premium' ) }}</option>
+                            <option value="2">{{ __( 'user.trial' ) }}</option>
+                        </select>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3 row">

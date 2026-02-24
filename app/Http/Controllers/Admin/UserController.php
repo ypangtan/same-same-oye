@@ -40,8 +40,9 @@ class UserController extends Controller
         ];
 
         $this->data['data']['membership'] = [
-            '0' => __( 'user.member' ),
-            '1' => __( 'user.premium' ),
+            '0' => __( 'user.free' ),
+            '1' => __( 'user.paid' ),
+            '2' => __( 'user.trial' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
@@ -88,8 +89,9 @@ class UserController extends Controller
         ];
 
         $this->data['data']['membership'] = [
-            '0' => __( 'user.member' ),
-            '1' => __( 'user.premium' ),
+            '0' => __( 'user.free' ),
+            '1' => __( 'user.paid' ),
+            '2' => __( 'user.trial' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
@@ -118,8 +120,9 @@ class UserController extends Controller
         ];
 
         $this->data['data']['membership'] = [
-            '0' => __( 'user.member' ),
-            '1' => __( 'user.premium' ),
+            '0' => __( 'user.free' ),
+            '1' => __( 'user.paid' ),
+            '2' => __( 'user.trial' ),
         ];
 
         $this->data['data']['age_groups'] = UserService::ageGroups();
@@ -150,8 +153,9 @@ class UserController extends Controller
         ];
 
         $this->data['data']['membership'] = [
-            '0' => __( 'user.member' ),
-            '1' => __( 'user.premium' ),
+            '0' => __( 'user.free' ),
+            '1' => __( 'user.paid' ),
+            '2' => __( 'user.trial' ),
         ];
 
         $this->data['data']['age_groups'] = UserService::ageGroups();

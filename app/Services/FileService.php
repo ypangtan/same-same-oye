@@ -73,12 +73,11 @@ class FileService
         $path = StorageService::upload( 'song', $file );
         $mimeType = $file->getMimeType();
         $duration = null;
-        $getID3 = new \getID3();
 
-        $fileInfo = $getID3->analyze( $file->getPathname() );
-        if ( isset( $fileInfo['playtime_seconds'] ) ) {
-            $duration = round( $fileInfo['playtime_seconds'] );
-        }
+        $ffprobe = \FFMpeg\FFProbe::create();
+        $duration = (int) round(
+            $ffprobe->format($file->getPathname())->get('duration')
+        );
             
         if (str_starts_with($mimeType, 'audio/')) {
             $file_type = 1;

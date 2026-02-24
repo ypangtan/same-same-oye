@@ -22,4 +22,5 @@ return [
     'ios_product_id' => 'IOS Product ID',
     'android_product_id' => 'Android Product ID',
     'huawei_product_id' => 'Huawei Product ID',
+    'max_member' => 'Max Member',
 ];

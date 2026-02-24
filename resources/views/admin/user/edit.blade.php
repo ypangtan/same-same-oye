@@ -91,11 +91,14 @@ $age_groups = $data['age_groups'] ?? [];
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $user_edit }}_membership" class="col-sm-5 col-form-label">{{ __( 'collection.membership' ) }}</label>
+                    <label for="{{ $user_edit }}_membership" class="col-sm-5 col-form-label">{{ __( 'user.membership' ) }}</label>
                     <div class="col-sm-7">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="{{ $user_edit }}_membership">
-                        </div>
+                        <select class="form-select" id="{{ $user_edit }}_membership" >
+                            <option value="0">{{ __( 'user.member' ) }}</option>
+                            <option value="1">{{ __( 'user.premium' ) }}</option>
+                            <option value="2">{{ __( 'user.trial' ) }}</option>
+                        </select>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3 row">

@@ -63,7 +63,7 @@ class UserSubscription extends Model
     }
 
     public function isActive() {
-        return $this->status === 10 
+        return $this->status === 10
             && $this->end_date 
             && $this->end_date->isFuture();
     }
