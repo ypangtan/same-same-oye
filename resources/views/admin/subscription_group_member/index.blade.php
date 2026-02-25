@@ -1,7 +1,7 @@
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
-            <h3 class="nk-block-title page-title">{{ __( 'template.ranks' ) }}</h3>
+            <h3 class="nk-block-title page-title">{{ __( 'template.subscription_group_members' ) }}</h3>
         </div><!-- .nk-block-head-content -->
     </div><!-- .nk-block-between -->
 </div><!-- .nk-block-head -->
@@ -15,30 +15,15 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.title' ) ] ),
-        'id' => 'title',
-        'title' => __( 'rank.title' ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.leader' ) ] ),
+        'id' => 'leader',
+        'title' => __( 'subscription_group_member.leader' ),
     ],
     [
-        'type' => 'default',
-        'id' => 'target_spending',
-        'title' => __( 'rank.target_spending' ),
-    ],
-    [
-        'type' => 'default',
-        'id' => 'reward_value',
-        'title' => __( 'rank.reward_value' ),
-    ],
-    [
-        'type' => 'default',
-        'id' => 'priority',
-        'title' => __( 'rank.priority' ),
-    ],
-    [
-        'type' => 'select',
-        'options' => $data['status'],
-        'id' => 'status',
-        'title' => __( 'datatables.status' ),
+        'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.user' ) ] ),
+        'id' => 'user',
+        'title' => __( 'subscription_group_member.user' ),
     ],
     [
         'type' => 'default',
@@ -48,7 +33,7 @@ $columns = [
 ];
 ?>
 
-<x-data-tables id="rank_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
+<x-data-tables id="subscription_group_member_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
 
 <script>
 
@@ -72,7 +57,7 @@ $columns = [
             },
         },
         dt_table,
-        dt_table_name = '#rank_table',
+        dt_table_name = '#subscription_group_member_table',
         dt_table_config = {
             language: {
                 'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
@@ -86,11 +71,11 @@ $columns = [
                 }
             },
             ajax: {
-                url: '{{ route( 'admin.rank.allRanks' ) }}',
+                url: '{{ route( 'admin.subscription_group_member.allSubscriptionGroupMembers' ) }}',
                 data: {
                     '_token': '{{ csrf_token() }}',
                 },
-                dataSrc: 'ranks',
+                dataSrc: 'subscription_group_members',
             },
             lengthMenu: [
                 [ 10, 25, 50, 999999 ],
@@ -99,11 +84,8 @@ $columns = [
             order: [[ 1, 'desc' ]],
             columns: [
                 { data: null },
-                { data: 'title' },
-                { data: 'target_spending' },
-                { data: 'reward_value' },
-                { data: 'priority' },
-                { data: 'status' },
+                { data: 'leader' },
+                { data: 'user' },
                 { data: 'encrypted_id' },
             ],
             columnDefs: [
@@ -117,39 +99,26 @@ $columns = [
                     },
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "leader" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        return data ?? '-';
-                    },
+                        if( data ) {
+                            return ( data.calling_code ?? '+60' ) + data.phone_number + ' (' + ( data.email ? data.email : '-' ) + ')';
+                        } else {
+                            return '-';
+                        }
+                    }
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "target_spending" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        return data ?? '-';
-                    },
-                },
-                {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "reward_value" ) }}' ),
-                    orderable: false,
-                    render: function( data, type, row, meta ) {
-                        return data ?? '-';
-                    },
-                },
-                {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "priority" ) }}' ),
-                    orderable: false,
-                    render: function( data, type, row, meta ) {
-                        return data ?? '-';
-                    },
-                },
-                {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
-                    orderable: false,
-                    render: function( data, type, row, meta ) {
-                        return '<span class="' + statusMapper[data].color + '">' + statusMapper[data].text + '</span>';
-                    },
+                        if( data ) {
+                            return ( data.calling_code ?? '+60' ) + data.phone_number + ' (' + ( data.email ? data.email : '-' ) + ')';
+                        } else {
+                            return '-';
+                        }
+                    }
                 },
                 {
                     targets: parseInt( '{{ count( $columns ) - 1 }}' ),
@@ -158,16 +127,14 @@ $columns = [
                     className: 'text-center',
                     render: function( data, type, row, meta ) {
 
-                        @canany( [ 'edit ranks', 'view ranks' ] )
+                        @canany( [ 'edit subscription_group_members', 'view subscription_group_members' ] )
                         let view = '',
                             edit = '',
                             status = '';
 
-                        @can( 'edit ranks' )
+                        @can( 'edit subscription_group_members' )
                         edit += '<li class="dropdown-item click-action dt-edit" data-id="' + data + '">{{ __( 'template.edit' ) }}</li>';
-                        status = row.status == 10 ? 
-                        '<li class="dropdown-item click-action dt-suspend" data-id="' + data + '">{{ __( 'datatables.suspend' ) }}</li>':
-                        '<li class="dropdown-item click-action dt-activate" data-id="' + data + '">{{ __( 'datatables.activate' ) }}</li>' ;
+                        status = '<li class="dropdown-item click-action dt-suspend" data-id="' + data + '">{{ __( 'datatables.delete' ) }}</li>';
                         @endcan
 
                         let html = 
@@ -177,6 +144,7 @@ $columns = [
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
                                     `+edit+`
+                                    `+status+`
                                 </ul>
                             </div>
                         </div>
@@ -195,7 +163,7 @@ $columns = [
     document.addEventListener( 'DOMContentLoaded', function() {
 
         $( document ).on( 'click', '.dt-edit', function() {
-            window.location.href = '{{ route( 'admin.rank.edit' ) }}?id=' + $( this ).data( 'id' );
+            window.location.href = '{{ route( 'admin.subscription_group_member.edit' ) }}?id=' + $( this ).data( 'id' );
         } );
 
         let uid = 0,
@@ -205,23 +173,10 @@ $columns = [
         $( document ).on( 'click', '.dt-suspend', function() {
 
             uid = $( this ).data( 'id' );
-            status = 20,
             scope = 'status';
 
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.suspend' ), 'title' => Str::singular( __( 'template.ranks' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.suspend' ), 'title' => Str::singular( __( 'template.ranks' ) ) ] ) }}' );
-
-            modalConfirmation.show();
-        } );
-
-        $( document ).on( 'click', '.dt-activate', function() {
-
-            uid = $( this ).data( 'id' );
-            status = 10,
-            scope = 'status';
-
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.activate' ), 'title' => Str::singular( __( 'template.ranks' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.activate' ), 'title' => Str::singular( __( 'template.ranks' ) ) ] ) }}' );
+            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ) }}' );
+            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ) }}' );
 
             modalConfirmation.show();
         } );
@@ -231,11 +186,10 @@ $columns = [
             switch ( scope ) {
                 case 'status':
                     $.ajax( {
-                        url: '{{ route( 'admin.rank.updateRankStatus' ) }}',
+                        url: '{{ route( 'admin.subscription_group_member.deleteSubscriptionGroupMember' ) }}',
                         type: 'POST',
                         data: {
                             id: uid,
-                            status,
                             _token: '{{ csrf_token() }}',
                         },
                         success: function( response ) {

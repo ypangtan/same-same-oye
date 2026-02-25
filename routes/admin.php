@@ -27,8 +27,10 @@ use App\Http\Controllers\Admin\{
     PlaylistController,
     PodcastController,
     PopAnnouncementController,
+    SubscriptionGroupMemberController,
     SubscriptionPlanController,
     TalkController,
+    UserSubscriptionController,
 };
 
 use App\Models\{
@@ -393,6 +395,42 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'create-subscription-plan', [ SubscriptionPlanController::class, 'createSubscriptionPlan' ] )->name( 'admin.subscription_plan.createSubscriptionPlan' );
                 Route::post( 'update-subscription-plan', [ SubscriptionPlanController::class, 'updateSubscriptionPlan' ] )->name( 'admin.subscription_plan.updateSubscriptionPlan' );
                 Route::post( 'update-subscription-plan-status', [ SubscriptionPlanController::class, 'updateSubscriptionPlanStatus' ] )->name( 'admin.subscription_plan.updateSubscriptionPlanStatus' );
+            } );
+
+            Route::prefix( 'user_subscriptions' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view user_subscriptions' ] ], function() {
+                    Route::get( '/', [ UserSubscriptionController::class, 'index' ] )->name( 'admin.module_parent.user_subscription.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add user_subscriptions' ] ], function() {
+                    Route::get( 'add', [ UserSubscriptionController::class, 'add' ] )->name( 'admin.user_subscription.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit user_subscriptions' ] ], function() {
+                    Route::get( 'edit', [ UserSubscriptionController::class, 'edit' ] )->name( 'admin.user_subscription.edit' );
+                } );
+    
+                Route::post( 'all-user-subscriptions', [ UserSubscriptionController::class, 'allUserSubscriptions' ] )->name( 'admin.user_subscription.allUserSubscriptions' );
+                Route::post( 'one-user-subscription', [ UserSubscriptionController::class, 'oneUserSubscription' ] )->name( 'admin.user_subscription.oneUserSubscription' );
+                Route::post( 'create-user-subscription', [ UserSubscriptionController::class, 'createUserSubscription' ] )->name( 'admin.user_subscription.createUserSubscription' );
+                Route::post( 'update-user-subscription', [ UserSubscriptionController::class, 'updateUserSubscription' ] )->name( 'admin.user_subscription.updateUserSubscription' );
+                Route::post( 'update-user-subscription-status', [ UserSubscriptionController::class, 'updateUserSubscriptionStatus' ] )->name( 'admin.user_subscription.updateUserSubscriptionStatus' );
+            } );
+
+            Route::prefix( 'subscription_group_members' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view subscription_group_members' ] ], function() {
+                    Route::get( '/', [ SubscriptionGroupMemberController::class, 'index' ] )->name( 'admin.module_parent.subscription_group_member.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add subscription_group_members' ] ], function() {
+                    Route::get( 'add', [ SubscriptionGroupMemberController::class, 'add' ] )->name( 'admin.subscription_group_member.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit subscription_group_members' ] ], function() {
+                    Route::get( 'edit', [ SubscriptionGroupMemberController::class, 'edit' ] )->name( 'admin.subscription_group_member.edit' );
+                } );
+    
+                Route::post( 'all-subscription-group-members', [ SubscriptionGroupMemberController::class, 'allSubscriptionGroupMembers' ] )->name( 'admin.subscription_group_member.allSubscriptionGroupMembers' );
+                Route::post( 'one-subscription-group-member', [ SubscriptionGroupMemberController::class, 'oneSubscriptionGroupMember' ] )->name( 'admin.subscription_group_member.oneSubscriptionGroupMember' );
+                Route::post( 'create-subscription-group-member', [ SubscriptionGroupMemberController::class, 'createSubscriptionGroupMember' ] )->name( 'admin.subscription_group_member.createSubscriptionGroupMember' );
+                Route::post( 'update-subscription-group-member', [ SubscriptionGroupMemberController::class, 'updateSubscriptionGroupMember' ] )->name( 'admin.subscription_group_member.updateSubscriptionGroupMember' );
+                Route::post( 'update-subscription-group-member-status', [ SubscriptionGroupMemberController::class, 'deleteSubscriptionGroupMember' ] )->name( 'admin.subscription_group_member.deleteSubscriptionGroupMember' );
             } );
             
             Route::prefix( 'ad' )->group( function() {

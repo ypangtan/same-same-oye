@@ -23,4 +23,6 @@ return [
     'android_product_id' => 'Android Product ID',
     'huawei_product_id' => 'Huawei Product ID',
     'max_member' => 'Max Member',
+
+    'unable_to_edit_real_plan' => 'You only can edit the trial.'
 ];

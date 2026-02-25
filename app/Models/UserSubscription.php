@@ -59,13 +59,7 @@ class UserSubscription extends Model
     public function scopeIsActive($query) {
         return $query->where('status', 10)
             ->whereNotNull('end_date')
-            ->where('end_date', '>', now());
-    }
-
-    public function isActive() {
-        return $this->status === 10
-            && $this->end_date 
-            && $this->end_date->isFuture();
+            ->whereDate('end_date', '>', now());
     }
     
     public function scopeIsGroup($query) {
@@ -76,7 +70,7 @@ class UserSubscription extends Model
     
     public function scopeNotHitMaxMember($query) {
         return $query->whereHas('plan', function ($q) {
-            $q->where('max_member', '>', 1);
+            $q->where( 'max_member', '>', 1 );
         })->whereRaw('
             (SELECT COUNT(*) FROM subscription_group_members 
             WHERE subscription_group_members.user_subscription_id = user_subscriptions.id) 
@@ -84,29 +78,6 @@ class UserSubscription extends Model
             (SELECT max_member FROM subscription_plans 
             WHERE subscription_plans.id = user_subscriptions.subscription_plan_id)
         ');
-    }
-
-    public function scopeUserNotInAnyGroup($query, $userId) {
-        return $query->whereDoesntHave('member', function ($q) use ($userId) {
-            $q->where('user_id', $userId);
-        });
-    }
-
-    public function isExpired() {
-        return $this->end_date && $this->end_date->isPast();
-    }
-
-    public function renew( $days )  {
-        $newEndDate = $this->end_date && $this->end_date->isFuture()
-            ? $this->end_date->addDays($days)
-            : now()->addDays($days);
-
-        $this->update([
-            'status' => 10,
-            'end_date' => $newEndDate,
-        ]);
-
-        return $this;
     }
 
     public function cancel() {

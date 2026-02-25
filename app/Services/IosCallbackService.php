@@ -188,7 +188,6 @@ class IosCallbackService {
             
             $userSubscription->status = 10; // active
             $userSubscription->end_date = $expiresAt;
-            $userSubscription->auto_renew = true;
             
             // 📱 发送订阅成功通知
             if ($user) {

@@ -290,19 +290,26 @@ class PaymentService {
         $user = User::find( $user_id );
         $plan = SubscriptionPlan::find( $plan_id );
 
+        $existsTrialSubsciption = $user->subscriptions()
+            ->where( 'type', 2 )
+            ->where( 'status', 10 )
+            ->get();
+        foreach( $existsTrialSubsciption as $exists ) {
+            $exists->status = 20;
+            $exists->save();
+        }
+
         $subscription = $user->subscriptions()
             ->where('platform', $platform)
             ->where('platform_transaction_id', $transactionId)
             ->first();
 
         if ($subscription) {
-            // 更新现有订阅
             $subscription->update([
                 'status' => 10,
                 'end_date' => $endDate,
             ]);
         } else {
-            // 创建新订阅
             $subscription = UserSubscription::create([
                 'user_id' => $user->id,
                 'subscription_plan_id' => $plan->id,
