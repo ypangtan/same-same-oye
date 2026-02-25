@@ -31,6 +31,14 @@ class UserSubscription extends Model
         'status',
     ];
 
+    public function getEndDateAttribute() {
+        if( $this->attributes['end_date'] ) {
+            return Carbon::parse( $this->attributes['end_date'] )->format('Y-m-d');
+        }
+
+        return $this->attributes['end_date'];
+    }
+
     public function statusList() {
         return [
             10 => __( 'user_subscription.active' ),
