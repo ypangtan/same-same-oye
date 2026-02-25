@@ -156,6 +156,7 @@ $columns = [
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
                                     `+edit+`
+                                    `+status+`
                                 </ul>
                             </div>
                         </div>
