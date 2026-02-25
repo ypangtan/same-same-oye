@@ -273,9 +273,8 @@ window.cke_element = [ 'item_edit_desc'];
                     const dropzone2 = new Dropzone(de + '_file', { 
                         url: '{{ route("admin.item.songUpload") }}',
                         maxFiles: 1,
-                        acceptedFiles: 'audio/mpeg,audio/mp3',
+                        acceptedFiles: 'audio/mpeg,audio/mp3,video/mp4,video/webm,video/ogg,video/avi,video/mov,video/quicktime',
                         addRemoveLinks: true,
-
                         previewTemplate: `
                             <div class="dz-preview dz-file-preview" style="cursor:pointer;">
                                 <img src="{{ asset('admin/images/song.png') }}" 
