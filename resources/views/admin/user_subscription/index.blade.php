@@ -113,7 +113,7 @@ $columns = [
                     }
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "plan" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
                         if( data == 2 ) {
