@@ -62,6 +62,10 @@ class User extends Model implements AuthenticatableContract
         'is_first_login',
     ];
 
+    public function subscriptionGroup() {
+        return $this->hasMany( SubscriptionGroupMember::class, 'leader_id' );
+    }
+
     public function subscriptions()
     {
         return $this->hasMany( UserSubscription::class, 'user_id' );

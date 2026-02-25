@@ -20,15 +20,15 @@ class SubscriptionGroupMember extends Model
 
     protected $fillable = [
         'user_id',
-        'user_subscription_id',
+        'leader_id',
     ];
+
+    public function leader() {
+        return $this->belongsTo( User::class, 'leader_id' );
+    }
 
     public function user() {
         return $this->belongsTo( User::class, 'user_id' );
-    }
-
-    public function userSubscription() {
-        return $this->belongsTo( UserSubscription::class, 'user_subscription_id' );
     }
 
     public function getEncryptedIdAttribute() {
@@ -41,7 +41,7 @@ class SubscriptionGroupMember extends Model
 
     protected static $logAttributes = [
         'user_id',
-        'user_subscription_id',
+        'leader_id',
     ];
 
     protected static $logName = 'SubscriptionGroupMember';
