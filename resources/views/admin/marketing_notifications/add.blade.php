@@ -210,6 +210,21 @@ window.cke_element = [ 'announcement_create_en_content', 'announcement_create_zh
             maxFiles: 1,
             acceptedFiles: 'image/jpg,image/jpeg,image/png',
             addRemoveLinks: true,
+            inti: function() {
+                this.on("addedfile", function (file) {
+                    if (this.files.length > 1) {
+                        this.removeFile(this.files[0]);
+                    }
+                });
+                this.on("sending", function( file ) {
+                    $( 'body' ).loading( {
+                        message: '{{ __( 'template.loading' ) }}'
+                    } );
+                });
+                this.on("complete", function( file ) {
+                    $( 'body' ).loading( 'stop' );
+                });
+            },
             removedfile: function( file ) {
                 fileID = null;
                 file.previewElement.remove();

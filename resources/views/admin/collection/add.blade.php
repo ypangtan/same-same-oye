@@ -289,6 +289,14 @@ $parent_route = $data['parent_route'] ?? '';
                         this.removeFile(this.files[0]);
                     }
                 });
+                this.on("sending", function( file ) {
+                    $( 'body' ).loading( {
+                        message: '{{ __( 'template.loading' ) }}'
+                    } );
+                });
+                this.on("complete", function( file ) {
+                    $( 'body' ).loading( 'stop' );
+                });
             },
             removedfile: function( file ) {
                 fileID = null;

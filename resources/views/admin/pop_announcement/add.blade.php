@@ -195,6 +195,14 @@ window.cke_element = [ 'pop_announcement_create_en_text', 'pop_announcement_crea
                         this.removeFile(this.files[0]);
                     }
                 });
+                this.on("sending", function( file ) {
+                    $( 'body' ).loading( {
+                        message: '{{ __( 'template.loading' ) }}'
+                    } );
+                });
+                this.on("complete", function( file ) {
+                    $( 'body' ).loading( 'stop' );
+                });
             },
             removedfile: function( file ) {
                 fileID = null;

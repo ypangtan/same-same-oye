@@ -249,6 +249,19 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
                         acceptedFiles: 'image/jpg,image/jpeg,image/png',
                         addRemoveLinks: true,
                         init: function() {
+                            this.on("addedfile", function (file) {
+                                if (this.files.length > 1) {
+                                    this.removeFile(this.files[0]);
+                                }
+                            });
+                            this.on("sending", function( file ) {
+                                $( 'body' ).loading( {
+                                    message: '{{ __( 'template.loading' ) }}'
+                                } );
+                            });
+                            this.on("complete", function( file ) {
+                                $( 'body' ).loading( 'stop' );
+                            });
                             if ( imagePath ) {
                                 let myDropzone = this,
                                     mockFile = { name: 'Default', size: 1024, accepted: true };
