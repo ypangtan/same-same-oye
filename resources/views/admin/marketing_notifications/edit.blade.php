@@ -235,10 +235,12 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
 
                     fileID = response.path;
                     if( response.user != null ){
-                        name = ( response.user.calling_code ? response.user.calling_code : '+60' ) + ( response.user.phone_number ? response.user.phone_number : '-' ) + ' (' + ( response.user.email ? response.user.email : '-' ) + ')',
-                        let option1 = new Option( name, response.user.id, true, true );
-                        userSelect2.append( option1 );
-                        userSelect2.trigger( 'change' );
+                        $.each( response.user, function( key, value ) {
+                            name = ( value.calling_code ? value.calling_code : '+60' ) + ( value.phone_number ? value.phone_number : '-' ) + ' (' + ( value.email ? value.email : '-' ) + ')',
+                            let option1 = new Option( name, value.id, true, true );
+                            userSelect2.append( option1 );
+                            userSelect2.trigger( 'change' );
+                        } );
                     }
 
                     let imagePath = response.path;
