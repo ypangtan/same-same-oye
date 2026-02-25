@@ -92,7 +92,7 @@ class Item extends Model
         } else if ( $minutes ) {
             return sprintf( '%d mins', $minutes );
         } else {
-            return sprintf( '%02d sec', $minutes, $seconds );
+            return sprintf( '%02d sec', $seconds );
         }
     }
 
