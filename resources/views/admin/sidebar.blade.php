@@ -189,15 +189,37 @@
                                     </ul>
                                 </li>
                                 @endcanany
-
-                                @can( 'view subscription_plans' )
-                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SubscriptionPlanController' ? 'active current-page' : '' }}">
-                                        <a href="{{ route( 'admin.module_parent.subscription_plan.index' ) }}" class="nk-menu-link">
-                                            <span class="nk-menu-icon"><em class="icon ni ni-report-profit"></em></span>
-                                            <span class="nk-menu-text">{{ __( 'template.subscription_plans' ) }}</span>
-                                        </a>
-                                    </li>
-                                @endcan
+                                
+                                @canany( [ 'view subscription_plans', 'view playlists', 'view collections' ] )
+                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\SubscriptionPlanController' ||
+                                    $controller == 'App\Http\Controllers\Admin\UserSubscriptionController' ||
+                                    $controller == 'App\Http\Controllers\Admin\SubscriptionGroupMemberController'
+                                    ) ? 'active current-page' : '' }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-report-profit"></em></span>
+                                        <span class="nk-menu-text">{{ __( 'template.subscription_plans' ) }}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @can( 'view subscription_plans' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SubscriptionPlanController' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.subscription_plan.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.subscription_plans' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @if( auth()->user()->id == 1 )
+                                        @can( 'view user_subscriptions' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\UserSubscriptionController' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.user_subscription.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.user_subscriptions' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view subscription_group_members' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SubscriptionGroupMemberController' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.subscription_group_member.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.subscription_group_members' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @endIf
+                                    </ul>
+                                </li>
+                                @endcanany
                                 
                                 @canany( [ 'view marketing_notifications', 'view pop_announcements' ] )
                                 <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\MarketingNotificationController' || $controller == 'App\Http\Controllers\Admin\PopAnnouncementController') ? 'active current-page' : '' }}">
