@@ -136,7 +136,7 @@ $columns = [
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        return statusMapper[data].text;
+                        return statusMapper[data];
                     },
                 },
                 {
