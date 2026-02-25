@@ -83,6 +83,7 @@ return [
     'app_versions' => 'App Versions',
     'contact_us_email' => 'Contact Us Email',
     'subscription_group_members' => 'Subscription Group Members',
+    'user_subscriptions' => 'User Subscriptions',
 
     'loading' => 'Loading...',
     'add' => 'Add',
