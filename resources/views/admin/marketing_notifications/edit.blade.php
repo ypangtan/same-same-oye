@@ -111,6 +111,7 @@ $announcement_edit = 'announcement_edit';
                 <div class="mb-3 row">
                     <label for="{{ $announcement_edit }}_users" class="col-sm-4 col-form-label">{{ __( 'template.users' ) }}</label>
                     <div class="col-sm-8">
+                        <select class="form-select form-select-sm" multiple="multiple" id="{{ $announcement_edit }}_users" data-placeholder="{{ __( 'datatables.select_x', [ 'title' => __( 'template.users' ) ] ) }}"></select>
                         <input class="form-check-input" type="checkbox" id="{{ $announcement_edit }}_all_users">
                         <label class="form-check-label" for="{{ $announcement_edit }}_all_users">
                             <small>{{ __( 'announcement.all_users' ) }}</small>
@@ -170,6 +171,7 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
             formData.append( 'en_content', editors['announcement_edit_en_content'].getData() );
             formData.append( 'zh_content', editors['announcement_edit_zh_content'].getData() );
             formData.append( 'type', $( ae + '_type' ).val() );
+            formData.append( 'users', $( ae + '_users' ).val() );
             formData.append( 'all_users', all_users );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -232,6 +234,12 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
                     $( ae + '_all_users' ).prop( "checked", response.is_broadcast == 10 ? true : false );
 
                     fileID = response.path;
+                    if( response.user != null ){
+                        name = ( response.user.calling_code ? response.user.calling_code : '+60' ) + ( response.user.phone_number ? response.user.phone_number : '-' ) + ' (' + ( response.user.email ? response.user.email : '-' ) + ')',
+                        let option1 = new Option( name, response.user.id, true, true );
+                        userSelect2.append( option1 );
+                        userSelect2.trigger( 'change' );
+                    }
 
                     let imagePath = response.path;
 
@@ -264,6 +272,65 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
                 },
             } );
         }
+
+        let userSelect2 = $( ae + '_users' ).select2( {
+            theme: 'bootstrap-5',
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            allowClear: false,
+            closeOnSelect: true,
+            ajax: {
+                method: 'POST',
+                url: '{{ route( 'admin.user.allUsers' ) }}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        mixed_search: params.term, // search term
+                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
+                        length: 10,
+                        _token: '{{ csrf_token() }}',
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    let processedResult = [];
+
+                    data.users.map( function( v, i ) {
+                        processedResult.push( {
+                            id: v.encrypted_id,
+                            text: ( v.calling_code ? v.calling_code : '+60' ) + ( v.phone_number ? v.phone_number : '-' ) + ' (' + ( v.email ? v.email : '-' ) + ')',
+                        } );
+                    } );
+
+                    return {
+                        results: processedResult,
+                        pagination: {
+                            more: ( params.page * 10 ) < data.recordsFiltered
+                        }
+                    };
+                }
+            }
+        } );
+
+        $( ae + "_all_users" ).change( function() {
+            if ( $( this ).is( ":checked" ) ) {
+                $( this ).siblings( ".select2" ).hide()
+            } else {
+                $( this ).siblings( ".select2" ).show()
+            }
+        });
+
+        $( ae + "_users" ).on('select2:select', function (e) {
+            $( ae + "_all_users" ).hide()
+            $( ae + "_all_users" ).siblings( ".form-check-label" ).hide()
+        });
+
+        $( ae + "_users" ).on('select2:unselect', function (e) {
+            $( ae + "_all_users" ).show()
+            $( ae + "_all_users" ).siblings( ".form-check-label" ).show()
+        });
 
     } );
 </script>

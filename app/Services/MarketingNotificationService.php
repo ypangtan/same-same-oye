@@ -274,6 +274,7 @@ class MarketingNotificationService {
             'image' => [ 'nullable' ],
             'target_url' => [ 'nullable' ],
             'all_users' => ['nullable', 'in:1,0'],
+            'users' => [ 'required_if:all_users,0' ], 
         ] );
 
         $attributeName = [
@@ -295,6 +296,7 @@ class MarketingNotificationService {
         DB::beginTransaction();
 
         try {
+            $request->users != NULL ? $selectedUsersId = explode(',', $request->users) : $selectedUsersId = array();
 
             $updateAnnouncement = UserNotification::find( $request->id );
             $updateAnnouncement->en_title = $request->en_title;
@@ -306,6 +308,31 @@ class MarketingNotificationService {
             $updateAnnouncement->zh_content = $request->zh_content;
             
             $is_broadcast = intval( $request->all_users ) == 1 ? 10 : 20;
+            $existsIds = [];
+            if( $updateAnnouncement && count( $selectedUsersId ) > 0 ){
+                foreach( $selectedUsersId as $key => $val ){
+                    $user = User::findOrFail( \Helper::decode( $val ) );
+                    $userNotificationUser = UserNotificationUser::where( 'user_notification_id', $updateAnnouncement->id )
+                        ->where( 'user_id', $user->id )
+                        ->first();
+
+                    if( !$userNotificationUser ) {
+                        $userNotificationUser = UserNotificationUser::create( [
+                            'user_notification_id' => $updateAnnouncement->id,
+                            'user_id' => $user->id,
+                        ] );
+                    }
+                    $existsIds[] = $user->id; 
+                }
+            }
+
+            $existsUserNotificationUsers = UserNotificationUser::where( 'user_notification_id', $updateAnnouncement->id )
+                ->whereNotIn( 'user_id', $existsIds )
+                ->get();
+                
+            foreach( $existsUserNotificationUsers as $user ) {
+                $user->delete();
+            }
 
             $is_template = self::isPrefixes($request->content);
 
