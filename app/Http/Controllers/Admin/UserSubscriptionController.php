@@ -32,7 +32,7 @@ class UserSubscriptionController extends Controller {
         
         $this->data['data']['status'] = [
             '10' => __( 'user_subscription.active' ),
-            '20' => __( 'user_subscription.rxpired' ),
+            '20' => __( 'user_subscription.expired' ),
             '30' => __( 'user_subscription.refunded' ),
             '40' => __( 'user_subscription.cancelled' ),
         ];
