@@ -242,6 +242,15 @@ window.cke_element = [ 'item_edit_desc'];
                                     this.removeFile(this.files[0]);
                                 }
                             });
+                            this.on("sending", function( file ) {
+                                $( 'body' ).loading( {
+                                    message: '{{ __( 'template.loading' ) }}'
+                                } );
+                            });
+                            this.on("complete", function( file ) {
+                                $( 'body' ).loading( 'stop' );
+                            });
+
                             if ( imagePath ) {
                                 let myDropzone = this,
                                     mockFile = { name: 'Default', size: 12345, accepted: true };

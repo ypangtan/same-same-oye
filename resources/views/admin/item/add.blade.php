@@ -297,6 +297,15 @@ window.cke_element = [ 'item_create_desc'];
                         if (file._fileUrl) window.open(file._fileUrl, "_blank");
                     });
                 });
+                this.on("sending", function( file ) {
+                    $( 'body' ).loading( {
+                        message: '{{ __( 'template.loading' ) }}'
+                    } );
+                });
+                this.on("complete", function( file ) {
+                    $( 'body' ).loading( 'stop' );
+                });
+
             },
             removedfile: function(file) {
                 file2ID = "";
