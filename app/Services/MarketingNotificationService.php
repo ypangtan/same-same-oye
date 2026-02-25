@@ -467,8 +467,8 @@ class MarketingNotificationService {
 
         $messageContent['key'] = 'announcement';
         $messageContent['id'] = $createAnnouncement->id;
-        $messageContent['message'] = $createAnnouncement->title;
-        $messageContent['message_content'] = $createAnnouncement->content;
+        $messageContent['title'] = $createAnnouncement->title;
+        $messageContent['message'] = $createAnnouncement->content;
 
         \Helper::sendNotification( $user->id, $messageContent );
         
@@ -480,8 +480,8 @@ class MarketingNotificationService {
 
         $messageContent['key'] = 'announcement';
         $messageContent['id'] = $createAnnouncement->id;
-        $messageContent['message'] = $createAnnouncement->title;
-        $messageContent['message_content'] = $createAnnouncement->content;
+        $messageContent['title'] = $createAnnouncement->title;
+        $messageContent['message'] = $createAnnouncement->content;
 
         \Helper::sendMultiNotification( $selectedUsersId, $messageContent );
     }

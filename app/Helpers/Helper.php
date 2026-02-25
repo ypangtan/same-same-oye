@@ -483,33 +483,27 @@ class Helper {
             $json = [
                 'app_id' => config( 'services.os.app_id' ),
                 'contents' => [
-                    'en' => ( is_array( $message ) && isset( $message['message_content'] ) )
-                        ? strip_tags( $message['message_content']['en'] ?? '' )
-                        : ( is_array( $message ) && isset( $message['message'] )
-                            ? strip_tags( $message['message']['en'] ?? '' )
+                    'en' => ( is_array( $message ) && isset( $message['message'] )
+                            ? strip_tags( $message['message']['en'] ?? $message['message'] )
                             : strip_tags( (string) $message['message'] )
                         ),
 
-                    'zh' => ( is_array( $message ) && isset( $message['message_content'] ) )
-                        ? strip_tags( $message['message_content']['zh'] ?? '' )
-                        : ( is_array( $message ) && isset( $message['message'] )
-                            ? strip_tags( $message['message']['zh'] ?? '' )
+                    'zh' => ( is_array( $message ) && isset( $message['message'] )
+                            ? strip_tags( $message['message']['zh'] ?? $message['message'] )
                             : strip_tags( (string) $message['message'] )
                         ),
                 ],
 
                 'headings' => [
-                    'en' => ( is_array( $message ) && isset( $message['message'] ) )
-                        ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
-                        ? $message['message']['en']
-                        : $message['message']
-                        : 'SSO',
+                    'en' => ( is_array( $message ) && isset( $message['title'] )
+                            ? strip_tags( $message['title']['en'] ?? $message['title'] )
+                            : strip_tags( (string) $message['title'] )
+                        ),
 
-                    'zh' => ( is_array( $message ) && isset( $message['message'] ) )
-                        ? ( is_array( $message['message'] ) && isset( $message['message'] ) )
-                        ? $message['message']['zh']
-                        : $message['message']
-                        : 'SSO',
+                    'zh' => ( is_array( $message ) && isset( $message['title'] )
+                            ? strip_tags( $message['title']['zh'] ?? $message['title'] )
+                            : strip_tags( (string) $message['title'] )
+                        ),
                 ],
                 'include_player_ids' => $devices,
                 'data' => [
