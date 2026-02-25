@@ -16,4 +16,9 @@ return [
     'plan' => 'Subscription Plan',
     'user' => 'User',
     'end_date' => 'End Date',
+
+    'active' => 'Active',
+    'expired' => 'Expired',
+    'refunded' => 'Refunded',
+    'cancelled' => 'Cancelled',
 ];

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserSubscription;
 use Illuminate\Http\Request;
 
 use App\Services\{
@@ -31,7 +30,12 @@ class UserSubscriptionController extends Controller {
             ],
         ];
         
-        $this->data['data']['status'] = UserSubscription::statusList();
+        $this->data['data']['status'] = [
+            '10' => __( 'user_subscription.active' ),
+            '20' => __( 'user_subscription.rxpired' ),
+            '30' => __( 'user_subscription.refunded' ),
+            '40' => __( 'user_subscription.cancelled' ),
+        ];
 
         return view( 'admin.main' )->with( $this->data );
     }
