@@ -234,10 +234,10 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
                     $( ae + '_all_users' ).prop( "checked", response.is_broadcast == 10 ? true : false );
 
                     fileID = response.path;
-                    if( response.user != null ){
-                        $.each( response.user, function( key, value ) {
-                            name = ( value.calling_code ? value.calling_code : '+60' ) + ( value.phone_number ? value.phone_number : '-' ) + ' (' + ( value.email ? value.email : '-' ) + ')',
-                            option1 = new Option( name, value.id, true, true );
+                    if( response.user_notification_users != null ){
+                        $.each( response.user_notification_users, function( key, value ) {
+                            name = ( value.user.calling_code ? value.user.calling_code : '+60' ) + ( value.user.phone_number ? value.user.phone_number : '-' ) + ' (' + ( value.user.email ? value.user.email : '-' ) + ')',
+                            option1 = new Option( name, value.user.id, true, true );
                             userSelect2.append( option1 );
                             userSelect2.trigger( 'change' );
                         } );

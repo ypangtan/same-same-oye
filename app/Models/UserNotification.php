@@ -42,8 +42,7 @@ class UserNotification extends Model
         'encrypted_id',
     ];
 
-    public function setTitleAttribute($value)
-    {
+    public function setTitleAttribute($value) {
         $languages = array_keys(Config::get('languages'));
 
         $translations = [];
@@ -56,8 +55,7 @@ class UserNotification extends Model
 
     }
 
-    public function setContentAttribute($value)
-    {
+    public function setContentAttribute($value) {
         $languages = array_keys(Config::get('languages'));
 
         $translations = [];
@@ -69,8 +67,7 @@ class UserNotification extends Model
         $this->attributes['content'] = json_encode($translations);
     }
 
-    public function getContentAttribute($value)
-    {
+    public function getContentAttribute($value) {
         $translations = json_decode($value, true) ?? [];
 
         $translations['en'] = $this->attributes['en_content'] ?? ( $translations['en'] ?? '' );

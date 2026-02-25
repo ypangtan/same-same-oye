@@ -145,7 +145,9 @@ class MarketingNotificationService {
             'id' => Helper::decode( $request->id ),
         ] );
 
-        $userNotification = UserNotification::find( $request->id );
+        $userNotification = UserNotification::with( [
+            'UserNotificationUsers.user'
+        ] )->find( $request->id );
 
         $userNotification->append( [
             'path',
