@@ -34,8 +34,6 @@ $user_subscription_create = 'user_subscription_create';
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        getUserSubscription();
-
         let uc = '#{{ $user_subscription_create }}';
 
         $( uc + '_cancel' ).click( function() {

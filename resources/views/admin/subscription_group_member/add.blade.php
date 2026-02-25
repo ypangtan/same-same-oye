@@ -34,8 +34,6 @@ $subscription_group_member_create = 'subscription_group_member_create';
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        getSubscriptionGroupMember();
-
         let uc = '#{{ $subscription_group_member_create }}';
 
         $( uc + '_cancel' ).click( function() {
