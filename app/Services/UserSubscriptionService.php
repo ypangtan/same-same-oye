@@ -51,8 +51,8 @@ class UserSubscriptionService
 
         $userSubscriptions = $userSubscription->skip( $offset )->take( $limit )->get();
 
-        if ( $userSubscriptions ) {
-            $userSubscriptions->append( [
+        foreach ( $userSubscriptions as $userSubscription ) {
+            $userSubscription->append( [
                 'encrypted_id',
             ] );
 
