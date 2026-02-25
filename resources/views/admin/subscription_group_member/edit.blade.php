@@ -103,14 +103,14 @@ $subscription_group_member_edit = 'subscription_group_member_edit';
                 success: function( response ) {
 
                     if( response.user != null ){
-                        name = ( response.user.calling_code ? response.user.calling_code : '+60' ) + ( response.user.phone_number ? response.user.phone_number : '-' ) + ' (' + ( response.user.email ? response.user.email : '-' ) + ')',
+                        name = ( response.user.calling_code ? response.user.calling_code : '+60' ) + ( response.user.phone_number ? response.user.phone_number : '-' ) + ' (' + ( response.user.email ? response.user.email : '-' ) + ')';
                         let option1 = new Option( name, response.user.encrypted_id, true, true );
                         userSelect2.append( option1 );
                         userSelect2.trigger( 'change' );
                     }
                     
                     if( response.leader != null ){
-                        name = ( response.leader.calling_code ? response.leader.calling_code : '+60' ) + ( response.leader.phone_number ? response.leader.phone_number : '-' ) + ' (' + ( response.leader.email ? response.leader.email : '-' ) + ')',
+                        name = ( response.leader.calling_code ? response.leader.calling_code : '+60' ) + ( response.leader.phone_number ? response.leader.phone_number : '-' ) + ' (' + ( response.leader.email ? response.leader.email : '-' ) + ')';
                         let option1 = new Option( name, response.leader.encrypted_id, true, true );
                         leaderSelect2.append( option1 );
                         leaderSelect2.trigger( 'change' );
