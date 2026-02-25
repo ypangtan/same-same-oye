@@ -110,7 +110,8 @@ $user_subscription_edit = 'user_subscription_edit';
                 success: function( response ) {
 
                     if( response.user != null ){
-                        name = ( response.user.calling_code ? response.user.calling_code : '+60' ) + ( response.user.phone_number ? response.user.phone_number : '-' ) + ' (' + ( response.user.email ? response.user.email : '-' ) + ')';
+                        name = ( response.user.phone_number ? ( response.user.calling_code ? response.user.calling_code : '+60' ) + ( response.user.phone_number ? response.user.phone_number : '-' ) : '' ) 
+                        + ' (' + ( response.user.email ? response.user.email : '-' ) + ')';
                         let option1 = new Option( name, response.user.encrypted_id, true, true );
                         userSelect2.append( option1 );
                         userSelect2.trigger( 'change' );
