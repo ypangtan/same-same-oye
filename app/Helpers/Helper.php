@@ -441,15 +441,15 @@ class Helper {
                     ],
 
                     'headings' => [
-                        'en' => ( is_array( $message ) && isset( $message['title'] ) )
-                            ? ( ( is_array( $message['title'] ) && isset( $message['title'] ) ) ? $message['title']['en'] : $message['title'] )
-                            : 'SSO',
+                        'en' => ( is_array( $message ) && isset( $message['title'] )
+                                ? strip_tags( $message['title']['en'] ?? $message['title'] )
+                                : strip_tags( (string) $message['title'] )
+                            ),
 
-                        'zh' => ( is_array( $message ) && isset( $message['title'] ) )
-                            ? ( ( is_array( $message['title'] ) && isset( $message['title'] ) )
-                            ? $message['title']['zh']
-                            : $message['title'] )
-                            : 'SSO',
+                        'zh' => ( is_array( $message ) && isset( $message['title'] )
+                                ? strip_tags( $message['title']['zh'] ?? $message['title'] )
+                                : strip_tags( (string) $message['title'] )
+                            ),
                     ],
                     'include_player_ids' => [
                         $device->register_token
