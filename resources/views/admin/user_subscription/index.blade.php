@@ -116,7 +116,7 @@ $columns = [
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        if( type == 2 ) {
+                        if( data == 2 ) {
                             return 'Trial';
                         }
 
