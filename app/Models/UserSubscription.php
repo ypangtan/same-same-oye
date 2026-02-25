@@ -33,10 +33,10 @@ class UserSubscription extends Model
 
     public function statusList() {
         return [
-            10 => 'active',
-            20 => 'expired',
-            30 => 'refunded',
-            40 => 'cancelled',
+            10 => 'Active',
+            20 => 'Expired',
+            30 => 'Refunded',
+            40 => 'Cancelled',
         ];
     }
 
