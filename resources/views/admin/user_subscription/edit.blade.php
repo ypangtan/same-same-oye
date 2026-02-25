@@ -116,7 +116,7 @@ $user_subscription_edit = 'user_subscription_edit';
                         userSelect2.append( option1 );
                         userSelect2.trigger( 'change' );
                     }
-                    $( ue + '_end_date' ).val( response.end_date );
+                    $( ue + '_end_date' ).val( response.end_date ? response.end_date.split(' ')[0] : '' );
                     if( response.type != 2 ) {
                         $( ue + '_submit' ).addClass( 'd-none' );
 
