@@ -56,16 +56,7 @@ $columns = [
     @endif
     @endforeach
     
-    var statusMapper = {
-            '10': {
-                'text': '{{ __( 'datatables.activated' ) }}',
-                'color': 'badge rounded-pill bg-success',
-            },
-            '20': {
-                'text': '{{ __( 'datatables.suspended' ) }}',
-                'color': 'badge rounded-pill bg-danger',
-            },
-        },
+    var statusMapper = @json( $data['status'] ),
         dt_table,
         dt_table_name = '#user_subscription_table',
         dt_table_config = {
