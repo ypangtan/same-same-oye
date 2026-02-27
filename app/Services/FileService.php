@@ -70,14 +70,15 @@ class FileService
     public static function songUpload( $request ) {
 
         $file = $request->file( 'file' );
-        $path = StorageService::upload( 'song', $file );
         $mimeType = $file->getMimeType();
         $duration = null;
 
         $ffprobe = \FFMpeg\FFProbe::create();
         $duration = (int) round(
-            $ffprobe->format($file->getPathname())->get('duration')
+            $ffprobe->format( $file->getPathname() )->get('duration')
         );
+
+        $path = StorageService::upload( 'song', $file );
             
         if (str_starts_with($mimeType, 'audio/')) {
             $file_type = 1;
