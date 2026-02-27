@@ -116,7 +116,7 @@ class User extends Model implements AuthenticatableContract
     public function checkPlanValidity() {
         $have_plan = $this->subscriptions()->isActive()->first();
         if( $have_plan ) {
-            $this->update( [ 'membership' => $have_plan->type == 1 ] );
+            $this->update( [ 'membership' => $have_plan->type ] );
             return ;
         } else {
             // check group plan
