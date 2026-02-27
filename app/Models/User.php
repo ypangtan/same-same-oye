@@ -117,9 +117,25 @@ class User extends Model implements AuthenticatableContract
         $have_plan = $this->subscriptions()->isActive()->first();
         if( $have_plan ) {
             $this->update( [ 'membership' => $have_plan->type == 1 ] );
+            return ;
         } else {
-            $this->update( [ 'membership' => 0 ] );
+            // check group plan
+            $group = $this->subscriptionGroup()->first();
+            if( $group ) {
+                // check if leader have active plan
+                $plan = $group->leader()->subscriptions()->isGroup()->isActive()->first();
+                if( $plan ) {
+                    $this->update( [ 'membership' => $plan->type == 1 ] );
+                    return ;
+                } else {
+                    // remove from group if leader plan expired
+                    // $group->delete();
+                }
+            }
         }
+
+        $this->update( [ 'membership' => 0 ] );
+        return ;
     }
 
     public function getEncryptedIdAttribute() {

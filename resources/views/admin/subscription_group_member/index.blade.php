@@ -22,6 +22,7 @@
 
 
 <?php
+$leader = $data['leader'] ?? '';
 $columns = [
     [
         'type' => 'default',

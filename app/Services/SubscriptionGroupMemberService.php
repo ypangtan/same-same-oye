@@ -45,7 +45,7 @@ class SubscriptionGroupMemberService {
                     ->first();
 
                 if ( !$user_subscription ) {
-                    $fail( 'Leader does not have an active group subscription or group is full.' );
+                    $fail( __( 'subscription_group_member.leader_not_active_group_subscription' ) );
                     return;
                 }
 
@@ -53,7 +53,8 @@ class SubscriptionGroupMemberService {
                     ->exists();
 
                 if ( $alreadyInGroup ) {
-                    $fail( 'User is already in another group.' );
+                    $fail( __( 'subscription_group_member.user_already_in_group' ) );
+                    return;
                 }
             } ],
             'user_id' => [ 'required','exists:users,id' ],
@@ -119,14 +120,15 @@ class SubscriptionGroupMemberService {
                     ->first();
 
                 if ( !$user_subscription ) {
-                    $fail( 'Leader does not have an active group subscription or group is full.' );
+                    $fail( __( 'subscription_group_member.leader_not_active_group_subscription' ) );
                     return;
                 }
 
                 $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $request->user_id )
                     ->exists();
                 if ( $alreadyInGroup ) {
-                    $fail( 'User is already in another group.' );
+                    $fail( __( 'subscription_group_member.user_already_in_group' ) );
+                    return;
                 }
             } ],
             'user_id' => [ 'required','exists:users,id' ],
@@ -219,17 +221,17 @@ class SubscriptionGroupMemberService {
         $filter = false;
 
         if ( !empty( $request->id ) ) {
-            $model->where( 'subscriptionGroupMembers.id', '!=', Helper::decode($request->id) );
+            $model->where( 'subscriptionGroupMembers.id', '!=', \Helper::decode($request->id) );
             $filter = true;
         }
 
         if ( !empty( $request->leader_id ) ) {
-            $model->where( 'subscriptionGroupMembers.leader_id', Helper::decode($request->leader_id) );
+            $model->where( 'subscriptionGroupMembers.leader_id', \Helper::decode($request->leader_id) );
             $filter = true;
         }
 
         if ( !empty( $request->user_id ) ) {
-            $model->where( 'subscriptionGroupMembers.user_id', Helper::decode($request->user_id) );
+            $model->where( 'subscriptionGroupMembers.user_id', \Helper::decode($request->user_id) );
             $filter = true;
         }
 
@@ -359,14 +361,14 @@ class SubscriptionGroupMemberService {
                     ->first();
 
                 if ( !$user_subscription ) {
-                    $fail( 'You does not have an active group subscription or group is full.' );
+                    $fail( 'subscription_group_member.not_active_group_subscription' );
                     return;
                 }
 
                 $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $value )
                     ->exists();
                 if ( $alreadyInGroup ) {
-                    $fail( 'User is already in another group.' );
+                    $fail( __( 'subscription_group_member.user_already_in_group' ) );
                     return;
                 }
             } ],
@@ -407,73 +409,26 @@ class SubscriptionGroupMemberService {
             'status' => 200
         ] );
     }
-    
-    public static function updateSubscriptionGroupMemberApi( $request ) {
 
-        if( !empty( $request->user_id ) ) {
-            $request->merge( [
-                'user_id' => \Helper::decode( $request->user_id )
+    public static function searchUser( $request ) {
+        $users = User::where( 'first_name', 'like', '%' . $request->user . '%' )
+            ->orWhere( 'last_name', 'like', '%' . $request->user . '%' )
+            ->orWhere( 'email', 'like', '%' . $request->user . '%' )
+            ->paginate( $request->per_page ?? 10 );
+
+        $users->getCollection()->transform(function ($value) {
+
+            $value->append( [
+                'encrypted_id',
             ] );
-        }
-        if( !empty( $request->id ) ) {
-            $request->merge( [
-                'id' => \Helper::decode( $request->id )
-            ] );
-        }
 
-        $validator = Validator::make( $request->all(), [
-            'user_id' => [ 'required', 'exists:users,id', function ( $attribute, $value, $fail ) {
-                $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
-                    ->isActive()
-                    ->isGroup()
-                    ->notHitMaxMember()
-                    ->first();
-
-                if ( !$user_subscription ) {
-                    $fail( 'You does not have an active group subscription or group is full.' );
-                    return;
-                }
-
-                $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $value )
-                    ->exists();
-                if ( $alreadyInGroup ) {
-                    $fail( 'User is already in another group.' );
-                    return;
-                }
-            } ],
-        ] );
-
-        $attributeName = [
-            'user_id' => __( 'subscription_group_member.user' ),
-        ];
-
-        foreach( $attributeName as $key => $aName ) {
-            $attributeName[$key] = strtolower( $aName );
-        }
-
-        $validator->setAttributeNames( $attributeName )->validate();
-        
-        DB::beginTransaction();
-
-        try {
-
-            $subscriptionGroupMemberUpdate = SubscriptionGroupMember::lockForUpdate()->find( $request->id );
-            $subscriptionGroupMemberUpdate->user_id = $request->user_id;
-            $subscriptionGroupMemberUpdate->save();
-
-            DB::commit();
-
-        } catch ( \Throwable $th ) {
-
-            DB::rollback();
-
-            return response()->json( [
-                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-            ], 500 );
-        }
+            return $value;
+        });
 
         return response()->json( [
-            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
+            'message' => '',
+            'message_key' => 'search_user_success',
+            'users' => $users,
         ] );
     }
 
