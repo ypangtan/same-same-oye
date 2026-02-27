@@ -189,9 +189,12 @@
             
             var simplebars = document.querySelectorAll('[data-simplebar]');
             simplebars.forEach(function(el) {
-                var sb = new SimpleBar(el, { autoHide: false });
+                new SimpleBar(el, { autoHide: false });
                 setTimeout(function() {
-                    sb.recalculate();
+                    var instance = SimpleBar.instances.get(el);
+                    if (instance) {
+                        instance.recalculate();
+                    }
                 }, 300);
             });
         } );
