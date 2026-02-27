@@ -1712,44 +1712,6 @@ class UserService
 
         $validator->setAttributeNames( $attributeName )->validate();
 
-        // custom validation
-        $user = auth()->user(); // or the model you're updating
-        $input = $request->all();
-
-        $rules = [
-            'email' => [ 'nullable', 'email', Rule::unique('users')->ignore($user->id) ],
-            'phone_number' => [ 'nullable' ],
-            'date_of_birth' => [ 'nullable', 'date'],
-        ];
-
-        // CASE 1: Has phone, no email
-        if ( $user->phone_number && !$user->email ) {
-            // Disallow phone change
-            $rules['phone_number'][] = function( $attribute, $value, $fail ) use ( $user ) {
-                if ( $value !== $user->phone_number ) {
-                    $fail( __( 'Please contact admin for phone number update.' ) );
-                }
-            };
-        }
-
-        if ( $user->date_of_birth ) {
-            // Disallow phone change
-            $rules['date_of_birth'][] = function( $attribute, $value, $fail ) use ( $user ) {
-                if ( $value !== $user->date_of_birth ) {
-                    $fail( __( 'Please contact admin for Birthday update.' ) );
-                }
-            };
-        }
-
-        // CASE 2: Has email, no phone
-        if ( !$user->phone_number && $user->email ) {
-            // Allow phone to be added once only, must be unique
-            $rules['phone_number'][] = 'required';
-            $rules['phone_number'][] = Rule::unique('users');
-        }
-
-        $validated = Validator::make($input, $rules)->validate();
-
         $updateUser = User::find( auth()->user()->id );
         $updateUser->username = $request->username;
         $updateUser->first_name = $request->first_name;
