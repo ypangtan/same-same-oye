@@ -194,6 +194,8 @@
                     var instance = SimpleBar.instances.get(el);
                     if (instance) {
                         instance.recalculate();
+                    } else {
+                        console.warn('SimpleBar instance not found for element:', el);
                     }
                 }, 300);
             });
