@@ -71,12 +71,29 @@ class FileService
 
         $file = $request->file( 'file' );
         $mimeType = $file->getMimeType();
-        $duration = null;
+        $pathname = $file->getPathname();
+        $clientName = $file->getClientOriginalName();
 
-        $ffprobe = \FFMpeg\FFProbe::create();
-        $duration = (int) round(
-            $ffprobe->format( $file->getPathname() )->get('duration')
-        );
+        // 验证文件是否可读
+        if (empty($pathname) || !file_exists($pathname)) {
+            return response()->json([
+                'status'  => 422,
+                'message' => '上传的文件不可读。',
+            ], 422);
+        }
+
+        $duration = null;
+        try {
+            $ffprobe  = \FFMpeg\FFProbe::create();
+            $duration = (int) round(
+                $ffprobe->format($pathname)->get('duration')
+            );
+        } catch (\Exception $e) {
+            \Log::warning('FFProbe 无法读取时长', [
+                'file'  => $clientName,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         $path = StorageService::upload( 'song', $file );
             
