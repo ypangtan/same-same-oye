@@ -61,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
         Item::observe(ItemObserver::class);
         Playlist::observe(PlaylistObserver::class);
         UserSubscription::observe(UserSubscriptionObserver::class);
-        // SubscriptionGroupMember::observe(SubscriptionGroupMemberObserver::class);
+        SubscriptionGroupMember::observe(SubscriptionGroupMemberObserver::class);
 
     }
 }
