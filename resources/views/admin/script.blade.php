@@ -189,8 +189,7 @@
             
             var simplebars = document.querySelectorAll('[data-simplebar]');
             simplebars.forEach(function(el) {
-                var sb = new SimpleBar(el, { autoHide: false });
-                sb.recalculate();
+                new SimpleBar(el, { autoHide: false });
             });
         } );
     </script>
