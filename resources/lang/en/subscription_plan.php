@@ -24,5 +24,6 @@ return [
     'huawei_product_id' => 'Huawei Product ID',
     'max_member' => 'Max Member',
 
-    'unable_to_edit_real_plan' => 'You only can edit the trial.'
+    'unable_to_edit_real_plan' => 'You only can edit the trial.',
+    'user_not_found' => 'The user with the provided email does not exist.',
 ];

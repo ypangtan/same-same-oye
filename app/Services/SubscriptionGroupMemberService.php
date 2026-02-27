@@ -346,14 +346,8 @@ class SubscriptionGroupMemberService {
 
     public static function createSubscriptionGroupMemberApi( $request ) {
 
-        if( !empty( $request->user_id ) ) {
-            $request->merge( [
-                'user_id' => \Helper::decode( $request->user_id )
-            ] );
-        }
-
         $validator = Validator::make( $request->all(), [
-            'user_id' => [ 'required', 'exists:users,id', function ( $attribute, $value, $fail ) {
+            'user_id' => [ 'required', 'exists:users,email', function ( $attribute, $value, $fail ) {
                 $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
                     ->isActive()
                     ->isGroup()
@@ -362,6 +356,12 @@ class SubscriptionGroupMemberService {
 
                 if ( !$user_subscription ) {
                     $fail( 'subscription_group_member.not_active_group_subscription' );
+                    return;
+                }
+
+                $user = User::where( 'email', $value )->first();
+                if ( !$user ) {
+                    $fail( 'subscription_group_member.user_not_found' );
                     return;
                 }
 

@@ -186,5 +186,11 @@
                     parents.splice( index, 1 );
                 } )
             } );
+            
+            var simplebars = document.querySelectorAll('[data-simplebar]');
+            simplebars.forEach(function(el) {
+                new SimpleBar(el, { autoHide: false });
+                el.SimpleBar.recalculate();
+            });
         } );
     </script>
