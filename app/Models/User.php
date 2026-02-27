@@ -125,7 +125,7 @@ class User extends Model implements AuthenticatableContract
                 // check if leader have active plan
                 $plan = $group->leader()->subscriptions()->isGroup()->isActive()->first();
                 if( $plan ) {
-                    $this->update( [ 'membership' => $plan->type == 1 ] );
+                    $this->update( [ 'membership' => $plan->type ] );
                     return ;
                 } else {
                     // remove from group if leader plan expired
