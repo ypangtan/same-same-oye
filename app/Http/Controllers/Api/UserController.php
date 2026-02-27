@@ -200,6 +200,8 @@ class UserController extends Controller {
      * @bodyParam first_name string The first_name to update. Example: wick
      * @bodyParam last_name string The last_name to update. Example: John
      * @bodyParam email string The email to update. Example: john@email.com
+     * @bodyParam calling_code string The calling_code to update. Example: +60
+     * @bodyParam phone_number string The phone_number to update. Example: 012398
      * @bodyParam date_of_birth string The date of birth to update. Example: 2022-01-01
      * @bodyParam to_remove integer Indicate remove photo or not. Example: 1
      * @bodyParam invitation_code string The invitation_code of upline. Example: abcdef
