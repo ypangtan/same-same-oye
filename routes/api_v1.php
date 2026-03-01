@@ -161,11 +161,11 @@ Route::middleware( 'auth:user' )->group( function() {
 
     Route::prefix( 'subscription-group-member' )->group( function() {
         Route::get( '/get-subscription-group-members', [ SubscriptionGroupMemberController::class, 'getSubscriptionGroupMembers' ] );
-        Route::get( '/create-subscription-group-member', [ SubscriptionGroupMemberController::class, 'createSubscriptionGroupMember' ] );
-        Route::get( '/update-subscription-group-member', [ SubscriptionGroupMemberController::class, 'updateSubscriptionGroupMember' ] );
-        Route::get( '/delete-subscription-group-member', [ SubscriptionGroupMemberController::class, 'deleteSubscriptionGroupMember' ] );
-        Route::get( '/accept-subscription-group-member', [ SubscriptionGroupMemberController::class, 'acceptSubscriptionGroupMember' ] );
-        Route::get( '/verify-user-subscription', [ SubscriptionGroupMemberController::class, 'verifyUserSubscription' ] );
+        Route::post( '/create-subscription-group-member', [ SubscriptionGroupMemberController::class, 'createSubscriptionGroupMember' ] );
+        Route::post( '/update-subscription-group-member', [ SubscriptionGroupMemberController::class, 'updateSubscriptionGroupMember' ] );
+        Route::post( '/delete-subscription-group-member', [ SubscriptionGroupMemberController::class, 'deleteSubscriptionGroupMember' ] );
+        Route::post( '/accept-subscription-group-member', [ SubscriptionGroupMemberController::class, 'acceptSubscriptionGroupMember' ] );
+        Route::post( '/verify-user-subscription', [ SubscriptionGroupMemberController::class, 'verifyUserSubscription' ] );
     } );
         
 });
