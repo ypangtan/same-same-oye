@@ -131,7 +131,6 @@ class User extends Model implements AuthenticatableContract
                         return ;
                     }
                 }
-                // remove from group if leader plan expired
             }
         }
 
