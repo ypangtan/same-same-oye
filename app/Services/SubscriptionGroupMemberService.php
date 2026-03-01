@@ -102,7 +102,9 @@ class SubscriptionGroupMemberService {
     // Api
     public static function getSubscriptionGroupMembers() {
 
-        $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
+        $user_subscription = UserSubscription::with( [
+            'plan',
+        ] )->where( 'user_id', auth()->user()->id )
             ->isActive()
             ->first();
             
@@ -115,8 +117,6 @@ class SubscriptionGroupMemberService {
                 'user',
             ] )->where( 'leader_id', auth()->user()->id )
                 ->get();
-
-
         } else {
             // is member
             $members = SubscriptionGroupMember::with( [
@@ -126,7 +126,9 @@ class SubscriptionGroupMemberService {
 
             foreach ( $members as $member ) {
                 $leader = User::find( $member->leader_id );
-                $user_subscription = UserSubscription::where( 'user_id', $member->first()->leader_id )
+                $user_subscription = UserSubscription::with( [
+                    'plan',
+                ] )->where( 'user_id', $member->leader_id )
                     ->isActive()
                     ->first();
                 break;
