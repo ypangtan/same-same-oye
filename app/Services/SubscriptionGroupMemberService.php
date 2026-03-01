@@ -102,6 +102,11 @@ class SubscriptionGroupMemberService {
     // Api
     public static function getSubscriptionGroupMembers() {
 
+        $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
+            ->isActive()
+            ->isGroup()
+            ->first();
+
         $members = SubscriptionGroupMember::with( [
             'user',
         ] )->where( 'leader_id', auth()->user()->id )
@@ -109,17 +114,11 @@ class SubscriptionGroupMemberService {
             ->first();
             
         $leader = null;
-        $user_subscription = null;
 
         if( $members ) {
             if( $members->leader_id == auth()->user()->id ) {
                 // is leader
                 $leader = auth()->user();
-                $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
-                    ->isActive()
-                    ->isGroup()
-                    ->first();
-
                 $members = SubscriptionGroupMember::with( [
                     'user',
                 ] )->where( 'leader_id', auth()->user()->id )
