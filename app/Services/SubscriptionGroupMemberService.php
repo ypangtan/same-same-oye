@@ -168,13 +168,13 @@ class SubscriptionGroupMemberService {
                     ->first();
 
                 if ( !$user_subscription ) {
-                    $fail( 'subscription_group_member.not_active_group_subscription' );
+                    $fail( __( 'subscription_group_member.not_active_group_subscription' ) );
                     return;
                 }
 
                 $user = User::where( 'email', $value )->where( 'status', 10 )->first();
                 if ( !$user ) {
-                    $fail( 'subscription_group_member.user_not_found' );
+                    $fail( __( 'subscription_group_member.user_not_found' ) );
                     return;
                 }
 
@@ -262,24 +262,24 @@ class SubscriptionGroupMemberService {
                     ->first();
 
                 if ( !$user_subscription ) {
-                    $fail( 'subscription_group_member.not_active_group_subscription' );
+                    $fail( __( 'subscription_group_member.not_active_group_subscription' ) );
                     return;
                 }
 
                 $groupMember = SubscriptionGroupMember::find( request()->id );
                 if ( !$groupMember ) {
-                    $fail( 'subscription_group_member.not_found' );
+                    $fail( __( 'subscription_group_member.not_found' ) );
                     return;
                 }
 
                 if ( $groupMember->leader_id != auth()->user()->id ) {
-                    $fail( 'subscription_group_member.not_leader' );
+                    $fail( __( 'subscription_group_member.not_leader' ) );
                     return;
                 }
 
                 $user = User::where( 'email', $value )->where( 'status', 10 )->first();
                 if ( !$user ) {
-                    $fail( 'subscription_group_member.user_not_found' );
+                    $fail( __( 'subscription_group_member.user_not_found' ) );
                     return;
                 }
 
