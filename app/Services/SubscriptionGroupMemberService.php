@@ -171,7 +171,7 @@ class SubscriptionGroupMemberService {
                     return;
                 }
 
-                $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $value )
+                $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $user->id )
                     ->exists();
                 if ( $alreadyInGroup ) {
                     $fail( __( 'subscription_group_member.user_already_in_group' ) );
