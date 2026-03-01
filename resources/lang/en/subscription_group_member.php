@@ -19,6 +19,7 @@ return [
     'not_active_group_subscription' => 'You does not have an active group subscription or group is full.',
     'leader_not_active_group_subscription' => 'Leader does not have an active group subscription or group is full.',
     'user_not_found' => 'User not found.',
+    'accepted' => 'You have accepted the subscription group member request.',
 
     'invalid_invite' => 'The invite is invalid.',
     'accepted' => 'Subscription group member request accepted successfully.',

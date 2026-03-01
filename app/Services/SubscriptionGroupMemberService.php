@@ -419,6 +419,17 @@ class SubscriptionGroupMemberService {
                     ]
                 ], 422 );
             }
+
+            if( $subscriptionGroupMember->user_id != auth()->user()->id && $subscriptionGroupMember->status != 1 ) {
+                return response()->json( [
+                    'message' => __( 'validation.header_message' ),
+                    'errors' => [
+                        'token' => [
+                            __( 'subscription_group_member.invalid_invite' ),
+                        ],
+                    ]
+                ], 422 );
+            }
             $subscriptionGroupMember->update( [
                 'status' => 10,
             ] );
