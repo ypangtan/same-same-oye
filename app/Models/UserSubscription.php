@@ -67,7 +67,7 @@ class UserSubscription extends Model
     public function scopeIsActive($query) {
         return $query->where('status', 10)
             ->whereNotNull('end_date')
-            ->whereDate('end_date', '>', now());
+            ->whereDate('end_date', '>=', now());
     }
     
     public function scopeIsGroup($query) {
