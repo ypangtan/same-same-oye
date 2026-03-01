@@ -135,7 +135,6 @@ class SubscriptionGroupMemberService {
             $leader = User::find( $members->leader_id );
             $user_subscription = UserSubscription::where( 'user_id', $members->leader_id )
                 ->isActive()
-                ->isGroup()
                 ->first();
         }
 
