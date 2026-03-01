@@ -339,7 +339,7 @@ class SubscriptionGroupMemberService {
         }
 
         return response()->json( [
-            'message' => __( 'subscription_group_members.accepted' ),
+            'message' => __( 'subscription_group_member.accepted' ),
         ] );
     }
 
