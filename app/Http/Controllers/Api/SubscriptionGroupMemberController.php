@@ -49,23 +49,7 @@ class SubscriptionGroupMemberController extends Controller
     }
 
     /**
-     * 3. Update Subscription Group Member 
-     * 
-     * @group Subscription Group Member API
-     * 
-     * @authenticated
-     * 
-     * @bodyParam id string The encrypted_id of the subscription group member. Example: 52
-     * @bodyParam user string The email of the user. Example: user@example.com
-     * 
-     */
-    public function updateSubscriptionGroupMember( Request $request ) {
-
-        return SubscriptionGroupMemberService::updateSubscriptionGroupMemberApi( $request );
-    }
-
-    /**
-     * 4. Delete Subscription Group Member 
+     * 3. Delete Subscription Group Member 
      * 
      * @group Subscription Group Member API
      * 
@@ -80,7 +64,7 @@ class SubscriptionGroupMemberController extends Controller
     }
 
     /**
-     * 5. Accept Subscription Group Member 
+     * 4. Accept Subscription Group Member 
      * 
      * @group Subscription Group Member API
      * 
@@ -95,7 +79,7 @@ class SubscriptionGroupMemberController extends Controller
     }
 
     /**
-     * 6. Verify User Subscription 
+     * 5. Verify User Subscription 
      * 
      * @group Subscription Group Member API
      * 
