@@ -74,24 +74,4 @@ class SubscriptionGroupMemberController extends Controller {
     public function allSubscriptionGroupMembers( Request $request ) {
         return SubscriptionGroupMemberService::allSubscriptionGroupMembers( $request );
     }
-
-    public function oneSubscriptionGroupMember( Request $request ) {
-
-        return SubscriptionGroupMemberService::oneSubscriptionGroupMember( $request );
-    }
-
-    public function createSubscriptionGroupMember( Request $request ) {
-
-        return SubscriptionGroupMemberService::createSubscriptionGroupMember( $request );
-    }
-
-    public function updateSubscriptionGroupMember( Request $request ) {
-
-        return SubscriptionGroupMemberService::updateSubscriptionGroupMember( $request );
-    }
-
-    public function deleteSubscriptionGroupMember( Request $request ) {
-
-        return SubscriptionGroupMemberService::deleteSubscriptionGroupMember( $request );
-    }
 }
