@@ -66,6 +66,10 @@ class User extends Model implements AuthenticatableContract
         return $this->hasMany( SubscriptionGroupMember::class, 'leader_id' );
     }
 
+    public function subscriptionGroupMember() {
+        return $this->hasOne( SubscriptionGroupMember::class, 'user_id' );
+    }
+
     public function subscriptions()
     {
         return $this->hasMany( UserSubscription::class, 'user_id' );
@@ -120,7 +124,7 @@ class User extends Model implements AuthenticatableContract
             return ;
         } else {
             // check group plan
-            $group = $this->subscriptionGroup()->where( 'status', 10 )->first();
+            $group = $this->subscriptionGroupMember()->where( 'status', 10 )->first();
             if( $group ) {
                 // check if leader have active plan
                 $leader = $group->leader()->first();
