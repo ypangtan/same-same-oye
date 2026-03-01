@@ -116,27 +116,26 @@ class SubscriptionGroupMemberService {
             ] )->where( 'leader_id', auth()->user()->id )
                 ->get();
 
-            foreach( $members as $key => $member ) {
-                $member->append( [
-                    'encrypted_id',
-                ] );
-            }
 
         } else {
             // is member
             $members = SubscriptionGroupMember::with( [
                 'user',
             ] )->where( 'user_id', auth()->user()->id )
-                ->first();
+                ->get();
 
-            $members->append( [
-                'encrypted_id',
-            ] );
-            $leader = User::find( $members->leader_id );
-            $user_subscription = UserSubscription::where( 'user_id', $members->leader_id )
-                ->isActive()
-                ->first();
+            foreach ( $members as $member ) {
+                $leader = User::find( $member->leader_id );
+                $user_subscription = UserSubscription::where( 'user_id', $member->first()->leader_id )
+                    ->isActive()
+                    ->first();
+                break;
+            }
         }
+
+        $members->append( [
+            'encrypted_id',
+        ] );
 
 
         return response()->json( [
