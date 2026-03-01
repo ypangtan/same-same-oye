@@ -163,12 +163,17 @@ $columns = [
                         '' ;
                         @endcan
 
+                        @can( 'view subscription_group_members' )
+                        view += '<li class="dropdown-item click-action dt-view" data-id="' + data + '">{{ __( 'template.view' ) }}</li>';
+                        @endcan
+
                         let html = 
                         `
                         <div class="dropdown">
                             <a class="dropdown-toggle btn btn-icon btn-trigger" href="#" type="button" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
+                                    `+view+`
                                     `+edit+`
                                     `+status+`
                                 </ul>
@@ -190,6 +195,10 @@ $columns = [
 
         $( document ).on( 'click', '.dt-edit', function() {
             window.location.href = '{{ route( 'admin.user_subscription.edit' ) }}?id=' + $( this ).data( 'id' );
+        } );
+
+        $( document ).on( 'click', '.dt-view', function() {
+            window.location.href = '{{ route( 'admin.module_parent.subscription_group_member.index' ) }}?id=' + $( this ).data( 'id' );
         } );
 
         let uid = 0,

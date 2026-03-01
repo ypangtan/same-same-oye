@@ -31,20 +31,15 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.leader' ) ] ),
-        'id' => 'leader',
-        'title' => __( 'subscription_group_member.leader' ),
-    ],
-    [
-        'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.user' ) ] ),
         'id' => 'user',
         'title' => __( 'subscription_group_member.user' ),
     ],
     [
-        'type' => 'default',
-        'id' => 'dt_action',
-        'title' => __( 'datatables.action' ),
+        'type' => 'select',
+        'options' => $data['status'],
+        'id' => 'status',
+        'title' => __( 'datatables.status' ),
     ],
 ];
 ?>
@@ -62,16 +57,7 @@ $columns = [
     @endif
     @endforeach
     
-    var statusMapper = {
-            '10': {
-                'text': '{{ __( 'datatables.activated' ) }}',
-                'color': 'badge rounded-pill bg-success',
-            },
-            '20': {
-                'text': '{{ __( 'datatables.suspended' ) }}',
-                'color': 'badge rounded-pill bg-danger',
-            },
-        },
+    var statusMapper = @json( $data['status'] ),
         dt_table,
         dt_table_name = '#subscription_group_member_table',
         dt_table_config = {
@@ -100,9 +86,8 @@ $columns = [
             order: [[ 1, 'desc' ]],
             columns: [
                 { data: null },
-                { data: 'leader' },
                 { data: 'user' },
-                { data: 'encrypted_id' },
+                { data: 'status' },
             ],
             columnDefs: [
                 {
@@ -137,92 +122,16 @@ $columns = [
                     }
                 },
                 {
-                    targets: parseInt( '{{ count( $columns ) - 1 }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
                     orderable: false,
-                    width: '10%',
-                    className: 'text-center',
                     render: function( data, type, row, meta ) {
-
-                        @canany( [ 'edit subscription_group_members', 'view subscription_group_members' ] )
-                        let view = '',
-                            edit = '',
-                            status = '';
-
-                        @can( 'edit subscription_group_members' )
-                        edit += '<li class="dropdown-item click-action dt-edit" data-id="' + data + '">{{ __( 'template.edit' ) }}</li>';
-                        status = '<li class="dropdown-item click-action dt-suspend" data-id="' + data + '">{{ __( 'datatables.delete' ) }}</li>';
-                        @endcan
-
-                        let html = 
-                        `
-                        <div class="dropdown">
-                            <a class="dropdown-toggle btn btn-icon btn-trigger" href="#" type="button" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                            <div class="dropdown-menu">
-                                <ul class="link-list-opt">
-                                    `+edit+`
-                                    `+status+`
-                                </ul>
-                            </div>
-                        </div>
-                        `;
-                        return html;
-                        @else
-                        return '-';
-                        @endcanany
+                        return statusMapper[data];
                     },
                 },
             ],
         },
         table_no = 0,
         timeout = null;
-
-    document.addEventListener( 'DOMContentLoaded', function() {
-
-        $( document ).on( 'click', '.dt-edit', function() {
-            window.location.href = '{{ route( 'admin.subscription_group_member.edit' ) }}?id=' + $( this ).data( 'id' );
-        } );
-
-        let uid = 0,
-            status = '',
-            scope = '';
-
-        $( document ).on( 'click', '.dt-suspend', function() {
-
-            uid = $( this ).data( 'id' );
-            scope = 'status';
-
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ) }}' );
-
-            modalConfirmation.show();
-        } );
-
-        $( document ).on( 'click', '#modal_confirmation_submit', function() {
-
-            switch ( scope ) {
-                case 'status':
-                    $.ajax( {
-                        url: '{{ route( 'admin.subscription_group_member.deleteSubscriptionGroupMember' ) }}',
-                        type: 'POST',
-                        data: {
-                            id: uid,
-                            _token: '{{ csrf_token() }}',
-                        },
-                        success: function( response ) {
-                            modalConfirmation.hide();
-                            $( '#modal_success .caption-text' ).html( response.message );
-                            modalSuccess.show();
-                            dt_table.draw( false );
-                        },
-                        error: function( error ) {
-                            modalConfirmation.hide();
-                            $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
-                            modalDanger.show();
-                        },
-                    } );        
-            }
-        } );
-   } );
 
 </script>
 

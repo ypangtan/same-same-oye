@@ -419,18 +419,8 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view subscription_group_members' ] ], function() {
                     Route::get( '/', [ SubscriptionGroupMemberController::class, 'index' ] )->name( 'admin.module_parent.subscription_group_member.index' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:add subscription_group_members' ] ], function() {
-                    Route::get( 'add', [ SubscriptionGroupMemberController::class, 'add' ] )->name( 'admin.subscription_group_member.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit subscription_group_members' ] ], function() {
-                    Route::get( 'edit', [ SubscriptionGroupMemberController::class, 'edit' ] )->name( 'admin.subscription_group_member.edit' );
-                } );
     
                 Route::post( 'all-subscription-group-members', [ SubscriptionGroupMemberController::class, 'allSubscriptionGroupMembers' ] )->name( 'admin.subscription_group_member.allSubscriptionGroupMembers' );
-                Route::post( 'one-subscription-group-member', [ SubscriptionGroupMemberController::class, 'oneSubscriptionGroupMember' ] )->name( 'admin.subscription_group_member.oneSubscriptionGroupMember' );
-                Route::post( 'create-subscription-group-member', [ SubscriptionGroupMemberController::class, 'createSubscriptionGroupMember' ] )->name( 'admin.subscription_group_member.createSubscriptionGroupMember' );
-                Route::post( 'update-subscription-group-member', [ SubscriptionGroupMemberController::class, 'updateSubscriptionGroupMember' ] )->name( 'admin.subscription_group_member.updateSubscriptionGroupMember' );
-                Route::post( 'update-subscription-group-member-status', [ SubscriptionGroupMemberController::class, 'deleteSubscriptionGroupMember' ] )->name( 'admin.subscription_group_member.deleteSubscriptionGroupMember' );
             } );
             
             Route::prefix( 'ad' )->group( function() {

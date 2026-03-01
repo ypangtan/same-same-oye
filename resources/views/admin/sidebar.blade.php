@@ -211,11 +211,6 @@
                                             <a href="{{ route( 'admin.module_parent.user_subscription.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.user_subscriptions' ) }}</span></a>
                                         </li>
                                         @endcan
-                                        @can( 'view subscription_group_members' )
-                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SubscriptionGroupMemberController' ? 'active current-page' : '' }}">
-                                            <a href="{{ route( 'admin.module_parent.subscription_group_member.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.subscription_group_members' ) }}</span></a>
-                                        </li>
-                                        @endcan
                                         @endIf
                                     </ul>
                                 </li>

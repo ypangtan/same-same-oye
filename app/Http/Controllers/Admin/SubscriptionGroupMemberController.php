@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserSubscription;
 use Illuminate\Http\Request;
 
 use App\Services\{
@@ -34,6 +35,10 @@ class SubscriptionGroupMemberController extends Controller {
             '10' => __( 'datatables.activated' ),
             '20' => __( 'datatables.suspended' ),
         ];
+
+        $userSubscription = $request->id ? UserSubscription::find( $request->id ) : '';
+
+        $this->data['data']['leader'] = $userSubscription ? $userSubscription->user_id : '';
 
         return view( 'admin.main' )->with( $this->data );
     }
