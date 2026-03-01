@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\{
 };
 
 use App\Services\{
-    SubscriptionGroupMemberService
+    SubscriptionGroupMemberService,
+    UserSubscriptionService
 };
 
 use App\Models\{
@@ -21,6 +22,8 @@ class SubscriptionGroupMemberController extends Controller
 {
     /**
      * 1. Get Subscription Group Members 
+     * 
+     * @authenticated
      * 
      * @group Subscription Group Member API
      * 
@@ -35,7 +38,9 @@ class SubscriptionGroupMemberController extends Controller
      * 
      * @group Subscription Group Member API
      * 
-     * @bodyParam user_id string The encrypted_id of the user. Example: 52
+     * @authenticated
+     * 
+     * @bodyParam user string The email of the user. Example: user@example.com
      * 
      */
     public function createSubscriptionGroupMember( Request $request ) {
@@ -44,9 +49,27 @@ class SubscriptionGroupMemberController extends Controller
     }
 
     /**
-     * 3. Delete Subscription Group Member 
+     * 3. Update Subscription Group Member 
      * 
      * @group Subscription Group Member API
+     * 
+     * @authenticated
+     * 
+     * @bodyParam id string The encrypted_id of the subscription group member. Example: 52
+     * @bodyParam user string The email of the user. Example: user@example.com
+     * 
+     */
+    public function updateSubscriptionGroupMember( Request $request ) {
+
+        return SubscriptionGroupMemberService::updateSubscriptionGroupMemberApi( $request );
+    }
+
+    /**
+     * 4. Delete Subscription Group Member 
+     * 
+     * @group Subscription Group Member API
+     * 
+     * @authenticated
      * 
      * @bodyParam id string The encrypted_id of the subscription group member. Example: 52
      * 
@@ -57,17 +80,35 @@ class SubscriptionGroupMemberController extends Controller
     }
 
     /**
-     * 4. Search User for Subscription Group Member 
+     * 5. Accept Subscription Group Member 
      * 
      * @group Subscription Group Member API
      * 
-     * @bodyParam user string The search text for the user. Example: 52
-     * @bodyParam per_page string The data per page. Example: 10
+     * @authenticated
+     * 
+     * @bodyParam token string The token. Example: 52
      * 
      */
-    public function searchUser( Request $request ) {
+    public function acceptSubscriptionGroupMember( Request $request ) {
 
-        return SubscriptionGroupMemberService::searchUser( $request );
+        return SubscriptionGroupMemberService::acceptSubscriptionGroupMember( $request );
     }
+
+    /**
+     * 6. Verify User Subscription 
+     * 
+     * @group Subscription Group Member API
+     * 
+     * @authenticated
+     * 
+     * @bodyParam plan_id string The plan_id of the subscription. Example: 52
+     * 
+     */
+    public function verifyUserSubscription( Request $request ) {
+
+        return UserSubscriptionService::verifyUserSubscription( $request );
+    }
+
+    
 
 }

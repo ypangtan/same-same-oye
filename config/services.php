@@ -79,4 +79,8 @@ return [
         'mail' => env( 'BREVO_FROM_MAIL' ),
         'contact_us_mail' => env( 'CONTACT_US_MAIL' ),
     ],
+
+    'deeplink' => [
+        'deeplink_url' => env( 'DEEPLINK_URL' ),
+    ],
 ];

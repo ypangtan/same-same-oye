@@ -60,6 +60,7 @@ return [
     'phone_number' => 'Phone Number',
     'message' => 'Message',
     'type' => 'Type',
+    'invitation' => 'Invitation',
 
     'invalid_otp' => 'Invalid_otp',
     'invalid_phone_number' => 'Invalid phone number',

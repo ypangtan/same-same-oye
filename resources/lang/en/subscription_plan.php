@@ -25,5 +25,6 @@ return [
     'max_member' => 'Max Member',
 
     'unable_to_edit_real_plan' => 'You only can edit the trial.',
+    'not_found' => 'Member not found.',
     'user_not_found' => 'The user with the provided email does not exist.',
 ];

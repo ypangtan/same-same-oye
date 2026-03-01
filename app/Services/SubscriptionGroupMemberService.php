@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\{
+    Crypt,
     DB,
     Validator,
     Storage,
@@ -21,154 +22,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class SubscriptionGroupMemberService {
-
-    public static function createSubscriptionGroupMember( $request ) {
-
-        if( !empty( $request->leader_id ) ) {
-            $request->merge( [
-                'leader_id' => \Helper::decode( $request->leader_id )
-            ] );
-        }
-
-        if( !empty( $request->user_id ) ) {
-            $request->merge( [
-                'user_id' => \Helper::decode( $request->user_id )
-            ] );
-        }
-
-        $validator = Validator::make( $request->all(), [
-            'leader_id' => [ 'required','exists:users,id', function ( $attribute, $value, $fail ) use ( $request ) {
-                $user_subscription = UserSubscription::where( 'user_id', $value )
-                    ->isActive()
-                    ->isGroup()
-                    ->notHitMaxMember()
-                    ->first();
-
-                if ( !$user_subscription ) {
-                    $fail( __( 'subscription_group_member.leader_not_active_group_subscription' ) );
-                    return;
-                }
-
-                $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $request->user_id )
-                    ->exists();
-
-                if ( $alreadyInGroup ) {
-                    $fail( __( 'subscription_group_member.user_already_in_group' ) );
-                    return;
-                }
-            } ],
-            'user_id' => [ 'required','exists:users,id' ],
-        ] );
-
-
-        $attributeName = [
-            'leader_id' => __( 'subscription_group_member.leader' ),
-            'user_id' => __( 'subscription_group_member.user' ),
-        ];
-
-        foreach( $attributeName as $key => $aName ) {
-            $attributeName[$key] = strtolower( $aName );
-        }
-
-        $validator->setAttributeNames( $attributeName )->validate();
-
-        DB::beginTransaction();
-        
-        try {
-            $subscriptionGroupMemberCreate = SubscriptionGroupMember::create([
-                'user_id' => $request->user_id,
-                'leader_id' => $request->leader_id,
-            ]);
-
-            DB::commit();
-
-        } catch ( \Throwable $th ) {
-
-            DB::rollback();
-
-            return response()->json( [
-                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-            ], 500 );
-        }
-
-        return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
-            'status' => 200
-        ] );
-    }
-    
-    public static function updateSubscriptionGroupMember( $request ) {
-
-        if( !empty( $request->leader_id ) ) {
-            $request->merge( [
-                'leader_id' => \Helper::decode( $request->leader_id )
-            ] );
-        }
-
-        if( !empty( $request->user_id ) ) {
-            $request->merge( [
-                'user_id' => \Helper::decode( $request->user_id )
-            ] );
-        }
-
-        $validator = Validator::make( $request->all(), [
-            'leader_id' => [ 'required','exists:users,id', function ( $attribute, $value, $fail ) use ( $request ) {
-                $user_subscription = UserSubscription::where( 'user_id', $value )
-                    ->where( 'status', 10 )
-                    ->isGroup()
-                    ->notHitMaxMember()
-                    ->first();
-
-                if ( !$user_subscription ) {
-                    $fail( __( 'subscription_group_member.leader_not_active_group_subscription' ) );
-                    return;
-                }
-
-                $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $request->user_id )
-                    ->exists();
-                if ( $alreadyInGroup ) {
-                    $fail( __( 'subscription_group_member.user_already_in_group' ) );
-                    return;
-                }
-            } ],
-            'user_id' => [ 'required','exists:users,id' ],
-        ] );
-
-        $attributeName = [
-            'leader_id' => __( 'subscription_group_member.leader' ),
-            'user_id' => __( 'subscription_group_member.user' ),
-        ];
-
-        foreach( $attributeName as $key => $aName ) {
-            $attributeName[$key] = strtolower( $aName );
-        }
-
-        $validator->setAttributeNames( $attributeName )->validate();
-        
-        DB::beginTransaction();
-
-        try {
-
-            $subscriptionGroupMemberUpdate = SubscriptionGroupMember::lockForUpdate()->find( $request->id );
-            $subscriptionGroupMemberUpdate->leader_id = $request->leader_id;
-            $subscriptionGroupMemberUpdate->user_id = $request->user_id;
-            $subscriptionGroupMemberUpdate->save();
-
-            DB::commit();
-
-        } catch ( \Throwable $th ) {
-
-            DB::rollback();
-
-            return response()->json( [
-                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-            ], 500 );
-        }
-
-        return response()->json( [
-            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
-        ] );
-    }
 
     public static function allSubscriptionGroupMembers( $request ) {
 
@@ -246,24 +99,239 @@ class SubscriptionGroupMemberService {
         ];
     }
 
-    public static function oneSubscriptionGroupMember( $request ) {
+    // Api
+    public static function getSubscriptionGroupMembers() {
 
-        $subscriptionGroupMember = SubscriptionGroupMember::with( [
+        $members = SubscriptionGroupMember::with( [
             'user',
-            'leader',
-        ] )->find( $request->id );
+        ] )->where( 'leader_id', auth()->user()->id )
+            ->orWhere( 'user_id', auth()->user()->id )
+            ->get();
+            
+        $leader = null;
+        $user_subscription = null;
 
-        $subscriptionGroupMember->append( ['encrypted_id'] );
-        if( $subscriptionGroupMember ) {
-            if( $subscriptionGroupMember->user ) {
-                $subscriptionGroupMember->user->append( [ 'encrypted_id' ] );
-            }
-            if( $subscriptionGroupMember->leader ) {
-                $subscriptionGroupMember->leader->append( [ 'encrypted_id' ] );
+        if( $members ) {
+            foreach( $members as $key => $member ) {
+                $member->append( [
+                    'encrypted_id',
+                ] );
+
+                if( $key == 0 ) {
+                    $leader = User::find( $member->leader_id );
+                    $user_subscription = UserSubscription::where( 'user_id', $member->leader_id )
+                        ->isActive()
+                        ->isGroup()
+                        ->first();
+                }
             }
         }
+
+        return response()->json( [
+            'message' => '',
+            'message_key' => 'get_subscription_group_member_success',
+            'members' => $members,
+            'leader' => $leader,
+            'user_subscription' => $user_subscription,
+        ] );
+
+    }
+
+    public static function createSubscriptionGroupMemberApi( $request ) {
+
+        $validator = Validator::make( $request->all(), [
+            'user' => [ 'required', function ( $attribute, $value, $fail ) {
+                $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
+                    ->isActive()
+                    ->isGroup()
+                    ->notHitMaxMember()
+                    ->first();
+
+                if ( !$user_subscription ) {
+                    $fail( 'subscription_group_member.not_active_group_subscription' );
+                    return;
+                }
+
+                $user = User::where( 'email', $value )->where( 'status', 10 )->first();
+                if ( !$user ) {
+                    $fail( 'subscription_group_member.user_not_found' );
+                    return;
+                }
+
+                $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $value )
+                    ->exists();
+                if ( $alreadyInGroup ) {
+                    $fail( __( 'subscription_group_member.user_already_in_group' ) );
+                    return;
+                }
+            } ],
+        ] );
+
+
+        $attributeName = [
+            'user' => __( 'subscription_group_member.user' ),
+        ];
+
+        foreach( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        DB::beginTransaction();
         
-        return response()->json( $subscriptionGroupMember );
+        try {
+            $user = User::where( 'email', $request->user )->where( 'status', 10 )->first();
+            $subscriptionGroupMemberCreate = SubscriptionGroupMember::create([
+                'user_id' => $user->id,
+                'leader_id' => auth()->user()->id,
+                'status' => 1,
+            ]);
+            
+            $plan = auth()->user()->subscriptions()->isActive()->first();
+            $subscription_plan = $plan ? $plan->plan()->first() : null;
+
+            // send invite notification to user
+            $data = [
+                'email' => $user->email,
+                'name' => $user->name,
+                'plan_name' => $subscription_plan ? $subscription_plan->name : null,
+                'sender_name' => auth()->user()->name,
+                'invitation_link' => config( 'services.deeplink.deeplink_url' ) . '?token=' . Crypt::encryptString( $subscriptionGroupMemberCreate->id ),
+                'type' => 4,
+            ];
+            $service = new MailService( $data );
+            $result = $service->send();
+            if( !$result || !isset( $result['status'] ) || $result['status'] != 200 ) {
+                DB::rollback();
+                return response()->json([
+                    'message' => __('user.send_mail_fail'),
+                    'message_key' => 'send_mail_failed',
+                    'data' => null,
+                ], 500 );
+            }
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
+            'status' => 200
+        ] );
+    }
+
+    public static function updateSubscriptionGroupMemberApi( $request ) {
+
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
+        ] );
+
+        $validator = Validator::make( $request->all(), [
+            'user' => [ 'required', function ( $attribute, $value, $fail ) {
+                $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
+                    ->isActive()
+                    ->isGroup()
+                    ->first();
+
+                if ( !$user_subscription ) {
+                    $fail( 'subscription_group_member.not_active_group_subscription' );
+                    return;
+                }
+
+                $groupMember = SubscriptionGroupMember::find( request()->id );
+                if ( !$groupMember ) {
+                    $fail( 'subscription_group_member.not_found' );
+                    return;
+                }
+
+                if ( $groupMember->leader_id != auth()->user()->id ) {
+                    $fail( 'subscription_group_member.not_leader' );
+                    return;
+                }
+
+                $user = User::where( 'email', $value )->where( 'status', 10 )->first();
+                if ( !$user ) {
+                    $fail( 'subscription_group_member.user_not_found' );
+                    return;
+                }
+
+                $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $value )
+                    ->exists();
+                if ( $alreadyInGroup ) {
+                    $fail( __( 'subscription_group_member.user_already_in_group' ) );
+                    return;
+                }
+            } ],
+        ] );
+
+
+        $attributeName = [
+            'user' => __( 'subscription_group_member.user' ),
+        ];
+
+        foreach( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        DB::beginTransaction();
+        
+        try {
+            $user = User::where( 'email', $request->user )->where( 'status', 10 )->first();
+
+            $subscriptionGroupMemberCreate = SubscriptionGroupMember::find( $request->id );
+            $subscriptionGroupMemberCreate->update( [
+                'user_id' => $user->id,
+                'status' => 1,
+            ] );
+
+            $plan = auth()->user()->subscriptions()->isActive()->first();
+            $subscription_plan = $plan ? $plan->plan()->first() : null;
+
+            // send invite notification to user
+            $data = [
+                'email' => $user->email,
+                'name' => $user->name,
+                'plan_name' => $subscription_plan ? $subscription_plan->name : null,
+                'sender_name' => auth()->user()->name,
+                'invitation_link' => config( 'services.deeplink.deeplink_url' ) . '?token=' . Crypt::encryptString( $subscriptionGroupMemberCreate->id ),
+                'type' => 4,
+            ];
+            $service = new MailService( $data );
+            $result = $service->send();
+            if( !$result || !isset( $result['status'] ) || $result['status'] != 200 ) {
+                DB::rollback();
+                return response()->json([
+                    'message' => __('user.send_mail_fail'),
+                    'message_key' => 'send_mail_failed',
+                    'data' => null,
+                ], 500 );
+            }
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
+            'status' => 200
+        ] );
     }
 
     public static function deleteSubscriptionGroupMember( $request ){
@@ -306,95 +374,43 @@ class SubscriptionGroupMemberService {
         ] );
     }
 
-    // Api
-    public static function getSubscriptionGroupMembers() {
-
-        $members = SubscriptionGroupMember::with( [
-            'user',
-        ] )->where( 'leader_id', auth()->user()->id )
-            ->orWhere( 'user_id', auth()->user()->id )
-            ->get();
-            
-        $leader = null;
-        $user_subscription = null;
-
-        if( $members ) {
-            foreach( $members as $key => $member ) {
-                $member->append( [
-                    'encrypted_id',
-                ] );
-
-                if( $key == 0 ) {
-                    $leader = User::find( $member->leader_id );
-                    $user_subscription = UserSubscription::where( 'user_id', $member->leader_id )
-                        ->isActive()
-                        ->isGroup()
-                        ->first();
-                }
-            }
-        }
-
-        return response()->json( [
-            'message' => '',
-            'message_key' => 'get_subscription_group_member_success',
-            'members' => $members,
-            'leader' => $leader,
-            'user_subscription' => $user_subscription,
-        ] );
-
-    }
-
-    public static function createSubscriptionGroupMemberApi( $request ) {
-
-        $validator = Validator::make( $request->all(), [
-            'user_id' => [ 'required', 'exists:users,email', function ( $attribute, $value, $fail ) {
-                $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
-                    ->isActive()
-                    ->isGroup()
-                    ->notHitMaxMember()
-                    ->first();
-
-                if ( !$user_subscription ) {
-                    $fail( 'subscription_group_member.not_active_group_subscription' );
-                    return;
-                }
-
-                $user = User::where( 'email', $value )->first();
-                if ( !$user ) {
-                    $fail( 'subscription_group_member.user_not_found' );
-                    return;
-                }
-
-                $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $value )
-                    ->exists();
-                if ( $alreadyInGroup ) {
-                    $fail( __( 'subscription_group_member.user_already_in_group' ) );
-                    return;
-                }
-            } ],
-        ] );
-
-
-        $attributeName = [
-            'user_id' => __( 'subscription_group_member.user' ),
-        ];
-
-        foreach( $attributeName as $key => $aName ) {
-            $attributeName[$key] = strtolower( $aName );
-        }
-
-        $validator->setAttributeNames( $attributeName )->validate();
-
-        DB::beginTransaction();
+    public static function acceptSubscriptionGroupMember( $request ) {
         
         try {
-            $subscriptionGroupMemberCreate = SubscriptionGroupMember::create([
-                'user_id' => $request->user_id,
-                'leader_id' => auth()->user()->id,
-            ]);
+            $request->merge( [
+                'token' => Crypt::decryptString( $request->token ),
+            ] );
+        } catch ( \Throwable $th ) {
+            return response()->json( [
+                'message' => __( 'validation.header_message' ),
+                'errors' => [
+                    'token' => [
+                        __( 'subscription_group_member.invalid_invite' ),
+                    ],
+                ]
+            ], 422 );
+        }
 
+
+        DB::beginTransaction();
+
+        try {
+            $subscriptionGroupMember = SubscriptionGroupMember::find( $request->token );
+            if ( !$subscriptionGroupMember ) {
+                return response()->json( [
+                    'message' => __( 'validation.header_message' ),
+                    'errors' => [
+                        'token' => [
+                            __( 'subscription_group_member.invalid_invite' ),
+                        ],
+                    ]
+                ], 422 );
+            }
+            $subscriptionGroupMember->update( [
+                'status' => 10,
+            ] );
+            
             DB::commit();
-
         } catch ( \Throwable $th ) {
 
             DB::rollback();
@@ -405,30 +421,7 @@ class SubscriptionGroupMemberService {
         }
 
         return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
-            'status' => 200
-        ] );
-    }
-
-    public static function searchUser( $request ) {
-        $users = User::where( 'first_name', 'like', '%' . $request->user . '%' )
-            ->orWhere( 'last_name', 'like', '%' . $request->user . '%' )
-            ->orWhere( 'email', 'like', '%' . $request->user . '%' )
-            ->paginate( $request->per_page ?? 10 );
-
-        $users->getCollection()->transform(function ($value) {
-
-            $value->append( [
-                'encrypted_id',
-            ] );
-
-            return $value;
-        });
-
-        return response()->json( [
-            'message' => '',
-            'message_key' => 'search_user_success',
-            'users' => $users,
+            'message' => __( 'subscription_group_members.accepted' ),
         ] );
     }
 

@@ -119,6 +119,8 @@ class MailService {
                 return view( 'admin.mail.otp', [ 'data' => $this->data ] )->render();
             case 3:
                 return view( 'admin.mail.contact_us', [ 'data' => $this->data ] )->render();
+            case 4:
+                return view( 'admin.mail.invitation', [ 'data' => $this->data ] )->render();
             default:
                 return view( 'admin.mail.otp', [ 'data' => $this->data ] )->render();
         }
@@ -134,6 +136,9 @@ class MailService {
                 break;
             case 3:
                 $this->data['subject'] = __( 'user.contact_us' );
+                break;
+            case 4:
+                $this->data['subject'] = __( 'user.invitation' );
                 break;
             default:
                 $this->data['subject'] = __( 'user.register' );

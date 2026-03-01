@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\{
     PointsController,
     RankController,
     SearchController,
+    SubscriptionGroupMemberController,
     TypeController,
     UserPlaylistController,
 };
@@ -156,6 +157,15 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( '/verify-payment', [ InAppPurchaseController::class, 'verifyPayment' ] );
         Route::get( '/get-current-subscription', [ InAppPurchaseController::class, 'getCurrentSubscription' ] );
         Route::get( '/cancel-subscription', [ InAppPurchaseController::class, 'cancelSubscription' ] );
+    } );
+
+    Route::prefix( 'subscription-group-member' )->group( function() {
+        Route::get( '/get-subscription-group-members', [ SubscriptionGroupMemberController::class, 'getSubscriptionGroupMembers' ] );
+        Route::get( '/create-subscription-group-member', [ SubscriptionGroupMemberController::class, 'createSubscriptionGroupMember' ] );
+        Route::get( '/update-subscription-group-member', [ SubscriptionGroupMemberController::class, 'updateSubscriptionGroupMember' ] );
+        Route::get( '/delete-subscription-group-member', [ SubscriptionGroupMemberController::class, 'deleteSubscriptionGroupMember' ] );
+        Route::get( '/accept-subscription-group-member', [ SubscriptionGroupMemberController::class, 'acceptSubscriptionGroupMember' ] );
+        Route::get( '/verify-user-subscription', [ SubscriptionGroupMemberController::class, 'verifyUserSubscription' ] );
     } );
         
 });

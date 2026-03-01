@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\{
 use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
+    SubscriptionGroupMember,
+    SubscriptionPlan,
     UserSubscription,
 };
 
@@ -311,4 +313,52 @@ class UserSubscriptionService
             'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
         ] );
     }
+
+    public static function verifyUserSubscription( $request ) {
+
+        if( !empty( $request->plan_id ) ) {
+            $request->merge( [
+                'plan_id' => \Helper::decode( $request->plan_id )
+            ] );
+        }
+
+        $validator = Validator::make( $request->all(), [
+            'plan_id' => [ 'required', function ( $attribute, $value, $fail ) {
+                $plan = SubscriptionPlan::find( $value );
+                if( !$plan ) {
+                    $fail( __( 'subscription_group_member.invalid_plan' ) );
+                    return ;
+                }
+
+                $userGroupMember = SubscriptionGroupMember::where( 'user_id', auth()->user()->id )->where( 'status', 10 )->first();
+                if( !$userGroupMember ) {
+                    $fail( __( 'subscription_group_member.in_other_group' ) );
+                    return ;
+                }
+
+                $userGroupMember = SubscriptionGroupMember::where( 'leader_id', auth()->user()->id )->count();
+                if( $userGroupMember >= $userGroupMember->max_members ) {
+                    $fail( __( 'subscription_group_member.over_max_members' ) );
+                    return ;
+                }
+
+            } ],
+        ] );
+
+
+        $attributeName = [
+            'plan_id' => __( 'subscription_group_member.plan' ),
+        ];
+
+        foreach( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        return response()->json( [
+            'status' => 200
+        ] );
+    }
+
 }

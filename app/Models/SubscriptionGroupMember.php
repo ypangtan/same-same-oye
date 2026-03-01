@@ -21,6 +21,7 @@ class SubscriptionGroupMember extends Model
     protected $fillable = [
         'user_id',
         'leader_id',
+        'status',
     ];
 
     public function leader() {
@@ -42,6 +43,7 @@ class SubscriptionGroupMember extends Model
     protected static $logAttributes = [
         'user_id',
         'leader_id',
+        'status',
     ];
 
     protected static $logName = 'SubscriptionGroupMember';

@@ -120,17 +120,18 @@ class User extends Model implements AuthenticatableContract
             return ;
         } else {
             // check group plan
-            $group = $this->subscriptionGroup()->first();
+            $group = $this->subscriptionGroup()->where( 'status', 10 )->first();
             if( $group ) {
                 // check if leader have active plan
-                $plan = $group->leader()->subscriptions()->isGroup()->isActive()->first();
-                if( $plan ) {
-                    $this->update( [ 'membership' => $plan->type ] );
-                    return ;
-                } else {
-                    // remove from group if leader plan expired
-                    // $group->delete();
+                $leader = $group->leader()->first();
+                if( $leader ) {
+                    $plan = $leader->subscriptions()->isGroup()->isActive()->first();
+                    if( $plan ) {
+                        $this->update( [ 'membership' => $plan->type ] );
+                        return ;
+                    }
                 }
+                // remove from group if leader plan expired
             }
         }
 

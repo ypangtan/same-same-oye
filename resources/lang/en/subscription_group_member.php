@@ -18,4 +18,10 @@ return [
     'user_already_in_group' => 'User is already in another group.',
     'not_active_group_subscription' => 'You does not have an active group subscription or group is full.',
     'leader_not_active_group_subscription' => 'Leader does not have an active group subscription or group is full.',
+
+    'invalid_invite' => 'The invite is invalid.',
+    'accepted' => 'Subscription group member request accepted successfully.',
+    'invalid_plan' => 'The subscription plan is invalid.',
+    'in_other_group' => 'You are already in another group. Please leave the current group before joining another.',
+    'over_max_members' => 'The group has reached the maximum number of members.',
 ];
