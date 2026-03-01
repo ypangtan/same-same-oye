@@ -207,9 +207,9 @@ class SubscriptionGroupMemberService {
             // send invite notification to user
             $data = [
                 'email' => $user->email,
-                'name' => $user->name,
+                'name' => $user->first_name . ' ' . $user->last_name,
                 'plan_name' => $subscription_plan ? $subscription_plan->name : null,
-                'sender_name' => auth()->user()->name,
+                'sender_name' => auth()->user()->first_name . ' ' . auth()->user()->last_name,
                 'invitation_link' => config( 'services.deeplink.deeplink_url' ) . '?token=' . Crypt::encryptString( $subscriptionGroupMemberCreate->id ),
                 'type' => 4,
             ];
@@ -313,9 +313,9 @@ class SubscriptionGroupMemberService {
             // send invite notification to user
             $data = [
                 'email' => $user->email,
-                'name' => $user->name,
+                'name' => $user->first_name . ' ' . $user->last_name,
                 'plan_name' => $subscription_plan ? $subscription_plan->name : null,
-                'sender_name' => auth()->user()->name,
+                'sender_name' => auth()->user()->first_name . ' ' . auth()->user()->last_name,
                 'invitation_link' => config( 'services.deeplink.deeplink_url' ) . '?token=' . Crypt::encryptString( $subscriptionGroupMemberCreate->id ),
                 'type' => 4,
             ];
