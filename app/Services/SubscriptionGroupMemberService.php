@@ -314,7 +314,7 @@ class SubscriptionGroupMemberService {
                 ], 422 );
             }
 
-            if( $subscriptionGroupMember->user_id != auth()->user()->id && $subscriptionGroupMember->status != 1 ) {
+            if( $subscriptionGroupMember->user_id != auth()->user()->id || $subscriptionGroupMember->status != 1 ) {
                 return response()->json( [
                     'message' => __( 'validation.header_message' ),
                     'errors' => [
