@@ -104,45 +104,41 @@ class SubscriptionGroupMemberService {
 
         $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
             ->isActive()
-            ->isGroup()
-            ->first();
-
-        $members = SubscriptionGroupMember::with( [
-            'user',
-        ] )->where( 'leader_id', auth()->user()->id )
-            ->orWhere( 'user_id', auth()->user()->id )
             ->first();
             
         $leader = null;
 
-        if( $members ) {
-            if( $members->leader_id == auth()->user()->id ) {
-                // is leader
-                $leader = auth()->user();
-                $members = SubscriptionGroupMember::with( [
-                    'user',
-                ] )->where( 'leader_id', auth()->user()->id )
-                    ->get();
+        if( $user_subscription ) {
+            // is leader
+            $leader = auth()->user();
+            $members = SubscriptionGroupMember::with( [
+                'user',
+            ] )->where( 'leader_id', auth()->user()->id )
+                ->get();
 
-                foreach( $members as $key => $member ) {
-                    $member->append( [
-                        'encrypted_id',
-                    ] );
-                }
-
-            } else {
-                // is member
-                $members->append( [
+            foreach( $members as $key => $member ) {
+                $member->append( [
                     'encrypted_id',
                 ] );
-                $leader = User::find( $members->leader_id );
-                $user_subscription = UserSubscription::where( 'user_id', $members->leader_id )
-                    ->isActive()
-                    ->isGroup()
-                    ->first();
             }
 
+        } else {
+            // is member
+            $members = SubscriptionGroupMember::with( [
+                'user',
+            ] )->where( 'user_id', auth()->user()->id )
+                ->first();
+
+            $members->append( [
+                'encrypted_id',
+            ] );
+            $leader = User::find( $members->leader_id );
+            $user_subscription = UserSubscription::where( 'user_id', $members->leader_id )
+                ->isActive()
+                ->isGroup()
+                ->first();
         }
+
 
         return response()->json( [
             'message' => '',
