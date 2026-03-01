@@ -49,7 +49,7 @@
 
         <p>If the button above does not work, you may copy and paste the following link into your browser:</p>
 
-        <p>{{ $data['invitation_link'] }}</p>
+        <p><a href="{{ $data['invitation_link'] }}">{{ $data['invitation_link'] }}</a></p>
 
         <p>If you were not expecting this invitation, you may safely ignore this email.</p>
     </div>
