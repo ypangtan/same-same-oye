@@ -106,7 +106,6 @@ class SubscriptionGroupMemberService {
             'user',
         ] )->where( 'leader_id', auth()->user()->id )
             ->orWhere( 'user_id', auth()->user()->id )
-            ->where( 'status', 10 )
             ->first();
             
         $leader = null;
@@ -124,7 +123,6 @@ class SubscriptionGroupMemberService {
                 $members = SubscriptionGroupMember::with( [
                     'user',
                 ] )->where( 'leader_id', auth()->user()->id )
-                    ->where( 'status', 10 )
                     ->get();
 
                 foreach( $members as $key => $member ) {
