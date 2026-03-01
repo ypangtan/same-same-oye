@@ -236,7 +236,7 @@ class SubscriptionGroupMemberService {
         }
 
         return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
+            'message' => __( 'subscription_group_member.invite_send' ),
             'status' => 200
         ] );
     }
@@ -342,7 +342,7 @@ class SubscriptionGroupMemberService {
         }
 
         return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.subscription_group_members' ) ) ] ),
+            'message' => __( 'subscription_group_member.invite_send' ),
             'status' => 200
         ] );
     }
