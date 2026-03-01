@@ -46,7 +46,7 @@ class checkPlanValidity extends Command
 
         $user = User::find( 5 );
         if( $user ) {
-            
+            $this->info( 'have user' );
             $group = $user->subscriptionGroup()->where( 'status', 10 )->first();
             if( $group ) {
                 $this->info( 'have group' );
