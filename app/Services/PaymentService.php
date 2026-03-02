@@ -291,6 +291,7 @@ class PaymentService {
         $plan = SubscriptionPlan::find( $plan_id );
 
         $existsTrialSubsciption = $user->subscriptions()
+            ->where('platform_transaction_id', '!=', $transactionId)
             ->where( 'status', 10 )
             ->get();
         foreach( $existsTrialSubsciption as $exists ) {
