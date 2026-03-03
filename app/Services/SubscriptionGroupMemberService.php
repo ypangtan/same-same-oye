@@ -177,6 +177,8 @@ class SubscriptionGroupMemberService {
                     $fail( __( 'subscription_group_member.user_already_in_group' ) );
                     return;
                 }
+
+                // TODO: check user have subscription or not
             } ],
         ] );
 
@@ -298,7 +300,6 @@ class SubscriptionGroupMemberService {
             ], 422 );
         }
 
-
         DB::beginTransaction();
 
         try {
@@ -324,6 +325,7 @@ class SubscriptionGroupMemberService {
                     ]
                 ], 422 );
             }
+            
             $subscriptionGroupMember->update( [
                 'status' => 10,
             ] );
