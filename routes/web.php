@@ -22,7 +22,50 @@ use PhpOffice\PhpSpreadsheet\Calculation\Web;
 //     return view( 'welcome' );
 // } );
 
-Route::get('/.well-known/apple-app-site-association', function () {
+Route::get('.well-known/apple-app-site-association', function () {
+    $data = [
+        "applinks" => [
+            "details" => [
+                [
+                    "appIDs" => [
+                        "2NT4CMN626.com.sama2oye.ios"
+                    ],
+                    "components" => [
+                        [
+                            "#" => "no_universal_links",
+                            "exclude" => true,
+                            "comment" => "Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link."
+                        ],
+                        [
+                            "/" => "/subscription-groups/invite",
+                            "comment" => "Matches any URL with path /subscription-groups/invite."
+                        ],
+                        [
+                            "/" => "/playlist/share",
+                            "comment" => "Matches any URL with path /playlist/share."
+                        ],
+                        [
+                            "/" => "/item/share",
+                            "comment" => "Matches any URL with path /item/share."
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "webcredentials" => [
+            "apps" => [
+                "2NT4CMN626.com.sama2oye.ios"
+            ]
+        ]
+    ];
+    
+    return Response::make(
+        json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
+        200,
+        ['Content-Type' => 'application/json']
+    );
+});
+Route::get('apple-app-site-association', function () {
     $data = [
         "applinks" => [
             "details" => [
