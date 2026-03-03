@@ -59,10 +59,11 @@ Route::get('.well-known/apple-app-site-association', function () {
         ]
     ];
     
-    return response(json_encode($data), 200)
-        ->withHeaders([
-            'Content-Type' => 'application/json',
-        ]);
+    return Response::make(
+        json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT),
+        200,
+        ['Content-Type' => 'application/json']
+    );
 });
 
 Route::post( '/ios/notification', [ WebhookController::class, 'ios']  )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
