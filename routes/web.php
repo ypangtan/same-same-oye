@@ -22,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\Calculation\Web;
 //     return view( 'welcome' );
 // } );
 
-Route::get('.well-known/apple-app-site-association', function () {
+Route::get('/.well-known/apple-app-site-association', function () {
     $data = [
         "applinks" => [
             "details" => [
