@@ -24,29 +24,37 @@ use PhpOffice\PhpSpreadsheet\Calculation\Web;
 
 Route::get('.well-known/apple-app-site-association', function () {
     $data = [
-        'applinks' => [
-            'details' => [
+        "applinks" => [
+            "details" => [
                 [
-                    'appIDs' => [
-                        '8XQG3SLQJX.com.mecar.user'
+                    "appIDs" => [
+                        "2NT4CMN626.com.sama2oye.ios"
                     ],
-                    'components' => [
+                    "components" => [
                         [
-                            '#' => 'no_universal_links',
-                            'exclude' => true,
-                            'comment' => 'Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link.'
+                            "#" => "no_universal_links",
+                            "exclude" => true,
+                            "comment" => "Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link."
                         ],
                         [
-                            '/' => '/register/*',
-                            'comment' => 'Matches any URL with a path that starts with /register/.'
+                            "/" => "/subscription-groups/invite",
+                            "comment" => "Matches any URL with path /subscription-groups/invite."
+                        ],
+                        [
+                            "/" => "/playlist/share",
+                            "comment" => "Matches any URL with path /playlist/share."
+                        ],
+                        [
+                            "/" => "/item/share",
+                            "comment" => "Matches any URL with path /item/share."
                         ]
                     ]
                 ]
             ]
         ],
-        'webcredentials' => [
-            'apps' => [
-                '8XQG3SLQJX.com.mecar.user'
+        "webcredentials" => [
+            "apps" => [
+                "2NT4CMN626.com.sama2oye.ios"
             ]
         ]
     ];
@@ -57,24 +65,25 @@ Route::get('.well-known/apple-app-site-association', function () {
 Route::post( '/ios/notification', [ WebhookController::class, 'ios']  )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
 Route::post( '/android/notification', [ WebhookController::class, 'android' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
 
-Route::get('/register', function (Request $request) {    
-    $userAgent = $request->header('User-Agent');
 
-    if (preg_match('/Android/i', $userAgent)) {
-        return redirect('https://play.google.com/store/apps/details?id=com.ifei.android');
-    } elseif (preg_match('/iPhone/i', $userAgent)) {
-        return redirect('https://apps.apple.com/my/app/ifei/id6740760943');
-    }
+// Route::get('/register', function (Request $request) {    
+//     $userAgent = $request->header('User-Agent');
+
+//     if (preg_match('/Android/i', $userAgent)) {
+//         return redirect('https://play.google.com/store/apps/details?id=com.ifei.android');
+//     } elseif (preg_match('/iPhone/i', $userAgent)) {
+//         return redirect('https://apps.apple.com/my/app/ifei/id6740760943');
+//     }
     
-    $code = $request->query('code');
+//     $code = $request->query('code');
 
-    return response()->json([
-        'code' => $code,
-        'all_parameters' => $request->all(),
-        'agent' => $userAgent,
-    ]);
+//     return response()->json([
+//         'code' => $code,
+//         'all_parameters' => $request->all(),
+//         'agent' => $userAgent,
+//     ]);
 
-});
+// });
 
 
 // This is admin route
