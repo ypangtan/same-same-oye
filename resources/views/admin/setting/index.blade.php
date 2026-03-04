@@ -64,7 +64,7 @@ $setting = 'setting';
                                 <div class="mb-3 row">
                                     <label for="{{ $setting }}_content" class="col-sm-5 col-form-label">{{ __( 'setting.disclaimer_content' ) }}</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="{{ $setting }}_content">
+                                        <textarea class="form-control" id="{{ $setting }}_content" rows="5"></textarea>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
