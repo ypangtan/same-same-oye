@@ -561,9 +561,11 @@ class UserService
 
             if( $request->membership == 0 ) {
                 $userUserSubscription = UserSubscription::where( 'user_id', $request->id )->isActive()->first();
-                $userUserSubscription->update( [
-                    'status' => 20,
-                ] );
+                if( $userUserSubscription ) {
+                    $userUserSubscription->update( [
+                        'status' => 20,
+                    ] );
+                }
             }
 
             if ( !empty( $request->password ) ) {
