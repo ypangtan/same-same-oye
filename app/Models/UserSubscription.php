@@ -31,6 +31,10 @@ class UserSubscription extends Model
         'status',
     ];
 
+    public function member() {
+        return $this->hasMany( SubscriptionGroupMember::class, 'leader_id', 'user_id' );
+    }
+
     public function getEndDateAttribute() {
         if( $this->attributes['end_date'] ) {
             return Carbon::parse( $this->attributes['end_date'] )->format('Y-m-d');
@@ -82,6 +86,13 @@ class UserSubscription extends Model
             (SELECT max_member FROM subscription_plans 
             WHERE subscription_plans.id = user_subscriptions.subscription_plan_id)
         ');
+    }
+
+    public function isHitMaxMember() {
+        $currentCount = $this->member()->count();
+        $maxMember = $this->plan->max_member;
+        
+        return $currentCount >= $maxMember;
     }
 
     public function cancel() {
