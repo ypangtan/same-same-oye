@@ -158,11 +158,15 @@ class SubscriptionGroupMemberService {
                 $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
                     ->isActive()
                     ->isGroup()
-                    ->notHitMaxMember()
                     ->first();
 
                 if ( !$user_subscription ) {
                     $fail( __( 'subscription_group_member.not_active_group_subscription' ) );
+                    return;
+                }
+
+                if ( $user_subscription->isHitMaxMember() ) {
+                    $fail( __( 'subscription_group_member.max_member_reached' ) );
                     return;
                 }
 

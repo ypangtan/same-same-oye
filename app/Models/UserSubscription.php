@@ -48,10 +48,6 @@ class UserSubscription extends Model
         ];
     }
 
-    public function member() {
-        return $this->hasMany( SubscriptionGroupMember::class, 'user_subscription_id' );
-    }
-
     public function user() {
         return $this->belongsTo( User::class, 'user_id' );
     }
@@ -81,7 +77,7 @@ class UserSubscription extends Model
             $q->where( 'max_member', '>', 1 );
         })->whereRaw('
             (SELECT COUNT(*) FROM subscription_group_members 
-            WHERE subscription_group_members.user_subscription_id = user_subscriptions.id) 
+            WHERE subscription_group_members.leader_id  = user_subscriptions.user_id) 
             < 
             (SELECT max_member FROM subscription_plans 
             WHERE subscription_plans.id = user_subscriptions.subscription_plan_id)

@@ -25,6 +25,7 @@ return [
     'leave_group' => 'You have left the subscription group successfully.',
     'not_found' => 'Subscription group member not found.',
     'cant_invite_yourself' => 'You can\'t invite yourself.',
+    'max_member_reached' => 'The group has reached the maximum number of members.',
 
     'already_have_active_group_subscription' => 'You already have an active group subscription.',
     'invalid_invite' => 'The invite is invalid.',
