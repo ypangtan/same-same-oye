@@ -85,6 +85,7 @@ $setting = 'setting';
 
         getAppVersionSettings();
         getSettings();
+        getDisclaimerSettings();
 
         let s = '#{{ $setting }}';
 
@@ -152,7 +153,7 @@ $setting = 'setting';
             resetInputValidation();
 
             $.ajax( {
-                url: '{{ route( 'admin.setting.updateDisclaimerContentSetting' ) }}',
+                url: '{{ route( 'admin.setting.updateDisclaimer' ) }}',
                 type: 'POST',
                 data: {
                     content: $( s + '_content' ).val(),
@@ -198,7 +199,7 @@ $setting = 'setting';
         function getDisclaimerSettings() {
 
             $.ajax( {
-                url: '{{ route( 'admin.setting.lastestDisclaimerContent' ) }}',
+                url: '{{ route( 'admin.setting.getDisclaimer' ) }}',
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
