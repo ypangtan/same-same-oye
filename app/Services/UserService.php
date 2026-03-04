@@ -559,6 +559,13 @@ class UserService
             $updateUser->age_group = $request->age_group;
             $updateUser->fullname = $request->fullname;
 
+            if( $request->membership == 0 ) {
+                $userUserSubscription = UserSubscription::where( 'user_id', $request->id )->isActive()->first();
+                $userUserSubscription->update( [
+                    'status' => 20,
+                ] );
+            }
+
             if ( !empty( $request->password ) ) {
                 $updateUser->password = Hash::make( $request->password );
             }

@@ -267,13 +267,23 @@ class IosCallbackService {
     private static function handleExpiration( UserSubscription $userSubscription, ?string $subtype, $user ) {
         $userSubscription->status = 20; // expired
         
-        $reason = match($subtype) {
-            'VOLUNTARY' => 'User cancelled',
-            'BILLING_RETRY' => 'Billing issue',
-            'PRICE_INCREASE' => 'Did not agree to price increase',
-            'PRODUCT_NOT_FOR_SALE' => 'Product no longer available',
-            default => 'Unknown reason'
-        };
+        $reason = '';
+        switch ($subtype) {
+            case 'VOLUNTARY':
+                $reason = 'User cancelled';
+                break;
+            case 'BILLING_RETRY':
+                $reason = 'Billing issue';
+                break;
+            case 'PRICE_INCREASE':
+                $reason = 'Did not agree to price increase';
+                break;
+            case 'PRODUCT_NOT_FOR_SALE':
+                $reason = 'Product no longer available';
+                break;
+            default:
+                $reason = 'Unknown reason';
+        }
         
         // 📱 根据原因发送不同通知
         if ($user) {
