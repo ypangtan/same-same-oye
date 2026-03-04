@@ -171,7 +171,7 @@ class SubscriptionGroupMemberService {
                     $fail( __( 'subscription_group_member.user_not_found' ) );
                     return;
                 }
-                if ( $value != auth()->user()->email ) {
+                if ( $value == auth()->user()->email ) {
                     $fail( __( 'subscription_group_member.cant_invite_yourself' ) );
                     return;
                 }
