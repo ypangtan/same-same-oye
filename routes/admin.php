@@ -180,6 +180,9 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
                 Route::post( 'update-app-version-setting', [ SettingController::class, 'updateAppVersionSetting' ] )->name( 'admin.setting.updateAppVersionSetting' );
                 Route::post( 'update-contact-us-email-setting', [ SettingController::class, 'updateContactUsEmailSetting' ] )->name( 'admin.setting.updateContactUsEmailSetting' );
+                
+                Route::get( 'get-disclaimer', [ SettingController::class, 'getDisclaimer' ] )->name( 'admin.setting.getDisclaimer' );
+                Route::post( 'update-disclaimer', [ SettingController::class, 'updateDisclaimer' ] )->name( 'admin.setting.updateDisclaimer' );
             } );
             
             Route::prefix( 'pop-announcements' )->group( function() {

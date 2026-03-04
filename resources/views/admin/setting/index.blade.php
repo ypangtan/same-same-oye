@@ -9,6 +9,7 @@ $setting = 'setting';
                 <div class="list-group" role="tablist">
                     <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#avs" role="tab">{{ __( 'setting.app_version_settings' ) }}</a>
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#cues" role="tab">{{ __( 'setting.contact_us_email_settings' ) }}</a>
+                    <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#ds" role="tab">{{ __( 'setting.disclaimer_settings' ) }}</a>
                 </div>
             </div>
             <div class="col-md-10">
@@ -51,6 +52,24 @@ $setting = 'setting';
                                 </div>
                                 <div class="text-end">
                                     <button class="btn btn-sm btn-primary" id="contact_us_email_save">{{ __( 'template.save_changes' ) }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="ds" role="tabpanel">
+                        <h5 class="card-title mb-0">{{ __( 'setting.disclaimer_settings' ) }}</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3 row">
+                                    <label for="{{ $setting }}_content" class="col-sm-5 col-form-label">{{ __( 'setting.disclaimer_content' ) }}</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control form-control-sm" id="{{ $setting }}_content">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-sm btn-primary" id="disclaimer_content_save">{{ __( 'template.save_changes' ) }}</button>
                                 </div>
                             </div>
                         </div>
@@ -128,6 +147,35 @@ $setting = 'setting';
             } );
         } );
 
+        $( '#disclaimer_content_save' ).on( 'click', function() {
+
+            resetInputValidation();
+
+            $.ajax( {
+                url: '{{ route( 'admin.setting.updateDisclaimerContentSetting' ) }}',
+                type: 'POST',
+                data: {
+                    content: $( s + '_content' ).val(),
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.show();
+                },
+                error: function( error ) {
+                    if ( error.status === 422 ) {
+                        let errors = error.responseJSON.errors;
+                        $.each( errors, function( key, value ) {
+                            $( s + '_' + key ).addClass( 'is-invalid' ).next().text( value );
+                        } );
+                    } else {
+                        $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
+                        modalDanger.show();       
+                    }
+                }
+            } );
+        } );
+
         function getAppVersionSettings() {
 
             $.ajax( {
@@ -142,6 +190,22 @@ $setting = 'setting';
                         if ( response?.data.force_logout == 10 ) {
                             $( s + '_force_logout' ).prop('checked', true);
                         }
+                    }
+                },
+            } );
+        }
+
+        function getDisclaimerSettings() {
+
+            $.ajax( {
+                url: '{{ route( 'admin.setting.lastestDisclaimerContent' ) }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    if ( response.data ) {
+                        $( s + '_content').val( response.data.content );
                     }
                 },
             } );

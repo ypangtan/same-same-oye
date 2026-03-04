@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\{
     AppVersionService,
     SettingService,
+    DisclaimerService,
 };
 
 use Helper;
@@ -88,5 +89,15 @@ class SettingController extends Controller
     public function updateContactUsEmailSetting( Request $request ) {
 
         return SettingService::updateContactUsEmailSetting( $request );
+    }
+
+    public function getDisclaimer() {
+
+        return DisclaimerService::getDisclaimer();
+    }
+
+    public function updateDisclaimer( Request $request ) {
+
+        return DisclaimerService::updateDisclaimer( $request );
     }
 }

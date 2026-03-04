@@ -25,7 +25,7 @@ use App\Http\Controllers\Api\{
     MusicRequestController,
     PlaylistController,
     PointsController,
-    RankController,
+    DisclaimerController,
     SearchController,
     SubscriptionGroupMemberController,
     TypeController,
@@ -69,6 +69,10 @@ Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
 
 Route::prefix( 'app_versions' )->group( function() {
     Route::get( '/', [ AppVersionController::class, 'lastestAppVersion' ] );
+} );
+
+Route::prefix( 'disclaimer' )->group( function() {
+    Route::get( '/', [ DisclaimerController::class, 'getDisclaimer' ] );
 } );
 
 Route::prefix( 'country' )->group( function() {
