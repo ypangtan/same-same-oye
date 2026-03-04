@@ -64,7 +64,7 @@ $setting = 'setting';
                                 <div class="mb-3 row">
                                     <label for="{{ $setting }}_content" class="col-sm-5 col-form-label">{{ __( 'setting.disclaimer_content' ) }}</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control form-control-sm" id="{{ $setting }}_content">
+                                        <input type="text" class="form-control" id="{{ $setting }}_content">
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -79,6 +79,17 @@ $setting = 'setting';
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" href="{{ asset( 'admin/css/ckeditor/styles.css' ) }}">
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor.js' ) }}"></script>
+<script src="{{ asset( 'admin/js/ckeditor/upload-adapter.js' ) }}"></script>
+
+<script>
+window.ckeupload_path = '{{ route( 'admin.file.ckeUpload' ) }}';
+window.csrf_token = '{{ csrf_token() }}';
+window.cke_element = [ 'setting_content'];
+</script>
+<script src="{{ asset( 'admin/js/ckeditor/ckeditor-init-multi.js' ) }}"></script>
 
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
@@ -156,7 +167,7 @@ $setting = 'setting';
                 url: '{{ route( 'admin.setting.updateDisclaimer' ) }}',
                 type: 'POST',
                 data: {
-                    content: $( s + '_content' ).val(),
+                    content: editors['setting_content'].getData(),
                     _token: '{{ csrf_token() }}',
                 },
                 success: function( response ) {
@@ -206,7 +217,7 @@ $setting = 'setting';
                 },
                 success: function( response ) {
                     if ( response.data ) {
-                        $( s + '_content').val( response.data.content );
+                        editors['setting_content'].setData( response.data.content ?? '' );
                     }
                 },
             } );

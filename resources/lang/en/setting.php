@@ -61,4 +61,6 @@ return [
 
     'contact_us_email' => 'Contact Us Email',
     'contact_us_email_settings' => 'Contact Us Email Settings',
+
+    'disclaimer_content' => 'Disclaimer Content',
 ];
