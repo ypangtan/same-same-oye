@@ -60,17 +60,15 @@ $setting = 'setting';
                         <h5 class="card-title mb-0">{{ __( 'setting.disclaimer_settings' ) }}</h5>
                         <hr>
                         <div class="row">
-                            <div class="col-6">
-                                <div class="mb-3 row">
-                                    <label for="{{ $setting }}_content" class="col-sm-5 col-form-label">{{ __( 'setting.disclaimer_content' ) }}</label>
-                                    <div class="col-sm-7">
-                                        <textarea class="form-control" id="{{ $setting }}_content" rows="5"></textarea>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
+                            <div class="mb-3 row">
+                                <label for="{{ $setting }}_content" class="col-sm-5 col-form-label">{{ __( 'setting.disclaimer_content' ) }}</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="{{ $setting }}_content">
+                                    <div class="invalid-feedback"></div>
                                 </div>
-                                <div class="text-end">
-                                    <button class="btn btn-sm btn-primary" id="disclaimer_content_save">{{ __( 'template.save_changes' ) }}</button>
-                                </div>
+                            </div>
+                            <div class="text-end">
+                                <button class="btn btn-sm btn-primary" id="disclaimer_content_save">{{ __( 'template.save_changes' ) }}</button>
                             </div>
                         </div>
                     </div>
