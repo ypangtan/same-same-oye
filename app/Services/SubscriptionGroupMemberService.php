@@ -167,7 +167,7 @@ class SubscriptionGroupMemberService {
                 }
 
                 $user = User::where( 'email', $value )->where( 'status', 10 )->first();
-                if ( !$user ) {
+                if ( !$user && $value != auth()->user()->email ) {
                     $fail( __( 'subscription_group_member.user_not_found' ) );
                     return;
                 }
