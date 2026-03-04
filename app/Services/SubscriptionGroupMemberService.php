@@ -122,6 +122,7 @@ class SubscriptionGroupMemberService {
             $members = SubscriptionGroupMember::with( [
                 'user',
             ] )->where( 'user_id', auth()->user()->id )
+                ->where( 'status', 10 )
                 ->get();
 
             foreach ( $members as $member ) {
@@ -172,6 +173,7 @@ class SubscriptionGroupMemberService {
                 }
 
                 $alreadyInGroup = SubscriptionGroupMember::where( 'user_id', $user->id )
+                    ->where( 'status', 10 )
                     ->exists();
                 if ( $alreadyInGroup ) {
                     $fail( __( 'subscription_group_member.user_already_in_group' ) );
@@ -331,6 +333,21 @@ class SubscriptionGroupMemberService {
                 ], 422 );
             }
 
+            // check user have active subscription group or not
+            $userMember = SubscriptionGroupMember::where( 'user_id', auth()->user()->id )
+                ->where( 'status', 10 )
+                ->first();
+            if( $userMember ) {
+                return response()->json( [
+                    'message' => __( 'validation.header_message' ),
+                    'errors' => [
+                        'token' => [
+                            __( 'subscription_group_member.already_have_active_group_subscription' ),
+                        ],
+                    ]
+                ], 422 );
+            }
+
             $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
                 ->isActive()
                 ->first();
@@ -357,35 +374,6 @@ class SubscriptionGroupMemberService {
 
         return response()->json( [
             'message' => __( 'subscription_group_member.accepted' ),
-        ] );
-    }
-
-    public static function rejectSubscriptionGroupMember(){
-
-        DB::beginTransaction();
-
-        try {
-            $subscriptionGroupMember = SubscriptionGroupMember::where( 'user_id', auth()->user()->id )->first();
-            if( !$subscriptionGroupMember || $subscriptionGroupMember->status != 1 ) {
-                return response()->json( [
-                    'message' => __( 'subscription_group_member.not_found' ),
-                ], 500 );
-            }
-
-            $subscriptionGroupMember->delete();
-            
-            DB::commit();
-        } catch ( \Throwable $th ) {
-
-            DB::rollback();
-
-            return response()->json( [
-                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-            ], 500 );
-        }
-
-        return response()->json( [
-            'message' => __( 'subscription_group_member.leave_group' ),
         ] );
     }
 

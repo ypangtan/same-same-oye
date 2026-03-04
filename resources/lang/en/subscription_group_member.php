@@ -24,6 +24,7 @@ return [
     'user_have_active_subscription' => 'The user already has an active subscription.',
     'leave_group' => 'You have left the subscription group successfully.',
 
+    'already_have_active_group_subscription' => 'You already have an active group subscription.',
     'invalid_invite' => 'The invite is invalid.',
     'accepted' => 'Subscription group member request accepted successfully.',
     'invalid_plan' => 'The subscription plan is invalid.',
