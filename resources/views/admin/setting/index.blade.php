@@ -209,7 +209,7 @@ window.cke_element = [ 'setting_content'];
 
             $.ajax( {
                 url: '{{ route( 'admin.setting.getDisclaimer' ) }}',
-                type: 'POST',
+                type: 'get',
                 data: {
                     _token: '{{ csrf_token() }}',
                 },
