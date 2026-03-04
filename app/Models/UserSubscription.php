@@ -91,8 +91,12 @@ class UserSubscription extends Model
     public function isHitMaxMember() {
         $currentCount = $this->member()->count();
         $maxMember = $this->plan->max_member;
+
+        if( $maxMember <= 1 ) {
+            return true;
+        }
         
-        return $currentCount >= $maxMember;
+        return $currentCount >= ( $maxMember - 1 );
     }
 
     public function cancel() {
