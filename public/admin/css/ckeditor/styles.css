@@ -454,3 +454,15 @@
         display: none;
     }
 }
+
+.ck-content ul,
+.ck-content ol {
+  list-style: revert !important;
+  margin: revert !important;
+  padding: revert !important;
+}
+
+.ck-content li {
+  list-style: revert !important;
+  margin-bottom: 8px !important;
+}
