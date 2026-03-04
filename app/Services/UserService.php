@@ -560,9 +560,9 @@ class UserService
             $updateUser->fullname = $request->fullname;
 
             if( $request->membership == 0 ) {
-                $userUserSubscription = UserSubscription::where( 'user_id', $request->id )->isActive()->first();
-                if( $userUserSubscription ) {
-                    $userUserSubscription->update( [
+                $userUserSubscription = UserSubscription::where( 'user_id', $request->id )->isActive()->get();
+                foreach( $userUserSubscription as $u ) {
+                    $u->update( [
                         'status' => 20,
                     ] );
                 }
