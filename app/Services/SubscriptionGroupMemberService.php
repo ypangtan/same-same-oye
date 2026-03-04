@@ -382,8 +382,8 @@ class SubscriptionGroupMemberService {
         DB::beginTransaction();
 
         try {
-            $subscriptionGroupMember = SubscriptionGroupMember::where( 'user_id', auth()->user()->id )->first();
-            if( !$subscriptionGroupMember || $subscriptionGroupMember->status != 10 ) {
+            $subscriptionGroupMember = SubscriptionGroupMember::where( 'user_id', auth()->user()->id )->where( 'status', 10 )->first();
+            if( !$subscriptionGroupMember ) {
                 return response()->json( [
                     'message' => __( 'subscription_group_member.not_found' ),
                 ], 500 );
