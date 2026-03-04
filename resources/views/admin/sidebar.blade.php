@@ -205,13 +205,11 @@
                                             <a href="{{ route( 'admin.module_parent.subscription_plan.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.subscription_plans' ) }}</span></a>
                                         </li>
                                         @endcan
-                                        @if( auth()->user()->id == 1 )
                                         @can( 'view user_subscriptions' )
                                         <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\UserSubscriptionController' ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.module_parent.user_subscription.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.user_subscriptions' ) }}</span></a>
                                         </li>
                                         @endcan
-                                        @endIf
                                     </ul>
                                 </li>
                                 @endcanany

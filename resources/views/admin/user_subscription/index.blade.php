@@ -164,7 +164,9 @@ $columns = [
                         @endcan
 
                         @can( 'view subscription_group_members' )
-                        view += '<li class="dropdown-item click-action dt-view" data-id="' + data + '">{{ __( 'template.view' ) }}</li>';
+                        if( row.type == 1 && row.plan && row.plan.max_member > 1 ) {
+                            view += '<li class="dropdown-item click-action dt-view" data-id="' + data + '">{{ __( 'template.view' ) }}</li>';
+                        }
                         @endcan
 
                         let html = 
@@ -174,7 +176,6 @@ $columns = [
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
                                     `+view+`
-                                    `+edit+`
                                     `+status+`
                                 </ul>
                             </div>
