@@ -178,7 +178,12 @@ class SubscriptionGroupMemberService {
                     return;
                 }
 
-                // TODO: check user have subscription or not
+                // check user have subscription or not
+                $userSubscription = UserSubscription::where( 'user_id', $value )->isActive()->where( 'type', 1 )->exists();
+                if( $userSubscription ) {
+                    $fail( __( 'subscription_group_member.user_have_active_subscription' ) );
+                    return;
+                }
             } ],
         ] );
 
@@ -325,6 +330,16 @@ class SubscriptionGroupMemberService {
                     ]
                 ], 422 );
             }
+
+            $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
+                ->isActive()
+                ->first();
+
+            if( $user_subscription ) {
+                $user_subscription->update( [
+                    'status' => 20,
+                ] );
+            }
             
             $subscriptionGroupMember->update( [
                 'status' => 10,
@@ -342,6 +357,64 @@ class SubscriptionGroupMemberService {
 
         return response()->json( [
             'message' => __( 'subscription_group_member.accepted' ),
+        ] );
+    }
+
+    public static function rejectSubscriptionGroupMember(){
+
+        DB::beginTransaction();
+
+        try {
+            $subscriptionGroupMember = SubscriptionGroupMember::where( 'user_id', auth()->user()->id )->first();
+            if( !$subscriptionGroupMember || $subscriptionGroupMember->status != 1 ) {
+                return response()->json( [
+                    'message' => __( 'subscription_group_member.not_found' ),
+                ], 500 );
+            }
+
+            $subscriptionGroupMember->delete();
+            
+            DB::commit();
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'subscription_group_member.leave_group' ),
+        ] );
+    }
+
+    public static function leaveSubscriptionGroupMember(){
+
+        DB::beginTransaction();
+
+        try {
+            $subscriptionGroupMember = SubscriptionGroupMember::where( 'user_id', auth()->user()->id )->first();
+            if( !$subscriptionGroupMember || $subscriptionGroupMember->status != 10 ) {
+                return response()->json( [
+                    'message' => __( 'subscription_group_member.not_found' ),
+                ], 500 );
+            }
+
+            $subscriptionGroupMember->delete();
+            
+            DB::commit();
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'subscription_group_member.leave_group' ),
         ] );
     }
 

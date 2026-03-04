@@ -21,6 +21,8 @@ return [
     'user_not_found' => 'Not Account Found',
     'invite_send' => 'Invitation Sent',
     'accepted' => 'You have accepted the subscription group member request.',
+    'user_have_active_subscription' => 'The user already has an active subscription.',
+    'leave_group' => 'You have left the subscription group successfully.',
 
     'invalid_invite' => 'The invite is invalid.',
     'accepted' => 'Subscription group member request accepted successfully.',

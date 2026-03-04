@@ -165,6 +165,8 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( '/delete-subscription-group-member', [ SubscriptionGroupMemberController::class, 'deleteSubscriptionGroupMember' ] );
         Route::post( '/accept-subscription-group-member', [ SubscriptionGroupMemberController::class, 'acceptSubscriptionGroupMember' ] );
         Route::post( '/verify-user-subscription', [ SubscriptionGroupMemberController::class, 'verifyUserSubscription' ] );
+        Route::get( '/reject-subscription-group-member', [ SubscriptionGroupMemberController::class, 'rejectSubscriptionGroupMember' ] );
+        Route::get( '/leave-subscription-group-member', [ SubscriptionGroupMemberController::class, 'leaveSubscriptionGroupMember' ] );
     } );
         
 });

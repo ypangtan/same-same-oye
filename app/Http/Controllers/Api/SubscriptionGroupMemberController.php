@@ -93,6 +93,32 @@ class SubscriptionGroupMemberController extends Controller
         return UserSubscriptionService::verifyUserSubscription( $request );
     }
 
+    /**
+     * 6. Reject Subscription Group Member 
+     * 
+     * @group Subscription Group Member API
+     * 
+     * @authenticated
+     * 
+     */
+    public function rejectSubscriptionGroupMember( Request $request ) {
+
+        return SubscriptionGroupMemberService::rejectSubscriptionGroupMember( $request );
+    }
+
+    /**
+     * 7. Leave Subscription Group Member 
+     * 
+     * @group Subscription Group Member API
+     * 
+     * @authenticated
+     * 
+     */
+    public function leaveSubscriptionGroupMember( Request $request ) {
+
+        return SubscriptionGroupMemberService::leaveSubscriptionGroupMember( $request );
+    }
+
     
 
 }
