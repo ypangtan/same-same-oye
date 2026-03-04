@@ -78,7 +78,7 @@ $setting = 'setting';
     </div>
 </div>
 
-<link rel="stylesheet" href="{{ asset( 'admin/css/ckeditor/styles.css' ) }}">
+<link rel="stylesheet" href="{{ asset( 'admin/css/ckeditor/styles.css' ) . Helper::assetVersion() }}">
 <script src="{{ asset( 'admin/js/ckeditor/ckeditor.js' ) }}"></script>
 <script src="{{ asset( 'admin/js/ckeditor/upload-adapter.js' ) }}"></script>
 
