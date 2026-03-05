@@ -183,9 +183,9 @@ class PaymentService {
             
             $expiryTime = $lineItem->getExpiryTime();
             if ($expiryTime) {
-                $expiredDate = Carbon::parse($expiryTime)->timezone('Asia/Kuala_Lumpur');
+            $expiredDate = Carbon::parse($expiryTime)->timezone('Asia/Kuala_Lumpur');
             } else {
-                throw new \Exception('Invalid subscription purchase (no expiry time)');
+                // throw new \Exception('Invalid subscription purchase (no expiry time)');
             }
             // $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
             
@@ -205,7 +205,7 @@ class PaymentService {
 
             // 创建或更新订阅
             $isRenew = true;
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate, $isRenew );
+            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate ?? '', $isRenew );
 
             // 记录交易
             $transaction = PaymentTransaction::create([
