@@ -14,8 +14,7 @@ class RemoveUniqueFromTransactionIdToPaymentTransactionsTable extends Migration
     public function up()
     {
         Schema::table('payment_transactions', function (Blueprint $table) {
-            $table->dropUnique(['transaction_id']);
-            //
+            $table->dropUnique('payment_transactions_transaction_id_unique');
         });
     }
 

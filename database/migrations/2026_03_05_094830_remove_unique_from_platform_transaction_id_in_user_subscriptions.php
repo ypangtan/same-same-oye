@@ -14,7 +14,7 @@ class RemoveUniqueFromPlatformTransactionIdInUserSubscriptions extends Migration
     public function up()
     {
         Schema::table('user_subscriptions', function (Blueprint $table) {
-            $table->dropUnique(['platform_transaction_id']);
+            $table->dropUnique('user_subscriptions_platform_transaction_id_unique');
         });
     }
 
