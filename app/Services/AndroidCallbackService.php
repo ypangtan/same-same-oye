@@ -231,7 +231,6 @@ class AndroidCallbackService {
     }
 
     public static function callbackAndroid($request) {
-                return response()->json(['status' => 'success'], 200);
         try{ 
             $createLog = CallbackLog::create([
                 'platform' => 'android',
