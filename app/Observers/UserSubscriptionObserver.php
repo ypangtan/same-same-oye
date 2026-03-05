@@ -6,26 +6,24 @@ use App\Jobs\CheckUserPlanValidityJob;
 use App\Models\User;
 use App\Models\UserSubscription;
 
-class UserSubscriptionObserver
-{
+class UserSubscriptionObserver {
+
+    public $afterCommit = true;
+
     public function created( UserSubscription $userSubscription ) {
-        CheckUserPlanValidityJob::dispatch( $userSubscription->user_id )
-        ->afterCommit();;
+        CheckUserPlanValidityJob::dispatch( $userSubscription->user_id );
 
         $userSubscription->member()
             ->pluck('user_id')
-            ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) )
-            ->afterCommit();
+            ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) );
     }
 
     public function updated( UserSubscription $userSubscription ) {
-        CheckUserPlanValidityJob::dispatch( $userSubscription->user_id )
-            ->afterCommit();
+        CheckUserPlanValidityJob::dispatch( $userSubscription->user_id );
 
         $userSubscription->member()
             ->pluck('user_id')
-            ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) )
-            ->afterCommit();
+            ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) );
 
         // If the subscription is not active, we need to remove all the member of the plan.
         if( $userSubscription->status != 10 ) {

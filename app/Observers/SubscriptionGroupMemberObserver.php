@@ -6,27 +6,24 @@ use App\Jobs\CheckUserPlanValidityJob;
 use App\Models\User;
 use App\Models\SubscriptionGroupMember;
 
-class SubscriptionGroupMemberObserver
-{
+class SubscriptionGroupMemberObserver {
+    public $afterCommit = true;
+
     public function created( SubscriptionGroupMember $member ) {
-        CheckUserPlanValidityJob::dispatch($member->user_id)
-            ->afterCommit();
+        CheckUserPlanValidityJob::dispatch($member->user_id);
     }
 
     public function updated( SubscriptionGroupMember $member ) {
-        CheckUserPlanValidityJob::dispatch($member->user_id)
-            ->afterCommit();
+        CheckUserPlanValidityJob::dispatch($member->user_id);
 
         // 处理旧用户
         if ($member->wasChanged('user_id')) {
             $oldUserId = $member->getOriginal('user_id');
-            CheckUserPlanValidityJob::dispatch($oldUserId)
-                ->afterCommit();
+            CheckUserPlanValidityJob::dispatch($oldUserId);
         }
     }
 
     public function deleted( SubscriptionGroupMember $member ) {
-        CheckUserPlanValidityJob::dispatch($member->user_id)
-            ->afterCommit();
+        CheckUserPlanValidityJob::dispatch($member->user_id);
     }
 }
