@@ -205,7 +205,7 @@ class PaymentService {
 
             // 创建或更新订阅
             $isRenew = true;
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate ?? '', $isRenew );
+            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate ?? null, $isRenew );
 
             // 记录交易
             $transaction = PaymentTransaction::create([
