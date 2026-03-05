@@ -253,7 +253,6 @@ class AndroidCallbackService {
             
             if (!$subscriptionNotification) {
                 Log::channel('payment')->warning('No subscription notification in webhook');
-                DB::commit();
                 return response()->json(['status' => 'success'], 200);
             }
 
@@ -274,7 +273,7 @@ class AndroidCallbackService {
             if ($eventType) {
                 self::verifySubscriptionV2(
                     $data['packageName'],
-                    $subscriptionNotification['subscriptionId'],
+                    $subscriptionNotification['subscriptionId'] ?? null,
                     $subscriptionNotification['purchaseToken'],
                     $eventType
                 );
