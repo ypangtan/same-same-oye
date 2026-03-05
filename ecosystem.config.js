@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "laravel-worker",
+      name: "sso-staging-worker",
       script: "artisan",
       interpreter: "php",
       args: "queue:work --sleep=3 --tries=3 --max-time=3600",
