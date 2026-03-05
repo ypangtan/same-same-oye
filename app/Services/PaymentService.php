@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\{
 
 class PaymentService {
 
+    
     public static function verifyIOSPurchase( $user_id, $data ) {
         try {
             DB::beginTransaction();
@@ -67,7 +68,18 @@ class PaymentService {
                 ->timezone('Asia/Kuala_Lumpur')
                 ->format( 'Y-m-d' );
 
-            // $expiryDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
+            // 检查是否有 pending renewal info（iOS 降级）
+            // pending_renewal_info 里的 auto_renew_product_id 与当前 product_id 不同时，表示有 deferred plan change
+            $deferredIosProductId = null;
+            $pendingRenewalInfo = $response->getPendingRenewalInfo() ?? [];
+            foreach ($pendingRenewalInfo as $renewal) {
+                $renewalArray = $renewal->toArray();
+                $autoRenewProductId = $renewalArray['auto_renew_product_id'] ?? null;
+                if ($autoRenewProductId && $autoRenewProductId !== $productId) {
+                    $deferredIosProductId = $autoRenewProductId;
+                    break;
+                }
+            }
 
             // 检查交易是否已存在
             if ( PaymentTransaction::exists( $transactionId ) ) {
@@ -81,6 +93,37 @@ class PaymentService {
             // 创建或更新订阅
             $isRenew = true;
             $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiryDate, $isRenew );
+
+            // ✅ 如果有 deferred plan（iOS 降级），额外创建 status=1 的 pending subscription
+            if ($deferredIosProductId) {
+                $deferredPlan = SubscriptionPlan::where('ios_product_id', $deferredIosProductId)->first();
+
+                if ($deferredPlan) {
+                    $existingPending = UserSubscription::where('user_id', $user->id)
+                        ->where('subscription_plan_id', $deferredPlan->id)
+                        ->where('status', 1)
+                        ->first();
+
+                    if (!$existingPending) {
+                        UserSubscription::create([
+                            'user_id' => $user->id,
+                            'subscription_plan_id' => $deferredPlan->id,
+                            'status' => 1, // pending
+                            'start_date' => null,
+                            'end_date' => null,
+                            'platform' => 1,
+                            'platform_transaction_id' => $originalTransactionId,
+                        ]);
+
+                        Log::channel('payment')->info('iOS deferred plan change recorded', [
+                            'user_id' => $user->id,
+                            'current_plan_id' => $plan->id,
+                            'deferred_plan_id' => $deferredPlan->id,
+                            'deferred_product_id' => $deferredIosProductId,
+                        ]);
+                    }
+                }
+            }
 
             // // 记录交易
             $transaction = PaymentTransaction::create([
@@ -108,23 +151,12 @@ class PaymentService {
                 'success' => true,
                 'message' => 'Subscription activated successfully',
                 'subscription' => $subscription->fresh(),
-                // 'transaction' => $transaction,
             ];
 
         } catch (Exception $e) {
             DB::rollBack();
             Log::channel('payment')->error('iOS verification failed', [
                 'error' => $e->getMessage(),
-                // 'file' => $e->getFile(),
-                // 'line' => $e->getLine(),
-                // 'class' => get_class($e),
-                // 'trace' => $e->getTraceAsString(),
-                // 'previous' => $e->getPrevious() ? [
-                //     'message' => $e->getPrevious()->getMessage(),
-                //     'file' => $e->getPrevious()->getFile(),
-                //     'line' => $e->getPrevious()->getLine(),
-                //     'class' => get_class($e->getPrevious()),
-                // ] : null,
             ]);
 
             throw $e;
@@ -137,18 +169,15 @@ class PaymentService {
 
             $credentialsPath = config('liap.google_application_credentials');
             
-            // 检查文件是否存在
             if (!file_exists($credentialsPath)) {
                 throw new \Exception('Google Play 凭据文件不存在: ' . $credentialsPath);
             }
         
             $user = User::find( $user_id );
             $plan = SubscriptionPlan::find( $data['plan_id'] );
-            $productId = $plan->android_product_id;
             $purchaseToken = $data['purchase_token'];
             $packageName = config('liap.google_play_package_name');
 
-            // 验证订阅
             $client = new GoogleClient();
             $client->setAuthConfig($credentialsPath);
             $client->setScopes([
@@ -157,44 +186,40 @@ class PaymentService {
 
             $androidPublisher = new AndroidPublisher($client);
 
-            /**
-             * 2️⃣ 调用 subscriptionsv2.get
-             */
             $subscriptionPurchase = $androidPublisher->purchases_subscriptionsv2->get($packageName, $purchaseToken);
 
-            
             if ( empty( $subscriptionPurchase->getLineItems() ) ) {
                 throw new \Exception('Invalid subscription purchase (no line items)');
             }
 
-            // 获取订阅信息
-            $lineItem = $subscriptionPurchase->getLineItems()[0];
-            $orderId = $subscriptionPurchase->getLatestOrderId();
-            $productId = $lineItem->getProductId();
+            // ✅ 遍历 lineItems，找出 current active（有 expiryTime）和 deferred plan
+            $currentLineItem = null;
             $deferredProductId = null;
-            
-            $expiryTime = $lineItem->getExpiryTime();
-            if ($expiryTime) {
-                $expiredDate = Carbon::parse($expiryTime)->timezone('Asia/Kuala_Lumpur');
+
+            foreach ($subscriptionPurchase->getLineItems() as $item) {
+                $deferred = $item->getDeferredItemReplacement();
+                if ($deferred) {
+                    $deferredProductId = $deferred->getProductId();
+                }
+                if ($item->getExpiryTime()) {
+                    $currentLineItem = $item;
+                }
             }
 
-            foreach ($subscriptionPurchase->getLineItems() as $index => $item) {
-                Log::channel('payment')->info("LineItem [{$index}]", [
-                    'product_id' => $item->getProductId(),
-                    'expiry_time' => $item->getExpiryTime(),
-                    'deferred' => $item->getDeferredItemReplacement() ? json_encode($item->getDeferredItemReplacement()) : null,
-                ]);
+            // ✅ 有 current active plan 才处理 expiry 和 productId
+            if ($currentLineItem) {
+                $productId = $currentLineItem->getProductId();
+                $expiryTime = $currentLineItem->getExpiryTime();
+                if ($expiryTime) {
+                    $expiredDate = Carbon::parse($expiryTime)->timezone('Asia/Kuala_Lumpur');
+                }
+            } else {
+                // 没有 active line item，只处理 deferred
+                $productId = null;
+                $expiredDate = null;
             }
 
-            // 检查是否有 deferred plan change（降级）
-            // $lineItems = $subscriptionPurchase->getLineItems();
-            // foreach ($lineItems as $item) {
-            //     $deferred = $item->getDeferredItemReplacement();
-            //     if ($deferred) {
-            //         $deferredProductId = $deferred->getProductId();
-            //         break;
-            //     }
-            // }
+            $orderId = $subscriptionPurchase->getLatestOrderId();
 
             // check state payment
             if ($subscriptionPurchase->getSubscriptionState() !== 'SUBSCRIPTION_STATE_ACTIVE') {
@@ -210,59 +235,62 @@ class PaymentService {
                 ];
             }
 
-            // 创建或更新订阅
-            $isRenew = true;
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate ?? null, $isRenew );
+            // ✅ 只有 currentLineItem 存在才 createOrUpdate
+            if ($currentLineItem) {
+                $isRenew = true;
+                $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate ?? null, $isRenew );
+            }
 
-            // 如果有 deferred plan，额外创建一个 status=1 的 pending subscription
-            // if ($deferredProductId) {
-            //     $deferredPlan = SubscriptionPlan::where('android_product_id', $deferredProductId)->first();
+            // ✅ 如果有 deferred plan（降级），额外创建 status=1 的 pending subscription
+            if ($deferredProductId) {
+                $deferredPlan = SubscriptionPlan::where('android_product_id', $deferredProductId)->first();
 
-            //     if ($deferredPlan) {
-            //         // 检查是否已存在 pending subscription（避免重复）
-            //         $existingPending = UserSubscription::where('user_id', $user->id)
-            //             ->where('subscription_plan_id', $deferredPlan->id)
-            //             ->where('status', 1)
-            //             ->first();
+                if ($deferredPlan) {
+                    $existingPending = UserSubscription::where('user_id', $user->id)
+                        ->where('subscription_plan_id', $deferredPlan->id)
+                        ->where('status', 1)
+                        ->first();
 
-            //         if (!$existingPending) {
-            //             UserSubscription::create([
-            //                 'user_id' => $user->id,
-            //                 'subscription_plan_id' => $deferredPlan->id,
-            //                 'status' => 1,  // pending
-            //                 'start_date' => null,  // 还没开始
-            //                 'end_date' => null,
-            //                 'platform' => 2,
-            //                 'platform_transaction_id' => $orderId,
-            //             ]);
+                    if (!$existingPending) {
+                        UserSubscription::create([
+                            'user_id' => $user->id,
+                            'subscription_plan_id' => $deferredPlan->id,
+                            'status' => 1, // pending
+                            'start_date' => null,
+                            'end_date' => null,
+                            'platform' => 2,
+                            'platform_transaction_id' => $orderId,
+                        ]);
 
-            //             Log::channel('payment')->info('Deferred plan change recorded', [
-            //                 'user_id' => $user->id,
-            //                 'current_plan_id' => $plan->id,
-            //                 'deferred_plan_id' => $deferredPlan->id,
-            //                 'deferred_product_id' => $deferredProductId,
-            //             ]);
-            //         }
-            //     }
-            // }
+                        Log::channel('payment')->info('Deferred plan change recorded', [
+                            'user_id' => $user->id,
+                            'current_plan_id' => $plan->id,
+                            'deferred_plan_id' => $deferredPlan->id,
+                            'deferred_product_id' => $deferredProductId,
+                        ]);
+                    }
+                }
+            }
 
             // 记录交易
-            $transaction = PaymentTransaction::create([
-                'user_id' => $user->id,
-                'user_subscription_id' => $subscription->id,
-                'transaction_id' => $orderId,
-                'original_transaction_id' => $orderId,
-                'amount' => 0,
-                'currency' => 'MYR',
-                'platform' => 2,
-                'product_id' => $productId,
-                'receipt_data' => $purchaseToken,
-                'status' => 10,
-                'verified_at' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
-                'verification_response' => json_encode( $subscriptionPurchase ),
-            ]);
+            if ($subscription) {
+                $transaction = PaymentTransaction::create([
+                    'user_id' => $user->id,
+                    'user_subscription_id' => $subscription->id,
+                    'transaction_id' => $orderId,
+                    'original_transaction_id' => $orderId,
+                    'amount' => 0,
+                    'currency' => 'MYR',
+                    'platform' => 2,
+                    'product_id' => $productId,
+                    'receipt_data' => $purchaseToken,
+                    'status' => 10,
+                    'verified_at' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
+                    'verification_response' => json_encode( $subscriptionPurchase ),
+                ]);
+            }
 
-            // 确认购买（告诉 Google 已经处理）plugin 没有处理确认购买，这里手动处理
+            // 确认购买（告诉 Google 已经处理）
             if ($subscriptionPurchase->getAcknowledgementState() === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED') {
                 Log::channel('payment')->info('Subscription already acknowledged', [
                     'purchaseToken' => $purchaseToken,
@@ -275,10 +303,11 @@ class PaymentService {
 
                 $accessToken = $accessTokenData['access_token'];
                 
-                $ackUrl = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/{$packageName}/purchases/subscriptions/{$productId}/tokens/{$purchaseToken}:acknowledge";
+                // acknowledge 用 currentLineItem 的 productId，如果没有就用 plan 的
+                $ackProductId = $productId ?? $plan->android_product_id;
+                $ackUrl = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/{$packageName}/purchases/subscriptions/{$ackProductId}/tokens/{$purchaseToken}:acknowledge";
                 
-                $ackResponse = Http::withToken($accessToken)
-                    ->post($ackUrl);
+                $ackResponse = Http::withToken($accessToken)->post($ackUrl);
 
                 if (!$ackResponse->successful()) {
                     Log::channel('payment')->error('Android subscription acknowledge failed', [
@@ -294,14 +323,14 @@ class PaymentService {
             Log::channel('payment')->info('Android purchase verified', [
                 'user_id' => $user_id,
                 'transaction_id' => $orderId,
+                'has_deferred_plan' => !is_null($deferredProductId),
             ]);
 
             DB::commit();
             return [
                 'success' => true,
                 'message' => 'Subscription activated successfully',
-                'subscription' => $subscription->fresh(),
-                // 'transaction' => $transaction,
+                'subscription' => $subscription ? $subscription->fresh() : null,
             ];
 
         } catch (Exception $e) {
@@ -314,6 +343,7 @@ class PaymentService {
             throw $e;
         }
     }
+
 
     public static function verifyHuaweiPurchase( $user_id, $data ) {
         try {
@@ -338,11 +368,14 @@ class PaymentService {
         $user = User::find( $user_id );
         $plan = SubscriptionPlan::find( $plan_id );
 
-        $existsTrialSubsciption = $user->subscriptions()
+        // ✅ 只过期同平台的其他 active subscription（不影响跨平台）
+        $existsSubscriptions = $user->subscriptions()
+            ->where('platform', $platform)
             ->where('platform_transaction_id', '!=', $transactionId)
-            ->where( 'status', 10 )
+            ->where('status', 10)
             ->get();
-        foreach( $existsTrialSubsciption as $exists ) {
+
+        foreach ( $existsSubscriptions as $exists ) {
             $exists->status = 20;
             $exists->save();
         }
@@ -354,6 +387,7 @@ class PaymentService {
 
         if ($subscription) {
             $subscription->update([
+                'subscription_plan_id' => $plan->id,
                 'status' => 10,
                 'end_date' => $endDate ?? null,
             ]);
