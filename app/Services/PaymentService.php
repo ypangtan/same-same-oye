@@ -64,9 +64,13 @@ class PaymentService {
             $originalTransactionId = $receiptInfo->getOriginalTransactionId();
 
             $rawData = $receiptInfo->toArray();
+            $currentProductId = $rawData['product_id'];
             $expiryDate = Carbon::createFromTimestampMs( $rawData['expires_date_ms'] )
                 ->timezone('Asia/Kuala_Lumpur')
                 ->format( 'Y-m-d' );
+
+            $currentPlan = SubscriptionPlan::where('ios_product_id', $currentProductId)->first();
+            $currentPlanId = $currentPlan ? $currentPlan->id : $plan->id;
 
             // 检查是否有 pending renewal info（iOS 降级）
             // pending_renewal_info 里的 auto_renew_product_id 与当前 product_id 不同时，表示有 deferred plan change
@@ -92,8 +96,8 @@ class PaymentService {
 
             // 创建或更新订阅
             $isRenew = true;
-            $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 1, $originalTransactionId, $expiryDate, $isRenew );
-
+            $subscription = self::createOrUpdateSubscription($user_id, $currentPlanId, 1, $originalTransactionId, $expiryDate, $isRenew);   
+            
             // ✅ 如果有 deferred plan（iOS 降级），额外创建 status=1 的 pending subscription
             if ($deferredIosProductId) {
                 $deferredPlan = SubscriptionPlan::where('ios_product_id', $deferredIosProductId)->first();
@@ -238,7 +242,11 @@ class PaymentService {
             // ✅ 只有 currentLineItem 存在才 createOrUpdate
             if ($currentLineItem) {
                 $isRenew = true;
-                $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate ?? null, $isRenew );
+                
+                $currentPlan = SubscriptionPlan::where('android_product_id', $productId)->first();
+                $currentPlanId = $currentPlan ? $currentPlan->id : $plan->id;
+                
+                $subscription = self::createOrUpdateSubscription($user_id, $currentPlanId, 2, $orderId, $expiredDate ?? null, $isRenew);
             }
 
             // ✅ 如果有 deferred plan（降级），额外创建 status=1 的 pending subscription
@@ -343,7 +351,6 @@ class PaymentService {
             throw $e;
         }
     }
-
 
     public static function verifyHuaweiPurchase( $user_id, $data ) {
         try {
