@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\SubscriptionGroupMember;
 
 class SubscriptionGroupMemberObserver {
-    public $afterCommit = true;
 
     public function created( SubscriptionGroupMember $member ) {
         CheckUserPlanValidityJob::dispatch($member->user_id);

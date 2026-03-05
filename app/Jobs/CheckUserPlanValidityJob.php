@@ -24,6 +24,8 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUniqueUntilProces
      */
     public int $backoff = 2;
 
+    public $afterCommit = true;
+    
     public function __construct(public int $userId) {}
 
     /**

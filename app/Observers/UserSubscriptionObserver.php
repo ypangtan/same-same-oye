@@ -8,8 +8,6 @@ use App\Models\UserSubscription;
 
 class UserSubscriptionObserver {
 
-    public $afterCommit = true;
-
     public function created( UserSubscription $userSubscription ) {
         CheckUserPlanValidityJob::dispatch( $userSubscription->user_id );
 
