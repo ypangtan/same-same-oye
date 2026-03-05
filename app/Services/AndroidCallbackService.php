@@ -237,7 +237,9 @@ class AndroidCallbackService {
                 'payload' => json_encode($request->all()),
             ]);
         } catch ( \Throwable $e) {
-            return response()->json(['status' => 'success'], 200);
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500); 
         }
 
         try {
