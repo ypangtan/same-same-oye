@@ -2,48 +2,41 @@
 
 namespace App\Observers;
 
+use App\Jobs\CheckUserPlanValidityJob;
 use App\Models\User;
 use App\Models\UserSubscription;
 
 class UserSubscriptionObserver
 {
     public function created( UserSubscription $userSubscription ) {
-        $user = User::find( $userSubscription->user_id );
-        $user->checkPlanValidity();
+        CheckUserPlanValidityJob::dispatch( $userSubscription->user_id );
 
-        $members = $userSubscription->member()->get();
-        foreach( $members as $member ) {
-            $user = User::find( $member->user_id );
-            $user->checkPlanValidity();
-        }
+        $userSubscription->member()
+            ->pluck('user_id')
+            ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) );
     }
 
     public function updated( UserSubscription $userSubscription ) {
-        $user = User::find( $userSubscription->user_id );
-        $user->checkPlanValidity();
+        CheckUserPlanValidityJob::dispatch( $userSubscription->user_id );
 
-        $members = $userSubscription->member()->get();
-        foreach( $members as $member ) {
-            $user = User::find( $member->user_id );
-            $user->checkPlanValidity();
-        }
+        $userSubscription->member()
+            ->pluck('user_id')
+            ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) );
 
+        // If the subscription is not active, we need to remove all the member of the plan.
         if( $userSubscription->status != 10 ) {
-            // TODO: If the subscription is not active, we need to remove all the member of the plan.
-            // $members = $userSubscription->member()->get();
-            // foreach( $members as $member ) {
-            // }
-        }
-    }
-
-    public function deleted( UserSubscription $userSubscription) {
-        $user = User::find( $userSubscription->user_id );
-        $user->checkPlanValidity();
-
-        $members = $userSubscription->member()->get();
-        foreach( $members as $member ) {
-            $user = User::find( $member->user_id );
-            $user->checkPlanValidity();
+            try {
+                \DB::beginTransaction();
+                $members = $userSubscription->member()->get();
+                foreach( $members as $member ) {
+                    $member->delete();
+                }
+                \DB::commit();
+            } catch (\Throwable $e) {
+                \DB::rollBack();
+                \Log::error('Failed to remove subscription members: ' . $e->getMessage());
+                throw $e;
+            }
         }
     }
 }

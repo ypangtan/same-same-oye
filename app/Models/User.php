@@ -122,18 +122,18 @@ class User extends Model implements AuthenticatableContract
         if( $have_plan ) {
             $this->update( [ 'membership' => $have_plan->type ] );
             return ;
-        } else {
-            // check group plan
-            $group = $this->subscriptionGroupMember()->where( 'status', 10 )->first();
-            if( $group ) {
-                // check if leader have active plan
-                $leader = $group->leader()->first();
-                if( $leader ) {
-                    $plan = $leader->subscriptions()->isGroup()->isActive()->first();
-                    if( $plan ) {
-                        $this->update( [ 'membership' => $plan->type ] );
-                        return ;
-                    }
+        }
+
+        // check group plan
+        $group = $this->subscriptionGroupMember()->where( 'status', 10 )->first();
+        if( $group ) {
+            // check if leader have active plan
+            $leader = User::lockForUpdate()->find( $group->leader_id );
+            if( $leader ) {
+                $plan = $leader->subscriptions()->isGroup()->isActive()->first();
+                if( $plan ) {
+                    $this->update( [ 'membership' => $plan->type ] );
+                    return ;
                 }
             }
         }
