@@ -173,12 +173,9 @@ class PaymentService {
             $productId = $lineItem->getProductId();
 
             // debug
-            Log::channel('payment')->info('LineItem debug', [
-                'product_id' => $lineItem->getProductId(),
-                'expiry_time' => $lineItem->getExpiryTime(),
-                'auto_renewing' => $lineItem->getAutoRenewingPlan(),
-                'prepaid' => $lineItem->getPrepaidPlan(),
-                'raw' => json_encode($lineItem),
+            Log::channel('payment')->info('Full subscription debug', [
+                'raw' => json_encode($subscriptionPurchase),
+                'line_items_count' => count($subscriptionPurchase->getLineItems()),
             ]);
             
             $expiryTime = $lineItem->getExpiryTime();
