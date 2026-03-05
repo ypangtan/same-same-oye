@@ -31,6 +31,7 @@ class UserSubscriptionController extends Controller {
         ];
         
         $this->data['data']['status'] = [
+            '1' => __( 'user_subscription.pending' ),
             '10' => __( 'user_subscription.active' ),
             '20' => __( 'user_subscription.expired' ),
             '30' => __( 'user_subscription.refunded' ),

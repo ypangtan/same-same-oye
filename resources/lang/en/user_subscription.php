@@ -17,6 +17,7 @@ return [
     'user' => 'User',
     'end_date' => 'End Date',
 
+    'pending' => 'Pending',
     'active' => 'Active',
     'expired' => 'Expired',
     'refunded' => 'Refunded',
