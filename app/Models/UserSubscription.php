@@ -35,6 +35,10 @@ class UserSubscription extends Model
         return $this->hasMany( SubscriptionGroupMember::class, 'leader_id', 'user_id' );
     }
 
+    public function group() {
+        return $this->hasMany( SubscriptionGroupMember::class, 'user_id', 'user_id' );
+    }
+
     public function getEndDateAttribute() {
         if( $this->attributes['end_date'] ) {
             return Carbon::parse( $this->attributes['end_date'] )->format('Y-m-d');

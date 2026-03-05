@@ -14,10 +14,13 @@ class UserSubscriptionObserver {
         $userSubscription->member()
             ->pluck('user_id')
             ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) );
+
+        $userSubscription->group()->each( fn($member) => $member->delete() );
     }
 
     public function updated( UserSubscription $userSubscription ) {
         CheckUserPlanValidityJob::dispatch( $userSubscription->user_id );
+        $userSubscription->group()->each( fn($member) => $member->delete() );
 
         $userSubscription->member()
             ->pluck('user_id')

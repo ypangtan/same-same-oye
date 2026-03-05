@@ -188,6 +188,14 @@ class SubscriptionGroupMemberService {
                     return;
                 }
 
+                $alreadyInvite = SubscriptionGroupMember::where( 'user_id', $user->id )
+                    ->where( 'leader_id', auth()->user()->id )
+                    ->exists();
+                if ( $alreadyInvite ) {
+                    $fail( __( 'subscription_group_member.user_already_invited' ) );
+                    return;
+                }
+
                 // check user have subscription or not
                 $userSubscription = UserSubscription::where( 'user_id', $value )->isActive()->where( 'type', 1 )->exists();
                 if( $userSubscription ) {
