@@ -316,7 +316,7 @@ class PaymentService {
         if ($subscription) {
             $subscription->update([
                 'status' => 10,
-                'end_date' => $endDate,
+                'end_date' => $endDate ?? null,
             ]);
         } else {
             $subscription = UserSubscription::create([
@@ -324,7 +324,7 @@ class PaymentService {
                 'subscription_plan_id' => $plan->id,
                 'status' => 10,
                 'start_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
-                'end_date' => $endDate,
+                'end_date' => $endDate ?? null,
                 'platform' => $platform,
                 'platform_transaction_id' => $transactionId,
             ]);
