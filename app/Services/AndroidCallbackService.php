@@ -98,8 +98,23 @@ class AndroidCallbackService {
                         $userSubscription->end_date = Carbon::parse($expiryTime)
                             ->timezone('Asia/Kuala_Lumpur');
                     }
+                    
+                    // ✅ 新增：检查 plan 是否有变更（降级生效时）
+                    $currentProductId = $lineItems[0]->getProductId();
+                    if ($currentProductId) {
+                        $newPlan = SubscriptionPlan::where('android_product_id', $currentProductId)->first();
+                        if ($newPlan && $userSubscription->subscription_plan_id !== $newPlan->id) {
+                            Log::channel('payment')->info('Subscription plan changed', [
+                                'user_id' => $user->id ?? null,
+                                'old_plan_id' => $userSubscription->subscription_plan_id,
+                                'new_plan_id' => $newPlan->id,
+                                'product_id' => $currentProductId,
+                            ]);
+                            $userSubscription->subscription_plan_id = $newPlan->id;
+                        }
+                    }
                 }
-                
+
                 $userSubscription->save();
                 
                 Log::channel('payment')->info('Android subscription verified', [
