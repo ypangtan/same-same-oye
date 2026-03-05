@@ -171,21 +171,23 @@ class PaymentService {
             $lineItem = $subscriptionPurchase->getLineItems()[0];
             $orderId = $subscriptionPurchase->getLatestOrderId();
             $productId = $lineItem->getProductId();
-
-            // debug
-            Log::channel('payment')->info('Full subscription debug', [
-                'raw' => json_encode($subscriptionPurchase),
-                'line_items_count' => count($subscriptionPurchase->getLineItems()),
-            ]);
+            $deferredProductId = null;
             
             $expiryTime = $lineItem->getExpiryTime();
             if ($expiryTime) {
-            $expiredDate = Carbon::parse($expiryTime)->timezone('Asia/Kuala_Lumpur');
-            } else {
-                // throw new \Exception('Invalid subscription purchase (no expiry time)');
+                $expiredDate = Carbon::parse($expiryTime)->timezone('Asia/Kuala_Lumpur');
             }
-            // $expiredDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addYears( $plan->duration_in_years )->addMonths( $plan->duration_in_months )->addDays( $plan->duration_in_days );
-            
+
+            // 检查是否有 deferred plan change（降级）
+            $lineItems = $subscriptionPurchase->getLineItems();
+            foreach ($lineItems as $item) {
+                $deferred = $item->getDeferredItemReplacement();
+                if ($deferred) {
+                    $deferredProductId = $deferred->getProductId();
+                    break;
+                }
+            }
+
             // check state payment
             if ($subscriptionPurchase->getSubscriptionState() !== 'SUBSCRIPTION_STATE_ACTIVE') {
                 throw new \Exception( 'Subscription not active, ' . $subscriptionPurchase->getSubscriptionState() );
@@ -203,6 +205,38 @@ class PaymentService {
             // 创建或更新订阅
             $isRenew = true;
             $subscription = self::createOrUpdateSubscription( $user_id, $plan->id, 2, $orderId, $expiredDate ?? null, $isRenew );
+
+            // 如果有 deferred plan，额外创建一个 status=1 的 pending subscription
+            if ($deferredProductId) {
+                $deferredPlan = SubscriptionPlan::where('android_product_id', $deferredProductId)->first();
+
+                if ($deferredPlan) {
+                    // 检查是否已存在 pending subscription（避免重复）
+                    $existingPending = UserSubscription::where('user_id', $user->id)
+                        ->where('subscription_plan_id', $deferredPlan->id)
+                        ->where('status', 1)
+                        ->first();
+
+                    if (!$existingPending) {
+                        UserSubscription::create([
+                            'user_id' => $user->id,
+                            'subscription_plan_id' => $deferredPlan->id,
+                            'status' => 1,  // pending
+                            'start_date' => null,  // 还没开始
+                            'end_date' => null,
+                            'platform' => 2,
+                            'platform_transaction_id' => $orderId,
+                        ]);
+
+                        Log::channel('payment')->info('Deferred plan change recorded', [
+                            'user_id' => $user->id,
+                            'current_plan_id' => $plan->id,
+                            'deferred_plan_id' => $deferredPlan->id,
+                            'deferred_product_id' => $deferredProductId,
+                        ]);
+                    }
+                }
+            }
 
             // 记录交易
             $transaction = PaymentTransaction::create([
