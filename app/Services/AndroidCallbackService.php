@@ -231,15 +231,14 @@ class AndroidCallbackService {
     }
 
     public static function callbackAndroid($request) {
+                return response()->json(['status' => 'success'], 200);
         try{ 
             $createLog = CallbackLog::create([
                 'platform' => 'android',
                 'payload' => json_encode($request->all()),
             ]);
         } catch ( \Throwable $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500); 
+            return response()->json(['status' => 'success'], 200);
         }
 
         try {
