@@ -4,6 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Malaysia’s first dedicated digital radio station celebrating the infectious energy of Bollywood and Punjabi music, created for all Malaysians and lovers of this genre.">
+    <meta name="author" content="Sama Sama Oye!">
+    <meta property="og:title" content="Sama Sama Oye!">
+    <meta property="og:description" content="Malaysia’s first dedicated digital radio station celebrating the infectious energy of Bollywood and Punjabi music, created for all Malaysians and lovers of this genre.">
 
     <link rel="shortcut icon" href="{{ asset( 'admin/images/favicon.ico' ) . Helper::assetVersion() }}">
 
