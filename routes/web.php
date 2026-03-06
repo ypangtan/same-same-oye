@@ -113,7 +113,7 @@ Route::post( '/ios/notification', [ WebhookController::class, 'ios']  )->without
 Route::post( '/android/notification', [ WebhookController::class, 'android' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
 
 
-// Route::get('/register', function (Request $request) {    
+// Route::get('/register', function (Request $request) {
 //     $userAgent = $request->header('User-Agent');
 
 //     if (preg_match('/Android/i', $userAgent)) {
@@ -131,6 +131,10 @@ Route::post( '/android/notification', [ WebhookController::class, 'android' ] )-
 //     ]);
 
 // });
+
+Route::get('{any}/share', function (Request $request, $any) {
+    return redirect( "https://sso.upplex.com.my/download" );
+})->where('any', '.*');
 
 
 // This is admin route

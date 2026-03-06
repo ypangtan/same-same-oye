@@ -14,8 +14,8 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if ($request->is('playlist/share*')) {
-            return null; // 或 redirect 去 app 的页面
+        if ($request->is('*/share*')) {
+            return null;
         }
 
         if ( ! $request->expectsJson() ) {
