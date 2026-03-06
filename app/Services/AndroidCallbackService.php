@@ -267,7 +267,7 @@ class AndroidCallbackService {
             $subscriptionNotification = $data['subscriptionNotification'] ?? null;
 
             Log::payment( 'payment' )->info( 'debug android callback', [
-                'data' => $data,
+                'data' => json_encode( $data ),
                 'subscription_notification' => json_encode( $subscriptionNotification )
             ] );
             
