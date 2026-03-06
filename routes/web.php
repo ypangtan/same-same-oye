@@ -109,6 +109,10 @@ Route::get('apple-app-site-association', function () {
     );
 });
 
+Route::get('{any}/share', function (Request $request, $any) {
+    return redirect(config('app.url') . '/download');
+})->where('any', '.*');
+
 Route::post( '/ios/notification', [ WebhookController::class, 'ios']  )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
 Route::post( '/android/notification', [ WebhookController::class, 'android' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
 
@@ -131,10 +135,6 @@ Route::post( '/android/notification', [ WebhookController::class, 'android' ] )-
 //     ]);
 
 // });
-
-Route::get('{any}/share', function (Request $request, $any) {
-    return redirect(config('app.url') . '/download');
-})->where('any', '.*');
 
 
 // This is admin route
