@@ -14,7 +14,7 @@ class addPlan extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'command:addPlan';
 
     /**
      * The console command description.
