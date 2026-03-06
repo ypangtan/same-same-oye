@@ -47,6 +47,10 @@ Route::get('.well-known/apple-app-site-association', function () {
                         [
                             "/" => "/item/share",
                             "comment" => "Matches any URL with path /item/share."
+                        ],
+                        [
+                            "/" => "/radio/share",
+                            "comment" => "Matches any URL with path /radio/share."
                         ]
                     ]
                 ]
@@ -90,6 +94,10 @@ Route::get('apple-app-site-association', function () {
                         [
                             "/" => "/item/share",
                             "comment" => "Matches any URL with path /item/share."
+                        ],
+                        [
+                            "/" => "/radio/share",
+                            "comment" => "Matches any URL with path /radio/share."
                         ]
                     ]
                 ]
