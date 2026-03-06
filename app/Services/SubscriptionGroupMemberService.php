@@ -197,7 +197,7 @@ class SubscriptionGroupMemberService {
                 }
 
                 // check user have subscription or not
-                $userSubscription = UserSubscription::where( 'user_id', $value )->isActive()->where( 'type', 1 )->exists();
+                $userSubscription = UserSubscription::where( 'user_id', $user->id )->isActive()->where( 'type', 1 )->exists();
                 if( $userSubscription ) {
                     $fail( __( 'subscription_group_member.user_have_active_subscription' ) );
                     return;
