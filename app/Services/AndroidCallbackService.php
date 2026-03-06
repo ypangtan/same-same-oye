@@ -266,8 +266,11 @@ class AndroidCallbackService {
             // Extract subscription notification
             $subscriptionNotification = $data['subscriptionNotification'] ?? null;
 
-            Log::channel( 'payment' )->info( 'debug android callback', [
+            Log::channel( 'payment' )->info( 'debug android callback data', [
                 'data' => json_encode( $data ),
+            ] );
+
+            Log::channel( 'payment' )->info( 'debug android callback subscription_notification', [
                 'subscription_notification' => json_encode( $subscriptionNotification )
             ] );
             
