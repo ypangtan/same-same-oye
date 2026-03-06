@@ -14,9 +14,6 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if ($request->is('*/share*')) {
-            return null;
-        }
 
         if ( ! $request->expectsJson() ) {
 

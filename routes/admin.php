@@ -45,7 +45,6 @@ use Carbon\Carbon;
 
 Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
-
     Route::get('{any}/share', function (Request $request, $any) {
         return redirect(config('app.url') . '/download');
     })->where('any', '.*');
