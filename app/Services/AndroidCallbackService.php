@@ -59,14 +59,23 @@ class AndroidCallbackService {
             if ($subscriptionData) {
                 // 更新用户订阅表
 
-                $payment = PaymentTransaction::where( 'receipt_data', $purchaseToken )->first();
+                $payment = PaymentTransaction::where('receipt_data', $purchaseToken)->first();
 
-                if( !$payment ) {
+                if (!$payment) {
+                    $latestOrderId = $subscriptionData->getLatestOrderId();
+                    if ($latestOrderId) {
+                        $payment = PaymentTransaction::where('transaction_id', $latestOrderId)
+                            ->orWhere('original_transaction_id', $latestOrderId)
+                            ->first();
+                    }
+                }
+
+                if (!$payment) {
                     Log::channel('payment')->warning('Payment Transaction not found', [
                         'purchase_token' => $purchaseToken,
                         'subscription_id' => $subscriptionId
                     ]);
-                    return ;
+                    return;
                 }
 
                 $userSubscription = UserSubscription::find( $payment->user_subscription_id );
