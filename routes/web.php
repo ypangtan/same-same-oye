@@ -133,7 +133,7 @@ Route::post( '/android/notification', [ WebhookController::class, 'android' ] )-
 // });
 
 Route::get('{any}/share', function (Request $request, $any) {
-    return redirect( "https://sso.upplex.com.my/download" );
+    return redirect(config('app.url') . '/download');
 })->where('any', '.*');
 
 
