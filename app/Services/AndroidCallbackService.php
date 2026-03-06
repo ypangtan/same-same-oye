@@ -265,6 +265,11 @@ class AndroidCallbackService {
 
             // Extract subscription notification
             $subscriptionNotification = $data['subscriptionNotification'] ?? null;
+
+            Log::payment( 'payment' )->info( 'debug android callback', [
+                'data' => $data,
+                'subscription_notification' => $subscriptionNotification
+            ] );
             
             if (!$subscriptionNotification) {
                 Log::channel('payment')->warning('No subscription notification in webhook');
