@@ -201,10 +201,6 @@ class PaymentService {
             $deferredProductId = null;
 
             foreach ($subscriptionPurchase->getLineItems() as $item) {
-                $deferred = $item->getDeferredItemReplacement();
-                if ($deferred) {
-                    $deferredProductId = $deferred->getProductId();
-                }
                 if ($item->getExpiryTime()) {
                     $currentLineItem = $item;
                 }
@@ -247,37 +243,6 @@ class PaymentService {
                 $currentPlanId = $currentPlan ? $currentPlan->id : $plan->id;
                 
                 $subscription = self::createOrUpdateSubscription($user_id, $currentPlanId, 2, $orderId, $expiredDate ?? null, $isRenew);
-            }
-
-            // ✅ 如果有 deferred plan（降级），额外创建 status=1 的 pending subscription
-            if ($deferredProductId) {
-                $deferredPlan = SubscriptionPlan::where('android_product_id', $deferredProductId)->first();
-
-                if ($deferredPlan) {
-                    $existingPending = UserSubscription::where('user_id', $user->id)
-                        ->where('subscription_plan_id', $deferredPlan->id)
-                        ->where('status', 1)
-                        ->first();
-
-                    if (!$existingPending) {
-                        UserSubscription::create([
-                            'user_id' => $user->id,
-                            'subscription_plan_id' => $deferredPlan->id,
-                            'status' => 1, // pending
-                            'start_date' => null,
-                            'end_date' => null,
-                            'platform' => 2,
-                            'platform_transaction_id' => $orderId,
-                        ]);
-
-                        Log::channel('payment')->info('Deferred plan change recorded', [
-                            'user_id' => $user->id,
-                            'current_plan_id' => $plan->id,
-                            'deferred_plan_id' => $deferredPlan->id,
-                            'deferred_product_id' => $deferredProductId,
-                        ]);
-                    }
-                }
             }
 
             // 记录交易
