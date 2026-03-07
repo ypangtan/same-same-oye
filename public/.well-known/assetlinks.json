@@ -3,10 +3,9 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.ifei.app",
-      "sha256_cert_fingerprints": [
-        "76:67:7C:AF:3D:75:5F:06:48:E8:9B:3E:3E:A5:E1:02:C4:C6:2B:5A:E6:CB:FE:67:7D:9C:6E:65:3A:23:14:E2"
-      ]
+      "package_name": "com.sama2oye.android",
+      "sha256_cert_fingerprints":
+        ["8A:41:30:2D:BB:3F:FB:F6:1D:56:E0:89:7D:C1:51:70:55:A3:38:D7:EB:49:DF:D9:51:E5:9D:9E:13:E8:26:54"]
     }
   }
 ]
