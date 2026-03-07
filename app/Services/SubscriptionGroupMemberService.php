@@ -140,6 +140,14 @@ class SubscriptionGroupMemberService {
             'encrypted_id',
         ] );
 
+        if( $leader ) {
+            $leader->append( [
+                'encrypted_id',
+                'profile_picture_path_new',
+            ] );
+
+            $leader->profit_picture = $leader->profile_picture_path_new;
+        }
 
         return response()->json( [
             'message' => '',
