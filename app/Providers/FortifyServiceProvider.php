@@ -64,8 +64,10 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing( function ( Request $request ) {
             $validator = Validator::make( $request->all(), [
                 'email' => [ 'required', function( $attribute, $value, $fail ) use ( $request, &$administrator ) {
-                    $administrator = Administrator::where( 'email', $request->email )
-                        ->orWhere('phone_number', $request->email)
+                    $administrator = Administrator::where( function( $query ) use ( $request ) {
+                            $query->where( 'email', $request->email )
+                                ->orWhere( 'phone_number', $request->email );
+                        })
                         ->where( 'status', 10 )
                         ->first();
 
