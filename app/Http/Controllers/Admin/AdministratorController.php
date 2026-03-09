@@ -39,6 +39,11 @@ class AdministratorController extends Controller
                 'class' => 'active',
             ],
         ];
+        
+        $this->data['data']['status'] = [
+            '10' => __( 'datatables.activated' ),
+            '20' => __( 'datatables.suspended' ),
+        ];
 
         return view( 'admin.main' )->with( $this->data );
     }
@@ -124,6 +129,10 @@ class AdministratorController extends Controller
 
     public function updateAdministrator( Request $request ) {
         return AdministratorService::updateAdministrator( $request );
+    }
+
+    public function updateAdministratorStatus( Request $request ) {
+        return AdministratorService::updateAdministratorStatus( $request );
     }
 
     public function verify( Request $request ) {

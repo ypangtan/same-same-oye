@@ -55,6 +55,12 @@ $columns = [
         'title' => __( 'administrator.phone_number' ),
     ],
     [
+        'type' => 'select',
+        'options' => $data['status'],
+        'id' => 'status',
+        'title' => __( 'datatables.status' ),
+    ],
+    [
         'type' => 'default',
         'id' => 'dt_action',
         'title' => __( 'datatables.action' ),
@@ -74,7 +80,9 @@ $columns = [
     @endif
     @endforeach
 
-    var dt_table,
+
+    var statusMapper = @json( $data['status'] ),
+        dt_table,
         dt_table_name = '#administrator_table',
         dt_table_config = {
             language: {
@@ -104,6 +112,7 @@ $columns = [
                 { data: 'name' },
                 { data: 'email' },
                 { data: 'phone_number' },
+                { data: 'status' },
                 { data: 'id' },
             ],
             columnDefs: [
@@ -140,6 +149,12 @@ $columns = [
                     },
                 },
                 {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
+                    render: function( data, type, row, meta ) {
+                        return statusMapper[data];
+                    },
+                },
+                {
                     targets: parseInt( '{{ count( $columns ) - 1 }}' ),
                     orderable: false,
                     width: '10%',
@@ -155,8 +170,8 @@ $columns = [
 
                         @can( 'delete administrator' )
                         status = row['status'] == 10 ? 
-                        '<li class="dt-status" data-status="' + row['status'] + '"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
-                        '<li class="dt-status" data-status="' + row['status'] + '"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
+                        '<li class="dt-status" data-status="20" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
+                        '<li class="dt-status" data-status="10" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
                         @endcan
 
                         let html = 
@@ -198,7 +213,20 @@ $columns = [
         } );
 
         $( document ).on( 'click', '.dt-status', function() {
-            console.log( 'aaa' );
+            $.ajax( {
+                url: '{{ route( 'admin.administrator.updateAdministratorStatus' ) }}',
+                type: 'POST',
+                data: {
+                    'id': $( this ).data( 'id' ),
+                    'status': $( this ).data( 'status' ),
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function( response ) {
+                    dt_table.draw( false );
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.toggle();
+                },
+            } );
         } ); 
     } );
 </script>
