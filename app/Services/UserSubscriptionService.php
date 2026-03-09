@@ -112,7 +112,7 @@ class UserSubscriptionService
 
         if( !empty( $request->user ) ) {
             $model->whereHas( 'user', function ( $q ) use ( $request ) {
-                $model->where( 'email', 'like', '%'. $request->user . '%' )
+                $q->where( 'email', 'like', '%'. $request->user . '%' )
                     ->orWhere( 'phone_number', 'like', '%'. $request->user . '%' )
                     ->orWhere( 'first_name', 'like', '%'. $request->user . '%' )
                     ->orWhere( 'last_name', 'like', '%'. $request->user . '%' );
