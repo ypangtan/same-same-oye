@@ -24,7 +24,7 @@ $columns = [
     [
         'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.id' ) ] ),
-        'id' => 'id',
+        'id' => 'user_subscription_id',
         'title' => __( 'subscription_group_member.id' ),
     ],
     [
@@ -67,7 +67,7 @@ $columns = [
             ajax: {
                 url: '{{ route( 'admin.subscription_group_member.allSubscriptionGroupMembers' ) }}',
                 data: {
-                    'id': '{{ Request( 'id' )  }}'
+                    'user_subscription_id': '{{ Request( 'id' )  }}'
                     '_token': '{{ csrf_token() }}',
                 },
                 dataSrc: 'subscription_group_members',
@@ -80,6 +80,7 @@ $columns = [
             columns: [
                 { data: null },
                 { data: 'user' },
+                { data: null },
                 { data: 'status' },
             ],
             columnDefs: [
@@ -104,7 +105,7 @@ $columns = [
                     }
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "id" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "user_subscription_id" ) }}' ),
                     orderable: false,
                     visible: false,
                     render: function( data, type, row, meta ) {
@@ -135,8 +136,8 @@ $columns = [
         timeout = null;
 
     document.addEventListener( 'DOMContentLoaded', function() {
-        window['id'] = '{{ Request( 'id' ) }}';
-        $( '#id' ).val( '{{ Request( 'id' ) }}' ).addClass( 'd-none' );
+        window['user_subscription_id'] = '{{ Request( 'id' ) }}';
+        $( '#user_subscription_id' ).val( '{{ Request( 'id' ) }}' ).addClass( 'd-none' );
     } );
 
 </script>
