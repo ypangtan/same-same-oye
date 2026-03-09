@@ -45,7 +45,7 @@ class checkPlanValidity extends Command
     public function handle()
     {
 
-        $user = User::find( 1 );
+        $user = User::find( 5 );
         if( $user ) {
             $this->info( 'have user' );
             $response = $user->checkPlanValidity();
