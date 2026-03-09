@@ -290,7 +290,7 @@ class AdministratorService
         ] );
     }
 
-    public static function updateUserStatus( $request ) {
+    public static function updateAdministratorStatus( $request ) {
         
         $request->merge( [
             'id' => Helper::decode( $request->id ),
