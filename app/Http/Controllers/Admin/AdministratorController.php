@@ -131,6 +131,10 @@ class AdministratorController extends Controller
         return AdministratorService::updateAdministrator( $request );
     }
 
+    public function updateAdministratorStatus( Request $request ) {
+        return AdministratorService::updateAdministratorStatus( $request );
+    }
+
     public function verify( Request $request ) {
 
         $value = $request->session()->get( 'mfa-ed' );

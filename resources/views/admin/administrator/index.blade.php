@@ -213,7 +213,20 @@ $columns = [
         } );
 
         $( document ).on( 'click', '.dt-status', function() {
-            console.log( 'aaa' );
+            $.ajax( {
+                url: '{{ route( 'admin.user.updateUserStatus' ) }}',
+                type: 'POST',
+                data: {
+                    'id': $( this ).data( 'id' ),
+                    'status': $( this ).data( 'status' ),
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function( response ) {
+                    dt_table.draw( false );
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.toggle();
+                },
+            } );
         } ); 
     } );
 </script>

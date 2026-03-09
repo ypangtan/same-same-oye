@@ -290,6 +290,21 @@ class AdministratorService
         ] );
     }
 
+    public static function updateUserStatus( $request ) {
+        
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
+        ] );
+
+        $updateUser = Administrator::find( $request->id );
+        $updateUser->status = $request->status;
+        $updateUser->save();
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.administrators' ) ) ] ),
+        ] );
+    }
+
     public static function logout() {
 
         activity()
