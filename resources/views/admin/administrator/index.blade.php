@@ -170,8 +170,8 @@ $columns = [
 
                         @can( 'delete administrator' )
                         status = row['status'] == 10 ? 
-                        '<li class="dt-status" data-status="' + row['status'] + '" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
-                        '<li class="dt-status" data-status="' + row['status'] + '" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
+                        '<li class="dt-status" data-status="20" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
+                        '<li class="dt-status" data-status="10" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
                         @endcan
 
                         let html = 
