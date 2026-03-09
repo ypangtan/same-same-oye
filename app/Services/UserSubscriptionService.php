@@ -111,8 +111,12 @@ class UserSubscriptionService
         }
 
         if( !empty( $request->user ) ) {
-            $user = \Helper::decode( $request->user );
-            $model->where( 'user_subscriptions.user_id', $user );
+            $model->whereHas( 'user', function ( $q ) use ( $request ) {
+                $model->where( 'email', 'like', '%'. $request->user . '%' )
+                    ->orWhere( 'phone_number', 'like', '%'. $request->user . '%' )
+                    ->orWhere( 'first_name', 'like', '%'. $request->user . '%' )
+                    ->orWhere( 'last_name', 'like', '%'. $request->user . '%' );
+            } );
             $filter = true;
         }
 
