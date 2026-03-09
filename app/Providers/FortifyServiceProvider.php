@@ -71,6 +71,7 @@ class FortifyServiceProvider extends ServiceProvider
 
                     if ( !$administrator || !Hash::check( $request->password, $administrator->password ) ) {
                         $fail( __( 'auth.failed' ) );
+                        return ;
                     }
                 } ],
                 'password' => 'required',
