@@ -55,6 +55,12 @@ $columns = [
         'title' => __( 'administrator.phone_number' ),
     ],
     [
+        'type' => 'select',
+        'options' => $data['status'],
+        'id' => 'status',
+        'title' => __( 'datatables.status' ),
+    ],
+    [
         'type' => 'default',
         'id' => 'dt_action',
         'title' => __( 'datatables.action' ),
@@ -74,7 +80,9 @@ $columns = [
     @endif
     @endforeach
 
-    var dt_table,
+
+    var statusMapper = @json( $data['status'] ),
+        dt_table,
         dt_table_name = '#administrator_table',
         dt_table_config = {
             language: {
@@ -104,6 +112,7 @@ $columns = [
                 { data: 'name' },
                 { data: 'email' },
                 { data: 'phone_number' },
+                { data: 'status' },
                 { data: 'id' },
             ],
             columnDefs: [
@@ -137,6 +146,12 @@ $columns = [
                     orderable: false,
                     render: function( data, type, row, meta ) {
                         return data ? row.calling_code + ' ' + data : '-';
+                    },
+                },
+                {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
+                    render: function( data, type, row, meta ) {
+                        return statusMapper[data];
                     },
                 },
                 {
