@@ -47,18 +47,22 @@ class checkPlanValidity extends Command
         $user = User::find( 5 );
         if( $user ) {
             $this->info( 'have user' );
-            $group = $user->subscriptionGroupMember()->where( 'status', 10 )->first();
-            if( $group ) {
-                $this->info( 'have group' );
-                $leader = $group->leader()->first();
-                if( $leader ) {
-                    $this->info( 'have leader' );
-                    $plan = $leader->subscriptions()->isGroup()->isActive()->first();
-                    if( $plan ) {
-                        $this->info( 'have plan' );
-                    }
-                }
+            $plan = $user->subscriptions()->isActive()->first();
+            if( $plan ) {
+                $this->info( 'have plan' . $plan->id );
             }
+            // $group = $user->subscriptionGroupMember()->where( 'status', 10 )->first();
+            // if( $group ) {
+            //     $this->info( 'have group' );
+            //     $leader = $group->leader()->first();
+            //     if( $leader ) {
+            //         $this->info( 'have leader' );
+            //         $plan = $leader->subscriptions()->isGroup()->isActive()->first();
+            //         if( $plan ) {
+            //             $this->info( 'have plan' );
+            //         }
+            //     }
+            // }
         }
 
         return 0;
