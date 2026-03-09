@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\CheckUserPlanValidityJob;
 use App\Models\Collection;
 use App\Models\Item;
 use App\Models\Playlist;
@@ -47,22 +48,7 @@ class checkPlanValidity extends Command
         $user = User::find( 1 );
         if( $user ) {
             $this->info( 'have user' );
-            $plan = $user->subscriptions()->isActive()->first();
-            if( $plan ) {
-                $this->info( 'have plan' . $plan->id );
-            }
-            // $group = $user->subscriptionGroupMember()->where( 'status', 10 )->first();
-            // if( $group ) {
-            //     $this->info( 'have group' );
-            //     $leader = $group->leader()->first();
-            //     if( $leader ) {
-            //         $this->info( 'have leader' );
-            //         $plan = $leader->subscriptions()->isGroup()->isActive()->first();
-            //         if( $plan ) {
-            //             $this->info( 'have plan' );
-            //         }
-            //     }
-            // }
+            CheckUserPlanValidityJob::dispatch( $user->id );
         }
 
         return 0;
