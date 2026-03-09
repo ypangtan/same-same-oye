@@ -121,7 +121,7 @@ class User extends Model implements AuthenticatableContract
         $have_plan = $this->subscriptions()->isActive()->first();
         if( $have_plan ) {
             $this->update( [ 'membership' => $have_plan->type ] );
-            return ;
+            return 1;
         }
 
         // check group plan
@@ -133,13 +133,13 @@ class User extends Model implements AuthenticatableContract
                 $plan = $leader->subscriptions()->isGroup()->isActive()->first();
                 if( $plan ) {
                     $this->update( [ 'membership' => $plan->type ] );
-                    return ;
+                    return 2;
                 }
             }
         }
 
         $this->update( [ 'membership' => 0 ] );
-        return ;
+        return 3;
     }
 
     public function getEncryptedIdAttribute() {
