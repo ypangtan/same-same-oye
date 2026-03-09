@@ -214,7 +214,7 @@ $columns = [
 
         $( document ).on( 'click', '.dt-status', function() {
             $.ajax( {
-                url: '{{ route( 'admin.user.updateUserStatus' ) }}',
+                url: '{{ route( 'admin.administrator.updateAdministratorStatus' ) }}',
                 type: 'POST',
                 data: {
                     'id': $( this ).data( 'id' ),
