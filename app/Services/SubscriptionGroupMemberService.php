@@ -25,10 +25,14 @@ class SubscriptionGroupMemberService {
 
     public static function allSubscriptionGroupMembers( $request ) {
 
+        $request->merge( [
+            'leader_id' => \Helper::decode( $request->leader_id )
+        ] );
+
         $subscriptionGroupMembers = SubscriptionGroupMember::with( [
             'user',
             'leader',
-        ] )->select( 'subscription_group_members.*');
+        ] )->select( 'subscription_group_members.*')->where( 'leader_id', $request->leader_id );
 
         $filterObject = self::filter( $request, $subscriptionGroupMembers );
         $subscriptionGroupMember = $filterObject['model'];
@@ -56,7 +60,7 @@ class SubscriptionGroupMemberService {
             ] );
         }
 
-        $totalRecord = SubscriptionGroupMember::count();
+        $totalRecord = SubscriptionGroupMember::where( 'subscription_group_members.leader_id', $request->leader_id )->count();
 
         $data = [
             'subscription_group_members' => $subscriptionGroupMembers,
@@ -74,17 +78,17 @@ class SubscriptionGroupMemberService {
         $filter = false;
 
         if ( !empty( $request->id ) ) {
-            $model->where( 'subscriptionGroupMembers.id', '!=', \Helper::decode($request->id) );
+            $model->where( 'subscription_group_members.id', '!=', \Helper::decode($request->id) );
             $filter = true;
         }
 
         if ( !empty( $request->leader_id ) ) {
-            $model->where( 'subscriptionGroupMembers.leader_id', \Helper::decode($request->leader_id) );
+            $model->where( 'subscription_group_members.leader_id', \Helper::decode($request->leader_id) );
             $filter = true;
         }
 
         if ( !empty( $request->user_id ) ) {
-            $model->where( 'subscriptionGroupMembers.user_id', \Helper::decode($request->user_id) );
+            $model->where( 'subscription_group_members.user_id', \Helper::decode($request->user_id) );
             $filter = true;
         }
 
