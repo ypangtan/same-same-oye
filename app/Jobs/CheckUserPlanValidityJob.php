@@ -42,7 +42,7 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUniqueUntilProces
         \DB::beginTransaction();
         try {
             $user = User::lockForUpdate()->find( $this->userId );
-            $user?->checkPlanValidity();
+            $user->checkPlanValidity();
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollBack();
