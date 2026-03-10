@@ -110,8 +110,8 @@ class ItemService
 
         if ( !empty( $request->search ) ) {
             $model->where( function ( $q ) use ( $request ) {
-                $q->where( 'title', 'LIKE', '%' . $request->search . '%' )
-                    ->orWhere( 'author', 'LIKE', '%' . $request->search . '%' );
+                $q->where( 'items.title', 'LIKE', '%' . $request->search . '%' )
+                    ->orWhere( 'items.author', 'LIKE', '%' . $request->search . '%' );
             } );
             $filter = true;
         }
