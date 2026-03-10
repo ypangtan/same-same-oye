@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\{
     Storage,
 };
 
+use App\Services\{
+    StorageService,
+};
+
 use Helper;
 
 use App\Models\{
