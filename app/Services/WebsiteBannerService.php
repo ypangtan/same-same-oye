@@ -41,8 +41,8 @@ class WebsiteBannerService
         ] );
 
         $attributeName = [
-            'url' => __( 'website_banner.url' ),
-            'file' => __( 'website_banner.image' ),
+            'url' => __( 'banner.url' ),
+            'file' => __( 'banner.image' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -99,7 +99,7 @@ class WebsiteBannerService
         ] );
 
         $attributeName = [
-            'url' => __( 'website_banner.url' ),
+            'url' => __( 'banner.url' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -162,7 +162,7 @@ class WebsiteBannerService
         ] );
 
         $attributeName = [
-            'url' => __( 'website_banner.url' ),
+            'url' => __( 'banner.url' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
