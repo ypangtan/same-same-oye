@@ -84,6 +84,10 @@ return [
     'contact_us_email' => 'Contact Us Email',
     'subscription_group_members' => 'Subscription Group Members',
     'user_subscriptions' => 'User Subscriptions',
+    'disclaimers' => 'Disclaimers',
+    'website_banners' => 'Website Banners',
+    
+    'content' => 'Content',
 
     'loading' => 'Loading...',
     'add' => 'Add',

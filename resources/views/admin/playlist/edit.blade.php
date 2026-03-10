@@ -338,7 +338,7 @@ window.cke_element = [ 'playlist_edit_desc'];
                 delay: 250,
                 data: function (params) {
                     return {
-                        title: params.term, // search term
+                        search: params.term, // search term
                         type: '{{ $type }}',
                         file_type: file_type ?? '',
                         designation: 1,

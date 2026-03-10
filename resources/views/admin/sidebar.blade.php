@@ -241,14 +241,26 @@
                                     </ul>
                                 </li>
                                 @endcan
-
-                                @can( 'view banners' )
-                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\BannerController' ? 'active current-page' : '' }}">
-                                        <a href="{{ route( 'admin.module_parent.banner.index' ) }}" class="nk-menu-link">
-                                            <span class="nk-menu-icon"><em class="icon ni ni-flag-fill"></em></span>
-                                            <span class="nk-menu-text">{{ __( 'template.banners' ) }}</span>
-                                        </a>
-                                    </li>
+                                
+                                @canany( [ 'view banners', 'view website_banners' ] )
+                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\BannerController' || $controller == 'App\Http\Controllers\Admin\WebsiteBannerController') ? 'active current-page' : '' }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-flag-fill"></em></span>
+                                        <span class="nk-menu-text">{{ __( 'template.banners' ) }}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @can( 'view banners' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\BannerController' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.banner.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.banners' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view website_banners' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\WebsiteBannerController' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.website_banner.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.website_banners' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                    </ul>
+                                </li>
                                 @endcan
 
                                 @can( 'view settings' )
