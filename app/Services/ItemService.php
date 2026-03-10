@@ -108,10 +108,10 @@ class ItemService
             $filter = true;
         }
 
-        if ( !empty( $request->search ) ) {
+        if ( !empty( $request->search_text ) ) {
             $model->where( function ( $q ) use ( $request ) {
-                $q->where( 'items.title', 'LIKE', '%' . $request->search . '%' )
-                    ->orWhere( 'items.author', 'LIKE', '%' . $request->search . '%' );
+                $q->where( 'items.title', 'LIKE', '%' . $request->search_text . '%' )
+                    ->orWhere( 'items.author', 'LIKE', '%' . $request->search_text . '%' );
             } );
             $filter = true;
         }
