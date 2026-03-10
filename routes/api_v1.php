@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\{
     PointsController,
     DisclaimerController,
     SearchController,
+    WebsiteBannerController,
     SubscriptionGroupMemberController,
     TypeController,
     UserPlaylistController,
@@ -93,6 +94,10 @@ Route::prefix( 'pop_announcements' )->group( function() {
 Route::prefix( 'banners' )->group( function() {
     Route::post( '/get-all-banners', [ BannerController::class, 'getBanners' ] );
     Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
+} );
+Route::prefix( 'website-banners' )->group( function() {
+    Route::post( '/get-all-website-banners', [ WebsiteBannerController::class, 'getWebsiteBanners' ] );
+    Route::post( '/get-one-website-banner', [ WebsiteBannerController::class, 'getWebsiteBanner' ] );
 } );
 
 Route::prefix( 'plans' )->group( function() {

@@ -108,6 +108,12 @@ class ItemService
             $filter = true;
         }
 
+        if ( !empty( $request->search ) ) {
+            $model->where( 'title', 'LIKE', '%' . $request->search . '%' )
+                ->orWhere( 'author', 'LIKE', '%' . $request->search . '%' );
+            $filter = true;
+        }
+
         if ( !empty( $request->title ) ) {
             $model->where( 'title', 'LIKE', '%' . $request->title . '%' );
             $filter = true;
