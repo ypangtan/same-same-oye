@@ -12,19 +12,9 @@ use Illuminate\Support\Facades\{
 use Helper;
 
 use App\Models\{
-    Company,
-    Customer,
     WebsiteBanner,
-    Booking,
     FileManager,
-    VendingMachine,
     VendingMachineStock,
-    WebsiteBannerUsage,
-    Cart,
-    CartMeta,
-    Order,
-    OrderMeta,
-    UserWebsiteBanner,
 };
 
 use Barryvdh\DomPDF\Facade\Pdf;
