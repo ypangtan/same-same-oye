@@ -38,6 +38,8 @@ class BannerController extends Controller
      * 
      * @group Banner API
      * 
+     * @bodyParam id string The encrypted_id of the banner. Example: 52
+     * 
      */
     public function getBanner( Request $request ) {
 
