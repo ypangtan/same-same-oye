@@ -387,25 +387,25 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
             Route::prefix( 'website-banners' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view website_banners' ] ], function() {
-                    Route::get( '/', [ BannerController::class, 'index' ] )->name( 'admin.module_parent.website_banner.index' );
+                    Route::get( '/', [ WebsiteBannerController::class, 'index' ] )->name( 'admin.module_parent.website_banner.index' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:add website_banners' ] ], function() {
-                    Route::get( 'add', [ BannerController::class, 'add' ] )->name( 'admin.website_banner.add' );
+                    Route::get( 'add', [ WebsiteBannerController::class, 'add' ] )->name( 'admin.website_banner.add' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:edit website_banners' ] ], function() {
-                    Route::get( 'edit', [ BannerController::class, 'edit' ] )->name( 'admin.website_banner.edit' );
+                    Route::get( 'edit', [ WebsiteBannerController::class, 'edit' ] )->name( 'admin.website_banner.edit' );
                 } );
     
-                Route::post( 'update-website-banner-url', [ BannerController::class, 'updateWebsiteBannerUrl' ] )->name( 'admin.website_banner.updateWebsiteBannerUrl' );
-                Route::post( 'update-order', [ BannerController::class, 'updateOrder' ] )->name( 'admin.website_banner.updateOrder' );
-                Route::post( 'all-website-banners', [ BannerController::class, 'allWebsiteBanners' ] )->name( 'admin.website_banner.allWebsiteBanners' );
-                Route::post( 'one-website-banner', [ BannerController::class, 'oneWebsiteBanner' ] )->name( 'admin.website_banner.oneWebsiteBanner' );
-                Route::post( 'create-website-banner', [ BannerController::class, 'createWebsiteBanner' ] )->name( 'admin.website_banner.createWebsiteBanner' );
-                Route::post( 'update-website-banner', [ BannerController::class, 'updateWebsiteBanner' ] )->name( 'admin.website_banner.updateWebsiteBanner' );
-                Route::post( 'delete-website-banner', [ BannerController::class, 'deleteWebsiteBanner' ] )->name( 'admin.website_banner.deleteWebsiteBanner' );
-                Route::post( 'update-website-banner-status', [ BannerController::class, 'updateWebsiteBannerStatus' ] )->name( 'admin.website_banner.updateWebsiteBannerStatus' );
-                Route::post( 'remove-website-banner-gallery-image', [ BannerController::class, 'removeWebsiteBannerGalleryImage' ] )->name( 'admin.website_banner.removeWebsiteBannerGalleryImage' );
-                Route::post( 'ckeUpload', [ BannerController::class, 'ckeUpload' ] )->name( 'admin.website_banner.ckeUpload' );
+                Route::post( 'update-website-banner-url', [ WebsiteBannerController::class, 'updateWebsiteBannerUrl' ] )->name( 'admin.website_banner.updateWebsiteBannerUrl' );
+                Route::post( 'update-order', [ WebsiteBannerController::class, 'updateOrder' ] )->name( 'admin.website_banner.updateOrder' );
+                Route::post( 'all-website-banners', [ WebsiteBannerController::class, 'allWebsiteBanners' ] )->name( 'admin.website_banner.allWebsiteBanners' );
+                Route::post( 'one-website-banner', [ WebsiteBannerController::class, 'oneWebsiteBanner' ] )->name( 'admin.website_banner.oneWebsiteBanner' );
+                Route::post( 'create-website-banner', [ WebsiteBannerController::class, 'createWebsiteBanner' ] )->name( 'admin.website_banner.createWebsiteBanner' );
+                Route::post( 'update-website-banner', [ WebsiteBannerController::class, 'updateWebsiteBanner' ] )->name( 'admin.website_banner.updateWebsiteBanner' );
+                Route::post( 'delete-website-banner', [ WebsiteBannerController::class, 'deleteWebsiteBanner' ] )->name( 'admin.website_banner.deleteWebsiteBanner' );
+                Route::post( 'update-website-banner-status', [ WebsiteBannerController::class, 'updateWebsiteBannerStatus' ] )->name( 'admin.website_banner.updateWebsiteBannerStatus' );
+                Route::post( 'remove-website-banner-gallery-image', [ WebsiteBannerController::class, 'removeWebsiteBannerGalleryImage' ] )->name( 'admin.website_banner.removeWebsiteBannerGalleryImage' );
+                Route::post( 'ckeUpload', [ WebsiteBannerController::class, 'ckeUpload' ] )->name( 'admin.website_banner.ckeUpload' );
             } );
 
             Route::prefix( 'subscription_plans' )->group( function() {
