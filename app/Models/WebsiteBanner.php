@@ -13,6 +13,7 @@ use Spatie\Activitylog\LogOptions;
 use Helper;
 
 use Carbon\Carbon;
+use App\Services\StorageService;
 
 class WebsiteBanner extends Model
 {
