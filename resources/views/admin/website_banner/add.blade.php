@@ -69,7 +69,7 @@
         <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
         @can( 'add website_banners' )
         <div class="mb-3">
-            <label>{{ __( 'website_banner.image' ) }}</label>
+            <label>{{ __( 'banner.image' ) }}</label>
             <div class="dropzone mb-3" id="{{ $website_banner_create }}_image" style="min-height: 0px;">
                 <div class="dz-message needsclick">
                     <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
@@ -83,7 +83,7 @@
                 <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="{{ $website_banner->id }}">
                     <img src="{{ $website_banner->image_path }}" class="website_banner-img rounded">
                     <div class=" mt-2">
-                        <label>{{ __('website_banner.website_banner_url') }}</label>
+                        <label>{{ __('banner.banner_url') }}</label>
                         <input type="url" class="website_banner_url form-control" value="{{ $website_banner->url ?? '' }}" data-id="{{ $website_banner->id }}" placeholder="https://example.com"/>
                     </div>
                     <!-- Dropdown -->
@@ -149,7 +149,7 @@
                             <img src="${response.data.website_banner_url}" class="website_banner-img rounded">
                 
                             <div class=" mt-2">
-                                <label>{{ __('website_banner.website_banner_url') }}</label>
+                                <label>{{ __('banner.banner_url') }}</label>
                                 <input type="url" class="website_banner_url form-control" value="${response.data.url ?? ''}" data-id="${response.data.id}" placeholder="https://example.com"/>
                             </div>
                             <!-- Dropdown -->
