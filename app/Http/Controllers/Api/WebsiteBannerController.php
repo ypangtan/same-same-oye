@@ -38,6 +38,8 @@ class WebsiteBannerController extends Controller
      * 
      * @group Website Banner API
      * 
+     * @bodyParam id string The encrypted_id of the website banner. Example: 52
+     * 
      */
     public function getWebsiteBanner( Request $request ) {
 
