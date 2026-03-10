@@ -21,6 +21,7 @@ class CreateWebsiteBannersTable extends Migration
             $table->string( 'zh_desc' )->nullable();
             $table->string( 'image' )->nullable();
             $table->unsignedInteger( 'priority' );
+            $table->tinyInteger('sequence')->nullable()->default(0);
             $table->text( 'url' )->nullable();
             $table->tinyInteger( 'status' )->default(10);
             $table->timestamps();
