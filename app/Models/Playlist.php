@@ -35,7 +35,7 @@ class Playlist extends Model
         'status',
     ];
 
-    public function getDisplayTagAtrribute() {
+    public function getDisplayTagAttribute() {
         $tags = $this->tags()->pluck('tag')->toArray();
         if ( empty( $tags ) ) {
             return '';
