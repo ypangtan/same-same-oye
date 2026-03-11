@@ -35,6 +35,9 @@
     <link rel="stylesheet" href="{{ asset( 'admin/css/evol-colorpicker.css' ) . Helper::assetVersion() }}">
     <link rel="stylesheet" href="{{ asset( 'admin/css/evol-colorpicker.min.css' ) . Helper::assetVersion() }}">
 
+    {{-- tag --}}
+    <link rel="stylesheet" href="{{ asset( 'admin/css/bootstrap-tagsinput.css' ) . Helper::assetVersion() }}">
+
 </head>
 
 <style>
