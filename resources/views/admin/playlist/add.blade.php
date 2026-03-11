@@ -64,6 +64,13 @@ $parent_route = $data['parent_route'] ?? null;
                         </div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $playlist_create }}_tag" class="col-sm-5 col-form-label">{{ __( 'playlist.tags' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="{{ $playlist_create }}_tag" class="form-control form-control-sm" data-role="tagsinput">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="mb-3">
                     <label>{{ __( 'playlist.image' ) }}</label>
                     <div class="dropzone mb-3" id="{{ $playlist_create }}_image" style="min-height: 0px;">
@@ -113,6 +120,8 @@ window.cke_element = [ 'playlist_create_desc'];
             file_type = '',
             selectedItems = [];
 
+        $( dc + '_tag').tagsinput();
+
         $( dc + '_cancel' ).click( function() {
             window.location.href = '{{ $parent_route }}';
         } );
@@ -132,6 +141,7 @@ window.cke_element = [ 'playlist_create_desc'];
             formData.append( 'zh_name', $( dc + '_zh_name' ).val() ?? '' );
             formData.append( 'desc', editors['playlist_create_desc'].getData() );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
+            formData.append( 'tag', $( dc + '_tag' ).val() ?? '' );
             formData.append( 'image', fileID ?? '' );
             formData.append( 'file_type', file_type ?? '' );
             formData.append('items', JSON.stringify( selectedItems ) );

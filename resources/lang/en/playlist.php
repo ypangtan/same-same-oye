@@ -22,6 +22,9 @@ return [
     'membership' => 'Membership',
     'user_playlist_item' => 'User Playlist Item',
     'desc' => 'Description',
+    'tags' => 'Tags',
+    'tag' => 'Tag',
 
+    'max_tag' => 'You can only add a maximum of 2 tags per playlist',
     'playlist_type_mismatch' => 'The type of the song does not match the type of the playlist.',
 ];

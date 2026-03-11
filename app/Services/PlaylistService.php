@@ -14,6 +14,7 @@ use Illuminate\Validation\Rules\Password;
 use App\Models\{
     FileManager,
     Playlist,
+    PlaylistTag,
     User,
     Role as RoleModel
 };
@@ -37,6 +38,7 @@ class PlaylistService
             'category',
             'type',
             'administrator',
+            'tags',
         ] )->select( 'playlists.*' )
             ->where( 'is_item', 0 );
 
@@ -161,6 +163,7 @@ class PlaylistService
             'item',
             'items',
             'administrator',
+            'tags',
         ] )->find( Helper::decode( $request->id ) );
 
         $playlist->append( [
@@ -188,6 +191,16 @@ class PlaylistService
                     return false;
                 }
             } ],
+            'tag' => [ 'nullable', function ( $attribute, $value, $fail ) {
+                
+                if ( str_contains( $value, ',' ) ) {
+                    $tags = explode( ',', $value );
+                    if( count( $tags ) > 2 ) {
+                        $fail( __( 'playlist.max_tag' ) );
+                        return ;
+                    }
+                }
+            } ],
         ] );
 
         $attributeName = [
@@ -198,6 +211,7 @@ class PlaylistService
             'image' => __( 'playlist.image' ),
             'membership_level' => __( 'playlist.membership_level' ),
             'items' => __( 'playlist.items' ),
+            'tag' => __( 'playlist.tag' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -221,6 +235,23 @@ class PlaylistService
                 'file_type' => $request->file_type,
                 'status' => 10,
             ] );
+
+            if( !empty( $request->tag ) ) {
+                if ( str_contains( $request->tag, ',' ) ) {
+                    $tags = explode( ',', $request->tag );
+                    foreach( $tags as $tag ) {
+                        $createPlaylistTag = PlaylistTag::create( [
+                            'playlist_id' => $createPlaylist->id,
+                            'tag' => $tag,
+                        ] );
+                    }
+                }else{
+                    $createPlaylistTag = PlaylistTag::create( [
+                        'playlist_id' => $createPlaylist->id,
+                        'tag' => $request->tag,
+                    ] );
+                }
+            }
     
             $items = json_decode( $request->items, true );
             $syncData = [];
@@ -273,6 +304,16 @@ class PlaylistService
                     return false;
                 }
             } ],
+            'tag' => [ 'nullable', function ( $attribute, $value, $fail ) {
+                
+                if ( str_contains( $value, ',' ) ) {
+                    $tags = explode( ',', $value );
+                    if( count( $tags ) > 2 ) {
+                        $fail( __( 'playlist.max_tag' ) );
+                        return ;
+                    }
+                }
+            } ],
         ] );
 
         $attributeName = [
@@ -283,6 +324,7 @@ class PlaylistService
             'image' => __( 'playlist.image' ),
             'membership_level' => __( 'playlist.membership_level' ),
             'items' => __( 'playlist.items' ),
+            'tag' => __( 'playlist.tag' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -304,6 +346,29 @@ class PlaylistService
             $updatePlaylist->membership_level = $request->membership_level;
             $updatePlaylist->file_type = $request->file_type;
             $updatePlaylist->save();
+
+            $deleteTag = PlaylistTag::where( 'playlist_id', $updatePlaylist->id )
+                ->get();
+            foreach( $deleteTag as $delete ) {
+                $delete->delete();
+            }
+
+            if( !empty( $request->tag ) ) {
+                if ( str_contains( $request->tag, ',' ) ) {
+                    $tags = explode( ',', $request->tag );
+                    foreach( $tags as $tag ) {
+                        $createPlaylistTag = PlaylistTag::create( [
+                            'playlist_id' => $updatePlaylist->id,
+                            'tag' => $tag,
+                        ] );
+                    }
+                }else{
+                    $createPlaylistTag = PlaylistTag::create( [
+                        'playlist_id' => $updatePlaylist->id,
+                        'tag' => $request->tag,
+                    ] );
+                }
+            }
 
             $items = json_decode( $request->items, true );
             $syncData = [];
@@ -393,6 +458,7 @@ class PlaylistService
         $playlists = Playlist::with([
             'item',
             'items',
+            'tags',
         ])->select('playlists.*')
             ->whereHas( 'items' )
             ->when(!empty($request->collection_id), function ($q) use ($request) {
@@ -431,6 +497,7 @@ class PlaylistService
                 'encrypted_id',
                 'image_url',
                 'name',
+                'display_tag',
             ] );
 
             if ( $playlist->relationLoaded('item') && $playlist->item ) {
@@ -465,12 +532,14 @@ class PlaylistService
         $playlist = Playlist::with( [
             'item',
             'items',
+            'tags',
         ] )->find( Helper::decode( $request->id ) );
 
         $playlist->append( [
             'encrypted_id',
             'image_url',
             'name',
+            'display_tag',
         ] );
 
         if( $playlist->item ) {

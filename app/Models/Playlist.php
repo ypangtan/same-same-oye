@@ -35,6 +35,18 @@ class Playlist extends Model
         'status',
     ];
 
+    public function getDisplayTagAtrribute() {
+        $tags = $this->tags()->pluck('tag')->toArray();
+        if ( empty( $tags ) ) {
+            return '';
+        }
+        return implode(' · ', $tags);
+    }
+
+    public function tags() {
+        return $this->hasMany( PlaylistTag::class, 'playlist_id' );
+    }
+
     public function searchPlaylists() {
         return $this->hasMany( SearchItem::class, 'playlist_id' );
     }

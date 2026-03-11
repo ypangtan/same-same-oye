@@ -35,4 +35,12 @@ return [
     
     'trial_last_day_title' => 'Free Trial almost Over',
     'trial_last_day_content' => 'Today is the last day of your free trial. Subscribe now to keep uninterrupted access.',
+
+    'trial_end_title' => 'Free Trial End',
+    'trial_end_content' => 'Your free trial has ended, please subscribe to continue listening to Sama Sama Oye!',
+
+    'notify_trial_end_title' => 'Free Trial almost End',
+    'notify_trial_1_end_content' => 'You have 1 days to go before your 14-day Free trial ends. Subscribe to continue listening to Sama Sama Oye!',
+    'notify_trial_3_end_content' => 'You have 3 days to go before your 14-day Free trial ends. Subscribe to continue listening to Sama Sama Oye!',
+
 ];

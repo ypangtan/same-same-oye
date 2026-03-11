@@ -29,6 +29,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('search:update-hot-keywords')->timezone( 'Asia/Kuala_Lumpur' )->hourly();
         
         $schedule->command('subscriptions:check-expired')->timezone( 'Asia/Kuala_Lumpur' )->dailyAt( '00:15' );
+
+        $schedule->command('subscriptions:count-down-trial')->timezone( 'Asia/Kuala_Lumpur' )->dailyAt( '00:25' );
     }
 
     /**
