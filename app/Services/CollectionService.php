@@ -371,6 +371,7 @@ class CollectionService
 
         $collections = Collection::with( [
             'playlists',
+            'playlists.tags',
         ] )->select( 'collections.*' )
             ->whereHas( 'playlists' )
             ->when( !empty( $request->type_id ), function ( $q ) use ( $request ) {
@@ -399,6 +400,7 @@ class CollectionService
                         'encrypted_id',
                         'name',
                         'image_url',
+                        'display_tag',
                     ] );
                     return $playlist;
                 });
@@ -413,6 +415,7 @@ class CollectionService
     public static function getCollection( $request ) {
         $collection = Collection::with( [
             'playlists',
+            'playlists.tags',
         ] )->find( \Helper::decode( $request->id ) );
 
         $collection->append( [
@@ -427,6 +430,7 @@ class CollectionService
                     'encrypted_id',
                     'name',
                     'image_url',
+                    'display_tag',
                 ] );
 
                 // if( $playlist->item ) {
