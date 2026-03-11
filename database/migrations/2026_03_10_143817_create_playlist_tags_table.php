@@ -15,7 +15,7 @@ class CreatePlaylistTagsTable extends Migration
     {
         Schema::create('playlist_tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('playlist_id')->nullable()->constrained('playlist')->onUpdate( 'restrict')->onDelete('cascade');
+            $table->foreignId('playlist_id')->nullable()->constrained('playlists')->onUpdate( 'restrict')->onDelete('cascade');
             $table->string( 'tag' )->nullable();
             $table->tinyInteger( 'status' )->default(10);
             $table->timestamps();
