@@ -43,7 +43,7 @@ class Helper {
     }
 
     public static function assetVersion() {
-        return '?v=1.11';
+        return '?v=1.12';
     }
 
     public static function displayType() {
