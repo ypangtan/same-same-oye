@@ -21,6 +21,8 @@ class LogCartOrderActivity
             'otp' => 'otp',
             'announcements' => 'announcement',
             'users' => 'user_pre_auth',
+            'in-app-purchase' => 'app_purchase',
+            'subscription-group-member' => 'group_member',
         ];
     
         // Log request data
