@@ -23,8 +23,11 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
      * 重试间隔（秒）
      */
     public int $backoff = 2;
+    public $userId;
 
-    public function __construct(public int $userId) {}
+    public function __construct( $userId ) {
+        $this->userId = $userId;
+    }
 
     /**
      * 同一用户只保留一个 Job
