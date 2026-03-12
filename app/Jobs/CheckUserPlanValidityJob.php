@@ -42,6 +42,8 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
+        \Log::info( 'CheckUserPlanValidityJob start: User id: ' . $this->userId );
+
         \DB::beginTransaction();
         try {
             $user = User::lockForUpdate()->find( $this->userId );
