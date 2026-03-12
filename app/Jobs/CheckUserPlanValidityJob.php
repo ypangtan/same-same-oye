@@ -23,7 +23,7 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
      * 重试间隔（秒）
      */
     public int $backoff = 2;
-    public $userId;
+    protected $userId;
 
     public function __construct( $userId ) {
         $this->userId = $userId;
@@ -45,6 +45,10 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
         \DB::beginTransaction();
         try {
             $user = User::lockForUpdate()->find( $this->userId );
+            if (!$user) {
+                \Log::warning('CheckUserPlanValidityJob: User not found, id: ' . $this->userId);
+                return; // 直接跳过，不报错
+            }
             $user->checkPlanValidity();
             \DB::commit();
         } catch (\Exception $e) {
