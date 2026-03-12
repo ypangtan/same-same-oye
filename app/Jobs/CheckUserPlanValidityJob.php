@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
+class CheckUserPlanValidityJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
