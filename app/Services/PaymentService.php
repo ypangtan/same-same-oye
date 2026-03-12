@@ -342,7 +342,6 @@ class PaymentService {
 
         // ✅ 只过期同平台的其他 active subscription（不影响跨平台）
         $existsSubscriptions = $user->subscriptions()
-            ->where('platform', $platform)
             ->where('platform_transaction_id', '!=', $transactionId)
             ->where('status', 10)
             ->get();
