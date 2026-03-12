@@ -34,7 +34,7 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
      */
     public function uniqueId(): int
     {
-        return $this->userId;
+        return $this->userId ?? 0;
     }
 
     /**
@@ -47,7 +47,7 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
             $user = User::lockForUpdate()->find( $this->userId );
             if (!$user) {
                 \Log::warning('CheckUserPlanValidityJob: User not found, id: ' . $this->userId);
-                return; // 直接跳过，不报错
+                throw '';
             }
             $user->checkPlanValidity();
             \DB::commit();
