@@ -162,13 +162,13 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( '/create-music-requests', [ MusicRequestController::class, 'createMusicRequest' ] );
     } );
 
-    Route::prefix( 'in-app-purchase' )->group( function() {
+    Route::prefix( 'in-app-purchase' )->middleware( 'log.cart.order' )->group( function() {
         Route::post( '/verify-payment', [ InAppPurchaseController::class, 'verifyPayment' ] );
         Route::get( '/get-current-subscription', [ InAppPurchaseController::class, 'getCurrentSubscription' ] );
         Route::get( '/cancel-subscription', [ InAppPurchaseController::class, 'cancelSubscription' ] );
     } );
 
-    Route::prefix( 'subscription-group-member' )->group( function() {
+    Route::prefix( 'subscription-group-member' )->middleware( 'log.cart.order' )->group( function() {
         Route::get( '/get-subscription-group-members', [ SubscriptionGroupMemberController::class, 'getSubscriptionGroupMembers' ] );
         Route::post( '/create-subscription-group-member', [ SubscriptionGroupMemberController::class, 'createSubscriptionGroupMember' ] );
         Route::post( '/delete-subscription-group-member', [ SubscriptionGroupMemberController::class, 'deleteSubscriptionGroupMember' ] );

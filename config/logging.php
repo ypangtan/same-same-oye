@@ -136,6 +136,18 @@ return [
             'level' => 'info',
         ],
 
+        'app_purchase' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/app_purchase.log'),
+            'level' => 'info',
+        ],
+
+        'group_member' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/group_member.log'),
+            'level' => 'info',
+        ],
+
         'payment' => [
             'driver' => 'daily',
             'path' => storage_path('logs/payment.log'),
