@@ -16,3 +16,4 @@ docs/
 public/docs/
 .scribe
 *.p8
+/pm2
