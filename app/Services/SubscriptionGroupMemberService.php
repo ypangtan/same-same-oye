@@ -348,12 +348,23 @@ class SubscriptionGroupMemberService {
                 ], 422 );
             }
 
-            if( $subscriptionGroupMember->user_id != auth()->user()->id || $subscriptionGroupMember->status == 10 ) {
+            if( $subscriptionGroupMember->user_id != auth()->user()->id ) {
                 return response()->json( [
                     'message' => __( 'validation.header_message' ),
                     'errors' => [
                         'token' => [
                             __( 'subscription_group_member.invalid_invite' ),
+                        ],
+                    ]
+                ], 422 );
+            }
+
+            if( $subscriptionGroupMember->status == 10 ) {
+                return response()->json( [
+                    'message' => __( 'validation.header_message' ),
+                    'errors' => [
+                        'token' => [
+                            __( 'subscription_group_member.already_accept' ),
                         ],
                     ]
                 ], 422 );

@@ -34,4 +34,5 @@ return [
     'invalid_plan' => 'The subscription plan is invalid.',
     'in_other_group' => 'You are already in another group. Please leave the current group before joining another.',
     'over_max_members' => 'The group has reached the maximum number of members.',
+    'already_accept' => 'You have accepted this invitation.',
 ];
