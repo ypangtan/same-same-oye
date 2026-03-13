@@ -210,7 +210,7 @@ class PaymentService {
 
             } else {
                 // StoreKit 1
-                $isSandbox = config('liap.appstore_sandbox', false);
+                $isSandbox = config( 'liap.appstore_sandbox', false );
                 $client = AppStoreClientFactory::create($isSandbox);
 
                 $response = Subscription::appStore($client)
@@ -273,36 +273,6 @@ class PaymentService {
 
             // 创建或更新订阅
             $subscription = self::createOrUpdateSubscription( $user_id, $currentPlanId, 1, $originalTransactionId, $expiryDate, true );
-
-            // deferred plan（StoreKit 1 降级）
-            if ( !empty( $deferredIosProductId ) ) {
-                $deferredPlan = SubscriptionPlan::where('ios_product_id', $deferredIosProductId)->first();
-                if ( $deferredPlan ) {
-                    $existingPending = UserSubscription::where( 'user_id', $user->id )
-                        ->where( 'subscription_plan_id', $deferredPlan->id )
-                        ->where( 'status', 1 )
-                        ->first();
-
-                    if (!$existingPending) {
-                        UserSubscription::create([
-                            'user_id' => $user->id,
-                            'subscription_plan_id' => $deferredPlan->id,
-                            'status' => 1,
-                            'start_date' => null,
-                            'end_date' => null,
-                            'platform' => 1,
-                            'platform_transaction_id'  => $originalTransactionId,
-                        ]);
-
-                        Log::channel('payment')->info('iOS deferred plan change recorded', [
-                            'user_id'            => $user->id,
-                            'current_plan_id'    => $plan->id,
-                            'deferred_plan_id'   => $deferredPlan->id,
-                            'deferred_product_id'=> $deferredIosProductId,
-                        ]);
-                    }
-                }
-            }
 
             // 记录交易
             PaymentTransaction::create([
