@@ -38,7 +38,6 @@ class UserSubscriptionObserver {
                 throw $e;
             }
         } else {
-            $userSubscription->group()->each( fn($downline) => $downline->delete() );
             foreach( $members as $member ) {
                 CheckUserPlanValidityJob::dispatch( $member->id );
             }
