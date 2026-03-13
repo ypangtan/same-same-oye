@@ -176,8 +176,9 @@ class PaymentService {
             $productId = $plan->ios_product_id;
 
             // 检测是 StoreKit 1 还是 StoreKit 2
-            $isStoreKit2 = ( count( explode( '.', $receiptData ) ) === 3 );
-
+            // $isStoreKit2 = ( count( explode( '.', $receiptData ) ) === 3 );
+            $isStoreKit2 = substr_count($receiptData, '.') === 2;
+            return $isStoreKit2;
             if ( $isStoreKit2 ) {
                 $parts = explode( '.', $receiptData );
                 $payload = json_decode( base64_decode( str_pad( $parts[1], strlen( $parts[1] ) + ( 4 - strlen( $parts[1] ) % 4 ) % 4, '=' ) ), true );
