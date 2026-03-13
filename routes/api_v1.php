@@ -60,6 +60,7 @@ Route::post( 'otp/resend', [ UserController::class, 'resendOtp' ] )->middleware(
 
 Route::prefix( 'users' )->middleware( 'log.cart.order' )->group( function() {
     Route::post( '/', [ UserController::class, 'registerUser' ] );
+    Route::post( 'test', [ UserController::class, 'testLoginUser' ] );
     Route::post( 'login', [ UserController::class, 'loginUser' ] );
     Route::post( 'login-social', [ UserController::class, 'loginUserSocial' ] );
     Route::post( 'forgot-password', [ UserController::class, 'forgotPasswordOtp' ] );

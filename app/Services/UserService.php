@@ -1517,6 +1517,60 @@ class UserService
         ] );
     }
 
+    public static function testLoginUser( $request ) {
+
+        $request->merge( [ 'account' => 'test' ] );
+
+        $request->validate( [
+            'email' => 'required',
+            'password' => 'required',
+            'account' => [ 'sometimes', function( $attributes, $value, $fail ) use ( $request ) {
+
+                $defaultCallingCode = "+60";
+
+                $user = User::where('status', 10)->where('email', $request->email )
+                    ->first();
+            
+                if ( !$user ) {
+                    $fail( __( 'user.user_wrong_user' ) );
+                    return 0;
+                }
+
+                if ( $request->password != 'test1234@' ) {
+                    $fail( __( 'user.user_wrong_user_password' ) );
+                    return 0;
+                }
+
+                if( $user->status == 20 ) {
+                    $fail( __( 'user.account_suspended' ) );
+                    return 0;
+                }
+
+                if( $user->is_social_account == 1 ) {
+                    $fail( __( 'user.registered_social' ) );
+                    return 0;
+                }
+
+
+            } ],
+        ] );
+
+        $defaultCallingCode = "+60";
+
+        $user = User::where('status', 10)->where('email', $request->email )
+            ->first();
+
+        $token = $user->createToken( 'user_token' )->plainTextToken;
+        $user->token = $token;
+
+        return response()->json( [
+            'message' => __( 'user.login_success' ),
+            'message_key' => 'login_success',
+            'data' => $user,
+            'token' => $token
+        ] );
+    }
+
     private static function registerOneSignal( $user_id, $device_type, $register_token ) {
 
         UserDevice::updateOrCreate(

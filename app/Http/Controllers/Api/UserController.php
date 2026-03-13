@@ -368,4 +368,21 @@ class UserController extends Controller {
         return UserService::testNotification( $request );
     }
 
+
+    /**
+     * 18. Login an user - test
+     * 
+     * @sort 18
+     * 
+     * @group User API
+     * 
+     * @bodyParam email string required The email for login. Example: abc@gmail.com
+     * @bodyParam password string required The password for login. Example: abcd1234
+     * 
+     */
+    public function testLoginUser( Request $request ) {
+
+        return UserService::testLoginUser( $request );
+    }
+
 }
