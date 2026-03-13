@@ -237,18 +237,6 @@ class PaymentService {
                 $currentProductId = $rawData['product_id'];
                 $expiryDate = Carbon::createFromTimestampMs( $rawData['expires_date_ms'] )->timezone('Asia/Kuala_Lumpur')->format( 'Y-m-d' );
 
-                // deferred plan（iOS 降级）
-                $deferredIosProductId = null;
-                $pendingRenewalInfo = $response->getPendingRenewalInfo() ?? [];
-                foreach ( $pendingRenewalInfo as $renewal ) {
-                    $renewalArray = $renewal->toArray();
-                    $autoRenewProductId = $renewalArray['auto_renew_product_id'] ?? null;
-                    if ( $autoRenewProductId && $autoRenewProductId !== $productId ) {
-                        $deferredIosProductId = $autoRenewProductId;
-                        break;
-                    }
-                }
-
                 $verificationResponse = json_encode( $response->toArray() );
 
                 Log::channel('payment')->info('iOS StoreKit 1 verified', [
