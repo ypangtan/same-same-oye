@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Jobs\CheckUserPlanValidityJob;
+use App\Models\SubscriptionGroupMember;
 use App\Models\User;
 use App\Models\UserSubscription;
 
@@ -26,10 +27,9 @@ class UserSubscriptionObserver {
         if( $userSubscription->status != 10 ) {
             try {
                 \DB::beginTransaction();
-                $members = $userSubscription->member()->get();
+                $members = SubscriptionGroupMember::where( 'leader_id', $userSubscription->user_id )->get();
                 foreach( $members as $member ) {
-                    \Log::info('try to remove subscription members: ' . $member->id );
-                    // $member->delete();
+                    $member->delete();
                 }
                 \DB::commit();
             } catch (\Throwable $e) {
