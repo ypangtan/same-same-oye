@@ -35,7 +35,7 @@ use Firebase\JWT\{
 class AndroidCallbackService {
 
     public static function verifySubscriptionV2($packageName, $subscriptionId, $purchaseToken, $eventType = null) {
-        $credentialsPath = config('liap.google_application_credentials');
+        $credentialsPath = config('services.app.google_credentials');
             
         // 检查文件是否存在
         if (!file_exists($credentialsPath)) {

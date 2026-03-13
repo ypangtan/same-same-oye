@@ -304,7 +304,7 @@ class PaymentService {
         try {
             DB::beginTransaction();
 
-            $credentialsPath = config('liap.google_application_credentials');
+            $credentialsPath = config('services.app.google_credentials');
             
             if (!file_exists($credentialsPath)) {
                 throw new \Exception('Google Play 凭据文件不存在: ' . $credentialsPath);

@@ -48,6 +48,7 @@ return [
 
     'app' => [
         'name' => env( 'APP_NAME' ),
+        'google_credentials' => env('GOOGLE_CREDENTIALS'),
     ],
 
     'mail' => [
