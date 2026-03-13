@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
+class CheckUserPlanValidityJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -23,15 +23,18 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
      * 重试间隔（秒）
      */
     public int $backoff = 2;
+    protected $userId;
 
-    public function __construct(public int $userId) {}
+    public function __construct( $userId ) {
+        $this->userId = $userId;
+    }
 
     /**
      * 同一用户只保留一个 Job
      */
     public function uniqueId(): int
     {
-        return $this->userId;
+        return $this->userId ?? 0;
     }
 
     /**
@@ -39,9 +42,15 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
+        \Log::info( 'CheckUserPlanValidityJob start: User id: ' . $this->userId );
+
         \DB::beginTransaction();
         try {
             $user = User::lockForUpdate()->find( $this->userId );
+            if (!$user) {
+                \Log::warning('CheckUserPlanValidityJob: User not found, id: ' . $this->userId);
+                throw '';
+            }
             $user->checkPlanValidity();
             \DB::commit();
         } catch (\Exception $e) {

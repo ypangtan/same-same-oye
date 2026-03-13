@@ -336,7 +336,7 @@ class SubscriptionGroupMemberService {
         DB::beginTransaction();
 
         try {
-            $subscriptionGroupMember = SubscriptionGroupMember::find( $request->token );
+            $subscriptionGroupMember = SubscriptionGroupMember::lockForUpdate()->find( $request->token );
             if ( !$subscriptionGroupMember ) {
                 return response()->json( [
                     'message' => __( 'validation.header_message' ),
@@ -348,12 +348,23 @@ class SubscriptionGroupMemberService {
                 ], 422 );
             }
 
-            if( $subscriptionGroupMember->user_id != auth()->user()->id || $subscriptionGroupMember->status == 10 ) {
+            if( $subscriptionGroupMember->user_id != auth()->user()->id ) {
                 return response()->json( [
                     'message' => __( 'validation.header_message' ),
                     'errors' => [
                         'token' => [
                             __( 'subscription_group_member.invalid_invite' ),
+                        ],
+                    ]
+                ], 422 );
+            }
+
+            if( $subscriptionGroupMember->status == 10 ) {
+                return response()->json( [
+                    'message' => __( 'validation.header_message' ),
+                    'errors' => [
+                        'token' => [
+                            __( 'subscription_group_member.already_accept' ),
                         ],
                     ]
                 ], 422 );
@@ -374,7 +385,7 @@ class SubscriptionGroupMemberService {
                 ], 422 );
             }
 
-            $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
+            $user_subscription = UserSubscription::lockForUpdate()->where( 'user_id', auth()->user()->id )
                 ->isActive()
                 ->first();
 

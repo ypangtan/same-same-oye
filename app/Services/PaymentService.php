@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\{
 
 class PaymentService {
 
-    
     public static function verifyIOSPurchase( $user_id, $data ) {
         try {
             DB::beginTransaction();
@@ -167,11 +166,145 @@ class PaymentService {
         }
     }
 
+    public static function verifyIOSPurchaseV2( $user_id, $data ) {
+        try {
+            DB::beginTransaction();
+
+            $user = User::find( $user_id );
+            $receiptData = $data['receipt_data'];
+            $plan = SubscriptionPlan::find( $data['plan_id'] );
+            $productId = $plan->ios_product_id;
+
+            // 检测是 StoreKit 1 还是 StoreKit 2
+            $isStoreKit2 = substr_count($receiptData, '.') === 2;
+
+            if ( $isStoreKit2 ) {
+                $parts = explode( '.', $receiptData );
+                $payload = json_decode( base64_decode( str_pad( $parts[1], strlen( $parts[1] ) + ( 4 - strlen( $parts[1] ) % 4 ) % 4, '=' ) ), true );
+
+                if ( empty( $payload ) ) {
+                    throw new Exception( "Failed to decode JWT payload" );
+                }
+
+                $transactionId = $payload['transactionId'] ?? null;
+                $originalTransactionId = $payload['originalTransactionId'] ?? $transactionId;
+                $currentProductId = $payload['productId'] ?? $productId;
+                $expiresDateMs = $payload['expiresDate'] ?? null;
+
+                if ( !$transactionId || !$expiresDateMs ) {
+                    throw new Exception( "Missing transactionId or expiresDate in JWT" );
+                }
+
+                $expiryDate = Carbon::createFromTimestampMs( $expiresDateMs )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d' );
+
+                $deferredIosProductId = null; // StoreKit 2 deferred 另外处理
+                $verificationResponse = json_encode( $payload );
+
+                Log::channel('payment')->info('iOS StoreKit 2 JWT decoded', [
+                    'user_id' => $user_id,
+                    'environment' => $payload['environment'] ?? null,
+                    'productId' => $currentProductId,
+                    'transactionId' => $transactionId,
+                    'expiresDate' => $expiresDateMs,
+                ]);
+
+            } else {
+                // StoreKit 1
+                $isSandbox = config( 'liap.appstore_sandbox', false );
+                $client = AppStoreClientFactory::create($isSandbox);
+
+                $response = Subscription::appStore($client)
+                    ->receiptData($receiptData)
+                    ->verifyRenewable();
+
+                $statusCode = $response->getStatus();
+                $status = $statusCode->getValue();
+
+                if ( $status !== 0 ) {
+                    throw new Exception( "Receipt verification failed with status: " . $status );
+                }
+
+                $latestReceipt = $response->getLatestReceiptInfo();
+                if ( empty( $latestReceipt ) ) {
+                    throw new Exception( "No receipt info found" );
+                }
+
+                $receiptInfo = $latestReceipt[0];
+                $transactionId = $receiptInfo->getTransactionId();
+                $originalTransactionId = $receiptInfo->getOriginalTransactionId();
+
+                $rawData = $receiptInfo->toArray();
+                $currentProductId = $rawData['product_id'];
+                $expiryDate = Carbon::createFromTimestampMs( $rawData['expires_date_ms'] )->timezone('Asia/Kuala_Lumpur')->format( 'Y-m-d' );
+
+                $verificationResponse = json_encode( $response->toArray() );
+
+                Log::channel('payment')->info('iOS StoreKit 1 verified', [
+                    'user_id'       => $user_id,
+                    'productId'     => $currentProductId,
+                    'transactionId' => $transactionId,
+                ]);
+            }
+
+            // 以下逻辑 StoreKit 1 & 2 共用
+            $currentPlan = SubscriptionPlan::where('ios_product_id', $currentProductId)->first();
+            $currentPlanId = $currentPlan ? $currentPlan->id : $plan->id;
+
+            // 检查交易是否已存在
+            if ( PaymentTransaction::exists( $transactionId ) ) {
+                return [
+                    'success' => true,
+                    'message' => 'Transaction already processed',
+                    'subscription' => $user->subscriptions()->where('platform_transaction_id', $originalTransactionId)->first(),
+                ];
+            }
+
+            // 创建或更新订阅
+            $subscription = self::createOrUpdateSubscription( $user_id, $currentPlanId, 1, $originalTransactionId, $expiryDate, true );
+
+            // 记录交易
+            PaymentTransaction::create([
+                'user_id' => $user->id,
+                'user_subscription_id' => $subscription->id,
+                'transaction_id' => $transactionId,
+                'original_transaction_id' => $originalTransactionId,
+                'amount' => 0,
+                'currency' => 'MYR',
+                'platform' => 1,
+                'product_id' => $currentProductId,
+                'receipt_data' => $receiptData,
+                'status' => 10,
+                'verified_at' => Carbon::now()->timezone('Asia/Kuala_Lumpur'),
+                'verification_response' => $verificationResponse,
+            ]);
+
+            Log::channel('payment')->info('iOS purchase verified', [
+                'user_id' => $user->id,
+                'transaction_id' => $transactionId,
+                'storekit' => $isStoreKit2 ? 'SK2' : 'SK1',
+            ]);
+
+            DB::commit();
+            return [
+                'success' => true,
+                'message' => 'Subscription activated successfully',
+                'subscription' => $subscription->fresh(),
+            ];
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::channel('payment')->error('iOS verification failed', [
+                'error' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
+    }
+
     public static function verifyAndroidPurchase( $user_id, $data ) {
         try {
             DB::beginTransaction();
 
-            $credentialsPath = config('liap.google_application_credentials');
+            $credentialsPath = config('services.app.google_credentials');
             
             if (!file_exists($credentialsPath)) {
                 throw new \Exception('Google Play 凭据文件不存在: ' . $credentialsPath);
@@ -264,13 +397,13 @@ class PaymentService {
             }
 
             // 确认购买（告诉 Google 已经处理）
-            if ($subscriptionPurchase->getAcknowledgementState() === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED') {
+            if ( $subscriptionPurchase->getAcknowledgementState() === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED' ) {
                 Log::channel('payment')->info('Subscription already acknowledged', [
                     'purchaseToken' => $purchaseToken,
                 ]);
             } else {
                 $accessTokenData = $client->fetchAccessTokenWithAssertion();
-                if (empty($accessTokenData['access_token'])) {
+                if ( empty( $accessTokenData['access_token'] ) ) {
                     throw new \Exception('Failed to fetch Google access token');
                 }
 
@@ -282,7 +415,7 @@ class PaymentService {
                 
                 $ackResponse = Http::withToken($accessToken)->post($ackUrl);
 
-                if (!$ackResponse->successful()) {
+                if ( !$ackResponse->successful() ) {
                     Log::channel('payment')->error('Android subscription acknowledge failed', [
                         'status' => $ackResponse->status(),
                         'response' => $ackResponse->body(),
@@ -344,6 +477,17 @@ class PaymentService {
         $existsSubscriptions = $user->subscriptions()
             ->where('platform', $platform)
             ->where('platform_transaction_id', '!=', $transactionId)
+            ->where('status', 10)
+            ->get();
+
+        foreach ( $existsSubscriptions as $exists ) {
+            $exists->status = 20;
+            $exists->save();
+        }
+        
+        // 只过期trial
+        $existsSubscriptions = $user->subscriptions()
+            ->where('type', '2')
             ->where('status', 10)
             ->get();
 

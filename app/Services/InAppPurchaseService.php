@@ -55,7 +55,7 @@ class InAppPurchaseService {
         try {
             switch ( $request->platform ) {
                 case 1:
-                    $result = PaymentService::verifyIOSPurchase( auth()->user()->id, $request->all() );
+                    $result = PaymentService::verifyIOSPurchaseV2( auth()->user()->id, $request->all() );
                     break;
                 case 2:
                     $result = PaymentService::verifyAndroidPurchase( auth()->user()->id, $request->all() );

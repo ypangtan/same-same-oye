@@ -16,7 +16,7 @@ class SubscriptionGroupMemberObserver {
         CheckUserPlanValidityJob::dispatch($member->user_id);
 
         // 处理旧用户
-        if ($member->wasChanged('user_id')) {
+        if ( $member->wasChanged('user_id') ) {
             $oldUserId = $member->getOriginal('user_id');
             CheckUserPlanValidityJob::dispatch($oldUserId);
         }

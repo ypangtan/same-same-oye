@@ -64,7 +64,7 @@ $parent_route = $data['parent_route'] ?? '';
                         </div>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <div class="mb-3 row d-none">
                     <label for="{{ $playlist_edit }}_tag" class="col-sm-5 col-form-label">{{ __( 'playlist.tags' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" id="{{ $playlist_edit }}_tag" class="form-control form-control-sm" data-role="tagsinput">
