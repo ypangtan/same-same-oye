@@ -336,7 +336,7 @@ class SubscriptionGroupMemberService {
         DB::beginTransaction();
 
         try {
-            $subscriptionGroupMember = SubscriptionGroupMember::find( $request->token );
+            $subscriptionGroupMember = SubscriptionGroupMember::lockForUpdate()->find( $request->token );
             if ( !$subscriptionGroupMember ) {
                 return response()->json( [
                     'message' => __( 'validation.header_message' ),
@@ -385,7 +385,7 @@ class SubscriptionGroupMemberService {
                 ], 422 );
             }
 
-            $user_subscription = UserSubscription::where( 'user_id', auth()->user()->id )
+            $user_subscription = UserSubscription::lockForUpdate()->where( 'user_id', auth()->user()->id )
                 ->isActive()
                 ->first();
 
