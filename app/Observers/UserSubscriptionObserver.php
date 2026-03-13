@@ -22,17 +22,14 @@ class UserSubscriptionObserver {
         CheckUserPlanValidityJob::dispatch( $userSubscription->user_id );
         $userSubscription->group()->each( fn($member) => $member->delete() );
 
-        $userSubscription->member()
-            ->pluck('user_id')
-            ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) );
-
         // If the subscription is not active, we need to remove all the member of the plan.
         if( $userSubscription->status != 10 ) {
             try {
                 \DB::beginTransaction();
                 $members = $userSubscription->member()->get();
                 foreach( $members as $member ) {
-                    $member->delete();
+                    \Log::info('try to remove subscription members: ' . $member->id );
+                    // $member->delete();
                 }
                 \DB::commit();
             } catch (\Throwable $e) {
@@ -41,5 +38,10 @@ class UserSubscriptionObserver {
                 throw $e;
             }
         }
+
+        $userSubscription->member()
+            ->pluck('user_id')
+            ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId ) );
+
     }
 }
