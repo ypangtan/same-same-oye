@@ -36,10 +36,6 @@ class SubscriptionGroupMemberController extends Controller {
             '20' => __( 'datatables.suspended' ),
         ];
 
-        $userSubscription = $request->id ? UserSubscription::find( $request->id ) : '';
-
-        $this->data['data']['leader'] = $userSubscription ? $userSubscription->user_id : '';
-
         return view( 'admin.main' )->with( $this->data );
     }
 

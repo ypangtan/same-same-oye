@@ -8,7 +8,7 @@
 
 
 <?php
-$leader = $data['leader'] ?? '';
+$leader = Request( 'id' ) ?? '';
 $columns = [
     [
         'type' => 'default',
