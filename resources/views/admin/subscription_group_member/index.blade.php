@@ -17,15 +17,15 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.user' ) ] ),
-        'id' => 'user',
-        'title' => __( 'subscription_group_member.user' ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.leader' ) ] ),
+        'id' => 'leader',
+        'title' => __( 'subscription_group_member.leader' ),
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.id' ) ] ),
-        'id' => 'user_subscription_id',
-        'title' => __( 'subscription_group_member.id' ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.user' ) ] ),
+        'id' => 'user',
+        'title' => __( 'subscription_group_member.user' ),
     ],
     [
         'type' => 'select',
@@ -79,8 +79,8 @@ $columns = [
             order: [[ 1, 'desc' ]],
             columns: [
                 { data: null },
+                { data: 'leader' },
                 { data: 'user' },
-                { data: null },
                 { data: 'status' },
             ],
             columnDefs: [
@@ -102,14 +102,6 @@ $columns = [
                         } else {
                             return '-';
                         }
-                    }
-                },
-                {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "user_subscription_id" ) }}' ),
-                    orderable: false,
-                    visible: false,
-                    render: function( data, type, row, meta ) {
-                        return '-';
                     }
                 },
                 {
@@ -136,8 +128,8 @@ $columns = [
         timeout = null;
 
     document.addEventListener( 'DOMContentLoaded', function() {
-        window['user_subscription_id'] = '{{ Request( 'id' ) }}';
-        $( '#user_subscription_id' ).val( '{{ Request( 'id' ) }}' ).addClass( 'd-none' );
+        window['leader'] = '{{ Request( 'id' ) }}';
+        $( '#leader' ).val( '{{ Request( 'id' ) }}' ).addClass( 'd-none' );
     } );
 
 </script>
