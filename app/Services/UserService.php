@@ -370,6 +370,7 @@ class UserService
         }
 
         if( !empty( $request->age_group ) ) {
+            
             $model->where( 'age_group', $request->age_group );
             $filter = true;
         }

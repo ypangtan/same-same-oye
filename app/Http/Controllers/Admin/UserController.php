@@ -45,7 +45,11 @@ class UserController extends Controller
             '2' => __( 'user.trial' ),
         ];
 
-        $this->data['data']['age_group'] = UserService::ageGroups();
+        $this->data['data']['age_group'] = [];
+        $age_groups = UserService::ageGroups();
+        foreach( $age_groups as $age_group ) {
+            $this->data['data']['age_group'][ $age_group ]  = $age_group;
+        }
 
         return view( 'admin.main' )->with( $this->data );
     }
