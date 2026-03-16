@@ -34,5 +34,16 @@ return [
     'wallet_transactions' => 'Wallet Transactions',
     'wallets' => 'Wallets',
     'user_checkins' => 'User Checkins',
-    'user_vouchers' => 'User Vouchers'
+    'user_vouchers' => 'User Vouchers',
+    'otp_logs' => 'OTP Logs',
+    'collections' => 'Collections',
+    'playlists' => 'Playlists',
+    'items' => 'Items',
+    'songs' => 'Songs',
+    'category' => 'Category',
+    'user_playlists' => 'User Playlists',
+    'subscription_plans' => 'Subscription Plans',
+    'subscription_group_members' => 'Subscription Group Members',
+    'user_subscriptions' => 'User Subscriptions',
+    'website_banners' => 'Website Banners',
 ];
