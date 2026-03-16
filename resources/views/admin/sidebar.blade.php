@@ -190,7 +190,7 @@
                                 </li>
                                 @endcanany
                                 
-                                @canany( [ 'view subscription_plans', 'view playlists', 'view collections' ] )
+                                @canany( [ 'view subscription_plans', 'view user_subscriptions' ] )
                                 <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\SubscriptionPlanController' ||
                                     $controller == 'App\Http\Controllers\Admin\UserSubscriptionController' ||
                                     $controller == 'App\Http\Controllers\Admin\SubscriptionGroupMemberController'

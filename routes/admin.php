@@ -153,25 +153,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-user', [ UserController::class, 'updateUser' ] )->name( 'admin.user.updateUser' );
                 Route::post( 'update-user-status', [ UserController::class, 'updateUserStatus' ] )->name( 'admin.user.updateUserStatus' );
             } );
-
-            Route::prefix( 'wallets' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view wallets' ] ], function() {
-                    Route::get( '/', [ WalletController::class, 'index' ] )->name( 'admin.module_parent.wallet.index' );
-                } );
-
-                Route::post( 'all-wallets', [ WalletController::class, 'allWallets' ] )->name( 'admin.wallet.allWallets' );
-                Route::post( 'one-wallet', [ WalletController::class, 'oneWallet' ] )->name( 'admin.wallet.oneWallet' );
-                Route::post( 'update-wallet', [ WalletController::class, 'updateWallet' ] )->name( 'admin.wallet.updateWallet' );
-                Route::post( 'update-wallet-multiple', [ WalletController::class, 'updateWalletMultiple' ] )->name( 'admin.wallet.updateWalletMultiple' );
-            } );
-            
-            Route::prefix( 'wallet-transactions' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view wallet_transactions' ] ], function() {
-                    Route::get( '/', [ WalletTransactionController::class, 'index' ] )->name( 'admin.module_parent.wallet_transaction.index' );
-                } );
-
-                Route::post( 'all-wallet-transactions', [ WalletTransactionController::class, 'allWalletTransactions' ] )->name( 'admin.wallet_transaction.allWalletTransactions' );
-            } );
             
             // new routes ( 23/12 ) 
             Route::prefix( 'settings' )->group( function() {
@@ -358,13 +339,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             
             } );
 
-            Route::prefix( 'music_request' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view music_requests' ] ], function() {
-                    Route::get( '/', [ MusicRequestController::class, 'index' ] )->name( 'admin.module_parent.music_request.index' );
-                } );
-                Route::post( 'all-music-requests', [ MusicRequestController::class, 'allMusicRequests' ] )->name( 'admin.music_request.allMusicRequests' );
-            } );
-
             Route::prefix( 'banners' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view banners' ] ], function() {
                     Route::get( '/', [ BannerController::class, 'index' ] )->name( 'admin.module_parent.banner.index' );
@@ -453,25 +427,6 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 } );
     
                 Route::post( 'all-subscription-group-members', [ SubscriptionGroupMemberController::class, 'allSubscriptionGroupMembers' ] )->name( 'admin.subscription_group_member.allSubscriptionGroupMembers' );
-            } );
-            
-            Route::prefix( 'ad' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view ads' ] ], function() {
-                    Route::get( '/', [ AdController::class, 'index' ] )->name( 'admin.module_parent.ad.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add ads' ] ], function() {
-                    Route::get( 'add', [ AdController::class, 'add' ] )->name( 'admin.ad.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit ads' ] ], function() {
-                    Route::get( 'edit/{id?}', [ AdController::class, 'edit' ] )->name( 'admin.ad.edit' );
-                } );
-
-                Route::post( 'all-ad', [ AdController::class, 'allAds' ] )->name( 'admin.ad.allAds' );
-                Route::post( 'one-ad', [ AdController::class, 'oneAd' ] )->name( 'admin.ad.oneAd' );
-                Route::post( 'create-ad', [ AdController::class, 'createAd' ] )->name( 'admin.ad.createAd' );
-                Route::post( 'update-ad', [ AdController::class, 'updateAd' ] )->name( 'admin.ad.updateAd' );
-                Route::post( 'update-ad-status', [ AdController::class, 'updateAdStatus' ] )->name( 'admin.ad.updateAdStatus' );
-                Route::post( 'ckeUpload', [ AdController::class, 'ckeUpload' ] )->name( 'admin.ad.ckeUpload' );
             } );
             
             Route::prefix( 'country' )->group( function() {
