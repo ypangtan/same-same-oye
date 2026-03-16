@@ -76,9 +76,9 @@ class SubscriptionPlanService
 
         $filter = false;
 
-        if ( !empty( $request->created_at ) ) {
-            if ( str_contains( $request->created_at, 'to' ) ) {
-                $dates = explode( ' to ', $request->created_at );
+        if ( !empty( $request->created_date ) ) {
+            if ( str_contains( $request->created_date, 'to' ) ) {
+                $dates = explode( ' to ', $request->created_date );
 
                 $startDate = explode( '-', $dates[0] );
                 $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
@@ -89,7 +89,7 @@ class SubscriptionPlanService
                 $model->whereBetween( 'subscription_plans.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
             } else {
 
-                $dates = explode( '-', $request->created_at );
+                $dates = explode( '-', $request->created_date );
 
                 $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
                 $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );

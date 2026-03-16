@@ -83,6 +83,16 @@ class SubscriptionGroupMemberService {
             $filter = true;
         }
 
+        if ( !empty( $request->user ) ) {
+            $model->whereHas( 'user', function( $q ) use ( $request ) {
+                $q->where( 'email', 'LIKE', '%' . $request->user . '%' )
+                        ->orWhere( 'first_name', 'LIKE', '%' . $request->user . '%' )
+                        ->orWhere( 'last_name', 'LIKE', '%' . $request->user . '%' )
+                        ->orWhere( 'phone_number', 'LIKE', '%' . $request->user . '%' );
+            } );
+            $filter = true;
+        }
+
         if ( !empty( $request->status ) ) {
             $model->where( 'status', $request->status );
             $filter = true;

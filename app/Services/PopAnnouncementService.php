@@ -99,6 +99,11 @@ class PopAnnouncementService
             $filter = true;
         }
 
+        if ( !empty( $request->title ) ) {
+            $model->where( 'title', 'LIKE', '%' . $request->title . '%' );
+            $filter = true;
+        }
+
         if ( !empty( $request->status ) ) {
             $model->where( 'status', $request->status );
             $filter = true;

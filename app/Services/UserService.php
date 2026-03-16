@@ -363,6 +363,16 @@ class UserService
             $model->where( 'id', '!=', $user );
         }
         
+        if( !empty( $request->membership ) ) {
+            $model->where( 'status', $request->membership );
+            $filter = true;
+        }
+        
+        if( !empty( $request->status ) ) {
+            $model->where( 'status', $request->status );
+            $filter = true;
+        }
+        
         return [
             'filter' => $filter,
             'model' => $model,
