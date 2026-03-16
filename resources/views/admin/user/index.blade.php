@@ -50,36 +50,30 @@ $columns = [
         'id' => 'last_name',
         'title' => __( 'user.last_name' ),
     ],
-    // [
-    //     'type' => 'input',
-    //     'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.username' ) ] ),
-    //     'id' => 'username',
-    //     'title' => __( 'user.username' ),
-    // ],
     [
         'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.email' ) ] ),
         'id' => 'email',
         'title' => __( 'user.email' ),
     ],
-    // [
-    //     'type' => 'select',
-    //     'options' => $data['user_social'],
-    //     'id' => 'user_social',
-    //     'title' => __( 'user.user_social' ),
-    // ],
     [
         'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'user.phone_number' ) ] ),
         'id' => 'phone_number',
         'title' => __( 'user.phone_number' ),
     ],
-    // [
-    //     'type' => 'input',
-    //     'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.invitation_code' ) ] ),
-    //     'id' => 'referral',
-    //     'title' => __( 'user.invitation_code' ),
-    // ],
+    [
+        'type' => 'input',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.nationality' ) ] ),
+        'id' => 'nationality',
+        'title' => __( 'user.nationality' ),
+    ],
+    [
+        'type' => 'select',
+        'options' => $data['age_group'],
+        'id' => 'age_group',
+        'title' => __( 'user.age_group' ),
+    ],
     [
         'type' => 'select',
         'options' => $data['membership'],
@@ -113,6 +107,7 @@ window['{{ $column['id'] }}'] = '';
 @endforeach
 
 var statusMapper = @json( $data['status'] ),
+    ageGroupMapper = @json( $data['age_group'] ),
     membershipMapper = @json( $data['membership'] ),
     dt_table,
     dt_table_name = '#user_table',
@@ -147,7 +142,8 @@ var statusMapper = @json( $data['status'] ),
             { data: 'email' },
             // { data: 'social_logins' },
             { data: 'phone_number' },
-            // { data: 'invitation_code' },
+            { data: 'nationality' },
+            { data: 'age_group' },
             { data: 'membership' },
             { data: 'status' },
             { data: 'encrypted_id' },
@@ -269,6 +265,21 @@ var statusMapper = @json( $data['status'] ),
                     // `;
 
                     // return html ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "nationality" ) }}' ),
+                
+                render: function( data, type, row, meta ) {
+                    return data ?? '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "age_group" ) }}' ),
+                
+                render: function( data, type, row, meta ) {
+                    // return '-';
+                    return data ? ageGroupMapper[data] : '-' ;
                 },
             },
             {

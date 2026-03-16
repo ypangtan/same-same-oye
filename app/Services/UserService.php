@@ -362,6 +362,17 @@ class UserService
             $user = \Helper::decode( $request->no_user );
             $model->where( 'id', '!=', $user );
         }
+
+        if( !empty( $request->nationality ) ) {
+            $nationality = ucwords( strtolower( $request->nationality ) );
+            $model->where( 'nationality', 'like', '%' . $nationality . '%' );
+            $filter = true;
+        }
+
+        if( !empty( $request->age_group ) ) {
+            $model->where( 'age_group', $request->age_group );
+            $filter = true;
+        }
         
         if( !empty( $request->membership ) ) {
             $model->where( 'status', $request->membership );
