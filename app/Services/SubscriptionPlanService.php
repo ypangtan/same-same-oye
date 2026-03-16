@@ -101,7 +101,7 @@ class SubscriptionPlanService
 
         if ( !empty( $request->name ) ) {
             $model->where( function( $q ) use ( $request ) {
-                $q->where( 'multi_lang_name', 'LIKE', '%' . $request->name . '%' );
+                $q->where( 'name', 'LIKE', '%' . $request->name . '%' );
             } );
             $filter = true;
         }
