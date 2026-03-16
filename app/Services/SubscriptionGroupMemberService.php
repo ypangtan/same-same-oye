@@ -25,12 +25,10 @@ class SubscriptionGroupMemberService {
 
     public static function allSubscriptionGroupMembers( $request ) {
 
-        $user_subscription = UserSubscription::find( \Helper::decode( $request->user_subscription_id ) );
-
         $subscriptionGroupMembers = SubscriptionGroupMember::with( [
             'user',
             'leader',
-        ] )->select( 'subscription_group_members.*')->where( 'leader_id', $user_subscription->user_id );
+        ] )->select( 'subscription_group_members.*')->where( 'leader_id', $request->leader );
 
         $filterObject = self::filter( $request, $subscriptionGroupMembers );
         $subscriptionGroupMember = $filterObject['model'];
@@ -58,7 +56,7 @@ class SubscriptionGroupMemberService {
             ] );
         }
 
-        $totalRecord = SubscriptionGroupMember::where( 'subscription_group_members.leader_id', $user_subscription->user_id )->count();
+        $totalRecord = SubscriptionGroupMember::where( 'leader_id', $request->leader )->count();
 
         $data = [
             'subscription_group_members' => $subscriptionGroupMembers,
@@ -77,11 +75,6 @@ class SubscriptionGroupMemberService {
 
         if ( !empty( $request->id ) ) {
             $model->where( 'subscription_group_members.id', '!=', \Helper::decode($request->id) );
-            $filter = true;
-        }
-
-        if ( !empty( $request->leader_id ) ) {
-            $model->where( 'subscription_group_members.leader_id', \Helper::decode($request->leader_id) );
             $filter = true;
         }
 
