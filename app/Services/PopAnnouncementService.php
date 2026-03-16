@@ -95,12 +95,12 @@ class PopAnnouncementService
         }
 
         if ( !empty( $request->name ) ) {
-            $model->where( 'title', 'LIKE', '%' . $request->name . '%' );
+            $model->where( 'en_title', 'LIKE', '%' . $request->name . '%' );
             $filter = true;
         }
 
         if ( !empty( $request->title ) ) {
-            $model->where( 'title', 'LIKE', '%' . $request->title . '%' );
+            $model->where( 'en_title', 'LIKE', '%' . $request->title . '%' );
             $filter = true;
         }
 
