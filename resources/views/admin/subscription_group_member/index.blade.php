@@ -67,7 +67,7 @@ $columns = [
             ajax: {
                 url: '{{ route( 'admin.subscription_group_member.allSubscriptionGroupMembers' ) }}',
                 data: {
-                    'user_subscription_id': '{{ Request( 'id' )  }}'
+                    'leader': '{{ Request( 'id' )  }}',
                     '_token': '{{ csrf_token() }}',
                 },
                 dataSrc: 'subscription_group_members',
