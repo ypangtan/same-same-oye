@@ -104,14 +104,14 @@ class CategoryService
 
         if ( !empty( $request->name ) ) {
             $model->where( function( $q ) use ( $request ) {
-                $q->where( 'multi_lang_name', 'LIKE', '%' . $request->name . '%' );
+                $q->where( 'categories.en_name', 'LIKE', '%' . $request->name . '%' );
             } );
             $filter = true;
         }
 
         if ( !empty( $request->title ) ) {
             $model->where( function( $q ) use ( $request ) {
-                $q->where( 'multi_lang_name', 'LIKE', '%' . $request->title . '%' );
+                $q->where( 'categories.en_name', 'LIKE', '%' . $request->title . '%' );
             } );
             $filter = true;
         }
