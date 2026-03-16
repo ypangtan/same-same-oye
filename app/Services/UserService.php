@@ -375,8 +375,8 @@ class UserService
             $filter = true;
         }
         
-        if( !empty( $request->membership ) ) {
-            $model->where( 'status', $request->membership );
+        if( !empty( $request->membership ) || $request->membership == 0 ) {
+            $model->where( 'membership', $request->membership );
             $filter = true;
         }
         
