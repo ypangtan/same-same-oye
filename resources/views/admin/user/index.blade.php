@@ -269,17 +269,14 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "nationality" ) }}' ),
-                
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "age_group" ) }}' ),
-                
                 render: function( data, type, row, meta ) {
-                    // return '-';
-                    return data ? ageGroupMapper[data] : '-' ;
+                    return data ?? '-' ;
                 },
             },
             {
