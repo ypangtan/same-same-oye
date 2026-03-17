@@ -589,8 +589,8 @@ class Helper {
            $routeName = $route->getName();
             if ( str_contains( $route->getName(), 'admin.module_parent.' ) ) {
 
-                $routeName = str_replace( 'admin.module_parent.', '', $routeName );
-                $routeName = str_replace( '.index', '', $routeName );
+                $routeName = explode( '.', $routeName );
+                $routeName = $routeName[2];
                 $moduleName = \Str::plural( $routeName );
 
                 if ( in_array( $moduleName, $moduleDelete ) ) {
