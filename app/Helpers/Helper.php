@@ -87,7 +87,12 @@ class Helper {
 
     public static function unusedModule() {
         $array = [
-            // 'announcements',
+            'ads',
+            'category.adds',
+            'collection.adds',
+            'music_requests',
+            'wallet_transactions',
+            'wallets',
         ];
 
         return $array;
