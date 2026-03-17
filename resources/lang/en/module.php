@@ -40,7 +40,7 @@ return [
     'playlists' => 'Playlists',
     'items' => 'Items',
     'songs' => 'Songs',
-    'category' => 'Category',
+    'categories' => 'Categories',
     'user_playlists' => 'User Playlists',
     'subscription_plans' => 'Subscription Plans',
     'subscription_group_members' => 'Subscription Group Members',
