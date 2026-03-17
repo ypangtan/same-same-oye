@@ -46,6 +46,6 @@ return [
     'subscription_group_members' => 'Subscription Group Members',
     'user_subscriptions' => 'User Subscriptions',
     'website_banners' => 'Website Banners',
-    'marketing_notifications ' => 'Marketing Notifications',
+    'marketing_notifications' => 'Marketing Notifications',
     'pop_announcements' => 'Pop Announcements',
 ];
