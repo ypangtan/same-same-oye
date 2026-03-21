@@ -71,7 +71,8 @@ class User extends Model implements AuthenticatableContract
         if( $plan ) {
             $planDetail = $plan->plan()->first();
             if( $planDetail ) {
-                return $planDetail->name . ' [Main Account]';
+                $name = explode( ' ', $planDetail->name ); 
+                return $name[0] . ' [Sub Account]';
             }
         }
 
@@ -89,7 +90,8 @@ class User extends Model implements AuthenticatableContract
         if( $plan ) {
             $planDetail = $plan->plan()->first();
             if( $planDetail ) {
-                return $planDetail->name . ' [Sub Account]';
+                $name = explode( ' ', $planDetail->name ); 
+                return $name[0] . ' [Sub Account]';
             }
         }
 
