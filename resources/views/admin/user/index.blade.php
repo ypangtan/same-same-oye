@@ -411,6 +411,7 @@ var statusMapper = @json( $data['status'] ),
 
                     return {
                         title: params.term, // search term
+                        status: 10,
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,
