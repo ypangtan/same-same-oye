@@ -74,7 +74,9 @@ class User extends Model implements AuthenticatableContract
                 $name = explode( ' ', $planDetail->name ); 
                 return $name[0] . ' [Sub Account]';
             }
+            return '1';
         }
+            return '21';
 
         $member = $this->subscriptionGroupMember()->first();
         if( !$member ) {
