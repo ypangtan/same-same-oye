@@ -67,7 +67,7 @@ class User extends Model implements AuthenticatableContract
     }
 
     public function getSubscritionDetailAttribute() {
-        $plan = $this->subscriptions()->isactive()->first();
+        $plan = $this->subscriptions()->isActive()->first();
         if( $plan ) {
             $planDetail = $plan->plan()->first();
             if( $planDetail ) {
@@ -86,7 +86,7 @@ class User extends Model implements AuthenticatableContract
             return '-';
         }
 
-        $plan = $leader->subscriptions()->isactive()->first();
+        $plan = $leader->subscriptions()->isActive()->first();
         if( $plan ) {
             $planDetail = $plan->plan()->first();
             if( $planDetail ) {
