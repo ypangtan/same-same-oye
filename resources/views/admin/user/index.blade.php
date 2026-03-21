@@ -330,7 +330,7 @@ var statusMapper = @json( $data['status'] ),
 
                     @can( 'view subscription_group_members' )
                     if( row.plan_member == true ) {
-                        view += '<li class="dropdown-item click-action dt-view" data-id="' + row['encrypted_id'] + '">{{ __( 'user.view_group_member' ) }}</li>';
+                        view = '<li class="dt-view" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'user.view_group_member' ) }}</span></a></li>';
                     }
                     @endcan
                     
