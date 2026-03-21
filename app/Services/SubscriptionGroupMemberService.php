@@ -25,6 +25,10 @@ class SubscriptionGroupMemberService {
 
     public static function allSubscriptionGroupMembers( $request ) {
 
+        $request->merge( [
+            'leader' => \Helper::decode( $request->leader )
+        ] );
+
         $subscriptionGroupMembers = SubscriptionGroupMember::with( [
             'user',
             'leader',
