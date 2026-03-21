@@ -88,6 +88,8 @@ class UserService
         if ( $users ) {
             $users->append( [
                 'encrypted_id',
+                'subscrition_detail',
+                'plan_member',
             ] );
 
             foreach( $users as $user ){
@@ -377,6 +379,28 @@ class UserService
         
         if( $request->membership != '' ) {
             $model->where( 'membership', $request->membership );
+            $filter = true;
+        }
+
+        if( !empty( $request->plan ) ) {
+            $planId = \Helper::decode( $request->plan );
+            $model->where( function( $q ) use ( $planId ) {
+                $q->whereHas( 'subscriptionGroupMember', function ( $sq ) use ( $planId ) {
+                    $sq->whereHas( 'leader', function ( $ssq ) use ( $planId ) {
+                        $ssq->whereHas( 'subscriptions', function ( $sssq ) use ( $planId ) {
+                            $sssq->where( 'subscription_plan_id', $planId )
+                                ->where( 'status', 10 )
+                                ->whereNotNull('end_date')
+                                ->whereDate('end_date', '>=', now());
+                        } );
+                    } );
+                } )->orWhereHas( 'subscriptions', function ( $sq ) use ( $planId ) {
+                        $sq->where( 'subscription_plan_id', $planId )
+                            ->where( 'status', 10 )
+                            ->whereNotNull('end_date')
+                            ->whereDate('end_date', '>=', now());
+                    } );
+            } );
             $filter = true;
         }
         

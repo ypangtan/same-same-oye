@@ -62,6 +62,9 @@ return [
     'message' => 'Message',
     'type' => 'Type',
     'invitation' => 'Invitation',
+    'plan' => 'Subscription Plan',
+
+    'view_group_member' => 'View Group Member',
 
     'invalid_otp' => 'Invalid_otp',
     'invalid_phone_number' => 'Invalid phone number',

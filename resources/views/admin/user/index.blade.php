@@ -75,6 +75,12 @@ $columns = [
         'title' => __( 'user.age_group' ),
     ],
     [
+        'type' => 'select2',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.plan' ) ] ),
+        'id' => 'plan',
+        'title' => __( 'user.plan' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['membership'],
         'id' => 'membership',
@@ -144,6 +150,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'phone_number' },
             { data: 'nationality' },
             { data: 'age_group' },
+            { data: 'subscrition_detail' },
             { data: 'membership' },
             { data: 'status' },
             { data: 'encrypted_id' },
@@ -268,6 +275,12 @@ var statusMapper = @json( $data['status'] ),
                 },
             },
             {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "plan" ) }}' ),
+                render: function( data, type, row, meta ) {
+                    return data ?? '-' ;
+                },
+            },
+            {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "nationality" ) }}' ),
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
@@ -314,6 +327,12 @@ var statusMapper = @json( $data['status'] ),
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="20"><a href="#"><em class="icon ni ni-na"></em><span>{{ __( 'datatables.suspend' ) }}</span></a></li>' : 
                     '<li class="dt-status" data-id="' + row['encrypted_id'] + '" data-status="10"><a href="#"><em class="icon ni ni-check-circle"></em><span>{{ __( 'datatables.activate' ) }}</span></a></li>';
                     @endcan
+
+                    @can( 'view subscription_group_members' )
+                    if( row.plan_member == true ) {
+                        view += '<li class="dropdown-item click-action dt-view" data-id="' + data + '">{{ __( 'user.view_group_member' ) }}</li>';
+                    }
+                    @endcan
                     
                     let html = 
                         `
@@ -321,6 +340,7 @@ var statusMapper = @json( $data['status'] ),
                             <a class="dropdown-toggle btn btn-icon btn-trigger" href="#" type="button" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                             <div class="dropdown-menu">
                                 <ul class="link-list-opt">
+                                    `+view+`
                                     `+edit+`
                                     `+status+`
                                 </ul>
@@ -349,6 +369,10 @@ var statusMapper = @json( $data['status'] ),
             }
         } );
 
+        $( document ).on( 'click', '.dt-view', function() {
+            window.location.href = '{{ route( 'admin.module_parent.subscription_group_member.index' ) }}?id=' + $( this ).data( 'id' );
+        } );
+
         $( document ).on( 'click', '.dt-edit', function() {
             window.location.href = '{{ route( 'admin.user.edit' ) }}?id=' + $( this ).data( 'id' );
         } );
@@ -370,6 +394,52 @@ var statusMapper = @json( $data['status'] ),
                 },
             } );
         } );
+
+        $( '#plan' ).select2({
+
+            theme: 'bootstrap-5',
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            closeOnSelect: true,
+
+            ajax: { 
+                url: '{{ route( 'admin.subscription_plan.allSubscriptionPlans' ) }}',
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+
+                    return {
+                        title: params.term, // search term
+                        designation: 1,
+                        start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
+                        length: 10,
+                        _token: '{{ csrf_token() }}',
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    let processedResult = [];
+
+                    data.products.map( function( v, i ) {
+                        processedResult.push( {
+                            id: v.encrypted_id,
+                            text: v.name,
+                        } );
+                    } );
+
+                    return {
+                        results: processedResult,
+                        pagination: {
+                            more: ( params.page * 10 ) < data.recordsFiltered
+                        }
+                    };
+                },
+                cache: true
+            }
+
+        });
     } );
 </script>
 

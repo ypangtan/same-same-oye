@@ -62,6 +62,40 @@ class User extends Model implements AuthenticatableContract
         'is_first_login',
     ];
 
+    public function getPlanMemberAttribute() {
+        return $this->subscriptionGroup()->exists();
+    }
+
+    public function getSubscritionDetailAttribute() {
+        $plan = $this->subscriptions()->isactive()->first();
+        if( $plan ) {
+            $planDetail = $plan->plan()->first();
+            if( $planDetail ) {
+                return $planDetail->name . ' [Main Account]';
+            }
+        }
+
+        $member = $this->subscriptionGroupMember()->first();
+        if( !$member ) {
+            return '';
+        }
+
+        $leader = $member->leader()->first();
+        if( !$leader ) {
+            return '';
+        }
+
+        $plan = $leader->subscriptions()->isactive()->first();
+        if( $plan ) {
+            $planDetail = $plan->plan()->first();
+            if( $planDetail ) {
+                return $planDetail->name . ' [Sub Account]';
+            }
+        }
+
+        return '';
+    }
+
     public function subscriptionGroup() {
         return $this->hasMany( SubscriptionGroupMember::class, 'leader_id' );
     }

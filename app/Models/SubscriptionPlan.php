@@ -12,7 +12,7 @@ use Spatie\Activitylog\LogOptions;
 
 use Helper;
 
-use Carbon\Carbon;
+use Carbon\Carbon;      
 
 class SubscriptionPlan extends Model
 {
@@ -33,21 +33,31 @@ class SubscriptionPlan extends Model
     ];
     
     public function getProductIdForPlatform( $platform ) {
-        return match( $platform ) {
-            '1' => $this->ios_product_id,
-            '2' => $this->android_product_id,
-            '3' => $this->huawei_product_id,
-            default => null,
-        };
+        switch( $platform ) {
+            case '1':
+                return $this->ios_product_id;
+            case '2':
+                return $this->android_product_id;
+            case '3':
+                return $this->huawei_product_id;
+            default:
+                return null;
+        }
     }
 
     public static function findByPlatformProductId( $platform, $productId) {
-        $column = match( $platform ) {
-            '1' => 'ios_product_id',
-            '2' => 'android_product_id',
-            '3' => 'huawei_product_id',
-            default => null,
-        };
+        $column = null;
+        switch( $platform ) {
+            case '1':
+                $column = 'ios_product_id';
+                break;
+            case '2':
+                $column = 'android_product_id';
+                break;
+            case '3':
+                $column = 'huawei_product_id';
+                break;
+        }
 
         if (!$column) {
             return null;
