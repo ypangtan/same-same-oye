@@ -195,11 +195,10 @@ var statusMapper = {
                 render: function( data, type, row, meta ) {
 
                     @canany( [ 'edit subscription_plans', 'delete subscription_plans' ] )
-                    let edit = '', status = '', user_id = '';
+                    let edit = '', status = '';
 
                     @if( auth()->user()->id === 1 )
-                    user_id = row?.user?.encrypted_id ?? '';
-                    edit = '<li class="dt-edit" data-id="' + user_id + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.edit' ) }}</span></a></li>';
+                    edit = '<li class="dt-edit" data-id="' + row['encrypted_id'] + '"><a href="#"><em class="icon ni ni-edit"></em><span>{{ __( 'template.edit' ) }}</span></a></li>';
                     @endif
 
                     @can( 'delete subscription_plans' )

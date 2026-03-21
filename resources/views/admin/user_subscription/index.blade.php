@@ -165,7 +165,8 @@ $columns = [
 
                         @can( 'view subscription_group_members' )
                         if( row.type == 1 && row.plan && row.plan.max_member > 1 ) {
-                            view += '<li class="dropdown-item click-action dt-view" data-id="' + data + '">{{ __( 'template.view' ) }}</li>';
+                            user_id = row?.user?.encrypted_id ?? '';
+                            view += '<li class="dropdown-item click-action dt-view" data-id="' + user_id + '">{{ __( 'template.view' ) }}</li>';
                         }
                         @endcan
 
