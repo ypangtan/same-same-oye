@@ -96,6 +96,7 @@ $columns = [
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "leader" ) }}' ),
                     orderable: false,
+                    visible: false,
                     render: function( data, type, row, meta ) {
                         if( data ) {
                             return ( data.calling_code ?? '+60' ) + data.phone_number + ' (' + ( data.email ? data.email : '-' ) + ')';
