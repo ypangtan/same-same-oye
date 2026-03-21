@@ -78,12 +78,12 @@ class User extends Model implements AuthenticatableContract
 
         $member = $this->subscriptionGroupMember()->first();
         if( !$member ) {
-            return '';
+            return '-';
         }
 
         $leader = $member->leader()->first();
         if( !$leader ) {
-            return '';
+            return '-';
         }
 
         $plan = $leader->subscriptions()->isactive()->first();
@@ -95,7 +95,7 @@ class User extends Model implements AuthenticatableContract
             }
         }
 
-        return '';
+        return '-';
     }
 
     public function subscriptionGroup() {

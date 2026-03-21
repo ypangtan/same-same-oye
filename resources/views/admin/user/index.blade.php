@@ -422,7 +422,7 @@ var statusMapper = @json( $data['status'] ),
 
                     let processedResult = [];
 
-                    data.products.map( function( v, i ) {
+                    data.subscription_plans.map( function( v, i ) {
                         processedResult.push( {
                             id: v.encrypted_id,
                             text: v.name,
