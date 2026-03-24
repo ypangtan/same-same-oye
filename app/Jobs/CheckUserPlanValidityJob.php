@@ -9,28 +9,17 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
 
-class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
+class CheckUserPlanValidityJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
     public int $backoff = 2;
-    public int $uniqueFor = 3600;
     protected $userId;
 
     public function __construct($userId) {
         $this->userId = $userId;
-    }
-
-    public function middleware(): array
-    {
-        return [
-            (new WithoutOverlapping($this->userId))
-                ->releaseAfter(30)
-                ->expireAfter(300)
-        ];
     }
 
     /**
@@ -52,14 +41,14 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
             $user = User::lockForUpdate()->find( $this->userId );
             if (!$user) {
                 \Log::warning('CheckUserPlanValidityJob: User not found, id: ' . $this->userId);
-                throw '';
+                return;
             }
             $user->checkPlanValidity();
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollBack();
             \Log::error( 'update User plan validity user id'. $this->userId . ', error :' . $e->getMessage() );
-            throw $e;
+            return;
         }
     }
 

@@ -5,7 +5,7 @@ module.exports = {
       script: "artisan",
       interpreter: "php",
       args: "queue:work --sleep=3 --tries=3 --max-time=3600",
-      instances: 2,
+      instances: 1,
       autorestart: true,
       watch: false,
       max_memory_restart: "200M",
