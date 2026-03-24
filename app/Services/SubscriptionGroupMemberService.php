@@ -32,7 +32,7 @@ class SubscriptionGroupMemberService {
         $subscriptionGroupMembers = SubscriptionGroupMember::with( [
             'user',
             'leader',
-        ] )->select( 'subscription_group_members.*')->where( 'leader_id', $request->leader );
+        ] )->select( 'subscription_group_members.*')->where( 'leader_id', $request->leader )->where( 'status', 10 );
 
         $filterObject = self::filter( $request, $subscriptionGroupMembers );
         $subscriptionGroupMember = $filterObject['model'];
@@ -60,7 +60,7 @@ class SubscriptionGroupMemberService {
             ] );
         }
 
-        $totalRecord = SubscriptionGroupMember::where( 'leader_id', $request->leader )->count();
+        $totalRecord = SubscriptionGroupMember::where( 'leader_id', $request->leader )->where( 'status', 10 )->count();
 
         $data = [
             'subscription_group_members' => $subscriptionGroupMembers,

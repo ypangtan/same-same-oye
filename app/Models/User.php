@@ -75,7 +75,7 @@ class User extends Model implements AuthenticatableContract
                 return $name[0] . ' [Main Account]';
             }
         }
-        $member = $this->subscriptionGroupMember()->first();
+        $member = $this->subscriptionGroupMember()->where( 'status', 10 )->first();
         if( !$member ) {
             return '-';
         }
