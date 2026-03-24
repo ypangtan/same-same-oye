@@ -9,24 +9,28 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 
-class CheckUserPlanValidityJob implements ShouldQueue
+class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * 最多重试次数
-     */
     public int $tries = 3;
-
-    /**
-     * 重试间隔（秒）
-     */
     public int $backoff = 2;
+    public int $uniqueFor = 3600;
     protected $userId;
 
-    public function __construct( $userId ) {
+    public function __construct($userId) {
         $this->userId = $userId;
+    }
+
+    public function middleware(): array
+    {
+        return [
+            (new WithoutOverlapping($this->userId))
+                ->releaseAfter(30)
+                ->expireAfter(300)
+        ];
     }
 
     /**
@@ -42,7 +46,6 @@ class CheckUserPlanValidityJob implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info( 'CheckUserPlanValidityJob start: User id: ' . $this->userId );
 
         \DB::beginTransaction();
         try {
@@ -63,8 +66,7 @@ class CheckUserPlanValidityJob implements ShouldQueue
     /**
      * 只重试死锁错误
      */
-    public function shouldRetry(\Throwable $e): bool
-    {
+    public function shouldRetry(\Throwable $e) {
         return $e instanceof \Illuminate\Database\QueryException
             && $e->getCode() === '40001';
     }
