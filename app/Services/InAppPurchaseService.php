@@ -149,6 +149,7 @@ class InAppPurchaseService {
 
     public static function cancelSubscription() {
         try {
+            \DB::beginTransaction();
 
             $user = User::find( auth()->user()->id );
             
@@ -161,16 +162,22 @@ class InAppPurchaseService {
             }
 
             foreach ( $subscription as $sub ) {
-                $sub->cancel();
+                $sub->status = 40;
+                $sub->cancelled_at = now();
+                $sub->save();
             }
 
             UserSubscriptionService::checkUserPlan( $subscription );
+
+            \DB::commit();
 
             return response()->json([
                 'message' => 'Subscription cancelled successfully',
                 'subscription' => $subscription->fresh(),
             ]);
         } catch ( \Throwable $th ) {
+            \DB::rollback();
+
             return response()->json( [
                 'message' => $th->getMessage() . ' in line ' . $th->getLine()
             ], 500 );
