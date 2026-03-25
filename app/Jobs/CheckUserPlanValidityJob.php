@@ -18,11 +18,9 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
     public int $backoff = 2;
     public int $uniqueFor = 60;
     protected $userId;
-    protected $dispatchedAt;
 
     public function __construct( $userId ) {
         $this->userId = $userId;
-        $this->dispatchedAt = now();
     }
 
     public function uniqueId(): string {
@@ -41,12 +39,6 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
             $user = User::lockForUpdate()->find( $this->userId );
             if (!$user) {
                 \Log::warning('CheckUserPlanValidityJob: User not found, id: ' . $this->userId);
-                return;
-            }
-
-            if ($user->updated_at > $this->dispatchedAt) {
-                \DB::commit();
-                CheckUserPlanValidityJob::dispatch($this->userId)->delay(now()->addSeconds(2));
                 return;
             }
             $user->checkPlanValidity();
