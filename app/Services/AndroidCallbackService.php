@@ -98,8 +98,6 @@ class AndroidCallbackService {
                     $eventType,
                     $user
                 );
-                
-                UserSubscriptionService::checkUserPlan( $userSubscription );
 
                 // 更新到期时间
                 $lineItems = $subscriptionData->getLineItems();
@@ -127,6 +125,8 @@ class AndroidCallbackService {
                 }
 
                 $userSubscription->save();
+
+                UserSubscriptionService::checkUserPlan( $userSubscription );
                 
                 Log::channel('payment')->info('Android subscription verified', [
                     'user_id' => $user->id ?? null,
