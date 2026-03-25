@@ -163,7 +163,7 @@ class User extends Model implements AuthenticatableContract
         $group = $this->subscriptionGroupMember()->where( 'status', 10 )->first();
         if( $group ) {
             // check if leader have active plan
-            $leader = User::lockForUpdate()->find( $group->leader_id );
+            $leader = User::find( $group->leader_id );
             if( $leader ) {
                 $plan = $leader->subscriptions()->isGroup()->isActive()->first();
                 if( $plan ) {

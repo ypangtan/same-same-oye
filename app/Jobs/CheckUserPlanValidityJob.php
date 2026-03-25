@@ -27,11 +27,15 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
         return (string) $this->userId;
     }
 
+    public static function dispatchSafe( $userId ) {
+        \Cache::put("check_plan_pending_{$userId}", true, now()->addMinutes(5));
+        static::dispatch($userId)->delay(now()->addSeconds(1));
+    }
+
     /**
      * 执行 Job
      */
-    public function handle(): void
-    {
+    public function handle() {
         \Cache::forget("check_plan_pending_{$this->userId}");
 
         \DB::beginTransaction();
@@ -46,7 +50,7 @@ class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
         } catch (\Exception $e) {
             \DB::rollBack();
             \Log::error( 'update User plan validity user id'. $this->userId . ', error :' . $e->getMessage() );
-            return;
+            throw '';
         }
 
         if (\Cache::get("check_plan_pending_{$this->userId}")) {

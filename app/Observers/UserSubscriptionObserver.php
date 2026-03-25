@@ -11,11 +11,11 @@ class UserSubscriptionObserver {
 
     public function created( UserSubscription $userSubscription ) {
         \DB::afterCommit( function() use ( $userSubscription ) {
-            CheckUserPlanValidityJob::dispatch( $userSubscription->user_id )->delay(now()->addSeconds(1));
+            CheckUserPlanValidityJob::dispatchSafe( $userSubscription->user_id );
 
             $userSubscription->member()
                 ->pluck('user_id')
-                ->each( fn($userId) => CheckUserPlanValidityJob::dispatch( $userId )->delay(now()->addSeconds(1)) );
+                ->each( fn($userId) => CheckUserPlanValidityJob::dispatchSafe( $userId ) );
 
             $userSubscription->group()->get()->each( fn($member) => $member->delete() );
         } );
@@ -23,7 +23,7 @@ class UserSubscriptionObserver {
 
     public function updated( UserSubscription $userSubscription ) {
         \DB::afterCommit( function() use ( $userSubscription ) {
-            CheckUserPlanValidityJob::dispatch( $userSubscription->user_id )->delay(now()->addSeconds(1));
+            CheckUserPlanValidityJob::dispatchSafe( $userSubscription->user_id );
 
             // If the subscription is not active, we need to remove all the member of the plan.
             $members = SubscriptionGroupMember::where( 'leader_id', $userSubscription->user_id )->get();
@@ -34,7 +34,7 @@ class UserSubscriptionObserver {
                 }
             } else {
                 foreach( $members as $member ) {
-                    CheckUserPlanValidityJob::dispatch( $member->user_id )->delay(now()->addSeconds(1));
+                    CheckUserPlanValidityJob::dispatchSafe( $member->user_id );
                 }
             }
         } );
