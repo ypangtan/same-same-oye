@@ -367,7 +367,7 @@ class UserSubscriptionService
     }
 
     public static function checkUserPlan( $userSubscription ) {
-        $user = User::lockForUpdate()->find( $userSubscription->user_id);
+        $user = User::find( $userSubscription->user_id);
         $user->checkPlanValidity();
 
         // If the subscription is not active, we need to remove all the member of the plan.
@@ -379,7 +379,7 @@ class UserSubscriptionService
             }
         } else {
             foreach( $members as $member ) {
-                $user = User::lockForUpdate()->find( $userSubscription->user_id);
+                $user = User::find( $userSubscription->user_id);
                 $user->checkPlanValidity();
             }
         }
