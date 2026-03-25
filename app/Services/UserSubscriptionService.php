@@ -373,14 +373,14 @@ class UserSubscriptionService
         // If the subscription is not active, we need to remove all the member of the plan.
         $members = SubscriptionGroupMember::where( 'leader_id', $userSubscription->user_id )->get();
 
-        if( $userSubscription->status != 10 ) {
-            foreach( $members as $member ) {
-                $member->delete();
-            }
-        } else {
+        if( $userSubscription->status == 10 ) {
             foreach( $members as $member ) {
                 $user = User::find( $userSubscription->user_id);
                 $user->checkPlanValidity();
+            }
+        } else {
+            foreach( $members as $member ) {
+                $member->delete();
             }
         }
     }
