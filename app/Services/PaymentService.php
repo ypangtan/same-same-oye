@@ -366,36 +366,6 @@ class PaymentService {
                 ];
             }
 
-            DB::beginTransaction();
-            
-            // ✅ 只有 currentLineItem 存在才 createOrUpdate
-            if ($currentLineItem) {
-                $isRenew = true;
-                
-                $currentPlan = SubscriptionPlan::where('android_product_id', $productId)->first();
-                $currentPlanId = $currentPlan ? $currentPlan->id : $plan->id;
-                
-                $subscription = self::createOrUpdateSubscription($user_id, $currentPlanId, 2, $orderId, $expiredDate ?? null, $isRenew);
-            }
-
-            // 记录交易
-            if ($subscription) {
-                $transaction = PaymentTransaction::create([
-                    'user_id' => $user->id,
-                    'user_subscription_id' => $subscription->id,
-                    'transaction_id' => $orderId,
-                    'original_transaction_id' => $orderId,
-                    'amount' => 0,
-                    'currency' => 'MYR',
-                    'platform' => 2,
-                    'product_id' => $productId,
-                    'receipt_data' => $purchaseToken,
-                    'status' => 10,
-                    'verified_at' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
-                    'verification_response' => json_encode( $subscriptionPurchase ),
-                ]);
-            }
-
             // 确认购买（告诉 Google 已经处理）
             if ( $subscriptionPurchase->getAcknowledgementState() === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED' ) {
                 Log::channel('payment')->info('Subscription already acknowledged', [
@@ -424,6 +394,36 @@ class PaymentService {
 
                     throw new \Exception('Failed to acknowledge Android subscription');
                 }
+            }
+            
+            DB::beginTransaction();
+
+            // ✅ 只有 currentLineItem 存在才 createOrUpdate
+            if ($currentLineItem) {
+                $isRenew = true;
+                
+                $currentPlan = SubscriptionPlan::where('android_product_id', $productId)->first();
+                $currentPlanId = $currentPlan ? $currentPlan->id : $plan->id;
+                
+                $subscription = self::createOrUpdateSubscription($user_id, $currentPlanId, 2, $orderId, $expiredDate ?? null, $isRenew);
+            }
+
+            // 记录交易
+            if ($subscription) {
+                $transaction = PaymentTransaction::create([
+                    'user_id' => $user->id,
+                    'user_subscription_id' => $subscription->id,
+                    'transaction_id' => $orderId,
+                    'original_transaction_id' => $orderId,
+                    'amount' => 0,
+                    'currency' => 'MYR',
+                    'platform' => 2,
+                    'product_id' => $productId,
+                    'receipt_data' => $purchaseToken,
+                    'status' => 10,
+                    'verified_at' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
+                    'verification_response' => json_encode( $subscriptionPurchase ),
+                ]);
             }
 
             Log::channel('payment')->info('Android purchase verified', [
