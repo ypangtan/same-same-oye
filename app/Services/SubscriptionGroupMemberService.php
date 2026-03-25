@@ -309,7 +309,7 @@ class SubscriptionGroupMemberService {
             $subscriptionGroupMember = SubscriptionGroupMember::find($request->id);
             $subscriptionGroupMember->delete();
             
-            $user = User::lockForUpdate()->find( $request->id );
+            $user = User::lockForUpdate()->find( $subscriptionGroupMember->user_id );
             $user->checkPlanValidity();
 
             DB::commit();
