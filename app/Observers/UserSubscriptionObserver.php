@@ -29,13 +29,8 @@ class UserSubscriptionObserver {
             $members = SubscriptionGroupMember::where( 'leader_id', $userSubscription->user_id )->get();
 
             if( $userSubscription->status != 10 ) {
-                try {
-                    foreach( $members as $member ) {
-                        $member->delete();
-                    }
-                } catch (\Throwable $e) {
-                    \Log::error('Failed to remove subscription members: ' . $e->getMessage());
-                    throw $e;
+                foreach( $members as $member ) {
+                    $member->delete();
                 }
             } else {
                 foreach( $members as $member ) {
