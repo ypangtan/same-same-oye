@@ -10,24 +10,23 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class CheckUserPlanValidityJob implements ShouldQueue
+class CheckUserPlanValidityJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
     public int $backoff = 2;
+    public int $uniqueFor = 60;
     protected $userId;
+    protected $dispatchedAt;
 
-    public function __construct($userId) {
+    public function __construct( $userId ) {
         $this->userId = $userId;
+        $this->dispatchedAt = now();
     }
 
-    /**
-     * 同一用户只保留一个 Job
-     */
-    public function uniqueId(): int
-    {
-        return $this->userId ?? 0;
+    public function uniqueId(): string {
+        return (string) $this->userId;
     }
 
     /**
@@ -35,6 +34,7 @@ class CheckUserPlanValidityJob implements ShouldQueue
      */
     public function handle(): void
     {
+        \Cache::forget("check_plan_pending_{$this->userId}");
 
         \DB::beginTransaction();
         try {
@@ -43,12 +43,23 @@ class CheckUserPlanValidityJob implements ShouldQueue
                 \Log::warning('CheckUserPlanValidityJob: User not found, id: ' . $this->userId);
                 return;
             }
+
+            if ($user->updated_at > $this->dispatchedAt) {
+                \DB::commit();
+                CheckUserPlanValidityJob::dispatch($this->userId)->delay(now()->addSeconds(2));
+                return;
+            }
             $user->checkPlanValidity();
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollBack();
             \Log::error( 'update User plan validity user id'. $this->userId . ', error :' . $e->getMessage() );
             return;
+        }
+
+        if (\Cache::get("check_plan_pending_{$this->userId}")) {
+            \Cache::forget("check_plan_pending_{$this->userId}");
+            CheckUserPlanValidityJob::dispatch($this->userId);
         }
     }
 
