@@ -55,6 +55,8 @@ class InAppPurchaseService {
         $validator->setAttributeNames( $attributeName )->validate();
 
         try {
+            \DB::beginTransaction();
+
             switch ( $request->platform ) {
                 case 1:
                     $result = PaymentService::verifyIOSPurchaseV2( auth()->user()->id, $request->all() );
@@ -81,10 +83,14 @@ class InAppPurchaseService {
                 UserSubscriptionService::checkUserPlan( $userSubscription );
             }
 
+            \DB::commit();
+
             return response()->json( $result, 200 );
 
         } catch ( Exception $e ) {
-            
+        
+            \DB::rollback();
+
             $createlog->response = json_encode( [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
