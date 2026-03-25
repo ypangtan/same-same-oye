@@ -213,6 +213,8 @@ class IosCallbackService {
         }
 
         $userSubscription->save();
+
+        UserSubscriptionService::checkUserPlan( $userSubscription );
     }
 
     /**

@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Models\PaymentLog;
+use App\Models\SubscriptionGroupMember;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
+use App\Models\UserSubscription;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 
@@ -74,6 +76,11 @@ class InAppPurchaseService {
             $createlog->status = 10;
             $createlog->save();
 
+            $userSubscription = UserSubscription::where( 'user_id', auth()->user()->id )->isActive()->first();
+            if( $userSubscription ) {
+                UserSubscriptionService::checkUserPlan( $userSubscription );
+            }
+
             return response()->json( $result, 200 );
 
         } catch ( Exception $e ) {
@@ -141,22 +148,32 @@ class InAppPurchaseService {
     }
 
     public static function cancelSubscription() {
-        $user = User::find( auth()->user()->id );
-        
-        $subscription = $user->subscriptions()->isActive()->get();
+        try {
 
-        if ( $subscription->isEmpty() ) {
+            $user = User::find( auth()->user()->id );
+            
+            $subscription = $user->subscriptions()->isActive()->get();
+
+            if ( $subscription->isEmpty() ) {
+                return response()->json([
+                    'message' => 'No active subscription found',
+                ], 500);
+            }
+
+            foreach ( $subscription as $sub ) {
+                $sub->cancel();
+            }
+
+            UserSubscriptionService::checkUserPlan( $subscription );
+
             return response()->json([
-                'message' => 'No active subscription found',
-            ], 500);
+                'message' => 'Subscription cancelled successfully',
+                'subscription' => $subscription->fresh(),
+            ]);
+        } catch ( \Throwable $th ) {
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line ' . $th->getLine()
+            ], 500 );
         }
-
-        foreach ( $subscription as $sub ) {
-            $sub->cancel();
-        }
-        return response()->json([
-            'message' => 'Subscription cancelled successfully',
-            'subscription' => $subscription->fresh(),
-        ]);
     }
 }

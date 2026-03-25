@@ -99,6 +99,8 @@ class AndroidCallbackService {
                     $user
                 );
                 
+                UserSubscriptionService::checkUserPlan( $userSubscription );
+
                 // 更新到期时间
                 $lineItems = $subscriptionData->getLineItems();
                 if (!empty($lineItems)) {
