@@ -168,8 +168,6 @@ class PaymentService {
 
     public static function verifyIOSPurchaseV2( $user_id, $data ) {
         try {
-            DB::beginTransaction();
-
             $user = User::find( $user_id );
             $receiptData = $data['receipt_data'];
             $plan = SubscriptionPlan::find( $data['plan_id'] );
@@ -259,6 +257,7 @@ class PaymentService {
                 ];
             }
 
+            DB::beginTransaction();
             // 创建或更新订阅
             $subscription = self::createOrUpdateSubscription( $user_id, $currentPlanId, 1, $originalTransactionId, $expiryDate, true );
 
@@ -302,7 +301,6 @@ class PaymentService {
 
     public static function verifyAndroidPurchase( $user_id, $data ) {
         try {
-            DB::beginTransaction();
 
             $credentialsPath = config('services.app.google_credentials');
             
@@ -368,6 +366,8 @@ class PaymentService {
                 ];
             }
 
+            DB::beginTransaction();
+            
             // ✅ 只有 currentLineItem 存在才 createOrUpdate
             if ($currentLineItem) {
                 $isRenew = true;
