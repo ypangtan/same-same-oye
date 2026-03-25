@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\CheckUserPlanValidityJob;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\{
     Crypt,
@@ -308,6 +309,9 @@ class SubscriptionGroupMemberService {
             $subscriptionGroupMember = SubscriptionGroupMember::find($request->id);
             $subscriptionGroupMember->delete();
             
+            $user = User::lockForUpdate()->find( $request->id );
+            $user->checkPlanValidity();
+
             DB::commit();
         } catch ( \Throwable $th ) {
 
@@ -405,6 +409,9 @@ class SubscriptionGroupMemberService {
             $subscriptionGroupMember->update( [
                 'status' => 10,
             ] );
+
+            $user = User::lockForUpdate()->find(auth()->user()->id);
+            $user->checkPlanValidity();
             
             DB::commit();
         } catch ( \Throwable $th ) {
@@ -434,6 +441,9 @@ class SubscriptionGroupMemberService {
             }
 
             $subscriptionGroupMember->delete();
+            
+            $user = User::lockForUpdate()->find(auth()->user()->id);
+            $user->checkPlanValidity();
             
             DB::commit();
         } catch ( \Throwable $th ) {
