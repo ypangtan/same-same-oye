@@ -45,13 +45,10 @@ class checkPlanValidity extends Command
     public function handle()
     {
 
-        $user = User::find( 26 );
-        if( $user ) {
-            $this->info( 'have user' );
-            $response = $user->checkPlanValidity();
-            $this->info( $response );
-
-            CheckUserPlanValidityJob::dispatch( $user->id );
+        $user = User::where( 'status', 10 )->get();
+        foreach( $user as $u ) {
+            $response = $u->checkPlanValidity();
+            
         }
 
         return 0;

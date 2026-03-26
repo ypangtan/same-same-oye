@@ -2604,6 +2604,8 @@ class UserService
                 'first_login',
                 'home'
             );
+            
+            $user->checkPlanValidity();
         }
     }
 
