@@ -48,7 +48,6 @@ class checkPlanValidity extends Command
         $user = User::where( 'status', 10 )->get();
         foreach( $user as $u ) {
             $response = $u->checkPlanValidity();
-            
         }
 
         return 0;

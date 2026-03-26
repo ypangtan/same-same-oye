@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\UserSubscription;
 use App\Services\UserService;
+use App\Services\UserSubscriptionService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -47,7 +48,10 @@ class CheckExpiredSubscriptions extends Command
 
         foreach ($expiredSubscriptions as $subscription) {
             try {
-                $subscription->markAsExpired();
+                $subscription->status = 20;
+                $subscription->save();
+
+                UserSubscriptionService::checkUserPlan( $subscription );
 
                 if ( $subscription->type == 2 ) {
                     // trial need send notification
