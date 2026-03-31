@@ -213,6 +213,7 @@ window.cke_element = [ 'setting_content'];
                 url: '{{ route( 'admin.setting.lastestAppVersion' ) }}',
                 type: 'POST',
                 data: {
+                    is_bo: 10,
                     _token: '{{ csrf_token() }}',
                 },
                 success: function( response ) {

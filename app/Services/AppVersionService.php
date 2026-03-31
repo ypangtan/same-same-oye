@@ -22,9 +22,9 @@ use Carbon\Carbon;
 class AppVersionService
 {
     public static function lastestAppVersion( $request ) {
+        $platform = $request->platform ?? 1;
 
-        if( !empty( $request->platform ) ) {
-            $platform = $request->platform ?? 1;
+        if( empty( $request->is_bo ) ) {
             $app_version = AppVersion::where( 'platform', $platform )
                 ->first();
         } else {
