@@ -78,16 +78,25 @@ class SettingService {
         ] );
     }
 
+    
     public static function updateAppVersionSetting( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'version' => [ 'required' ],
-            'force_logout' => [ 'required', 'in:10,20' ],
+            'version_1' => [ 'required' ],
+            'force_logout_1' => [ 'required', 'in:10,20' ],
+            'version_2' => [ 'required' ],
+            'force_logout_2' => [ 'required', 'in:10,20' ],
+            // 'version_3' => [ 'required' ],
+            // 'force_logout_3' => [ 'required', 'in:10,20' ],
         ] );
 
         $attributeName = [
-            'version' => __( 'app_version.version' ),
-            'force_logout' => __( 'app_version.force_logout' ),
+            'version_1' => __( 'app_version.version' ),
+            'force_logout_1' => __( 'app_version.force_logout' ),
+            'version_2' => __( 'app_version.version' ),
+            'force_logout_2' => __( 'app_version.force_logout' ),
+            'version_3' => __( 'app_version.version' ),
+            'force_logout_3' => __( 'app_version.force_logout' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -99,12 +108,20 @@ class SettingService {
         DB::beginTransaction();
 
         try {
-            $updateAppVersions = AppVersion::get();
-            foreach( $updateAppVersions as $updateAppVersion ) {
-                $updateAppVersion->version = $request->version;
-                $updateAppVersion->force_logout = $request->force_logout;
-                $updateAppVersion->save();
-            }
+            $updateAppVersion = AppVersion::where( 'platform', 1 )->first();
+            $updateAppVersion->version = $request->version_1;
+            $updateAppVersion->force_logout = $request->force_logout_1;
+            $updateAppVersion->save();
+
+            $updateAppVersion = AppVersion::where( 'platform', 2 )->first();
+            $updateAppVersion->version = $request->version_2;
+            $updateAppVersion->force_logout = $request->force_logout_2;
+            $updateAppVersion->save();
+
+            // $updateAppVersion = AppVersion::where( 'platform', 3 )->first();
+            // $updateAppVersion->version = $request->version_3;
+            // $updateAppVersion->force_logout = $request->force_logout_3;
+            // $updateAppVersion->save();
 
             DB::commit();
 

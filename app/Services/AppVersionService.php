@@ -23,10 +23,13 @@ class AppVersionService
 {
     public static function lastestAppVersion( $request ) {
 
-        $platform = $request->platform ?? 1;
-
-        $app_version = AppVersion::where( 'platform', $platform )
-            ->first();
+        if( !empty( $request->platform ) ) {
+            $platform = $request->platform ?? 1;
+            $app_version = AppVersion::where( 'platform', $platform )
+                ->first();
+        } else {
+            $app_version = AppVersion::get();
+        }
 
         $app_version->append( [
             'notes',
