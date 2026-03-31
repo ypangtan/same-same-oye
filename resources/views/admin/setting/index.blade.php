@@ -15,30 +15,6 @@ $setting = 'setting';
             <div class="col-md-10">
                 <div class="tab-content p-2">
                     <div class="tab-pane fade show active" id="avs" role="tabpanel">
-                        <h5 class="card-title mb-0">{{ __( 'setting.app_version_settings' ) }}</h5>
-                        <hr>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="mb-3">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="{{ $setting }}_force_logout">
-                                        <label class="form-check-label" for="{{ $setting }}_force_logout">{{ __( 'setting.enable_force_logout' ) }}</label>
-                                    </div>
-                                </div>
-                                <div class="mb-3 row">
-                                    <label for="{{ $setting }}_version" class="col-sm-5 col-form-label">{{ __( 'setting.app_version' ) }}</label>
-                                    <div class="col-sm-7">
-                                        <input type="number" class="form-control form-control-sm" id="{{ $setting }}_version">
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="text-end">
-                                    <button class="btn btn-sm btn-primary" id="app_version_save">{{ __( 'template.save_changes' ) }}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="avs" role="tabpanel">
                         {{-- <h5 class="card-title mb-0">{{ __( 'setting.app_version_settings' ) }}</h5>
                         <hr> --}}
                         <div class="row">
