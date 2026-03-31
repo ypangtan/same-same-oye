@@ -64,4 +64,7 @@ return [
 
     'disclaimer_settings' => 'Disclaimer Settings',
     'disclaimer_content' => 'Disclaimer Content',
+
+    'app_store' => 'App Store',
+    'google_play' => 'Google Play Store',
 ];
