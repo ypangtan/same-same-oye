@@ -72,7 +72,7 @@ class User extends Model implements AuthenticatableContract
             $planDetail = $plan->plan()->first();
             if( $planDetail ) {
                 $name = explode( ' ', $planDetail->name ); 
-                return $name[0] . ' [Main Account]';
+                return $name[0] . ' [Main Account]' . '<br> Subscribed on ' . Carbon::parse( $plan->start_date )->format( 'd M Y' );
             }
         }
         $member = $this->subscriptionGroupMember()->where( 'status', 10 )->first();
@@ -90,7 +90,7 @@ class User extends Model implements AuthenticatableContract
             $planDetail = $plan->plan()->first();
             if( $planDetail ) {
                 $name = explode( ' ', $planDetail->name ); 
-                return $name[0] . ' [Sub Account]';
+                return $name[0] . ' [Sub Account]' . '<br> Subscribed on ' . Carbon::parse( $plan->start_date )->format( 'd M Y' );
             }
         }
 

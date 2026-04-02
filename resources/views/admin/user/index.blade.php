@@ -34,6 +34,12 @@ $columns = [
     ],
     [
         'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'user.subscription_date' ) ] ),
+        'id' => 'start_date',
+        'title' => __( 'user.subscription_date' ),
+    ],
+    [
+        'type' => 'date',
         'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ),
         'id' => 'created_date',
         'title' => __( 'datatables.created_date' ),
@@ -141,6 +147,7 @@ var statusMapper = @json( $data['status'] ),
         columns: [
             { data: null },
             { data: null },
+            { data: null },
             { data: 'created_at' },
             { data: 'first_name' },
             { data: 'last_name' },
@@ -173,6 +180,13 @@ var statusMapper = @json( $data['status'] ),
                     // Calculate the row number dynamically based on the page info
                     const pageInfo = dt_table.page.info();
                     return pageInfo.start + meta.row + 1; // Adjust for 1-based numbering
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "start_date" ) }}' ),
+                visiable: false,
+                render: function( data, type, row, meta ) {
+                    return '-' ;
                 },
             },
             {
@@ -361,6 +375,15 @@ var statusMapper = @json( $data['status'] ),
     document.addEventListener( 'DOMContentLoaded', function() {
 
         $( '#created_date' ).flatpickr( {
+            mode: 'range',
+            disableMobile: true,
+            onClose: function( selected, dateStr, instance ) {
+                window[$( instance.element ).data('id')] = $( instance.element ).val();
+                dt_table.draw();
+            }
+        } );
+        
+        $( '#start_date' ).flatpickr( {
             mode: 'range',
             disableMobile: true,
             onClose: function( selected, dateStr, instance ) {

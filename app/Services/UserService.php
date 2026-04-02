@@ -204,6 +204,41 @@ class UserService
             $filter = true;
         }
 
+        if ( !empty( $request->start_date ) ) {
+            if ( str_contains( $request->start_date, 'to' ) ) {
+                $dates = explode( ' to ', $request->start_date );
+
+                $startDate = explode( '-', $dates[0] );
+                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                
+                $endDate = explode( '-', $dates[1] );
+                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereHas( 'subscriptions', function ($query) use ($start, $end) {
+                    $query->whereBetween( 'start_date', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+                        ->where( 'type', 1 )
+                        ->where('status', 10)
+                        ->whereNotNull('end_date')
+                        ->whereDate('end_date', '>=', now());
+                } );
+            } else {
+
+                $dates = explode( '-', $request->start_date );
+
+                $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereHas( 'subscriptions', function ($query) use ($start, $end) {
+                    $query->whereBetween( 'start_date', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+                        ->where( 'type', 1 )
+                        ->where('status', 10)
+                        ->whereNotNull('end_date')
+                        ->whereDate('end_date', '>=', now());
+                } );
+            }
+            $filter = true;
+        }
+
         if ( !empty( $request->fullname ) ) {
             $model->where( 'fullname', 'LIKE', '%' . $request->fullname . '%' );
             $filter = true;

@@ -63,6 +63,7 @@ return [
     'type' => 'Type',
     'invitation' => 'Invitation',
     'plan' => 'Subscription Plan',
+    'subscription_date' => 'Subscription Date',
 
     'view_group_member' => 'View Group Member',
 
