@@ -64,14 +64,14 @@ class CheckExpiredSubscriptions extends Command
                     );
                 }
 
-                Log::channel('payment')->info('Subscription marked as expired', [
+                Log::channel('cronjob')->info('Subscription marked as expired', [
                     'subscription_id' => $subscription->id,
                     'user_id' => $subscription->user_id,
                     'end_date' => $subscription->end_date,
                 ]);
 
             } catch (\Exception $e) {
-                Log::channel('payment')->error('Failed to mark subscription as expired', [
+                Log::channel('cronjob')->error('Failed to mark subscription as expired', [
                     'subscription_id' => $subscription->id,
                     'error' => $e->getMessage(),
                 ]);

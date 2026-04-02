@@ -148,10 +148,17 @@ return [
             'level' => 'info',
         ],
 
+        'cronjob' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/cronjob.log'),
+            'level' => 'info',
+        ],
+
         'payment' => [
             'driver' => 'daily',
             'path' => storage_path('logs/payment.log'),
             'level' => 'debug',
+            'permission' => 0664,
             'days' => 30,
         ],
     ],

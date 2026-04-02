@@ -61,7 +61,7 @@ class CountdownTrial extends Command
                 );
             } catch ( \Throwable $th ) {
                 
-                Log::channel('payment')->info('Trial Subscription notify 3 day fail', [
+                Log::channel('cronjob')->info('Trial Subscription notify 3 day fail', [
                     'subscription_id' => $userSubscription->id,
                     'user_id' => $userSubscription->user_id,
                     'end_date' => $userSubscription->end_date,
@@ -85,7 +85,7 @@ class CountdownTrial extends Command
                 );
             } catch ( \Throwable $th ) {
                 
-                Log::channel('payment')->info('Trial Subscription notify 1 day fail', [
+                Log::channel('cronjob')->info('Trial Subscription notify 1 day fail', [
                     'subscription_id' => $userSubscription->id,
                     'user_id' => $userSubscription->user_id,
                     'end_date' => $userSubscription->end_date,
