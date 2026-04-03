@@ -27,6 +27,7 @@ return [
     'cant_invite_yourself' => 'You can\'t invite yourself.',
     'max_member_reached' => 'The group has reached the maximum number of members.',
     'user_already_invited' => 'The user has already been invited to this group.',
+    'accepted_date' => 'Accepted Date',
 
     'already_have_active_group_subscription' => 'You already have an active group subscription.',
     'invalid_invite' => 'The invite is invalid.',
