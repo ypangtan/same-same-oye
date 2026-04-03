@@ -184,7 +184,7 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "start_date" ) }}' ),
-                visiable: false,
+                visible: false,
                 render: function( data, type, row, meta ) {
                     return '-' ;
                 },
