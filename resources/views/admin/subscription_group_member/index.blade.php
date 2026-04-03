@@ -29,9 +29,9 @@ $columns = [
     ],
     [
         'type' => 'date',
-        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ),
-        'id' => 'created_date',
-        'title' => __( 'datatables.created_date' ),
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'subscription_group_member.accepted_date' ) ] ),
+        'id' => 'accepted_date',
+        'title' => __( 'subscription_group_member.accepted_date' ),
     ],
     [
         'type' => 'select',
@@ -87,7 +87,7 @@ $columns = [
                 { data: null },
                 { data: 'leader' },
                 { data: 'user' },
-                { data: 'created_at' },
+                { data: 'accepted_date' },
                 { data: 'status' },
             ],
             columnDefs: [
@@ -124,7 +124,7 @@ $columns = [
                     }
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "created_date" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "accepted_date" ) }}' ),
                     width: '10%',
                     render: function( data, type, row, meta ) {
                         return data ? data : '-' ;
@@ -146,7 +146,7 @@ $columns = [
         window['leader'] = '{{ Request( 'id' ) }}';
         $( '#leader' ).val( '{{ Request( 'id' ) }}' ).addClass( 'd-none' );
         
-        $( '#created_date' ).flatpickr( {
+        $( '#accepted_date' ).flatpickr( {
             mode: 'range',
             disableMobile: true,
             onClose: function( selected, dateStr, instance ) {
