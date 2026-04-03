@@ -214,12 +214,24 @@ class UserService
                 $endDate = explode( '-', $dates[1] );
                 $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
 
-                $model->whereHas( 'subscriptions', function ($query) use ($start, $end) {
-                    $query->whereBetween( 'start_date', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
-                        ->where( 'type', 1 )
-                        ->where('status', 10)
-                        ->whereNotNull('end_date')
-                        ->whereDate('end_date', '>=', now());
+                $model->where( function( $q ) use( $start, $end ) {
+                    $q->whereHas( 'subscriptions', function ($query) use ($start, $end) {
+                        $query->whereBetween( 'start_date', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+                            ->where( 'type', 1 )
+                            ->where('status', 10)
+                            ->whereNotNull('end_date')
+                            ->whereDate('end_date', '>=', now());
+                    } )->orWhereHas( 'subscriptionGroupMember', function ($sq) use ($start, $end) {
+                        $sq->whereHas( 'leader', function ( $ssq ) use ( $start, $end ) {
+                            $ssq->whereHas( 'subscriptions', function ($sssq) use ($start, $end) {
+                                $sssq->whereBetween( 'start_date', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+                                    ->where( 'type', 1 )
+                                    ->where('status', 10)
+                                    ->whereNotNull('end_date')
+                                    ->whereDate('end_date', '>=', now());
+                            } );
+                        });
+                    });
                 } );
             } else {
 
@@ -228,12 +240,24 @@ class UserService
                 $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
                 $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
 
-                $model->whereHas( 'subscriptions', function ($query) use ($start, $end) {
-                    $query->whereBetween( 'start_date', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
-                        ->where( 'type', 1 )
-                        ->where('status', 10)
-                        ->whereNotNull('end_date')
-                        ->whereDate('end_date', '>=', now());
+                $model->where( function( $q ) use( $start, $end ) {
+                    $q->whereHas( 'subscriptions', function ($query) use ($start, $end) {
+                        $query->whereBetween( 'start_date', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+                            ->where( 'type', 1 )
+                            ->where('status', 10)
+                            ->whereNotNull('end_date')
+                            ->whereDate('end_date', '>=', now());
+                    } )->orWhereHas( 'subscriptionGroupMember', function ($sq) use ($start, $end) {
+                        $sq->whereHas( 'leader', function ( $ssq ) use ( $start, $end ) {
+                            $ssq->whereHas( 'subscriptions', function ($sssq) use ($start, $end) {
+                                $sssq->whereBetween( 'start_date', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+                                    ->where( 'type', 1 )
+                                    ->where('status', 10)
+                                    ->whereNotNull('end_date')
+                                    ->whereDate('end_date', '>=', now());
+                            } );
+                        });
+                    });
                 } );
             }
             $filter = true;
