@@ -21,6 +21,7 @@ class SubscriptionGroupMember extends Model
     protected $fillable = [
         'user_id',
         'leader_id',
+        'accepted_date',
         'status',
     ];
 
@@ -43,6 +44,7 @@ class SubscriptionGroupMember extends Model
     protected static $logAttributes = [
         'user_id',
         'leader_id',
+        'accepted_date',
         'status',
     ];
 
