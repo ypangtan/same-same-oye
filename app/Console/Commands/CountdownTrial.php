@@ -42,8 +42,8 @@ class CountdownTrial extends Command
     {
 
         $now = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' );
-        $day1 = $now->copy()->subDay();
-        $day3 = $now->copy()->subDays(3);
+        $day1 = $now->copy()->addDay();
+        $day3 = $now->copy()->addDays(3);
 
         $notifyUserSubscription = UserSubscription::where( 'type', 2 )
             ->where( 'status', 10 )
