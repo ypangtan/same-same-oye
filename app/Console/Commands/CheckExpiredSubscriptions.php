@@ -53,6 +53,7 @@ class CheckExpiredSubscriptions extends Command
                 if( $dryrun ) {
                     $this->info( "Processing subscription ID: {$subscription->id}, User ID: {$subscription->user_id}" );
                 } else {
+                    $this->info( "Processing subscription ID: {$subscription->id}, User ID: {$subscription->user_id}" );
                     $subscription->status = 20;
                     $subscription->save();
 
