@@ -28,6 +28,12 @@ $columns = [
         'title' => __( 'subscription_group_member.user' ),
     ],
     [
+        'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ),
+        'id' => 'created_date',
+        'title' => __( 'datatables.created_date' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -81,6 +87,7 @@ $columns = [
                 { data: null },
                 { data: 'leader' },
                 { data: 'user' },
+                { data: 'created_at' },
                 { data: 'status' },
             ],
             columnDefs: [
@@ -117,6 +124,13 @@ $columns = [
                     }
                 },
                 {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "created_date" ) }}' ),
+                    width: '10%',
+                    render: function( data, type, row, meta ) {
+                        return data ? data : '-' ;
+                    },
+                },
+                {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
@@ -131,6 +145,16 @@ $columns = [
     document.addEventListener( 'DOMContentLoaded', function() {
         window['leader'] = '{{ Request( 'id' ) }}';
         $( '#leader' ).val( '{{ Request( 'id' ) }}' ).addClass( 'd-none' );
+        
+        $( '#created_date' ).flatpickr( {
+            mode: 'range',
+            disableMobile: true,
+            onClose: function( selected, dateStr, instance ) {
+                window[$( instance.element ).data('id')] = $( instance.element ).val();
+                dt_table.draw();
+            }
+        } );
+        
     } );
 
 </script>
