@@ -183,7 +183,7 @@ window.cke_element = [ 'trending_content_edit_desc'];
 
                     fileID = response.image;
 
-                    songPath = response.song_url;
+                    songPath = response.song_url ?? '';
                     file2ID = response.file;
 
                     imagePath = response.image_url;

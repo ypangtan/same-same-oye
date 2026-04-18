@@ -51,7 +51,7 @@ class TrendingContent extends Model
             
             return StorageService::get( $this->attributes['file'] );
         } else {
-            return $this->attributes['url'];
+            return '';
         }
     }
 
