@@ -264,7 +264,7 @@ window.cke_element = [ 'trending_content_edit_desc'];
                             // ---------- Existing file ----------
                             if (songPath) {
 
-                                file_name = song_file ?? 'Default.mp3';
+                                file_name = 'Default.mp3';
                                 let myDropzone = this,
                                     mockFile = { name: file_name, size: 1024, accepted: true };
 
