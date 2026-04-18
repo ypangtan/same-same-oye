@@ -122,7 +122,7 @@ var statusMapper = @json( $data['status'] ),
         columnDefs: [
             {
                 // Add checkboxes to the first column
-                targets: 0,
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "select_row" ) }}' ),
                 orderable: false,
                 className: 'text-center',
                 render: function (data, type, row) {
@@ -233,7 +233,7 @@ var statusMapper = @json( $data['status'] ),
         } );
 
     }
-    
+
     document.addEventListener( 'DOMContentLoaded', function() {
 
         $( '#created_date' ).flatpickr( {
