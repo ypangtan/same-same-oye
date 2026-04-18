@@ -155,11 +155,10 @@ return [
         ],
 
         'payment' => [
-            'driver' => 'daily',
+            'driver' => 'single',
             'path' => storage_path('logs/payment.log'),
             'level' => 'debug',
             'permission' => 0664,
-            'days' => 30,
         ],
     ],
 
