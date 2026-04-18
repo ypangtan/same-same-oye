@@ -256,6 +256,15 @@
                                 </li>
                                 @endcan
 
+                                @can( 'view trending_contents' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TrendingContentController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.trending_content.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-report-profit"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.trending_contents' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
                                 @can( 'view settings' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SettingController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.setting.index' ) }}" class="nk-menu-link">
