@@ -213,8 +213,8 @@ class TrendingContentService
             $updateTrendingContent->title = $request->title;
             $updateTrendingContent->desc = $request->desc;
             $updateTrendingContent->image = $request->image;
-            $updateTrendingContent->file = $request->upload_type == 1 ? $request->file : null,
-            $updateTrendingContent->url = $request->upload_type == 2 ? $request->url : null,
+            $updateTrendingContent->file = $request->upload_type == 1 ? $request->file : null;
+            $updateTrendingContent->url = $request->upload_type == 2 ? $request->url : null;
             $updateTrendingContent->upload_type = $request->upload_type;
             $updateTrendingContent->save();
 
