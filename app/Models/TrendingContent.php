@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageService;
 use DateTimeInterface;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
