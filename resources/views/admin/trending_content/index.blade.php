@@ -10,7 +10,7 @@
                 <div class="toggle-expand-content" data-content="pageMenu">
                     <ul class="nk-block-tools g-3">
                         <li class="nk-block-tools-opt">
-                            <a href="{{ route( 'admin.trending_content.add' ) . '?type=' . $type . '&parent_route=' . $parent_route }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
+                            <a href="{{ route( 'admin.trending_content.add' ) . '&parent_route=' . $parent_route }}" class="btn btn-primary">{{ __( 'template.add' ) }}</a>
                         </li>
                     </ul>
                 </div>
@@ -94,7 +94,6 @@ var statusMapper = @json( $data['status'] ),
         ajax: {
             url: '{{ route( 'admin.trending_content.allTrendingContents' ) }}',
             data: {
-                'type': '{{ $type }}',
                 '_token': '{{ csrf_token() }}',
             },
             dataSrc: 'trending_contents',
