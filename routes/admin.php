@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\{
     SubscriptionGroupMemberController,
     SubscriptionPlanController,
     TalkController,
+    TrendingContentController,
     UserSubscriptionController,
     WebsiteBannerController,
 };
@@ -238,6 +239,27 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
                 Route::post( 'all-otp-logs', [ OtpLogController::class, 'allOtpLogs' ] )->name( 'admin.otp_log.allOtpLogs' );
                 Route::post( 'one-otp-log', [ OtpLogController::class, 'oneOtpLog' ] )->name( 'admin.otp_log.oneOtpLog' );
+            } );
+
+            Route::prefix( 'trending-contents' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view trending_contents' ] ], function() {
+                    Route::get( '/', [ TrendingContentController::class, 'index' ] )->name( 'admin.module_parent.trending_content.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add trending_contents' ] ], function() {
+                    Route::get( 'add', [ TrendingContentController::class, 'add' ] )->name( 'admin.trending_content.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit items' ] ], function() {
+                    Route::get( 'edit', [ TrendingContentController::class, 'edit' ] )->name( 'admin.trending_content.edit' );
+                } );
+
+                Route::post( 'all-trending_contents', [ TrendingContentController::class, 'allTrendingContents' ] )->name( 'admin.trending_content.allTrendingContents' );
+                Route::post( 'one-trending-content', [ TrendingContentController::class, 'oneTrendingContent' ] )->name( 'admin.trending_content.oneTrendingContent' );
+                Route::post( 'create-trending-content', [ TrendingContentController::class, 'createTrendingContent' ] )->name( 'admin.trending_content.createTrendingContent' );
+                Route::post( 'update-trending-content', [ TrendingContentController::class, 'updateTrendingContent' ] )->name( 'admin.trending_content.updateTrendingContent' );
+                Route::post( 'update-trending-content-status', [ TrendingContentController::class, 'updateTrendingContentStatus' ] )->name( 'admin.trending_content.updateTrendingContentStatus' );
+                Route::post( 'cke-upload', [ TrendingContentController::class, 'ckeUpload' ] )->name( 'admin.trending_content.ckeUpload' );
+                Route::post( 'image-upload', [ TrendingContentController::class, 'imageUpload' ] )->name( 'admin.trending_content.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+                Route::post( 'song-upload', [ TrendingContentController::class, 'songUpload' ] )->name( 'admin.trending_content.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
             } );
 
             Route::prefix( 'items' )->group( function() {

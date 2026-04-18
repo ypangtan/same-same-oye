@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\{
     SearchController,
     WebsiteBannerController,
     SubscriptionGroupMemberController,
+    TrendingContentController,
     TypeController,
     UserPlaylistController,
 };
@@ -92,13 +93,20 @@ Route::prefix( 'types' )->group( function() {
 Route::prefix( 'pop_announcements' )->group( function() {
     Route::post( '/', [ AnnouncementController::class, 'getAllPopAnnouncements' ] );
 } );
+
 Route::prefix( 'banners' )->group( function() {
     Route::post( '/get-all-banners', [ BannerController::class, 'getBanners' ] );
     Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
 } );
+
 Route::prefix( 'website-banners' )->group( function() {
     Route::post( '/get-all-website-banners', [ WebsiteBannerController::class, 'getWebsiteBanners' ] );
     Route::post( '/get-one-website-banner', [ WebsiteBannerController::class, 'getWebsiteBanner' ] );
+} );
+
+Route::prefix( 'trending-contents' )->group( function() {
+    Route::post( '/get-all-trending-contents', [ TrendingContentController::class, 'getTrendingContents' ] );
+    Route::post( '/get-one-trending-content', [ TrendingContentController::class, 'getTrendingContent' ] );
 } );
 
 Route::prefix( 'plans' )->group( function() {
