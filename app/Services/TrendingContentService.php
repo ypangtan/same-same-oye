@@ -28,7 +28,7 @@ class TrendingContentService
             $dir = $request->input( 'order.0.dir' ) ?? 'DESC';
             switch ( $request->input( 'order.0.column' ) ) {
                 default:
-                    $trending_content->orderBy( 'created_at', $dir );
+                    $trending_content->orderBy( 'priority', 'asc' );
                     break;
             }
         }
@@ -249,9 +249,26 @@ class TrendingContentService
         ] );
     }
 
+    public static function updateOrder( $request ) {
+
+        $updates = $request->input( 'updates' );
+
+        foreach( $updates as $update ) {
+            $ad = TrendingContent::find( \Helper::decode( $update['id'] ) );
+            if( $ad ) {
+                $ad->priority = $update['position'];
+                $ad->save();
+            }
+        }
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.trending_contents' ) ) ] ),
+        ] );
+    }
+
     public static function getTrendingContents( $request ) {
 
-        $trending_contents = TrendingContent::select( 'trending_contents.*' )->where( 'trending_contents.status', 10 );
+        $trending_contents = TrendingContent::select( 'trending_contents.*' )->where( 'trending_contents.status', 10 )->orderBy( 'priority', 'asc' );
 
         $trending_contents = $trending_contents->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 

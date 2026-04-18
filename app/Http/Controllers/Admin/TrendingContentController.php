@@ -91,4 +91,8 @@ class TrendingContentController extends Controller
         ] );
         return FileService::imageUpload( $request );
     }
+
+    public function updateOrder( Request $request ) {
+        return TrendingContentService::updateOrder( $request );
+    }
 }

@@ -21,6 +21,7 @@
 </div><!-- .nk-block-head -->
 
 <?php
+$enableReorder = 1;
 
 $columns = [
     [
@@ -62,6 +63,15 @@ $columns = [
         'title' => __( 'datatables.action' ),
     ],
 ];
+
+if ( $enableReorder == 1 ) {
+    array_unshift( $columns,  [
+        'type' => 'default',
+        'id' => 'dt_reorder',
+        'title' => '',
+        'reorder' => 'yes',
+    ] );
+}
 ?>
 
 <x-data-tables id="trending_content_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
@@ -197,7 +207,8 @@ var statusMapper = @json( $data['status'] ),
         ],
     },
     table_no = 0,
-    timeout = null;
+    timeout = null,
+    reorderPath = '{{ route( 'admin.trending_content.updateOrder' ) }}';
 
     document.addEventListener( 'DOMContentLoaded', function() {
 

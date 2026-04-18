@@ -26,6 +26,7 @@ class TrendingContent extends Model
         'image',
         'file',
         'url',
+        'priority',
         'status',
     ];
 
@@ -83,6 +84,7 @@ class TrendingContent extends Model
         'image',
         'file',
         'url',
+        'priority',
         'status',
     ];
 

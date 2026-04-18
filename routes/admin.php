@@ -260,6 +260,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'cke-upload', [ TrendingContentController::class, 'ckeUpload' ] )->name( 'admin.trending_content.ckeUpload' );
                 Route::post( 'image-upload', [ TrendingContentController::class, 'imageUpload' ] )->name( 'admin.trending_content.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'song-upload', [ TrendingContentController::class, 'songUpload' ] )->name( 'admin.trending_content.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+                Route::post( 'update-order', [ TrendingContentController::class, 'updateOrder' ] )->name( 'admin.trending_content.updateOrder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
             } );
 
             Route::prefix( 'items' )->group( function() {
