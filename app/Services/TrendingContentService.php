@@ -153,8 +153,8 @@ class TrendingContentService
                 'title' => $request->title,
                 'desc' => $request->desc,
                 'image' => $request->image,
-                'file' => $request->file,
-                'url' => $request->url,
+                'file' => $request->upload_type == 1 ? $request->file : null,
+                'url' => $request->upload_type == 2 ? $request->url : null,
                 'upload_type' => $request->upload_type,
                 'status' => 10,
             ] );
@@ -213,8 +213,8 @@ class TrendingContentService
             $updateTrendingContent->title = $request->title;
             $updateTrendingContent->desc = $request->desc;
             $updateTrendingContent->image = $request->image;
-            $updateTrendingContent->file = $request->file;
-            $updateTrendingContent->url = $request->url;
+            $updateTrendingContent->file = $request->upload_type == 1 ? $request->file : null,
+            $updateTrendingContent->url = $request->upload_type == 2 ? $request->url : null,
             $updateTrendingContent->upload_type = $request->upload_type;
             $updateTrendingContent->save();
 
