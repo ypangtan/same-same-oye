@@ -138,6 +138,13 @@ window.cke_element = [ 'pop_announcement_create_en_text', 'pop_announcement_crea
         let fc = '#{{ $pop_announcement_create }}',
             fileID = '';
 
+        flatpickr( ac + '_publishing_date', {
+            
+            dateFormat: 'Y-m-d',
+            disableMobile: true,
+            allowInput: true,
+        } );
+
         $( fc + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.pop_announcement.index' ) }}';
         } );

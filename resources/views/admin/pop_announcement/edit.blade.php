@@ -136,7 +136,14 @@ window.cke_element = [ 'pop_announcement_edit_en_text', 'pop_announcement_edit_z
     document.addEventListener( 'DOMContentLoaded', function() {
 
         let fe = '#{{ $pop_announcement_edit }}',
-                fileID = '';
+            fileID = '';
+
+        flatpickr( ac + '_publishing_date', {
+            
+            dateFormat: 'Y-m-d',
+            disableMobile: true,
+            allowInput: true,
+        } );
 
         $( fe + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.pop_announcement.index' ) }}';
