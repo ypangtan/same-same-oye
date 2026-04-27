@@ -154,13 +154,13 @@ class MarketingNotificationService {
             'display_status'
         ] );
 
-        if( $userNotification->user_notification_users ) {
-            foreach( $userNotification->user_notification_users as $userNotificationUser ) {
-                // if( $userNotificationUser->user ) {
+        if( $userNotification->UserNotificationUsers ) {
+            foreach( $userNotification->UserNotificationUsers as $userNotificationUser ) {
+                if( $userNotificationUser->user ) {
                     $userNotificationUser->user->append( [
                         'encrypted_id',
                     ] );
-                // }   
+                }   
             }
         }
         return response()->json( $userNotification );
