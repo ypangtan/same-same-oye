@@ -30,6 +30,7 @@ class Collection extends Model
         'membership_level',
         'display_type',
         'status',
+        'publishing_date',
     ];
 
     public function searchCollection() {
@@ -107,6 +108,7 @@ class Collection extends Model
         'priority',
         'membership_level',
         'status',
+        'publishing_date',
     ];
 
     protected static $logName = 'collections';

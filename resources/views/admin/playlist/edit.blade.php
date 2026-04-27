@@ -91,6 +91,13 @@ $parent_route = $data['parent_route'] ?? '';
 
                     <input type="hidden" name="tags" id="{{ $playlist_edit }}_hide_items">
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $playlist_edit }}_publishing_date" class="col-sm-5 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $playlist_edit }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $playlist_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -120,6 +127,13 @@ window.cke_element = [ 'playlist_edit_desc'];
             file_type = '',
             selectedItems = [];
 
+        flatpickr( de + '_publishing_date', {
+            
+            dateFormat: 'Y-m-d',
+            disableMobile: true,
+            allowInput: true,
+        } );
+
         $( de + '_tag').tagsinput();
 
         $( de + '_cancel' ).click( function() {
@@ -146,6 +160,7 @@ window.cke_element = [ 'playlist_edit_desc'];
             formData.append( 'image', fileID ?? '' );
             formData.append( 'file_type', file_type ?? '' );
             formData.append('items', JSON.stringify( selectedItems ) );
+            formData.append( 'publishing_date', $( de + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -200,6 +215,7 @@ window.cke_element = [ 'playlist_edit_desc'];
                     $( de + '_en_name' ).val( response.en_name ?? '' );
                     $( de + '_zh_name' ).val( response.zh_name ?? '' );
                     editors['playlist_edit_desc'].setData( response.desc ?? '' );
+                    $( de + '_publishing_date' ).val( response.publishing_date ?? '' );
                     
                     $.each( response.tags, function( i, v ) {
                         $( de + '_tag').tagsinput( 'add', v.tag );

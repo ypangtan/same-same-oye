@@ -31,6 +31,7 @@ class Banner extends Model
         'description',
         'sequence',
         'status',
+        'publishing_date',
     ];
 
     public function getImagePathAttribute() {

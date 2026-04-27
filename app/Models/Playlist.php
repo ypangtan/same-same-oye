@@ -33,6 +33,7 @@ class Playlist extends Model
         'item_id',
         'file_type',
         'status',
+        'publishing_date',
     ];
 
     public function getDisplayTagAttribute() {
@@ -135,6 +136,7 @@ class Playlist extends Model
         'item_id',
         'file_type',
         'status',
+        'publishing_date',
     ];
 
     protected static $logName = 'playlists';

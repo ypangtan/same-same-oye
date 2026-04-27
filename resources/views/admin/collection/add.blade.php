@@ -85,6 +85,13 @@ $parent_route = $data['parent_route'] ?? '';
                     <input type="hidden" name="tags" id="{{ $collection_create }}_hide_playlists">
                 </div>
                 
+                <div class="mb-3 row">
+                    <label for="{{ $collection_create }}_publishing_date" class="col-sm-5 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $collection_create }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $collection_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -124,6 +131,13 @@ $parent_route = $data['parent_route'] ?? '';
             fileID = '',
             selectedPlaylists = [];
 
+        flatpickr( dc + '_publishing_date', {
+            
+            dateFormat: 'Y-m-d',
+            disableMobile: true,
+            allowInput: true,
+        } );
+
         $( dc + '_cancel' ).click( function() {
             window.location.href = '{{ $parent_route }}';
         } );
@@ -144,7 +158,7 @@ $parent_route = $data['parent_route'] ?? '';
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
             formData.append( 'image', fileID ?? '' );
             formData.append('playlists', JSON.stringify( selectedPlaylists ) );
-            
+            formData.append( 'publishing_date', $( dc + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {

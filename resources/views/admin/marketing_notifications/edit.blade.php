@@ -119,6 +119,13 @@ $announcement_edit = 'announcement_edit';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $announcement_edit }}_publishing_date" class="col-sm-4 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control form-control-sm" id="{{ $announcement_edit }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $announcement_edit}}_cancel" type="button" class="btn btn-sm btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -147,6 +154,13 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
         let ae = '#{{ $announcement_edit }}',
             fileID = '';
 
+        flatpickr( ae + '_publishing_date', {
+            
+            dateFormat: 'Y-m-d',
+            disableMobile: true,
+            allowInput: true,
+        } );
+
         $( ae + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.marketing_notifications.index' ) }}';
         } );
@@ -173,6 +187,7 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
             formData.append( 'type', $( ae + '_type' ).val() );
             formData.append( 'users', $( ae + '_users' ).val() );
             formData.append( 'all_users', all_users );
+            formData.append( 'publishing_date', $( ae + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -228,6 +243,7 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
                     $( ae + '_url_slug' ).val( response.url_slug );
                     $( ae + '_en_title' ).val( response.en_title ?? response.title.en );
                     $( ae + '_zh_title' ).val( response.zh_title ?? response.title.zh );
+                    $( ae + '_publishing_date' ).val( response.publishing_date ?? '' );
                     editors['announcement_edit_en_content'].setData( response.en_content ?? ( response.content.en ?? '' ) );
                     editors['announcement_edit_zh_content'].setData( response.zh_content ?? ( response.content.zh ?? '' ) );
                     $( ae + '_type' ).val( response.type ).change();

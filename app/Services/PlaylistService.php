@@ -242,6 +242,7 @@ class PlaylistService
                 'membership_level' => $request->membership_level,
                 'file_type' => $request->file_type,
                 'status' => 10,
+                'publishing_date' => $request->publishing_date ?: null,
             ] );
 
             if( !empty( $request->tag ) ) {
@@ -353,6 +354,7 @@ class PlaylistService
             $updatePlaylist->image = $request->image;
             $updatePlaylist->membership_level = $request->membership_level;
             $updatePlaylist->file_type = $request->file_type;
+            $updatePlaylist->publishing_date = $request->publishing_date ?: null;
             $updatePlaylist->save();
 
             $deleteTag = PlaylistTag::where( 'playlist_id', $updatePlaylist->id )
@@ -484,7 +486,10 @@ class PlaylistService
                     $sq->where( 'categories.id', $request->category_id );
                 });
             })
-            ->where('playlists.status', 10);
+            ->where('playlists.status', 10)
+            ->where( function( $q ) {
+                $q->whereNull( 'playlists.publishing_date' )->orWhereDate( 'playlists.publishing_date', '<=', now() );
+            } );
 
         if( !auth()->check() || auth()->user()->membership == 0 ) {
             // for membership level filter

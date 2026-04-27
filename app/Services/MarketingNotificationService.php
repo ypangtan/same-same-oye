@@ -213,6 +213,7 @@ class MarketingNotificationService {
                 'system_content' => NULL,
                 'system_data' => NULL,
                 'meta_data' => NULL,
+                'publishing_date' => $request->publishing_date ?: null,
             ] );
 
             $file = FileManager::find( $request->image );
@@ -340,6 +341,7 @@ class MarketingNotificationService {
 
             $updateAnnouncement->is_broadcast = $is_broadcast;
             $updateAnnouncement->type = $request->type;
+            $updateAnnouncement->publishing_date = $request->publishing_date ?: null;
             $updateAnnouncement->save();
             
             if ( $request->image ) {
@@ -394,7 +396,16 @@ class MarketingNotificationService {
 
         $marketingNotificationsIds = UserNotificationUser::where( 'user_id', auth()->user()->id )->pluck('user_notification_id');
 
-        $marketingNotificationss = UserNotification::select('user_notifications.*' )->whereIn( 'id', $marketingNotificationsIds )->orWhere( 'is_broadcast', 10 )->where('status' , 10);
+        $marketingNotificationss = UserNotification::select('user_notifications.*' )
+            ->where( function( $q ) use ( $marketingNotificationsIds ) {
+                $q->whereIn( 'id', $marketingNotificationsIds )
+                  ->orWhere( function( $q2 ) {
+                      $q2->where( 'is_broadcast', 10 )->where( 'status', 10 );
+                  } );
+            } )
+            ->where( function( $q ) {
+                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', now() );
+            } );
 
         $marketingNotificationss->orderBy( 'user_notifications.created_at', 'DESC' );
 

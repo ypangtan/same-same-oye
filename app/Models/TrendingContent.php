@@ -28,6 +28,7 @@ class TrendingContent extends Model
         'url',
         'priority',
         'status',
+        'publishing_date',
     ];
 
     public function getImageUrlAttribute() {

@@ -218,4 +218,7 @@ return [
     'banners' => 'Banners',
     'announcement_rewards' => 'Announcement Rewards History',
     'reward_histories' => 'Reward Histories',
+
+    'publishing_date' => 'Publishing Date',
+    'publishing_date_placeholder' => 'Leave empty to publish immediately',
 ];

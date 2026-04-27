@@ -118,6 +118,13 @@ $announcement_create = 'announcement_create';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $announcement_create }}_publishing_date" class="col-sm-4 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control form-control-sm" id="{{ $announcement_create }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $announcement_create }}_cancel" type="button" class="btn btn-sm btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -146,6 +153,13 @@ window.cke_element = [ 'announcement_create_en_content', 'announcement_create_zh
         let ac = '#announcement_create',
             fileID = '';
 
+        flatpickr( ac + '_publishing_date', {
+            
+            dateFormat: 'Y-m-d',
+            disableMobile: true,
+            allowInput: true,
+        } );
+
         $( ac + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.marketing_notifications.index' ) }}';
         } );
@@ -171,6 +185,7 @@ window.cke_element = [ 'announcement_create_en_content', 'announcement_create_zh
             formData.append( 'url_slug', $( ac + '_url_slug' ).val() );
             formData.append( 'all_users', all_users );
             formData.append( 'image', fileID );
+            formData.append( 'publishing_date', $( ac + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {

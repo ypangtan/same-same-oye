@@ -66,6 +66,13 @@ $trending_content_create = 'trending_content_create';
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $trending_content_create }}_publishing_date" class="col-sm-5 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $trending_content_create }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $trending_content_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -94,6 +101,13 @@ window.cke_element = [ 'trending_content_create_desc'];
             fileID = '',
             file2ID = '',
             songPath = '';
+
+        flatpickr( dc + '_publishing_date', {
+            
+            dateFormat: 'Y-m-d',
+            disableMobile: true,
+            allowInput: true,
+        } );
 
         $( dc + '_upload_type' ).change( function() {
             let selectedType = $( this ).val();
@@ -126,6 +140,7 @@ window.cke_element = [ 'trending_content_create_desc'];
             formData.append( 'upload_type', $( dc + '_upload_type' ).val() ?? '' );
             formData.append( 'url', $( dc + '_url' ).val() ?? '' );
             formData.append( 'file', file2ID ?? '' );
+            formData.append( 'publishing_date', $( dc + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {

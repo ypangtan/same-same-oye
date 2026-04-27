@@ -32,6 +32,7 @@ class WebsiteBanner extends Model
         'description',
         'sequence',
         'status',
+        'publishing_date',
     ];
 
     public function getImagePathAttribute() {
@@ -82,6 +83,7 @@ class WebsiteBanner extends Model
         'priority',
         'sequence',
         'status',
+        'publishing_date',
     ];
 
     protected static $logName = 'website_banners';

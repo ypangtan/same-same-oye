@@ -166,6 +166,9 @@ class WebsiteBannerService
         try {
             $updateWebsiteBanner = WebsiteBanner::find( $request->id );
             $updateWebsiteBanner->url = $request->url;
+            if ( $request->has( 'publishing_date' ) ) {
+                $updateWebsiteBanner->publishing_date = $request->publishing_date ?: null;
+            }
             $updateWebsiteBanner->save();
 
             DB::commit();
@@ -405,6 +408,9 @@ class WebsiteBannerService
 
     public static function getWebsiteBanners( $request ) {
         $website_banners = WebsiteBanner::where('status', 10)
+        ->where( function( $q ) {
+            $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', now() );
+        } )
         ->orderBy( 'sequence' );
 
         $website_banners = $website_banners->get();

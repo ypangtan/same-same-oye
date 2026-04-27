@@ -35,6 +35,7 @@ class UserNotification extends Model
         'type',
         'is_broadcast',
         'key',
+        'publishing_date',
     ];
 
     protected $appends = [

@@ -176,6 +176,9 @@ class BannerService
         try {
             $updateBanner = Banner::find( $request->id );
             $updateBanner->url = $request->url;
+            if ( $request->has( 'publishing_date' ) ) {
+                $updateBanner->publishing_date = $request->publishing_date ?: null;
+            }
             $updateBanner->save();
 
             DB::commit();
@@ -415,6 +418,9 @@ class BannerService
 
     public static function getBanners( $request ) {
         $banners = Banner::where('status', 10)
+        ->where( function( $q ) {
+            $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', now() );
+        } )
         ->orderBy( 'sequence' );
 
         $banners = $banners->get();

@@ -157,6 +157,7 @@ class TrendingContentService
                 'url' => $request->upload_type == 2 ? $request->url : null,
                 'upload_type' => $request->upload_type,
                 'status' => 10,
+                'publishing_date' => $request->publishing_date ?: null,
             ] );
 
             DB::commit();
@@ -216,6 +217,7 @@ class TrendingContentService
             $updateTrendingContent->file = $request->upload_type == 1 ? $request->file : null;
             $updateTrendingContent->url = $request->upload_type == 2 ? $request->url : null;
             $updateTrendingContent->upload_type = $request->upload_type;
+            $updateTrendingContent->publishing_date = $request->publishing_date ?: null;
             $updateTrendingContent->save();
 
             DB::commit();
@@ -268,7 +270,12 @@ class TrendingContentService
 
     public static function getTrendingContents( $request ) {
 
-        $trending_contents = TrendingContent::select( 'trending_contents.*' )->where( 'trending_contents.status', 10 )->orderBy( 'priority', 'asc' );
+        $trending_contents = TrendingContent::select( 'trending_contents.*' )
+            ->where( 'trending_contents.status', 10 )
+            ->where( function( $q ) {
+                $q->whereNull( 'trending_contents.publishing_date' )->orWhereDate( 'trending_contents.publishing_date', '<=', now() );
+            } )
+            ->orderBy( 'priority', 'asc' );
 
         $trending_contents = $trending_contents->paginate( empty( $request->per_page ) ? 100 : $request->per_page );
 

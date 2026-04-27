@@ -66,6 +66,13 @@ $trending_content_edit = 'trending_content_edit';
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $trending_content_edit }}_publishing_date" class="col-sm-5 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="{{ $trending_content_edit }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $trending_content_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -93,6 +100,13 @@ window.cke_element = [ 'trending_content_edit_desc'];
         let de = '#{{ $trending_content_edit }}',
             fileID = '',
             file2ID = '';
+
+        flatpickr( de + '_publishing_date', {
+            
+            dateFormat: 'Y-m-d',
+            disableMobile: true,
+            allowInput: true,
+        } );
 
         $( de + '_upload_type' ).change( function() {
             let selectedType = $( this ).val();
@@ -126,6 +140,7 @@ window.cke_element = [ 'trending_content_edit_desc'];
             formData.append( 'file', file2ID ?? '' );
             formData.append( 'url', $( de + '_url' ).val() ?? '' );
             formData.append( 'upload_type', $( de + '_upload_type' ).val() ?? '' );
+            formData.append( 'publishing_date', $( de + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -180,6 +195,7 @@ window.cke_element = [ 'trending_content_edit_desc'];
                     $( de + '_upload_type' ).val( response.upload_type ).trigger( 'change' );
                     $( de + '_url' ).val( response.url );
                     editors['trending_content_edit_desc'].setData( response.desc ?? '' );
+                    $( de + '_publishing_date' ).val( response.publishing_date ?? '' );
 
                     fileID = response.image;
 

@@ -216,6 +216,7 @@ class CollectionService
                 'display_type' => $request->display_type,
                 'priority' => Collection::max( 'priority' ) + 1,
                 'status' => 10,
+                'publishing_date' => $request->publishing_date ?: null,
             ] );
 
             $playlists = json_decode( $request->playlists, true );
@@ -292,6 +293,7 @@ class CollectionService
             $updateCollection->image = $request->image;
             $updateCollection->membership_level = $request->membership_level;
             $updateCollection->display_type = $request->display_type;
+            $updateCollection->publishing_date = $request->publishing_date ?: null;
             $updateCollection->save();
 
             $playlists = json_decode( $request->playlists, true );
@@ -385,8 +387,11 @@ class CollectionService
             ->when( !empty( $request->type_id ), function ( $q ) use ( $request ) {
                 $q->where( 'type_id', $request->type_id );
             } )
-            ->where( 'status', 10 );
-            
+            ->where( 'status', 10 )
+            ->where( function( $q ) {
+                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', now() );
+            } );
+
         if( !auth()->check() || auth()->user()->membership == 0 ) {
             $collections->where( 'collections.membership_level', 0 );
         }
