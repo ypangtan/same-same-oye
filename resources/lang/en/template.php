@@ -136,6 +136,7 @@ return [
 
     'sign_out' => 'Sign out',
 
+    'replace_image' => 'Replace Image',
     'drop_file_or_click_to_upload' => 'Drop file here or click to upload.',
     'drop_files_or_click_to_upload' => 'Drop files here or click to upload.',
 

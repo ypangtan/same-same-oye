@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Services\{
     BannerService,
+    FileService,
 };
 
 use App\Models\{
@@ -154,6 +155,17 @@ class BannerController extends Controller
 
     public function updateBannerUrl( Request $request ) {
         return BannerService::updateBannerUrl( $request );
-    } 
-    
+    }
+
+    public function updateBannerImage( Request $request ) {
+        return BannerService::updateBannerImage( $request );
+    }
+
+    public function imageUpload( Request $request ) {
+        $request->merge( [
+            'source' => 'image/banner'
+        ] );
+        return FileService::imageUpload( $request );
+    }
+
 }

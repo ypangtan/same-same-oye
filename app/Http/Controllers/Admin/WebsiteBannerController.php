@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Services\{
+    FileService,
     WebsiteBannerService,
 };
 
@@ -154,6 +155,13 @@ class WebsiteBannerController extends Controller
 
     public function updateWebsiteBannerUrl( Request $request ) {
         return WebsiteBannerService::updateWebsiteBannerUrl( $request );
-    } 
-    
+    }
+
+    public function imageUpload( Request $request ) {
+        $request->merge( [
+            'source' => 'image/website_banner'
+        ] );
+        return FileService::imageUpload( $request );
+    }
+
 }

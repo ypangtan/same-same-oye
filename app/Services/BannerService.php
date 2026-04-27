@@ -112,31 +112,9 @@ class BannerService
 
         try {
             $updateBanner = Banner::find( $request->id );
-    
             $updateBanner->url = $request->url;
-            
-            $image = explode( ',', $request->image );
-
-            $imageFiles = FileManager::whereIn( 'id', $image )->get();
-
-            if ( $imageFiles ) {
-                foreach ( $imageFiles as $imageFile ) {
-
-                    $fileName = explode( '/', $imageFile->file );
-                    $fileExtention = pathinfo($fileName[1])['extension'];
-
-                    $target = 'banner/' . $updateBanner->id . '/' . $fileName[1];
-                    Storage::disk( 'public' )->move( $imageFile->file, $target );
-
-                   $updateBanner->image = $target;
-                   $updateBanner->save();
-
-                    $imageFile->status = 10;
-                    $imageFile->save();
-
-                }
-            }
-
+            $updateBanner->publishing_date = $request->publishing_date;
+            $updateBanner->image = $request->image;
             $updateBanner->save();
 
             DB::commit();
@@ -158,11 +136,13 @@ class BannerService
     public static function updateBannerUrl( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'url' => [ 'nullable' ],
+            'url'  => [ 'nullable' ],
+            'file' => [ 'nullable', 'mimes:jpeg,jpg,png' ],
         ] );
 
         $attributeName = [
-            'url' => __( 'banner.url' ),
+            'url'  => __( 'banner.url' ),
+            'file' => __( 'banner.image' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -170,14 +150,13 @@ class BannerService
         }
 
         $validator->setAttributeNames( $attributeName )->validate();
-        
+
         DB::beginTransaction();
 
         try {
             $updateBanner = Banner::find( $request->id );
-            $updateBanner->url = $request->url;
-            if ( $request->has( 'publishing_date' ) ) {
-                $updateBanner->publishing_date = $request->publishing_date ?: null;
+            if ( $request->hasFile( 'file' ) ) {
+                $updateBanner->image = StorageService::upload( 'banner', $request->file( 'file' ) );
             }
             $updateBanner->save();
 

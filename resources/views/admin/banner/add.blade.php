@@ -82,14 +82,14 @@
             @foreach($banners as $banner)
                 <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="{{ $banner->id }}">
                     <img src="{{ $banner->image_path }}" class="banner-img rounded">
-                    <div class=" mt-2">
+                    {{-- <div class=" mt-2">
                         <label>{{ __('banner.banner_url') }}</label>
                         <input type="url" class="banner_url form-control" value="{{ $banner->url ?? '' }}" data-id="{{ $banner->id }}" placeholder="https://example.com"/>
                     </div>
                     <div class="mt-2">
                         <label>{{ __('template.publishing_date') }}</label>
                         <input type="text" class="banner_publishing_date form-control" value="{{ $banner->publishing_date ?? '' }}" data-id="{{ $banner->id }}" placeholder="{{ __('template.publishing_date_placeholder') }}"/>
-                    </div>
+                    </div> --}}
                     <!-- Dropdown -->
                     @can( 'edit banners' )
                     <div class="dropdown mt-2">
@@ -97,9 +97,9 @@
                             <em class="icon ni ni-more-h"></em>
                         </button>
                         <ul class="dropdown-menu">
-                            {{-- <li>
-                                <button class="dropdown-item edit-banner" data-id="{{ $banner->id }}">Edit</button>
-                            </li> --}}
+                            <li>
+                                <button class="dropdown-item edit-banner" data-id="{{ $banner->id }}">{{ __( 'template.edit' ) }}</button>
+                            </li>
                             <li>
                                 <button class="dropdown-item text-danger delete-banner" data-id="{{ $banner->id }}">Delete</button>
                             </li>
@@ -129,15 +129,6 @@
     let bannerUrlTimer = {};
     let bannerPublishingDateTimer = {};
 
-    // Init flatpickr on existing banners
-    document.querySelectorAll('.banner_publishing_date').forEach(function(el) {
-        flatpickr(el, {
-            
-            dateFormat: 'Y-m-d',
-            disableMobile: true,
-            allowInput: true,
-        });
-    });
 
     $(fc + '_cancel').click(() => window.location.href = '{{ route('admin.module_parent.banner.index') }}');
 
@@ -162,15 +153,6 @@
                     let newBanner = $(`
                         <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="${response.data.id}${response.data.id}">
                             <img src="${response.data.banner_url}" class="banner-img rounded">
-
-                            <div class=" mt-2">
-                                <label>{{ __('banner.banner_url') }}</label>
-                                <input type="url" class="banner_url form-control" value="${response.data.url ?? ''}" data-id="${response.data.id}" placeholder="https://example.com"/>
-                            </div>
-                            <div class="mt-2">
-                                <label>{{ __('template.publishing_date') }}</label>
-                                <input type="text" class="banner_publishing_date form-control" value="" data-id="${response.data.id}" placeholder="{{ __('template.publishing_date_placeholder') }}"/>
-                            </div>
                             <!-- Dropdown -->
                             <div class="dropdown mt-2">
                                 <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -201,85 +183,6 @@
             }
         });
     }
-
-
-    $(document).on('keydown keyup', '.banner_url', function() {
-        let input = $(this);
-        let bannerId = input.data('id');
-        let newUrl = input.val();
-
-        // Clear any existing timer for this banner
-        clearTimeout(bannerUrlTimer[bannerId]);
-
-        // Start a new debounce timer (500ms after last key event)
-        bannerUrlTimer[bannerId] = setTimeout(() => {
-            // Skip if input is empty or unchanged (optional optimization)
-            // if (!newUrl.trim()) return;
-
-            let formData = new FormData();
-            formData.append('id', bannerId);
-            formData.append('url', newUrl ?? '');
-            formData.append('_token', '{{ csrf_token() }}');
-
-            $.ajax({
-                url: '{{ route("admin.banner.updateBannerUrl") }}',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    console.log('✅ Banner URL updated:', response);
-                    input.css({
-                        'border-color': '#28a745',
-                        'box-shadow': '0 0 4px #28a745'
-                    });
-                    setTimeout(() => {
-                        input.css('border-color', '#dbdfea');
-                        input.css('box-shadow', '');
-                    }, 600);
-                },
-                error: function(xhr) {
-                    console.error('❌ Error updating banner URL:', xhr.responseText);
-                    input.css({
-                        'border-color': '#f8d7da',
-                        'box-shadow': '0 0 4px #f8d7da'
-                    });
-                }
-            });
-        }, 500); // 500ms debounce after last key event
-    });
-
-    $(document).on('change', '.banner_publishing_date', function() {
-        let input = $(this);
-        let bannerId = input.data('id');
-        let newDate = input.val();
-        let currentUrl = input.closest('li').find('.banner_url').val() ?? '';
-
-        clearTimeout(bannerPublishingDateTimer[bannerId]);
-
-        bannerPublishingDateTimer[bannerId] = setTimeout(() => {
-            let formData = new FormData();
-            formData.append('id', bannerId);
-            formData.append('url', currentUrl);
-            formData.append('publishing_date', newDate);
-            formData.append('_token', '{{ csrf_token() }}');
-
-            $.ajax({
-                url: '{{ route("admin.banner.updateBannerUrl") }}',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    input.css({ 'border-color': '#28a745', 'box-shadow': '0 0 4px #28a745' });
-                    setTimeout(() => { input.css('border-color', '#dbdfea'); input.css('box-shadow', ''); }, 600);
-                },
-                error: function(xhr) {
-                    input.css({ 'border-color': '#f8d7da', 'box-shadow': '0 0 4px #f8d7da' });
-                }
-            });
-        }, 500);
-    });
 
     // ✅ Initialize Sortable.js
     let sortableList = new Sortable(document.getElementById('banner-list'), {

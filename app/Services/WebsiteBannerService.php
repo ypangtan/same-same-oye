@@ -85,10 +85,12 @@ class WebsiteBannerService
     public static function updateWebsiteBanner( $request ) {
 
         $validator = Validator::make( $request->all(), [
+            'image' => [ 'required' ],
             'url' => [ 'nullable' ],
         ] );
 
         $attributeName = [
+            'image' => __( 'banner.image' ),
             'url' => __( 'banner.url' ),
         ];
 
@@ -102,31 +104,9 @@ class WebsiteBannerService
 
         try {
             $updateWebsiteBanner = WebsiteBanner::find( $request->id );
-    
             $updateWebsiteBanner->url = $request->url;
-            
-            $image = explode( ',', $request->image );
-
-            $imageFiles = FileManager::whereIn( 'id', $image )->get();
-
-            if ( $imageFiles ) {
-                foreach ( $imageFiles as $imageFile ) {
-
-                    $fileName = explode( '/', $imageFile->file );
-                    $fileExtention = pathinfo($fileName[1])['extension'];
-
-                    $target = 'website_banner/' . $updateWebsiteBanner->id . '/' . $fileName[1];
-                    Storage::disk( 'public' )->move( $imageFile->file, $target );
-
-                   $updateWebsiteBanner->image = $target;
-                   $updateWebsiteBanner->save();
-
-                    $imageFile->status = 10;
-                    $imageFile->save();
-
-                }
-            }
-
+            $updateWebsiteBanner->publishing_date = $request->publishing_date;
+            $updateWebsiteBanner->image = $request->image;
             $updateWebsiteBanner->save();
 
             DB::commit();
@@ -148,11 +128,13 @@ class WebsiteBannerService
     public static function updateWebsiteBannerUrl( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'url' => [ 'nullable' ],
+            'url'  => [ 'nullable' ],
+            'file' => [ 'nullable', 'mimes:jpeg,jpg,png' ],
         ] );
 
         $attributeName = [
-            'url' => __( 'banner.url' ),
+            'url'  => __( 'banner.url' ),
+            'file' => __( 'banner.image' ),
         ];
 
         foreach( $attributeName as $key => $aName ) {
@@ -160,14 +142,13 @@ class WebsiteBannerService
         }
 
         $validator->setAttributeNames( $attributeName )->validate();
-        
+
         DB::beginTransaction();
 
         try {
             $updateWebsiteBanner = WebsiteBanner::find( $request->id );
-            $updateWebsiteBanner->url = $request->url;
-            if ( $request->has( 'publishing_date' ) ) {
-                $updateWebsiteBanner->publishing_date = $request->publishing_date ?: null;
+            if ( $request->hasFile( 'file' ) ) {
+                $updateWebsiteBanner->image = StorageService::upload( 'website_banner', $request->file( 'file' ) );
             }
             $updateWebsiteBanner->save();
 
@@ -275,12 +256,6 @@ class WebsiteBannerService
 
         if ( !empty( $request->code ) ) {
             $model->where( 'code', 'LIKE', '%' . $request->code . '%' );
-            $filter = true;
-        }
-
-        if ( !empty( $request->vending_machine_id ) ) {
-            $vendingMachineWebsiteBanners = VendingMachineStock::where( 'vending_machine_id', $request->vending_machine_id )->pluck( 'website_banner_id' );
-            $model->whereNotIn( 'id', $vendingMachineWebsiteBanners );
             $filter = true;
         }
         
