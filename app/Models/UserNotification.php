@@ -43,6 +43,10 @@ class UserNotification extends Model
         'encrypted_id',
     ];
 
+    public function getPublishingDateAttribute() {
+        return $this->attributes['publishing_date'] ? Carbon::parse( $this->attributes['publishing_date'] )->format( 'Y-m-d' ) : null;
+    }
+
     public function setTitleAttribute($value) {
         $languages = array_keys(Config::get('languages'));
 
