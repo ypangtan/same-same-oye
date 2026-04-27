@@ -14,6 +14,7 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Helper;
+use Carbon\Carbon;
 
 class UserNotification extends Model
 {
