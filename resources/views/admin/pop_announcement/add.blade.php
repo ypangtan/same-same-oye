@@ -138,7 +138,7 @@ window.cke_element = [ 'pop_announcement_create_en_text', 'pop_announcement_crea
         let fc = '#{{ $pop_announcement_create }}',
             fileID = '';
 
-        flatpickr( ac + '_publishing_date', {
+        flatpickr( fc + '_publishing_date', {
             
             dateFormat: 'Y-m-d',
             disableMobile: true,
