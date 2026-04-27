@@ -149,7 +149,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
         formData.append( '_token', '{{ csrf_token() }}' );
 
         $.ajax( {
-            url: '{{ route( 'admin.website_banner.updateWebsiteBannerUrl' ) }}',
+            url: '{{ route( 'admin.website_banner.updateWebsiteBanner' ) }}',
             type: 'POST',
             data: formData,
             processData: false,
