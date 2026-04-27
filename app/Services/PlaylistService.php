@@ -488,7 +488,7 @@ class PlaylistService
             })
             ->where('playlists.status', 10)
             ->where( function( $q ) {
-                $q->whereNull( 'playlists.publishing_date' )->orWhereDate( 'playlists.publishing_date', '<=', now() );
+                $q->whereNull( 'playlists.publishing_date' )->orWhereDate( 'playlists.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
             } );
 
         if( !auth()->check() || auth()->user()->membership == 0 ) {

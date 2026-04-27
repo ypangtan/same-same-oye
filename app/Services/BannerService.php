@@ -398,7 +398,7 @@ class BannerService
     public static function getBanners( $request ) {
         $banners = Banner::where('status', 10)
         ->where( function( $q ) {
-            $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', now() );
+            $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
         } )
         ->orderBy( 'sequence' );
 

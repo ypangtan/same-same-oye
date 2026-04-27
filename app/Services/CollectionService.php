@@ -389,7 +389,7 @@ class CollectionService
             } )
             ->where( 'status', 10 )
             ->where( function( $q ) {
-                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', now() );
+                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
             } );
 
         if( !auth()->check() || auth()->user()->membership == 0 ) {

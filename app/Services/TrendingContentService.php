@@ -273,7 +273,7 @@ class TrendingContentService
         $trending_contents = TrendingContent::select( 'trending_contents.*' )
             ->where( 'trending_contents.status', 10 )
             ->where( function( $q ) {
-                $q->whereNull( 'trending_contents.publishing_date' )->orWhereDate( 'trending_contents.publishing_date', '<=', now() );
+                $q->whereNull( 'trending_contents.publishing_date' )->orWhereDate( 'trending_contents.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
             } )
             ->orderBy( 'priority', 'asc' );
 

@@ -384,7 +384,7 @@ class WebsiteBannerService
     public static function getWebsiteBanners( $request ) {
         $website_banners = WebsiteBanner::where('status', 10)
         ->where( function( $q ) {
-            $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', now() );
+            $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
         } )
         ->orderBy( 'sequence' );
 

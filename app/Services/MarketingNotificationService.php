@@ -404,7 +404,7 @@ class MarketingNotificationService {
                   } );
             } )
             ->where( function( $q ) {
-                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', now() );
+                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
             } );
 
         $marketingNotificationss->orderBy( 'user_notifications.created_at', 'DESC' );
