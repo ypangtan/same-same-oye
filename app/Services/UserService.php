@@ -2645,14 +2645,23 @@ class UserService
             $user->is_first_login = 20;
             $user->save();
             
+            $addDay = 0;
             $days = Option::where( 'option_name', 'trial_period_days' )->first();
+            if( $days && $days->option_value > 0 ) {
+                $addDay = $days->option_value - 1;
+            }
+
+            $endDate = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' );
+            if( $addDay > 0 ) {
+                $endDate->addDays( $addDay );
+            }
 
             $userSubscription = UserSubscription::create( [
                 'user_id' => $user->id,
                 'subscription_plan_id' => null,
                 'status' => 10,
                 'start_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ),
-                'end_date' => Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->addDays( $days ? $days->option_value : 14 ),
+                'end_date' => $endDate,
                 'type' => 2,
             ] );
             
