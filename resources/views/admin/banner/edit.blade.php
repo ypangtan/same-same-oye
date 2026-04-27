@@ -60,6 +60,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
     } );
 
     $( 'body' ).loading( { message: '{{ __( 'template.loading' ) }}' } );
+    Dropzone.autoDiscover = false;
 
     $.ajax( {
         url: '{{ route( 'admin.banner.oneBanner' ) }}',
