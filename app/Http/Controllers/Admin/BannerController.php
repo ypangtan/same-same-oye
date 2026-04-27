@@ -157,10 +157,6 @@ class BannerController extends Controller
         return BannerService::updateBannerUrl( $request );
     }
 
-    public function updateBannerImage( Request $request ) {
-        return BannerService::updateBannerImage( $request );
-    }
-
     public function imageUpload( Request $request ) {
         $request->merge( [
             'source' => 'image/banner'

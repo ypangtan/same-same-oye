@@ -283,7 +283,7 @@ class BannerService
 
         $banner = Banner::find( $request->id );
 
-        $banner->append( ['encrypted_id','image_path'] );
+        $banner->append( ['encrypted_id','image_path', 'image_url'] );
         
         return response()->json( $banner );
     }

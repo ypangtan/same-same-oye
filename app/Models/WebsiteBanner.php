@@ -47,6 +47,18 @@ class WebsiteBanner extends Model
         return '';
     }
 
+    public function getImageUrlAttribute() {
+        if( $this->attributes['image'] ) {
+            $localPath = storage_path ( 'app/public/' . $this->attributes['image'] );
+            if ( file_exists( $localPath ) ) {
+                return asset( 'storage/' . $this->attributes['image'] );
+            }
+        
+            return StorageService::get( $this->attributes['image'] );
+        }
+        return '';
+    }
+
     public function getNameAttribute() {
         $locale = app()->getLocale();
         if( $locale == 'zh' ) {

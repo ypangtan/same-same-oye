@@ -269,7 +269,7 @@ class WebsiteBannerService
 
         $website_banner = WebsiteBanner::find( $request->id );
 
-        $website_banner->append( ['encrypted_id','image_path'] );
+        $website_banner->append( ['encrypted_id','image_path', 'image_url'] );
         
         return response()->json( $website_banner );
     }
