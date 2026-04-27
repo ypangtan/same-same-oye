@@ -238,6 +238,26 @@ $parent_route = $data['parent_route'] ?? '';
                             this.on("complete", function( file ) {
                                 $( 'body' ).loading( 'stop' );
                             });
+                            if ( imagePath ) {
+                                let myDropzone = this,
+                                    mockFile = { name: 'Default', size: 1024, accepted: true };
+
+                                myDropzone.files.push( mockFile );
+                                // 不要使用 displayExistingFile，手动创建预览
+                                myDropzone.emit("addedfile", mockFile);
+                                myDropzone.emit("complete", mockFile);
+                                
+                                // 手动设置缩略图，直接使用图片 URL
+                                if (mockFile.previewElement) {
+                                    let img = mockFile.previewElement.querySelector("[data-dz-thumbnail]");
+                                    if (img) {
+                                        img.src = imagePath;
+                                        img.style.width = "100%";
+                                        img.style.height = "100%";
+                                        img.style.objectFit = "cover";
+                                    }
+                                }
+                            }
                         },
                         removedfile: function( file ) {
                             fileID = null;
