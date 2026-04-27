@@ -172,6 +172,7 @@ class PopAnnouncementService
                 'url' => $request->url,
                 'en_text' => $request->en_text,
                 'zh_text' => $request->zh_text,
+                'publishing_date' => $request->publishing_date ?: null, 
             ] );
             DB::commit();
 
@@ -233,6 +234,7 @@ class PopAnnouncementService
             $updaterank->image = $request->image;
             $updaterank->en_text = $request->en_text;
             $updaterank->zh_text = $request->zh_text;
+            $updaterank->publishing_date = $request->publishing_date ?: null;
             $updaterank->save();
 
             DB::commit();

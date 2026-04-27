@@ -103,6 +103,13 @@ $pop_announcementTypes = $data['voucher_type'];
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="{{ $pop_announcement_edit }}_publishing_date" class="col-sm-4 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control form-control-sm" id="{{ $pop_announcement_edit }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $pop_announcement_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -151,6 +158,7 @@ window.cke_element = [ 'pop_announcement_edit_en_text', 'pop_announcement_edit_z
             formData.append( 'zh_text', editors['pop_announcement_edit_zh_text'].getData() );
             formData.append( 'image', fileID );
             formData.append( 'url', $( fe + '_url' ).val() );
+            formData.append( 'publishing_date', $( fe + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -204,6 +212,7 @@ window.cke_element = [ 'pop_announcement_edit_en_text', 'pop_announcement_edit_z
                     
                     $( fe + '_en_title' ).val( response.en_title );
                     $( fe + '_zh_title' ).val( response.zh_title );
+                    $( fe + '_publishing_date' ).val( response.publishing_date ?? '' );
                     $( fe + '_url' ).val( response.url );
                     editors['pop_announcement_edit_en_text'].setData( response.en_text ?? '' );
                     editors['pop_announcement_edit_zh_text'].setData( response.zh_text ?? '' );

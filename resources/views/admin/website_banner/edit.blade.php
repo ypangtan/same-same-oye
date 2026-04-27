@@ -71,7 +71,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
             $( de + '_url' ).val( response.url ?? '' );
 
             if ( response.publishing_date ) {
-                $( de + '_publishing_date' ).val( response.publishing_date.substring( 0, 10 ) );
+                $( de + '_publishing_date' ).val( response.publishing_date );
             }
 
             imagePath = response.image_url;
