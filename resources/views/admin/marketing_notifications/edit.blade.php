@@ -254,7 +254,7 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
                     if( response.user_notification_users != null ){
                         $.each( response.user_notification_users, function( key, value ) {
                             name = ( value.user.calling_code ? value.user.calling_code : '+60' ) + ( value.user.phone_number ? value.user.phone_number : '-' ) + ' (' + ( value.user.email ? value.user.email : '-' ) + ')',
-                            option1 = new Option( name, value.user.id, true, true );
+                            option1 = new Option( name, value.user.encrypted_id, true, true );
                             userSelect2.append( option1 );
                             userSelect2.trigger( 'change' );
                         } );
