@@ -292,7 +292,10 @@ class PopAnnouncementService
     }
 
     public static function getAllPopAnnouncements() {
-        $rank = PopAnnouncement::where( 'status', '10' )->get();
+        $rank = PopAnnouncement::where( 'status', '10' )
+        ->where( function( $q ) {
+            $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+        } )->get();
 
         $rank->append( [
             'encrypted_id',

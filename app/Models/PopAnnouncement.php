@@ -27,6 +27,7 @@ class PopAnnouncement extends Model
         'en_text',
         'zh_text',
         'status',
+        'publishing_date',
     ];
 
     public function getImagePathAttribute() {
@@ -61,6 +62,10 @@ class PopAnnouncement extends Model
         }
     }
 
+    public function getPublishingDateAttribute() {
+        return $this->attributes['publishing_date'] ? Carbon::parse( $this->attributes['publishing_date'] )->format( 'Y-m-d' ) : null;
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }
@@ -77,6 +82,7 @@ class PopAnnouncement extends Model
         'en_text',
         'zh_text',
         'status',
+        'publishing_date',
     ];
 
     protected static $logName = 'pop_announcements';

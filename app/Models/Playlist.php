@@ -36,6 +36,10 @@ class Playlist extends Model
         'publishing_date',
     ];
 
+    public function getPublishingDateAttribute() {
+        return $this->attributes['publishing_date'] ? Carbon::parse( $this->attributes['publishing_date'] )->format( 'Y-m-d' ) : null;
+    }
+
     public function getDisplayTagAttribute() {
         $tags = $this->tags()->pluck('tag')->toArray();
         if ( empty( $tags ) ) {
