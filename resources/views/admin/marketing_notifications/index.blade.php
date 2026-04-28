@@ -1,3 +1,7 @@
+<style>
+    td:has(span.highlight) { background-color: #fff56d; }
+</style>
+
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
@@ -163,7 +167,7 @@ $columns = [
                         var today = new Date();
                         today.setHours( 0, 0, 0, 0 );
                         if ( new Date( data ) > today ) {
-                            return '<span style="display:block;width:100%;background-color:#fff56d;padding:2px 4px;">' + data + '</span>';
+                            return '<span class="highlight">' + data + '</span>';
                         }
                         return data;
                     },
