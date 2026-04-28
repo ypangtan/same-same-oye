@@ -400,7 +400,11 @@ class CollectionService
             'playlists',
             'playlists.tags',
         ] )->select( 'collections.*' )
-            ->whereHas( 'playlists' )
+            ->whereHas( 'playlists', function ( $q ) {
+                $q->where( function( $sq ) {
+                    $sq->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                } );
+            } )
             ->when( !empty( $request->type_id ), function ( $q ) use ( $request ) {
                 $q->where( 'type_id', $request->type_id );
             } )
@@ -446,7 +450,11 @@ class CollectionService
         $collection = Collection::with( [
             'playlists',
             'playlists.tags',
-        ] )->find( \Helper::decode( $request->id ) );
+        ] )->whereHas( 'playlists', function ( $q ) {
+            $q->where( function( $sq ) {
+                $sq->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+            } );
+        } )->find( \Helper::decode( $request->id ) );
 
         $collection->append( [
             'name',
