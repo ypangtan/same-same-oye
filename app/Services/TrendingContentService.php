@@ -87,6 +87,23 @@ class TrendingContentService
             $filter = true;
         }
 
+        if ( !empty( $request->publishing_date ) ) {
+            if ( str_contains( $request->publishing_date, 'to' ) ) {
+                $dates = explode( ' to ', $request->publishing_date );
+
+                $startDate = explode( '-', $dates[0] );
+                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+
+                $endDate = explode( '-', $dates[1] );
+                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'trending_contents.publishing_date', [ date( 'Y-m-d', $start->timestamp ), date( 'Y-m-d', $end->timestamp ) ] );
+            } else {
+                $model->whereDate( 'trending_contents.publishing_date', $request->publishing_date );
+            }
+            $filter = true;
+        }
+
         if ( !empty( $request->name ) ) {
             $model->where( function( $q ) use ( $request ) {
                 $q->where( 'en_name', 'LIKE', '%' . $request->name . '%' )

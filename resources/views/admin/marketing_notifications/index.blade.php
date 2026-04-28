@@ -39,6 +39,12 @@ $columns = [
         'title' => __( 'datatables.created_date' ),
     ],
     [
+        'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'template.publishing_date' ) ] ),
+        'id' => 'publishing_date',
+        'title' => __( 'template.publishing_date' ),
+    ],
+    [
         'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'announcement.user' ) ] ),
         'id' => 'user',
@@ -122,12 +128,23 @@ $columns = [
                 { data: null },
                 { data: null },
                 { data: 'created_at' },
+                { data: 'publishing_date' },
                 { data: 'is_broadcast' },
                 { data: 'title' },
                 // { data: 'type' },
                 { data: 'status' },
                 { data: 'encrypted_id' },
             ],
+            createdRow: function( row, data, dataIndex ) {
+                if ( data.publishing_date ) {
+                    var today = new Date();
+                    today.setHours( 0, 0, 0, 0 );
+                    var publishDate = new Date( data.publishing_date );
+                    if ( publishDate > today ) {
+                        $( 'td', row ).eq( {{ Helper::columnIndex( $columns, 'publishing_date' ) }} ).css( 'background-color', '#fff56d' );
+                    }
+                }
+            },
             columnDefs: [
                 {
                     // Add checkboxes to the first column
@@ -146,6 +163,13 @@ $columns = [
                         // Calculate the row number dynamically based on the page info
                         const pageInfo = dt_table.page.info();
                         return pageInfo.start + meta.row + 1; // Adjust for 1-based numbering
+                    },
+                },
+                {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "publishing_date" ) }}' ),
+                    width: '10%',
+                    render: function( data, type, row, meta ) {
+                        return data ? data : '-';
                     },
                 },
                 {
@@ -264,7 +288,7 @@ $columns = [
             } );
         } );
 
-        $( '#created_date' ).flatpickr( {
+        $( '#created_date, #publishing_date' ).flatpickr( {
             mode: 'range',
             disableMobile: true,
             onClose: function( selected, dateStr, instance ) {

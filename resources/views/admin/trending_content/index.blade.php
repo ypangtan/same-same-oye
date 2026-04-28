@@ -41,6 +41,12 @@ $columns = [
         'title' => __( 'datatables.created_date' ),
     ],
     [
+        'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'template.publishing_date' ) ] ),
+        'id' => 'publishing_date',
+        'title' => __( 'template.publishing_date' ),
+    ],
+    [
         'type' => 'default',
         'id' => 'image',
         'title' => __( 'trending_content.image' ),
@@ -114,11 +120,22 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: null },
             { data: 'created_at' },
+            { data: 'publishing_date' },
             { data: 'image_url' },
             { data: 'title' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
+        createdRow: function( row, data, dataIndex ) {
+            if ( data.publishing_date ) {
+                var today = new Date();
+                today.setHours( 0, 0, 0, 0 );
+                var publishDate = new Date( data.publishing_date );
+                if ( publishDate > today ) {
+                    $( 'td', row ).eq( {{ Helper::columnIndex( $columns, 'publishing_date' ) }} ).css( 'background-color', '#fff56d' );
+                }
+            }
+        },
         columnDefs: [
             {
                 // Add checkboxes to the first column
@@ -141,9 +158,16 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "created_date" ) }}' ),
-                
+
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "publishing_date" ) }}' ),
+                width: '10%',
+                render: function( data, type, row, meta ) {
+                    return data ? data : '-';
                 },
             },
             {
@@ -236,7 +260,7 @@ var statusMapper = @json( $data['status'] ),
 
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        $( '#created_date' ).flatpickr( {
+        $( '#created_date, #publishing_date' ).flatpickr( {
             mode: 'range',
             disableMobile: true,
             onClose: function( selected, dateStr, instance ) {
