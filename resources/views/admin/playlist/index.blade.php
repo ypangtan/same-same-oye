@@ -139,16 +139,6 @@ var statusMapper = @json( $data['status'] ),
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
-        createdRow: function( row, data, dataIndex ) {
-            if ( data.publishing_date ) {
-                var today = new Date();
-                today.setHours( 0, 0, 0, 0 );
-                var publishDate = new Date( data.publishing_date );
-                if ( publishDate > today ) {
-                    $( 'td', row ).eq( {{ Helper::columnIndex( $columns, 'publishing_date' ) }} ).css( 'background-color', '#fff56d' );
-                }
-            }
-        },
         columnDefs: [
             {
                 // Add checkboxes to the first column
@@ -180,7 +170,13 @@ var statusMapper = @json( $data['status'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "publishing_date" ) }}' ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
-                    return data ? data : '-';
+                    if ( !data ) return '-';
+                    var today = new Date();
+                    today.setHours( 0, 0, 0, 0 );
+                    if ( new Date( data ) > today ) {
+                        return '<span style="display:block;width:100%;background-color:#fff56d;padding:2px 4px;">' + data + '</span>';
+                    }
+                    return data;
                 },
             },
             {
