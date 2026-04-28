@@ -176,9 +176,10 @@ var statusMapper = @json( $data['status'] ),
                 width: '10%',
                 render: function( data, type, row, meta ) {
                     if ( !data ) return '-';
-                    var today = new Date();
-                    today.setHours( 0, 0, 0, 0 );
-                    if ( new Date( data ) > today ) {
+                    var klNow = new Date( new Date().toLocaleString( 'en-US', { timeZone: 'Asia/Kuala_Lumpur' } ) );
+                    var today = new Date( klNow.getFullYear(), klNow.getMonth(), klNow.getDate() );
+                    var p = data.split( '-' ); var publishDate = new Date( p[0], p[1] - 1, p[2] );
+                    if ( publishDate > today ) {
                         return '<span class="highlight">' + data + '</span>';
                     }
                     return data;
