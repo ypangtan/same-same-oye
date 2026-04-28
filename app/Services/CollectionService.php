@@ -397,12 +397,12 @@ class CollectionService
         }
 
         $collections = Collection::with( [
-            'playlists',
+            'playlists' => function ( $q ) {
+                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+            },
             'playlists.tags',
         ] )->select( 'collections.*' )
-            ->whereHas( 'playlists', function ( $q ) {
-                $q->whereNull( 'playlists.publishing_date' )->orWhereDate( 'playlists.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
-            } )
+            ->whereHas( 'playlists' )
             ->when( !empty( $request->type_id ), function ( $q ) use ( $request ) {
                 $q->where( 'type_id', $request->type_id );
             } )
@@ -446,11 +446,11 @@ class CollectionService
 
     public static function getCollection( $request ) {
         $collection = Collection::with( [
-            'playlists',
+            'playlists' => function ( $q ) {
+                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+            },
             'playlists.tags',
-        ] )->whereHas( 'playlists', function ( $q ) {
-            $q->whereNull( 'playlists.publishing_date' )->orWhereDate( 'playlists.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
-        } )->find( \Helper::decode( $request->id ) );
+        ] )->find( \Helper::decode( $request->id ) );
 
         $collection->append( [
             'name',

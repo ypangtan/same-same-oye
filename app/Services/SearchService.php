@@ -42,7 +42,9 @@ class SearchService {
 
         $search = SearchItem::with( [
             'item',
-            'playlist',
+            'playlist' => function ( $q ) {
+                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+            },
         ] )->where( 'keyword', 'like', '%' . $text . '%' );
 
         $search = $search->where( function ( $query ) use ( $request ) {
