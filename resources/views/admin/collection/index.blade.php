@@ -174,6 +174,7 @@ var statusMapper = @json( $data['status'] ),
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "publishing_date" ) }}' ),
                 width: '10%',
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     if ( !data ) return '-';
                     var klNow = new Date( new Date().toLocaleString( 'en-US', { timeZone: 'Asia/Kuala_Lumpur' } ) );

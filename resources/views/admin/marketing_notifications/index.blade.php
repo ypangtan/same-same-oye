@@ -161,6 +161,7 @@ $columns = [
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "publishing_date" ) }}' ),
+                    orderable: false,
                     width: '10%',
                     render: function( data, type, row, meta ) {
                         if ( !data ) return '-';
