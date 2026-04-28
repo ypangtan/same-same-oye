@@ -1,3 +1,7 @@
+<style>
+    td:has(span.highlight) { background-color: #fff56d; }
+</style>
+
 <div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
@@ -37,6 +41,12 @@ $columns = [
         'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ),
         'id' => 'created_date',
         'title' => __( 'datatables.created_date' ),
+    ],
+    [
+        'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'template.publishing_date' ) ] ),
+        'id' => 'publishing_date',
+        'title' => __( 'template.publishing_date' ),
     ],
     [
         'type' => 'default',
@@ -112,6 +122,7 @@ var statusMapper = {
             { data: null },
             { data: null },
             { data: 'created_at' },
+            { data: 'publishing_date' },
             { data: 'image_path' },
             { data: 'title' },
             { data: 'status' },
@@ -158,6 +169,21 @@ var statusMapper = {
                 width: '10%',
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "publishing_date" ) }}' ),
+                width: '10%',
+                orderable: false,
+                render: function( data, type, row, meta ) {
+                    if ( !data ) return '-';
+                    var klNow = new Date( new Date().toLocaleString( 'en-US', { timeZone: 'Asia/Kuala_Lumpur' } ) );
+                    var today = new Date( klNow.getFullYear(), klNow.getMonth(), klNow.getDate() );
+                    var p = data.split( '-' ); var publishDate = new Date( p[0], p[1] - 1, p[2] );
+                    if ( publishDate > today ) {
+                        return '<span class="highlight">' + data + '</span>';
+                    }
+                    return data;
                 },
             },
             {
@@ -217,7 +243,7 @@ var statusMapper = {
 
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        $( '#created_date' ).flatpickr( {
+        $( '#created_date, #publishing_date' ).flatpickr( {
             mode: 'range',
             disableMobile: true,
             onClose: function( selected, dateStr, instance ) {
