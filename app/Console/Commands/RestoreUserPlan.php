@@ -21,17 +21,12 @@ class RestoreUserPlan extends Command
 
     public function handle()
     {
-        $userId = 32;
         $planId = 51;
 
         try {
             DB::beginTransaction();
 
-            $userSubscription = UserSubscription::where('user_id', $userId)
-                ->where('subscription_plan_id', $planId)
-                ->where('status', 40) // cancelled
-                ->latest()
-                ->firstOrFail();
+            $userSubscription = UserSubscription::find( $planId );
 
             $userSubscription->update([
                 'status' => 10,
@@ -41,7 +36,7 @@ class RestoreUserPlan extends Command
 
             UserSubscriptionService::checkUserPlan($userSubscription);
 
-            $this->info("Restored user_subscription id={$userSubscription->id} for user_id={$userId}, plan_id={$planId}");
+            $this->info("Restored user_subscription id={$userSubscription->id} for user_id={$userSubscription->user_id}");
 
         } catch (\Exception $e) {
             DB::rollBack();
