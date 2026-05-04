@@ -21,27 +21,30 @@ class RestoreUserPlan extends Command
 
     public function handle()
     {
-        $planId = 51;
+        $planId = ['1118', '1006', '882' ];
 
-        try {
-            DB::beginTransaction();
+        foreach ($planId as $id) {
+            try {
+                DB::beginTransaction();
 
-            $userSubscription = UserSubscription::find( $planId );
+                $userSubscription = UserSubscription::find( $id );
 
-            $userSubscription->update([
-                'status' => 10,
-            ]);
+                $userSubscription->update([
+                    'status' => 10,
+                ]);
 
-            DB::commit();
+                DB::commit();
 
-            UserSubscriptionService::checkUserPlan($userSubscription);
+                UserSubscriptionService::checkUserPlan($userSubscription);
 
-            $this->info("Restored user_subscription id={$userSubscription->id} for user_id={$userSubscription->user_id}");
+                $this->info("Restored user_subscription id={$userSubscription->id} for user_id={$userSubscription->user_id}");
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->error('Error: ' . $e->getMessage());
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $this->error('Error: ' . $e->getMessage());
+            }
         }
+        
 
         return 0;
     }
