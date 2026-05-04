@@ -163,7 +163,6 @@ class InAppPurchaseService {
             }
 
             foreach ( $subscription as $sub ) {
-                $sub->status = 40;
                 $sub->cancelled_at = Carbon::now()->timezone('Asia/Kuala_Lumpur');
                 $sub->save();
             }
