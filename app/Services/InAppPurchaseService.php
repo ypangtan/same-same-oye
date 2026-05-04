@@ -8,6 +8,7 @@ use App\Models\SubscriptionPlan;
 use App\Models\User;
 use App\Models\UserSubscription;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 use Exception;
 
 class InAppPurchaseService {
@@ -163,7 +164,7 @@ class InAppPurchaseService {
 
             foreach ( $subscription as $sub ) {
                 $sub->status = 40;
-                $sub->cancelled_at = now();
+                $sub->cancelled_at = Carbon::now()->timezone('Asia/Kuala_Lumpur');
                 $sub->save();
             }
 
