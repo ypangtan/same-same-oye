@@ -44,6 +44,11 @@ $columns = [
         'title' => __( 'user_subscription.end_date' ),
     ],
     [
+        'type' => 'default',
+        'id' => 'cancelled_at',
+        'title' => __( 'user_subscription.cancelled_at' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -102,6 +107,7 @@ $columns = [
                 { data: 'user' },
                 { data: 'type' },
                 { data: 'end_date' },
+                { data: 'cancelled_at' },
                 { data: 'status' },
                 { data: 'encrypted_id' },
             ],
@@ -135,6 +141,13 @@ $columns = [
                         }
 
                         return row?.plan?.name ?? '-';
+                    },
+                },
+                {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "cancelled_at" ) }}' ),
+                    orderable: false,
+                    render: function( data, type, row, meta ) {
+                        return data ?? '-';
                     },
                 },
                 {
