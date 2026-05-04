@@ -189,8 +189,38 @@ class IosCallbackService {
                 break;
                 
             case 'DID_CHANGE_RENEWAL_STATUS':
+                if ($subtype === 'AUTO_RENEW_DISABLED' && $user) {
+                    UserService::createUserNotification(
+                        $user->id,
+                        'notification.subscription_cancelled_title',
+                        'notification.subscription_cancelled_content',
+                        'subscription_cancelled',
+                        'subscription'
+                    );
+                }
+                Log::channel('payment')->info('iOS renewal status changed', [
+                    'user_id' => $user->id ?? null,
+                    'subtype' => $subtype,
+                ]);
                 break;
                 
+            case 'GRACE_PERIOD':
+                $userSubscription->status = 30;
+                if ($user) {
+                    UserService::createUserNotification(
+                        $user->id,
+                        'notification.subscription_payment_failed_title',
+                        'notification.subscription_payment_failed_content',
+                        'payment_failed_grace_period',
+                        'subscription'
+                    );
+                }
+                Log::channel('payment')->warning('iOS subscription entered grace period', [
+                    'user_id' => $user->id ?? null,
+                    'user_subscription_id' => $userSubscription->id,
+                ]);
+                break;
+
             case 'DID_FAIL_TO_RENEW':
                 self::handleRenewalFailure( $userSubscription, $subtype, $user );
                 break;
@@ -301,18 +331,18 @@ class IosCallbackService {
      * 处理续订失败 - 发送支付失败通知
      */
     private static function handleRenewalFailure( UserSubscription $userSubscription, ?string $subtype, $user ) {
-        $userSubscription->status = 30; // grace_period
-        
+        $userSubscription->status = 30;
+
         if ($user) {
             UserService::createUserNotification(
                 $user->id,
                 'notification.subscription_payment_failed_title',
                 'notification.subscription_payment_failed_content',
-                'payment_failed',
+                $subtype === 'GRACE_PERIOD' ? 'payment_failed_grace_period' : 'payment_failed',
                 'subscription'
             );
         }
-        
+
         Log::channel('payment')->warning('Subscription renewal failed', [
             'user_id' => $user->id ?? null,
             'user_subscription_id' => $userSubscription->id,
@@ -335,23 +365,16 @@ class IosCallbackService {
         };
         
         if ($user) {
-            if ($subtype === 'VOLUNTARY') {
-                UserService::createUserNotification(
-                    $user->id,
-                    'notification.subscription_cancelled_title',
-                    'notification.subscription_cancelled_content',
-                    'subscription_cancelled',
-                    'subscription'
-                );
-            } elseif ($subtype === 'BILLING_RETRY') {
-                UserService::createUserNotification(
-                    $user->id,
-                    'notification.subscription_payment_cancelled_title',
-                    'notification.subscription_payment_cancelled_content',
-                    'payment_cancelled',
-                    'subscription'
-                );
-            }
+            UserService::createUserNotification(
+                $user->id,
+                'notification.subscription_cancelled_title',
+                'notification.subscription_cancelled_content',
+                match($subtype) {
+                    'BILLING_RETRY' => 'payment_cancelled',
+                    default         => 'subscription_cancelled',
+                },
+                'subscription'
+            );
         }
         
         Log::channel('payment')->info('Subscription expired', [

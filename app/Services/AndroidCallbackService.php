@@ -190,35 +190,47 @@ class AndroidCallbackService {
                 break;
                 
             case 'SUBSCRIPTION_STATE_CANCELED':
-                $userSubscription->status = 40; // 取消
-                
-                // 📱 发送订阅取消通知
-                if ($user) {
-                    UserService::createUserNotification(
-                        $user->id,
-                        'notification.subscription_cancelled_title',
-                        'notification.subscription_cancelled_content',
-                        'subscription_cancelled',
-                        'subscription'
-                    );
+                if ($eventType === 'SUBSCRIPTION_REVOKED') {
+                    // 开发者撤销（退款等）→ 立即断开
+                    $userSubscription->status = 40;
+                    if ($user) {
+                        UserService::createUserNotification(
+                            $user->id,
+                            'notification.subscription_cancelled_title',
+                            'notification.subscription_cancelled_content',
+                            'subscription_revoked',
+                            'subscription'
+                        );
+                    }
+                } else {
+                    // 用户主动取消 → 到 end_date 才断，SUBSCRIPTION_STATE_EXPIRED 触发时设 20
+                    if ($user) {
+                        UserService::createUserNotification(
+                            $user->id,
+                            'notification.subscription_cancelled_title',
+                            'notification.subscription_cancelled_content',
+                            'subscription_cancelled',
+                            'subscription'
+                        );
+                    }
                 }
-                
+
                 Log::channel('payment')->info('Subscription cancelled', [
                     'user_id' => $user->id ?? null,
-                    'user_subscription_id' => $userSubscription->id
+                    'user_subscription_id' => $userSubscription->id,
+                    'event_type' => $eventType,
                 ]);
                 break;
                 
             case 'SUBSCRIPTION_STATE_EXPIRED':
                 $userSubscription->status = 20; // 过期
-                
-                // 📱 发送订阅过期通知（如果是被撤销）
+
                 if ( $user ) {
                     UserService::createUserNotification(
                         $user->id,
                         'notification.subscription_cancelled_title',
                         'notification.subscription_cancelled_content',
-                        'subscription_revoked',
+                        'subscription_expired',
                         'subscription'
                     );
                 }
@@ -231,6 +243,25 @@ class AndroidCallbackService {
                 ]);
                 break;
                 
+            case 'SUBSCRIPTION_STATE_ON_HOLD':
+                $userSubscription->status = 30; // 付款失败，宽限期已过，账户暂停
+
+                if ($user) {
+                    UserService::createUserNotification(
+                        $user->id,
+                        'notification.subscription_payment_failed_title',
+                        'notification.subscription_payment_failed_content',
+                        'payment_failed_on_hold',
+                        'subscription'
+                    );
+                }
+
+                Log::channel('payment')->warning('Subscription on hold (payment failed past grace period)', [
+                    'user_id' => $user->id ?? null,
+                    'user_subscription_id' => $userSubscription->id
+                ]);
+                break;
+
             case 'SUBSCRIPTION_STATE_IN_GRACE_PERIOD':
                 $userSubscription->status = 30; // 宽限期
                 
@@ -252,6 +283,22 @@ class AndroidCallbackService {
                 break;
                 
             case 'SUBSCRIPTION_STATE_PAUSED':
+                $userSubscription->status = 30; // 用户主动暂停
+
+                if ($user) {
+                    UserService::createUserNotification(
+                        $user->id,
+                        'notification.subscription_cancelled_title',
+                        'notification.subscription_cancelled_content',
+                        'subscription_paused',
+                        'subscription'
+                    );
+                }
+
+                Log::channel('payment')->info('Subscription paused by user', [
+                    'user_id' => $user->id ?? null,
+                    'user_subscription_id' => $userSubscription->id
+                ]);
                 break;
         }
     }
