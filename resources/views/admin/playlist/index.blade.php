@@ -274,7 +274,7 @@ var statusMapper = @json( $data['status'] ),
             targets: 0,
             orderable: false,
             render: function( data, type, row, meta ) {
-                return `<div class="dt-reorder"style="width: 100%" data-id="${data}" />
+                return `<div class="dt-reorder"style="width: 20px" data-id="${data}" />
                     <i class="align-middle feather" icon-name="move" style="color: #5f5f5f;"></i>
                 </div>`;
             },
