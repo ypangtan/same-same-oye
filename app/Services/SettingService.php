@@ -168,22 +168,25 @@ class SettingService {
 
         try {
 
-            $existing = Option::getSpecialOtpSettings();
-            $current = $existing ? json_decode( $existing->option_value, true ) : [
-                'otp_code' => null,
-                'expires_at' => null,
-            ];
+            // Read with lock inside transaction to prevent race condition with generateSpecialOtp
+            $existing = Option::lockForUpdate()->where( 'option_name', 'SPECIAL_REGISTRATION_OTP' )->first();
+            $current = $existing ? json_decode( $existing->option_value, true ) : [];
 
             $newValue = [
-                'enabled' => (bool) $request->enabled,
-                'otp_code' => $current['otp_code'],
-                'expires_at' => $current['expires_at'],
+                'enabled'    => (bool) $request->enabled,
+                'otp_code'   => $current['otp_code'] ?? null,
+                'expires_at' => $current['expires_at'] ?? null,
             ];
 
-            Option::lockForUpdate()->updateOrCreate(
-                [ 'option_name' => 'SPECIAL_REGISTRATION_OTP' ],
-                [ 'option_value' => json_encode( $newValue ) ]
-            );
+            if ( $existing ) {
+                $existing->option_value = json_encode( $newValue );
+                $existing->save();
+            } else {
+                Option::create( [
+                    'option_name'  => 'SPECIAL_REGISTRATION_OTP',
+                    'option_value' => json_encode( $newValue ),
+                ] );
+            }
 
             DB::commit();
 
@@ -208,22 +211,28 @@ class SettingService {
 
         try {
 
-            $otpCode = (string) mt_rand( 100000, 999999 );
+            $otpCode  = (string) mt_rand( 100000, 999999 );
             $expiresAt = Carbon::now( 'Asia/Kuala_Lumpur' )->addHour()->format( 'Y-m-d H:i:s' );
 
-            $existing = Option::getSpecialOtpSettings();
-            $current = $existing ? json_decode( $existing->option_value, true ) : [ 'enabled' => false ];
+            // Read with lock inside transaction to prevent race condition with updateSpecialOtpSetting
+            $existing = Option::lockForUpdate()->where( 'option_name', 'SPECIAL_REGISTRATION_OTP' )->first();
+            $current  = $existing ? json_decode( $existing->option_value, true ) : [];
 
             $newValue = [
-                'enabled' => $current['enabled'] ?? false,
-                'otp_code' => $otpCode,
+                'enabled'    => $current['enabled'] ?? false,
+                'otp_code'   => $otpCode,
                 'expires_at' => $expiresAt,
             ];
 
-            Option::lockForUpdate()->updateOrCreate(
-                [ 'option_name' => 'SPECIAL_REGISTRATION_OTP' ],
-                [ 'option_value' => json_encode( $newValue ) ]
-            );
+            if ( $existing ) {
+                $existing->option_value = json_encode( $newValue );
+                $existing->save();
+            } else {
+                Option::create( [
+                    'option_name'  => 'SPECIAL_REGISTRATION_OTP',
+                    'option_value' => json_encode( $newValue ),
+                ] );
+            }
 
             DB::commit();
 

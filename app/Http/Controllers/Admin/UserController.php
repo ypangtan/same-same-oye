@@ -52,8 +52,8 @@ class UserController extends Controller
         }
 
         $this->data['data']['is_special_otp_register'] = [
-            '1' => __( 'user.special_otp_yes' ),
-            '0' => __( 'user.special_otp_no' ),
+            '1' => __( 'user.special_otp_register_without_otp' ),
+            '0' => '-',
         ];
 
         return view( 'admin.main' )->with( $this->data );
