@@ -160,6 +160,9 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
+                                        <button class="dropdown-item edit-banner" data-id="${response.data.id}">{{ __( 'template.edit' ) }}</button>
+                                    </li>
+                                    <li>
                                         <button class="dropdown-item text-danger delete-banner" data-id="${response.data.id}">Delete</button>
                                     </li>
                                 </ul>
