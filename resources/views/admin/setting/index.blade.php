@@ -117,7 +117,7 @@ $setting = 'setting';
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <button class="btn btn-sm btn-secondary" id="special_otp_generate">{{ __( 'template.save_changes' ) }}</button>
+                                    <button class="btn btn-sm btn-secondary" id="special_otp_generate">{{ __( 'template.special_otp_generate' ) }}</button>
                                     <button class="btn btn-sm btn-primary" id="special_otp_generate">{{ __( 'template.save_changes' ) }}</button>
                                 </div>
                             </div>
