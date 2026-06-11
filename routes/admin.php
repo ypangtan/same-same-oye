@@ -190,6 +190,10 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 
                 Route::get( 'get-disclaimer', [ SettingController::class, 'getDisclaimer' ] )->name( 'admin.setting.getDisclaimer' );
                 Route::post( 'update-disclaimer', [ SettingController::class, 'updateDisclaimer' ] )->name( 'admin.setting.updateDisclaimer' );
+
+                Route::get( 'get-special-otp-settings', [ SettingController::class, 'getSpecialOtpSettings' ] )->name( 'admin.setting.getSpecialOtpSettings' );
+                Route::post( 'update-special-otp-setting', [ SettingController::class, 'updateSpecialOtpSetting' ] )->name( 'admin.setting.updateSpecialOtpSetting' );
+                Route::post( 'generate-special-otp', [ SettingController::class, 'generateSpecialOtp' ] )->name( 'admin.setting.generateSpecialOtp' );
             } );
             
             Route::prefix( 'pop-announcements' )->group( function() {

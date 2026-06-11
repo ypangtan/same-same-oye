@@ -467,7 +467,12 @@ class UserService
             $model->where( 'status', $request->status );
             $filter = true;
         }
-        
+
+        if( $request->is_special_otp_register !== null && $request->is_special_otp_register !== '' ) {
+            $model->where( 'is_special_otp_register', $request->is_special_otp_register );
+            $filter = true;
+        }
+
         return [
             'filter' => $filter,
             'model' => $model,
@@ -1424,9 +1429,11 @@ class UserService
             ], 422 );
         }
 
+        $usedSpecialOtp = false;
+
         $validator = Validator::make( $request->all(), [
             'otp_code' => [ 'required' ],
-            'identifier' => [ 'required', function( $attribute, $value, $fail ) use ( $request, &$currentTmpUser ) {
+            'identifier' => [ 'required', function( $attribute, $value, $fail ) use ( $request, &$currentTmpUser, &$usedSpecialOtp ) {
 
                 $currentTmpUser = TmpUser::lockForUpdate()->find( $value );
 
@@ -1441,8 +1448,26 @@ class UserService
                 }
 
                 if ( $currentTmpUser->otp_code != $request->otp_code ) {
-                    $fail( __( 'user.invalid_otp' ) );
-                    return false;
+                    // Check if provided code matches the special registration OTP
+                    $specialOption = Option::getSpecialOtpSettings();
+                    if ( $specialOption ) {
+                        $specialSettings = json_decode( $specialOption->option_value, true );
+                        if (
+                            !empty( $specialSettings['enabled'] ) &&
+                            !empty( $specialSettings['otp_code'] ) &&
+                            $specialSettings['otp_code'] === $request->otp_code &&
+                            !empty( $specialSettings['expires_at'] ) &&
+                            Carbon::now( 'Asia/Kuala_Lumpur' )->lessThanOrEqualTo( Carbon::parse( $specialSettings['expires_at'], 'Asia/Kuala_Lumpur' ) )
+                        ) {
+                            $usedSpecialOtp = true;
+                        } else {
+                            $fail( __( 'user.invalid_otp' ) );
+                            return false;
+                        }
+                    } else {
+                        $fail( __( 'user.invalid_otp' ) );
+                        return false;
+                    }
                 }
 
                 if ( $currentTmpUser->phone_number != $request->phone_number ) {
@@ -1516,6 +1541,7 @@ class UserService
                 'password' => Hash::make( $request->password ),
                 'status' => 10,
                 'invitation_code' => strtoupper( \Str::random( 6 ) ),
+                'is_special_otp_register' => $usedSpecialOtp,
             ];
 
             $referral = User::where( 'invitation_code', $request->invitation_code )->first();

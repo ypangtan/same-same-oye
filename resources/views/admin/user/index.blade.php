@@ -99,6 +99,12 @@ $columns = [
         'title' => __( 'datatables.status' ),
     ],
     [
+        'type' => 'select',
+        'options' => $data['is_special_otp_register'],
+        'id' => 'is_special_otp_register',
+        'title' => __( 'user.is_special_otp_register' ),
+    ],
+    [
         'type' => 'default',
         'id' => 'dt_action',
         'title' => __( 'datatables.action' ),
@@ -121,6 +127,7 @@ window['{{ $column['id'] }}'] = '';
 var statusMapper = @json( $data['status'] ),
     ageGroupMapper = @json( $data['age_group'] ),
     membershipMapper = @json( $data['membership'] ),
+    specialOtpMapper = @json( $data['is_special_otp_register'] ),
     dt_table,
     dt_table_name = '#user_table',
     dt_table_config = {
@@ -160,6 +167,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'subscrition_detail' },
             { data: 'membership' },
             { data: 'status' },
+            { data: 'is_special_otp_register' },
             { data: 'encrypted_id' },
         ],
         columnDefs: [
@@ -318,6 +326,12 @@ var statusMapper = @json( $data['status'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
                 render: function( data, type, row, meta ) {
                     return statusMapper[data];
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "is_special_otp_register" ) }}' ),
+                render: function( data, type, row, meta ) {
+                    return data == 1 ? specialOtpMapper[1] : specialOtpMapper[0];
                 },
             },
             {

@@ -67,4 +67,13 @@ return [
 
     'app_store' => 'App Store',
     'google_play' => 'Google Play Store',
+
+    'special_otp_settings' => 'Special Registration OTP Settings',
+    'special_otp_enable' => 'Enable Special Registration OTP',
+    'special_otp_code' => 'OTP Code',
+    'special_otp_expires_at' => 'Expires At',
+    'special_otp_generate' => 'Generate New OTP',
+    'special_otp_generated' => 'New special OTP generated successfully.',
+    'special_otp_no_otp' => 'No OTP generated yet.',
+    'special_otp_expired' => 'Expired',
 ];

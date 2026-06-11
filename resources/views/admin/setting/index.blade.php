@@ -10,6 +10,7 @@ $setting = 'setting';
                     <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#avs" role="tab">{{ __( 'setting.app_version_settings' ) }}</a>
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#cues" role="tab">{{ __( 'setting.contact_us_email_settings' ) }}</a>
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#ds" role="tab">{{ __( 'setting.disclaimer_settings' ) }}</a>
+                    <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#sotp" role="tab">{{ __( 'setting.special_otp_settings' ) }}</a>
                 </div>
             </div>
             <div class="col-md-10">
@@ -91,6 +92,37 @@ $setting = 'setting';
                             </div>
                         </div>
                     </div>
+
+                    <div class="tab-pane fade" id="sotp" role="tabpanel">
+                        <h5 class="card-title mb-0">{{ __( 'setting.special_otp_settings' ) }}</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="{{ $setting }}_special_otp_enabled">
+                                        <label class="form-check-label" for="{{ $setting }}_special_otp_enabled">{{ __( 'setting.special_otp_enable' ) }}</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-5 col-form-label">{{ __( 'setting.special_otp_code' ) }}</label>
+                                    <div class="col-sm-7 d-flex align-items-center gap-2">
+                                        <strong id="special_otp_code_display">{{ __( 'setting.special_otp_no_otp' ) }}</strong>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-5 col-form-label">{{ __( 'setting.special_otp_expires_at' ) }}</label>
+                                    <div class="col-sm-7 d-flex align-items-center">
+                                        <span id="special_otp_expires_display">-</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <button class="btn btn-sm btn-secondary" id="special_otp_generate">{{ __( 'setting.special_otp_generate' ) }}</button>
+                                    <button class="btn btn-sm btn-primary" id="special_otp_save">{{ __( 'template.save_changes' ) }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -114,6 +146,7 @@ window.cke_element = [ 'setting_content'];
         getAppVersionSettings();
         getSettings();
         getDisclaimerSettings();
+        getSpecialOtpSettings();
 
         let s = '#{{ $setting }}';
 
@@ -261,6 +294,68 @@ window.cke_element = [ 'setting_content'];
                 },
             } );
         }
+
+        function getSpecialOtpSettings() {
+            $.ajax( {
+                url: '{{ route( 'admin.setting.getSpecialOtpSettings' ) }}',
+                type: 'GET',
+                data: { _token: '{{ csrf_token() }}' },
+                success: function( response ) {
+                    if ( response.data ) {
+                        let d = response.data;
+                        $( s + '_special_otp_enabled' ).prop( 'checked', d.enabled == true );
+                        if ( d.otp_code ) {
+                            $( '#special_otp_code_display' ).text( d.otp_code );
+                        }
+                        if ( d.expires_at ) {
+                            let now = new Date();
+                            let exp = new Date( d.expires_at );
+                            let label = d.expires_at + ( exp < now ? ' ({{ __( 'setting.special_otp_expired' ) }})' : '' );
+                            $( '#special_otp_expires_display' ).text( label );
+                        }
+                    }
+                },
+            } );
+        }
+
+        $( '#special_otp_save' ).on( 'click', function() {
+            $.ajax( {
+                url: '{{ route( 'admin.setting.updateSpecialOtpSetting' ) }}',
+                type: 'POST',
+                data: {
+                    enabled: $( s + '_special_otp_enabled' ).is( ':checked' ) ? 1 : 0,
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.show();
+                },
+                error: function( error ) {
+                    $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
+                    modalDanger.show();
+                }
+            } );
+        } );
+
+        $( '#special_otp_generate' ).on( 'click', function() {
+            $.ajax( {
+                url: '{{ route( 'admin.setting.generateSpecialOtp' ) }}',
+                type: 'POST',
+                data: { _token: '{{ csrf_token() }}' },
+                success: function( response ) {
+                    let d = response.data;
+                    $( '#special_otp_code_display' ).text( d.otp_code );
+                    $( '#special_otp_expires_display' ).text( d.expires_at );
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.show();
+                },
+                error: function( error ) {
+                    $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
+                    modalDanger.show();
+                }
+            } );
+        } );
+
     } );
 </script>
 

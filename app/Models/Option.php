@@ -36,6 +36,10 @@ class Option extends Model
         return self::where('option_name', 'TAXES')->first();
     }
 
+    public static function getSpecialOtpSettings(){
+        return self::where('option_name', 'SPECIAL_REGISTRATION_OTP')->first();
+    }
+
     protected function serializeDate( DateTimeInterface $date ) {
         return $date->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' );
     }

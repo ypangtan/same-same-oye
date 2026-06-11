@@ -104,4 +104,8 @@ return [
     'checkin_success_point' => 'You get :quantity point',
     'checkin_success_vouvher' => 'You get :quantity :voucher',
 
+    'is_special_otp_register' => 'Special OTP Register',
+    'special_otp_yes' => 'Yes',
+    'special_otp_no' => 'No',
+
 ];

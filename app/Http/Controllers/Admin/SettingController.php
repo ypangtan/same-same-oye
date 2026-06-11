@@ -100,4 +100,19 @@ class SettingController extends Controller
 
         return DisclaimerService::updateDisclaimer( $request );
     }
+
+    public function getSpecialOtpSettings( Request $request ) {
+
+        return SettingService::getSpecialOtpSettings();
+    }
+
+    public function updateSpecialOtpSetting( Request $request ) {
+
+        return SettingService::updateSpecialOtpSetting( $request );
+    }
+
+    public function generateSpecialOtp( Request $request ) {
+
+        return SettingService::generateSpecialOtp();
+    }
 }

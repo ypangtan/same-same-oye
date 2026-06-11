@@ -60,6 +60,7 @@ class User extends Model implements AuthenticatableContract
         'membership',
         'rank_id',
         'is_first_login',
+        'is_special_otp_register',
     ];
 
     public function getPlanMemberAttribute() {
@@ -219,6 +220,7 @@ class User extends Model implements AuthenticatableContract
         'membership',
         'rank_id',
         'is_first_login',
+        'is_special_otp_register',
     ];
 
     protected static $logName = 'users';
