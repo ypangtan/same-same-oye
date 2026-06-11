@@ -168,19 +168,10 @@
                     `);
                     $("#banner-list").append(newBanner);
 
-                    // Init flatpickr on newly added publishing_date input
-                    flatpickr(newBanner.find('.banner_publishing_date')[0], {
-
-                        dateFormat: 'Y-m-d',
-                        disableMobile: true,
-                        allowInput: true,
-                    });
+                    // Remove file preview after upload so dropzone is ready for the next image
+                    myDropzone.removeFile(file);
                 }
 
-                // Remove file preview after upload so dropzone is ready for the next image
-                setTimeout(function() {
-                    myDropzone.removeFile(file);
-                }, 300);
             }
         });
     }
