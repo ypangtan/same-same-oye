@@ -107,7 +107,7 @@ class UserSubscription extends Model
     public function cancel() {
         $this->update([
             'status' => 40,
-            'cancelled_at' => now(),
+            'cancelled_at' => Carbon::now()->timezone('Asia/Kuala_Lumpur'),
         ]);
 
         return $this;

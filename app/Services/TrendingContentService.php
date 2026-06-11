@@ -173,6 +173,7 @@ class TrendingContentService
                 'file' => $request->upload_type == 1 ? $request->file : null,
                 'url' => $request->upload_type == 2 ? $request->url : null,
                 'upload_type' => $request->upload_type,
+                'priority' => TrendingContent::max( 'priority' ) + 1,
                 'status' => 10,
                 'publishing_date' => $request->publishing_date ?: null,
             ] );

@@ -16,6 +16,7 @@ return [
     'plan' => 'Subscription Plan',
     'user' => 'User',
     'end_date' => 'End Date',
+    'cancelled_at' => 'Cancelled At',
 
     'pending' => 'Pending',
     'active' => 'Active',

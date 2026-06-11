@@ -190,6 +190,7 @@ class AndroidCallbackService {
                 break;
                 
             case 'SUBSCRIPTION_STATE_CANCELED':
+                $userSubscription->cancelled_at = Carbon::now()->timezone('Asia/Kuala_Lumpur');
                 if ($eventType === 'SUBSCRIPTION_REVOKED') {
                     // 开发者撤销（退款等）→ 立即断开
                     $userSubscription->status = 40;
