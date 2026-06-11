@@ -116,9 +116,9 @@ $setting = 'setting';
                                         <span id="special_otp_expires_display">-</span>
                                     </div>
                                 </div>
-                                <div class="d-flex gap-2 justify-content-end">
-                                    <button class="btn btn-sm btn-secondary" id="special_otp_generate">{{ __( 'setting.special_otp_generate' ) }}</button>
-                                    <button class="btn btn-sm btn-primary" id="special_otp_save">{{ __( 'template.save_changes' ) }}</button>
+                                <div class="text-end">
+                                    <button class="btn btn-sm btn-secondary" id="special_otp_generate">{{ __( 'template.save_changes' ) }}</button>
+                                    <button class="btn btn-sm btn-primary" id="special_otp_generate">{{ __( 'template.save_changes' ) }}</button>
                                 </div>
                             </div>
                         </div>
