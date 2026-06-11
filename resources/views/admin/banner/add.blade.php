@@ -175,12 +175,12 @@
                         disableMobile: true,
                         allowInput: true,
                     });
-                }
 
-                // Remove file preview after upload so dropzone is ready for the next image
-                setTimeout(function() {
-                    myDropzone.removeFile(file);
-                }, 300);
+                    // Remove file preview after upload so dropzone is ready for the next image
+                    setTimeout(function() {
+                        myDropzone.removeFile(file);
+                    }, 300);
+                }
             }
         });
     }
