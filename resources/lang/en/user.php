@@ -101,6 +101,7 @@ return [
     'checkin_success_vouvher' => 'You get :quantity :voucher',
 
     'is_special_otp_register' => 'Special OTP Register',
+    'special_otp_register_with_otp' => 'Register With OTP',
     'special_otp_register_without_otp' => 'Register Without OTP',
 
 ];

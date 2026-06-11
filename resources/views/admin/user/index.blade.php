@@ -100,7 +100,7 @@ $columns = [
     ],
     [
         'type' => 'select',
-        'options' => $data['is_special_otp_register'],
+        'options' => $data['is_special_otp_register_filter'],
         'id' => 'is_special_otp_register',
         'title' => __( 'user.is_special_otp_register' ),
     ],
