@@ -80,16 +80,8 @@
         @endcan
         <ul id="banner-list" class="list-group">
             @foreach($banners as $banner)
-                <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="{{ $banner->id }}">
-                    <img src="{{ $banner->image_path }}" class="banner-img rounded">
-                    {{-- <div class=" mt-2">
-                        <label>{{ __('banner.banner_url') }}</label>
-                        <input type="url" class="banner_url form-control" value="{{ $banner->url ?? '' }}" data-id="{{ $banner->id }}" placeholder="https://example.com"/>
-                    </div>
-                    <div class="mt-2">
-                        <label>{{ __('template.publishing_date') }}</label>
-                        <input type="text" class="banner_publishing_date form-control" value="{{ $banner->publishing_date ?? '' }}" data-id="{{ $banner->id }}" placeholder="{{ __('template.publishing_date_placeholder') }}"/>
-                    </div> --}}
+                <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="{{ $banner->id }}" data-status="{{ $banner->status }}">
+                    <img src="{{ $banner->image_path }}" class="banner-img rounded{{ $banner->status == 30 ? ' opacity-50' : '' }}">
                     <!-- Dropdown -->
                     @can( 'edit banners' )
                     <div class="dropdown mt-2">
@@ -101,7 +93,12 @@
                                 <button class="dropdown-item edit-banner" data-id="{{ $banner->id }}">{{ __( 'template.edit' ) }}</button>
                             </li>
                             <li>
-                                <button class="dropdown-item text-danger delete-banner" data-id="{{ $banner->id }}">Delete</button>
+                                <button class="dropdown-item status-banner" data-id="{{ $banner->id }}">
+                                    {{ $banner->status == 10 ? __( 'datatables.suspend' ) : __( 'datatables.activate' ) }}
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item text-danger delete-banner" data-id="{{ $banner->id }}">{{ __( 'template.delete' ) }}</button>
                             </li>
                         </ul>
                     </div>
@@ -151,7 +148,7 @@
             success: function(file, response) {
                 if (response.status == 200) {
                     let newBanner = $(`
-                        <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="${response.data.id}${response.data.id}">
+                        <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="${response.data.id}" data-status="10">
                             <img src="${response.data.banner_url}" class="banner-img rounded">
                             <!-- Dropdown -->
                             <div class="dropdown mt-2">
@@ -160,7 +157,13 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <button class="dropdown-item text-danger delete-banner" data-id="${response.data.id}">Delete</button>
+                                        <button class="dropdown-item edit-banner" data-id="${response.data.id}">{{ __( 'template.edit' ) }}</button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item status-banner" data-id="${response.data.id}">{{ __( 'datatables.suspend' ) }}</button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger delete-banner" data-id="${response.data.id}">{{ __( 'template.delete' ) }}</button>
                                     </li>
                                 </ul>
                             </div>
@@ -231,6 +234,39 @@
             bannerItem.fadeOut(300, function() {
                 $(this).remove();
             });
+        }).fail(function() {
+            $( 'body' ).loading( 'stop' );
+
+            alert("Error occurred. Please check your connection.");
+        });
+    });
+
+    $(document).on("click", ".status-banner", function() {
+        let btn = $(this);
+        let bannerId = btn.data("id");
+        let bannerItem = btn.closest(".list-group-item");
+
+        $( 'body' ).loading( {
+            message: '{{ __( 'template.loading' ) }}'
+        } );
+
+        $.post('{{ route("admin.banner.updateBannerStatus") }}', {
+            _token: '{{ csrf_token() }}',
+            id: bannerId
+        }).done(function(response) {
+            $( 'body' ).loading( 'stop' );
+
+            let currentStatus = parseInt( bannerItem.data('status') );
+            let newStatus = currentStatus == 10 ? 30 : 10;
+            bannerItem.data('status', newStatus);
+
+            if ( newStatus == 30 ) {
+                btn.text('{{ __( 'datatables.activate' ) }}');
+                bannerItem.find('.banner-img').addClass('opacity-50');
+            } else {
+                btn.text('{{ __( 'datatables.suspend' ) }}');
+                bannerItem.find('.banner-img').removeClass('opacity-50');
+            }
         }).fail(function() {
             $( 'body' ).loading( 'stop' );
 

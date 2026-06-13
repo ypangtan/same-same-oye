@@ -411,6 +411,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-banner', [ BannerController::class, 'updateBanner' ] )->name( 'admin.banner.updateBanner' );
                 Route::post( 'delete-banner', [ BannerController::class, 'deleteBanner' ] )->name( 'admin.banner.deleteBanner' );
                 Route::post( 'update-banner-status', [ BannerController::class, 'updateBannerStatus' ] )->name( 'admin.banner.updateBannerStatus' );
+                Route::post( 'delete-banner-status', [ BannerController::class, 'deleteBannerStatus' ] )->name( 'admin.banner.deleteBannerStatus' );
                 Route::post( 'remove-banner-gallery-image', [ BannerController::class, 'removeBannerGalleryImage' ] )->name( 'admin.banner.removeBannerGalleryImage' );
                 Route::post( 'ckeUpload', [ BannerController::class, 'ckeUpload' ] )->name( 'admin.banner.ckeUpload' );
                 Route::post( 'image-upload', [ BannerController::class, 'imageUpload' ] )->name( 'admin.banner.imageUpload' );
