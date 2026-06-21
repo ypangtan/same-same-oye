@@ -25,9 +25,21 @@
 
 {{-- PAGE TITLE --}}
 <div class="nk-block-head nk-block-head-sm">
-    <div class="nk-block-between">
+    <div class="nk-block-between flex-wrap gap-2">
         <div class="nk-block-head-content">
             <h3 class="nk-block-title page-title">{{ __( 'template.dashboard' ) }}</h3>
+        </div>
+        <div class="nk-block-head-content">
+            <div class="d-flex align-items-center gap-4">
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" id="toggle-radio-graph">
+                    <label class="form-check-label fw-medium" for="toggle-radio-graph">Radio Graph</label>
+                </div>
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" id="toggle-subs">
+                    <label class="form-check-label fw-medium" for="toggle-subs">Subscription Records</label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -111,7 +123,7 @@
 </div>
 
 {{-- SECTION 5 — RADIO GRAPH --}}
-<div class="nk-block mb-4">
+<div id="section-radio-graph" class="nk-block mb-4" style="display:none">
     <div class="card card-bordered">
         <div class="card-inner">
             <div class="d-flex align-items-center justify-content-between mb-3">
@@ -128,7 +140,7 @@
 </div>
 
 {{-- SECTION 6 — SUBSCRIPTIONS --}}
-<div class="nk-block mb-4">
+<div id="section-subs" class="nk-block mb-4" style="display:none">
     <p class="section-title">Subscription Records</p>
     <div class="listing-filter">
         <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="subs-date" style="background:#fff" />
@@ -164,11 +176,23 @@
     </div>
 </div>
 
-{{-- SECTION 7 — ITEM STREAMS (per type, built dynamically) --}}
+{{-- SECTION 7 — ITEM STREAMS (single table, ordered by type) --}}
 <div class="nk-block mb-4">
     <p class="section-title">Item Streams by Type</p>
-    <div id="items-tables-container">
-        <div class="text-muted py-3">Loading…</div>
+    <div class="listing-filter">
+        <input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="items-date" style="background:#fff" />
+        <input type="text" class="form-control form-control-sm" placeholder="Search…" id="items-search" />
+        <div></div><div></div>
+    </div>
+    <div class="card card-bordered card-preview">
+        <div class="card-inner">
+            <table class="table" style="width:100%" id="items-table">
+                <thead><tr>
+                    <th></th><th>No.</th><th>Type</th><th>Title</th><th>Plays</th>
+                </tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -436,34 +460,41 @@ document.addEventListener('DOMContentLoaded', function () {
         }).render();
     });
 
-    post('{{ route("admin.dashboard.getRadioStreamGraph") }}').then(function (d) {
-        var el = document.getElementById('chart-radio-streams');
-        if (!d.series || !d.series.length) {
-            el.innerHTML = '<div class="d-flex align-items-center justify-content-center" style="height:300px"><span class="text-muted">No radio stream data yet.</span></div>';
-            return;
-        }
-        if (typeof ApexCharts === 'undefined') return;
-        new ApexCharts(el, {
-            chart      : { type: 'bar', height: 300, stacked: true, toolbar: { show: false } },
-            series     : d.series,
-            xaxis      : { categories: d.labels || [], labels: { rotate: -45, style: { fontSize: '10px' } } },
-            colors     : ['#ae4342','#e65100','#3c58d0','#2e7d32','#7b1fa2','#00838f','#f9a825','#4e342e'],
-            plotOptions: { bar: { columnWidth: '60%' } },
-            legend     : { position: 'top', fontSize: '12px' },
-            dataLabels : { enabled: false },
-            grid       : { borderColor: '#f1f3f7' },
-        }).render();
-    });
+    /* ── Radio graph (lazy — only loads when section is shown) ── */
+    var radioChartLoaded = false;
+    function loadRadioGraph() {
+        if (radioChartLoaded) return;
+        radioChartLoaded = true;
+        post('{{ route("admin.dashboard.getRadioStreamGraph") }}').then(function (d) {
+            var el = document.getElementById('chart-radio-streams');
+            if (!d.series || !d.series.length) {
+                el.innerHTML = '<div class="d-flex align-items-center justify-content-center" style="height:300px"><span class="text-muted">No radio stream data yet.</span></div>';
+                return;
+            }
+            if (typeof ApexCharts === 'undefined') return;
+            new ApexCharts(el, {
+                chart      : { type: 'bar', height: 300, stacked: true, toolbar: { show: false } },
+                series     : d.series,
+                xaxis      : { categories: d.labels || [], labels: { rotate: -45, style: { fontSize: '10px' } } },
+                colors     : ['#ae4342','#e65100','#3c58d0','#2e7d32','#7b1fa2','#00838f','#f9a825','#4e342e'],
+                plotOptions: { bar: { columnWidth: '60%' } },
+                legend     : { position: 'top', fontSize: '12px' },
+                dataLabels : { enabled: false },
+                grid       : { borderColor: '#f1f3f7' },
+            }).render();
+        });
+    }
 
     /* ══════════════════════════════════════════════════════════════════
        SECTION 6 — SUBSCRIPTIONS
        Cols: 0=chk 1=no 2=user 3=email 4=plan 5=type 6=status 7=start 8=end
     ══════════════════════════════════════════════════════════════════ */
 
-    var dtSubs = null, subsDateRange = '';
+    var dtSubs = null, subsDateRange = '', subsLoaded = false;
 
     function loadSubs() {
         post('{{ route("admin.dashboard.getSubscriptionsTable") }}', { date_range: subsDateRange }).then(function (d) {
+            subsLoaded = true;
             dtSubs = makeDT('subs-table', d.subscriptions, [
                 { data: null, render: CHK_RENDER },
                 { data: null         },
@@ -502,7 +533,27 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#subs-type').on('change',   function () { if (dtSubs) dtSubs.column(5).search($(this).val()).draw(); });
     $('#subs-status').on('change', function () { if (dtSubs) dtSubs.column(6).search($(this).val()).draw(); });
 
-    loadSubs();
+    /* ── Toggle switches (localStorage-persisted) ─────────────────── */
+    function initToggle(toggleId, sectionId, onShow) {
+        var stored = localStorage.getItem('dash_' + toggleId);
+        var on     = stored === '1';
+        var $chk   = $('#' + toggleId);
+        var $sec   = $('#' + sectionId);
+
+        $chk.prop('checked', on);
+        $sec.toggle(on);
+        if (on && onShow) onShow();
+
+        $chk.on('change', function () {
+            var nowOn = $(this).is(':checked');
+            localStorage.setItem('dash_' + toggleId, nowOn ? '1' : '0');
+            $sec.toggle(nowOn);
+            if (nowOn && onShow) onShow();
+        });
+    }
+
+    initToggle('toggle-radio-graph', 'section-radio-graph', loadRadioGraph);
+    initToggle('toggle-subs',        'section-subs',        loadSubs);
 
     /* ══════════════════════════════════════════════════════════════════
        SECTIONS 7-9 — STREAM TABLES (per type, each with own date+search)
@@ -551,32 +602,36 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* ── Items (cols: chk 0, no 1, title 2, plays 3) ── */
-    var ITEMS_THEAD = '<th></th><th>No.</th><th>Title</th><th>Plays</th>';
-    var ITEMS_COLS  = [
-        { data: null,  render: CHK_RENDER },
-        { data: null          },
-        { data: 'title'       },
-        { data: 'total'       },
-    ];
-    var ITEMS_DEFS = [
-        { targets: 0, orderable: false, render: CHK_RENDER },
-        noColDef(),
-        { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-    ];
+    /* ── Items — single table, cols: chk 0, no 1, type 2, title 3, plays 4 ── */
+    var dtItems = null, itemsDateRange = '';
 
-    post('{{ route("admin.dashboard.getItemStreams") }}', {})
-        .then(function (d) {
-            var $c = $('#items-tables-container').empty();
-            if (!d.types || !d.types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
-            var allItems = d.items || [];
-            d.types.forEach(function (type) {
-                var ids      = buildTypeBlock('items-tables-container', 'items', type, ITEMS_THEAD);
-                var typeRows = allItems.filter(function (r) { return r.type_id == type.id; });
-                wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getItemStreams") }}', 'items', ITEMS_COLS, ITEMS_DEFS, 3);
+    function loadItems() {
+        post('{{ route("admin.dashboard.getItemStreams") }}', { date_range: itemsDateRange })
+            .then(function (d) {
+                dtItems = makeDT('items-table', d.items || [], [
+                    { data: null,        render: CHK_RENDER },
+                    { data: null         },
+                    { data: 'type_name'  },
+                    { data: 'title'      },
+                    { data: 'total'      },
+                ], [
+                    { targets: 0, orderable: false, render: CHK_RENDER },
+                    noColDef(),
+                    { targets: 4, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+                ], 2);
             });
-        })
-        .catch(function () { $('#items-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
+    }
+
+    $('#items-date').flatpickr({ mode: 'range', disableMobile: true,
+        onClose: function (sel, dateStr) { itemsDateRange = dateStr; loadItems(); } });
+
+    var itemsTimer;
+    $('#items-search').on('input', function () {
+        var v = $(this).val(); clearTimeout(itemsTimer);
+        itemsTimer = setTimeout(function () { if (dtItems) dtItems.search(v).draw(); }, 400);
+    });
+
+    loadItems();
 
     /* ── Playlists (cols: chk 0, no 1, name 2, plays 3, last 4) ──────── */
     var PLISTS_THEAD = '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th><th>Last Played</th>';
