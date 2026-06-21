@@ -369,7 +369,6 @@
             <table class="table" style="width:100%" id="banners-table">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>No.</th>
                         <th>Image</th>
                         <th>Status</th>
@@ -393,7 +392,6 @@
             <table class="table" style="width:100%" id="popups-table">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>No.</th>
                         <th>Image</th>
                         <th>Title</th>
@@ -824,17 +822,17 @@
             { data: 'clicks'     },
         ], [
             noColDef(),
-            { targets: 2, orderable: false,
+            { targets: 1, orderable: false,
               render: function (data) {
                   return data ? '<img src="' + esc(data) + '" class="thumb-img">' : '—';
               } },
-            { targets: 3, orderable: false,
+            { targets: 2, orderable: false,
               render: function (data) {
                   var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
-            { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-        ], 5);
+            { targets: 3, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+        ], 3);
     });
 
     var bannersTimer;
@@ -860,16 +858,16 @@
             { data: 'clicks'     },
         ], [
             noColDef(),
-            { targets: 2, orderable: false,
+            { targets: 1, orderable: false,
               render: function (data) {
                   return data ? '<img src="' + esc(data) + '" class="thumb-img">' : '—';
               } },
-            { targets: 4, orderable: false,
+            { targets: 3, orderable: false,
               render: function (data) {
                   var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
-            { targets: 5, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
         ], 5);
     });
 
