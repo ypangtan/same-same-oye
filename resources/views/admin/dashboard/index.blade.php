@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function makeDT(id, data, columns, columnDefs, orderCol) {
         var key = id.replace('-table', '').replace(/-/g, '');
         if ($.fn.DataTable.isDataTable('#' + id)) {
-            $('#' + id).DataTable().destroy(true);
+            $('#' + id).DataTable().destroy(); /* keep <table> in DOM for reinit */
         }
         return $('#' + id).DataTable({
             data         : data || [],
@@ -699,9 +699,8 @@ document.addEventListener('DOMContentLoaded', function () {
               } },
             { targets: 4, orderable: false,
               render: function (data) {
-                  var c = data == 10 ? 'bx-active' : 'bx-inactive';
-                  var l = data == 10 ? 'Active'    : 'Inactive';
-                  return '<span class="bx ' + c + '">' + l + '</span>';
+                  var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
+                  return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
             { targets: 5, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
         ], 5);
@@ -739,9 +738,8 @@ document.addEventListener('DOMContentLoaded', function () {
               } },
             { targets: 4, orderable: false,
               render: function (data) {
-                  var c = data == 10 ? 'bx-active' : 'bx-inactive';
-                  var l = data == 10 ? 'Active'    : 'Inactive';
-                  return '<span class="bx ' + c + '">' + l + '</span>';
+                  var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
+                  return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
             { targets: 5, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
         ], 5);

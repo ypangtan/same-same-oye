@@ -384,7 +384,7 @@ class DashboardService {
                     'id'         => $banner->id,
                     'name'       => $banner->en_name ?? '—',
                     'image_path' => $banner->image_path,
-                    'status'     => $banner->status,
+                    'status'     => $banner->status == 10 ? 'Active' : 'Inactive',
                     'clicks'     => $banner->clicks_count,
                     'created_at' => $banner->created_at ? $banner->created_at->format( 'Y-m-d' ) : '—',
                 ];
@@ -405,7 +405,7 @@ class DashboardService {
                     'id'         => $popup->id,
                     'title'      => $popup->en_title ?? '—',
                     'image_path' => $popup->image_path,
-                    'status'     => $popup->status,
+                    'status'     => $popup->status == 10 ? 'Active' : 'Inactive',
                     'clicks'     => $popup->clicks_count,
                     'created_at' => $popup->created_at ? $popup->created_at->format( 'Y-m-d' ) : '—',
                 ];
