@@ -193,7 +193,7 @@ class DashboardService {
             ->join( 'users', 'users.id', '=', 'user_subscriptions.user_id' )
             ->leftJoin( 'subscription_plans', 'subscription_plans.id', '=', 'user_subscriptions.subscription_plan_id' )
             ->select(
-                'users.name as user_name',
+                'users.fullname as user_name',
                 'users.email',
                 'subscription_plans.name as plan_name',
                 'user_subscriptions.type',
@@ -207,7 +207,7 @@ class DashboardService {
 
         if ( $search ) {
             $q->where( function ( $q2 ) use ( $search ) {
-                $q2->where( 'users.name', 'like', "%{$search}%" )
+                $q2->where( 'users.fullname', 'like', "%{$search}%" )
                    ->orWhere( 'users.email', 'like', "%{$search}%" )
                    ->orWhere( 'subscription_plans.name', 'like', "%{$search}%" );
             } );

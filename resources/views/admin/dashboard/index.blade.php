@@ -551,21 +551,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* ── Items (cols: chk 0, no 1, title 2, author 3, plays 4, last 5) ── */
-    var ITEMS_THEAD = '<th></th><th>No.</th><th>Title</th><th>Author</th><th>Plays</th><th>Last Played</th>';
+    /* ── Items (cols: chk 0, no 1, title 2, plays 3) ── */
+    var ITEMS_THEAD = '<th></th><th>No.</th><th>Title</th><th>Plays</th>';
     var ITEMS_COLS  = [
-        { data: null, render: CHK_RENDER },
+        { data: null,  render: CHK_RENDER },
         { data: null          },
         { data: 'title'       },
-        { data: 'author'      },
         { data: 'total'       },
-        { data: 'last_played' },
     ];
     var ITEMS_DEFS = [
         { targets: 0, orderable: false, render: CHK_RENDER },
         noColDef(),
-        { targets: 4, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-        { targets: 5, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
+        { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
     ];
 
     post('{{ route("admin.dashboard.getItemStreams") }}', {})
@@ -576,7 +573,7 @@ document.addEventListener('DOMContentLoaded', function () {
             d.types.forEach(function (type) {
                 var ids      = buildTypeBlock('items-tables-container', 'items', type, ITEMS_THEAD);
                 var typeRows = allItems.filter(function (r) { return r.type_id == type.id; });
-                wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getItemStreams") }}', 'items', ITEMS_COLS, ITEMS_DEFS, 4);
+                wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getItemStreams") }}', 'items', ITEMS_COLS, ITEMS_DEFS, 3);
             });
         })
         .catch(function () { $('#items-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
