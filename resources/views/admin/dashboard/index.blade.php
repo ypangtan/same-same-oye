@@ -742,7 +742,7 @@
     ];
     var ITEMS_DEFS   = [
         noColDef(),
-        { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+        { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
     ];
 
     var PLISTS_THEAD = '<th>No.</th><th>Playlist Name</th><th>Plays</th>';
@@ -753,7 +753,7 @@
     ];
     var PLISTS_DEFS  = [
         noColDef(),
-        { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+        { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
     ];
 
     var COLLS_THEAD  = '<th>No.</th><th>Collection Name</th><th>Plays</th>';
@@ -764,7 +764,7 @@
     ];
     var COLLS_DEFS   = [
         noColDef(),
-        { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+        { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
     ];
 
     Promise.all([
