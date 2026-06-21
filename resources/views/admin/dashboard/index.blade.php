@@ -1,26 +1,116 @@
 <style>
-    .page-title  { color: #ae4342; margin-bottom: -10px; }
-    .section-title { font-size: .9rem; font-weight: 600; color: #364a63; border-left: 3px solid #ae4342; padding-left: 10px; margin-bottom: 16px; }
+    .page-title {
+        color: #ae4342;
+        margin-bottom: -10px;
+    }
+
+    .section-title {
+        font-size: .9rem;
+        font-weight: 600;
+        color: #364a63;
+        border-left: 3px solid #ae4342;
+        padding-left: 10px;
+        margin-bottom: 16px;
+    }
 
     /* Stat cards */
-    .stat-card .stat-value { font-size: 1.75rem; font-weight: 700; color: #364a63; }
-    .stat-card .stat-label { font-size: .78rem; color: #8094ae; text-transform: uppercase; letter-spacing: .05em; }
-    .stat-card .stat-icon  { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .stat-card .stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #364a63;
+    }
+
+    .stat-card .stat-label {
+        font-size: .78rem;
+        color: #8094ae;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
+
+    .stat-card .stat-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
 
     /* Stream mini */
-    .stream-mini { padding: 14px 18px; display: flex; align-items: center; gap: 12px; }
-    .stream-mini .sm-icon  { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-    .stream-mini .sm-val   { font-size: 1.4rem; font-weight: 700; color: #364a63; line-height: 1; }
-    .stream-mini .sm-label { font-size: .72rem; color: #8094ae; text-transform: uppercase; letter-spacing: .05em; }
+    .stream-mini {
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .stream-mini .sm-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .stream-mini .sm-val {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #364a63;
+        line-height: 1;
+    }
+
+    .stream-mini .sm-label {
+        font-size: .72rem;
+        color: #8094ae;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
 
     /* Inline badge styles */
-    .bx { display: inline-block; border-radius: 4px; padding: 2px 8px; font-size: .75rem; font-weight: 600; }
-    .bx-active   { background: #e8f5e9; color: #2e7d32; }
-    .bx-inactive { background: #fce4ec; color: #b71c1c; }
-    .bx-paid     { background: #e8f5e9; color: #2e7d32; }
-    .bx-trial    { background: #fff3e0; color: #e65100; }
-    .bx-type     { background: #e5edff; color: #3c58d0; }
-    .thumb-img   { width: 60px; height: 36px; object-fit: cover; border-radius: 4px; }
+    .bx {
+        display: inline-block;
+        border-radius: 4px;
+        padding: 2px 8px;
+        font-size: .75rem;
+        font-weight: 600;
+    }
+
+    .bx-active {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .bx-inactive {
+        background: #fce4ec;
+        color: #b71c1c;
+    }
+
+    .bx-paid {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .bx-trial {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .bx-type {
+        background: #e5edff;
+        color: #3c58d0;
+    }
+
+    .thumb-img {
+        width: 60px;
+        height: 36px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
 </style>
 
 {{-- PAGE TITLE --}}
@@ -48,22 +138,61 @@
 <div class="nk-block mb-4">
     <p class="section-title">Active Users Overview</p>
     <div class="row g-3">
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
-            <div class="stat-icon bg-primary-dim text-primary"><em class="icon ni ni-users"></em></div>
-            <div><div class="stat-value" id="stat-total-active">—</div><div class="stat-label">Total Active</div></div>
-        </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
-            <div class="stat-icon" style="background:#e5edff;color:#3c58d0"><em class="icon ni ni-user"></em></div>
-            <div><div class="stat-value" id="stat-free">—</div><div class="stat-label">Free</div></div>
-        </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
-            <div class="stat-icon" style="background:#fff3e0;color:#e65100"><em class="icon ni ni-clock"></em></div>
-            <div><div class="stat-value" id="stat-trial">—</div><div class="stat-label">Trial</div></div>
-        </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
-            <div class="stat-icon" style="background:#e8f5e9;color:#2e7d32"><em class="icon ni ni-star"></em></div>
-            <div><div class="stat-value" id="stat-paid">—</div><div class="stat-label">Paid</div></div>
-        </div></div></div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center">
+                        <div class="stat-icon bg-primary-dim text-primary"><em class="icon ni ni-users"></em></div>
+                        <div>
+                            <div class="stat-value" id="stat-total-active">—</div>
+                            <div class="stat-label">Total Active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center">
+                        <div class="stat-icon" style="background:#e5edff;color:#3c58d0"><em class="icon ni ni-user"></em>
+                        </div>
+                        <div>
+                            <div class="stat-value" id="stat-free">—</div>
+                            <div class="stat-label">Free</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center">
+                        <div class="stat-icon" style="background:#fff3e0;color:#e65100"><em class="icon ni ni-clock"></em>
+                        </div>
+                        <div>
+                            <div class="stat-value" id="stat-trial">—</div>
+                            <div class="stat-label">Trial</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center">
+                        <div class="stat-icon" style="background:#e8f5e9;color:#2e7d32"><em class="icon ni ni-star"></em>
+                        </div>
+                        <div>
+                            <div class="stat-value" id="stat-paid">—</div>
+                            <div class="stat-label">Paid</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -73,27 +202,65 @@
         <div class="col-12 col-md-6">
             <p class="section-title">New Users</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
-                    <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
-                    <div><div class="stat-value" id="stat-new-today">—</div><div class="stat-label">Today</div></div>
-                </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
-                    <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
-                    <div><div class="stat-value" id="stat-new-month">—</div><div class="stat-label">This Month</div></div>
-                </div></div></div>
+                <div class="col-6">
+                    <div class="card stat-card h-100">
+                        <div class="card-body">
+                            <div class="gap-3 d-flex align-items-center">
+                                <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
+                                <div>
+                                    <div class="stat-value" id="stat-new-today">—</div>
+                                    <div class="stat-label">Today</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card stat-card h-100">
+                        <div class="card-body">
+                            <div class="gap-3 d-flex align-items-center">
+                                <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
+                                <div>
+                                    <div class="stat-value" id="stat-new-month">—</div>
+                                    <div class="stat-label">This Month</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-12 col-md-6">
             <p class="section-title">Subscriptions</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
-                    <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em class="icon ni ni-check-circle"></em></div>
-                    <div><div class="stat-value" id="stat-subs-today">—</div><div class="stat-label">Today</div></div>
-                </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
-                    <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em class="icon ni ni-check-circle"></em></div>
-                    <div><div class="stat-value" id="stat-subs-month">—</div><div class="stat-label">This Month</div></div>
-                </div></div></div>
+                <div class="col-6">
+                    <div class="card stat-card h-100">
+                        <div class="card-body">
+                            <div class="gap-3 d-flex align-items-center">
+                                <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em
+                                        class="icon ni ni-check-circle"></em></div>
+                                <div>
+                                    <div class="stat-value" id="stat-subs-today">—</div>
+                                    <div class="stat-label">Today</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card stat-card h-100">
+                        <div class="card-body">
+                            <div class="gap-3 d-flex align-items-center">
+                                <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em
+                                        class="icon ni ni-check-circle"></em></div>
+                                <div>
+                                    <div class="stat-value" id="stat-subs-month">—</div>
+                                    <div class="stat-label">This Month</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -114,10 +281,18 @@
     <p class="section-title">Streaming Activity (All Time)</p>
     <div class="row g-3" id="stream-cards-row">
         {{-- Radio always first (static) --}}
-        <div class="col-6 col-md-4 col-lg-3"><div class="card h-100"><div class="card-body stream-mini">
-            <div class="sm-icon" style="background:#fce4ec;color:#c62828"><em class="icon ni ni-signal"></em></div>
-            <div><div class="sm-val" id="stat-radio">—</div><div class="sm-label">Radio Streams</div></div>
-        </div></div></div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body stream-mini">
+                    <div class="sm-icon" style="background:#fce4ec;color:#c62828"><em class="icon ni ni-signal"></em>
+                    </div>
+                    <div>
+                        <div class="sm-val" id="stat-radio">—</div>
+                        <div class="sm-label">Radio Streams</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         {{-- Per-type cards appended here by JS --}}
     </div>
 </div>
@@ -143,7 +318,8 @@
 <div id="section-subs" class="nk-block mb-4" style="display:none">
     <p class="section-title">Subscription Records</p>
     <div class="listing-filter">
-        <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="subs-date" style="background:#fff" />
+        <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="subs-date"
+            style="background:#fff" />
         <input type="text" class="form-control form-control-sm" placeholder="Search name / email…" id="subs-search" />
         <select class="form-select form-select-sm" id="subs-type">
             <option value="">All Types</option>
@@ -159,17 +335,19 @@
     <div class="card card-bordered card-preview">
         <div class="card-inner">
             <table class="table" style="width:100%" id="subs-table">
-                <thead><tr>
-                    <th></th>
-                    <th>No.</th>
-                    <th>User</th>
-                    <th>Email</th>
-                    <th>Plan</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                </tr></thead>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>No.</th>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Plan</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
                 <tbody></tbody>
             </table>
         </div>
@@ -197,15 +375,17 @@
     <div class="card card-bordered card-preview">
         <div class="card-inner">
             <table class="table" style="width:100%" id="banners-table">
-                <thead><tr>
-                    <th></th>
-                    <th>No.</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>Clicks</th>
-                    <th>Created</th>
-                </tr></thead>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>No.</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Clicks</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
                 <tbody></tbody>
             </table>
         </div>
@@ -226,15 +406,17 @@
     <div class="card card-bordered card-preview">
         <div class="card-inner">
             <table class="table" style="width:100%" id="popups-table">
-                <thead><tr>
-                    <th></th>
-                    <th>No.</th>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Clicks</th>
-                    <th>Created</th>
-                </tr></thead>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>No.</th>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Clicks</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
                 <tbody></tbody>
             </table>
         </div>
@@ -242,7 +424,7 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     var csrf = '{{ csrf_token() }}';
 
     /* ── helpers ─────────────────────────────────────────────────────── */
