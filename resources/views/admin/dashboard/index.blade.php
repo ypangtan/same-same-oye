@@ -36,19 +36,19 @@
 <div class="nk-block mb-4">
     <p class="section-title">Active Users Overview</p>
     <div class="row g-3">
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
             <div class="stat-icon bg-primary-dim text-primary"><em class="icon ni ni-users"></em></div>
             <div><div class="stat-value" id="stat-total-active">—</div><div class="stat-label">Total Active</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
             <div class="stat-icon" style="background:#e5edff;color:#3c58d0"><em class="icon ni ni-user"></em></div>
             <div><div class="stat-value" id="stat-free">—</div><div class="stat-label">Free</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
             <div class="stat-icon" style="background:#fff3e0;color:#e65100"><em class="icon ni ni-clock"></em></div>
             <div><div class="stat-value" id="stat-trial">—</div><div class="stat-label">Trial</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
             <div class="stat-icon" style="background:#e8f5e9;color:#2e7d32"><em class="icon ni ni-star"></em></div>
             <div><div class="stat-value" id="stat-paid">—</div><div class="stat-label">Paid</div></div>
         </div></div></div>
@@ -61,11 +61,11 @@
         <div class="col-12 col-md-6">
             <p class="section-title">New Users</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                     <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
                     <div><div class="stat-value" id="stat-new-today">—</div><div class="stat-label">Today</div></div>
                 </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                     <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
                     <div><div class="stat-value" id="stat-new-month">—</div><div class="stat-label">This Month</div></div>
                 </div></div></div>
@@ -74,11 +74,11 @@
         <div class="col-12 col-md-6">
             <p class="section-title">Subscriptions</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                     <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em class="icon ni ni-check-circle"></em></div>
                     <div><div class="stat-value" id="stat-subs-today">—</div><div class="stat-label">Today</div></div>
                 </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                     <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em class="icon ni ni-check-circle"></em></div>
                     <div><div class="stat-value" id="stat-subs-month">—</div><div class="stat-label">This Month</div></div>
                 </div></div></div>
@@ -174,88 +174,39 @@
     </div>
 </div>
 
-{{-- SECTION 7 — ITEM STREAMS --}}
+{{-- SECTION 7 — ITEM STREAMS (per type, built dynamically) --}}
 <div class="nk-block mb-4">
-    <p class="section-title">Item Streams</p>
-    <div class="listing-filter">
-        <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="items-date" style="background:#fff" />
-        <input type="text" class="form-control form-control-sm" placeholder="Search title / author…" id="items-search" />
-        <select class="form-select form-select-sm" id="items-type">
-            <option value="">All Types</option>
-        </select>
+    <p class="section-title">Item Streams by Type</p>
+    <div class="listing-filter" style="grid-template-columns:1fr 3fr">
+        <input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="items-date" style="background:#fff" />
         <div></div>
     </div>
-    <div class="card card-bordered card-preview">
-        <div class="card-inner">
-            <table class="table" style="width:100%" id="items-table">
-                <thead><tr>
-                    <th></th>
-                    <th>No.</th>
-                    <th>Type</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Plays</th>
-                    <th>Last Played</th>
-                </tr></thead>
-                <tbody></tbody>
-            </table>
-        </div>
+    <div id="items-tables-container">
+        <div class="text-muted py-3">Loading…</div>
     </div>
 </div>
 
-{{-- SECTION 8 — PLAYLIST STREAMS --}}
+{{-- SECTION 8 — PLAYLIST STREAMS (per type, built dynamically) --}}
 <div class="nk-block mb-4">
-    <p class="section-title">Playlist Streams</p>
-    <div class="listing-filter">
-        <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="plists-date" style="background:#fff" />
-        <input type="text" class="form-control form-control-sm" placeholder="Search playlist name…" id="plists-search" />
-        <select class="form-select form-select-sm" id="plists-type">
-            <option value="">All Types</option>
-        </select>
+    <p class="section-title">Playlist Streams by Type</p>
+    <div class="listing-filter" style="grid-template-columns:1fr 3fr">
+        <input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="plists-date" style="background:#fff" />
         <div></div>
     </div>
-    <div class="card card-bordered card-preview">
-        <div class="card-inner">
-            <table class="table" style="width:100%" id="plists-table">
-                <thead><tr>
-                    <th></th>
-                    <th>No.</th>
-                    <th>Type</th>
-                    <th>Playlist Name</th>
-                    <th>Plays</th>
-                    <th>Last Played</th>
-                </tr></thead>
-                <tbody></tbody>
-            </table>
-        </div>
+    <div id="plists-tables-container">
+        <div class="text-muted py-3">Loading…</div>
     </div>
 </div>
 
-{{-- SECTION 9 — COLLECTION STREAMS --}}
+{{-- SECTION 9 — COLLECTION STREAMS (per type, built dynamically) --}}
 <div class="nk-block mb-4">
-    <p class="section-title">Collection Streams</p>
-    <div class="listing-filter">
-        <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="colls-date" style="background:#fff" />
-        <input type="text" class="form-control form-control-sm" placeholder="Search collection name…" id="colls-search" />
-        <select class="form-select form-select-sm" id="colls-type">
-            <option value="">All Types</option>
-        </select>
+    <p class="section-title">Collection Streams by Type</p>
+    <div class="listing-filter" style="grid-template-columns:1fr 3fr">
+        <input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="colls-date" style="background:#fff" />
         <div></div>
     </div>
-    <div class="card card-bordered card-preview">
-        <div class="card-inner">
-            <table class="table" style="width:100%" id="colls-table">
-                <thead><tr>
-                    <th></th>
-                    <th>No.</th>
-                    <th>Type</th>
-                    <th>Collection Name</th>
-                    <th>Plays</th>
-                    <th>Last Played</th>
-                </tr></thead>
-                <tbody></tbody>
-            </table>
-        </div>
+    <div id="colls-tables-container">
+        <div class="text-muted py-3">Loading…</div>
     </div>
 </div>
 
@@ -448,16 +399,6 @@
         };
     }
 
-    function populateTypeSelect(selectId, types) {
-        var $sel = $('#' + selectId);
-        var cur  = $sel.val();
-        $sel.find('option:not(:first)').remove();
-        (types || []).forEach(function (t) {
-            $sel.append('<option value="' + esc(t.name) + '">' + esc(t.name) + '</option>');
-        });
-        if (cur) $sel.val(cur);
-    }
-
     /* ══════════════════════════════════════════════════════════════════
        SECTIONS 1-5: ONE-TIME LOADS
     ══════════════════════════════════════════════════════════════════ */
@@ -565,129 +506,179 @@
     loadSubs();
 
     /* ══════════════════════════════════════════════════════════════════
-       SECTION 7 — ITEM STREAMS
-       Cols: 0=chk 1=no 2=type 3=title 4=author 5=plays 6=last_played
+       SECTIONS 7-9 — STREAM TABLES (per type category, built dynamically)
+
+       Each content type (items / playlists / collections) gets ONE shared
+       flatpickr date filter.  After each API load the rows are split by
+       type_id and a separate DataTable is created per type.
     ══════════════════════════════════════════════════════════════════ */
 
-    var dtItems = null, itemsDateRange = '', itemsTypesLoaded = false;
+    /* Track active DT instances so we can destroy them before rebuilding */
+    var itemsDTs  = [];
+    var plistsDTs = [];
+    var collsDTs  = [];
+
+    /* Destroy all DTs in an array then clear it */
+    function destroyDTs(arr) {
+        arr.forEach(function (dt) { try { dt.destroy(); } catch (e) {} });
+        arr.length = 0;
+    }
+
+    /* Build HTML for one per-type table block and return {tableId, searchId} */
+    function buildTypeBlock(containerId, prefix, type, thead) {
+        var safeKey  = prefix + '-t' + type.id;
+        var tableId  = safeKey + '-table';
+        var searchId = safeKey + '-search';
+
+        $('#' + containerId).append(
+            '<p class="section-title mt-3 mb-2">' + esc(type.name) + '</p>' +
+            '<div class="listing-filter" style="grid-template-columns:1fr 3fr">' +
+            '<input type="text" class="form-control form-control-sm" placeholder="Search…" id="' + searchId + '">' +
+            '<div></div></div>' +
+            '<div class="card card-bordered card-preview mb-3"><div class="card-inner">' +
+            '<table class="table" style="width:100%" id="' + tableId + '">' +
+            '<thead><tr>' + thead + '</tr></thead><tbody></tbody>' +
+            '</table></div></div>'
+        );
+        return { tableId: tableId, searchId: searchId };
+    }
+
+    /* Wire text-search input to a DataTable instance */
+    function wireSearch(searchId, getDt) {
+        var timer;
+        $('#' + searchId).on('input', function () {
+            var v = $(this).val(); clearTimeout(timer);
+            timer = setTimeout(function () { var dt = getDt(); if (dt) dt.search(v).draw(); }, 400);
+        });
+    }
+
+    /* ── Items (cols: chk 0, no 1, title 2, author 3, plays 4, last 5) ── */
+    var itemsDateRange = '';
+    var ITEMS_THEAD = '<th></th><th>No.</th><th>Title</th><th>Author</th><th>Plays</th><th>Last Played</th>';
+    var ITEMS_COLS  = [
+        { data: null, render: CHK_RENDER },
+        { data: null         },
+        { data: 'title'      },
+        { data: 'author'     },
+        { data: 'total'      },
+        { data: 'last_played'},
+    ];
+    var ITEMS_DEFS = [
+        { targets: 0, orderable: false, render: CHK_RENDER },
+        noColDef(),
+        { targets: 4, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+        { targets: 5, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
+    ];
+
+    function buildItemTables(types, allRows) {
+        destroyDTs(itemsDTs);
+        var $c = $('#items-tables-container').empty();
+        if (!types || !types.length) {
+            $c.html('<div class="text-muted py-3">No data.</div>');
+            return;
+        }
+        types.forEach(function (type) {
+            var ids    = buildTypeBlock('items-tables-container', 'items', type, ITEMS_THEAD);
+            var rows   = allRows.filter(function (r) { return r.type_id == type.id; });
+            var dt     = makeDT(ids.tableId, rows, ITEMS_COLS, ITEMS_DEFS, 4);
+            itemsDTs.push(dt);
+            (function (ref) { wireSearch(ids.searchId, function () { return ref; }); })(dt);
+        });
+    }
 
     function loadItems() {
-        post('{{ route("admin.dashboard.getItemStreams") }}', { date_range: itemsDateRange }).then(function (d) {
-            if (!itemsTypesLoaded) { populateTypeSelect('items-type', d.types); itemsTypesLoaded = true; }
-            dtItems = makeDT('items-table', d.items, [
-                { data: null, render: CHK_RENDER },
-                { data: null          },
-                { data: 'type_name'   },
-                { data: 'title'       },
-                { data: 'author'      },
-                { data: 'total'       },
-                { data: 'last_played' },
-            ], [
-                { targets: 0, orderable: false, render: CHK_RENDER },
-                noColDef(),
-                { targets: 2, orderable: false,
-                  render: function (data) {
-                      return data ? '<span class="bx bx-type">' + esc(data) + '</span>' : '—';
-                  } },
-                { targets: 5, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-                { targets: 6, render: function (data) { return data ? String(data).substring(0, 16) : '—'; } },
-            ], 5);
-        });
+        post('{{ route("admin.dashboard.getItemStreams") }}', { date_range: itemsDateRange })
+            .then(function (d) { buildItemTables(d.types, d.items); });
     }
 
     $('#items-date').flatpickr({ mode: 'range', disableMobile: true,
         onClose: function (sel, dateStr) { itemsDateRange = dateStr; loadItems(); } });
 
-    var itemsTimer;
-    $('#items-search').on('input', function () {
-        var v = $(this).val(); clearTimeout(itemsTimer);
-        itemsTimer = setTimeout(function () { if (dtItems) dtItems.search(v).draw(); }, 400);
-    });
-    $('#items-type').on('change', function () { if (dtItems) dtItems.column(2).search($(this).val()).draw(); });
-
     loadItems();
 
-    /* ══════════════════════════════════════════════════════════════════
-       SECTION 8 — PLAYLIST STREAMS
-       Cols: 0=chk 1=no 2=type 3=name 4=plays 5=last_played
-    ══════════════════════════════════════════════════════════════════ */
+    /* ── Playlists (cols: chk 0, no 1, name 2, plays 3, last 4) ──────── */
+    var plistsDateRange = '';
+    var PLISTS_THEAD = '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th><th>Last Played</th>';
+    var PLISTS_COLS  = [
+        { data: null, render: CHK_RENDER },
+        { data: null          },
+        { data: 'name'        },
+        { data: 'total'       },
+        { data: 'last_played' },
+    ];
+    var PLISTS_DEFS = [
+        { targets: 0, orderable: false, render: CHK_RENDER },
+        noColDef(),
+        { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+        { targets: 4, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
+    ];
 
-    var dtPlists = null, plistsDateRange = '', plistsTypesLoaded = false;
+    function buildPlistTables(types, allRows) {
+        destroyDTs(plistsDTs);
+        var $c = $('#plists-tables-container').empty();
+        if (!types || !types.length) {
+            $c.html('<div class="text-muted py-3">No data.</div>');
+            return;
+        }
+        types.forEach(function (type) {
+            var ids  = buildTypeBlock('plists-tables-container', 'plists', type, PLISTS_THEAD);
+            var rows = allRows.filter(function (r) { return r.type_id == type.id; });
+            var dt   = makeDT(ids.tableId, rows, PLISTS_COLS, PLISTS_DEFS, 3);
+            plistsDTs.push(dt);
+            (function (ref) { wireSearch(ids.searchId, function () { return ref; }); })(dt);
+        });
+    }
 
     function loadPlists() {
-        post('{{ route("admin.dashboard.getPlaylistStreams") }}', { date_range: plistsDateRange }).then(function (d) {
-            if (!plistsTypesLoaded) { populateTypeSelect('plists-type', d.types); plistsTypesLoaded = true; }
-            dtPlists = makeDT('plists-table', d.playlists, [
-                { data: null, render: CHK_RENDER },
-                { data: null          },
-                { data: 'type_name'   },
-                { data: 'name'        },
-                { data: 'total'       },
-                { data: 'last_played' },
-            ], [
-                { targets: 0, orderable: false, render: CHK_RENDER },
-                noColDef(),
-                { targets: 2, orderable: false,
-                  render: function (data) {
-                      return data ? '<span class="bx bx-type">' + esc(data) + '</span>' : '—';
-                  } },
-                { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-                { targets: 5, render: function (data) { return data ? String(data).substring(0, 16) : '—'; } },
-            ], 4);
-        });
+        post('{{ route("admin.dashboard.getPlaylistStreams") }}', { date_range: plistsDateRange })
+            .then(function (d) { buildPlistTables(d.types, d.playlists); });
     }
 
     $('#plists-date').flatpickr({ mode: 'range', disableMobile: true,
         onClose: function (sel, dateStr) { plistsDateRange = dateStr; loadPlists(); } });
 
-    var plistsTimer;
-    $('#plists-search').on('input', function () {
-        var v = $(this).val(); clearTimeout(plistsTimer);
-        plistsTimer = setTimeout(function () { if (dtPlists) dtPlists.search(v).draw(); }, 400);
-    });
-    $('#plists-type').on('change', function () { if (dtPlists) dtPlists.column(2).search($(this).val()).draw(); });
-
     loadPlists();
 
-    /* ══════════════════════════════════════════════════════════════════
-       SECTION 9 — COLLECTION STREAMS
-       Cols: 0=chk 1=no 2=type 3=name 4=plays 5=last_played
-    ══════════════════════════════════════════════════════════════════ */
+    /* ── Collections (cols: chk 0, no 1, name 2, plays 3, last 4) ────── */
+    var collsDateRange = '';
+    var COLLS_THEAD = '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th><th>Last Played</th>';
+    var COLLS_COLS  = [
+        { data: null, render: CHK_RENDER },
+        { data: null          },
+        { data: 'name'        },
+        { data: 'total'       },
+        { data: 'last_played' },
+    ];
+    var COLLS_DEFS = [
+        { targets: 0, orderable: false, render: CHK_RENDER },
+        noColDef(),
+        { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+        { targets: 4, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
+    ];
 
-    var dtColls = null, collsDateRange = '', collsTypesLoaded = false;
+    function buildCollTables(types, allRows) {
+        destroyDTs(collsDTs);
+        var $c = $('#colls-tables-container').empty();
+        if (!types || !types.length) {
+            $c.html('<div class="text-muted py-3">No data.</div>');
+            return;
+        }
+        types.forEach(function (type) {
+            var ids  = buildTypeBlock('colls-tables-container', 'colls', type, COLLS_THEAD);
+            var rows = allRows.filter(function (r) { return r.type_id == type.id; });
+            var dt   = makeDT(ids.tableId, rows, COLLS_COLS, COLLS_DEFS, 3);
+            collsDTs.push(dt);
+            (function (ref) { wireSearch(ids.searchId, function () { return ref; }); })(dt);
+        });
+    }
 
     function loadColls() {
-        post('{{ route("admin.dashboard.getCollectionStreams") }}', { date_range: collsDateRange }).then(function (d) {
-            if (!collsTypesLoaded) { populateTypeSelect('colls-type', d.types); collsTypesLoaded = true; }
-            dtColls = makeDT('colls-table', d.collections, [
-                { data: null, render: CHK_RENDER },
-                { data: null          },
-                { data: 'type_name'   },
-                { data: 'name'        },
-                { data: 'total'       },
-                { data: 'last_played' },
-            ], [
-                { targets: 0, orderable: false, render: CHK_RENDER },
-                noColDef(),
-                { targets: 2, orderable: false,
-                  render: function (data) {
-                      return data ? '<span class="bx bx-type">' + esc(data) + '</span>' : '—';
-                  } },
-                { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-                { targets: 5, render: function (data) { return data ? String(data).substring(0, 16) : '—'; } },
-            ], 4);
-        });
+        post('{{ route("admin.dashboard.getCollectionStreams") }}', { date_range: collsDateRange })
+            .then(function (d) { buildCollTables(d.types, d.collections); });
     }
 
     $('#colls-date').flatpickr({ mode: 'range', disableMobile: true,
         onClose: function (sel, dateStr) { collsDateRange = dateStr; loadColls(); } });
-
-    var collsTimer;
-    $('#colls-search').on('input', function () {
-        var v = $(this).val(); clearTimeout(collsTimer);
-        collsTimer = setTimeout(function () { if (dtColls) dtColls.search(v).draw(); }, 400);
-    });
-    $('#colls-type').on('change', function () { if (dtColls) dtColls.column(2).search($(this).val()).draw(); });
 
     loadColls();
 
