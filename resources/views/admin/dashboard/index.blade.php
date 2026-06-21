@@ -73,11 +73,11 @@
         <div class="col-12 col-md-6">
             <p class="section-title">New Users</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
                     <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
                     <div><div class="stat-value" id="stat-new-today">—</div><div class="stat-label">Today</div></div>
                 </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
                     <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
                     <div><div class="stat-value" id="stat-new-month">—</div><div class="stat-label">This Month</div></div>
                 </div></div></div>
