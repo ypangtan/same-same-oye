@@ -11,7 +11,7 @@ class SettingService {
     public static function recordStream( $request ) {
         $request->validate( [
             'content_type' => [ 'required', 'in:1,2,3,4' ],
-            'radio_name'    => [ 'required_if:content_type,1' ],
+            'radio_name'    => [ 'nullable' ],
             'item_id'     => [ 'required_if:content_type,2', 'exists:items,id' ],
             'playlist_id' => [ 'required_if:content_type,3', 'exists:playlists,id' ],
             'collection_id' => [ 'required_if:content_type,4', 'exists:collections,id' ],

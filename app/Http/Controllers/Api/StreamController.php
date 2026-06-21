@@ -23,7 +23,7 @@ class StreamController extends Controller
      * @authenticated
      * 
      * @bodyParam content_type string required One of: 1, 2, 3, 4. Example: 2
-     * @bodyParam radio_id integer The encrypted id of the radio being streamed (null for other content types). Example: 5
+     * @bodyParam radio_id integer The name the radio being streamed (null for other content types). Example: 5
      * @bodyParam item_id integer The encrypted id of the item being streamed (null for other content types). Example: 5
      * @bodyParam playlist_id integer The encrypted id of the playlist being streamed (null for other content types). Example: 5
      * @bodyParam collection_id integer The encrypted id of the collection being streamed (null for other content types). Example: 5
