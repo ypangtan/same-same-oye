@@ -83,8 +83,8 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'daily-user-stats', [ DashboardController::class, 'getDailyUserStats' ] )->name( 'admin.dashboard.getDailyUserStats' );
                 Route::post( 'radio-stream-graph', [ DashboardController::class, 'getRadioStreamGraph' ] )->name( 'admin.dashboard.getRadioStreamGraph' );
                 Route::post( 'subscriptions-table', [ DashboardController::class, 'getSubscriptionsTable' ] )->name( 'admin.dashboard.getSubscriptionsTable' );
-                Route::post( 'item-streams', [ DashboardController::class, 'getItemStreams' ] )->name( 'admin.dashboard.getItemStreams' );
-                Route::post( 'playlist-streams', [ DashboardController::class, 'getPlaylistStreams' ] )->name( 'admin.dashboard.getPlaylistStreams' );
+                Route::post( 'item-streams',       [ DashboardController::class, 'getItemStreams' ] )->name( 'admin.dashboard.getItemStreams' );
+                Route::post( 'playlist-streams',   [ DashboardController::class, 'getPlaylistStreams' ] )->name( 'admin.dashboard.getPlaylistStreams' );
                 Route::post( 'collection-streams', [ DashboardController::class, 'getCollectionStreams' ] )->name( 'admin.dashboard.getCollectionStreams' );
                 Route::post( 'banner-click-stats', [ DashboardController::class, 'getBannerClickStats' ] )->name( 'admin.dashboard.getBannerClickStats' );
                 Route::post( 'popup-click-stats', [ DashboardController::class, 'getPopAnnouncementClickStats' ] )->name( 'admin.dashboard.getPopAnnouncementClickStats' );

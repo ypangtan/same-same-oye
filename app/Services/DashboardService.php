@@ -242,134 +242,65 @@ class DashboardService {
 
     // ── Item Streams DataTable ────────────────────────────────────────────────
 
-    public static function getItemStreams( Request $request ) {
-        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
-        $search = $request->input( 'search', '' );
-        $typeId = $request->input( 'type_id', '' );
-
-        // Types from items table regardless of stream history
+    public static function getItemStreams() {
         $types = DB::table( 'types' )
-            ->join( 'items', 'items.type_id', '=', 'types.id' )
-            ->distinct()
-            ->select( 'types.id', 'types.en_name as name' )
-            ->orderBy( 'types.en_name' )
+            ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'items' )->whereColumn( 'items.type_id', 'types.id' ) )
+            ->select( 'id', 'en_name as name' )
+            ->orderBy( 'en_name' )
             ->get();
 
-        $q = DB::table( 'stream_logs' )
+        $items = DB::table( 'stream_logs' )
             ->join( 'items', 'items.id', '=', 'stream_logs.item_id' )
             ->join( 'types', 'types.id', '=', 'items.type_id' )
-            ->where( 'stream_logs.content_type', 2 );
-
-        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
-
-        if ( $search ) {
-            $q->where( function ( $q2 ) use ( $search ) {
-                $q2->where( 'items.title', 'like', "%{$search}%" )
-                   ->orWhere( 'items.author', 'like', "%{$search}%" );
-            } );
-        }
-
-        if ( $typeId ) {
-            $q->where( 'types.id', $typeId );
-        }
-
-        $rows = $q->selectRaw(
-                'types.id as type_id, types.en_name as type_name,
-                 items.title, items.author,
-                 COUNT(*) as total,
-                 MAX(stream_logs.created_at) as last_played'
-            )
-            ->groupBy( 'types.id', 'types.en_name', 'items.title', 'items.author' )
+            ->where( 'stream_logs.content_type', 2 )
+            ->selectRaw( 'types.id as type_id, items.id as item_id, items.title, COUNT(*) as total' )
+            ->groupBy( 'types.id', 'items.id', 'items.title' )
             ->orderByDesc( 'total' )
             ->get();
 
-        return response()->json( [ 'items' => $rows, 'types' => $types ] );
+        return response()->json( [ 'types' => $types, 'items' => $items ] );
     }
 
     // ── Playlist Streams DataTable ────────────────────────────────────────────
 
-    public static function getPlaylistStreams( Request $request ) {
-        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
-        $search = $request->input( 'search', '' );
-        $typeId = $request->input( 'type_id', '' );
-
-        // Types from playlists table regardless of stream history
+    public static function getPlaylistStreams() {
         $types = DB::table( 'types' )
-            ->join( 'playlists', 'playlists.type_id', '=', 'types.id' )
-            ->distinct()
-            ->select( 'types.id', 'types.en_name as name' )
-            ->orderBy( 'types.en_name' )
+            ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'playlists' )->whereColumn( 'playlists.type_id', 'types.id' ) )
+            ->select( 'id', 'en_name as name' )
+            ->orderBy( 'en_name' )
             ->get();
 
-        $q = DB::table( 'stream_logs' )
+        $playlists = DB::table( 'stream_logs' )
             ->join( 'playlists', 'playlists.id', '=', 'stream_logs.playlist_id' )
             ->join( 'types', 'types.id', '=', 'playlists.type_id' )
-            ->where( 'stream_logs.content_type', 3 );
-
-        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
-
-        if ( $search ) {
-            $q->where( 'playlists.en_name', 'like', "%{$search}%" );
-        }
-
-        if ( $typeId ) {
-            $q->where( 'types.id', $typeId );
-        }
-
-        $rows = $q->selectRaw(
-                'types.id as type_id, types.en_name as type_name,
-                 playlists.en_name as name,
-                 COUNT(*) as total,
-                 MAX(stream_logs.created_at) as last_played'
-            )
-            ->groupBy( 'types.id', 'types.en_name', 'playlists.id', 'playlists.en_name' )
+            ->where( 'stream_logs.content_type', 3 )
+            ->selectRaw( 'types.id as type_id, playlists.id as playlist_id, playlists.en_name as name, COUNT(*) as total' )
+            ->groupBy( 'types.id', 'playlists.id', 'playlists.en_name' )
             ->orderByDesc( 'total' )
             ->get();
 
-        return response()->json( [ 'playlists' => $rows, 'types' => $types ] );
+        return response()->json( [ 'types' => $types, 'playlists' => $playlists ] );
     }
 
     // ── Collection Streams DataTable ──────────────────────────────────────────
 
-    public static function getCollectionStreams( Request $request ) {
-        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
-        $search = $request->input( 'search', '' );
-        $typeId = $request->input( 'type_id', '' );
-
-        // Types from collections table regardless of stream history
+    public static function getCollectionStreams() {
         $types = DB::table( 'types' )
-            ->join( 'collections', 'collections.type_id', '=', 'types.id' )
-            ->distinct()
-            ->select( 'types.id', 'types.en_name as name' )
-            ->orderBy( 'types.en_name' )
+            ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'collections' )->whereColumn( 'collections.type_id', 'types.id' ) )
+            ->select( 'id', 'en_name as name' )
+            ->orderBy( 'en_name' )
             ->get();
 
-        $q = DB::table( 'stream_logs' )
+        $collections = DB::table( 'stream_logs' )
             ->join( 'collections', 'collections.id', '=', 'stream_logs.collection_id' )
             ->join( 'types', 'types.id', '=', 'collections.type_id' )
-            ->where( 'stream_logs.content_type', 4 );
-
-        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
-
-        if ( $search ) {
-            $q->where( 'collections.en_name', 'like', "%{$search}%" );
-        }
-
-        if ( $typeId ) {
-            $q->where( 'types.id', $typeId );
-        }
-
-        $rows = $q->selectRaw(
-                'types.id as type_id, types.en_name as type_name,
-                 collections.en_name as name,
-                 COUNT(*) as total,
-                 MAX(stream_logs.created_at) as last_played'
-            )
-            ->groupBy( 'types.id', 'types.en_name', 'collections.id', 'collections.en_name' )
+            ->where( 'stream_logs.content_type', 4 )
+            ->selectRaw( 'types.id as type_id, collections.id as collection_id, collections.en_name as name, COUNT(*) as total' )
+            ->groupBy( 'types.id', 'collections.id', 'collections.en_name' )
             ->orderByDesc( 'total' )
             ->get();
 
-        return response()->json( [ 'collections' => $rows, 'types' => $types ] );
+        return response()->json( [ 'types' => $types, 'collections' => $collections ] );
     }
 
     // ── Banner click table ────────────────────────────────────────────────────
