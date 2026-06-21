@@ -247,7 +247,6 @@
                         <tr>
                             <th>No.</th>
                             <th>Image</th>
-                            <th>Name</th>
                             <th>Status</th>
                             <th>Clicks</th>
                             <th>Created</th>
@@ -357,7 +356,6 @@
             return '<tr>'
                 + '<td>' + (i + 1) + '</td>'
                 + '<td>' + img + '</td>'
-                + '<td>' + (b.name || '—') + '</td>'
                 + '<td>' + statusBadge + '</td>'
                 + '<td><strong>' + (b.clicks || 0) + '</strong></td>'
                 + '<td>' + (b.created_at || '—') + '</td>'
