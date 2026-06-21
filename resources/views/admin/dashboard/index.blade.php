@@ -111,6 +111,10 @@
         object-fit: cover;
         border-radius: 4px;
     }
+
+    .dt-buttons{
+        display: none;
+    }
 </style>
 
 {{-- PAGE TITLE --}}
