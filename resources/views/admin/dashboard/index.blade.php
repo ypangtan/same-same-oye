@@ -396,10 +396,12 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         var $row = $('#stream-cards-row');
         $row.find('.stream-type-card').remove();
+        var CARD_TYPE_NAMES = { 'Song': 'Music' };
         (d.stream_types || []).forEach(function (type) {
+            var typeName = CARD_TYPE_NAMES[type.name] || type.name;
             ['items', 'playlists', 'collections'].forEach(function (ct) {
                 var c   = CT[ct];
-                var lbl = esc(type.name) + ' ' + c.label;
+                var lbl = esc(typeName) + ' ' + c.label;
                 $row.append(
                     '<div class="col-6 col-md-4 col-lg-3 stream-type-card">' +
                     '<div class="card h-100"><div class="card-body stream-mini">' +
@@ -631,10 +633,13 @@ document.addEventListener('DOMContentLoaded', function () {
         var dI = results[0], dP = results[1], dC = results[2];
         var $c = $('#streams-by-type-container').empty();
 
-        /* Merge types from all 3 responses, sorted alphabetically */
+        /* Merge types from all 3 responses, rename, then sort alphabetically */
+        var TYPE_NAMES = { 'Song': 'Music' };
         var typesMap = {};
         [(dI.types || []), (dP.types || []), (dC.types || [])].forEach(function (arr) {
-            arr.forEach(function (t) { if (!typesMap[t.id]) typesMap[t.id] = t; });
+            arr.forEach(function (t) {
+                if (!typesMap[t.id]) typesMap[t.id] = { id: t.id, name: TYPE_NAMES[t.name] || t.name };
+            });
         });
         var types = Object.keys(typesMap)
             .map(function (k) { return typesMap[k]; })
