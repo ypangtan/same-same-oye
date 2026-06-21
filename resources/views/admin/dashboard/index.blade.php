@@ -383,11 +383,6 @@
     <p class="section-title">Pop Announcement Clicks</p>
     <div class="listing-filter" style="grid-template-columns:1fr 1fr">
         <input type="text" class="form-control form-control-sm" placeholder="Search title…" id="popups-search" />
-        <select class="form-select form-select-sm" id="popups-status">
-            <option value="">All Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-        </select>
     </div>
     <div class="card card-bordered card-preview">
         <div class="card-inner">
@@ -872,7 +867,6 @@
             { data: 'title'      },
             { data: 'status'     },
             { data: 'clicks'     },
-            { data: 'created_at' },
         ], [
             { targets: 0, orderable: false, render: CHK_RENDER },
             noColDef(),
