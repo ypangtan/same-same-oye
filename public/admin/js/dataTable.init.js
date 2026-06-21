@@ -209,15 +209,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
             $(row).addClass('nk-tb-item');
         },
         initComplete: function () {
-            if( dt_table_config.export ) {
-                const exportCheckbox = `
-                    <div class="my-3">
-                        <input type="checkbox" id="exportSelected" name="exportSelected">
-                        <label for="exportSelected" class="ms-1">Export ONLY selected rows</label>
-                    </div>
-                `;
-                $('.dt-buttons').append(exportCheckbox);
-            }
+            const exportCheckbox = `
+                <div class="my-3">
+                    <input type="checkbox" id="exportSelected" name="exportSelected">
+                    <label for="exportSelected" class="ms-1">Export ONLY selected rows</label>
+                </div>
+            `;
+            $('.dt-buttons').append(exportCheckbox);
             $(dt_table_name + '_filter').remove();
 
             let rawName = dt_table_name.replace('#', '');

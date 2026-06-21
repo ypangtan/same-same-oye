@@ -739,41 +739,35 @@
        Order per type: {Type} → {Type} Playlist → {Type} Collection
     ══════════════════════════════════════════════════════════════════ */
 
-    var ITEMS_THEAD  = '<th></th><th>No.</th><th>Title</th><th>Plays</th>';
+    var ITEMS_THEAD  = '<th>No.</th><th>Title</th><th>Plays</th>';
     var ITEMS_COLS   = [
-        { data: null,  render: CHK_RENDER },
         { data: null   },
         { data: 'title'},
         { data: 'total'},
     ];
     var ITEMS_DEFS   = [
-        { targets: 0, orderable: false, render: CHK_RENDER },
         noColDef(),
         { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
     ];
 
-    var PLISTS_THEAD = '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th>';
+    var PLISTS_THEAD = '<th>No.</th><th>Playlist Name</th><th>Plays</th>';
     var PLISTS_COLS  = [
-        { data: null, render: CHK_RENDER },
         { data: null   },
         { data: 'name' },
         { data: 'total'},
     ];
     var PLISTS_DEFS  = [
-        { targets: 0, orderable: false, render: CHK_RENDER },
         noColDef(),
         { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
     ];
 
-    var COLLS_THEAD  = '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th>';
+    var COLLS_THEAD  = '<th>No.</th><th>Collection Name</th><th>Plays</th>';
     var COLLS_COLS   = [
-        { data: null, render: CHK_RENDER },
         { data: null   },
         { data: 'name' },
         { data: 'total'},
     ];
     var COLLS_DEFS   = [
-        { targets: 0, orderable: false, render: CHK_RENDER },
         noColDef(),
         { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
     ];
