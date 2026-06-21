@@ -17,7 +17,9 @@ use App\Services\{
 };
 
 use App\Models\{
-    Announcement
+    Announcement,
+    Banner,
+    BannerClick,
 };
 
 class BannerController extends Controller
@@ -44,6 +46,22 @@ class BannerController extends Controller
     public function getBanner( Request $request ) {
 
         return BannerService::oneBannerClient( $request );
+    }
+
+    public function recordClick( Request $request ) {
+
+        $banner = Banner::find( $request->id );
+
+        if ( !$banner ) {
+            return response()->json( [ 'message' => 'Banner not found.' ], 404 );
+        }
+
+        BannerClick::create( [
+            'banner_id' => $banner->id,
+            'user_id'   => auth()->id() ?? null,
+        ] );
+
+        return response()->json( [ 'message' => 'Click recorded.' ] );
     }
 
 }

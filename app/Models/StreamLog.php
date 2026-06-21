@@ -1,27 +1,23 @@
 <?php
 
 namespace App\Models;
-
 use DateTimeInterface;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
-
 use Helper;
 
-use Carbon\Carbon;
-
-class SearchLog extends Model
+class StreamLog extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'keyword',
-        'taken_time',
+        'content_type',
+        'radio_id',
+        'item_id',
+        'playlist_id',
+        'collection_id',
     ];
 
     public function user() {
@@ -29,7 +25,7 @@ class SearchLog extends Model
     }
 
     public function getEncryptedIdAttribute() {
-        return \Helper::encode( $this->attributes['id'] );
+        return Helper::encode( $this->attributes['id'] );
     }
 
     protected function serializeDate( DateTimeInterface $date ) {

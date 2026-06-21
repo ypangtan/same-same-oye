@@ -16,7 +16,9 @@ use App\Services\{
 };
 
 use App\Models\{
-    Announcement
+    Announcement,
+    PopAnnouncement,
+    PopAnnouncementClick,
 };
 
 class AnnouncementController extends Controller
@@ -30,6 +32,22 @@ class AnnouncementController extends Controller
     public function getAllPopAnnouncements( Request $request ) {
 
         return PopAnnouncementService::getAllPopAnnouncements( $request );
+    }
+
+    public function recordClick( Request $request ) {
+
+        $popup = PopAnnouncement::find( $request->id );
+
+        if ( !$popup ) {
+            return response()->json( [ 'message' => 'Announcement not found.' ], 404 );
+        }
+
+        PopAnnouncementClick::create( [
+            'pop_announcement_id' => $popup->id,
+            'user_id'             => auth()->id() ?? null,
+        ] );
+
+        return response()->json( [ 'message' => 'Click recorded.' ] );
     }
 
 }

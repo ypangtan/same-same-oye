@@ -111,4 +111,9 @@ class Banner extends Model
     public function getDescriptionForEvent( string $eventName ): string {
         return "{$eventName} ";
     }
+
+    public function clicks()
+    {
+        return $this->hasMany(BannerClick::class, 'banner_id');
+    }
 }

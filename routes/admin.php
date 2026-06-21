@@ -80,6 +80,10 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::get( '/', [ DashboardController::class, 'index' ] )->name( 'admin.dashboard' );
 
                 Route::post( '/', [ DashboardController::class, 'getDashboardData' ] )->name( 'admin.dashboard.getDashboardData' );
+                Route::post( 'engagement-stats', [ DashboardController::class, 'getEngagementStats' ] )->name( 'admin.dashboard.getEngagementStats' );
+                Route::post( 'banner-click-stats', [ DashboardController::class, 'getBannerClickStats' ] )->name( 'admin.dashboard.getBannerClickStats' );
+                Route::post( 'popup-click-stats', [ DashboardController::class, 'getPopAnnouncementClickStats' ] )->name( 'admin.dashboard.getPopAnnouncementClickStats' );
+                Route::post( 'daily-user-stats', [ DashboardController::class, 'getDailyUserStats' ] )->name( 'admin.dashboard.getDailyUserStats' );
 
             } );
 

@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\{
     TrendingContentController,
     TypeController,
     UserPlaylistController,
+    StreamController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -92,11 +93,13 @@ Route::prefix( 'types' )->group( function() {
 
 Route::prefix( 'pop_announcements' )->group( function() {
     Route::post( '/', [ AnnouncementController::class, 'getAllPopAnnouncements' ] );
+    Route::post( '/record-click', [ AnnouncementController::class, 'recordClick' ] );
 } );
 
 Route::prefix( 'banners' )->group( function() {
     Route::post( '/get-all-banners', [ BannerController::class, 'getBanners' ] );
     Route::post( '/get-one-banner', [ BannerController::class, 'getBanner' ] );
+    Route::post( '/record-click', [ BannerController::class, 'recordClick' ] );
 } );
 
 Route::prefix( 'website-banners' )->group( function() {
@@ -185,7 +188,11 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( '/verify-user-subscription', [ SubscriptionGroupMemberController::class, 'verifyUserSubscription' ] );
         Route::get( '/leave-subscription-group-member', [ SubscriptionGroupMemberController::class, 'leaveSubscriptionGroupMember' ] );
     } );
-        
+
+    Route::prefix( 'stream' )->group( function() {
+        Route::post( '/record', [ StreamController::class, 'recordStream' ] );
+    } );
+
 });
 
 

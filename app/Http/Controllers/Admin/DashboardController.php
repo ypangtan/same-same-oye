@@ -45,4 +45,20 @@ class DashboardController extends Controller
     public function totalUserStatistics( Request $request ) {
         return DashboardService::totalUserStatistics( $request );
     }
+
+    public function getEngagementStats( Request $request ) {
+        return DashboardService::getEngagementStats( $request );
+    }
+
+    public function getBannerClickStats( Request $request ) {
+        return DashboardService::getBannerClickStats( $request );
+    }
+
+    public function getPopAnnouncementClickStats( Request $request ) {
+        return DashboardService::getPopAnnouncementClickStats( $request );
+    }
+
+    public function getDailyUserStats( Request $request ) {
+        return DashboardService::getDailyUserStats( $request );
+    }
 }
