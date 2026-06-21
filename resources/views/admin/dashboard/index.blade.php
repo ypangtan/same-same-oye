@@ -529,12 +529,9 @@
         });
     }
 
-    /* Shared column helpers */
-    var CHK_RENDER = function () { return '<input type="checkbox" class="select-row">'; };
-
     function noColDef() {  /* No. column is always at target 1 (checkbox at 0) */
         return {
-            targets  : 1,
+            targets  : 0,
             orderable: false,
             render   : function (data, type, row, meta) { return meta.row + 1; },
         };
@@ -637,7 +634,6 @@
         post('{{ route("admin.dashboard.getSubscriptionsTable") }}', { date_range: subsDateRange }).then(function (d) {
             subsLoaded = true;
             dtSubs = makeDT('subs-table', d.subscriptions, [
-                { data: null, render: CHK_RENDER },
                 { data: null         },
                 { data: 'user'       },
                 { data: 'email'      },
@@ -647,7 +643,6 @@
                 { data: 'start_date' },
                 { data: 'end_date'   },
             ], [
-                { targets: 0, orderable: false, render: CHK_RENDER },
                 noColDef(),
                 { targets: 5, orderable: false,
                   render: function (data) {
@@ -823,13 +818,11 @@
 
     post('{{ route("admin.dashboard.getBannerClickStats") }}').then(function (d) {
         dtBanners = makeDT('banners-table', d.banners, [
-            { data: null, render: CHK_RENDER },
             { data: null         },
             { data: 'image_path' },
             { data: 'status'     },
             { data: 'clicks'     },
         ], [
-            { targets: 0, orderable: false, render: CHK_RENDER },
             noColDef(),
             { targets: 2, orderable: false,
               render: function (data) {
@@ -860,14 +853,12 @@
 
     post('{{ route("admin.dashboard.getPopAnnouncementClickStats") }}').then(function (d) {
         dtPopups = makeDT('popups-table', d.popups, [
-            { data: null, render: CHK_RENDER },
             { data: null         },
             { data: 'image_path' },
             { data: 'title'      },
             { data: 'status'     },
             { data: 'clicks'     },
         ], [
-            { targets: 0, orderable: false, render: CHK_RENDER },
             noColDef(),
             { targets: 2, orderable: false,
               render: function (data) {
