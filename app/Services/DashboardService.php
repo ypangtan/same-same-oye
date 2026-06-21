@@ -10,11 +10,27 @@ use App\Models\{
 };
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService {
 
-    // ── Summary stat cards (sections 1–5) ────────────────────────────────────
+    // ── Private helpers ───────────────────────────────────────────────────────
+
+    private static function parseDateRange( ?string $range ): array {
+        if ( !$range || !str_contains( $range, ' to ' ) ) {
+            return [ null, null ];
+        }
+        $parts = explode( ' to ', $range );
+        return [ trim( $parts[0] ) ?: null, trim( $parts[1] ) ?: null ];
+    }
+
+    private static function applyDateRange( $q, string $column, ?string $from, ?string $to ): void {
+        if ( $from ) $q->where( $column, '>=', Carbon::parse( $from )->startOfDay() );
+        if ( $to )   $q->where( $column, '<=', Carbon::parse( $to )->endOfDay() );
+    }
+
+    // ── Engagement summary cards ──────────────────────────────────────────────
 
     public static function getEngagementStats() {
         $today        = Carbon::today()->timezone( 'Asia/Kuala_Lumpur' );
@@ -31,7 +47,6 @@ class DashboardService {
         $subsToday     = UserSubscription::whereDate( 'created_at', $today )->count();
         $subsThisMonth = UserSubscription::where( 'created_at', '>=', $startOfMonth )->count();
 
-        // Stream totals by content_type
         $streamCounts = DB::table( 'stream_logs' )
             ->selectRaw( 'content_type, COUNT(*) as total' )
             ->groupBy( 'content_type' )
@@ -46,14 +61,14 @@ class DashboardService {
             'new_users_month'    => number_format( $newUsersThisMonth ),
             'subs_today'         => number_format( $subsToday ),
             'subs_month'         => number_format( $subsThisMonth ),
-            'stream_radio'       => number_format( $streamCounts->get( 1,      0 ) ),
-            'stream_items'       => number_format( $streamCounts->get( 2,       0 ) ),
-            'stream_playlists'   => number_format( $streamCounts->get( 3,   0 ) ),
+            'stream_radio'       => number_format( $streamCounts->get( 1, 0 ) ),
+            'stream_items'       => number_format( $streamCounts->get( 2, 0 ) ),
+            'stream_playlists'   => number_format( $streamCounts->get( 3, 0 ) ),
             'stream_collections' => number_format( $streamCounts->get( 4, 0 ) ),
         ] );
     }
 
-    // ── Chart: daily user counts by membership (last 30 days) ────────────────
+    // ── Daily user chart ──────────────────────────────────────────────────────
 
     public static function getDailyUserStats() {
         $days       = 30;
@@ -82,13 +97,12 @@ class DashboardService {
         ] );
     }
 
-    // ── Chart: radio streams per day, broken down by radio_name ─────────────
+    // ── Radio streams graph ───────────────────────────────────────────────────
 
     public static function getRadioStreamGraph() {
         $days  = 30;
         $since = Carbon::today()->subDays( $days - 1 )->startOfDay();
 
-        // Top 8 radio stations by all-time plays
         $topRadios = DB::table( 'stream_logs' )
             ->where( 'content_type', 1 )
             ->whereNotNull( 'radio_name' )
@@ -98,7 +112,6 @@ class DashboardService {
             ->limit( 8 )
             ->pluck( 'radio_name' );
 
-        // Build date labels
         $labels = [];
         for ( $i = $days - 1; $i >= 0; $i-- ) {
             $labels[] = Carbon::today()->subDays( $i )->format( 'M d' );
@@ -108,7 +121,6 @@ class DashboardService {
             return response()->json( [ 'labels' => $labels, 'series' => [] ] );
         }
 
-        // Single query: count per radio per day
         $raw = DB::table( 'stream_logs' )
             ->where( 'content_type', 1 )
             ->whereIn( 'radio_name', $topRadios )
@@ -132,24 +144,15 @@ class DashboardService {
         return response()->json( [ 'labels' => $labels, 'series' => $series ] );
     }
 
-    // ── Helper: resolve date range from period string ─────────────────────────
+    // ── Subscriptions DataTable ───────────────────────────────────────────────
 
-    private static function periodRange( string $period ): array {
-        $tz = 'Asia/Kuala_Lumpur';
-        return match ( $period ) {
-            'today' => [ Carbon::today( $tz )->startOfDay(), Carbon::today( $tz )->endOfDay() ],
-            'year'  => [ Carbon::now( $tz )->startOfYear(), Carbon::now( $tz )->endOfYear() ],
-            'all'   => [ null, null ],
-            default => [ Carbon::now( $tz )->startOfMonth(), Carbon::now( $tz )->endOfMonth() ],
-        };
-    }
+    public static function getSubscriptionsTable( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+        $search    = $request->input( 'search', '' );
+        $subType   = $request->input( 'sub_type', '' );
+        $subStatus = $request->input( 'sub_status', '' );
 
-    // ── DataTable: subscriptions list ─────────────────────────────────────────
-
-    public static function getSubscriptionsTable( string $period = 'month' ) {
-        [ $from, $to ] = self::periodRange( $period );
-
-        $query = DB::table( 'user_subscriptions' )
+        $q = DB::table( 'user_subscriptions' )
             ->join( 'users', 'users.id', '=', 'user_subscriptions.user_id' )
             ->leftJoin( 'subscription_plans', 'subscription_plans.id', '=', 'user_subscriptions.subscription_plan_id' )
             ->select(
@@ -160,14 +163,32 @@ class DashboardService {
                 'user_subscriptions.status',
                 'user_subscriptions.start_date',
                 'user_subscriptions.end_date',
-                'user_subscriptions.created_at',
             )
-            ->orderByDesc( 'user_subscriptions.created_at' );
+            ->orderByDesc( 'user_subscriptions.start_date' );
 
-        if ( $from ) $query->where( 'user_subscriptions.created_at', '>=', $from );
-        if ( $to )   $query->where( 'user_subscriptions.created_at', '<=', $to );
+        self::applyDateRange( $q, 'user_subscriptions.start_date', $from, $to );
 
-        $rows = $query->get()->map( function ( $r ) {
+        if ( $search ) {
+            $q->where( function ( $q2 ) use ( $search ) {
+                $q2->where( 'users.name', 'like', "%{$search}%" )
+                   ->orWhere( 'users.email', 'like', "%{$search}%" )
+                   ->orWhere( 'subscription_plans.name', 'like', "%{$search}%" );
+            } );
+        }
+
+        if ( $subType === 'Trial' ) {
+            $q->where( 'user_subscriptions.type', 2 );
+        } elseif ( $subType === 'Paid' ) {
+            $q->where( 'user_subscriptions.type', 1 );
+        }
+
+        if ( $subStatus === 'Active' ) {
+            $q->where( 'user_subscriptions.status', 10 );
+        } elseif ( $subStatus === 'Inactive' ) {
+            $q->where( 'user_subscriptions.status', '!=', 10 );
+        }
+
+        $rows = $q->get()->map( function ( $r ) {
             return [
                 'user'       => $r->user_name ?? '—',
                 'email'      => $r->email ?? '—',
@@ -182,80 +203,140 @@ class DashboardService {
         return response()->json( [ 'subscriptions' => $rows ] );
     }
 
-    // ── Tables: streams grouped by content type ───────────────────────────────
+    // ── Item Streams DataTable ────────────────────────────────────────────────
 
-    public static function getStreamsByType( string $period = 'month' ) {
-        [ $from, $to ] = self::periodRange( $period );
+    public static function getItemStreams( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+        $search = $request->input( 'search', '' );
+        $typeId = $request->input( 'type_id', '' );
 
-        $applyPeriod = function ( $q ) use ( $from, $to ) {
-            if ( $from ) $q->where( 'stream_logs.created_at', '>=', $from );
-            if ( $to )   $q->where( 'stream_logs.created_at', '<=', $to );
-        };
+        // All-time types for dropdown (not date-filtered)
+        $types = DB::table( 'stream_logs' )
+            ->join( 'items', 'items.id', '=', 'stream_logs.item_id' )
+            ->join( 'types', 'types.id', '=', 'items.type_id' )
+            ->where( 'stream_logs.content_type', 2 )
+            ->distinct()
+            ->select( 'types.id', 'types.en_name as name' )
+            ->orderBy( 'types.en_name' )
+            ->get();
 
-        // Item streams grouped by their item.type_id
-        $iq = DB::table( 'stream_logs' )
+        $q = DB::table( 'stream_logs' )
             ->join( 'items', 'items.id', '=', 'stream_logs.item_id' )
             ->join( 'types', 'types.id', '=', 'items.type_id' )
             ->where( 'stream_logs.content_type', 2 );
-        $applyPeriod( $iq );
-        $itemStreams = $iq
-            ->selectRaw( 'types.id as type_id, types.en_name as type_name, items.id as item_id, items.title, items.author, COUNT(*) as total, MAX(stream_logs.created_at) as last_played' )
-            ->groupBy( 'types.id', 'types.en_name', 'items.id', 'items.title', 'items.author' )
-            ->orderBy( 'types.en_name' )
-            ->orderByDesc( 'total' )
-            ->get()
-            ->groupBy( 'type_id' );
 
-        // Playlist streams grouped by their playlist.type_id
-        $pq = DB::table( 'stream_logs' )
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+
+        if ( $search ) {
+            $q->where( function ( $q2 ) use ( $search ) {
+                $q2->where( 'items.title', 'like', "%{$search}%" )
+                   ->orWhere( 'items.author', 'like', "%{$search}%" );
+            } );
+        }
+
+        if ( $typeId ) {
+            $q->where( 'types.id', $typeId );
+        }
+
+        $rows = $q->selectRaw(
+                'types.id as type_id, types.en_name as type_name,
+                 items.title, items.author,
+                 COUNT(*) as total,
+                 MAX(stream_logs.created_at) as last_played'
+            )
+            ->groupBy( 'types.id', 'types.en_name', 'items.title', 'items.author' )
+            ->orderByDesc( 'total' )
+            ->get();
+
+        return response()->json( [ 'items' => $rows, 'types' => $types ] );
+    }
+
+    // ── Playlist Streams DataTable ────────────────────────────────────────────
+
+    public static function getPlaylistStreams( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+        $search = $request->input( 'search', '' );
+        $typeId = $request->input( 'type_id', '' );
+
+        $types = DB::table( 'stream_logs' )
+            ->join( 'playlists', 'playlists.id', '=', 'stream_logs.playlist_id' )
+            ->join( 'types', 'types.id', '=', 'playlists.type_id' )
+            ->where( 'stream_logs.content_type', 3 )
+            ->distinct()
+            ->select( 'types.id', 'types.en_name as name' )
+            ->orderBy( 'types.en_name' )
+            ->get();
+
+        $q = DB::table( 'stream_logs' )
             ->join( 'playlists', 'playlists.id', '=', 'stream_logs.playlist_id' )
             ->join( 'types', 'types.id', '=', 'playlists.type_id' )
             ->where( 'stream_logs.content_type', 3 );
-        $applyPeriod( $pq );
-        $playlistStreams = $pq
-            ->selectRaw( 'types.id as type_id, types.en_name as type_name, playlists.id as playlist_id, playlists.en_name as name, COUNT(*) as total, MAX(stream_logs.created_at) as last_played' )
-            ->groupBy( 'types.id', 'types.en_name', 'playlists.id', 'playlists.en_name' )
-            ->orderBy( 'types.en_name' )
-            ->orderByDesc( 'total' )
-            ->get()
-            ->groupBy( 'type_id' );
 
-        // Collection streams grouped by their collection.type_id
-        $cq = DB::table( 'stream_logs' )
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+
+        if ( $search ) {
+            $q->where( 'playlists.en_name', 'like', "%{$search}%" );
+        }
+
+        if ( $typeId ) {
+            $q->where( 'types.id', $typeId );
+        }
+
+        $rows = $q->selectRaw(
+                'types.id as type_id, types.en_name as type_name,
+                 playlists.en_name as name,
+                 COUNT(*) as total,
+                 MAX(stream_logs.created_at) as last_played'
+            )
+            ->groupBy( 'types.id', 'types.en_name', 'playlists.id', 'playlists.en_name' )
+            ->orderByDesc( 'total' )
+            ->get();
+
+        return response()->json( [ 'playlists' => $rows, 'types' => $types ] );
+    }
+
+    // ── Collection Streams DataTable ──────────────────────────────────────────
+
+    public static function getCollectionStreams( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+        $search = $request->input( 'search', '' );
+        $typeId = $request->input( 'type_id', '' );
+
+        $types = DB::table( 'stream_logs' )
+            ->join( 'collections', 'collections.id', '=', 'stream_logs.collection_id' )
+            ->join( 'types', 'types.id', '=', 'collections.type_id' )
+            ->where( 'stream_logs.content_type', 4 )
+            ->distinct()
+            ->select( 'types.id', 'types.en_name as name' )
+            ->orderBy( 'types.en_name' )
+            ->get();
+
+        $q = DB::table( 'stream_logs' )
             ->join( 'collections', 'collections.id', '=', 'stream_logs.collection_id' )
             ->join( 'types', 'types.id', '=', 'collections.type_id' )
             ->where( 'stream_logs.content_type', 4 );
-        $applyPeriod( $cq );
-        $collectionStreams = $cq
-            ->selectRaw( 'types.id as type_id, types.en_name as type_name, collections.id as collection_id, collections.en_name as name, COUNT(*) as total, MAX(stream_logs.created_at) as last_played' )
+
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+
+        if ( $search ) {
+            $q->where( 'collections.en_name', 'like', "%{$search}%" );
+        }
+
+        if ( $typeId ) {
+            $q->where( 'types.id', $typeId );
+        }
+
+        $rows = $q->selectRaw(
+                'types.id as type_id, types.en_name as type_name,
+                 collections.en_name as name,
+                 COUNT(*) as total,
+                 MAX(stream_logs.created_at) as last_played'
+            )
             ->groupBy( 'types.id', 'types.en_name', 'collections.id', 'collections.en_name' )
-            ->orderBy( 'types.en_name' )
             ->orderByDesc( 'total' )
-            ->get()
-            ->groupBy( 'type_id' );
+            ->get();
 
-        // Merge all type IDs encountered
-        $allTypeIds = $itemStreams->keys()
-            ->merge( $playlistStreams->keys() )
-            ->merge( $collectionStreams->keys() )
-            ->unique();
-
-        // Build type name map
-        $typeNames = DB::table( 'types' )
-            ->whereIn( 'id', $allTypeIds )
-            ->pluck( 'en_name', 'id' );
-
-        $types = $allTypeIds->sortBy( fn( $id ) => $typeNames->get( $id, '' ) )->values()->map( function ( $typeId ) use ( $itemStreams, $playlistStreams, $collectionStreams, $typeNames ) {
-            return [
-                'id'          => $typeId,
-                'name'        => $typeNames->get( $typeId, 'Unknown' ),
-                'items'       => $itemStreams->get( $typeId, collect() )->values(),
-                'playlists'   => $playlistStreams->get( $typeId, collect() )->values(),
-                'collections' => $collectionStreams->get( $typeId, collect() )->values(),
-            ];
-        } );
-
-        return response()->json( [ 'types' => $types ] );
+        return response()->json( [ 'collections' => $rows, 'types' => $types ] );
     }
 
     // ── Banner click table ────────────────────────────────────────────────────
@@ -268,11 +349,11 @@ class DashboardService {
             ->map( function ( $banner ) {
                 return [
                     'id'         => $banner->id,
-                    'name'       => $banner->en_name ?? '-',
+                    'name'       => $banner->en_name ?? '—',
                     'image_path' => $banner->image_path,
                     'status'     => $banner->status,
                     'clicks'     => $banner->clicks_count,
-                    'created_at' => $banner->created_at ? $banner->created_at->format( 'Y-m-d' ) : '-',
+                    'created_at' => $banner->created_at ? $banner->created_at->format( 'Y-m-d' ) : '—',
                 ];
             } );
 
@@ -289,11 +370,11 @@ class DashboardService {
             ->map( function ( $popup ) {
                 return [
                     'id'         => $popup->id,
-                    'title'      => $popup->en_title ?? '-',
+                    'title'      => $popup->en_title ?? '—',
                     'image_path' => $popup->image_path,
                     'status'     => $popup->status,
                     'clicks'     => $popup->clicks_count,
-                    'created_at' => $popup->created_at ? $popup->created_at->format( 'Y-m-d' ) : '-',
+                    'created_at' => $popup->created_at ? $popup->created_at->format( 'Y-m-d' ) : '—',
                 ];
             } );
 

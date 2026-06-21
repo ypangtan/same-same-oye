@@ -9,10 +9,8 @@ use App\Services\DashboardService;
 class DashboardController extends Controller
 {
     public function index() {
-
         $this->data['header']['title'] = __( 'template.dashboard' );
         $this->data['content'] = 'admin.dashboard.index';
-
         return view( 'admin.main' )->with( $this->data );
     }
 
@@ -29,11 +27,19 @@ class DashboardController extends Controller
     }
 
     public function getSubscriptionsTable( Request $request ) {
-        return DashboardService::getSubscriptionsTable( $request->input( 'period', 'month' ) );
+        return DashboardService::getSubscriptionsTable( $request );
     }
 
-    public function getStreamsByType( Request $request ) {
-        return DashboardService::getStreamsByType( $request->input( 'period', 'month' ) );
+    public function getItemStreams( Request $request ) {
+        return DashboardService::getItemStreams( $request );
+    }
+
+    public function getPlaylistStreams( Request $request ) {
+        return DashboardService::getPlaylistStreams( $request );
+    }
+
+    public function getCollectionStreams( Request $request ) {
+        return DashboardService::getCollectionStreams( $request );
     }
 
     public function getBannerClickStats() {
