@@ -365,8 +365,8 @@
 <div class="nk-block mb-4">
     <p class="section-title">Banner Clicks</p>
     <div class="listing-filter" style="grid-template-columns:1fr 1fr">
-        <input type="text" class="form-control form-control-sm" placeholder="Search banner name…" id="banners-search" />
-        <select class="form-select form-select-sm" id="banners-status">
+        <input type="text" class="form-control form-control-sm d-none" placeholder="Search banner name…" id="banners-search" />
+        <select class="form-select form-select-sm d-none" id="banners-status">
             <option value="">All Status</option>
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
@@ -380,10 +380,8 @@
                         <th></th>
                         <th>No.</th>
                         <th>Image</th>
-                        <th>Name</th>
                         <th>Status</th>
                         <th>Clicks</th>
-                        <th>Created</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -846,10 +844,8 @@
             { data: null, render: CHK_RENDER },
             { data: null         },
             { data: 'image_path' },
-            { data: 'name'       },
             { data: 'status'     },
             { data: 'clicks'     },
-            { data: 'created_at' },
         ], [
             { targets: 0, orderable: false, render: CHK_RENDER },
             noColDef(),
