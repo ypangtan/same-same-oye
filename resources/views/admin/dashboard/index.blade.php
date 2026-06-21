@@ -167,10 +167,6 @@
 {{-- SECTION 7 — ITEM STREAMS (per type, built dynamically) --}}
 <div class="nk-block mb-4">
     <p class="section-title">Item Streams by Type</p>
-    <div class="listing-filter" style="grid-template-columns:1fr 3fr">
-        <input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="items-date" style="background:#fff" />
-        <div></div>
-    </div>
     <div id="items-tables-container">
         <div class="text-muted py-3">Loading…</div>
     </div>
@@ -179,10 +175,6 @@
 {{-- SECTION 8 — PLAYLIST STREAMS (per type, built dynamically) --}}
 <div class="nk-block mb-4">
     <p class="section-title">Playlist Streams by Type</p>
-    <div class="listing-filter" style="grid-template-columns:1fr 3fr">
-        <input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="plists-date" style="background:#fff" />
-        <div></div>
-    </div>
     <div id="plists-tables-container">
         <div class="text-muted py-3">Loading…</div>
     </div>
@@ -191,10 +183,6 @@
 {{-- SECTION 9 — COLLECTION STREAMS (per type, built dynamically) --}}
 <div class="nk-block mb-4">
     <p class="section-title">Collection Streams by Type</p>
-    <div class="listing-filter" style="grid-template-columns:1fr 3fr">
-        <input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="colls-date" style="background:#fff" />
-        <div></div>
-    </div>
     <div id="colls-tables-container">
         <div class="text-muted py-3">Loading…</div>
     </div>
@@ -517,62 +505,61 @@ document.addEventListener('DOMContentLoaded', function () {
     loadSubs();
 
     /* ══════════════════════════════════════════════════════════════════
-       SECTIONS 7-9 — STREAM TABLES (per type category, built dynamically)
+       SECTIONS 7-9 — STREAM TABLES (per type, each with own date+search)
 
-       Each content type (items / playlists / collections) gets ONE shared
-       flatpickr date filter.  After each API load the rows are split by
-       type_id and a separate DataTable is created per type.
+       Initial load fetches all rows once and splits client-side by type.
+       Each per-type date filter re-calls the API with that type_id only.
     ══════════════════════════════════════════════════════════════════ */
 
-    /* Track active DT instances so we can destroy them before rebuilding */
-    var itemsDTs  = [];
-    var plistsDTs = [];
-    var collsDTs  = [];
-
-    /* Destroy all DTs in an array then clear it */
-    function destroyDTs(arr) {
-        arr.forEach(function (dt) { try { dt.destroy(); } catch (e) {} });
-        arr.length = 0;
-    }
-
-    /* Build HTML for one per-type table block and return {tableId, searchId} */
+    /* Build HTML for one per-type block; date + search filters above the card */
     function buildTypeBlock(containerId, prefix, type, thead) {
         var safeKey  = prefix + '-t' + type.id;
         var tableId  = safeKey + '-table';
         var searchId = safeKey + '-search';
+        var dateId   = safeKey + '-date';
 
         $('#' + containerId).append(
             '<p class="section-title mt-3 mb-2">' + esc(type.name) + '</p>' +
-            '<div class="listing-filter" style="grid-template-columns:1fr 3fr">' +
+            '<div class="listing-filter">' +
+            '<input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="' + dateId + '" style="background:#fff">' +
             '<input type="text" class="form-control form-control-sm" placeholder="Search…" id="' + searchId + '">' +
-            '<div></div></div>' +
+            '<div></div><div></div>' +
+            '</div>' +
             '<div class="card card-bordered card-preview mb-3"><div class="card-inner">' +
             '<table class="table" style="width:100%" id="' + tableId + '">' +
             '<thead><tr>' + thead + '</tr></thead><tbody></tbody>' +
             '</table></div></div>'
         );
-        return { tableId: tableId, searchId: searchId };
+        return { tableId: tableId, searchId: searchId, dateId: dateId };
     }
 
-    /* Wire text-search input to a DataTable instance */
-    function wireSearch(searchId, getDt) {
+    /* Wire per-type block: initial rows supplied from the outer load; date filter re-fetches */
+    function wireTypeBlock(ids, type, initialRows, apiUrl, rowKey, cols, defs, orderCol) {
+        var dt = makeDT(ids.tableId, initialRows, cols, defs, orderCol);
+
+        $('#' + ids.dateId).flatpickr({ mode: 'range', disableMobile: true,
+            onClose: function (sel, dateStr) {
+                post(apiUrl, { date_range: dateStr || '', type_id: type.id })
+                    .then(function (d) { dt = makeDT(ids.tableId, d[rowKey] || [], cols, defs, orderCol); });
+            }
+        });
+
         var timer;
-        $('#' + searchId).on('input', function () {
+        $('#' + ids.searchId).on('input', function () {
             var v = $(this).val(); clearTimeout(timer);
-            timer = setTimeout(function () { var dt = getDt(); if (dt) dt.search(v).draw(); }, 400);
+            timer = setTimeout(function () { if (dt) dt.search(v).draw(); }, 400);
         });
     }
 
     /* ── Items (cols: chk 0, no 1, title 2, author 3, plays 4, last 5) ── */
-    var itemsDateRange = '';
     var ITEMS_THEAD = '<th></th><th>No.</th><th>Title</th><th>Author</th><th>Plays</th><th>Last Played</th>';
     var ITEMS_COLS  = [
         { data: null, render: CHK_RENDER },
-        { data: null         },
-        { data: 'title'      },
-        { data: 'author'     },
-        { data: 'total'      },
-        { data: 'last_played'},
+        { data: null          },
+        { data: 'title'       },
+        { data: 'author'      },
+        { data: 'total'       },
+        { data: 'last_played' },
     ];
     var ITEMS_DEFS = [
         { targets: 0, orderable: false, render: CHK_RENDER },
@@ -581,35 +568,20 @@ document.addEventListener('DOMContentLoaded', function () {
         { targets: 5, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
     ];
 
-    function buildItemTables(types, allRows) {
-        destroyDTs(itemsDTs);
-        var $c = $('#items-tables-container').empty();
-        if (!types || !types.length) {
-            $c.html('<div class="text-muted py-3">No data.</div>');
-            return;
-        }
-        types.forEach(function (type) {
-            var ids    = buildTypeBlock('items-tables-container', 'items', type, ITEMS_THEAD);
-            var rows   = allRows.filter(function (r) { return r.type_id == type.id; });
-            var dt     = makeDT(ids.tableId, rows, ITEMS_COLS, ITEMS_DEFS, 4);
-            itemsDTs.push(dt);
-            (function (ref) { wireSearch(ids.searchId, function () { return ref; }); })(dt);
-        });
-    }
-
-    function loadItems() {
-        post('{{ route("admin.dashboard.getItemStreams") }}', { date_range: itemsDateRange })
-            .then(function (d) { buildItemTables(d.types, d.items); })
-            .catch(function () { $('#items-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
-    }
-
-    $('#items-date').flatpickr({ mode: 'range', disableMobile: true,
-        onClose: function (sel, dateStr) { itemsDateRange = dateStr; loadItems(); } });
-
-    loadItems();
+    post('{{ route("admin.dashboard.getItemStreams") }}', {})
+        .then(function (d) {
+            var $c = $('#items-tables-container').empty();
+            if (!d.types || !d.types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
+            var allItems = d.items || [];
+            d.types.forEach(function (type) {
+                var ids      = buildTypeBlock('items-tables-container', 'items', type, ITEMS_THEAD);
+                var typeRows = allItems.filter(function (r) { return r.type_id == type.id; });
+                wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getItemStreams") }}', 'items', ITEMS_COLS, ITEMS_DEFS, 4);
+            });
+        })
+        .catch(function () { $('#items-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
 
     /* ── Playlists (cols: chk 0, no 1, name 2, plays 3, last 4) ──────── */
-    var plistsDateRange = '';
     var PLISTS_THEAD = '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th><th>Last Played</th>';
     var PLISTS_COLS  = [
         { data: null, render: CHK_RENDER },
@@ -625,35 +597,20 @@ document.addEventListener('DOMContentLoaded', function () {
         { targets: 4, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
     ];
 
-    function buildPlistTables(types, allRows) {
-        destroyDTs(plistsDTs);
-        var $c = $('#plists-tables-container').empty();
-        if (!types || !types.length) {
-            $c.html('<div class="text-muted py-3">No data.</div>');
-            return;
-        }
-        types.forEach(function (type) {
-            var ids  = buildTypeBlock('plists-tables-container', 'plists', type, PLISTS_THEAD);
-            var rows = allRows.filter(function (r) { return r.type_id == type.id; });
-            var dt   = makeDT(ids.tableId, rows, PLISTS_COLS, PLISTS_DEFS, 3);
-            plistsDTs.push(dt);
-            (function (ref) { wireSearch(ids.searchId, function () { return ref; }); })(dt);
-        });
-    }
-
-    function loadPlists() {
-        post('{{ route("admin.dashboard.getPlaylistStreams") }}', { date_range: plistsDateRange })
-            .then(function (d) { buildPlistTables(d.types, d.playlists); })
-            .catch(function () { $('#plists-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
-    }
-
-    $('#plists-date').flatpickr({ mode: 'range', disableMobile: true,
-        onClose: function (sel, dateStr) { plistsDateRange = dateStr; loadPlists(); } });
-
-    loadPlists();
+    post('{{ route("admin.dashboard.getPlaylistStreams") }}', {})
+        .then(function (d) {
+            var $c = $('#plists-tables-container').empty();
+            if (!d.types || !d.types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
+            var allPlists = d.playlists || [];
+            d.types.forEach(function (type) {
+                var ids      = buildTypeBlock('plists-tables-container', 'plists', type, PLISTS_THEAD);
+                var typeRows = allPlists.filter(function (r) { return r.type_id == type.id; });
+                wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getPlaylistStreams") }}', 'playlists', PLISTS_COLS, PLISTS_DEFS, 3);
+            });
+        })
+        .catch(function () { $('#plists-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
 
     /* ── Collections (cols: chk 0, no 1, name 2, plays 3, last 4) ────── */
-    var collsDateRange = '';
     var COLLS_THEAD = '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th><th>Last Played</th>';
     var COLLS_COLS  = [
         { data: null, render: CHK_RENDER },
@@ -669,32 +626,18 @@ document.addEventListener('DOMContentLoaded', function () {
         { targets: 4, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
     ];
 
-    function buildCollTables(types, allRows) {
-        destroyDTs(collsDTs);
-        var $c = $('#colls-tables-container').empty();
-        if (!types || !types.length) {
-            $c.html('<div class="text-muted py-3">No data.</div>');
-            return;
-        }
-        types.forEach(function (type) {
-            var ids  = buildTypeBlock('colls-tables-container', 'colls', type, COLLS_THEAD);
-            var rows = allRows.filter(function (r) { return r.type_id == type.id; });
-            var dt   = makeDT(ids.tableId, rows, COLLS_COLS, COLLS_DEFS, 3);
-            collsDTs.push(dt);
-            (function (ref) { wireSearch(ids.searchId, function () { return ref; }); })(dt);
-        });
-    }
-
-    function loadColls() {
-        post('{{ route("admin.dashboard.getCollectionStreams") }}', { date_range: collsDateRange })
-            .then(function (d) { buildCollTables(d.types, d.collections); })
-            .catch(function () { $('#colls-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
-    }
-
-    $('#colls-date').flatpickr({ mode: 'range', disableMobile: true,
-        onClose: function (sel, dateStr) { collsDateRange = dateStr; loadColls(); } });
-
-    loadColls();
+    post('{{ route("admin.dashboard.getCollectionStreams") }}', {})
+        .then(function (d) {
+            var $c = $('#colls-tables-container').empty();
+            if (!d.types || !d.types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
+            var allColls = d.collections || [];
+            d.types.forEach(function (type) {
+                var ids      = buildTypeBlock('colls-tables-container', 'colls', type, COLLS_THEAD);
+                var typeRows = allColls.filter(function (r) { return r.type_id == type.id; });
+                wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getCollectionStreams") }}', 'collections', COLLS_COLS, COLLS_DEFS, 3);
+            });
+        })
+        .catch(function () { $('#colls-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
 
     /* ══════════════════════════════════════════════════════════════════
        SECTION 10 — BANNER CLICKS
