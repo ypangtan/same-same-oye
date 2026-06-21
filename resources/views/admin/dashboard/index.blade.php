@@ -519,6 +519,7 @@
             lengthMenu   : [5, 10, 25, 50, 100],
             searching    : true,
             ordering     : true,
+            export       : false,
             scrollX      : true,
             dom          : DT_DOM,
             buttons      : makeButtons(key),
