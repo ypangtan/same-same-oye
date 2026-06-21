@@ -5,49 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Services\{
-    DashboardService,
-    UserService,
-};
+use App\Services\DashboardService;
 
 class DashboardController extends Controller
 {
     public function index( Request $request ) {
-        
+
         $this->data['header']['title'] = __( 'template.dashboard' );
         $this->data['content'] = 'admin.dashboard.index';
-        
-        $this->data['data']['status'] = [
-            '10' => __( 'datatables.activated' ),
-            '20' => __( 'datatables.suspended' ),
-        ];
 
         return view( 'admin.main' )->with( $this->data );
     }
 
-    public function getDashboardData( Request $request ) {
-
-        return DashboardService::getDashboardData( $request );
-    }
-
-    public function totalRevenueStatistics( Request $request ) {
-        return DashboardService::totalRevenueStatistics( $request );
-    }
-
-    public function totalReloadStatistics( Request $request ) {
-        return DashboardService::totalReloadStatistics( $request );
-    }
-
-    public function totalCupsStatistics( Request $request ) {
-        return DashboardService::totalCupsStatistics( $request );
-    }
-
-    public function totalUserStatistics( Request $request ) {
-        return DashboardService::totalUserStatistics( $request );
-    }
-
     public function getEngagementStats( Request $request ) {
         return DashboardService::getEngagementStats( $request );
+    }
+
+    public function getDailyUserStats( Request $request ) {
+        return DashboardService::getDailyUserStats( $request );
     }
 
     public function getBannerClickStats( Request $request ) {
@@ -56,9 +31,5 @@ class DashboardController extends Controller
 
     public function getPopAnnouncementClickStats( Request $request ) {
         return DashboardService::getPopAnnouncementClickStats( $request );
-    }
-
-    public function getDailyUserStats( Request $request ) {
-        return DashboardService::getDailyUserStats( $request );
     }
 }
