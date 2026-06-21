@@ -397,7 +397,6 @@
                         <th>Title</th>
                         <th>Status</th>
                         <th>Clicks</th>
-                        <th>Created</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
