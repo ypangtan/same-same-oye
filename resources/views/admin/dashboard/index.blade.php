@@ -100,7 +100,7 @@
 </div>
 
 {{-- SECTION 3 — DAILY USER CHART --}}
-<div class="nk-block mb-4">
+<div class="nk-block mb-4 d-none">
     <div class="card card-bordered">
         <div class="card-inner">
             <p class="section-title mb-3">Active Users by Type (Last 30 Days)</p>
