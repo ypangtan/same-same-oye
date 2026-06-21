@@ -60,7 +60,7 @@ class DashboardService {
                   ->orWhereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'collections' )->whereColumn( 'collections.type_id', 'types.id' ) );
             } )
             ->select( 'id', 'en_name as name' )
-            ->orderBy( 'en_name' )
+            ->orderBy( 'id' )
             ->get();
 
         $itemsByType = DB::table( 'stream_logs' )
