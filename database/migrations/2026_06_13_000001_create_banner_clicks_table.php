@@ -13,8 +13,6 @@ class CreateBannerClicksTable extends Migration
             $table->foreignId('banner_id')->nullable()->constrained('banners')->onUpdate( 'restrict')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate( 'restrict')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('banner_id')->references('id')->on('banners')->onDelete('cascade');
         });
     }
 

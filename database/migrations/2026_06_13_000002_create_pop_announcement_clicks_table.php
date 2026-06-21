@@ -13,8 +13,6 @@ class CreatePopAnnouncementClicksTable extends Migration
             $table->foreignId('pop_announcement_id')->nullable()->constrained('pop_announcements')->onUpdate( 'restrict')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate( 'restrict')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('pop_announcement_id')->references('id')->on('pop_announcements')->onDelete('cascade');
         });
     }
 
