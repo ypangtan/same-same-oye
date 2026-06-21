@@ -12,7 +12,7 @@ class CreateStreamLogsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate( 'restrict')->onDelete('cascade');
             $table->tinyInteger( 'content_type' )->nullable();
-            $table->foreignId('radio_id')->nullable()->constrained('radios')->onUpdate( 'restrict')->onDelete('cascade');
+            $table->string('radio_name')->nullable();
             $table->foreignId('item_id')->nullable()->constrained('items')->onUpdate( 'restrict')->onDelete('cascade');
             $table->foreignId('playlist_id')->nullable()->constrained('playlists')->onUpdate( 'restrict')->onDelete('cascade');
             $table->foreignId('collection_id')->nullable()->constrained('collections')->onUpdate( 'restrict')->onDelete('cascade');
