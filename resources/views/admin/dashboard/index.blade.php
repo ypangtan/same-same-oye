@@ -119,18 +119,6 @@
         <div class="nk-block-head-content">
             <h3 class="nk-block-title page-title">{{ __( 'template.dashboard' ) }}</h3>
         </div>
-        <div class="nk-block-head-content">
-            <div class="d-flex align-items-center gap-4">
-                <div class="form-check form-switch mb-0">
-                    <input class="form-check-input" type="checkbox" id="toggle-radio-graph">
-                    <label class="form-check-label fw-medium" for="toggle-radio-graph">Radio Graph</label>
-                </div>
-                <div class="form-check form-switch mb-0">
-                    <input class="form-check-input" type="checkbox" id="toggle-subs">
-                    <label class="form-check-label fw-medium" for="toggle-subs">Subscription Records</label>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
