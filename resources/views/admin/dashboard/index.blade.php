@@ -36,19 +36,19 @@
 <div class="nk-block mb-4">
     <p class="section-title">Active Users Overview</p>
     <div class="row g-3">
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
             <div class="stat-icon bg-primary-dim text-primary"><em class="icon ni ni-users"></em></div>
             <div><div class="stat-value" id="stat-total-active">—</div><div class="stat-label">Total Active</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
             <div class="stat-icon" style="background:#e5edff;color:#3c58d0"><em class="icon ni ni-user"></em></div>
             <div><div class="stat-value" id="stat-free">—</div><div class="stat-label">Free</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
             <div class="stat-icon" style="background:#fff3e0;color:#e65100"><em class="icon ni ni-clock"></em></div>
             <div><div class="stat-value" id="stat-trial">—</div><div class="stat-label">Trial</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
             <div class="stat-icon" style="background:#e8f5e9;color:#2e7d32"><em class="icon ni ni-star"></em></div>
             <div><div class="stat-value" id="stat-paid">—</div><div class="stat-label">Paid</div></div>
         </div></div></div>
@@ -61,11 +61,11 @@
         <div class="col-12 col-md-6">
             <p class="section-title">New Users</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
                     <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
                     <div><div class="stat-value" id="stat-new-today">—</div><div class="stat-label">Today</div></div>
                 </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
                     <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
                     <div><div class="stat-value" id="stat-new-month">—</div><div class="stat-label">This Month</div></div>
                 </div></div></div>
@@ -74,11 +74,11 @@
         <div class="col-12 col-md-6">
             <p class="section-title">Subscriptions</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
                     <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em class="icon ni ni-check-circle"></em></div>
                     <div><div class="stat-value" id="stat-subs-today">—</div><div class="stat-label">Today</div></div>
                 </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
                     <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em class="icon ni ni-check-circle"></em></div>
                     <div><div class="stat-value" id="stat-subs-month">—</div><div class="stat-label">This Month</div></div>
                 </div></div></div>
@@ -100,23 +100,13 @@
 {{-- SECTION 4 — STREAM SUMMARY CARDS --}}
 <div class="nk-block mb-4">
     <p class="section-title">Streaming Activity (All Time)</p>
-    <div class="row g-3">
-        <div class="col-6 col-lg-3"><div class="card h-100"><div class="card-body stream-mini">
+    <div class="row g-3" id="stream-cards-row">
+        {{-- Radio always first (static) --}}
+        <div class="col-6 col-md-4 col-lg-3"><div class="card h-100"><div class="card-body stream-mini">
             <div class="sm-icon" style="background:#fce4ec;color:#c62828"><em class="icon ni ni-signal"></em></div>
-            <div><div class="sm-val" id="stat-radio">—</div><div class="sm-label">Radio</div></div>
+            <div><div class="sm-val" id="stat-radio">—</div><div class="sm-label">Radio Streams</div></div>
         </div></div></div>
-        <div class="col-6 col-lg-3"><div class="card h-100"><div class="card-body stream-mini">
-            <div class="sm-icon bg-warning-dim text-warning"><em class="icon ni ni-music"></em></div>
-            <div><div class="sm-val" id="stat-items">—</div><div class="sm-label">Items</div></div>
-        </div></div></div>
-        <div class="col-6 col-lg-3"><div class="card h-100"><div class="card-body stream-mini">
-            <div class="sm-icon bg-success-dim text-success"><em class="icon ni ni-list"></em></div>
-            <div><div class="sm-val" id="stat-playlists">—</div><div class="sm-label">Playlists</div></div>
-        </div></div></div>
-        <div class="col-6 col-lg-3"><div class="card h-100"><div class="card-body stream-mini">
-            <div class="sm-icon bg-primary-dim text-primary"><em class="icon ni ni-folder"></em></div>
-            <div><div class="sm-val" id="stat-collections">—</div><div class="sm-label">Collections</div></div>
-        </div></div></div>
+        {{-- Per-type cards appended here by JS --}}
     </div>
 </div>
 
@@ -404,18 +394,39 @@
     ══════════════════════════════════════════════════════════════════ */
 
     post('{{ route("admin.dashboard.getEngagementStats") }}').then(function (d) {
-        document.getElementById('stat-total-active').textContent = d.total_active       || '0';
-        document.getElementById('stat-free').textContent         = d.free_users         || '0';
-        document.getElementById('stat-trial').textContent        = d.trial_users        || '0';
-        document.getElementById('stat-paid').textContent         = d.paid_users         || '0';
-        document.getElementById('stat-new-today').textContent    = d.new_users_today    || '0';
-        document.getElementById('stat-new-month').textContent    = d.new_users_month    || '0';
-        document.getElementById('stat-subs-today').textContent   = d.subs_today         || '0';
-        document.getElementById('stat-subs-month').textContent   = d.subs_month         || '0';
-        document.getElementById('stat-radio').textContent        = d.stream_radio       || '0';
-        document.getElementById('stat-items').textContent        = d.stream_items       || '0';
-        document.getElementById('stat-playlists').textContent    = d.stream_playlists   || '0';
-        document.getElementById('stat-collections').textContent  = d.stream_collections || '0';
+        document.getElementById('stat-total-active').textContent = d.total_active    || '0';
+        document.getElementById('stat-free').textContent         = d.free_users      || '0';
+        document.getElementById('stat-trial').textContent        = d.trial_users     || '0';
+        document.getElementById('stat-paid').textContent         = d.paid_users      || '0';
+        document.getElementById('stat-new-today').textContent    = d.new_users_today || '0';
+        document.getElementById('stat-new-month').textContent    = d.new_users_month || '0';
+        document.getElementById('stat-subs-today').textContent   = d.subs_today      || '0';
+        document.getElementById('stat-subs-month').textContent   = d.subs_month      || '0';
+        document.getElementById('stat-radio').textContent        = d.stream_radio    || '0';
+
+        /* Build per-type stream cards dynamically */
+        var CT = {
+            items:       { bg: '#fff3e0', color: '#e65100', icon: 'ni-music',  label: 'Streams'     },
+            playlists:   { bg: '#e8f5e9', color: '#2e7d32', icon: 'ni-list',   label: 'Playlists'   },
+            collections: { bg: '#e5edff', color: '#3c58d0', icon: 'ni-folder', label: 'Collections' },
+        };
+        var $row = $('#stream-cards-row');
+        $row.find('.stream-type-card').remove();
+        (d.stream_types || []).forEach(function (type) {
+            ['items', 'playlists', 'collections'].forEach(function (ct) {
+                var c   = CT[ct];
+                var lbl = esc(type.name) + ' ' + c.label;
+                $row.append(
+                    '<div class="col-6 col-md-4 col-lg-3 stream-type-card">' +
+                    '<div class="card h-100"><div class="card-body stream-mini">' +
+                    '<div class="sm-icon" style="background:' + c.bg + ';color:' + c.color + '">' +
+                    '<em class="icon ni ' + c.icon + '"></em></div>' +
+                    '<div><div class="sm-val">' + (type[ct] || '0') + '</div>' +
+                    '<div class="sm-label">' + lbl + '</div></div>' +
+                    '</div></div></div>'
+                );
+            });
+        });
     });
 
     post('{{ route("admin.dashboard.getDailyUserStats") }}').then(function (d) {
@@ -588,7 +599,8 @@
 
     function loadItems() {
         post('{{ route("admin.dashboard.getItemStreams") }}', { date_range: itemsDateRange })
-            .then(function (d) { buildItemTables(d.types, d.items); });
+            .then(function (d) { buildItemTables(d.types, d.items); })
+            .catch(function () { $('#items-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
     }
 
     $('#items-date').flatpickr({ mode: 'range', disableMobile: true,
@@ -631,7 +643,8 @@
 
     function loadPlists() {
         post('{{ route("admin.dashboard.getPlaylistStreams") }}', { date_range: plistsDateRange })
-            .then(function (d) { buildPlistTables(d.types, d.playlists); });
+            .then(function (d) { buildPlistTables(d.types, d.playlists); })
+            .catch(function () { $('#plists-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
     }
 
     $('#plists-date').flatpickr({ mode: 'range', disableMobile: true,
@@ -674,7 +687,8 @@
 
     function loadColls() {
         post('{{ route("admin.dashboard.getCollectionStreams") }}', { date_range: collsDateRange })
-            .then(function (d) { buildCollTables(d.types, d.collections); });
+            .then(function (d) { buildCollTables(d.types, d.collections); })
+            .catch(function () { $('#colls-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
     }
 
     $('#colls-date').flatpickr({ mode: 'range', disableMobile: true,

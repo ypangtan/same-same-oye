@@ -52,6 +52,45 @@ class DashboardService {
             ->groupBy( 'content_type' )
             ->pluck( 'total', 'content_type' );
 
+        // Per content-category type: types that have items, playlists, or collections
+        $contentTypes = DB::table( 'types' )
+            ->where( function ( $q ) {
+                $q->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'items' )->whereColumn( 'items.type_id', 'types.id' ) )
+                  ->orWhereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'playlists' )->whereColumn( 'playlists.type_id', 'types.id' ) )
+                  ->orWhereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'collections' )->whereColumn( 'collections.type_id', 'types.id' ) );
+            } )
+            ->select( 'id', 'en_name as name' )
+            ->orderBy( 'en_name' )
+            ->get();
+
+        $itemsByType = DB::table( 'stream_logs' )
+            ->join( 'items', 'items.id', '=', 'stream_logs.item_id' )
+            ->where( 'stream_logs.content_type', 2 )
+            ->selectRaw( 'items.type_id, COUNT(*) as total' )
+            ->groupBy( 'items.type_id' )
+            ->pluck( 'total', 'type_id' );
+
+        $playlistsByType = DB::table( 'stream_logs' )
+            ->join( 'playlists', 'playlists.id', '=', 'stream_logs.playlist_id' )
+            ->where( 'stream_logs.content_type', 3 )
+            ->selectRaw( 'playlists.type_id, COUNT(*) as total' )
+            ->groupBy( 'playlists.type_id' )
+            ->pluck( 'total', 'type_id' );
+
+        $collsByType = DB::table( 'stream_logs' )
+            ->join( 'collections', 'collections.id', '=', 'stream_logs.collection_id' )
+            ->where( 'stream_logs.content_type', 4 )
+            ->selectRaw( 'collections.type_id, COUNT(*) as total' )
+            ->groupBy( 'collections.type_id' )
+            ->pluck( 'total', 'type_id' );
+
+        $streamTypes = $contentTypes->map( fn( $t ) => [
+            'name'        => $t->name,
+            'items'       => number_format( $itemsByType->get( $t->id, 0 ) ),
+            'playlists'   => number_format( $playlistsByType->get( $t->id, 0 ) ),
+            'collections' => number_format( $collsByType->get( $t->id, 0 ) ),
+        ] )->values();
+
         return response()->json( [
             'total_active'       => number_format( $totalActive ),
             'free_users'         => number_format( $freeUsers ),
@@ -62,9 +101,7 @@ class DashboardService {
             'subs_today'         => number_format( $subsToday ),
             'subs_month'         => number_format( $subsThisMonth ),
             'stream_radio'       => number_format( $streamCounts->get( 1, 0 ) ),
-            'stream_items'       => number_format( $streamCounts->get( 2, 0 ) ),
-            'stream_playlists'   => number_format( $streamCounts->get( 3, 0 ) ),
-            'stream_collections' => number_format( $streamCounts->get( 4, 0 ) ),
+            'stream_types'       => $streamTypes,
         ] );
     }
 
@@ -210,11 +247,9 @@ class DashboardService {
         $search = $request->input( 'search', '' );
         $typeId = $request->input( 'type_id', '' );
 
-        // All-time types for dropdown (not date-filtered)
-        $types = DB::table( 'stream_logs' )
-            ->join( 'items', 'items.id', '=', 'stream_logs.item_id' )
-            ->join( 'types', 'types.id', '=', 'items.type_id' )
-            ->where( 'stream_logs.content_type', 2 )
+        // Types from items table regardless of stream history
+        $types = DB::table( 'types' )
+            ->join( 'items', 'items.type_id', '=', 'types.id' )
             ->distinct()
             ->select( 'types.id', 'types.en_name as name' )
             ->orderBy( 'types.en_name' )
@@ -258,10 +293,9 @@ class DashboardService {
         $search = $request->input( 'search', '' );
         $typeId = $request->input( 'type_id', '' );
 
-        $types = DB::table( 'stream_logs' )
-            ->join( 'playlists', 'playlists.id', '=', 'stream_logs.playlist_id' )
-            ->join( 'types', 'types.id', '=', 'playlists.type_id' )
-            ->where( 'stream_logs.content_type', 3 )
+        // Types from playlists table regardless of stream history
+        $types = DB::table( 'types' )
+            ->join( 'playlists', 'playlists.type_id', '=', 'types.id' )
             ->distinct()
             ->select( 'types.id', 'types.en_name as name' )
             ->orderBy( 'types.en_name' )
@@ -302,10 +336,9 @@ class DashboardService {
         $search = $request->input( 'search', '' );
         $typeId = $request->input( 'type_id', '' );
 
-        $types = DB::table( 'stream_logs' )
-            ->join( 'collections', 'collections.id', '=', 'stream_logs.collection_id' )
-            ->join( 'types', 'types.id', '=', 'collections.type_id' )
-            ->where( 'stream_logs.content_type', 4 )
+        // Types from collections table regardless of stream history
+        $types = DB::table( 'types' )
+            ->join( 'collections', 'collections.type_id', '=', 'types.id' )
             ->distinct()
             ->select( 'types.id', 'types.en_name as name' )
             ->orderBy( 'types.en_name' )
