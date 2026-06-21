@@ -11,6 +11,37 @@ use App\Models\{
 class StreamService {
 
     public static function recordStream( $request ) {
+        
+        if( !empty( $request->item_id ) ) {
+            $request->merge( [ 
+                'item_id' => \Helper::decode( $request->item_id )
+            ] );
+        }
+        
+        if( !empty( $request->playlist_id ) ) {
+            $request->merge( [ 
+                'playlist_id' => \Helper::decode( $request->playlist_id )
+            ] );
+        }
+        
+        if( !empty( $request->collection_id ) ) {
+            $request->merge( [ 
+                'collection_id' => \Helper::decode( $request->collection_id )
+            ] );
+        }
+        
+        if( !empty( $request->banner_id ) ) {
+            $request->merge( [ 
+                'banner_id' => \Helper::decode( $request->banner_id )
+            ] );
+        }
+        
+        if( !empty( $request->pop_announcement_id ) ) {
+            $request->merge( [ 
+                'pop_announcement_id' => \Helper::decode( $request->pop_announcement_id )
+            ] );
+        }
+    
         $request->validate( [
             'content_type' => [ 'required', 'in:1,2,3,4,5,6' ],
             'radio_name'    => [ 'nullable' ],
