@@ -563,14 +563,15 @@ document.addEventListener('DOMContentLoaded', function () {
     ══════════════════════════════════════════════════════════════════ */
 
     /* Build HTML for one per-type block; date + search filters above the card */
-    function buildTypeBlock(containerId, prefix, type, thead) {
+    function buildTypeBlock(containerId, prefix, type, thead, suffix) {
         var safeKey  = prefix + '-t' + type.id;
         var tableId  = safeKey + '-table';
         var searchId = safeKey + '-search';
         var dateId   = safeKey + '-date';
+        var title    = esc(type.name) + (suffix ? ' ' + suffix : '');
 
         $('#' + containerId).append(
-            '<p class="section-title mt-3 mb-2">' + esc(type.name) + '</p>' +
+            '<p class="section-title mt-3 mb-2">' + title + '</p>' +
             '<div class="listing-filter">' +
             '<input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="' + dateId + '" style="background:#fff">' +
             '<input type="text" class="form-control form-control-sm" placeholder="Search…" id="' + searchId + '">' +
@@ -655,7 +656,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!d.types || !d.types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
             var allPlists = d.playlists || [];
             d.types.forEach(function (type) {
-                var ids      = buildTypeBlock('plists-tables-container', 'plists', type, PLISTS_THEAD);
+                var ids      = buildTypeBlock('plists-tables-container', 'plists', type, PLISTS_THEAD, 'Playlist');
                 var typeRows = allPlists.filter(function (r) { return r.type_id == type.id; });
                 wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getPlaylistStreams") }}', 'playlists', PLISTS_COLS, PLISTS_DEFS, 3);
             });
@@ -684,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!d.types || !d.types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
             var allColls = d.collections || [];
             d.types.forEach(function (type) {
-                var ids      = buildTypeBlock('colls-tables-container', 'colls', type, COLLS_THEAD);
+                var ids      = buildTypeBlock('colls-tables-container', 'colls', type, COLLS_THEAD, 'Collection');
                 var typeRows = allColls.filter(function (r) { return r.type_id == type.id; });
                 wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getCollectionStreams") }}', 'collections', COLLS_COLS, COLLS_DEFS, 3);
             });
