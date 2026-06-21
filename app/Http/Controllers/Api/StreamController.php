@@ -26,11 +26,11 @@ class StreamController extends Controller
      *
      * @bodyParam content_type integer Required when type=stream. One of: 1, 2, 3, 4, 5, 6. Example: 2
      * @bodyParam radio_name string nullable. Example: "Hits FM"
-     * @bodyParam item_id integer Required when content_type=2. Example: 5
-     * @bodyParam playlist_id integer Required when content_type=3. Example: 5
-     * @bodyParam collection_id integer Required when content_type=4. Example: 5
-     * @bodyParam banner_id integer Required when content_type=5. Example: 5
-     * @bodyParam pop_announcement_id integer Required when content_type=6. Example: 5
+     * @bodyParam item_id string Required when content_type=2. Example: 5
+     * @bodyParam playlist_id string Required when content_type=3. Example: 5
+     * @bodyParam collection_id string Required when content_type=4. Example: 5
+     * @bodyParam banner_id string Required when content_type=5. Example: 5
+     * @bodyParam pop_announcement_id string Required when content_type=6. Example: 5
      *
      */
     public function record( Request $request ) {
