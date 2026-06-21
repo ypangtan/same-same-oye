@@ -14,11 +14,23 @@ class StreamLog extends Model
     protected $fillable = [
         'user_id',
         'content_type',
-        'radio_id',
+        'radio_name',
         'item_id',
         'playlist_id',
         'collection_id',
     ];
+
+    public function item() {
+        return $this->belongsTo(Item::class, 'item_id');
+    }
+
+    public function playlist() {
+        return $this->belongsTo(Playlist::class, 'playlist_id');
+    }
+
+    public function collection() {
+        return $this->belongsTo(Collection::class, 'collection_id');
+    }
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
