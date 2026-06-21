@@ -24,6 +24,8 @@ class StreamController extends Controller
      * 5: Banner<br>
      * 6: Pop Announcement<br>
      *
+     * @authenticated
+     * 
      * @bodyParam content_type integer Required when type=stream. One of: 1, 2, 3, 4, 5, 6. Example: 2
      * @bodyParam radio_name string nullable. Example: "Hits FM"
      * @bodyParam item_id string Required when content_type=2. Example: 5
