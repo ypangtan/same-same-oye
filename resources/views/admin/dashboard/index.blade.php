@@ -523,14 +523,23 @@
             language     : DT_LANG,
             createdRow   : function (row) { $(row).addClass('nk-tb-item'); },
             initComplete : makeInitComplete(key),
+            drawCallback : function () {
+                var api = this.api();
+                var info = api.page.info();
+
+                api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = info.start + i + 1;
+                });
+            },
         });
     }
 
-    function noColDef() {  /* No. column is always at target 1 (checkbox at 0) */
+    function noColDef() {
         return {
             targets  : 0,
             orderable: false,
-            render   : function (data, type, row, meta) { return meta.row + 1; },
+            searchable: false,
+            render   : function () { return ''; },
         };
     }
 
