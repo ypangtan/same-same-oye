@@ -265,7 +265,7 @@
 </div>
 
 {{-- SECTION 4 — STREAM SUMMARY CARDS --}}
-<div class="nk-block mb-4 d-none">
+<div class="nk-block mb-4">
     <p class="section-title">Streaming Activity (All Time)</p>
     <div class="row g-3" id="stream-cards-row">
         {{-- Radio always first (static) --}}
@@ -286,7 +286,7 @@
 </div>
 
 {{-- SECTION 5 — RADIO GRAPH --}}
-<div id="section-radio-graph" class="nk-block mb-4" style="display:none">
+<div id="section-radio-graph" class="nk-block mb-4 d-none" style="display:none">
     <div class="card card-bordered">
         <div class="card-inner">
             <div class="d-flex align-items-center justify-content-between mb-3">
