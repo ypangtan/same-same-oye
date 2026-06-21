@@ -864,12 +864,12 @@
               render: function (data) {
                   return data ? '<img src="' + esc(data) + '" class="thumb-img">' : '—';
               } },
-            { targets: 2, orderable: false,
+            { targets: 3, orderable: false,
               render: function (data) {
                   var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
-            { targets: 3, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
         ], 5);
     });
 
