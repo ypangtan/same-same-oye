@@ -178,7 +178,6 @@
 
 {{-- SECTIONS 7-9 — STREAMS BY TYPE (grouped per category) --}}
 <div class="nk-block mb-4">
-    <p class="section-title">Streams by Type</p>
     <div id="streams-by-type-container">
         <div class="text-muted py-3">Loading…</div>
     </div>
@@ -541,35 +540,25 @@ document.addEventListener('DOMContentLoaded', function () {
         var safeKey  = prefix + '-t' + type.id;
         var tableId  = safeKey + '-table';
         var searchId = safeKey + '-search';
-        var dateId   = safeKey + '-date';
         var title    = esc(type.name) + (suffix ? ' ' + suffix : '');
 
         $('#' + containerId).append(
             '<p class="section-title mt-3 mb-2">' + title + '</p>' +
-            '<div class="listing-filter">' +
-            '<input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="' + dateId + '" style="background:#fff">' +
+            '<div class="listing-filter" style="grid-template-columns:1fr 3fr">' +
             '<input type="text" class="form-control form-control-sm" placeholder="Search…" id="' + searchId + '">' +
-            '<div></div><div></div>' +
+            '<div></div>' +
             '</div>' +
             '<div class="card card-bordered card-preview mb-3"><div class="card-inner">' +
             '<table class="table" style="width:100%" id="' + tableId + '">' +
             '<thead><tr>' + thead + '</tr></thead><tbody></tbody>' +
             '</table></div></div>'
         );
-        return { tableId: tableId, searchId: searchId, dateId: dateId };
+        return { tableId: tableId, searchId: searchId };
     }
 
-    /* Wire per-type block: initial rows supplied from the outer load; date filter re-fetches */
-    function wireTypeBlock(ids, type, initialRows, apiUrl, rowKey, cols, defs, orderCol) {
-        var dt = makeDT(ids.tableId, initialRows, cols, defs, orderCol);
-
-        $('#' + ids.dateId).flatpickr({ mode: 'range', disableMobile: true,
-            onClose: function (sel, dateStr) {
-                post(apiUrl, { date_range: dateStr || '', type_id: type.id })
-                    .then(function (d) { dt = makeDT(ids.tableId, d[rowKey] || [], cols, defs, orderCol); });
-            }
-        });
-
+    /* Wire per-type block: load all data once, search only */
+    function wireTypeBlock(ids, rows, cols, defs, orderCol) {
+        var dt = makeDT(ids.tableId, rows, cols, defs, orderCol);
         var timer;
         $('#' + ids.searchId).on('input', function () {
             var v = $(this).val(); clearTimeout(timer);
@@ -595,34 +584,30 @@ document.addEventListener('DOMContentLoaded', function () {
         { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
     ];
 
-    var PLISTS_THEAD = '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th><th>Last Played</th>';
+    var PLISTS_THEAD = '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th>';
     var PLISTS_COLS  = [
         { data: null, render: CHK_RENDER },
-        { data: null          },
-        { data: 'name'        },
-        { data: 'total'       },
-        { data: 'last_played' },
+        { data: null   },
+        { data: 'name' },
+        { data: 'total'},
     ];
     var PLISTS_DEFS  = [
         { targets: 0, orderable: false, render: CHK_RENDER },
         noColDef(),
         { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-        { targets: 4, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
     ];
 
-    var COLLS_THEAD  = '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th><th>Last Played</th>';
+    var COLLS_THEAD  = '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th>';
     var COLLS_COLS   = [
         { data: null, render: CHK_RENDER },
-        { data: null          },
-        { data: 'name'        },
-        { data: 'total'       },
-        { data: 'last_played' },
+        { data: null   },
+        { data: 'name' },
+        { data: 'total'},
     ];
     var COLLS_DEFS   = [
         { targets: 0, orderable: false, render: CHK_RENDER },
         noColDef(),
         { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-        { targets: 4, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
     ];
 
     Promise.all([
@@ -652,23 +637,16 @@ document.addEventListener('DOMContentLoaded', function () {
         var allColls  = dC.collections  || [];
 
         types.forEach(function (type) {
-            /* {Type} — items, no suffix */
+            var tid = type.id;
+
             var iIds = buildTypeBlock('streams-by-type-container', 'items', type, ITEMS_THEAD, null);
-            wireTypeBlock(iIds, type,
-                allItems.filter(function (r) { return r.type_id == type.id; }),
-                '{{ route("admin.dashboard.getItemStreams") }}', 'items', ITEMS_COLS, ITEMS_DEFS, 3);
+            wireTypeBlock(iIds, allItems.filter(function (r) { return r.type_id == tid; }), ITEMS_COLS, ITEMS_DEFS, 3);
 
-            /* {Type} Playlist */
             var pIds = buildTypeBlock('streams-by-type-container', 'plists', type, PLISTS_THEAD, 'Playlist');
-            wireTypeBlock(pIds, type,
-                allPlists.filter(function (r) { return r.type_id == type.id; }),
-                '{{ route("admin.dashboard.getPlaylistStreams") }}', 'playlists', PLISTS_COLS, PLISTS_DEFS, 3);
+            wireTypeBlock(pIds, allPlists.filter(function (r) { return r.type_id == tid; }), PLISTS_COLS, PLISTS_DEFS, 3);
 
-            /* {Type} Collection */
             var cIds = buildTypeBlock('streams-by-type-container', 'colls', type, COLLS_THEAD, 'Collection');
-            wireTypeBlock(cIds, type,
-                allColls.filter(function (r) { return r.type_id == type.id; }),
-                '{{ route("admin.dashboard.getCollectionStreams") }}', 'collections', COLLS_COLS, COLLS_DEFS, 3);
+            wireTypeBlock(cIds, allColls.filter(function (r) { return r.type_id == tid; }), COLLS_COLS, COLLS_DEFS, 3);
         });
     }).catch(function () {
         $('#streams-by-type-container').html('<div class="text-danger py-3">Failed to load.</div>');
