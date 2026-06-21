@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Services\DashboardService;
 
 class DashboardController extends Controller
 {
-    public function index( Request $request ) {
+    public function index() {
 
         $this->data['header']['title'] = __( 'template.dashboard' );
         $this->data['content'] = 'admin.dashboard.index';
@@ -17,19 +16,31 @@ class DashboardController extends Controller
         return view( 'admin.main' )->with( $this->data );
     }
 
-    public function getEngagementStats( Request $request ) {
-        return DashboardService::getEngagementStats( $request );
+    public function getEngagementStats() {
+        return DashboardService::getEngagementStats();
     }
 
-    public function getDailyUserStats( Request $request ) {
-        return DashboardService::getDailyUserStats( $request );
+    public function getDailyUserStats() {
+        return DashboardService::getDailyUserStats();
     }
 
-    public function getBannerClickStats( Request $request ) {
-        return DashboardService::getBannerClickStats( $request );
+    public function getRadioStreamGraph() {
+        return DashboardService::getRadioStreamGraph();
     }
 
-    public function getPopAnnouncementClickStats( Request $request ) {
-        return DashboardService::getPopAnnouncementClickStats( $request );
+    public function getSubscriptionsTable( Request $request ) {
+        return DashboardService::getSubscriptionsTable( $request->input( 'period', 'month' ) );
+    }
+
+    public function getStreamsByType( Request $request ) {
+        return DashboardService::getStreamsByType( $request->input( 'period', 'month' ) );
+    }
+
+    public function getBannerClickStats() {
+        return DashboardService::getBannerClickStats();
+    }
+
+    public function getPopAnnouncementClickStats() {
+        return DashboardService::getPopAnnouncementClickStats();
     }
 }
