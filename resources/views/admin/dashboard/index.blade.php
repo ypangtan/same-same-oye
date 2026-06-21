@@ -36,19 +36,19 @@
 <div class="nk-block mb-4">
     <p class="section-title">Active Users Overview</p>
     <div class="row g-3">
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
             <div class="stat-icon bg-primary-dim text-primary"><em class="icon ni ni-users"></em></div>
             <div><div class="stat-value" id="stat-total-active">—</div><div class="stat-label">Total Active</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
             <div class="stat-icon" style="background:#e5edff;color:#3c58d0"><em class="icon ni ni-user"></em></div>
             <div><div class="stat-value" id="stat-free">—</div><div class="stat-label">Free</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
             <div class="stat-icon" style="background:#fff3e0;color:#e65100"><em class="icon ni ni-clock"></em></div>
             <div><div class="stat-value" id="stat-trial">—</div><div class="stat-label">Trial</div></div>
         </div></div></div>
-        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+        <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
             <div class="stat-icon" style="background:#e8f5e9;color:#2e7d32"><em class="icon ni ni-star"></em></div>
             <div><div class="stat-value" id="stat-paid">—</div><div class="stat-label">Paid</div></div>
         </div></div></div>
@@ -61,11 +61,11 @@
         <div class="col-12 col-md-6">
             <p class="section-title">New Users</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                     <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
                     <div><div class="stat-value" id="stat-new-today">—</div><div class="stat-label">Today</div></div>
                 </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                     <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
                     <div><div class="stat-value" id="stat-new-month">—</div><div class="stat-label">This Month</div></div>
                 </div></div></div>
@@ -74,11 +74,11 @@
         <div class="col-12 col-md-6">
             <p class="section-title">Subscriptions</p>
             <div class="row g-3">
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                     <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em class="icon ni ni-check-circle"></em></div>
                     <div><div class="stat-value" id="stat-subs-today">—</div><div class="stat-label">Today</div></div>
                 </div></div></div>
-                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center gap-3">
+                <div class="col-6"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                     <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em class="icon ni ni-check-circle"></em></div>
                     <div><div class="stat-value" id="stat-subs-month">—</div><div class="stat-label">This Month</div></div>
                 </div></div></div>
@@ -259,7 +259,7 @@
 </div>
 
 <script>
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
     var csrf = '{{ csrf_token() }}';
 
     /* ── helpers ─────────────────────────────────────────────────────── */
@@ -776,5 +776,5 @@
     });
     $('#popups-status').on('change', function () { if (dtPopups) dtPopups.column(4).search($(this).val()).draw(); });
 
-})();
+});
 </script>
