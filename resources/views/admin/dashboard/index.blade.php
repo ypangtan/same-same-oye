@@ -176,38 +176,10 @@
     </div>
 </div>
 
-{{-- SECTION 7 — ITEM STREAMS (single table, ordered by type) --}}
+{{-- SECTIONS 7-9 — STREAMS BY TYPE (grouped per category) --}}
 <div class="nk-block mb-4">
-    <p class="section-title">Item Streams by Type</p>
-    <div class="listing-filter">
-        <input type="text" class="form-control form-control-sm" placeholder="Filter by date range…" id="items-date" style="background:#fff" />
-        <input type="text" class="form-control form-control-sm" placeholder="Search…" id="items-search" />
-        <div></div><div></div>
-    </div>
-    <div class="card card-bordered card-preview">
-        <div class="card-inner">
-            <table class="table" style="width:100%" id="items-table">
-                <thead><tr>
-                    <th></th><th>No.</th><th>Type</th><th>Title</th><th>Plays</th>
-                </tr></thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-{{-- SECTION 8 — PLAYLIST STREAMS (per type, built dynamically) --}}
-<div class="nk-block mb-4">
-    <p class="section-title">Playlist Streams by Type</p>
-    <div id="plists-tables-container">
-        <div class="text-muted py-3">Loading…</div>
-    </div>
-</div>
-
-{{-- SECTION 9 — COLLECTION STREAMS (per type, built dynamically) --}}
-<div class="nk-block mb-4">
-    <p class="section-title">Collection Streams by Type</p>
-    <div id="colls-tables-container">
+    <p class="section-title">Streams by Type</p>
+    <div id="streams-by-type-container">
         <div class="text-muted py-3">Loading…</div>
     </div>
 </div>
@@ -603,38 +575,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* ── Items — single table, cols: chk 0, no 1, type 2, title 3, plays 4 ── */
-    var dtItems = null, itemsDateRange = '';
+    /* ══════════════════════════════════════════════════════════════════
+       SECTIONS 7-9 — STREAMS BY TYPE
+       Order per type: {Type} → {Type} Playlist → {Type} Collection
+    ══════════════════════════════════════════════════════════════════ */
 
-    function loadItems() {
-        post('{{ route("admin.dashboard.getItemStreams") }}', { date_range: itemsDateRange })
-            .then(function (d) {
-                dtItems = makeDT('items-table', d.items || [], [
-                    { data: null,        render: CHK_RENDER },
-                    { data: null         },
-                    { data: 'type_name'  },
-                    { data: 'title'      },
-                    { data: 'total'      },
-                ], [
-                    { targets: 0, orderable: false, render: CHK_RENDER },
-                    noColDef(),
-                    { targets: 4, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-                ], 2);
-            });
-    }
+    var ITEMS_THEAD  = '<th></th><th>No.</th><th>Title</th><th>Plays</th>';
+    var ITEMS_COLS   = [
+        { data: null,  render: CHK_RENDER },
+        { data: null   },
+        { data: 'title'},
+        { data: 'total'},
+    ];
+    var ITEMS_DEFS   = [
+        { targets: 0, orderable: false, render: CHK_RENDER },
+        noColDef(),
+        { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+    ];
 
-    $('#items-date').flatpickr({ mode: 'range', disableMobile: true,
-        onClose: function (sel, dateStr) { itemsDateRange = dateStr; loadItems(); } });
-
-    var itemsTimer;
-    $('#items-search').on('input', function () {
-        var v = $(this).val(); clearTimeout(itemsTimer);
-        itemsTimer = setTimeout(function () { if (dtItems) dtItems.search(v).draw(); }, 400);
-    });
-
-    loadItems();
-
-    /* ── Playlists (cols: chk 0, no 1, name 2, plays 3, last 4) ──────── */
     var PLISTS_THEAD = '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th><th>Last Played</th>';
     var PLISTS_COLS  = [
         { data: null, render: CHK_RENDER },
@@ -643,54 +601,73 @@ document.addEventListener('DOMContentLoaded', function () {
         { data: 'total'       },
         { data: 'last_played' },
     ];
-    var PLISTS_DEFS = [
+    var PLISTS_DEFS  = [
         { targets: 0, orderable: false, render: CHK_RENDER },
         noColDef(),
         { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
         { targets: 4, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
     ];
 
-    post('{{ route("admin.dashboard.getPlaylistStreams") }}', {})
-        .then(function (d) {
-            var $c = $('#plists-tables-container').empty();
-            if (!d.types || !d.types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
-            var allPlists = d.playlists || [];
-            d.types.forEach(function (type) {
-                var ids      = buildTypeBlock('plists-tables-container', 'plists', type, PLISTS_THEAD, 'Playlist');
-                var typeRows = allPlists.filter(function (r) { return r.type_id == type.id; });
-                wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getPlaylistStreams") }}', 'playlists', PLISTS_COLS, PLISTS_DEFS, 3);
-            });
-        })
-        .catch(function () { $('#plists-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
-
-    /* ── Collections (cols: chk 0, no 1, name 2, plays 3, last 4) ────── */
-    var COLLS_THEAD = '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th><th>Last Played</th>';
-    var COLLS_COLS  = [
+    var COLLS_THEAD  = '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th><th>Last Played</th>';
+    var COLLS_COLS   = [
         { data: null, render: CHK_RENDER },
         { data: null          },
         { data: 'name'        },
         { data: 'total'       },
         { data: 'last_played' },
     ];
-    var COLLS_DEFS = [
+    var COLLS_DEFS   = [
         { targets: 0, orderable: false, render: CHK_RENDER },
         noColDef(),
         { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
         { targets: 4, render: function (d) { return d ? String(d).substring(0, 16) : '—'; } },
     ];
 
-    post('{{ route("admin.dashboard.getCollectionStreams") }}', {})
-        .then(function (d) {
-            var $c = $('#colls-tables-container').empty();
-            if (!d.types || !d.types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
-            var allColls = d.collections || [];
-            d.types.forEach(function (type) {
-                var ids      = buildTypeBlock('colls-tables-container', 'colls', type, COLLS_THEAD, 'Collection');
-                var typeRows = allColls.filter(function (r) { return r.type_id == type.id; });
-                wireTypeBlock(ids, type, typeRows, '{{ route("admin.dashboard.getCollectionStreams") }}', 'collections', COLLS_COLS, COLLS_DEFS, 3);
-            });
-        })
-        .catch(function () { $('#colls-tables-container').html('<div class="text-danger py-3">Failed to load.</div>'); });
+    Promise.all([
+        post('{{ route("admin.dashboard.getItemStreams") }}',       {}),
+        post('{{ route("admin.dashboard.getPlaylistStreams") }}',   {}),
+        post('{{ route("admin.dashboard.getCollectionStreams") }}', {}),
+    ]).then(function (results) {
+        var dI = results[0], dP = results[1], dC = results[2];
+        var $c = $('#streams-by-type-container').empty();
+
+        /* Merge types from all 3 responses, sorted alphabetically */
+        var typesMap = {};
+        [(dI.types || []), (dP.types || []), (dC.types || [])].forEach(function (arr) {
+            arr.forEach(function (t) { if (!typesMap[t.id]) typesMap[t.id] = t; });
+        });
+        var types = Object.keys(typesMap)
+            .map(function (k) { return typesMap[k]; })
+            .sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+        if (!types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
+
+        var allItems  = dI.items        || [];
+        var allPlists = dP.playlists    || [];
+        var allColls  = dC.collections  || [];
+
+        types.forEach(function (type) {
+            /* {Type} — items, no suffix */
+            var iIds = buildTypeBlock('streams-by-type-container', 'items', type, ITEMS_THEAD, null);
+            wireTypeBlock(iIds, type,
+                allItems.filter(function (r) { return r.type_id == type.id; }),
+                '{{ route("admin.dashboard.getItemStreams") }}', 'items', ITEMS_COLS, ITEMS_DEFS, 3);
+
+            /* {Type} Playlist */
+            var pIds = buildTypeBlock('streams-by-type-container', 'plists', type, PLISTS_THEAD, 'Playlist');
+            wireTypeBlock(pIds, type,
+                allPlists.filter(function (r) { return r.type_id == type.id; }),
+                '{{ route("admin.dashboard.getPlaylistStreams") }}', 'playlists', PLISTS_COLS, PLISTS_DEFS, 3);
+
+            /* {Type} Collection */
+            var cIds = buildTypeBlock('streams-by-type-container', 'colls', type, COLLS_THEAD, 'Collection');
+            wireTypeBlock(cIds, type,
+                allColls.filter(function (r) { return r.type_id == type.id; }),
+                '{{ route("admin.dashboard.getCollectionStreams") }}', 'collections', COLLS_COLS, COLLS_DEFS, 3);
+        });
+    }).catch(function () {
+        $('#streams-by-type-container').html('<div class="text-danger py-3">Failed to load.</div>');
+    });
 
     /* ══════════════════════════════════════════════════════════════════
        SECTION 10 — BANNER CLICKS
