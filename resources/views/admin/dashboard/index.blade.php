@@ -116,13 +116,8 @@
         display: none;
     }
 
-    /* Stream card page-trigger */
     .stream-card-trigger {
         cursor: pointer;
-    }
-    .stream-card-trigger.active .card {
-        border: 2px solid #ae4342;
-        box-shadow: 0 0 0 3px rgba(174,67,66,.12);
     }
     .stream-page {
         display: none;
@@ -131,6 +126,8 @@
         display: block;
     }
 </style>
+
+<div id="dashboard-overview">
 
 {{-- PAGE TITLE --}}
 <div class="nk-block-head nk-block-head-sm">
@@ -273,16 +270,6 @@
     </div>
 </div>
 
-{{-- SECTION 3 — DAILY USER CHART --}}
-<div class="nk-block mb-4 d-none">
-    <div class="card card-bordered">
-        <div class="card-inner">
-            <p class="section-title mb-3">Active Users by Type (Last 30 Days)</p>
-            <div id="chart-daily-users"></div>
-        </div>
-    </div>
-</div>
-
 {{-- SECTION 4 — STREAM SUMMARY CARDS --}}
 <div class="nk-block mb-4">
     <p class="section-title">Streaming Activity (All Time)</p>
@@ -344,35 +331,6 @@
     </div>
 </div>
 
-{{-- STREAM DETAIL PANEL — revealed when a stream summary card is clicked --}}
-<div id="stream-detail-panel" class="nk-block mb-4" style="display:none">
-    {{-- Radio streams DataTable page --}}
-    <div id="stream-page-radio" class="stream-page">
-        <p class="section-title mb-2">Radio Streams</p>
-        <div class="listing-filter" style="grid-template-columns:1fr 3fr">
-            <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="radio-date" style="background:#fff" />
-            <input type="text" class="form-control form-control-sm" placeholder="Search user / email / station…" id="radio-search" />
-        </div>
-        <div class="card card-bordered card-preview">
-            <div class="card-inner">
-                <table class="table" style="width:100%" id="radio-table">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Played At</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    {{-- Per-type stream pages built by JS --}}
-    <div id="streams-by-type-container"></div>
-</div>
-
 {{-- SECTION 10 — BANNER CLICKS --}}
 <div class="nk-block mb-4">
     <p class="section-title">Banner Clicks</p>
@@ -423,6 +381,48 @@
             </table>
         </div>
     </div>
+</div>
+
+</div>{{-- /dashboard-overview --}}
+
+{{-- STREAM DETAIL VIEW — full-page replacement when a stream card is clicked --}}
+<div id="stream-detail-view" style="display:none">
+    <div class="nk-block-head nk-block-head-sm">
+        <div class="nk-block-between flex-wrap gap-2">
+            <div class="nk-block-head-content">
+                <h3 class="nk-block-title page-title" id="stream-detail-title"></h3>
+            </div>
+            <div class="nk-block-head-content">
+                <a href="#" id="btn-back-dashboard" class="btn btn-outline-light btn-sm">
+                    <em class="icon ni ni-arrow-left me-1"></em>Back
+                </a>
+            </div>
+        </div>
+    </div>
+    {{-- Radio streams page --}}
+    <div id="stream-page-radio" class="stream-page">
+        <div class="listing-filter" style="grid-template-columns:1fr 3fr">
+            <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="radio-date" style="background:#fff" />
+            <input type="text" class="form-control form-control-sm" placeholder="Search user / email…" id="radio-search" />
+        </div>
+        <div class="card card-bordered card-preview">
+            <div class="card-inner">
+                <table class="table" style="width:100%" id="radio-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Played At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{-- Per-type stream pages built by JS --}}
+    <div id="streams-by-type-container"></div>
 </div>
 
 <script>
@@ -606,25 +606,6 @@
         });
     });
 
-    post('{{ route("admin.dashboard.getDailyUserStats") }}').then(function (d) {
-        if (typeof ApexCharts === 'undefined') return;
-        new ApexCharts(document.getElementById('chart-daily-users'), {
-            chart      : { type: 'area', height: 260, toolbar: { show: false } },
-            series     : [
-                { name: 'Free',  data: d.free_data  || [] },
-                { name: 'Trial', data: d.trial_data || [] },
-                { name: 'Paid',  data: d.paid_data  || [] },
-            ],
-            xaxis      : { categories: d.xAxis || [], labels: { rotate: -45, style: { fontSize: '10px' } } },
-            colors     : ['#3c58d0','#e65100','#2e7d32'],
-            fill       : { type: 'gradient', gradient: { opacityFrom: .25, opacityTo: .02 } },
-            stroke     : { curve: 'smooth', width: 2 },
-            legend     : { position: 'top' },
-            dataLabels : { enabled: false },
-            grid       : { borderColor: '#f1f3f7' },
-        }).render();
-    });
-
     /* ── Radio stream DataTable (lazy — loads on first card click) ── */
     var dtRadio = null, radioDateRange = '', radioLoaded = false;
 
@@ -734,32 +715,36 @@
 
     initToggle('toggle-subs', 'section-subs', loadSubs);
 
-    /* Stream summary card → show/hide detail panel */
+    /* Stream summary card → switch to full-page detail view */
     $(document).on('click', '.stream-card-trigger', function () {
         var pageId = $(this).data('page');
-        var $panel = $('#stream-detail-panel');
-        var $cards = $('#stream-cards-row .stream-card-trigger');
+        var label  = $(this).find('.sm-label').text();
 
-        if ($(this).hasClass('active')) {
-            $(this).removeClass('active');
-            $panel.hide();
-            return;
-        }
-
-        $cards.removeClass('active');
+        $('#stream-cards-row .stream-card-trigger').removeClass('active');
         $(this).addClass('active');
+
         $('.stream-page').removeClass('active');
         $('#' + pageId).addClass('active');
-        $panel.show();
+
+        $('#stream-detail-title').text(label);
+        $('#dashboard-overview').hide();
+        $('#stream-detail-view').show();
 
         if (pageId === 'stream-page-radio') {
             loadRadioGraph();
         } else {
-            /* Fix DataTable column widths after becoming visible */
             setTimeout(function () {
                 $.fn.DataTable.tables({ visible: true, api: true }).columns.adjust();
             }, 50);
         }
+    });
+
+    /* Back button → return to dashboard overview */
+    $(document).on('click', '#btn-back-dashboard', function (e) {
+        e.preventDefault();
+        $('#stream-detail-view').hide();
+        $('#dashboard-overview').show();
+        $('#stream-cards-row .stream-card-trigger').removeClass('active');
     });
 
     /* ══════════════════════════════════════════════════════════════════
