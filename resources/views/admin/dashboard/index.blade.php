@@ -115,6 +115,21 @@
     .dt-buttons{
         display: none;
     }
+
+    /* Stream card page-trigger */
+    .stream-card-trigger {
+        cursor: pointer;
+    }
+    .stream-card-trigger.active .card {
+        border: 2px solid #ae4342;
+        box-shadow: 0 0 0 3px rgba(174,67,66,.12);
+    }
+    .stream-page {
+        display: none;
+    }
+    .stream-page.active {
+        display: block;
+    }
 </style>
 
 {{-- PAGE TITLE --}}
@@ -273,7 +288,7 @@
     <p class="section-title">Streaming Activity (All Time)</p>
     <div class="row g-3" id="stream-cards-row">
         {{-- Radio always first (static) --}}
-        <div class="col-6 col-md-4 col-lg-3">
+        <div class="col-6 col-md-4 col-lg-3 stream-card-trigger" data-page="stream-page-radio">
             <div class="card h-100">
                 <div class="card-body stream-mini">
                     <div class="sm-icon" style="background:#fce4ec;color:#c62828"><em class="icon ni ni-signal"></em>
@@ -286,23 +301,6 @@
             </div>
         </div>
         {{-- Per-type cards appended here by JS --}}
-    </div>
-</div>
-
-{{-- SECTION 5 — RADIO GRAPH --}}
-<div id="section-radio-graph" class="nk-block mb-4 d-none" style="display:none">
-    <div class="card card-bordered">
-        <div class="card-inner">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <p class="section-title mb-0">Radio Streams (Last 30 Days)</p>
-                <small class="text-muted">Top 8 stations</small>
-            </div>
-            <div id="chart-radio-streams" style="min-height:300px">
-                <div class="d-flex align-items-center justify-content-center" style="height:300px">
-                    <span class="text-muted">Loading…</span>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -346,11 +344,33 @@
     </div>
 </div>
 
-{{-- SECTIONS 7-9 — STREAMS BY TYPE (grouped per category) --}}
-<div class="nk-block mb-4">
-    <div id="streams-by-type-container">
-        <div class="text-muted py-3">Loading…</div>
+{{-- STREAM DETAIL PANEL — revealed when a stream summary card is clicked --}}
+<div id="stream-detail-panel" class="nk-block mb-4" style="display:none">
+    {{-- Radio streams DataTable page --}}
+    <div id="stream-page-radio" class="stream-page">
+        <p class="section-title mb-2">Radio Streams</p>
+        <div class="listing-filter" style="grid-template-columns:1fr 3fr">
+            <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="radio-date" style="background:#fff" />
+            <input type="text" class="form-control form-control-sm" placeholder="Search user / email / station…" id="radio-search" />
+        </div>
+        <div class="card card-bordered card-preview">
+            <div class="card-inner">
+                <table class="table" style="width:100%" id="radio-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Played At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    {{-- Per-type stream pages built by JS --}}
+    <div id="streams-by-type-container"></div>
 </div>
 
 {{-- SECTION 10 — BANNER CLICKS --}}
@@ -560,9 +580,9 @@
 
         /* Build per-type stream cards dynamically */
         var CT = {
-            items:       { bg: '#fff3e0', color: '#e65100', icon: 'ni-music',  label: 'Streams'     },
-            playlists:   { bg: '#e8f5e9', color: '#2e7d32', icon: 'ni-list',   label: 'Playlists'   },
-            collections: { bg: '#e5edff', color: '#3c58d0', icon: 'ni-folder', label: 'Collections' },
+            items:       { bg: '#fff3e0', color: '#e65100', icon: 'ni-music',  label: 'Streams',     prefix: 'items'  },
+            playlists:   { bg: '#e8f5e9', color: '#2e7d32', icon: 'ni-list',   label: 'Playlists',   prefix: 'plists' },
+            collections: { bg: '#e5edff', color: '#3c58d0', icon: 'ni-folder', label: 'Collections', prefix: 'colls'  },
         };
         var $row = $('#stream-cards-row');
         $row.find('.stream-type-card').remove();
@@ -570,10 +590,11 @@
         (d.stream_types || []).forEach(function (type) {
             var typeName = CARD_TYPE_NAMES[type.name] || type.name;
             ['items', 'playlists', 'collections'].forEach(function (ct) {
-                var c   = CT[ct];
-                var lbl = esc(typeName) + ' ' + c.label;
+                var c      = CT[ct];
+                var lbl    = esc(typeName) + ' ' + c.label;
+                var pageId = 'stream-page-' + c.prefix + '-t' + type.id;
                 $row.append(
-                    '<div class="col-6 col-md-4 col-lg-3 stream-type-card">' +
+                    '<div class="col-6 col-md-4 col-lg-3 stream-type-card stream-card-trigger" data-page="' + pageId + '">' +
                     '<div class="card h-100"><div class="card-body stream-mini">' +
                     '<div class="sm-icon" style="background:' + c.bg + ';color:' + c.color + '">' +
                     '<em class="icon ni ' + c.icon + '"></em></div>' +
@@ -604,30 +625,47 @@
         }).render();
     });
 
-    /* ── Radio graph (lazy — only loads when section is shown) ── */
-    var radioChartLoaded = false;
-    function loadRadioGraph() {
-        if (radioChartLoaded) return;
-        radioChartLoaded = true;
-        post('{{ route("admin.dashboard.getRadioStreamGraph") }}').then(function (d) {
-            var el = document.getElementById('chart-radio-streams');
-            if (!d.series || !d.series.length) {
-                el.innerHTML = '<div class="d-flex align-items-center justify-content-center" style="height:300px"><span class="text-muted">No radio stream data yet.</span></div>';
-                return;
-            }
-            if (typeof ApexCharts === 'undefined') return;
-            new ApexCharts(el, {
-                chart      : { type: 'bar', height: 300, stacked: true, toolbar: { show: false } },
-                series     : d.series,
-                xaxis      : { categories: d.labels || [], labels: { rotate: -45, style: { fontSize: '10px' } } },
-                colors     : ['#ae4342','#e65100','#3c58d0','#2e7d32','#7b1fa2','#00838f','#f9a825','#4e342e'],
-                plotOptions: { bar: { columnWidth: '60%' } },
-                legend     : { position: 'top', fontSize: '12px' },
-                dataLabels : { enabled: false },
-                grid       : { borderColor: '#f1f3f7' },
-            }).render();
+    /* ── Radio stream DataTable (lazy — loads on first card click) ── */
+    var dtRadio = null, radioDateRange = '', radioLoaded = false;
+
+    function loadRadioTable() {
+        if (radioLoaded) {
+            setTimeout(function () {
+                $.fn.DataTable.tables({ visible: true, api: true }).columns.adjust();
+            }, 50);
+            return;
+        }
+        post('{{ route("admin.dashboard.getRadioStreamTable") }}', { date_range: radioDateRange }).then(function (d) {
+            radioLoaded = true;
+            dtRadio = makeDT('radio-table', d.logs, [
+                { data: null        },
+                { data: 'user'      },
+                { data: 'email'     },
+                { data: 'played_at' },
+            ], [
+                noColDef(),
+                { targets: 1, render: function (data) {
+                    return data === 'Guest'
+                        ? '<span class="bx bx-inactive">Guest</span>'
+                        : esc(data);
+                } },
+            ], 3);
+            setTimeout(function () {
+                $.fn.DataTable.tables({ visible: true, api: true }).columns.adjust();
+            }, 50);
         });
     }
+
+    $('#radio-date').flatpickr({ mode: 'range', disableMobile: true,
+        onClose: function (sel, dateStr) { radioDateRange = dateStr; radioLoaded = false; loadRadioTable(); } });
+
+    var radioTimer;
+    $('#radio-search').on('input', function () {
+        var v = $(this).val(); clearTimeout(radioTimer);
+        radioTimer = setTimeout(function () { if (dtRadio) dtRadio.search(v).draw(); }, 400);
+    });
+
+    function loadRadioGraph() { loadRadioTable(); }
 
     /* ══════════════════════════════════════════════════════════════════
        SECTION 6 — SUBSCRIPTIONS
@@ -694,8 +732,35 @@
         });
     }
 
-    initToggle('toggle-radio-graph', 'section-radio-graph', loadRadioGraph);
-    initToggle('toggle-subs',        'section-subs',        loadSubs);
+    initToggle('toggle-subs', 'section-subs', loadSubs);
+
+    /* Stream summary card → show/hide detail panel */
+    $(document).on('click', '.stream-card-trigger', function () {
+        var pageId = $(this).data('page');
+        var $panel = $('#stream-detail-panel');
+        var $cards = $('#stream-cards-row .stream-card-trigger');
+
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            $panel.hide();
+            return;
+        }
+
+        $cards.removeClass('active');
+        $(this).addClass('active');
+        $('.stream-page').removeClass('active');
+        $('#' + pageId).addClass('active');
+        $panel.show();
+
+        if (pageId === 'stream-page-radio') {
+            loadRadioGraph();
+        } else {
+            /* Fix DataTable column widths after becoming visible */
+            setTimeout(function () {
+                $.fn.DataTable.tables({ visible: true, api: true }).columns.adjust();
+            }, 50);
+        }
+    });
 
     /* ══════════════════════════════════════════════════════════════════
        SECTIONS 7-9 — STREAM TABLES (per type, each with own date+search)
@@ -704,20 +769,20 @@
        Each per-type date filter re-calls the API with that type_id only.
     ══════════════════════════════════════════════════════════════════ */
 
-    /* Build HTML for one per-type block; date + search filters above the card */
-    function buildTypeBlock(containerId, prefix, type, thead, suffix) {
+    /* Build HTML for one per-type page (hidden div) with search + table */
+    function buildTypePage($page, prefix, type, thead, suffix) {
         var safeKey  = prefix + '-t' + type.id;
         var tableId  = safeKey + '-table';
         var searchId = safeKey + '-search';
         var title    = esc(type.name) + (suffix ? ' ' + suffix : '');
 
-        $('#' + containerId).append(
-            '<p class="section-title mt-3 mb-2">' + title + '</p>' +
+        $page.append(
+            '<p class="section-title mb-2">' + title + '</p>' +
             '<div class="listing-filter" style="grid-template-columns:1fr 3fr">' +
             '<input type="text" class="form-control form-control-sm" placeholder="Search…" id="' + searchId + '">' +
             '<div></div>' +
             '</div>' +
-            '<div class="card card-bordered card-preview mb-3"><div class="card-inner">' +
+            '<div class="card card-bordered card-preview"><div class="card-inner">' +
             '<table class="table" style="width:100%" id="' + tableId + '">' +
             '<thead><tr>' + thead + '</tr></thead><tbody></tbody>' +
             '</table></div></div>'
@@ -802,13 +867,19 @@
         types.forEach(function (type) {
             var tid = type.id;
 
-            var iIds = buildTypeBlock('streams-by-type-container', 'items', type, ITEMS_THEAD, null);
+            var $iPage = $('<div id="stream-page-items-t' + tid + '" class="stream-page"></div>');
+            $c.append($iPage);
+            var iIds = buildTypePage($iPage, 'items', type, ITEMS_THEAD, null);
             wireTypeBlock(iIds, allItems.filter(function (r) { return r.type_id == tid; }), ITEMS_COLS, ITEMS_DEFS, 3);
 
-            var pIds = buildTypeBlock('streams-by-type-container', 'plists', type, PLISTS_THEAD, 'Playlist');
+            var $pPage = $('<div id="stream-page-plists-t' + tid + '" class="stream-page"></div>');
+            $c.append($pPage);
+            var pIds = buildTypePage($pPage, 'plists', type, PLISTS_THEAD, 'Playlist');
             wireTypeBlock(pIds, allPlists.filter(function (r) { return r.type_id == tid; }), PLISTS_COLS, PLISTS_DEFS, 3);
 
-            var cIds = buildTypeBlock('streams-by-type-container', 'colls', type, COLLS_THEAD, 'Collection');
+            var $cPage = $('<div id="stream-page-colls-t' + tid + '" class="stream-page"></div>');
+            $c.append($cPage);
+            var cIds = buildTypePage($cPage, 'colls', type, COLLS_THEAD, 'Collection');
             wireTypeBlock(cIds, allColls.filter(function (r) { return r.type_id == tid; }), COLLS_COLS, COLLS_DEFS, 3);
         });
     }).catch(function () {

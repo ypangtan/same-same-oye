@@ -134,6 +134,40 @@ class DashboardService {
         ] );
     }
 
+    // ── Radio streams DataTable ───────────────────────────────────────────────
+
+    public static function getRadioStreamTable( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+
+        $q = DB::table( 'stream_logs' )
+            ->leftJoin( 'users', 'users.id', '=', 'stream_logs.user_id' )
+            ->where( 'stream_logs.content_type', 1 )
+            ->select(
+                'stream_logs.id',
+                'stream_logs.radio_name',
+                'stream_logs.user_id',
+                'users.fullname',
+                'users.email',
+                'stream_logs.created_at',
+            )
+            ->orderByDesc( 'stream_logs.created_at' );
+
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+
+        $rows = $q->get()->map( function ( $r ) {
+            return [
+                'user'       => $r->fullname ?? 'Guest',
+                'email'      => $r->email ?? '—',
+                'radio_name' => $r->radio_name ?? '—',
+                'played_at'  => $r->created_at
+                    ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
+                    : '—',
+            ];
+        } );
+
+        return response()->json( [ 'logs' => $rows ] );
+    }
+
     // ── Radio streams graph ───────────────────────────────────────────────────
 
     public static function getRadioStreamGraph() {

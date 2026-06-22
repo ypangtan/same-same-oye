@@ -81,6 +81,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
                 Route::post( 'engagement-stats', [ DashboardController::class, 'getEngagementStats' ] )->name( 'admin.dashboard.getEngagementStats' );
                 Route::post( 'daily-user-stats', [ DashboardController::class, 'getDailyUserStats' ] )->name( 'admin.dashboard.getDailyUserStats' );
+                Route::post( 'radio-stream-table', [ DashboardController::class, 'getRadioStreamTable' ] )->name( 'admin.dashboard.getRadioStreamTable' );
                 Route::post( 'radio-stream-graph', [ DashboardController::class, 'getRadioStreamGraph' ] )->name( 'admin.dashboard.getRadioStreamGraph' );
                 Route::post( 'subscriptions-table', [ DashboardController::class, 'getSubscriptionsTable' ] )->name( 'admin.dashboard.getSubscriptionsTable' );
                 Route::post( 'item-streams',       [ DashboardController::class, 'getItemStreams' ] )->name( 'admin.dashboard.getItemStreams' );
