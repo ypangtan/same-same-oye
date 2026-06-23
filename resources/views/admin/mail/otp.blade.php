@@ -41,6 +41,10 @@
             font-size: 13px;
             color: #555;
         }
+
+        .text-center{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +79,7 @@
     <p><a href="https://www.samasamaoye.com/en">https://www.samasamaoye.com/en</a></p>
 
     <div class="footer">
-        <p>This is an automated message. Please do not reply to this email.</p>
+        <p class="text-center">This is an automated message. Please do not reply to this email.</p>
     </div>
 </body>
 </html>
