@@ -50,9 +50,9 @@ class OtpMail extends Mailable
     {
         switch ($this->data['action']) {
             case 'forgot_password':
-                return 'Request Password Reset';
+                return 'Your Sama Sama Oye! OTP Code';
             default:
-                return 'Register';
+                return 'Your Sama Sama Oye! OTP Code';
         }
     }
 }
