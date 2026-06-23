@@ -45,6 +45,9 @@
         .text-center{
             text-align: center;
         }
+        .otp-container {
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
