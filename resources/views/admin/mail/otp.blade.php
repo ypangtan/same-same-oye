@@ -46,12 +46,7 @@
             text-align: center;
         }
         .otp-container {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-            text-align: center;
+            font-size: 14px;
         }
     </style>
 </head>
