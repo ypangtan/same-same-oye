@@ -129,10 +129,12 @@ class MailService {
     public function getSubject() {
         switch ( $this->data['type'] ) {
             case 1:
-                $this->data['subject'] = __( 'user.register' );
+                $this->data['subject'] = 'Your Sama Sama Oye! OTP Code';
+                // $this->data['subject'] = __( 'user.register' );
                 break;
             case 2:
-                $this->data['subject'] = __( 'user.request_password_reset' );
+                $this->data['subject'] = 'Your Sama Sama Oye! OTP Code';
+                // $this->data['subject'] = __( 'user.request_password_reset' );
                 break;
             case 3:
                 $this->data['subject'] = __( 'user.contact_us' );
