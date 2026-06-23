@@ -45,14 +45,6 @@
         .text-center{
             text-align: center;
         }
-        .otp-container {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -60,34 +52,24 @@
         <img src="{{ asset('admin/images/logo.png') }}" alt="Sama Sama Oye! Logo" class="logo">
     </div>
 
-    <div class="otp-container">
-        <p>Hello,</p>
+    <p>Hello,</p>
+    <p>Thank you for signing up with Sama Sama Oye!</p>
+    <p>Your OTP code is:</p>
+    <div class="otp">{{ $data['otp_code'] }}</div>
+    <p>This code will expire in 10 minutes.</p>
+    <p>For your security:</p>
 
-        <p>Thank you for signing up with Sama Sama Oye!</p>
+    <ul>
+        <li>Do not share this code with anyone.</li>
+        <li>Sama Sama Oye! staff will never ask for your verification code.</li>
+        <li>If you did not request for this code, please ignore this email.</li>
+    </ul>
 
-        <p>Your OTP code is:</p>
+    <p>Need help? Contact our support team at <a href="mailto:contact@samasamaoye.com">contact@samasamaoye.com</a>.</p>
 
-        <div class="otp">{{ $data['otp_code'] }}</div>
-
-        <p>This code will expire in 10 minutes.</p>
-
-        <p>For your security:</p>
-
-        <ul>
-            <li>Do not share this code with anyone.</li>
-            <li>Sama Sama Oye! staff will never ask for your verification code.</li>
-            <li>If you did not request for this code, please ignore this email.</li>
-        </ul>
-
-        <p>Need help? Contact our support team at <a href="mailto:contact@samasamaoye.com">contact@samasamaoye.com</a>.</p>
-
-        <p>Thank you,<br>
-            
-        Sama Sama Oye! Support Team</p>
-
-        <p><a href="https://www.samasamaoye.com/en">https://www.samasamaoye.com/en</a></p>
-
-    </div>
+    <p>Thank you,<br>
+    Sama Sama Oye! Support Team</p>
+    <p><a href="https://www.samasamaoye.com/en">https://www.samasamaoye.com/en</a></p>
 
     <div class="footer">
         <p class="text-center">This is an automated message. Please do not reply to this email.</p>
