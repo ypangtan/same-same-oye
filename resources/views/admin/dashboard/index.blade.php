@@ -83,6 +83,10 @@
         display: none;
     }
 
+    .dataTables_length select {
+        margin-right: 6px;
+    }
+
     .stream-link-card {
         display: block;
     }
