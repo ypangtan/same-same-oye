@@ -83,8 +83,10 @@
         display: none;
     }
 
-    .dataTables_length select {
-        margin-right: 6px;
+    .dataTables_length label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .stream-link-card {
