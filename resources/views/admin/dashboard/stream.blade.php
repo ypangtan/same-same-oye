@@ -33,11 +33,6 @@
         <div class="nk-block-head-content">
             <h3 class="nk-block-title page-title" id="stream-page-title">Streams</h3>
         </div>
-        <div class="nk-block-head-content">
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-light btn-sm">
-                <em class="icon ni ni-arrow-left me-1"></em>Back
-            </a>
-        </div>
     </div>
 </div>
 

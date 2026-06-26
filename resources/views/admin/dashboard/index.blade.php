@@ -317,8 +317,8 @@
 <div class="nk-block mb-4">
     <p class="section-title">Streaming Activity (All Time)</p>
     <div class="row g-3" id="stream-cards-row">
-        {{-- Radio always first (static) --}}
-        <a href="{{ route('admin.dashboard.stream') }}?page=radio" class="col-6 col-md-4 col-lg-3 stream-link-card text-decoration-none">
+        {{-- Radio always first (static, no link) --}}
+        <div class="col-6 col-md-4 col-lg-3">
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="gap-3 d-flex align-items-center h-100">
@@ -330,7 +330,7 @@
                     </div>
                 </div>
             </div>
-        </a>
+        </div>
         {{-- Per-type cards appended here by JS --}}
     </div>
 </div>
