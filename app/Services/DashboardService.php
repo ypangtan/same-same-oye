@@ -85,6 +85,7 @@ class DashboardService {
             ->pluck( 'total', 'type_id' );
 
         $streamTypes = $contentTypes->map( fn( $t ) => [
+            'id'          => $t->id,
             'name'        => $t->name,
             'items'       => number_format( $itemsByType->get( $t->id, 0 ) ),
             'playlists'   => number_format( $playlistsByType->get( $t->id, 0 ) ),
