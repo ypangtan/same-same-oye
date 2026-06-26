@@ -38,39 +38,6 @@
         flex-shrink: 0;
     }
 
-    /* Stream mini */
-    .stream-mini {
-        padding: 14px 18px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .stream-mini .sm-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
-        flex-shrink: 0;
-    }
-
-    .stream-mini .sm-val {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #364a63;
-        line-height: 1;
-    }
-
-    .stream-mini .sm-label {
-        font-size: .72rem;
-        color: #8094ae;
-        text-transform: uppercase;
-        letter-spacing: .05em;
-    }
-
     /* Inline badge styles */
     .bx {
         display: inline-block;
@@ -116,18 +83,17 @@
         display: none;
     }
 
-    .stream-card-trigger {
-        cursor: pointer;
-    }
-    .stream-page {
-        display: none;
-    }
-    .stream-page.active {
+    .stream-link-card {
         display: block;
     }
+    .stream-link-card .card {
+        transition: box-shadow .15s, transform .15s;
+    }
+    .stream-link-card:hover .card {
+        box-shadow: 0 4px 16px rgba(0,0,0,.10);
+        transform: translateY(-2px);
+    }
 </style>
-
-<div id="dashboard-overview">
 
 {{-- PAGE TITLE --}}
 <div class="nk-block-head nk-block-head-sm">
@@ -270,23 +236,94 @@
     </div>
 </div>
 
+{{-- SECTION 3 — APP ANALYTICS (Firebase GA4) --}}
+<div class="nk-block mb-4" id="section-app-analytics">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <p class="section-title mb-0">App Analytics <small class="text-muted fw-normal ms-2" style="font-size:.75rem;border:none;padding:0">Firebase — Production data</small></p>
+        <select class="form-select form-select-sm w-auto" id="app-analytics-period" style="font-size:.78rem">
+            <option value="7">Last 7 Days</option>
+            <option value="30" selected>Last 30 Days</option>
+            <option value="90">Last 90 Days</option>
+        </select>
+    </div>
+    <div class="row g-3">
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center h-100">
+                        <div class="stat-icon" style="background:#e8f5e9;color:#2e7d32"><em class="icon ni ni-android"></em></div>
+                        <div>
+                            <div class="stat-value" id="stat-android-installs">—</div>
+                            <div class="stat-label">Android Installs</div>
+                            <div style="font-size:.68rem;color:#2e7d32;margin-top:2px">Google Play</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center h-100">
+                        <div class="stat-icon" style="background:#e3f2fd;color:#1565c0"><em class="icon ni ni-apple"></em></div>
+                        <div>
+                            <div class="stat-value" id="stat-ios-installs">—</div>
+                            <div class="stat-label">iOS Installs</div>
+                            <div style="font-size:.68rem;color:#1565c0;margin-top:2px">App Store</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center h-100">
+                        <div class="stat-icon" style="background:#e5edff;color:#3c58d0"><em class="icon ni ni-download"></em></div>
+                        <div>
+                            <div class="stat-value" id="stat-total-installs">—</div>
+                            <div class="stat-label">Total Installs</div>
+                            <div style="font-size:.68rem;color:#3c58d0;margin-top:2px">Both Stores</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center h-100">
+                        <div class="stat-icon" style="background:#fce4ec;color:#c62828"><em class="icon ni ni-cross-circle"></em></div>
+                        <div>
+                            <div class="stat-value" id="stat-app-removed">—</div>
+                            <div class="stat-label">App Removed</div>
+                            <div style="font-size:.68rem;color:#c62828;margin-top:2px">Google Play only</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- SECTION 4 — STREAM SUMMARY CARDS --}}
 <div class="nk-block mb-4">
     <p class="section-title">Streaming Activity (All Time)</p>
     <div class="row g-3" id="stream-cards-row">
         {{-- Radio always first (static) --}}
-        <div class="col-6 col-md-4 col-lg-3 stream-card-trigger" data-page="stream-page-radio">
-            <div class="card h-100">
-                <div class="card-body stream-mini">
-                    <div class="sm-icon" style="background:#fce4ec;color:#c62828"><em class="icon ni ni-signal"></em>
-                    </div>
-                    <div>
-                        <div class="sm-val" id="stat-radio">—</div>
-                        <div class="sm-label">Radio Streams</div>
+        <a href="{{ route('admin.dashboard.stream') }}?page=radio" class="col-6 col-md-4 col-lg-3 stream-link-card text-decoration-none">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <div class="gap-3 d-flex align-items-center h-100">
+                        <div class="stat-icon" style="background:#fce4ec;color:#c62828"><em class="icon ni ni-signal"></em></div>
+                        <div>
+                            <div class="stat-value" id="stat-radio">—</div>
+                            <div class="stat-label">Radio Streams</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
         {{-- Per-type cards appended here by JS --}}
     </div>
 </div>
@@ -383,47 +420,6 @@
     </div>
 </div>
 
-</div>{{-- /dashboard-overview --}}
-
-{{-- STREAM DETAIL VIEW — full-page replacement when a stream card is clicked --}}
-<div id="stream-detail-view" style="display:none">
-    <div class="nk-block-head nk-block-head-sm">
-        <div class="nk-block-between flex-wrap gap-2">
-            <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title" id="stream-detail-title"></h3>
-            </div>
-            <div class="nk-block-head-content">
-                <a href="#" id="btn-back-dashboard" class="btn btn-outline-light btn-sm">
-                    <em class="icon ni ni-arrow-left me-1"></em>Back
-                </a>
-            </div>
-        </div>
-    </div>
-    {{-- Radio streams page --}}
-    <div id="stream-page-radio" class="stream-page">
-        <div class="listing-filter" style="grid-template-columns:1fr 3fr">
-            <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="radio-date" style="background:#fff" />
-            <input type="text" class="form-control form-control-sm" placeholder="Search user / email…" id="radio-search" />
-        </div>
-        <div class="card card-bordered card-preview">
-            <div class="card-inner">
-                <table class="table" style="width:100%" id="radio-table">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Played At</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    {{-- Per-type stream pages built by JS --}}
-    <div id="streams-by-type-container"></div>
-</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -587,66 +583,58 @@
         var $row = $('#stream-cards-row');
         $row.find('.stream-type-card').remove();
         var CARD_TYPE_NAMES = { 'Song': 'Music' };
+        var streamBaseUrl = '{{ route("admin.dashboard.stream") }}';
         (d.stream_types || []).forEach(function (type) {
             var typeName = CARD_TYPE_NAMES[type.name] || type.name;
             ['items', 'playlists', 'collections'].forEach(function (ct) {
                 var c      = CT[ct];
                 var lbl    = esc(typeName) + ' ' + c.label;
-                var pageId = 'stream-page-' + c.prefix + '-t' + type.id;
+                var pageId = c.prefix + '-t' + type.id;
                 $row.append(
-                    '<div class="col-6 col-md-4 col-lg-3 stream-type-card stream-card-trigger" data-page="' + pageId + '">' +
-                    '<div class="card h-100"><div class="card-body stream-mini">' +
-                    '<div class="sm-icon" style="background:' + c.bg + ';color:' + c.color + '">' +
+                    '<a href="' + streamBaseUrl + '?page=' + pageId + '" class="col-6 col-md-4 col-lg-3 stream-type-card stream-link-card text-decoration-none">' +
+                    '<div class="card stat-card h-100"><div class="card-body">' +
+                    '<div class="gap-3 d-flex align-items-center h-100">' +
+                    '<div class="stat-icon" style="background:' + c.bg + ';color:' + c.color + '">' +
                     '<em class="icon ni ' + c.icon + '"></em></div>' +
-                    '<div><div class="sm-val">' + (type[ct] || '0') + '</div>' +
-                    '<div class="sm-label">' + lbl + '</div></div>' +
-                    '</div></div></div>'
+                    '<div><div class="stat-value">' + (type[ct] || '0') + '</div>' +
+                    '<div class="stat-label">' + lbl + '</div></div>' +
+                    '</div></div></div></a>'
                 );
             });
         });
     });
 
-    /* ── Radio stream DataTable (lazy — loads on first card click) ── */
-    var dtRadio = null, radioDateRange = '', radioLoaded = false;
+    /* ── App Analytics (Firebase GA4) ─────────────────────────────── */
 
-    function loadRadioTable() {
-        if (radioLoaded) {
-            setTimeout(function () {
-                $.fn.DataTable.tables({ visible: true, api: true }).columns.adjust();
-            }, 50);
-            return;
-        }
-        post('{{ route("admin.dashboard.getRadioStreamTable") }}', { date_range: radioDateRange }).then(function (d) {
-            radioLoaded = true;
-            dtRadio = makeDT('radio-table', d.logs, [
-                { data: null        },
-                { data: 'user'      },
-                { data: 'email'     },
-                { data: 'played_at' },
-            ], [
-                noColDef(),
-                { targets: 1, render: function (data) {
-                    return data === 'Guest'
-                        ? '<span class="bx bx-inactive">Guest</span>'
-                        : esc(data);
-                } },
-            ], 3);
-            setTimeout(function () {
-                $.fn.DataTable.tables({ visible: true, api: true }).columns.adjust();
-            }, 50);
-        });
+    function loadAppAnalytics(period) {
+        document.getElementById('stat-android-installs').textContent = '…';
+        document.getElementById('stat-ios-installs').textContent     = '…';
+        document.getElementById('stat-total-installs').textContent   = '…';
+        document.getElementById('stat-app-removed').textContent      = '…';
+
+        post('{{ route("admin.dashboard.getAppAnalytics") }}', { period: period })
+            .then(function (d) {
+                if (d.error) {
+                    ['stat-android-installs','stat-ios-installs','stat-total-installs','stat-app-removed']
+                        .forEach(function (id) { document.getElementById(id).textContent = '—'; });
+                    return;
+                }
+                document.getElementById('stat-android-installs').textContent = d.installs.android ?? '0';
+                document.getElementById('stat-ios-installs').textContent     = d.installs.ios     ?? '0';
+                document.getElementById('stat-total-installs').textContent   = d.installs.total   ?? '0';
+                document.getElementById('stat-app-removed').textContent      = d.removals.android ?? '0';
+            })
+            .catch(function () {
+                ['stat-android-installs','stat-ios-installs','stat-total-installs','stat-app-removed']
+                    .forEach(function (id) { document.getElementById(id).textContent = '—'; });
+            });
     }
 
-    $('#radio-date').flatpickr({ mode: 'range', disableMobile: true,
-        onClose: function (sel, dateStr) { radioDateRange = dateStr; radioLoaded = false; loadRadioTable(); } });
+    loadAppAnalytics('30');
 
-    var radioTimer;
-    $('#radio-search').on('input', function () {
-        var v = $(this).val(); clearTimeout(radioTimer);
-        radioTimer = setTimeout(function () { if (dtRadio) dtRadio.search(v).draw(); }, 400);
+    $('#app-analytics-period').on('change', function () {
+        loadAppAnalytics($(this).val());
     });
-
-    function loadRadioGraph() { loadRadioTable(); }
 
     /* ══════════════════════════════════════════════════════════════════
        SECTION 6 — SUBSCRIPTIONS
@@ -714,162 +702,6 @@
     }
 
     initToggle('toggle-subs', 'section-subs', loadSubs);
-
-    /* Stream summary card → switch to full-page detail view */
-    $(document).on('click', '.stream-card-trigger', function () {
-        var pageId = $(this).data('page');
-        var label  = $(this).find('.sm-label').text();
-
-        $('#stream-cards-row .stream-card-trigger').removeClass('active');
-        $(this).addClass('active');
-
-        $('.stream-page').removeClass('active');
-        $('#' + pageId).addClass('active');
-
-        $('#stream-detail-title').text(label);
-        $('#dashboard-overview').hide();
-        $('#stream-detail-view').show();
-
-        if (pageId === 'stream-page-radio') {
-            loadRadioGraph();
-        } else {
-            setTimeout(function () {
-                $.fn.DataTable.tables({ visible: true, api: true }).columns.adjust();
-            }, 50);
-        }
-    });
-
-    /* Back button → return to dashboard overview */
-    $(document).on('click', '#btn-back-dashboard', function (e) {
-        e.preventDefault();
-        $('#stream-detail-view').hide();
-        $('#dashboard-overview').show();
-        $('#stream-cards-row .stream-card-trigger').removeClass('active');
-    });
-
-    /* ══════════════════════════════════════════════════════════════════
-       SECTIONS 7-9 — STREAM TABLES (per type, each with own date+search)
-
-       Initial load fetches all rows once and splits client-side by type.
-       Each per-type date filter re-calls the API with that type_id only.
-    ══════════════════════════════════════════════════════════════════ */
-
-    /* Build HTML for one per-type page (hidden div) with search + table */
-    function buildTypePage($page, prefix, type, thead, suffix) {
-        var safeKey  = prefix + '-t' + type.id;
-        var tableId  = safeKey + '-table';
-        var searchId = safeKey + '-search';
-        var title    = esc(type.name) + (suffix ? ' ' + suffix : '');
-
-        $page.append(
-            '<p class="section-title mb-2">' + title + '</p>' +
-            '<div class="listing-filter" style="grid-template-columns:1fr 3fr">' +
-            '<input type="text" class="form-control form-control-sm" placeholder="Search…" id="' + searchId + '">' +
-            '<div></div>' +
-            '</div>' +
-            '<div class="card card-bordered card-preview"><div class="card-inner">' +
-            '<table class="table" style="width:100%" id="' + tableId + '">' +
-            '<thead><tr>' + thead + '</tr></thead><tbody></tbody>' +
-            '</table></div></div>'
-        );
-        return { tableId: tableId, searchId: searchId };
-    }
-
-    /* Wire per-type block: load all data once, search only */
-    function wireTypeBlock(ids, rows, cols, defs, orderCol) {
-        var dt = makeDT(ids.tableId, rows, cols, defs, orderCol);
-        var timer;
-        $('#' + ids.searchId).on('input', function () {
-            var v = $(this).val(); clearTimeout(timer);
-            timer = setTimeout(function () { if (dt) dt.search(v).draw(); }, 400);
-        });
-    }
-
-    /* ══════════════════════════════════════════════════════════════════
-       SECTIONS 7-9 — STREAMS BY TYPE
-       Order per type: {Type} → {Type} Playlist → {Type} Collection
-    ══════════════════════════════════════════════════════════════════ */
-
-    var ITEMS_THEAD  = '<th>No.</th><th>Title</th><th>Plays</th>';
-    var ITEMS_COLS   = [
-        { data: null   },
-        { data: 'title'},
-        { data: 'total'},
-    ];
-    var ITEMS_DEFS   = [
-        noColDef(),
-        { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-    ];
-
-    var PLISTS_THEAD = '<th>No.</th><th>Playlist Name</th><th>Plays</th>';
-    var PLISTS_COLS  = [
-        { data: null   },
-        { data: 'name' },
-        { data: 'total'},
-    ];
-    var PLISTS_DEFS  = [
-        noColDef(),
-        { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-    ];
-
-    var COLLS_THEAD  = '<th>No.</th><th>Collection Name</th><th>Plays</th>';
-    var COLLS_COLS   = [
-        { data: null   },
-        { data: 'name' },
-        { data: 'total'},
-    ];
-    var COLLS_DEFS   = [
-        noColDef(),
-        { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-    ];
-
-    Promise.all([
-        post('{{ route("admin.dashboard.getItemStreams") }}',       {}),
-        post('{{ route("admin.dashboard.getPlaylistStreams") }}',   {}),
-        post('{{ route("admin.dashboard.getCollectionStreams") }}', {}),
-    ]).then(function (results) {
-        var dI = results[0], dP = results[1], dC = results[2];
-        var $c = $('#streams-by-type-container').empty();
-
-        /* Merge types from all 3 responses, rename, then sort alphabetically */
-        var TYPE_NAMES = { 'Song': 'Music' };
-        var typesMap = {};
-        [(dI.types || []), (dP.types || []), (dC.types || [])].forEach(function (arr) {
-            arr.forEach(function (t) {
-                if (!typesMap[t.id]) typesMap[t.id] = { id: t.id, name: TYPE_NAMES[t.name] || t.name };
-            });
-        });
-        var types = Object.keys(typesMap)
-            .map(function (k) { return typesMap[k]; })
-            .sort(function (a, b) { return a.name.localeCompare(b.name); });
-
-        if (!types.length) { $c.html('<div class="text-muted py-3">No data.</div>'); return; }
-
-        var allItems  = dI.items        || [];
-        var allPlists = dP.playlists    || [];
-        var allColls  = dC.collections  || [];
-
-        types.forEach(function (type) {
-            var tid = type.id;
-
-            var $iPage = $('<div id="stream-page-items-t' + tid + '" class="stream-page"></div>');
-            $c.append($iPage);
-            var iIds = buildTypePage($iPage, 'items', type, ITEMS_THEAD, null);
-            wireTypeBlock(iIds, allItems.filter(function (r) { return r.type_id == tid; }), ITEMS_COLS, ITEMS_DEFS, 3);
-
-            var $pPage = $('<div id="stream-page-plists-t' + tid + '" class="stream-page"></div>');
-            $c.append($pPage);
-            var pIds = buildTypePage($pPage, 'plists', type, PLISTS_THEAD, 'Playlist');
-            wireTypeBlock(pIds, allPlists.filter(function (r) { return r.type_id == tid; }), PLISTS_COLS, PLISTS_DEFS, 3);
-
-            var $cPage = $('<div id="stream-page-colls-t' + tid + '" class="stream-page"></div>');
-            $c.append($cPage);
-            var cIds = buildTypePage($cPage, 'colls', type, COLLS_THEAD, 'Collection');
-            wireTypeBlock(cIds, allColls.filter(function (r) { return r.type_id == tid; }), COLLS_COLS, COLLS_DEFS, 3);
-        });
-    }).catch(function () {
-        $('#streams-by-type-container').html('<div class="text-danger py-3">Failed to load.</div>');
-    });
 
     /* ══════════════════════════════════════════════════════════════════
        SECTION 10 — BANNER CLICKS

@@ -53,4 +53,15 @@ class DashboardController extends Controller
     public function getPopAnnouncementClickStats() {
         return DashboardService::getPopAnnouncementClickStats();
     }
+
+    public function getAppAnalytics( Request $request ) {
+        return DashboardService::getAppAnalytics( $request );
+    }
+
+    public function streamPage( Request $request ) {
+        $this->data['header']['title'] = __( 'template.dashboard' );
+        $this->data['content']         = 'admin.dashboard.stream';
+        $this->data['activePage']      = $request->query( 'page', 'radio' );
+        return view( 'admin.main' )->with( $this->data );
+    }
 }

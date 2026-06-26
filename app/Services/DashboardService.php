@@ -378,4 +378,25 @@ class DashboardService {
 
         return response()->json( [ 'popups' => $popups ] );
     }
+
+    // ── Firebase App Analytics (GA4) ─────────────────────────────────────────
+
+    public static function getAppAnalytics( Request $request ) {
+        $periodMap = [
+            '7'  => '7daysAgo',
+            '30' => '30daysAgo',
+            '90' => '90daysAgo',
+        ];
+        $period = $periodMap[ $request->input( 'period', '30' ) ] ?? '30daysAgo';
+
+        try {
+            $stats = \App\Services\FirebaseAnalyticsServiceV2::appStats( $period );
+            return response()->json( [
+                'installs' => $stats['installs'],
+                'removals' => $stats['removals'],
+            ] );
+        } catch ( \Throwable $e ) {
+            return response()->json( [ 'error' => $e->getMessage() ], 500 );
+        }
+    }
 }

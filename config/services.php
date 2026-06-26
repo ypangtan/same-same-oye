@@ -84,4 +84,20 @@ return [
     'deeplink' => [
         'deeplink_url' => env( 'DEEPLINK_URL' ),
     ],
+
+    'firebase' => [
+        // Absolute path to the Google service-account JSON key file.
+        // Default resolves to storage/app/credentials/google-credentials.json.
+        'credentials_path' => env( 'FIREBASE_CREDENTIALS_PATH', storage_path( 'app/credentials/google-credentials.json' ) ),
+
+        // Numeric GA4 property ID — found in GA4 Admin → Property Settings.
+        'ga4_property_id' => env( 'FIREBASE_GA4_PROPERTY_ID' ),
+
+        // Live GA4 Data Stream IDs (GA4 Admin → Data Streams → Stream ID).
+        // Leave empty to pull from all streams (no platform filter applied).
+        'streams' => array_filter( [
+            'android' => env( 'FIREBASE_STREAM_ANDROID' ),
+            'ios'     => env( 'FIREBASE_STREAM_IOS' ),
+        ] ),
+    ],
 ];
