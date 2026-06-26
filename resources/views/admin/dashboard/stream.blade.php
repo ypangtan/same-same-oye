@@ -46,7 +46,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var csrf      = '{{ csrf_token() }}';
-    var ACTIVE    = '{{ $activePage }}';
+    var ACTIVE    = '{{ $activePage ?? 'radio' }}';
 
     /* ── helpers ─────────────────────────────────────────────────────── */
 
