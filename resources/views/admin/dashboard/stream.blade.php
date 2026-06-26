@@ -28,7 +28,7 @@
     .dt-length select { margin-right: 8px; }
 </style>
 
-<div class="nk-block-head nk-block-head-sm">
+<div class="nk-block-head nk-block-head-sm mb-4">
     <div class="nk-block-between flex-wrap gap-2">
         <div class="nk-block-head-content">
             <h3 class="nk-block-title page-title" id="stream-page-title">Streams</h3>

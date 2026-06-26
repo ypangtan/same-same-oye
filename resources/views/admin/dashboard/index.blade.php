@@ -103,7 +103,7 @@
 </style>
 
 {{-- PAGE TITLE --}}
-<div class="nk-block-head nk-block-head-sm">
+<div class="nk-block-head nk-block-head-sm mb-4">
     <div class="nk-block-between flex-wrap gap-2">
         <div class="nk-block-head-content">
             <h3 class="nk-block-title page-title">{{ __( 'template.dashboard' ) }}</h3>
