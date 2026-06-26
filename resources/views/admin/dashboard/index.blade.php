@@ -83,7 +83,7 @@
         display: none;
     }
 
-    .dataTables_length label {
+    .dt-length {
         display: flex;
         align-items: center;
         gap: 8px;
