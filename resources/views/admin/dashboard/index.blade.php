@@ -93,10 +93,6 @@
         box-shadow: 0 4px 16px rgba(0,0,0,.10);
         transform: translateY(-2px);
     }
-
-    .dt-length-1{
-        margin-left: 10px;
-    }
 </style>
 
 {{-- PAGE TITLE --}}
