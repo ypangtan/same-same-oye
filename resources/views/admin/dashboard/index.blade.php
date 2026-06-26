@@ -86,6 +86,7 @@
     .dt-length {
         display: flex;
         align-items: center;
+        justify-content: end;
         gap: 8px;
     }
 
