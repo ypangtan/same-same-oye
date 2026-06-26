@@ -24,6 +24,8 @@
     .bx-inactive { background: #fce4ec; color: #b71c1c; }
 
     .dt-buttons { display: none; }
+
+    .dt-length select { margin-right: 8px; }
 </style>
 
 <div class="nk-block-head nk-block-head-sm">
