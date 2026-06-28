@@ -74,15 +74,34 @@ use GuzzleHttp\Client;
  */
 class FirebaseAnalyticsServiceV2
 {
+    private static function base64UrlEncode( string $data ): string {
+        return rtrim( strtr( base64_encode( $data ), '+/', '-_' ), '=' );
+    }
+
     private static function getAccessToken(): string {
-        return Cache::remember( 'ga4_oauth_access_token', 3480, function () {
+        return Cache::remember( 'ga4_service_account_access_token', 3480, function () {
+            $credentials = json_decode( file_get_contents( config( 'services.firebase.credentials_path' ) ), true );
+
+            $now     = time();
+            $header  = self::base64UrlEncode( json_encode( [ 'alg' => 'RS256', 'typ' => 'JWT' ] ) );
+            $payload = self::base64UrlEncode( json_encode( [
+                'iss'   => $credentials['client_email'],
+                'sub'   => $credentials['client_email'],
+                'scope' => 'https://www.googleapis.com/auth/analytics.readonly',
+                'aud'   => 'https://oauth2.googleapis.com/token',
+                'iat'   => $now,
+                'exp'   => $now + 3600,
+            ] ) );
+
+            $toSign = $header . '.' . $payload;
+            openssl_sign( $toSign, $signature, $credentials['private_key'], 'SHA256' );
+            $jwt = $toSign . '.' . self::base64UrlEncode( $signature );
+
             $http     = new Client();
             $response = $http->post( 'https://oauth2.googleapis.com/token', [
                 'form_params' => [
-                    'client_id'     => config( 'services.firebase.client_id' ),
-                    'client_secret' => config( 'services.firebase.client_secret' ),
-                    'refresh_token' => config( 'services.firebase.refresh_token' ),
-                    'grant_type'    => 'refresh_token',
+                    'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                    'assertion'  => $jwt,
                 ],
             ] );
 

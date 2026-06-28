@@ -86,10 +86,8 @@ return [
     ],
 
     'firebase' => [
-        // OAuth2 credentials — from Google Cloud Console → APIs & Services → Credentials.
-        'client_id'     => env( 'GOOGLE_OAUTH_CLIENT_ID' ),
-        'client_secret' => env( 'GOOGLE_OAUTH_CLIENT_SECRET' ),
-        'refresh_token' => env( 'GOOGLE_OAUTH_REFRESH_TOKEN' ),
+        // Absolute path to the Firebase service-account JSON key file.
+        'credentials_path' => env( 'FIREBASE_CREDENTIALS_PATH', storage_path( 'app/credentials/firebase.json' ) ),
 
         // Numeric GA4 property ID — found in GA4 Admin → Property Settings.
         'ga4_property_id' => env( 'FIREBASE_GA4_PROPERTY_ID' ),
