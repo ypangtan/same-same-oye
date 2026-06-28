@@ -73,7 +73,7 @@ use GuzzleHttp\Client;
  *   - newUsers     = users who opened the app for the first time.
  *   - app_remove   = Android uninstall event (iOS does not fire this event).
  */
-class FirebaseAnalyticsService
+class FirebaseAnalyticsServiceV2
 {
     private static function base64UrlEncode( string $data ): string {
         return rtrim( strtr( base64_encode( $data ), '+/', '-_' ), '=' );
