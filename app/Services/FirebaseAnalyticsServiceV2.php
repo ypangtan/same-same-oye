@@ -9,38 +9,40 @@ use GuzzleHttp\Client;
  * FirebaseAnalyticsServiceV2
  *
  * Fetches GA4 analytics data via the Google Analytics Data API (v1beta).
- * Uses OAuth2 refresh_token — no service-account JSON file required.
  *
  * Setup:
  *
- *   STEP 1 — Create OAuth2 credentials
- *     a. Go to https://console.cloud.google.com/ → APIs & Services → Credentials.
- *     b. Create OAuth 2.0 Client ID → Application type: Web application.
- *     c. Add https://developers.google.com/oauthplayground as an Authorized redirect URI.
- *     d. Note the Client ID and Client Secret.
+ *   STEP 1 — Create a Google service account
+ *     a. Go to https://console.cloud.google.com/ → select your project.
+ *     b. IAM & Admin → Service Accounts → Create Service Account.
+ *     c. No roles needed at this step. Click Done.
+ *     d. Open the service account → Keys tab → Add Key → JSON. Download the file.
+ *     e. Store the JSON file somewhere safe on the server (e.g. storage/app/firebase/).
+ *        NEVER commit it to git.
  *
- *   STEP 2 — Get a refresh_token via OAuth Playground
- *     a. Go to https://developers.google.com/oauthplayground
- *     b. Click the gear icon (top right) → check "Use your own OAuth credentials" →
- *        enter your Client ID and Client Secret.
- *     c. In Step 1, find "Google Analytics Data API v1beta" and select
- *        https://www.googleapis.com/auth/analytics.readonly → Authorise APIs.
- *     d. In Step 2, click "Exchange authorization code for tokens".
- *     e. Copy the refresh_token value.
+ *   STEP 2 — Grant the service account access to GA4
+ *     a. Go to https://analytics.google.com/ → Admin → Property Access Management.
+ *     b. Add the service account email (looks like name@project.iam.gserviceaccount.com).
+ *     c. Role: Viewer is enough for read-only reporting.
  *
  *   STEP 3 — Enable the Analytics Data API
  *     a. Go to https://console.cloud.google.com/apis/library.
  *     b. Search "Google Analytics Data API" → Enable.
  *
- *   STEP 4 — Grant your Google account access to GA4
- *     a. Go to https://analytics.google.com/ → Admin → Property Access Management.
- *     b. Add the Google account you used in Step 2 with Viewer role.
- *
- *   STEP 5 — Set .env variables
- *     GOOGLE_OAUTH_CLIENT_ID=your-client-id
- *     GOOGLE_OAUTH_CLIENT_SECRET=your-client-secret
- *     GOOGLE_OAUTH_REFRESH_TOKEN=your-refresh-token
+ *   STEP 4 — Set .env variables
+ *     FIREBASE_CREDENTIALS_PATH=/absolute/path/to/service-account.json
  *     FIREBASE_GA4_PROPERTY_ID=123456789   ← numeric ID, found in GA4 Admin → Property Settings
+ *
+ *   STEP 5 — Add to config/services.php
+ *     'firebase' => [
+ *         'credentials_path'    => env('FIREBASE_CREDENTIALS_PATH'),
+ *         'ga4_property_id'     => env('FIREBASE_GA4_PROPERTY_ID'),
+ *         'streams_env'         => env('APP_ENV'),          // 'production' or 'staging'
+ *         'streams_production'  => ['android' => '1234567890', 'ios' => '0987654321'],
+ *         'streams_staging'     => ['android' => '1111111111', 'ios' => '2222222222'],
+ *         // Stream IDs are found in GA4 Admin → Data Streams → select stream → Stream ID.
+ *         // Leave both arrays empty to pull data from all streams (no filter).
+ *     ],
  *
  * Usage:
  *   // Last 30 days (default)
@@ -63,7 +65,6 @@ use GuzzleHttp\Client;
  *   ['android' => int, 'ios' => int, 'total' => int]
  *
  * Caching:
- *   access_token          → cached 58 minutes (expires in 60, buffer of 2 min).
  *   appStats()            → cached 1 hour per env+period combination.
  *   realtimeActiveUsers() → cached 5 minutes (real-time data, short TTL).
  *
@@ -72,41 +73,37 @@ use GuzzleHttp\Client;
  *   - newUsers     = users who opened the app for the first time.
  *   - app_remove   = Android uninstall event (iOS does not fire this event).
  */
-class FirebaseAnalyticsServiceV2
+class FirebaseAnalyticsService
 {
     private static function base64UrlEncode( string $data ): string {
         return rtrim( strtr( base64_encode( $data ), '+/', '-_' ), '=' );
     }
 
-    private static function getAccessToken(): string {
-        return Cache::remember( 'ga4_service_account_access_token', 3480, function () {
-            $credentials = json_decode( file_get_contents( config( 'services.firebase.credentials_path' ) ), true );
+    private static function getAccessToken( array $credentials ): string {
+        $now    = time();
+        $header  = self::base64UrlEncode( json_encode( [ 'alg' => 'RS256', 'typ' => 'JWT' ] ) );
+        $payload = self::base64UrlEncode( json_encode( [
+            'iss'   => $credentials['client_email'],
+            'sub'   => $credentials['client_email'],
+            'scope' => 'https://www.googleapis.com/auth/analytics.readonly',
+            'aud'   => 'https://oauth2.googleapis.com/token',
+            'iat'   => $now,
+            'exp'   => $now + 3600,
+        ] ) );
 
-            $now     = time();
-            $header  = self::base64UrlEncode( json_encode( [ 'alg' => 'RS256', 'typ' => 'JWT' ] ) );
-            $payload = self::base64UrlEncode( json_encode( [
-                'iss'   => $credentials['client_email'],
-                'sub'   => $credentials['client_email'],
-                'scope' => 'https://www.googleapis.com/auth/analytics.readonly',
-                'aud'   => 'https://oauth2.googleapis.com/token',
-                'iat'   => $now,
-                'exp'   => $now + 3600,
-            ] ) );
+        $toSign = $header . '.' . $payload;
+        openssl_sign( $toSign, $signature, $credentials['private_key'], 'SHA256' );
+        $jwt = $toSign . '.' . self::base64UrlEncode( $signature );
 
-            $toSign = $header . '.' . $payload;
-            openssl_sign( $toSign, $signature, $credentials['private_key'], 'SHA256' );
-            $jwt = $toSign . '.' . self::base64UrlEncode( $signature );
+        $http     = new Client();
+        $response = $http->post( 'https://oauth2.googleapis.com/token', [
+            'form_params' => [
+                'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                'assertion'  => $jwt,
+            ],
+        ] );
 
-            $http     = new Client();
-            $response = $http->post( 'https://oauth2.googleapis.com/token', [
-                'form_params' => [
-                    'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    'assertion'  => $jwt,
-                ],
-            ] );
-
-            return json_decode( $response->getBody()->getContents(), true )['access_token'];
-        } );
+        return json_decode( $response->getBody()->getContents(), true )['access_token'];
     }
 
     /** Standard (historical) report — use for installs, removals, active users over a date range. */
@@ -159,6 +156,10 @@ class FirebaseAnalyticsServiceV2
         ];
     }
 
+    private static function credentials(): array {
+        return json_decode( file_get_contents( config( 'services.firebase.credentials_path' ) ), true );
+    }
+
     /**
      * Returns install, removal, and active-user counts broken down by platform.
      *
@@ -171,8 +172,9 @@ class FirebaseAnalyticsServiceV2
 
         return Cache::remember( $cacheKey, 3600, function () use ( $period ) {
 
+            $credentials  = self::credentials();
             $propertyId   = config( 'services.firebase.ga4_property_id' );
-            $accessToken  = self::getAccessToken();
+            $accessToken  = self::getAccessToken( $credentials );
             $dateRange    = [ 'startDate' => $period, 'endDate' => 'today' ];
             $streamFilter = self::streamFilter();
 
@@ -267,8 +269,9 @@ class FirebaseAnalyticsServiceV2
 
         return Cache::remember( $cacheKey, 300, function () {
 
+            $credentials = self::credentials();
             $propertyId  = config( 'services.firebase.ga4_property_id' );
-            $accessToken = self::getAccessToken();
+            $accessToken = self::getAccessToken( $credentials );
 
             // minutesAgo is the only date range supported by runRealtimeReport.
             // '0' = now, '29' = 30 minutes ago.
