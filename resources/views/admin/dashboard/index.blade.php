@@ -375,54 +375,61 @@
     </div>
 </div>
 
-{{-- SECTION 10 — BANNER CLICKS --}}
-<div class="nk-block mb-4">
-    <p class="section-title">Banner Clicks</p>
-    <div class="listing-filter" style="grid-template-columns:1fr 1fr">
-        <input type="text" class="form-control form-control-sm d-none" placeholder="Search banner name…" id="banners-search" />
-        <select class="form-select form-select-sm d-none" id="banners-status">
-            <option value="">All Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-        </select>
-    </div>
-    <div class="card card-bordered card-preview">
-        <div class="card-inner">
-            <table class="table" style="width:100%" id="banners-table">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Image</th>
-                        <th>Status</th>
-                        <th>Clicks</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+{{-- SECTION 10 & 11 — BANNER CLICKS + POPUP CLICKS (same row on desktop) --}}
+<div class="row g-4 mb-4">
+    {{-- SECTION 10 — BANNER CLICKS --}}
+    <div class="col-12 col-md-6">
+        <div class="nk-block h-100">
+            <p class="section-title">Banner Clicks</p>
+            <div class="listing-filter" style="grid-template-columns:1fr 1fr">
+                <input type="text" class="form-control form-control-sm d-none" placeholder="Search banner name…" id="banners-search" />
+                <select class="form-select form-select-sm d-none" id="banners-status">
+                    <option value="">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="card card-bordered card-preview h-100">
+                <div class="card-inner">
+                    <table class="table" style="width:100%" id="banners-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Image</th>
+                                <th>Status</th>
+                                <th>Clicks</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-{{-- SECTION 11 — POPUP CLICKS --}}
-<div class="nk-block mb-4">
-    <p class="section-title">Pop Announcement Clicks</p>
-    <div class="listing-filter" style="grid-template-columns:1fr 1fr">
-        <input type="text" class="form-control form-control-sm" placeholder="Search title…" id="popups-search" />
-    </div>
-    <div class="card card-bordered card-preview">
-        <div class="card-inner">
-            <table class="table" style="width:100%" id="popups-table">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th>Clicks</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+    {{-- SECTION 11 — POPUP CLICKS --}}
+    <div class="col-12 col-md-6">
+        <div class="nk-block h-100">
+            <p class="section-title">Pop Announcement Clicks</p>
+            <div class="listing-filter" style="grid-template-columns:1fr 1fr">
+                <input type="text" class="form-control form-control-sm" placeholder="Search title…" id="popups-search" />
+            </div>
+            <div class="card card-bordered card-preview h-100">
+                <div class="card-inner">
+                    <table class="table" style="width:100%" id="popups-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Clicks</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
