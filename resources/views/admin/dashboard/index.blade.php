@@ -244,7 +244,7 @@
 </div>
 
 {{-- SECTION 3 — APP ANALYTICS (Firebase GA4) --}}
-<div class="nk-block mb-4" id="section-app-analytics">
+<div class="nk-block mb-4 d-none" id="section-app-analytics">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <p class="section-title mb-0">App Analytics</p>
         <select class="form-select form-select-sm w-auto" id="app-analytics-period" style="font-size:.78rem">

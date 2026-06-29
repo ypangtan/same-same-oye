@@ -36,10 +36,18 @@ class DashboardService {
         $today        = Carbon::today()->timezone( 'Asia/Kuala_Lumpur' );
         $startOfMonth = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->startOfMonth();
 
-        $totalActive = User::where( 'status', 10 )->count();
-        $freeUsers   = User::where( 'status', 10 )->where( 'membership', 0 )->count();
-        $trialUsers  = User::where( 'status', 10 )->where( 'membership', 2 )->count();
-        $paidUsers   = User::where( 'status', 10 )->whereIn( 'membership', [ 1, 3, 4 ] )->count();
+        $since = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subHours( 24 );
+
+        $activeUserIds = DB::table( 'stream_logs' )
+            ->where( 'created_at', '>=', $since )
+            ->whereNotNull( 'user_id' )
+            ->distinct()
+            ->pluck( 'user_id' );
+
+        $totalActive = $activeUserIds->count();
+        $freeUsers   = User::whereIn( 'id', $activeUserIds )->where( 'membership', 0 )->count();
+        $trialUsers  = User::whereIn( 'id', $activeUserIds )->where( 'membership', 2 )->count();
+        $paidUsers   = User::whereIn( 'id', $activeUserIds )->whereIn( 'membership', [ 1, 3, 4 ] )->count();
 
         $newUsersToday     = User::whereDate( 'created_at', $today )->count();
         $newUsersThisMonth = User::where( 'created_at', '>=', $startOfMonth )->count();
