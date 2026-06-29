@@ -380,16 +380,11 @@
     {{-- SECTION 10 — BANNER CLICKS --}}
     <div class="col-12 col-md-6">
         <div class="nk-block">
-            <p class="section-title">Banner Clicks</p>
-            <div class="listing-filter" style="grid-template-columns:1fr 1fr">
-                <input type="text" class="form-control form-control-sm d-none" placeholder="Search banner name…" id="banners-search" />
-                <select class="form-select form-select-sm d-none" id="banners-status">
-                    <option value="">All Status</option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <p class="section-title mb-0">Banner Clicks</p>
+                <input type="text" class="form-control form-control-sm d-none" placeholder="Search banner name…" id="banners-search" style="max-width:180px" />
             </div>
-            <div class="card card-bordered card-preview h-100">
+            <div class="card card-bordered card-preview">
                 <div class="card-inner">
                     <table class="table" style="width:100%" id="banners-table">
                         <thead>
@@ -410,11 +405,11 @@
     {{-- SECTION 11 — POPUP CLICKS --}}
     <div class="col-12 col-md-6">
         <div class="nk-block">
-            <p class="section-title">Pop Announcement Clicks</p>
-            <div class="listing-filter" style="grid-template-columns:1fr 1fr">
-                <input type="text" class="form-control form-control-sm" placeholder="Search title…" id="popups-search" />
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <p class="section-title mb-0">Pop Announcement Clicks</p>
+                <input type="text" class="form-control form-control-sm" placeholder="Search title…" id="popups-search" style="max-width:180px" />
             </div>
-            <div class="card card-bordered card-preview h-100">
+            <div class="card card-bordered card-preview">
                 <div class="card-inner">
                     <table class="table" style="width:100%" id="popups-table">
                         <thead>
