@@ -249,7 +249,7 @@
 
 {{-- SECTION 3 — APP ANALYTICS (Firebase GA4) --}}
 <div class="nk-block mb-4 d-none" id="section-app-analytics">
-    <div class="d-flex align-items-center justify-content-between mb-3">
+    <div class="d-flex align-items-center justify-content-between mb-3" style="min-height:31px">
         <p class="section-title mb-0">App Analytics</p>
         <select class="form-select form-select-sm w-auto" id="app-analytics-period" style="font-size:.78rem">
             <option value="7">Last 7 Days</option>
@@ -384,7 +384,7 @@
     {{-- SECTION 10 — BANNER CLICKS --}}
     <div class="col-12 col-1024-6">
         <div class="nk-block">
-            <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-3" style="min-height:31px">
                 <p class="section-title mb-0">Banner Clicks</p>
                 <input type="text" class="form-control form-control-sm d-none" placeholder="Search banner name…" id="banners-search" style="max-width:180px" />
             </div>
@@ -409,7 +409,7 @@
     {{-- SECTION 11 — POPUP CLICKS --}}
     <div class="col-12 col-1024-6">
         <div class="nk-block">
-            <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-3" style="min-height:31px">
                 <p class="section-title mb-0">Pop Announcement Clicks</p>
                 <input type="text" class="form-control form-control-sm" placeholder="Search title…" id="popups-search" style="max-width:180px" />
             </div>
