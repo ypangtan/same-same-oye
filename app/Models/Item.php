@@ -110,7 +110,7 @@ class Item extends Model
 
     public function getFileUrlAttribute() {
 
-        if( $this->attributes['file'] ) {
+        if( $this->attributes['upload_type'] == 1 ) {
             $localPath = storage_path ('app/public/' . $this->attributes['file'] );
             if ( file_exists( $localPath ) ) {
                 return asset( 'storage/' . $this->attributes['file'] );
@@ -124,7 +124,7 @@ class Item extends Model
 
     public function getSongUrlAttribute() {
 
-        if( $this->attributes['file'] ) {
+        if( $this->attributes['upload_type'] == 1 ) {
             $localPath = storage_path ('app/public/' . $this->attributes['file'] );
             if ( file_exists( $localPath ) ) {
                 return asset( 'storage/' . $this->attributes['file'] );
