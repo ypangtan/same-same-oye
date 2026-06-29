@@ -132,7 +132,8 @@ class Item extends Model
             
             return StorageService::get( $this->attributes['file'] );
         } else {
-            return $this->attributes['url'];
+            // return $this->attributes['url'];
+            return null;
         }
     }
 
