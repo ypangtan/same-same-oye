@@ -90,16 +90,6 @@
         gap: 8px;
     }
 
-    .stream-link-card {
-        display: block;
-    }
-    .stream-link-card .card {
-        transition: box-shadow .15s, transform .15s;
-    }
-    .stream-link-card:hover .card {
-        box-shadow: 0 4px 16px rgba(0,0,0,.10);
-        transform: translateY(-2px);
-    }
 
     @media (min-width: 1024px) {
         .col-1024-6 { flex: 0 0 auto; width: 50%; }
@@ -604,14 +594,14 @@
                 var lbl    = esc(typeName) + ' ' + c.label;
                 var pageId = c.prefix + '-t' + type.id;
                 $row.append(
-                    '<a href="' + streamBaseUrl + '?page=' + pageId + '" class="col-6 col-md-4 col-lg-3 stream-type-card stream-link-card text-decoration-none">' +
+                    '<div class="col-6 col-md-4 col-lg-3 stream-type-card">' +
                     '<div class="card stat-card h-100"><div class="card-body">' +
                     '<div class="gap-3 d-flex align-items-center h-100">' +
                     '<div class="stat-icon" style="background:' + c.bg + ';color:' + c.color + '">' +
                     '<em class="icon ni ' + c.icon + '"></em></div>' +
                     '<div><div class="stat-value">' + (type[ct] || '0') + '</div>' +
                     '<div class="stat-label">' + lbl + '</div></div>' +
-                    '</div></div></div></a>'
+                    '</div></div></div></div>'
                 );
             });
         });
