@@ -220,10 +220,10 @@ class ItemService
                 'image' => $request->image,
                 'author' => $request->author,
                 'membership_level' => $request->membership_level,
-                'file' => !empty( $request->file ) ? $request->file : null,
+                'file' => $request->upload_type == 1 ? $request->file : null,
                 'file_name' => !empty( $request->file_name ) ? $request->file_name : null,
                 'file_type' => $request->upload_type == 1 ? ( !empty( $request->file_type ) ? $request->file_type : null ) : 2,
-                'url' => !empty( $request->url ) ? $request->url : null,
+                'url' => $request->upload_type == 2 ? $request->url : null,
                 'duration' => $request->duration,
                 'upload_type' => $request->upload_type,
                 'url_type' => $request->url_type,
@@ -299,10 +299,10 @@ class ItemService
             $updateItem->image = $request->image;
             $updateItem->author = $request->author;
             $updateItem->membership_level = $request->membership_level;
-            $updateItem->file = !empty( $request->file ) ? $request->file : null;
+            $updateItem->file = $request->upload_type == 1 ? $request->file : null;
             $updateItem->file_type = $request->upload_type == 1 ? ( !empty( $request->file_type ) ? $request->file_type : null ) : 2;
             $updateItem->file_name = !empty( $request->file_name ) ? $request->file_name : null;
-            $updateItem->url = !empty( $request->url ) ? $request->url : null;
+            $updateItem->url = $request->upload_type == 2 ? $request->url : null;
             $updateItem->upload_type = $request->upload_type;
             $updateItem->duration = $request->duration;
             $updateItem->url_type = !empty( $request->url_type ) ? $request->url_type : 1;
