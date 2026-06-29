@@ -73,8 +73,8 @@
     }
 
     .thumb-img {
-        min-width: 60px;
-        height: 36px;
+        min-width: 70px;
+        min-height: 36px;
         object-fit: cover;
         border-radius: 4px;
     }
