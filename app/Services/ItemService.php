@@ -220,7 +220,6 @@ class ItemService
                 'image' => $request->image,
                 'author' => $request->author,
                 'membership_level' => $request->membership_level,
-                'membership_level' => $request->membership_level,
                 'file' => !empty( $request->file ) ? $request->file : null,
                 'file_name' => !empty( $request->file_name ) ? $request->file_name : null,
                 'file_type' => $request->upload_type == 1 ? ( !empty( $request->file_type ) ? $request->file_type : null ) : 2,

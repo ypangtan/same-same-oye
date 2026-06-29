@@ -92,7 +92,24 @@ class Item extends Model
         }
     }
 
+    public function getFileAttribute() {
+        if( $this->attributes['upload_type'] != 1 ) {
+            return null;
+        }
+
+        return $this->attributes['file'];
+    }
+
+    public function getUrlAttribute() {
+        if( $this->attributes['upload_type'] != 2 ) {
+            return null;
+        }
+
+        return $this->attributes['url'];
+    }
+
     public function getFileUrlAttribute() {
+
         if( $this->attributes['file'] ) {
             $localPath = storage_path ('app/public/' . $this->attributes['file'] );
             if ( file_exists( $localPath ) ) {
@@ -106,6 +123,7 @@ class Item extends Model
     }
 
     public function getSongUrlAttribute() {
+
         if( $this->attributes['file'] ) {
             $localPath = storage_path ('app/public/' . $this->attributes['file'] );
             if ( file_exists( $localPath ) ) {
