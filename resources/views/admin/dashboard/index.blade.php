@@ -100,6 +100,10 @@
         box-shadow: 0 4px 16px rgba(0,0,0,.10);
         transform: translateY(-2px);
     }
+
+    @media (min-width: 1024px) {
+        .col-1024-6 { flex: 0 0 auto; width: 50%; }
+    }
 </style>
 
 {{-- PAGE TITLE --}}
@@ -176,7 +180,7 @@
 {{-- SECTION 2 — NEW USERS + SUBS COUNT --}}
 <div class="nk-block mb-4">
     <div class="row g-3">
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-1024-6">
             <p class="section-title">New Users</p>
             <div class="row g-3">
                 <div class="col-6">
@@ -207,7 +211,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-1024-6">
             <p class="section-title">Subscriptions</p>
             <div class="row g-3">
                 <div class="col-6">
@@ -378,7 +382,7 @@
 {{-- SECTION 10 & 11 — BANNER CLICKS + POPUP CLICKS (same row on desktop) --}}
 <div class="row g-4 mb-4">
     {{-- SECTION 10 — BANNER CLICKS --}}
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-1024-6">
         <div class="nk-block">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <p class="section-title mb-0">Banner Clicks</p>
@@ -403,7 +407,7 @@
     </div>
 
     {{-- SECTION 11 — POPUP CLICKS --}}
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-1024-6">
         <div class="nk-block">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <p class="section-title mb-0">Pop Announcement Clicks</p>
