@@ -379,7 +379,7 @@
 <div class="row g-4 mb-4">
     {{-- SECTION 10 — BANNER CLICKS --}}
     <div class="col-12 col-md-6">
-        <div class="nk-block h-100">
+        <div class="nk-block">
             <p class="section-title">Banner Clicks</p>
             <div class="listing-filter" style="grid-template-columns:1fr 1fr">
                 <input type="text" class="form-control form-control-sm d-none" placeholder="Search banner name…" id="banners-search" />
@@ -409,7 +409,7 @@
 
     {{-- SECTION 11 — POPUP CLICKS --}}
     <div class="col-12 col-md-6">
-        <div class="nk-block h-100">
+        <div class="nk-block">
             <p class="section-title">Pop Announcement Clicks</p>
             <div class="listing-filter" style="grid-template-columns:1fr 1fr">
                 <input type="text" class="form-control form-control-sm" placeholder="Search title…" id="popups-search" />
