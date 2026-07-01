@@ -52,8 +52,8 @@ class DashboardService {
         $newUsersToday     = User::whereDate( 'created_at', $today )->count();
         $newUsersThisMonth = User::where( 'created_at', '>=', $startOfMonth )->count();
 
-        $subsToday     = UserSubscription::whereDate( 'created_at', $today )->count();
-        $subsThisMonth = UserSubscription::where( 'created_at', '>=', $startOfMonth )->count();
+        $subsToday     = UserSubscription::where( 'type', 1 )->whereDate( 'created_at', $today )->count();
+        $subsThisMonth = UserSubscription::where( 'type', 1 )->where( 'created_at', '>=', $startOfMonth )->count();
 
         $streamCounts = DB::table( 'stream_logs' )
             ->selectRaw( 'content_type, COUNT(*) as total' )
