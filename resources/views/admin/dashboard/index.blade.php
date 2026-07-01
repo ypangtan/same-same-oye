@@ -633,7 +633,7 @@
             });
     }
 
-    loadAppAnalytics('30');
+    // loadAppAnalytics('30');
 
     $('#app-analytics-period').on('change', function () {
         loadAppAnalytics($(this).val());
