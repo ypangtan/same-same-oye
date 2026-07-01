@@ -349,7 +349,35 @@ class BannerService
         try {
 
             $updateBanner = Banner::find( $request->id );
-            $updateBanner->status = $updateBanner->status == 10 ? 20 : 10;
+            $updateBanner->status = $updateBanner->status == 10 ? 30 : 10;
+
+            $updateBanner->save();
+            DB::commit();
+
+            return response()->json( [
+                'data' => [
+                    'banner' => $updateBanner,
+                    'message_key' => 'update_banner_success',
+                ]
+            ] );
+
+        } catch ( \Throwable $th ) {
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+                'message_key' => 'create_banner_failed',
+            ], 500 );
+        }
+    }
+
+    public static function deleteBannerStatus( $request ) {
+
+        DB::beginTransaction();
+
+        try {
+
+            $updateBanner = Banner::find( $request->id );
+            $updateBanner->status = 20;
 
             $updateBanner->save();
             DB::commit();

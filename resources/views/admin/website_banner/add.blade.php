@@ -162,7 +162,6 @@
                     `);
                     $("#website_banner-list").append(newWebsiteBanner);
 
-                    
                     // Remove file preview after upload so dropzone is ready for the next image
                     myDropzone.removeFile(file);
                 }

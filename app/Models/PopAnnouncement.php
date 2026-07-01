@@ -96,4 +96,9 @@ class PopAnnouncement extends Model
     public function getDescriptionForEvent( string $eventName ): string {
         return "{$eventName} ";
     }
+
+    public function clicks()
+    {
+        return $this->hasMany(PopAnnouncementClick::class, 'pop_announcement_id');
+    }
 }

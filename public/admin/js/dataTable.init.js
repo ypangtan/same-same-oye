@@ -24,6 +24,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
         responsive: true,
         processing: true,
         serverSide: true,
+        export: dt_table_config.export ? dt_table_config.export : true,
         rowReorder: dt_table_config.rowReorder ? dt_table_config.rowReorder : false,
         order: dt_table_config.order,
         ordering: true,

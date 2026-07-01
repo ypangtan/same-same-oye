@@ -79,7 +79,18 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             Route::prefix( 'dashboard' )->group( function() {
                 Route::get( '/', [ DashboardController::class, 'index' ] )->name( 'admin.dashboard' );
 
-                Route::post( '/', [ DashboardController::class, 'getDashboardData' ] )->name( 'admin.dashboard.getDashboardData' );
+                Route::post( 'engagement-stats', [ DashboardController::class, 'getEngagementStats' ] )->name( 'admin.dashboard.getEngagementStats' );
+                Route::post( 'daily-user-stats', [ DashboardController::class, 'getDailyUserStats' ] )->name( 'admin.dashboard.getDailyUserStats' );
+                Route::post( 'radio-stream-table', [ DashboardController::class, 'getRadioStreamTable' ] )->name( 'admin.dashboard.getRadioStreamTable' );
+                Route::post( 'radio-stream-graph', [ DashboardController::class, 'getRadioStreamGraph' ] )->name( 'admin.dashboard.getRadioStreamGraph' );
+                Route::post( 'subscriptions-table', [ DashboardController::class, 'getSubscriptionsTable' ] )->name( 'admin.dashboard.getSubscriptionsTable' );
+                Route::post( 'item-streams',       [ DashboardController::class, 'getItemStreams' ] )->name( 'admin.dashboard.getItemStreams' );
+                Route::post( 'playlist-streams',   [ DashboardController::class, 'getPlaylistStreams' ] )->name( 'admin.dashboard.getPlaylistStreams' );
+                Route::post( 'collection-streams', [ DashboardController::class, 'getCollectionStreams' ] )->name( 'admin.dashboard.getCollectionStreams' );
+                Route::post( 'banner-click-stats', [ DashboardController::class, 'getBannerClickStats' ] )->name( 'admin.dashboard.getBannerClickStats' );
+                Route::post( 'popup-click-stats', [ DashboardController::class, 'getPopAnnouncementClickStats' ] )->name( 'admin.dashboard.getPopAnnouncementClickStats' );
+                Route::post( 'app-analytics',     [ DashboardController::class, 'getAppAnalytics' ] )->name( 'admin.dashboard.getAppAnalytics' );
+                Route::get(  'stream',            [ DashboardController::class, 'streamPage' ] )->name( 'admin.dashboard.stream' );
 
             } );
 
@@ -190,6 +201,10 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 
                 Route::get( 'get-disclaimer', [ SettingController::class, 'getDisclaimer' ] )->name( 'admin.setting.getDisclaimer' );
                 Route::post( 'update-disclaimer', [ SettingController::class, 'updateDisclaimer' ] )->name( 'admin.setting.updateDisclaimer' );
+
+                Route::get( 'get-special-otp-settings', [ SettingController::class, 'getSpecialOtpSettings' ] )->name( 'admin.setting.getSpecialOtpSettings' );
+                Route::post( 'update-special-otp-setting', [ SettingController::class, 'updateSpecialOtpSetting' ] )->name( 'admin.setting.updateSpecialOtpSetting' );
+                Route::post( 'generate-special-otp', [ SettingController::class, 'generateSpecialOtp' ] )->name( 'admin.setting.generateSpecialOtp' );
             } );
             
             Route::prefix( 'pop-announcements' )->group( function() {
@@ -407,6 +422,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-banner', [ BannerController::class, 'updateBanner' ] )->name( 'admin.banner.updateBanner' );
                 Route::post( 'delete-banner', [ BannerController::class, 'deleteBanner' ] )->name( 'admin.banner.deleteBanner' );
                 Route::post( 'update-banner-status', [ BannerController::class, 'updateBannerStatus' ] )->name( 'admin.banner.updateBannerStatus' );
+                Route::post( 'delete-banner-status', [ BannerController::class, 'deleteBannerStatus' ] )->name( 'admin.banner.deleteBannerStatus' );
                 Route::post( 'remove-banner-gallery-image', [ BannerController::class, 'removeBannerGalleryImage' ] )->name( 'admin.banner.removeBannerGalleryImage' );
                 Route::post( 'ckeUpload', [ BannerController::class, 'ckeUpload' ] )->name( 'admin.banner.ckeUpload' );
                 Route::post( 'image-upload', [ BannerController::class, 'imageUpload' ] )->name( 'admin.banner.imageUpload' );

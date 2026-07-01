@@ -57,15 +57,10 @@
 
     <div class="otp-container">
         <p>Hello,</p>
-
         <p>Thank you for signing up with Sama Sama Oye!</p>
-
         <p>Your OTP code is:</p>
-
         <div class="otp">{{ $data['otp_code'] }}</div>
-
         <p>This code will expire in 10 minutes.</p>
-
         <p>For your security:</p>
 
         <ul>
@@ -77,11 +72,8 @@
         <p>Need help? Contact our support team at <a href="mailto:contact@samasamaoye.com">contact@samasamaoye.com</a>.</p>
 
         <p>Thank you,<br>
-            
         Sama Sama Oye! Support Team</p>
-
         <p><a href="https://www.samasamaoye.com/en">https://www.samasamaoye.com/en</a></p>
-
     </div>
 
     <div class="footer">

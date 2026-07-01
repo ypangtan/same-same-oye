@@ -99,6 +99,12 @@ $columns = [
         'title' => __( 'datatables.status' ),
     ],
     [
+        'type' => 'select',
+        'options' => $data['is_special_otp_register_filter'],
+        'id' => 'is_special_otp_register',
+        'title' => __( 'user.is_special_otp_register' ),
+    ],
+    [
         'type' => 'default',
         'id' => 'dt_action',
         'title' => __( 'datatables.action' ),
@@ -121,6 +127,7 @@ window['{{ $column['id'] }}'] = '';
 var statusMapper = @json( $data['status'] ),
     ageGroupMapper = @json( $data['age_group'] ),
     membershipMapper = @json( $data['membership'] ),
+    specialOtpMapper = @json( $data['is_special_otp_register'] ),
     dt_table,
     dt_table_name = '#user_table',
     dt_table_config = {
@@ -160,6 +167,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'subscrition_detail' },
             { data: 'membership' },
             { data: 'status' },
+            { data: 'is_special_otp_register' },
             { data: 'encrypted_id' },
         ],
         columnDefs: [
@@ -198,35 +206,35 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "email" ) }}' ),
-                
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "user_social" ) }}' ),
-                
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data.length > 0 ? data[0].platform_label : '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "user" ) }}' ),
-                
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "first_name" ) }}' ),
-                
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "last_name" ) }}' ),
-                
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
@@ -247,19 +255,21 @@ var statusMapper = @json( $data['status'] ),
             // },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "feedback_email" ) }}' ),
-                
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "phone_number" ) }}' ),
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "referral" ) }}' ),
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ?? '-'
                     // if ( !data ) {
@@ -290,25 +300,28 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "plan" ) }}' ),
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "nationality" ) }}' ),
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "age_group" ) }}' ),
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ?? '-' ;
                 },
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "membership" ) }}' ),
-                
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     // return '-';
                     return membershipMapper[data] ;
@@ -316,14 +329,21 @@ var statusMapper = @json( $data['status'] ),
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
+                orderable: false,
                 render: function( data, type, row, meta ) {
                     return statusMapper[data];
                 },
             },
             {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "is_special_otp_register" ) }}' ),
+                orderable: false,
+                render: function( data, type, row, meta ) {
+                    return data == 1 ? specialOtpMapper[1] : specialOtpMapper[0];
+                },
+            },
+            {
                 targets: parseInt( '{{ count( $columns ) - 1 }}' ),
                 orderable: false,
-                
                 className: 'text-center',
                 render: function( data, type, row, meta ) {
 

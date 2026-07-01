@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\{
     TrendingContentController,
     TypeController,
     UserPlaylistController,
+    StreamController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -129,6 +130,8 @@ Route::middleware( 'auth.optional' )->group( function() {
         Route::post( '/get-one-item', [ ItemController::class, 'getItem' ] );
         Route::post( '/search', [ SearchController::class, 'search' ] );
     } );
+
+    Route::post( '/record', [ StreamController::class, 'record' ] );
 } );
 
 /* End Public route */
@@ -185,7 +188,7 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( '/verify-user-subscription', [ SubscriptionGroupMemberController::class, 'verifyUserSubscription' ] );
         Route::get( '/leave-subscription-group-member', [ SubscriptionGroupMemberController::class, 'leaveSubscriptionGroupMember' ] );
     } );
-        
+
 });
 
 

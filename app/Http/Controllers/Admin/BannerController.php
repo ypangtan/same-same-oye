@@ -46,7 +46,7 @@ class BannerController extends Controller
             '21' => __( 'datatables.expired' ),
         ];
         
-        $this->data['data']['banners'] = Banner::where( 'status', 10 )->orderBy( 'sequence' )->get();
+        $this->data['data']['banners'] = Banner::where( 'status', '!=', 20 )->orderBy( 'sequence' )->get();
 
         return view( 'admin.main' )->with( $this->data );
     }
@@ -136,6 +136,11 @@ class BannerController extends Controller
     public function updateBannerStatus( Request $request ) {
 
         return BannerService::updateBannerStatus( $request );
+    }
+
+    public function deleteBannerStatus( Request $request ) {
+
+        return BannerService::deleteBannerStatus( $request );
     }
 
     public function removeBannerGalleryImage( Request $request ) {

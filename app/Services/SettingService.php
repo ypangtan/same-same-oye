@@ -12,6 +12,8 @@ use App\Models\{
     ReferralGiftSetting,
 };
 
+use Carbon\Carbon;
+
 
 use Illuminate\Support\Facades\{
     DB,
@@ -136,6 +138,116 @@ class SettingService {
 
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.app_versions' ) ) ] ),
+        ] );
+    }
+
+    public static function getSpecialOtpSettings() {
+
+        $option = Option::getSpecialOtpSettings();
+
+        $settings = $option ? json_decode( $option->option_value, true ) : [
+            'enabled' => false,
+            'otp_code' => null,
+            'expires_at' => null,
+        ];
+
+        return response()->json( [
+            'data' => $settings,
+        ] );
+    }
+
+    public static function updateSpecialOtpSetting( $request ) {
+
+        $validator = Validator::make( $request->all(), [
+            'enabled' => [ 'required', 'boolean' ],
+        ] );
+
+        $validator->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            // Read with lock inside transaction to prevent race condition with generateSpecialOtp
+            $existing = Option::lockForUpdate()->where( 'option_name', 'SPECIAL_REGISTRATION_OTP' )->first();
+            $current = $existing ? json_decode( $existing->option_value, true ) : [];
+
+            $newValue = [
+                'enabled'    => (bool) $request->enabled,
+                'otp_code'   => $current['otp_code'] ?? null,
+                'expires_at' => $current['expires_at'] ?? null,
+            ];
+
+            if ( $existing ) {
+                $existing->option_value = json_encode( $newValue );
+                $existing->save();
+            } else {
+                Option::create( [
+                    'option_name'  => 'SPECIAL_REGISTRATION_OTP',
+                    'option_value' => json_encode( $newValue ),
+                ] );
+            }
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => __( 'setting.special_otp_settings' ) ] ),
+            'data' => $newValue,
+        ] );
+    }
+
+    public static function generateSpecialOtp() {
+
+        DB::beginTransaction();
+
+        try {
+
+            $otpCode  = (string) mt_rand( 100000, 999999 );
+            $expiresAt = Carbon::now( 'Asia/Kuala_Lumpur' )->addHour()->format( 'Y-m-d H:i:s' );
+
+            // Read with lock inside transaction to prevent race condition with updateSpecialOtpSetting
+            $existing = Option::lockForUpdate()->where( 'option_name', 'SPECIAL_REGISTRATION_OTP' )->first();
+            $current  = $existing ? json_decode( $existing->option_value, true ) : [];
+
+            $newValue = [
+                'enabled'    => $current['enabled'] ?? false,
+                'otp_code'   => $otpCode,
+                'expires_at' => $expiresAt,
+            ];
+
+            if ( $existing ) {
+                $existing->option_value = json_encode( $newValue );
+                $existing->save();
+            } else {
+                Option::create( [
+                    'option_name'  => 'SPECIAL_REGISTRATION_OTP',
+                    'option_value' => json_encode( $newValue ),
+                ] );
+            }
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'setting.special_otp_generated' ),
+            'data' => $newValue,
         ] );
     }
 

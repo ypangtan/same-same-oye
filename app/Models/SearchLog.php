@@ -24,8 +24,12 @@ class SearchLog extends Model
         'taken_time',
     ];
 
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function getEncryptedIdAttribute() {
-        return Helper::encode( $this->attributes['id'] );
+        return \Helper::encode( $this->attributes['id'] );
     }
 
     protected function serializeDate( DateTimeInterface $date ) {

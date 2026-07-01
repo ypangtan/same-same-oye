@@ -16,4 +16,5 @@ docs/
 public/docs/
 .scribe
 *.p8
+/storage/app/credentials/*.json
 /pm2

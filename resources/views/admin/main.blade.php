@@ -191,7 +191,7 @@
                                     </ul>
                                 </nav>
                                 @endif
-                                <?php echo view( $content, [ 'data' => @$data ] );?>
+                                <?php echo view( $content, [ 'data' => @$data, 'activePage' => @$activePage ] );?>
                             </div>
                         </div>
                     </div>

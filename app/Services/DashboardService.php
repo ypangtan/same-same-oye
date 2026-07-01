@@ -3,372 +3,409 @@
 namespace App\Services;
 
 use App\Models\{
-    Order,
-    Owner,
-    Farm,
-    Buyer,
-    Administrator,
-    Invoice,
-    Expense,
     User,
-    InvoiceMeta,
-    Outlet,
-    Product,
-    Bundle,
-    Wallet,
-    WalletTransaction,
-    OrderMeta,
+    Banner,
+    PopAnnouncement,
+    UserSubscription,
 };
 
-use Helper;
-
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-class DashboardService
-{
-    public static function getDashboardData( $request ) {
 
-        $today_revenue = Helper::numberFormat( 
-            Order::whereIn( 'status', [1,3] )->whereDate('created_at', Carbon::today())->sum('total_price') + 
-            WalletTransaction::whereDate('created_at', Carbon::today())->where( 'type',1 )->where('transaction_type', 1 )->where( 'status', 10 )->sum( 'amount' ), 
-            2);
-        $total_revenue = Helper::numberFormat( 
-            Order::whereIn( 'status', [1,3] )->sum('total_price') + 
-            WalletTransaction::where( 'type',1 )->where('transaction_type', 1 )->where( 'status', 10 )->sum( 'amount' ), 
-            2, true );
-        $new_users = $new_users = Helper::numberFormat(
-            User::whereDate('created_at', Carbon::today())->count(),
-            0
-        );
-        $total_users = Helper::numberFormat( User::where( 'status', 10 )->count(), 0 );
+class DashboardService {
+
+    // ── Private helpers ───────────────────────────────────────────────────────
+
+    private static function parseDateRange( ?string $range ): array {
+        if ( !$range || !str_contains( $range, ' to ' ) ) {
+            return [ null, null ];
+        }
+        $parts = explode( ' to ', $range );
+        return [ trim( $parts[0] ) ?: null, trim( $parts[1] ) ?: null ];
+    }
+
+    private static function applyDateRange( $q, string $column, ?string $from, ?string $to ): void {
+        if ( $from ) $q->where( $column, '>=', Carbon::parse( $from )->startOfDay() );
+        if ( $to )   $q->where( $column, '<=', Carbon::parse( $to )->endOfDay() );
+    }
+
+    // ── Engagement summary cards ──────────────────────────────────────────────
+
+    public static function getEngagementStats() {
+        $today        = Carbon::today()->timezone( 'Asia/Kuala_Lumpur' );
+        $startOfMonth = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->startOfMonth();
+
+        $since = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subHours( 24 );
+
+        $activeUserIds = DB::table( 'stream_logs' )
+            ->where( 'created_at', '>=', $since )
+            ->whereNotNull( 'user_id' )
+            ->distinct()
+            ->pluck( 'user_id' );
+
+        $totalActive = $activeUserIds->count();
+        $freeUsers   = User::whereIn( 'id', $activeUserIds )->where( 'membership', 0 )->count();
+        $trialUsers  = User::whereIn( 'id', $activeUserIds )->where( 'membership', 2 )->count();
+        $paidUsers   = User::whereIn( 'id', $activeUserIds )->whereIn( 'membership', [ 1, 3, 4 ] )->count();
+
+        $newUsersToday     = User::whereDate( 'created_at', $today )->count();
+        $newUsersThisMonth = User::where( 'created_at', '>=', $startOfMonth )->count();
+
+        $subsToday     = UserSubscription::whereDate( 'created_at', $today )->count();
+        $subsThisMonth = UserSubscription::where( 'created_at', '>=', $startOfMonth )->count();
+
+        $streamCounts = DB::table( 'stream_logs' )
+            ->selectRaw( 'content_type, COUNT(*) as total' )
+            ->groupBy( 'content_type' )
+            ->pluck( 'total', 'content_type' );
+
+        // Per content-category type: types that have items, playlists, or collections
+        $contentTypes = DB::table( 'types' )
+            ->where( function ( $q ) {
+                $q->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'items' )->whereColumn( 'items.type_id', 'types.id' ) )
+                  ->orWhereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'playlists' )->whereColumn( 'playlists.type_id', 'types.id' ) )
+                  ->orWhereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'collections' )->whereColumn( 'collections.type_id', 'types.id' ) );
+            } )
+            ->select( 'id', 'en_name as name' )
+            ->orderBy( 'id' )
+            ->get();
+
+        $itemsByType = DB::table( 'stream_logs' )
+            ->join( 'items', 'items.id', '=', 'stream_logs.item_id' )
+            ->where( 'stream_logs.content_type', 2 )
+            ->selectRaw( 'items.type_id, COUNT(*) as total' )
+            ->groupBy( 'items.type_id' )
+            ->pluck( 'total', 'type_id' );
+
+        $playlistsByType = DB::table( 'stream_logs' )
+            ->join( 'playlists', 'playlists.id', '=', 'stream_logs.playlist_id' )
+            ->where( 'stream_logs.content_type', 3 )
+            ->selectRaw( 'playlists.type_id, COUNT(*) as total' )
+            ->groupBy( 'playlists.type_id' )
+            ->pluck( 'total', 'type_id' );
+
+        $collsByType = DB::table( 'stream_logs' )
+            ->join( 'collections', 'collections.id', '=', 'stream_logs.collection_id' )
+            ->where( 'stream_logs.content_type', 4 )
+            ->selectRaw( 'collections.type_id, COUNT(*) as total' )
+            ->groupBy( 'collections.type_id' )
+            ->pluck( 'total', 'type_id' );
+
+        $streamTypes = $contentTypes->map( fn( $t ) => [
+            'id'          => $t->id,
+            'name'        => $t->name,
+            'items'       => number_format( $itemsByType->get( $t->id, 0 ) ),
+            'playlists'   => number_format( $playlistsByType->get( $t->id, 0 ) ),
+            'collections' => number_format( $collsByType->get( $t->id, 0 ) ),
+        ] )->values();
 
         return response()->json( [
-            'today_revenue' => 'RM ' . $today_revenue,
-            'total_revenue'  => 'RM ' . $total_revenue,
-            'new_users' => $new_users,
-            'total_users' => $total_users,
+            'total_active'       => number_format( $totalActive ),
+            'free_users'         => number_format( $freeUsers ),
+            'trial_users'        => number_format( $trialUsers ),
+            'paid_users'         => number_format( $paidUsers ),
+            'new_users_today'    => number_format( $newUsersToday ),
+            'new_users_month'    => number_format( $newUsersThisMonth ),
+            'subs_today'         => number_format( $subsToday ),
+            'subs_month'         => number_format( $subsThisMonth ),
+            'stream_radio'       => number_format( $streamCounts->get( 1, 0 ) ),
+            'stream_types'       => $streamTypes,
         ] );
     }
 
-    public static function totalRevenueStatistics($request)
-    {
-        $type = $request->input('type', 'day');
-        $chart = $request->chartId;
-        $xAxis = [];
-        $orderData = [];
-    
-        switch ($chart) {
-            case 'chart1':
-               
-                if ($type === 'day') {
-                    for ($x = 7; $x >= 0; $x--) {
-                        $day = strtotime(date('Y-m-d') . ' -' . $x . ' day');
-                        $thisDay = date('Y-m-d', $day);
+    // ── Daily user chart ──────────────────────────────────────────────────────
 
-                        $thisDayOrder = Order::whereIn('status', [1,3])
-                            ->whereBetween('created_at', [$thisDay . ' 00:00:00', $thisDay . ' 23:59:59'])
-                            ->sum( 'total_price' );
+    public static function getDailyUserStats() {
+        $days       = 30;
+        $xAxis      = [];
+        $free_data  = [];
+        $trial_data = [];
+        $paid_data  = [];
 
-                        $thisDayTopUp = WalletTransaction::whereDate('created_at', [$thisDay . ' 00:00:00', $thisDay . ' 23:59:59'])
-                        ->where( 'type',1 )
-                        ->where('transaction_type', 1 )
-                        ->where( 'status', 10 )
-                        ->sum( 'amount' );
+        for ( $x = $days - 1; $x >= 0; $x-- ) {
+            $date = Carbon::today()->subDays( $x )->format( 'Y-m-d' );
 
-                        $xAxis[] = date('M d', $day);
-                        $orderData[] = $thisDayOrder + $thisDayTopUp;
-                    }
-                } elseif ($type === 'week') {
-                    for ($x = 6; $x >= 0; $x--) {
-                        $startOfWeek = date('Y-m-d', strtotime("last sunday -{$x} week"));
-                        $endOfWeek = date('Y-m-d', strtotime("next saturday -{$x} week"));
-            
-                        $weekOrder = Order::whereIn('status', [1,3])
-                            ->whereBetween('created_at', [$startOfWeek . ' 00:00:00', $endOfWeek . ' 23:59:59'])
-                            ->sum( 'total_price' );
-
-                        $weekTopUp = WalletTransaction::whereDate('created_at', [$startOfWeek . ' 00:00:00', $endOfWeek . ' 23:59:59'])
-                            ->where( 'type',1 )
-                            ->where('transaction_type', 1 )
-                            ->where( 'status', 10 )
-                            ->sum( 'amount' );
-            
-                        $xAxis[] = date('M d', strtotime($startOfWeek)) . ' - ' . date('M d', strtotime($endOfWeek));
-                        $orderData[] = $weekOrder + $weekTopUp;
-                    }
-                } elseif ($type === 'month') {
-                    // Last 6 months
-                    for ($x = 5; $x >= 0; $x--) {
-                        $startOfMonth = date('Y-m-01', strtotime("-{$x} month"));
-                        $endOfMonth = date('Y-m-t', strtotime("-{$x} month"));
-            
-                        $monthOrder = Order::whereIn('status', [1,3])
-                            ->whereBetween('created_at', [$startOfMonth . ' 00:00:00', $endOfMonth . ' 23:59:59'])
-                            ->sum( 'total_price' );
-
-                        $monthTopUp = WalletTransaction::whereDate('created_at', [$startOfMonth . ' 00:00:00', $endOfMonth . ' 23:59:59'])
-                            ->where( 'type',1 )
-                            ->where('transaction_type', 1 )
-                            ->where( 'status', 10 )
-                            ->sum( 'amount' );
-            
-                        $xAxis[] = date('M Y', strtotime($startOfMonth));
-                        $orderData[] = $monthOrder + $monthTopUp;
-                    }
-                }
-
-                break;
-
-            case 'chart2':
-            
-                if ($type === 'day') {
-                    for ($x = 7; $x >= 0; $x--) {
-                        $day = strtotime(date('Y-m-d') . ' -' . $x . ' day');
-                        $thisDay = date('Y-m-d', $day);
-
-                        $thisDayTopUp = WalletTransaction::whereBetween('created_at', [$thisDay . ' 00:00:00', $thisDay . ' 23:59:59'])
-                        ->where( 'type',1 )
-                        ->where('transaction_type', 1 )
-                        ->where( 'status', 10 )
-                        ->sum( 'amount' );
-
-                        $xAxis[] = date('M d', $day);
-                        $orderData[] = $thisDayTopUp;
-                    }
-                } elseif ($type === 'week') {
-                    for ($x = 6; $x >= 0; $x--) {
-                        $startOfWeek = date('Y-m-d', strtotime("last sunday -{$x} week"));
-                        $endOfWeek = date('Y-m-d', strtotime("next saturday -{$x} week"));
-                        
-                        $weekTopUp = WalletTransaction::whereBetween('created_at', [
-                            $startOfWeek . ' 00:00:00',
-                            $endOfWeek . ' 23:59:59',
-                        ])
-                        ->where( 'type',1 )
-                        ->where('transaction_type', 1 )
-                        ->where( 'status', 10 )
-                        ->sum( 'amount' );
-                        $xAxis[] = date('M d', strtotime($startOfWeek)) . ' - ' . date('M d', strtotime($endOfWeek));
-                        $orderData[] = $weekTopUp;
-                    }
-                } elseif ($type === 'month') {
-                    // Last 6 months
-                    for ($x = 5; $x >= 0; $x--) {
-                        $startOfMonth = date('Y-m-01', strtotime("-{$x} month"));
-                        $endOfMonth = date('Y-m-t', strtotime("-{$x} month"));
-            
-                        $monthTopUp = WalletTransaction::whereBetween('created_at', [
-                            $startOfMonth . ' 00:00:00',
-                            $endOfMonth . ' 23:59:59',
-                        ])
-                            ->where( 'type',1 )
-                            ->where('transaction_type', 1 )
-                            ->where( 'status', 10 )
-                            ->sum( 'amount' );
-            
-                        $xAxis[] = date('M Y', strtotime($startOfMonth));
-                        $orderData[] = $monthTopUp;
-                    }
-                }
-
-                break;
-
-            case 'chart3':
-        
-                if ($type === 'day') {
-                    for ($x = 7; $x >= 0; $x--) {
-                        $day = strtotime(date('Y-m-d') . ' -' . $x . ' day');
-                        $thisDay = date('Y-m-d', $day);
-
-                        $thisDayOrder = OrderMeta::where('status', 10)
-                            ->whereBetween('created_at', [$thisDay . ' 00:00:00', $thisDay . ' 23:59:59'])
-                            ->count();
-
-                        $xAxis[] = date('M d', $day);
-                        $orderData[] = $thisDayOrder;
-                    }
-                } elseif ($type === 'week') {
-                    for ($x = 6; $x >= 0; $x--) {
-                        $startOfWeek = date('Y-m-d', strtotime("last sunday -{$x} week"));
-                        $endOfWeek = date('Y-m-d', strtotime("next saturday -{$x} week"));
-            
-                        $weekOrder = OrderMeta::where('status', 10)
-                            ->whereBetween('created_at', [$startOfWeek . ' 00:00:00', $endOfWeek . ' 23:59:59'])
-                            ->count();
-            
-                        $xAxis[] = date('M d', strtotime($startOfWeek)) . ' - ' . date('M d', strtotime($endOfWeek));
-                        $orderData[] = $weekOrder;
-                    }
-                } elseif ($type === 'month') {
-                    // Last 6 months
-                    for ($x = 5; $x >= 0; $x--) {
-                        $startOfMonth = date('Y-m-01', strtotime("-{$x} month"));
-                        $endOfMonth = date('Y-m-t', strtotime("-{$x} month"));
-            
-                        $monthOrder = OrderMeta::where('status', 10)
-                            ->whereBetween('created_at', [$startOfMonth . ' 00:00:00', $endOfMonth . ' 23:59:59'])
-                            ->count();
-            
-                        $xAxis[] = date('M Y', strtotime($startOfMonth));
-                        $orderData[] = $monthOrder;
-                    }
-                }
-
-                break;
-
-            case 'chart4':
-    
-                if ($type === 'day') {
-                    for ($x = 7; $x >= 0; $x--) {
-                        $day = strtotime(date('Y-m-d') . ' -' . $x . ' day');
-                        $thisDay = date('Y-m-d', $day);
-
-                        $thisDayOrder = User::where('status', 10)
-                            ->whereBetween('created_at', [$thisDay . ' 00:00:00', $thisDay . ' 23:59:59'])
-                            ->count();
-
-                        $xAxis[] = date('M d', $day);
-                        $orderData[] = $thisDayOrder;
-                    }
-                } elseif ($type === 'week') {
-                    for ($x = 6; $x >= 0; $x--) {
-                        $startOfWeek = date('Y-m-d', strtotime("last sunday -{$x} week"));
-                        $endOfWeek = date('Y-m-d', strtotime("next saturday -{$x} week"));
-            
-                        $weekOrder = User::where('status', 10)
-                            ->whereBetween('created_at', [$startOfWeek . ' 00:00:00', $endOfWeek . ' 23:59:59'])
-                            ->count();
-            
-                        $xAxis[] = date('M d', strtotime($startOfWeek)) . ' - ' . date('M d', strtotime($endOfWeek));
-                        $orderData[] = $weekOrder;
-                    }
-                } elseif ($type === 'month') {
-                    // Last 6 months
-                    for ($x = 5; $x >= 0; $x--) {
-                        $startOfMonth = date('Y-m-01', strtotime("-{$x} month"));
-                        $endOfMonth = date('Y-m-t', strtotime("-{$x} month"));
-            
-                        $monthOrder = User::where('status', 10)
-                            ->whereBetween('created_at', [$startOfMonth . ' 00:00:00', $endOfMonth . ' 23:59:59'])
-                            ->count();
-            
-                        $xAxis[] = date('M Y', strtotime($startOfMonth));
-                        $orderData[] = $monthOrder;
-                    }
-                }
-
-                break;
-            
-            default:
-                # code...
-                break;
+            $free_data[]  = User::where( 'status', 10 )->where( 'membership', 0 )
+                ->whereDate( 'created_at', '<=', $date )->count();
+            $trial_data[] = User::where( 'status', 10 )->where( 'membership', 2 )
+                ->whereDate( 'created_at', '<=', $date )->count();
+            $paid_data[]  = User::where( 'status', 10 )->whereIn( 'membership', [ 1, 3, 4 ] )
+                ->whereDate( 'created_at', '<=', $date )->count();
+            $xAxis[]      = Carbon::parse( $date )->format( 'M d' );
         }
-    
-        return response()->json([
-            'orderData' => $orderData,
-            'xAxis' => $xAxis,
-        ]);
+
+        return response()->json( [
+            'xAxis'      => $xAxis,
+            'free_data'  => $free_data,
+            'trial_data' => $trial_data,
+            'paid_data'  => $paid_data,
+        ] );
     }
 
-    public static function getDashboardStatistics()
-    {
-        // Get Top 5 Outlets based on Revenue
-        $topOutlets = Invoice::with(['outlet'])
-            ->select('outlet_id', DB::raw('SUM(final_amount) as total_revenue'))
-            ->where('status', 10)
-            ->whereNotNull('outlet_id')
-            ->groupBy('outlet_id')
-            ->with('outlet:id,name')
-            ->orderByDesc('total_revenue')
-            ->take(5)
-            ->get()
-            ->map(function ($invoice) {
-                return [
-                    'name' => $invoice->outlet->name ?? 'No Outlet',
-                    'revenue' => Helper::numberFormatV2($invoice->total_revenue, 2)
-                ];
-            });
+    // ── Radio streams DataTable ───────────────────────────────────────────────
 
-        if( count($topOutlets) > 0 ){
-            // If there are less than 5 outlets found, fetch the remaining outlets
-            $remainingOutlets = Outlet::select('id', 'name')->whereNotIn('id', $topOutlets->pluck('outlet_id'))->get();
+    public static function getRadioStreamTable( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
 
-            // Merge remaining outlets with 0 revenue
-            $allTopOutlets = $topOutlets->merge($remainingOutlets->map(function ($outlet) {
-                return [
-                    'name' => $outlet->name,
-                    'revenue' => 41888
-                ];
-            }));
-        }else{
-            $allTopOutlets = Outlet::select('id', 'name')->get()->map(function ($outlet) {
-                return [
-                    'name' => $outlet->name,
-                    'revenue' => 41888
-                ];
-            });
-        }
-        // Get Top 10 Best Selling Products
-        $topProducts = InvoiceMeta::with(['product', 'variant', 'bundle'])
-        ->select(
-            'product_id',
-            'variant_id',
-            'bundle_id',
-            DB::raw("IFNULL(variant_id, IFNULL(bundle_id, product_id)) as item_id"),
-            DB::raw("SUM(quantity) as total_sales")
-        )
-        ->whereHas('invoice')
-        ->groupBy('product_id', 'variant_id', 'bundle_id')
-        ->orderByDesc('total_sales')
-        ->take(10)
-        ->get()
-        ->map(function ($invoiceMeta) {
-            $title = '-';
-            if ($invoiceMeta->product) {
-                $title = $invoiceMeta->product->title;
-            } elseif ($invoiceMeta->variant) {
-                $title = $invoiceMeta->variant->title;
-            } elseif ($invoiceMeta->bundle) {
-                $title = $invoiceMeta->bundle->title;
-            }
-    
+        $q = DB::table( 'stream_logs' )
+            ->leftJoin( 'users', 'users.id', '=', 'stream_logs.user_id' )
+            ->where( 'stream_logs.content_type', 1 )
+            ->select(
+                'stream_logs.id',
+                'stream_logs.radio_name',
+                'stream_logs.user_id',
+                'users.fullname',
+                'users.email',
+                'stream_logs.created_at',
+            )
+            ->orderByDesc( 'stream_logs.created_at' );
+
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+
+        $rows = $q->get()->map( function ( $r ) {
             return [
-                'product' => $title,
-                'sales' => $invoiceMeta->total_sales
+                'user'       => $r->fullname ?? 'Guest',
+                'email'      => $r->email ?? '—',
+                'radio_name' => $r->radio_name ?? '—',
+                'played_at'  => $r->created_at
+                    ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
+                    : '—',
             ];
-        });
-    
-        // If there are less than 10 products/variants/bundles, fetch the latest products/variants/bundles with zero sales
-        $remainingProductsCount = 10 - $topProducts->count();
-        if ($remainingProductsCount > 0) {
-        $latestProducts = Product::select('id', 'title', 'created_at')
-            ->union(
-                ProductVariant::select('id', 'title', DB::raw('NULL as created_at'))
-            )
-            ->union(
-                Bundle::select('id', 'title', DB::raw('NULL as created_at'))
-            )
-            ->orderByDesc('created_at')
-            ->take($remainingProductsCount)
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'product' => $item->title,
-                    'sales' => 0,
-                ];
-            });
-            
-        // Merge the latest products/variants/bundles with 0 sales
-        $topProducts = $topProducts->merge($latestProducts);
-        }
-        
-        
-        return response()->json([
-            'topOutlets' => $allTopOutlets,
-            'topProducts' => $topProducts,
-        ]);
-    
+        } );
+
+        return response()->json( [ 'logs' => $rows ] );
     }
-    
-    
+
+    // ── Radio streams graph ───────────────────────────────────────────────────
+
+    public static function getRadioStreamGraph() {
+        $days  = 30;
+        $since = Carbon::today()->subDays( $days - 1 )->startOfDay();
+
+        $topRadios = DB::table( 'stream_logs' )
+            ->where( 'content_type', 1 )
+            ->whereNotNull( 'radio_name' )
+            ->selectRaw( 'radio_name, COUNT(*) as total' )
+            ->groupBy( 'radio_name' )
+            ->orderByDesc( 'total' )
+            ->limit( 8 )
+            ->pluck( 'radio_name' );
+
+        $labels = [];
+        for ( $i = $days - 1; $i >= 0; $i-- ) {
+            $labels[] = Carbon::today()->subDays( $i )->format( 'M d' );
+        }
+
+        if ( $topRadios->isEmpty() ) {
+            return response()->json( [ 'labels' => $labels, 'series' => [] ] );
+        }
+
+        $raw = DB::table( 'stream_logs' )
+            ->where( 'content_type', 1 )
+            ->whereIn( 'radio_name', $topRadios )
+            ->where( 'created_at', '>=', $since )
+            ->selectRaw( 'radio_name, DATE(created_at) as date, COUNT(*) as cnt' )
+            ->groupBy( 'radio_name', DB::raw( 'DATE(created_at)' ) )
+            ->get()
+            ->groupBy( 'radio_name' )
+            ->map( fn( $rows ) => $rows->keyBy( 'date' ) );
+
+        $series = $topRadios->map( function ( $name ) use ( $raw, $days ) {
+            $byDate = $raw->get( $name, collect() );
+            $data   = [];
+            for ( $i = $days - 1; $i >= 0; $i-- ) {
+                $dateStr = Carbon::today()->subDays( $i )->format( 'Y-m-d' );
+                $data[]  = (int) ( $byDate->get( $dateStr )->cnt ?? 0 );
+            }
+            return [ 'name' => $name, 'data' => $data ];
+        } )->values();
+
+        return response()->json( [ 'labels' => $labels, 'series' => $series ] );
+    }
+
+    // ── Subscriptions DataTable ───────────────────────────────────────────────
+
+    public static function getSubscriptionsTable( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+        $search    = $request->input( 'search', '' );
+        $subType   = $request->input( 'sub_type', '' );
+        $subStatus = $request->input( 'sub_status', '' );
+
+        $q = DB::table( 'user_subscriptions' )
+            ->join( 'users', 'users.id', '=', 'user_subscriptions.user_id' )
+            ->leftJoin( 'subscription_plans', 'subscription_plans.id', '=', 'user_subscriptions.subscription_plan_id' )
+            ->select(
+                'users.fullname as user_name',
+                'users.email',
+                'subscription_plans.name as plan_name',
+                'user_subscriptions.type',
+                'user_subscriptions.status',
+                'user_subscriptions.start_date',
+                'user_subscriptions.end_date',
+            )
+            ->orderByDesc( 'user_subscriptions.start_date' );
+
+        self::applyDateRange( $q, 'user_subscriptions.start_date', $from, $to );
+
+        if ( $search ) {
+            $q->where( function ( $q2 ) use ( $search ) {
+                $q2->where( 'users.fullname', 'like', "%{$search}%" )
+                   ->orWhere( 'users.email', 'like', "%{$search}%" )
+                   ->orWhere( 'subscription_plans.name', 'like', "%{$search}%" );
+            } );
+        }
+
+        if ( $subType === 'Trial' ) {
+            $q->where( 'user_subscriptions.type', 2 );
+        } elseif ( $subType === 'Paid' ) {
+            $q->where( 'user_subscriptions.type', 1 );
+        }
+
+        if ( $subStatus === 'Active' ) {
+            $q->where( 'user_subscriptions.status', 10 );
+        } elseif ( $subStatus === 'Inactive' ) {
+            $q->where( 'user_subscriptions.status', '!=', 10 );
+        }
+
+        $rows = $q->get()->map( function ( $r ) {
+            return [
+                'user'       => $r->user_name ?? '—',
+                'email'      => $r->email ?? '—',
+                'plan'       => $r->plan_name ?? '—',
+                'type'       => $r->type == 2 ? 'Trial' : 'Paid',
+                'status'     => $r->status == 10 ? 'Active' : 'Inactive',
+                'start_date' => $r->start_date ? Carbon::parse( $r->start_date )->format( 'Y-m-d' ) : '—',
+                'end_date'   => $r->end_date   ? Carbon::parse( $r->end_date )->format( 'Y-m-d' )   : '—',
+            ];
+        } );
+
+        return response()->json( [ 'subscriptions' => $rows ] );
+    }
+
+    // ── Item Streams DataTable ────────────────────────────────────────────────
+
+    public static function getItemStreams() {
+        $types = DB::table( 'types' )
+            ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'items' )->whereColumn( 'items.type_id', 'types.id' ) )
+            ->select( 'id', 'en_name as name' )
+            ->orderBy( 'en_name' )
+            ->get();
+
+        $items = DB::table( 'stream_logs' )
+            ->join( 'items', 'items.id', '=', 'stream_logs.item_id' )
+            ->join( 'types', 'types.id', '=', 'items.type_id' )
+            ->where( 'stream_logs.content_type', 2 )
+            ->selectRaw( 'types.id as type_id, items.id as item_id, items.title, COUNT(*) as total' )
+            ->groupBy( 'types.id', 'items.id', 'items.title' )
+            ->orderByDesc( 'total' )
+            ->get();
+
+        return response()->json( [ 'types' => $types, 'items' => $items ] );
+    }
+
+    // ── Playlist Streams DataTable ────────────────────────────────────────────
+
+    public static function getPlaylistStreams() {
+        $types = DB::table( 'types' )
+            ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'playlists' )->whereColumn( 'playlists.type_id', 'types.id' ) )
+            ->select( 'id', 'en_name as name' )
+            ->orderBy( 'en_name' )
+            ->get();
+
+        $playlists = DB::table( 'stream_logs' )
+            ->join( 'playlists', 'playlists.id', '=', 'stream_logs.playlist_id' )
+            ->join( 'types', 'types.id', '=', 'playlists.type_id' )
+            ->where( 'stream_logs.content_type', 3 )
+            ->selectRaw( 'types.id as type_id, playlists.id as playlist_id, playlists.en_name as name, COUNT(*) as total' )
+            ->groupBy( 'types.id', 'playlists.id', 'playlists.en_name' )
+            ->orderByDesc( 'total' )
+            ->get();
+
+        return response()->json( [ 'types' => $types, 'playlists' => $playlists ] );
+    }
+
+    // ── Collection Streams DataTable ──────────────────────────────────────────
+
+    public static function getCollectionStreams() {
+        $types = DB::table( 'types' )
+            ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'collections' )->whereColumn( 'collections.type_id', 'types.id' ) )
+            ->select( 'id', 'en_name as name' )
+            ->orderBy( 'en_name' )
+            ->get();
+
+        $collections = DB::table( 'stream_logs' )
+            ->join( 'collections', 'collections.id', '=', 'stream_logs.collection_id' )
+            ->join( 'types', 'types.id', '=', 'collections.type_id' )
+            ->where( 'stream_logs.content_type', 4 )
+            ->selectRaw( 'types.id as type_id, collections.id as collection_id, collections.en_name as name, COUNT(*) as total' )
+            ->groupBy( 'types.id', 'collections.id', 'collections.en_name' )
+            ->orderByDesc( 'total' )
+            ->get();
+
+        return response()->json( [ 'types' => $types, 'collections' => $collections ] );
+    }
+
+    // ── Banner click table ────────────────────────────────────────────────────
+
+    public static function getBannerClickStats() {
+        $banners = Banner::withCount( 'clicks' )
+            ->where( 'status', '!=', 20 )
+            ->orderBy( 'sequence' )
+            ->get()
+            ->map( function ( $banner ) {
+                return [
+                    'id'         => $banner->id,
+                    'name'       => $banner->en_name ?? '—',
+                    'image_path' => $banner->image_path,
+                    'status'     => $banner->status == 10 ? 'Active' : 'Inactive',
+                    'clicks'     => $banner->clicks_count,
+                    'created_at' => $banner->created_at ? $banner->created_at->format( 'Y-m-d' ) : '—',
+                ];
+            } );
+
+        return response()->json( [ 'banners' => $banners ] );
+    }
+
+    // ── Pop-announcement click table ──────────────────────────────────────────
+
+    public static function getPopAnnouncementClickStats() {
+        $popups = PopAnnouncement::withCount( 'clicks' )
+            ->where( 'status', '!=', 20 )
+            ->latest()
+            ->get()
+            ->map( function ( $popup ) {
+                return [
+                    'id'         => $popup->id,
+                    'title'      => $popup->en_title ?? '—',
+                    'image_path' => $popup->image_path,
+                    'status'     => $popup->status == 10 ? 'Active' : 'Inactive',
+                    'clicks'     => $popup->clicks_count,
+                    'created_at' => $popup->created_at ? $popup->created_at->format( 'Y-m-d' ) : '—',
+                ];
+            } );
+
+        return response()->json( [ 'popups' => $popups ] );
+    }
+
+    // ── Firebase App Analytics (GA4) ─────────────────────────────────────────
+
+    public static function getAppAnalytics( Request $request ) {
+        $periodMap = [
+            '7'  => '7daysAgo',
+            '30' => '30daysAgo',
+            '90' => '90daysAgo',
+        ];
+        $period = $periodMap[ $request->input( 'period', '30' ) ] ?? '30daysAgo';
+
+        try {
+            $stats = \App\Services\FirebaseAnalyticsServiceV2::appStats( $period );
+            return response()->json( [
+                'installs' => $stats['installs'],
+                'removals' => $stats['removals'],
+            ] );
+        } catch ( \Throwable $e ) {
+            return response()->json( [ 'error' => $e->getMessage() ], 500 );
+        }
+    }
 }

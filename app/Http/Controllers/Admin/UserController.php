@@ -51,6 +51,16 @@ class UserController extends Controller
             $this->data['data']['age_group'][ $age_group ]  = $age_group;
         }
 
+        $this->data['data']['is_special_otp_register'] = [
+            '1' => __( 'user.special_otp_register_without_otp' ),
+            '0' => '-',
+        ];
+
+        $this->data['data']['is_special_otp_register_filter'] = [
+            '0' => __( 'user.special_otp_register_with_otp' ),
+            '1' => __( 'user.special_otp_register_without_otp' ),
+        ];
+
         return view( 'admin.main' )->with( $this->data );
     }
 

@@ -53,13 +53,10 @@ return [
     'trial' => 'Trial',
     'paid' => 'Paid',
     'age_group' => 'Age Group',
-    'membership' => 'Membership',
     'register' => 'Register',
     'request_password_reset' => 'Request Password Reset',
     'nationality' => 'Nationality',
     'contact_us' => 'Contact Us',
-    'phone_number' => 'Phone Number',
-    'message' => 'Message',
     'type' => 'Type',
     'invitation' => 'Invitation',
     'plan' => 'Subscription Plan',
@@ -70,7 +67,6 @@ return [
     'invalid_otp' => 'Invalid_otp',
     'invalid_phone_number' => 'Invalid phone number',
     'repeat_password_not_match' => 'Repeat Password does not match',
-    'message' => 'Message',
 
     'password_verified' => 'Password Verified',
     'invalid_password' => 'Password incorrect',
@@ -103,5 +99,9 @@ return [
     'checkin_success' => 'Check In Successful',
     'checkin_success_point' => 'You get :quantity point',
     'checkin_success_vouvher' => 'You get :quantity :voucher',
+
+    'is_special_otp_register' => 'Special OTP Register',
+    'special_otp_register_with_otp' => 'Register With OTP',
+    'special_otp_register_without_otp' => 'Register Without OTP',
 
 ];
