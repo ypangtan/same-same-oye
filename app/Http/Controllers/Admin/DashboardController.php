@@ -30,6 +30,10 @@ class DashboardController extends Controller
         return DashboardService::getRadioStreamGraph();
     }
 
+    public function getStreamDetail( Request $request ) {
+        return DashboardService::getContentStreamDetail( $request );
+    }
+
     public function getSubscriptionsTable( Request $request ) {
         return DashboardService::getSubscriptionsTable( $request );
     }

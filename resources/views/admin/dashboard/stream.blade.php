@@ -40,6 +40,29 @@
     <div class="text-muted py-4 text-center">Loading…</div>
 </div>
 
+<div class="modal fade" id="stream-detail-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="stream-detail-title">Stream Detail</h5>
+                <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="card card-bordered card-preview">
+                    <div class="card-inner">
+                        <table class="table" style="width:100%" id="stream-detail-table">
+                            <thead><tr><th>No.</th><th>User</th><th>Email</th><th>Played At</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var csrf      = '{{ csrf_token() }}';
@@ -168,6 +191,50 @@ document.addEventListener('DOMContentLoaded', function () {
         return { targets: 0, orderable: false, searchable: false, render: function () { return ''; } };
     }
 
+    function actionColDef(target, contentType, idField, titleField) {
+        return {
+            targets: target, orderable: false, searchable: false,
+            render: function (data, type, row) {
+                return '<button type="button" class="btn btn-sm btn-outline-primary btn-stream-detail" ' +
+                    'data-content-type="' + contentType + '" data-id="' + row[idField] + '" ' +
+                    'data-title="' + esc(row[titleField]) + '">' +
+                    '<em class="icon ni ni-eye"></em> Detail</button>';
+            },
+        };
+    }
+
+    /* ── Stream detail modal (who streamed a specific item/playlist/collection) ── */
+
+    var streamDetailModal = new bootstrap.Modal(document.getElementById('stream-detail-modal'));
+
+    $('#stream-content').on('click', '.btn-stream-detail', function (e) {
+        e.preventDefault();
+        var $btn        = $(this);
+        var contentType = $btn.data('content-type');
+        var id          = $btn.data('id');
+        var title       = $btn.data('title');
+
+        document.getElementById('stream-detail-title').textContent = title || 'Stream Detail';
+        streamDetailModal.show();
+
+        post('{{ route("admin.dashboard.getStreamDetail") }}', { content_type: contentType, id: id })
+            .then(function (d) {
+                makeDT('stream-detail-table', d.logs, [
+                    { data: null        },
+                    { data: 'user'      },
+                    { data: 'email'     },
+                    { data: 'played_at' },
+                ], [
+                    noColDef(),
+                    { targets: 1, render: function (data) {
+                        return data === 'Guest'
+                            ? '<span class="bx bx-inactive">Guest</span>'
+                            : esc(data);
+                    }},
+                ], 3);
+            });
+    });
+
     /* ── Route to correct page ───────────────────────────────────────── */
 
     var match = ACTIVE.match(/^(items|plists|colls)-t(\d+)$/);
@@ -240,27 +307,30 @@ document.addEventListener('DOMContentLoaded', function () {
             items: {
                 endpoint : '{{ route("admin.dashboard.getItemStreams") }}',
                 dataKey  : 'items',
-                thead    : '<th>No.</th><th>Title</th><th>Plays</th>',
-                cols     : [{ data: null }, { data: 'title' }, { data: 'total' }],
-                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } }],
+                thead    : '<th>No.</th><th>Title</th><th>Plays</th><th>Action</th>',
+                cols     : [{ data: null }, { data: 'title' }, { data: 'total' }, { data: null }],
+                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+                            actionColDef(3, 2, 'item_id', 'title')],
                 orderCol : 2,
                 suffix   : 'Streams',
             },
             plists: {
                 endpoint : '{{ route("admin.dashboard.getPlaylistStreams") }}',
                 dataKey  : 'playlists',
-                thead    : '<th>No.</th><th>Playlist Name</th><th>Plays</th>',
-                cols     : [{ data: null }, { data: 'name' }, { data: 'total' }],
-                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } }],
+                thead    : '<th>No.</th><th>Playlist Name</th><th>Plays</th><th>Action</th>',
+                cols     : [{ data: null }, { data: 'name' }, { data: 'total' }, { data: null }],
+                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+                            actionColDef(3, 3, 'playlist_id', 'name')],
                 orderCol : 2,
                 suffix   : 'Playlists',
             },
             colls: {
                 endpoint : '{{ route("admin.dashboard.getCollectionStreams") }}',
                 dataKey  : 'collections',
-                thead    : '<th>No.</th><th>Collection Name</th><th>Plays</th>',
-                cols     : [{ data: null }, { data: 'name' }, { data: 'total' }],
-                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } }],
+                thead    : '<th>No.</th><th>Collection Name</th><th>Plays</th><th>Action</th>',
+                cols     : [{ data: null }, { data: 'name' }, { data: 'total' }, { data: null }],
+                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+                            actionColDef(3, 4, 'collection_id', 'name')],
                 orderCol : 2,
                 suffix   : 'Collections',
             },

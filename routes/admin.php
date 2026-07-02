@@ -87,6 +87,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'item-streams',       [ DashboardController::class, 'getItemStreams' ] )->name( 'admin.dashboard.getItemStreams' );
                 Route::post( 'playlist-streams',   [ DashboardController::class, 'getPlaylistStreams' ] )->name( 'admin.dashboard.getPlaylistStreams' );
                 Route::post( 'collection-streams', [ DashboardController::class, 'getCollectionStreams' ] )->name( 'admin.dashboard.getCollectionStreams' );
+                Route::post( 'stream-detail',      [ DashboardController::class, 'getStreamDetail' ] )->name( 'admin.dashboard.getStreamDetail' );
                 Route::post( 'banner-click-stats', [ DashboardController::class, 'getBannerClickStats' ] )->name( 'admin.dashboard.getBannerClickStats' );
                 Route::post( 'popup-click-stats', [ DashboardController::class, 'getPopAnnouncementClickStats' ] )->name( 'admin.dashboard.getPopAnnouncementClickStats' );
                 Route::post( 'app-analytics',     [ DashboardController::class, 'getAppAnalytics' ] )->name( 'admin.dashboard.getAppAnalytics' );

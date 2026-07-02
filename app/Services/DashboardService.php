@@ -177,6 +177,43 @@ class DashboardService {
         return response()->json( [ 'logs' => $rows ] );
     }
 
+    // ── Content stream detail (who streamed a specific item/playlist/collection) ──
+
+    public static function getContentStreamDetail( Request $request ) {
+        $contentType = (int) $request->input( 'content_type' );
+        $id          = (int) $request->input( 'id' );
+
+        $column = match ( $contentType ) {
+            2       => 'item_id',
+            3       => 'playlist_id',
+            4       => 'collection_id',
+            default => null,
+        };
+
+        if ( !$column || !$id ) {
+            return response()->json( [ 'logs' => [] ] );
+        }
+
+        $rows = DB::table( 'stream_logs' )
+            ->leftJoin( 'users', 'users.id', '=', 'stream_logs.user_id' )
+            ->where( 'stream_logs.content_type', $contentType )
+            ->where( 'stream_logs.' . $column, $id )
+            ->select( 'users.fullname', 'users.email', 'stream_logs.created_at' )
+            ->orderByDesc( 'stream_logs.created_at' )
+            ->get()
+            ->map( function ( $r ) {
+                return [
+                    'user'      => $r->fullname ?? 'Guest',
+                    'email'     => $r->email ?? '—',
+                    'played_at' => $r->created_at
+                        ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
+                        : '—',
+                ];
+            } );
+
+        return response()->json( [ 'logs' => $rows ] );
+    }
+
     // ── Radio streams graph ───────────────────────────────────────────────────
 
     public static function getRadioStreamGraph() {
