@@ -411,9 +411,9 @@ class CollectionService
                 $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
             } );
 
-        if( !auth()->check() || auth()->user()->membership == 0 ) {
-            $collections->where( 'collections.membership_level', 0 );
-        }
+        // if( !auth()->check() || auth()->user()->membership == 0 ) {
+        //     $collections->where( 'collections.membership_level', 0 );
+        // }
 
         $collections->orderBy( 'priority', 'asc' );
 

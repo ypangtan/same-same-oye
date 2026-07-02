@@ -508,10 +508,10 @@ class PlaylistService
                 $q->whereNull( 'playlists.publishing_date' )->orWhereDate( 'playlists.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
             } );
 
-        if( !auth()->check() || auth()->user()->membership == 0 ) {
-            // for membership level filter
-            $playlists->where( 'playlists.membership_level', 0 );
-        }
+        // if( !auth()->check() || auth()->user()->membership == 0 ) {
+        //     // for membership level filter
+        //     $playlists->where( 'playlists.membership_level', 0 );
+        // }
 
         if ( empty( $request->collection_id ) ) {
             $playlists->orderBy('playlists.created_at', 'desc');

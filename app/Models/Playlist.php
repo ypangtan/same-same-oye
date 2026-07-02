@@ -80,9 +80,9 @@ class Playlist extends Model
             ->orderBy( 'playlist_items.priority', 'asc' );
 
             
-        if( !auth()->check() || auth()->user()->membership == 0 && !auth('admin')->check() ) {
-            $items->where( 'items.membership_level', 0 );
-        }
+        // if( !auth()->check() || auth()->user()->membership == 0 && !auth('admin')->check() ) {
+        //     $items->where( 'items.membership_level', 0 );
+        // }
 
         return $items;
     }
