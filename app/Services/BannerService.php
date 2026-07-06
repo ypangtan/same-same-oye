@@ -58,7 +58,7 @@ class BannerService
                 'url' => '',
                 'sequence' => 1,
                 'status' => 10,
-                'priority' => max( Banner::max( 'priority' ) + 1, 1 ),
+                'priority' => max( Banner::max( 'sequence' ) + 1, 1 ),
             ]);
 
             // $name = $request->file( 'file' )->getClientOriginalName();
