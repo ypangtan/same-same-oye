@@ -56,9 +56,9 @@ class BannerService
         try {
             $bannerCreate = Banner::create([
                 'url' => '',
-                'sequence' => 1,
+                'sequence' => max( Banner::max( 'sequence' ) + 1, 1 ),
                 'status' => 10,
-                'priority' => max( Banner::max( 'sequence' ) + 1, 1 ),
+                'priority' => 0,
             ]);
 
             // $name = $request->file( 'file' )->getClientOriginalName();
