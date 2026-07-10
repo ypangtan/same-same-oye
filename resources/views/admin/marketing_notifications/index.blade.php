@@ -93,6 +93,10 @@ $columns = [
     @endforeach
 
     var statusMapper = {
+            '1': {
+                'text': '{{ __( 'datatables.scheduled' ) }}',
+                'color': 'badge rounded-pill bg-warning',
+            },
             '10': {
                 'text': '{{ __( 'datatables.activated' ) }}',
                 'color': 'badge rounded-pill bg-success',

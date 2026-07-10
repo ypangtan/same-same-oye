@@ -31,6 +31,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('subscriptions:check-expired')->timezone( 'Asia/Kuala_Lumpur' )->dailyAt( '00:15' );
 
         $schedule->command('subscriptions:count-down-trial')->timezone( 'Asia/Kuala_Lumpur' )->dailyAt( '00:25' );
+
+        $schedule->command('notifications:send-scheduled')->timezone( 'Asia/Kuala_Lumpur' )->everyMinute();
     }
 
     /**

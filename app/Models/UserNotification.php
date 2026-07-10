@@ -37,6 +37,7 @@ class UserNotification extends Model
         'is_broadcast',
         'key',
         'publishing_date',
+        'status',
     ];
 
     protected $appends = [
@@ -45,7 +46,7 @@ class UserNotification extends Model
     ];
 
     public function getPublishingDateAttribute() {
-        return $this->attributes['publishing_date'] ? Carbon::parse( $this->attributes['publishing_date'] )->format( 'Y-m-d' ) : null;
+        return $this->attributes['publishing_date'] ? Carbon::parse( $this->attributes['publishing_date'] )->format( 'Y-m-d H:i' ) : null;
     }
 
     public function setTitleAttribute($value) {
