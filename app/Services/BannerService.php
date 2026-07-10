@@ -56,7 +56,7 @@ class BannerService
         try {
             $bannerCreate = Banner::create([
                 'url' => '',
-                'sequence' => 1,
+                'sequence' => max( Banner::max( 'sequence' ) + 1, 1 ),
                 'status' => 10,
                 'priority' => 0,
             ]);
@@ -178,7 +178,7 @@ class BannerService
 
     public static function allBanners( $request ) {
 
-        $banners = Banner::select( 'banners.*');
+        $banners = Banner::select( 'banners.*')->where( 'status', '!=', 30 );
 
         $filterObject = self::filter( $request, $banners );
         $banner = $filterObject['model'];
@@ -213,7 +213,7 @@ class BannerService
                 ] );
             }
 
-            $totalRecord = Banner::count();
+            $totalRecord = Banner::where( 'status', '!=', 30 )->count();
 
             $data = [
                 'banners' => $banners,

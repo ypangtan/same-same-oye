@@ -419,6 +419,13 @@ class Helper {
         return 0;
     }
 
+    public static function cleanNotificationText( $text ) {
+        $text = html_entity_decode( strip_tags( (string) $text ), ENT_QUOTES, 'UTF-8' );
+        $text = str_replace( "\xc2\xa0", ' ', $text );
+
+        return trim( preg_replace( '/\s+/', ' ', $text ) );
+    }
+
     public static function sendNotification( $user, $message ){
 
         $devices = UserDevice::where( 'user_id', $user )->get();
@@ -430,30 +437,30 @@ class Helper {
                     'Content-Type: application/json; charset=utf-8',
                     'Authorization: BASIC ' . config( 'services.os.api_key' ),
                 ];
-    
+
                 $json = [
                     'app_id' => config( 'services.os.app_id' ),
                     'contents' => [
-                        'en' => ( is_array( $message ) && isset( $message['message'] )
-                                ? strip_tags( $message['message']['en'] ?? $message['message'] )
-                                : strip_tags( (string) $message['message'] )
+                        'en' => self::cleanNotificationText( is_array( $message ) && isset( $message['message'] )
+                                ? ( $message['message']['en'] ?? $message['message'] )
+                                : (string) $message['message']
                             ),
 
-                        'zh' => ( is_array( $message ) && isset( $message['message'] )
-                                ? strip_tags( $message['message']['zh'] ?? $message['message'] )
-                                : strip_tags( (string) $message['message'] )
+                        'zh' => self::cleanNotificationText( is_array( $message ) && isset( $message['message'] )
+                                ? ( $message['message']['zh'] ?? $message['message'] )
+                                : (string) $message['message']
                             ),
                     ],
 
                     'headings' => [
-                        'en' => ( is_array( $message ) && isset( $message['title'] )
-                                ? strip_tags( $message['title']['en'] ?? $message['title'] )
-                                : strip_tags( (string) $message['title'] )
+                        'en' => self::cleanNotificationText( is_array( $message ) && isset( $message['title'] )
+                                ? ( $message['title']['en'] ?? $message['title'] )
+                                : (string) $message['title']
                             ),
 
-                        'zh' => ( is_array( $message ) && isset( $message['title'] )
-                                ? strip_tags( $message['title']['zh'] ?? $message['title'] )
-                                : strip_tags( (string) $message['title'] )
+                        'zh' => self::cleanNotificationText( is_array( $message ) && isset( $message['title'] )
+                                ? ( $message['title']['zh'] ?? $message['title'] )
+                                : (string) $message['title']
                             ),
                     ],
                     'include_player_ids' => [
@@ -488,26 +495,26 @@ class Helper {
             $json = [
                 'app_id' => config( 'services.os.app_id' ),
                 'contents' => [
-                    'en' => ( is_array( $message ) && isset( $message['message'] )
-                            ? strip_tags( $message['message']['en'] ?? $message['message'] )
-                            : strip_tags( (string) $message['message'] )
+                    'en' => self::cleanNotificationText( is_array( $message ) && isset( $message['message'] )
+                            ? ( $message['message']['en'] ?? $message['message'] )
+                            : (string) $message['message']
                         ),
 
-                    'zh' => ( is_array( $message ) && isset( $message['message'] )
-                            ? strip_tags( $message['message']['zh'] ?? $message['message'] )
-                            : strip_tags( (string) $message['message'] )
+                    'zh' => self::cleanNotificationText( is_array( $message ) && isset( $message['message'] )
+                            ? ( $message['message']['zh'] ?? $message['message'] )
+                            : (string) $message['message']
                         ),
                 ],
 
                 'headings' => [
-                    'en' => ( is_array( $message ) && isset( $message['title'] )
-                            ? strip_tags( $message['title']['en'] ?? $message['title'] )
-                            : strip_tags( (string) $message['title'] )
+                    'en' => self::cleanNotificationText( is_array( $message ) && isset( $message['title'] )
+                            ? ( $message['title']['en'] ?? $message['title'] )
+                            : (string) $message['title']
                         ),
 
-                    'zh' => ( is_array( $message ) && isset( $message['title'] )
-                            ? strip_tags( $message['title']['zh'] ?? $message['title'] )
-                            : strip_tags( (string) $message['title'] )
+                    'zh' => self::cleanNotificationText( is_array( $message ) && isset( $message['title'] )
+                            ? ( $message['title']['zh'] ?? $message['title'] )
+                            : (string) $message['title']
                         ),
                 ],
                 'include_player_ids' => $devices,

@@ -218,6 +218,9 @@ class MarketingNotificationService {
 
         $is_broadcast = intval( $request->all_users ) == 1 ? 10 : 0;
 
+        $publishingDate = $request->publishing_date ? Carbon::parse( $request->publishing_date, 'Asia/Kuala_Lumpur' ) : null;
+        $isScheduled = $publishingDate && $publishingDate->gt( Carbon::now( 'Asia/Kuala_Lumpur' ) );
+
         $validator->setAttributeNames( $attributeName )->validate();
 
         DB::beginTransaction();
@@ -240,6 +243,7 @@ class MarketingNotificationService {
                 'system_data' => NULL,
                 'meta_data' => NULL,
                 'publishing_date' => $request->publishing_date ?: null,
+                'status' => $isScheduled ? 1 : 10,
             ] );
 
             $file = FileManager::find( $request->image );
@@ -254,20 +258,22 @@ class MarketingNotificationService {
             if( $createAnnouncement && count( $selectedUsersId ) > 0 ){
                 foreach( $selectedUsersId as $key => $val ){
                     $user = User::findOrFail( Helper::decode( $val ) );
-                                        
+
                     $createUserNotificationUser = UserNotificationUser::create( [
                         'user_notification_id' => $createAnnouncement->id,
                         'user_id' => $user->id,
                     ] );
 
-                    self::sendNotification( $user, $createAnnouncement ); 
+                    if ( !$isScheduled ) {
+                        self::sendNotification( $user, $createAnnouncement );
+                    }
                 }
             }
 
-            if( $request->users == NULL ){
+            if( $request->users == NULL && !$isScheduled ){
                 // $selectedUsersId = User::where( 'status', 10 )->get();
                 // foreach( $selectedUsersId as $user ){
-                //     self::sendNotification( $user, $createAnnouncement ); 
+                //     self::sendNotification( $user, $createAnnouncement );
                 // }
                 self::sendMultiNotification( $createAnnouncement );
             }
@@ -410,8 +416,15 @@ class MarketingNotificationService {
         ] );
 
         $updateAnnouncement = UserNotification::where( 'id', $request->id )->first();
+        $wasPending = $updateAnnouncement->status == 1;
+
         $updateAnnouncement->status = $request->status;
         $updateAnnouncement->save();
+
+        if ( $wasPending && $request->status == 10 ) {
+            // Admin manually activated a notification that was scheduled but hadn't sent yet.
+            self::dispatchScheduledAnnouncement( $updateAnnouncement );
+        }
 
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.marketing_notifications' ) ) ] ),
@@ -423,14 +436,13 @@ class MarketingNotificationService {
         $marketingNotificationsIds = UserNotificationUser::where( 'user_id', auth()->user()->id )->pluck('user_notification_id');
 
         $marketingNotificationss = UserNotification::select('user_notifications.*' )
+            ->where( 'status', 10 )
             ->where( function( $q ) use ( $marketingNotificationsIds ) {
                 $q->whereIn( 'id', $marketingNotificationsIds )
-                  ->orWhere( function( $q2 ) {
-                      $q2->where( 'is_broadcast', 10 )->where( 'status', 10 );
-                  } );
+                  ->orWhere( 'is_broadcast', 10 );
             } )
             ->where( function( $q ) {
-                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                $q->whereNull( 'publishing_date' )->orWhere( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
             } );
 
         $marketingNotificationss->orderBy( 'user_notifications.created_at', 'DESC' );
@@ -508,11 +520,20 @@ class MarketingNotificationService {
         $messageContent['message'] = $createAnnouncement->content;
 
         \Helper::sendNotification( $user->id, $messageContent );
-        
-    } 
+
+    }
 
     private static function sendMultiNotification( $createAnnouncement ) {
         $selectedUsersId = User::where( 'status', 10 )->pluck( 'id' )->toArray();
+
+        self::sendToUserIds( $selectedUsersId, $createAnnouncement );
+    }
+
+    private static function sendToUserIds( array $userIds, $createAnnouncement ) {
+        if ( count( $userIds ) === 0 ) {
+            return;
+        }
+
         $messageContent = array();
 
         $messageContent['key'] = 'announcement';
@@ -520,6 +541,24 @@ class MarketingNotificationService {
         $messageContent['title'] = $createAnnouncement->title;
         $messageContent['message'] = $createAnnouncement->content;
 
-        \Helper::sendMultiNotification( $selectedUsersId, $messageContent );
+        \Helper::sendMultiNotification( $userIds, $messageContent );
+    }
+
+    /**
+     * Sends a marketing notification whose publishing_date has arrived (status = 1, pending)
+     * and flips it to published (status = 10). Used by createAnnouncement (immediate send)
+     * fallback paths and by the notifications:send-scheduled command.
+     */
+    public static function dispatchScheduledAnnouncement( $announcement ) {
+
+        if ( $announcement->is_broadcast == 10 ) {
+            self::sendMultiNotification( $announcement );
+        } else {
+            $userIds = UserNotificationUser::where( 'user_notification_id', $announcement->id )->pluck( 'user_id' )->toArray();
+            self::sendToUserIds( $userIds, $announcement );
+        }
+
+        $announcement->status = 10;
+        $announcement->save();
     }
 }

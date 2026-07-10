@@ -50,6 +50,8 @@ return [
     'activated' => 'Activated',
     'suspend' => 'Suspend',
     'suspended' => 'Suspended',
+    'pending' => 'Pending',
+    'scheduled' => 'Scheduled',
     'points_expired' => 'Points Expired',
     'expired' => 'Expired',
     'to_x' => 'To :title',

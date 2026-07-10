@@ -225,7 +225,7 @@
             message: '{{ __( 'template.loading' ) }}'
         } );
 
-        $.post('{{ route("admin.banner.updateBannerStatus") }}', {
+        $.post('{{ route("admin.banner.deleteBannerStatus") }}', {
             _token: '{{ csrf_token() }}',
             id: bannerId
         }).done(function(response) {

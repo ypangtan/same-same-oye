@@ -155,8 +155,10 @@ window.cke_element = [ 'announcement_edit_en_content', 'announcement_edit_zh_con
             fileID = '';
 
         flatpickr( ae + '_publishing_date', {
-            
-            dateFormat: 'Y-m-d',
+
+            dateFormat: 'Y-m-d H:i',
+            enableTime: true,
+            time_24hr: true,
             disableMobile: true,
             allowInput: true,
         } );
