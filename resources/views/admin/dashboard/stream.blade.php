@@ -23,6 +23,8 @@
 
     .bx-inactive { background: #fce4ec; color: #b71c1c; }
 
+    .dt-buttons { display: none; }
+
     .dt-length select { margin-right: 8px; }
 </style>
 
@@ -51,7 +53,7 @@
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
                         <table class="table" style="width:100%" id="stream-detail-table">
-                            <thead><tr><th></th><th>No.</th><th>User</th><th>Email</th><th>Played At</th></tr></thead>
+                            <thead><tr><th>No.</th><th>User</th><th>Email</th><th>Played At</th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
@@ -94,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
         paginate     : { previous: '‹', next: '›' },
     };
 
-    function makeButtons(key, excludeLastCol) {
+    function makeButtons(key) {
         var chkId    = 'exportSelected-' + key;
         var copyCls  = 'buttons-copy-'   + key;
         var excelCls = 'buttons-excel-'  + key;
@@ -110,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     return true;
                 },
-                columns: excludeLastCol ? ':not(:first-child):not(:last-child)' : ':not(:first-child)',
+                columns: ':not(:last-child)',
             };
         }
 
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    function makeDT(id, data, columns, columnDefs, orderCol, excludeLastCol) {
+    function makeDT(id, data, columns, columnDefs, orderCol) {
         var key = id.replace(/-table$/, '').replace(/-/g, '');
         if ($.fn.DataTable.isDataTable('#' + id)) {
             $('#' + id).DataTable().destroy();
@@ -171,29 +173,22 @@ document.addEventListener('DOMContentLoaded', function () {
             ordering     : true,
             scrollX      : true,
             dom          : DT_DOM,
-            buttons      : makeButtons(key, excludeLastCol),
+            buttons      : makeButtons(key),
             language     : DT_LANG,
             createdRow   : function (row) { $(row).addClass('nk-tb-item'); },
             initComplete : makeInitComplete(key),
             drawCallback : function () {
                 var api  = this.api();
                 var info = api.page.info();
-                api.column(1, { page: 'current' }).nodes().each(function (cell, i) {
+                api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
                     cell.innerHTML = info.start + i + 1;
                 });
             },
         });
     }
 
-    function selectColDef() {
-        return {
-            targets: 0, orderable: false, searchable: false, className: 'text-center',
-            render: function () { return '<input type="checkbox" class="select-row">'; },
-        };
-    }
-
     function noColDef() {
-        return { targets: 1, orderable: false, searchable: false, render: function () { return ''; } };
+        return { targets: 0, orderable: false, searchable: false, render: function () { return ''; } };
     }
 
     function actionColDef(target, contentType, idField, titleField) {
@@ -219,19 +214,17 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildStreamDetailTable(logs) {
         streamDetailDT = makeDT('stream-detail-table', logs, [
             { data: null        },
-            { data: null        },
             { data: 'user'      },
             { data: 'email'     },
             { data: 'played_at' },
         ], [
-            selectColDef(),
             noColDef(),
-            { targets: 2, render: function (data) {
+            { targets: 1, render: function (data) {
                 return data === 'Guest'
                     ? '<span class="bx bx-inactive">Guest</span>'
                     : esc(data);
             }},
-        ], 4, false);
+        ], 3);
     }
 
     streamDetailModalEl.addEventListener('shown.bs.modal', function () {
@@ -289,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '</div>' +
             '<div class="card card-bordered card-preview"><div class="card-inner">' +
             '<table class="table" style="width:100%" id="radio-table">' +
-            '<thead><tr><th></th><th>No.</th><th>User</th><th>Email</th><th>Played At</th></tr></thead>' +
+            '<thead><tr><th>No.</th><th>User</th><th>Email</th><th>Played At</th></tr></thead>' +
             '<tbody></tbody>' +
             '</table></div></div>'
         );
@@ -301,19 +294,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(function (d) {
                     dtRadio = makeDT('radio-table', d.logs, [
                         { data: null        },
-                        { data: null        },
                         { data: 'user'      },
                         { data: 'email'     },
                         { data: 'played_at' },
                     ], [
-                        selectColDef(),
                         noColDef(),
-                        { targets: 2, render: function (data) {
+                        { targets: 1, render: function (data) {
                             return data === 'Guest'
                                 ? '<span class="bx bx-inactive">Guest</span>'
                                 : esc(data);
                         }},
-                    ], 4, false);
+                    ], 3);
                 });
         }
 
@@ -339,31 +330,31 @@ document.addEventListener('DOMContentLoaded', function () {
             items: {
                 endpoint : '{{ route("admin.dashboard.getItemStreams") }}',
                 dataKey  : 'items',
-                thead    : '<th></th><th>No.</th><th>Title</th><th>Plays</th><th>Action</th>',
-                cols     : [{ data: null }, { data: null }, { data: 'title' }, { data: 'total' }, { data: null }],
-                defs     : [selectColDef(), noColDef(), { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-                            actionColDef(4, 2, 'item_id', 'title')],
-                orderCol : 3,
+                thead    : '<th>No.</th><th>Title</th><th>Plays</th><th>Action</th>',
+                cols     : [{ data: null }, { data: 'title' }, { data: 'total' }, { data: null }],
+                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+                            actionColDef(3, 2, 'item_id', 'title')],
+                orderCol : 2,
                 suffix   : 'Streams',
             },
             plists: {
                 endpoint : '{{ route("admin.dashboard.getPlaylistStreams") }}',
                 dataKey  : 'playlists',
-                thead    : '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th><th>Action</th>',
-                cols     : [{ data: null }, { data: null }, { data: 'name' }, { data: 'total' }, { data: null }],
-                defs     : [selectColDef(), noColDef(), { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-                            actionColDef(4, 3, 'playlist_id', 'name')],
-                orderCol : 3,
+                thead    : '<th>No.</th><th>Playlist Name</th><th>Plays</th><th>Action</th>',
+                cols     : [{ data: null }, { data: 'name' }, { data: 'total' }, { data: null }],
+                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+                            actionColDef(3, 3, 'playlist_id', 'name')],
+                orderCol : 2,
                 suffix   : 'Playlists',
             },
             colls: {
                 endpoint : '{{ route("admin.dashboard.getCollectionStreams") }}',
                 dataKey  : 'collections',
-                thead    : '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th><th>Action</th>',
-                cols     : [{ data: null }, { data: null }, { data: 'name' }, { data: 'total' }, { data: null }],
-                defs     : [selectColDef(), noColDef(), { targets: 3, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
-                            actionColDef(4, 4, 'collection_id', 'name')],
-                orderCol : 3,
+                thead    : '<th>No.</th><th>Collection Name</th><th>Plays</th><th>Action</th>',
+                cols     : [{ data: null }, { data: 'name' }, { data: 'total' }, { data: null }],
+                defs     : [noColDef(), { targets: 2, render: function (d) { return '<strong>' + (d || 0) + '</strong>'; } },
+                            actionColDef(3, 4, 'collection_id', 'name')],
+                orderCol : 2,
                 suffix   : 'Collections',
             },
         };
@@ -390,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             var rows = (d[cfg.dataKey] || []).filter(function (r) { return r.type_id == typeId; });
-            var dt   = makeDT(tableId, rows, cfg.cols, cfg.defs, cfg.orderCol, true);
+            var dt   = makeDT(tableId, rows, cfg.cols, cfg.defs, cfg.orderCol);
 
             var timer;
             $('#' + searchId).on('input', function () {
