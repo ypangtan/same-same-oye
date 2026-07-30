@@ -81,6 +81,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
+    /* Build a descriptive, collision-safe export file name, e.g. "Radio_Streams_260730_143012" */
+    function exportFileName(label) {
+        var d = new Date();
+        function p(n) { return (n < 10 ? '0' : '') + n; }
+        var stamp = String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) +
+            '_' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
+        return (label || 'Streams').replace(/\s+/g, '_') + '_' + stamp;
+    }
+
     var DT_DOM = "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
                  "<'row'<'col-sm-12'tr>>" +
                  "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>";
@@ -94,12 +103,13 @@ document.addEventListener('DOMContentLoaded', function () {
         paginate     : { previous: '‹', next: '›' },
     };
 
-    function makeButtons(key, excludeLastCol) {
+    function makeButtons(key, excludeLastCol, label) {
         var chkId    = 'exportSelected-' + key;
         var copyCls  = 'buttons-copy-'   + key;
         var excelCls = 'buttons-excel-'  + key;
         var csvCls   = 'buttons-csv-'    + key;
         var pdfCls   = 'buttons-pdf-'    + key;
+        var fileName = function () { return exportFileName(label || key); };
 
         function exportOpts() {
             var rowNum = 0;
@@ -130,27 +140,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function visibleAction(proxyClass) {
-            return function (e, dt) {
-                if ($('#' + chkId).is(':checked')) {
-                    $('.' + proxyClass).click();
-                } else {
-                    dt.one('draw', function () {
-                        $('.' + proxyClass).click();
-                        setTimeout(function () { dt.page.len(10).draw(); }, 1000);
-                    });
-                    dt.page.len(-1).draw();
-                }
+            /* This table's data lives fully in memory (no serverSide), and the hidden
+               proxy button's exportOptions already use modifier:{page:'all'}, so the
+               export already covers every row regardless of on-screen pagination —
+               no need to flip page length to "All" and back. */
+            return function () {
+                $('.' + proxyClass).click();
             };
         }
 
         return [
             { extend: 'copyHtml5',  className: 'd-none ' + copyCls,  exportOptions: exportOpts() },
             { text: '<i class="fa fa-copy"></i>',       className: 'btn btn-light',   titleAttr: 'Copy',           action: visibleAction(copyCls) },
-            { extend: 'excelHtml5', className: 'd-none ' + excelCls, exportOptions: exportOpts() },
+            { extend: 'excelHtml5', className: 'd-none ' + excelCls, title: fileName, exportOptions: exportOpts() },
             { text: '<i class="fa fa-file-excel"></i>', className: 'btn btn-success', titleAttr: 'Export to EXCEL', action: visibleAction(excelCls) },
-            { extend: 'csvHtml5',   className: 'd-none ' + csvCls,   exportOptions: exportOpts() },
+            { extend: 'csvHtml5',   className: 'd-none ' + csvCls,   title: fileName, exportOptions: exportOpts() },
             { text: '<i class="fa fa-file-csv"></i>',   className: 'btn btn-info',    titleAttr: 'Export to CSV',   action: visibleAction(csvCls) },
-            { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   exportOptions: exportOpts(), orientation: 'landscape',
+            { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   title: fileName, exportOptions: exportOpts(), orientation: 'landscape',
                 customize: function (doc) {
                     var tableIndex = doc.content.findIndex(function (item) { return item.table; });
                     if (tableIndex > -1) {
@@ -181,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    function makeDT(id, data, columns, columnDefs, orderCol, excludeLastCol) {
+    function makeDT(id, data, columns, columnDefs, orderCol, excludeLastCol, label) {
         var key = id.replace(/-table$/, '').replace(/-/g, '');
         if ($.fn.DataTable.isDataTable('#' + id)) {
             $('#' + id).DataTable().destroy();
@@ -197,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ordering     : true,
             scrollX      : true,
             dom          : DT_DOM,
-            buttons      : makeButtons(key, excludeLastCol),
+            buttons      : makeButtons(key, excludeLastCol, label),
             language     : DT_LANG,
             createdRow   : function (row) { $(row).addClass('nk-tb-item'); },
             initComplete : makeInitComplete(key),
@@ -241,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var streamDetailDT      = null;
     var streamModalShown    = false;
     var streamPendingLogs   = null;
+    var streamDetailLabel   = 'Stream Detail';
 
     function buildStreamDetailTable(logs) {
         streamDetailDT = makeDT('stream-detail-table', logs, [
@@ -258,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ? '<span class="bx bx-inactive">Guest</span>'
                     : esc(data);
             }},
-        ], 4, false);
+        ], 4, false, streamDetailLabel);
     }
 
     streamDetailModalEl.addEventListener('shown.bs.modal', function () {
@@ -279,7 +286,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var id          = $btn.data('id');
         var title       = $btn.data('title');
 
-        document.getElementById('stream-detail-title').textContent = title || 'Stream Detail';
+        streamDetailLabel = title || 'Stream Detail';
+        document.getElementById('stream-detail-title').textContent = streamDetailLabel;
         streamDetailModal.show();
 
         post('{{ route("admin.dashboard.getStreamDetail") }}', { content_type: contentType, id: id })
@@ -341,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 ? '<span class="bx bx-inactive">Guest</span>'
                                 : esc(data);
                         }},
-                    ], 4, false);
+                    ], 4, false, 'Radio Streams');
                 });
         }
 
@@ -418,7 +426,7 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             var rows = (d[cfg.dataKey] || []).filter(function (r) { return r.type_id == typeId; });
-            var dt   = makeDT(tableId, rows, cfg.cols, cfg.defs, cfg.orderCol, true);
+            var dt   = makeDT(tableId, rows, cfg.cols, cfg.defs, cfg.orderCol, true, typeName + ' ' + cfg.suffix);
 
             var timer;
             $('#' + searchId).on('input', function () {

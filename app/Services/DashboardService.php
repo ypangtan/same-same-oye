@@ -144,6 +144,7 @@ class DashboardService {
                 return [
                     'user'  => self::resolveUserName( (object) [ 'user_id' => $r->id, 'fullname' => $r->fullname, 'first_name' => $r->first_name, 'last_name' => $r->last_name ] ),
                     'email' => $r->email ?? '—',
+                    'plan'  => $r->plan_name ?? null,
                     'date'  => $r->date_col
                         ? Carbon::parse( $r->date_col )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
                         : '—',
@@ -162,14 +163,16 @@ class DashboardService {
             'new_month'    => $userRows( $base()->where( 'created_at', '>=', $startOfMonth ) ),
             'subs_today'   => $userRows( DB::table( 'user_subscriptions' )
                 ->join( 'users', 'users.id', '=', 'user_subscriptions.user_id' )
+                ->leftJoin( 'subscription_plans', 'subscription_plans.id', '=', 'user_subscriptions.subscription_plan_id' )
                 ->where( 'user_subscriptions.type', 1 )
                 ->whereDate( 'user_subscriptions.created_at', $today )
-                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'user_subscriptions.created_at as date_col' ) ),
+                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'subscription_plans.name as plan_name', 'user_subscriptions.created_at as date_col' ) ),
             'subs_month'   => $userRows( DB::table( 'user_subscriptions' )
                 ->join( 'users', 'users.id', '=', 'user_subscriptions.user_id' )
+                ->leftJoin( 'subscription_plans', 'subscription_plans.id', '=', 'user_subscriptions.subscription_plan_id' )
                 ->where( 'user_subscriptions.type', 1 )
                 ->where( 'user_subscriptions.created_at', '>=', $startOfMonth )
-                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'user_subscriptions.created_at as date_col' ) ),
+                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'subscription_plans.name as plan_name', 'user_subscriptions.created_at as date_col' ) ),
             default        => collect(),
         };
 

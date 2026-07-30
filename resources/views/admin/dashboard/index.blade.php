@@ -407,6 +407,7 @@
                     <table class="table" style="width:100%" id="banners-table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>No.</th>
                                 <th>Image</th>
                                 <th>Status</th>
@@ -433,6 +434,7 @@
                     <table class="table" style="width:100%" id="popups-table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>No.</th>
                                 <th>Image</th>
                                 <th>Title</th>
@@ -463,7 +465,7 @@
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
                         <table class="table" style="width:100%" id="engagement-detail-table">
-                            <thead><tr><th>No.</th><th>User</th><th>Email</th><th>Date</th></tr></thead>
+                            <thead><tr><th></th><th>No.</th><th>User</th><th>Email</th><th>Plan</th><th>Date</th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
@@ -487,7 +489,7 @@
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
                         <table class="table" style="width:100%" id="click-detail-table">
-                            <thead><tr><th>No.</th><th>User</th><th>Email</th><th>Clicked At</th></tr></thead>
+                            <thead><tr><th></th><th>No.</th><th>User</th><th>Email</th><th>Clicked At</th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
@@ -516,6 +518,15 @@
             .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
+    /* Build a descriptive, collision-safe export file name, e.g. "Subscriptions_260730_143012" */
+    function exportFileName(label) {
+        var d = new Date();
+        function p(n) { return (n < 10 ? '0' : '') + n; }
+        var stamp = String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) +
+            '_' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
+        return (label || 'Dashboard').replace(/\s+/g, '_') + '_' + stamp;
+    }
+
     var DT_DOM = "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
                  "<'row'<'col-sm-12'tr>>" +
                  "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>";
@@ -531,13 +542,14 @@
 
     /* Build per-table export buttons — mirrors dataTable.init.js exactly,
        but uses per-table class names so multiple tables don't conflict.   */
-    function makeButtons(key, excludeLastCol) {
+    function makeButtons(key, excludeLastCol, label) {
         if (excludeLastCol === undefined) excludeLastCol = true;
         var chkId    = 'exportSelected-' + key;
         var copyCls  = 'buttons-copy-'   + key;
         var excelCls = 'buttons-excel-'  + key;
         var csvCls   = 'buttons-csv-'    + key;
         var pdfCls   = 'buttons-pdf-'    + key;
+        var fileName = function () { return exportFileName(label || key); };
 
         function exportOpts(cls) {
             var rowNum = 0;
@@ -550,35 +562,34 @@
                     }
                     return true;
                 },
-                columns: excludeLastCol ? ':not(:last-child)' : ':visible',
+                columns: excludeLastCol
+                    ? ':not(:first-child):not(:last-child)'
+                    : ':not(:first-child)',
                 format: {
-                    /* Column 0 ("No.") is reset+numbered here instead of trusting the
+                    /* Column 1 ("No.") is reset+numbered here instead of trusting the
                        library's row index, since that index does not always match the
                        row's actual position in the exported output. header() runs once
-                       per column at the start of every export, so column 0's header is
-                       used as the "new export starting" signal to reset the counter. */
+                       per column at the start of every export, so column 1's header is
+                       used as the "new export starting" signal to reset the counter.
+                       Column 0 is the row-select checkbox, excluded from every export. */
                     header: function (data, column) {
-                        if (column === 0) rowNum = 0;
+                        if (column === 1) rowNum = 0;
                         return data;
                     },
                     body: function (data, row, column) {
-                        return column === 0 ? ++rowNum : data;
+                        return column === 1 ? ++rowNum : data;
                     },
                 },
             };
         }
 
         function visibleAction(proxyClass) {
-            return function (e, dt) {
-                if ($('#' + chkId).is(':checked')) {
-                    $('.' + proxyClass).click();
-                } else {
-                    dt.one('draw', function () {
-                        $('.' + proxyClass).click();
-                        setTimeout(function () { dt.page.len(10).draw(); }, 1000);
-                    });
-                    dt.page.len(-1).draw();
-                }
+            /* This table's data lives fully in memory (no serverSide), and the hidden
+               proxy button's exportOptions already use modifier:{page:'all'}, so the
+               export already covers every row regardless of on-screen pagination —
+               no need to flip page length to "All" and back. */
+            return function () {
+                $('.' + proxyClass).click();
             };
         }
 
@@ -593,11 +604,11 @@
         return [
             { extend: 'copyHtml5',  className: 'd-none ' + copyCls,  exportOptions: exportOpts(copyCls) },
             { text: '<i class="fa fa-copy"></i>',       className: 'btn btn-light',   titleAttr: 'Copy',           action: visibleAction(copyCls) },
-            { extend: 'excelHtml5', className: 'd-none ' + excelCls, exportOptions: exportOpts(excelCls) },
+            { extend: 'excelHtml5', className: 'd-none ' + excelCls, title: fileName, exportOptions: exportOpts(excelCls) },
             { text: '<i class="fa fa-file-excel"></i>', className: 'btn btn-success', titleAttr: 'Export to EXCEL', action: visibleAction(excelCls) },
-            { extend: 'csvHtml5',   className: 'd-none ' + csvCls,   exportOptions: exportOpts(csvCls) },
+            { extend: 'csvHtml5',   className: 'd-none ' + csvCls,   title: fileName, exportOptions: exportOpts(csvCls) },
             { text: '<i class="fa fa-file-csv"></i>',   className: 'btn btn-info',    titleAttr: 'Export to CSV',   action: visibleAction(csvCls) },
-            { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   exportOptions: exportOpts(pdfCls), orientation: 'landscape', customize: pdfCustomize },
+            { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   title: fileName, exportOptions: exportOpts(pdfCls), orientation: 'landscape', customize: pdfCustomize },
             { text: '<i class="fa fa-file-pdf"></i>',   className: 'btn btn-danger',  titleAttr: 'Export to PDF',   action: visibleAction(pdfCls) },
         ];
     }
@@ -619,7 +630,7 @@
     }
 
     /* Generic table factory */
-    function makeDT(id, data, columns, columnDefs, orderCol, excludeLastCol) {
+    function makeDT(id, data, columns, columnDefs, orderCol, excludeLastCol, label) {
         var key = id.replace('-table', '').replace(/-/g, '');
         if ($.fn.DataTable.isDataTable('#' + id)) {
             $('#' + id).DataTable().destroy(); /* keep <table> in DOM for reinit */
@@ -636,7 +647,7 @@
             export       : false,
             scrollX      : true,
             dom          : DT_DOM,
-            buttons      : makeButtons(key, excludeLastCol),
+            buttons      : makeButtons(key, excludeLastCol, label),
             language     : DT_LANG,
             createdRow   : function (row) { $(row).addClass('nk-tb-item'); },
             initComplete : makeInitComplete(key),
@@ -644,16 +655,23 @@
                 var api = this.api();
                 var info = api.page.info();
 
-                api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+                api.column(1, { page: 'current' }).nodes().each(function (cell, i) {
                     cell.innerHTML = info.start + i + 1;
                 });
             },
         });
     }
 
+    function selectColDef() {
+        return {
+            targets: 0, orderable: false, searchable: false, className: 'text-center',
+            render: function () { return '<input type="checkbox" class="select-row">'; },
+        };
+    }
+
     function noColDef() {
         return {
-            targets  : 0,
+            targets  : 1,
             orderable: false,
             searchable: false,
             render   : function () { return ''; },
@@ -679,22 +697,25 @@
     var clickDetailDT      = null;
     var clickModalShown    = false;
     var clickPendingLogs   = null;
+    var clickDetailLabel   = 'Click Detail';
 
     function buildClickDetailTable(logs) {
         clickDetailDT = makeDT('click-detail-table', logs, [
+            { data: null         },
             { data: null         },
             { data: 'user'       },
             { data: 'email'      },
             { data: 'clicked_at' },
         ], [
+            selectColDef(),
             noColDef(),
-            { targets: 1, render: function (data, type) {
+            { targets: 2, render: function (data, type) {
                 if (type !== 'display') return data;
                 return data === 'Guest'
                     ? '<span class="bx bx-inactive">Guest</span>'
                     : esc(data);
             }},
-        ], 3, false);
+        ], 4, false, clickDetailLabel);
     }
 
     clickDetailModalEl.addEventListener('shown.bs.modal', function () {
@@ -716,8 +737,8 @@
         var title    = $btn.data('title');
         var fallback = $btn.data('fallback');
 
-        document.getElementById('click-detail-title').textContent =
-            (title && title !== '—') ? title : fallback;
+        clickDetailLabel = (title && title !== '—') ? title : fallback;
+        document.getElementById('click-detail-title').textContent = clickDetailLabel;
         clickDetailModal.show();
 
         post(url, { id: id }).then(function (d) {
@@ -736,16 +757,20 @@
     var engagementDetailDT      = null;
     var engagementModalShown    = false;
     var engagementPendingLogs   = null;
+    var engagementDetailLabel   = 'User Detail';
 
     function buildEngagementDetailTable(logs) {
         engagementDetailDT = makeDT('engagement-detail-table', logs, [
             { data: null    },
+            { data: null    },
             { data: 'user'  },
             { data: 'email' },
+            { data: 'plan', render: function (d) { return d ? esc(d) : '—'; } },
             { data: 'date'  },
         ], [
+            selectColDef(),
             noColDef(),
-        ], 3, false);
+        ], 5, false, engagementDetailLabel);
     }
 
     engagementDetailModalEl.addEventListener('shown.bs.modal', function () {
@@ -765,7 +790,8 @@
         var stat  = $card.data('stat');
         var title = $card.data('stat-title');
 
-        document.getElementById('engagement-detail-title').textContent = title || 'User Detail';
+        engagementDetailLabel = title || 'User Detail';
+        document.getElementById('engagement-detail-title').textContent = engagementDetailLabel;
         engagementDetailModal.show();
 
         post('{{ route("admin.dashboard.getEngagementDetail") }}', { stat: stat }).then(function (d) {
@@ -866,6 +892,7 @@
             subsLoaded = true;
             dtSubs = makeDT('subs-table', d.subscriptions, [
                 { data: null         },
+                { data: null         },
                 { data: 'user'       },
                 { data: 'email'      },
                 { data: 'plan'       },
@@ -874,6 +901,7 @@
                 { data: 'start_date' },
                 { data: 'end_date'   },
             ], [
+                selectColDef(),
                 noColDef(),
                 { targets: 5, orderable: false,
                   render: function (data) {
@@ -885,7 +913,7 @@
                       var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                       return '<span class="bx ' + c + '">' + esc(data) + '</span>';
                   } },
-            ], 7);
+            ], 7, undefined, 'Subscriptions');
         });
     }
 
@@ -931,24 +959,26 @@
     post('{{ route("admin.dashboard.getBannerClickStats") }}').then(function (d) {
         dtBanners = makeDT('banners-table', d.banners, [
             { data: null         },
+            { data: null         },
             { data: 'image_path' },
             { data: 'status'     },
             { data: 'clicks'     },
             { data: null         },
         ], [
+            selectColDef(),
             noColDef(),
-            { targets: 1, orderable: false,
+            { targets: 2, orderable: false,
               render: function (data) {
                   return data ? '<img src="' + esc(data) + '" class="thumb-img">' : '—';
               } },
-            { targets: 2, orderable: false,
+            { targets: 3, orderable: false,
               render: function (data) {
                   var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
-            { targets: 3, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-            viewStreamColDef(4, '{{ route("admin.dashboard.getBannerClickDetail") }}', 'id', 'name', 'Banner Stream'),
-        ], 3);
+            { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            viewStreamColDef(5, '{{ route("admin.dashboard.getBannerClickDetail") }}', 'id', 'name', 'Banner Stream'),
+        ], 4, undefined, 'Banner Clicks');
     });
 
     var bannersTimer;
@@ -956,7 +986,7 @@
         var v = $(this).val(); clearTimeout(bannersTimer);
         bannersTimer = setTimeout(function () { if (dtBanners) dtBanners.search(v).draw(); }, 400);
     });
-    $('#banners-status').on('change', function () { if (dtBanners) dtBanners.column(4).search($(this).val()).draw(); });
+    $('#banners-status').on('change', function () { if (dtBanners) dtBanners.column(3).search($(this).val()).draw(); });
 
     /* ══════════════════════════════════════════════════════════════════
        SECTION 11 — POPUP CLICKS
@@ -968,25 +998,27 @@
     post('{{ route("admin.dashboard.getPopAnnouncementClickStats") }}').then(function (d) {
         dtPopups = makeDT('popups-table', d.popups, [
             { data: null         },
+            { data: null         },
             { data: 'image_path' },
             { data: 'title'      },
             { data: 'status'     },
             { data: 'clicks'     },
             { data: null         },
         ], [
+            selectColDef(),
             noColDef(),
-            { targets: 1, orderable: false,
+            { targets: 2, orderable: false,
               render: function (data) {
                   return data ? '<img src="' + esc(data) + '" class="thumb-img">' : '—';
               } },
-            { targets: 3, orderable: false,
+            { targets: 4, orderable: false,
               render: function (data) {
                   var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
-            { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-            viewStreamColDef(5, '{{ route("admin.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title', 'Pop Announcement Stream'),
-        ], 5);
+            { targets: 5, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            viewStreamColDef(6, '{{ route("admin.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title', 'Pop Announcement Stream'),
+        ], 5, undefined, 'Popup Clicks');
     });
 
     var popupsTimer;
