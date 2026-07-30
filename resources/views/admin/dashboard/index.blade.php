@@ -407,6 +407,7 @@
                     <table class="table" style="width:100%" id="banners-table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>No.</th>
                                 <th>Image</th>
                                 <th>Status</th>
@@ -433,6 +434,7 @@
                     <table class="table" style="width:100%" id="popups-table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>No.</th>
                                 <th>Image</th>
                                 <th>Title</th>
@@ -463,7 +465,7 @@
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
                         <table class="table" style="width:100%" id="engagement-detail-table">
-                            <thead><tr><th>No.</th><th>User</th><th>Email</th><th>Date</th></tr></thead>
+                            <thead><tr><th></th><th>No.</th><th>User</th><th>Email</th><th>Plan</th><th>Date</th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
@@ -487,7 +489,7 @@
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
                         <table class="table" style="width:100%" id="click-detail-table">
-                            <thead><tr><th>No.</th><th>User</th><th>Email</th><th>Clicked At</th></tr></thead>
+                            <thead><tr><th></th><th>No.</th><th>User</th><th>Email</th><th>Clicked At</th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
@@ -560,19 +562,22 @@
                     }
                     return true;
                 },
-                columns: excludeLastCol ? ':not(:last-child)' : ':visible',
+                columns: excludeLastCol
+                    ? ':not(:first-child):not(:last-child)'
+                    : ':not(:first-child)',
                 format: {
-                    /* Column 0 ("No.") is reset+numbered here instead of trusting the
+                    /* Column 1 ("No.") is reset+numbered here instead of trusting the
                        library's row index, since that index does not always match the
                        row's actual position in the exported output. header() runs once
-                       per column at the start of every export, so column 0's header is
-                       used as the "new export starting" signal to reset the counter. */
+                       per column at the start of every export, so column 1's header is
+                       used as the "new export starting" signal to reset the counter.
+                       Column 0 is the row-select checkbox, excluded from every export. */
                     header: function (data, column) {
-                        if (column === 0) rowNum = 0;
+                        if (column === 1) rowNum = 0;
                         return data;
                     },
                     body: function (data, row, column) {
-                        return column === 0 ? ++rowNum : data;
+                        return column === 1 ? ++rowNum : data;
                     },
                 },
             };
@@ -650,16 +655,23 @@
                 var api = this.api();
                 var info = api.page.info();
 
-                api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+                api.column(1, { page: 'current' }).nodes().each(function (cell, i) {
                     cell.innerHTML = info.start + i + 1;
                 });
             },
         });
     }
 
+    function selectColDef() {
+        return {
+            targets: 0, orderable: false, searchable: false, className: 'text-center',
+            render: function () { return '<input type="checkbox" class="select-row">'; },
+        };
+    }
+
     function noColDef() {
         return {
-            targets  : 0,
+            targets  : 1,
             orderable: false,
             searchable: false,
             render   : function () { return ''; },
@@ -690,18 +702,20 @@
     function buildClickDetailTable(logs) {
         clickDetailDT = makeDT('click-detail-table', logs, [
             { data: null         },
+            { data: null         },
             { data: 'user'       },
             { data: 'email'      },
             { data: 'clicked_at' },
         ], [
+            selectColDef(),
             noColDef(),
-            { targets: 1, render: function (data, type) {
+            { targets: 2, render: function (data, type) {
                 if (type !== 'display') return data;
                 return data === 'Guest'
                     ? '<span class="bx bx-inactive">Guest</span>'
                     : esc(data);
             }},
-        ], 3, false, clickDetailLabel);
+        ], 4, false, clickDetailLabel);
     }
 
     clickDetailModalEl.addEventListener('shown.bs.modal', function () {
@@ -748,12 +762,15 @@
     function buildEngagementDetailTable(logs) {
         engagementDetailDT = makeDT('engagement-detail-table', logs, [
             { data: null    },
+            { data: null    },
             { data: 'user'  },
             { data: 'email' },
+            { data: 'plan', render: function (d) { return d ? esc(d) : '—'; } },
             { data: 'date'  },
         ], [
+            selectColDef(),
             noColDef(),
-        ], 3, false, engagementDetailLabel);
+        ], 5, false, engagementDetailLabel);
     }
 
     engagementDetailModalEl.addEventListener('shown.bs.modal', function () {
@@ -875,6 +892,7 @@
             subsLoaded = true;
             dtSubs = makeDT('subs-table', d.subscriptions, [
                 { data: null         },
+                { data: null         },
                 { data: 'user'       },
                 { data: 'email'      },
                 { data: 'plan'       },
@@ -883,6 +901,7 @@
                 { data: 'start_date' },
                 { data: 'end_date'   },
             ], [
+                selectColDef(),
                 noColDef(),
                 { targets: 5, orderable: false,
                   render: function (data) {
@@ -940,24 +959,26 @@
     post('{{ route("admin.dashboard.getBannerClickStats") }}').then(function (d) {
         dtBanners = makeDT('banners-table', d.banners, [
             { data: null         },
+            { data: null         },
             { data: 'image_path' },
             { data: 'status'     },
             { data: 'clicks'     },
             { data: null         },
         ], [
+            selectColDef(),
             noColDef(),
-            { targets: 1, orderable: false,
+            { targets: 2, orderable: false,
               render: function (data) {
                   return data ? '<img src="' + esc(data) + '" class="thumb-img">' : '—';
               } },
-            { targets: 2, orderable: false,
+            { targets: 3, orderable: false,
               render: function (data) {
                   var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
-            { targets: 3, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-            viewStreamColDef(4, '{{ route("admin.dashboard.getBannerClickDetail") }}', 'id', 'name', 'Banner Stream'),
-        ], 3, undefined, 'Banner Clicks');
+            { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            viewStreamColDef(5, '{{ route("admin.dashboard.getBannerClickDetail") }}', 'id', 'name', 'Banner Stream'),
+        ], 4, undefined, 'Banner Clicks');
     });
 
     var bannersTimer;
@@ -965,7 +986,7 @@
         var v = $(this).val(); clearTimeout(bannersTimer);
         bannersTimer = setTimeout(function () { if (dtBanners) dtBanners.search(v).draw(); }, 400);
     });
-    $('#banners-status').on('change', function () { if (dtBanners) dtBanners.column(4).search($(this).val()).draw(); });
+    $('#banners-status').on('change', function () { if (dtBanners) dtBanners.column(3).search($(this).val()).draw(); });
 
     /* ══════════════════════════════════════════════════════════════════
        SECTION 11 — POPUP CLICKS
@@ -977,24 +998,26 @@
     post('{{ route("admin.dashboard.getPopAnnouncementClickStats") }}').then(function (d) {
         dtPopups = makeDT('popups-table', d.popups, [
             { data: null         },
+            { data: null         },
             { data: 'image_path' },
             { data: 'title'      },
             { data: 'status'     },
             { data: 'clicks'     },
             { data: null         },
         ], [
+            selectColDef(),
             noColDef(),
-            { targets: 1, orderable: false,
+            { targets: 2, orderable: false,
               render: function (data) {
                   return data ? '<img src="' + esc(data) + '" class="thumb-img">' : '—';
               } },
-            { targets: 3, orderable: false,
+            { targets: 4, orderable: false,
               render: function (data) {
                   var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
-            { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-            viewStreamColDef(5, '{{ route("admin.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title', 'Pop Announcement Stream'),
+            { targets: 5, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            viewStreamColDef(6, '{{ route("admin.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title', 'Pop Announcement Stream'),
         ], 5, undefined, 'Popup Clicks');
     });
 
