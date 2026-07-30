@@ -214,6 +214,7 @@ $parent_route = $data['parent_route'] ?? '';
                         title: params.term, // search term
                         type: '{{ $type }}',
                         file_type: $( dc + '_display_type' ).val() == '8' ? 2 : '',
+                        upload_type: $( dc + '_display_type' ).val() == '8' ? 1 : '',
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,

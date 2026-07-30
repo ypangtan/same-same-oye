@@ -33,6 +33,6 @@ return [
     'display_type' => 'Display Type',
 
     'display_type_guide' => 'Display Type Guide',
-    'type_8_video_playlist_only' => 'Type 8 can only be assigned video playlists.',
-    'type_8_playlists_must_be_video' => 'All selected playlists must be video playlists when display type is Type 8.',
+    'type_8_video_playlist_only' => 'Type 8 can only be assigned video playlists made of uploaded video files (URL/live videos are not allowed).',
+    'type_8_playlists_must_be_video' => 'All selected playlists must be video playlists made of uploaded video files, not URL videos, when display type is Type 8.',
 ];

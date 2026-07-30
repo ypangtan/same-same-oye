@@ -204,8 +204,15 @@ class CollectionService
 
                 if ( $request->display_type == 8 ) {
                     $playlistIds = array_column( $playlists, 'id' );
-                    $nonVideoCount = Playlist::whereIn( 'id', $playlistIds )->where( 'file_type', '!=', 2 )->count();
-                    if ( $nonVideoCount > 0 ) {
+                    $invalidCount = Playlist::whereIn( 'id', $playlistIds )
+                        ->where( function ( $q ) {
+                            $q->where( 'file_type', '!=', 2 )
+                                ->orWhereHas( 'items', function ( $sq ) {
+                                    $sq->where( 'items.upload_type', '!=', 1 );
+                                } );
+                        } )
+                        ->count();
+                    if ( $invalidCount > 0 ) {
                         $fail( __( 'collection.type_8_playlists_must_be_video' ) );
                         return false;
                     }
@@ -292,8 +299,15 @@ class CollectionService
 
                 if ( $request->display_type == 8 ) {
                     $playlistIds = array_column( $playlists, 'id' );
-                    $nonVideoCount = Playlist::whereIn( 'id', $playlistIds )->where( 'file_type', '!=', 2 )->count();
-                    if ( $nonVideoCount > 0 ) {
+                    $invalidCount = Playlist::whereIn( 'id', $playlistIds )
+                        ->where( function ( $q ) {
+                            $q->where( 'file_type', '!=', 2 )
+                                ->orWhereHas( 'items', function ( $sq ) {
+                                    $sq->where( 'items.upload_type', '!=', 1 );
+                                } );
+                        } )
+                        ->count();
+                    if ( $invalidCount > 0 ) {
                         $fail( __( 'collection.type_8_playlists_must_be_video' ) );
                         return false;
                     }

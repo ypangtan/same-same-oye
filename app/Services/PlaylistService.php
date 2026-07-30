@@ -177,6 +177,12 @@ class PlaylistService
             $model->where( 'playlists.file_type', $request->file_type );
         }
 
+        if( !empty( $request->upload_type ) ) {
+            $model->whereDoesntHave( 'items', function ( $q ) use ( $request ) {
+                $q->where( 'items.upload_type', '!=', $request->upload_type );
+            } );
+        }
+
         return [
             'filter' => $filter,
             'model' => $model,
