@@ -116,12 +116,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     ? ':not(:first-child):not(:last-child)'
                     : ':not(:first-child)',
                 format: {
+                    /* column index here is the real table column index (checkbox=0,
+                       No.=1), not a position within the exported subset. */
                     header: function (data, column) {
-                        if (column === 0) rowNum = 0;
+                        if (column === 1) rowNum = 0;
                         return data;
                     },
                     body: function (data, row, column) {
-                        return column === 0 ? ++rowNum : data;
+                        return column === 1 ? ++rowNum : data;
                     },
                 },
             };
