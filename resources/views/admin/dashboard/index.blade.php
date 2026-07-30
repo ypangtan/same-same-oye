@@ -516,6 +516,15 @@
             .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
+    /* Build a descriptive, collision-safe export file name, e.g. "Subscriptions_260730_143012" */
+    function exportFileName(label) {
+        var d = new Date();
+        function p(n) { return (n < 10 ? '0' : '') + n; }
+        var stamp = String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) +
+            '_' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
+        return (label || 'Dashboard').replace(/\s+/g, '_') + '_' + stamp;
+    }
+
     var DT_DOM = "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
                  "<'row'<'col-sm-12'tr>>" +
                  "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>";
@@ -531,13 +540,14 @@
 
     /* Build per-table export buttons — mirrors dataTable.init.js exactly,
        but uses per-table class names so multiple tables don't conflict.   */
-    function makeButtons(key, excludeLastCol) {
+    function makeButtons(key, excludeLastCol, label) {
         if (excludeLastCol === undefined) excludeLastCol = true;
         var chkId    = 'exportSelected-' + key;
         var copyCls  = 'buttons-copy-'   + key;
         var excelCls = 'buttons-excel-'  + key;
         var csvCls   = 'buttons-csv-'    + key;
         var pdfCls   = 'buttons-pdf-'    + key;
+        var fileName = function () { return exportFileName(label || key); };
 
         function exportOpts(cls) {
             var rowNum = 0;
@@ -569,16 +579,12 @@
         }
 
         function visibleAction(proxyClass) {
-            return function (e, dt) {
-                if ($('#' + chkId).is(':checked')) {
-                    $('.' + proxyClass).click();
-                } else {
-                    dt.one('draw', function () {
-                        $('.' + proxyClass).click();
-                        setTimeout(function () { dt.page.len(10).draw(); }, 1000);
-                    });
-                    dt.page.len(-1).draw();
-                }
+            /* This table's data lives fully in memory (no serverSide), and the hidden
+               proxy button's exportOptions already use modifier:{page:'all'}, so the
+               export already covers every row regardless of on-screen pagination —
+               no need to flip page length to "All" and back. */
+            return function () {
+                $('.' + proxyClass).click();
             };
         }
 
