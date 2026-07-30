@@ -83,6 +83,10 @@
         display: none;
     }
 
+    #engagement-detail-modal .dt-buttons {
+        display: flex;
+    }
+
     .dt-length {
         display: flex;
         align-items: center;
@@ -526,7 +530,8 @@
 
     /* Build per-table export buttons — mirrors dataTable.init.js exactly,
        but uses per-table class names so multiple tables don't conflict.   */
-    function makeButtons(key) {
+    function makeButtons(key, excludeLastCol) {
+        if (excludeLastCol === undefined) excludeLastCol = true;
         var chkId    = 'exportSelected-' + key;
         var copyCls  = 'buttons-copy-'   + key;
         var excelCls = 'buttons-excel-'  + key;
@@ -542,7 +547,7 @@
                     }
                     return true;
                 },
-                columns: ':not(:last-child)',
+                columns: excludeLastCol ? ':not(:last-child)' : ':visible',
             };
         }
 
@@ -589,7 +594,7 @@
     }
 
     /* Generic table factory */
-    function makeDT(id, data, columns, columnDefs, orderCol) {
+    function makeDT(id, data, columns, columnDefs, orderCol, excludeLastCol) {
         var key = id.replace('-table', '').replace(/-/g, '');
         if ($.fn.DataTable.isDataTable('#' + id)) {
             $('#' + id).DataTable().destroy(); /* keep <table> in DOM for reinit */
@@ -606,7 +611,7 @@
             export       : false,
             scrollX      : true,
             dom          : DT_DOM,
-            buttons      : makeButtons(key),
+            buttons      : makeButtons(key, excludeLastCol),
             language     : DT_LANG,
             createdRow   : function (row) { $(row).addClass('nk-tb-item'); },
             initComplete : makeInitComplete(key),
@@ -714,7 +719,7 @@
             { data: 'date'  },
         ], [
             noColDef(),
-        ], 3);
+        ], 3, false);
     }
 
     engagementDetailModalEl.addEventListener('shown.bs.modal', function () {
