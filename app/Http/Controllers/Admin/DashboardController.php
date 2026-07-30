@@ -18,6 +18,10 @@ class DashboardController extends Controller
         return DashboardService::getEngagementStats();
     }
 
+    public function getEngagementDetail( Request $request ) {
+        return DashboardService::getEngagementDetail( $request );
+    }
+
     public function getDailyUserStats() {
         return DashboardService::getDailyUserStats();
     }

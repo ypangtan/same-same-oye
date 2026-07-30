@@ -137,7 +137,14 @@ document.addEventListener('DOMContentLoaded', function () {
             { text: '<i class="fa fa-file-excel"></i>', className: 'btn btn-success', titleAttr: 'Export to EXCEL', action: visibleAction(excelCls) },
             { extend: 'csvHtml5',   className: 'd-none ' + csvCls,   exportOptions: exportOpts() },
             { text: '<i class="fa fa-file-csv"></i>',   className: 'btn btn-info',    titleAttr: 'Export to CSV',   action: visibleAction(csvCls) },
-            { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   exportOptions: exportOpts() },
+            { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   exportOptions: exportOpts(),
+                customize: function (doc) {
+                    var tableIndex = doc.content.findIndex(function (item) { return item.table; });
+                    if (tableIndex > -1) {
+                        var colCount = doc.content[tableIndex].table.body[0].length;
+                        doc.content[tableIndex].table.widths = Array(colCount).fill('*');
+                    }
+                } },
             { text: '<i class="fa fa-file-pdf"></i>',   className: 'btn btn-danger',  titleAttr: 'Export to PDF',   action: visibleAction(pdfCls) },
         ];
     }

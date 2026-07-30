@@ -101,6 +101,15 @@
         transform: translateY(-2px);
     }
 
+    .stat-card-clickable {
+        cursor: pointer;
+        transition: box-shadow .15s, transform .15s;
+    }
+    .stat-card-clickable:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,.10);
+        transform: translateY(-2px);
+    }
+
     @media (min-width: 1024px) {
         .col-1024-6 { flex: 0 0 auto; width: 50%; }
     }
@@ -120,7 +129,7 @@
     <p class="section-title">Active Users Overview</p>
     <div class="row g-3">
         <div class="col-6 col-md-3">
-            <div class="card stat-card h-100">
+            <div class="card stat-card stat-card-clickable h-100" data-stat="total_active" data-stat-title="Total Active Users">
                 <div class="card-body">
                     <div class="gap-3 d-flex align-items-center h-100">
                         <div class="stat-icon bg-primary-dim text-primary"><em class="icon ni ni-users"></em></div>
@@ -133,7 +142,7 @@
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card stat-card h-100">
+            <div class="card stat-card stat-card-clickable h-100" data-stat="free" data-stat-title="Free Users">
                 <div class="card-body">
                     <div class="gap-3 d-flex align-items-center h-100">
                         <div class="stat-icon" style="background:#e5edff;color:#3c58d0"><em class="icon ni ni-user"></em>
@@ -147,7 +156,7 @@
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card stat-card h-100">
+            <div class="card stat-card stat-card-clickable h-100" data-stat="trial" data-stat-title="Trial Users">
                 <div class="card-body">
                     <div class="gap-3 d-flex align-items-center h-100">
                         <div class="stat-icon" style="background:#fff3e0;color:#e65100"><em class="icon ni ni-clock"></em>
@@ -161,7 +170,7 @@
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card stat-card h-100">
+            <div class="card stat-card stat-card-clickable h-100" data-stat="paid" data-stat-title="Paid Users">
                 <div class="card-body">
                     <div class="gap-3 d-flex align-items-center h-100">
                         <div class="stat-icon" style="background:#e8f5e9;color:#2e7d32"><em class="icon ni ni-star"></em>
@@ -184,7 +193,7 @@
             <p class="section-title">New Users</p>
             <div class="row g-3">
                 <div class="col-6">
-                    <div class="card stat-card h-100">
+                    <div class="card stat-card stat-card-clickable h-100" data-stat="new_today" data-stat-title="New Users Today">
                         <div class="card-body">
                             <div class="gap-3 d-flex align-items-center h-100">
                                 <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
@@ -197,7 +206,7 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="card stat-card h-100">
+                    <div class="card stat-card stat-card-clickable h-100" data-stat="new_month" data-stat-title="New Users This Month">
                         <div class="card-body">
                             <div class="gap-3 d-flex align-items-center h-100">
                                 <div class="stat-icon bg-info-dim text-info"><em class="icon ni ni-user-add"></em></div>
@@ -215,7 +224,7 @@
             <p class="section-title">Subscriptions</p>
             <div class="row g-3">
                 <div class="col-6">
-                    <div class="card stat-card h-100">
+                    <div class="card stat-card stat-card-clickable h-100" data-stat="subs_today" data-stat-title="New Subscriptions Today">
                         <div class="card-body">
                             <div class="gap-3 d-flex align-items-center h-100">
                                 <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em
@@ -229,7 +238,7 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="card stat-card h-100">
+                    <div class="card stat-card stat-card-clickable h-100" data-stat="subs_month" data-stat-title="New Subscriptions This Month">
                         <div class="card-body">
                             <div class="gap-3 d-flex align-items-center h-100">
                                 <div class="stat-icon" style="background:#f3e5f5;color:#7b1fa2"><em
@@ -429,6 +438,30 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ENGAGEMENT DETAIL MODAL (who's behind Active Users / New Users / Subscriptions cards) --}}
+<div class="modal fade" id="engagement-detail-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="engagement-detail-title">User Detail</h5>
+                <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="card card-bordered card-preview">
+                    <div class="card-inner">
+                        <table class="table" style="width:100%" id="engagement-detail-table">
+                            <thead><tr><th>No.</th><th>User</th><th>Email</th><th>Date</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -661,6 +694,54 @@
                 buildClickDetailTable(d.logs);
             } else {
                 clickPendingLogs = d.logs;
+            }
+        });
+    });
+
+    /* ── Engagement detail modal (who's behind an Active Users / New Users / Subscriptions card) ── */
+
+    var engagementDetailModalEl = document.getElementById('engagement-detail-modal');
+    var engagementDetailModal   = new bootstrap.Modal(engagementDetailModalEl);
+    var engagementDetailDT      = null;
+    var engagementModalShown    = false;
+    var engagementPendingLogs   = null;
+
+    function buildEngagementDetailTable(logs) {
+        engagementDetailDT = makeDT('engagement-detail-table', logs, [
+            { data: null    },
+            { data: 'user'  },
+            { data: 'email' },
+            { data: 'date'  },
+        ], [
+            noColDef(),
+        ], 3);
+    }
+
+    engagementDetailModalEl.addEventListener('shown.bs.modal', function () {
+        engagementModalShown = true;
+        if (engagementPendingLogs) {
+            buildEngagementDetailTable(engagementPendingLogs);
+            engagementPendingLogs = null;
+        }
+    });
+    engagementDetailModalEl.addEventListener('hidden.bs.modal', function () {
+        engagementModalShown = false;
+    });
+
+    $(document).on('click', '.stat-card-clickable', function (e) {
+        e.preventDefault();
+        var $card = $(this);
+        var stat  = $card.data('stat');
+        var title = $card.data('stat-title');
+
+        document.getElementById('engagement-detail-title').textContent = title || 'User Detail';
+        engagementDetailModal.show();
+
+        post('{{ route("admin.dashboard.getEngagementDetail") }}', { stat: stat }).then(function (d) {
+            if (engagementModalShown) {
+                buildEngagementDetailTable(d.logs);
+            } else {
+                engagementPendingLogs = d.logs;
             }
         });
     });
