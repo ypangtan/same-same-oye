@@ -102,8 +102,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var pdfCls   = 'buttons-pdf-'    + key;
 
         function exportOpts() {
+            var rowNum = 0;
             return {
                 modifier: { page: 'all' },
+                orthogonal: 'export',
                 rows: function (idx, data, node) {
                     if ($('#' + chkId).is(':checked')) {
                         return $(node).find('.select-row').is(':checked');
@@ -114,8 +116,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     ? ':not(:first-child):not(:last-child)'
                     : ':not(:first-child)',
                 format: {
+                    header: function (data, column) {
+                        if (column === 0) rowNum = 0;
+                        return data;
+                    },
                     body: function (data, row, column) {
-                        return column === 0 ? row + 1 : data;
+                        return column === 0 ? ++rowNum : data;
                     },
                 },
             };
@@ -244,7 +250,8 @@ document.addEventListener('DOMContentLoaded', function () {
         ], [
             selectColDef(),
             noColDef(),
-            { targets: 2, render: function (data) {
+            { targets: 2, render: function (data, type) {
+                if (type !== 'display') return data;
                 return data === 'Guest'
                     ? '<span class="bx bx-inactive">Guest</span>'
                     : esc(data);
@@ -326,7 +333,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     ], [
                         selectColDef(),
                         noColDef(),
-                        { targets: 2, render: function (data) {
+                        { targets: 2, render: function (data, type) {
+                            if (type !== 'display') return data;
                             return data === 'Guest'
                                 ? '<span class="bx bx-inactive">Guest</span>'
                                 : esc(data);

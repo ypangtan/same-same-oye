@@ -540,8 +540,10 @@
         var pdfCls   = 'buttons-pdf-'    + key;
 
         function exportOpts(cls) {
+            var rowNum = 0;
             return {
                 modifier: { page: 'all' },
+                orthogonal: 'export',
                 rows: function (idx, data, node) {
                     if ($('#' + chkId).is(':checked')) {
                         return $(node).find('.select-row').is(':checked');
@@ -550,8 +552,17 @@
                 },
                 columns: excludeLastCol ? ':not(:last-child)' : ':visible',
                 format: {
+                    /* Column 0 ("No.") is reset+numbered here instead of trusting the
+                       library's row index, since that index does not always match the
+                       row's actual position in the exported output. header() runs once
+                       per column at the start of every export, so column 0's header is
+                       used as the "new export starting" signal to reset the counter. */
+                    header: function (data, column) {
+                        if (column === 0) rowNum = 0;
+                        return data;
+                    },
                     body: function (data, row, column) {
-                        return column === 0 ? row + 1 : data;
+                        return column === 0 ? ++rowNum : data;
                     },
                 },
             };
@@ -677,7 +688,8 @@
             { data: 'clicked_at' },
         ], [
             noColDef(),
-            { targets: 1, render: function (data) {
+            { targets: 1, render: function (data, type) {
+                if (type !== 'display') return data;
                 return data === 'Guest'
                     ? '<span class="bx bx-inactive">Guest</span>'
                     : esc(data);
