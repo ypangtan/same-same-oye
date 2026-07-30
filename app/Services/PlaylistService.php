@@ -173,6 +173,10 @@ class PlaylistService
             $model->where( 'type_id', $request->type );
         }
 
+        if( !empty( $request->file_type ) ) {
+            $model->where( 'playlists.file_type', $request->file_type );
+        }
+
         return [
             'filter' => $filter,
             'model' => $model,
@@ -535,6 +539,7 @@ class PlaylistService
                     'encrypted_id',
                     'image_url',
                     'file_url',
+                    'is_liked',
                 ] );
             }
 
@@ -545,6 +550,7 @@ class PlaylistService
                         'image_url',
                         'file_url',
                         'display_duration',
+                        'is_liked',
                     ] );
                     return $item;
                 });
@@ -577,6 +583,7 @@ class PlaylistService
                 'encrypted_id',
                 'image_url',
                 'file_url',
+                'is_liked',
             ] );
         }
 
@@ -587,6 +594,7 @@ class PlaylistService
                     'image_url',
                     'file_url',
                     'display_duration',
+                    'is_liked',
                 ] );
             }
         }

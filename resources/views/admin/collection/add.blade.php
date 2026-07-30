@@ -76,6 +76,7 @@ $parent_route = $data['parent_route'] ?? '';
                 <div class="row mb-3">
                     <div>
                         <label for="{{ $collection_create }}_playlists" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'collection.playlists' ) }}</label>
+                        <div id="{{ $collection_create }}_video_only_hint" class="text-warning mb-1" style="display:none; font-size:13px;">{{ __( 'collection.type_8_video_playlist_only' ) }}</div>
                         <select class="form-select form-select-md" id="{{ $collection_create }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'template.playlists' ) ] ) }}"></select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -140,6 +141,10 @@ $parent_route = $data['parent_route'] ?? '';
 
         $( dc + '_cancel' ).click( function() {
             window.location.href = '{{ $parent_route }}';
+        } );
+
+        $( dc + '_display_type' ).on( 'change', function() {
+            $( dc + '_video_only_hint' ).toggle( $( this ).val() == '8' );
         } );
 
         $( dc + '_submit' ).click( function() {
@@ -208,6 +213,7 @@ $parent_route = $data['parent_route'] ?? '';
                     return {
                         title: params.term, // search term
                         type: '{{ $type }}',
+                        file_type: $( dc + '_display_type' ).val() == '8' ? 2 : '',
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,

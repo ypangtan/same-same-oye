@@ -15,6 +15,7 @@ use Illuminate\Validation\Rules\Password;
 use App\Models\{
     FileManager,
     Item,
+    ItemLike,
     Playlist,
     User,
     Role as RoleModel
@@ -411,6 +412,7 @@ class ItemService
                 'image_url',
                 'file_url',
                 'display_duration',
+                'is_liked',
             ] );
             return $item;
         } );
@@ -427,9 +429,99 @@ class ItemService
             'image_url',
             'file_url',
             'display_duration',
+            'is_liked',
         ] );
-  
+
         return response()->json( $item );
+    }
+
+    public static function likeItem( $request ) {
+
+        $request->merge( [
+            'item_id' => \Helper::decode( $request->item_id ),
+        ] );
+
+        $validator = Validator::make( $request->all(), [
+            'item_id' => [ 'required', 'exists:items,id' ],
+        ] );
+
+        $attributeName = [
+            'item_id' => __( 'item.title' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            ItemLike::firstOrCreate( [
+                'item_id' => $request->item_id,
+                'user_id' => auth()->id(),
+            ] );
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'item.item_liked' ),
+        ] );
+    }
+
+    public static function unlikeItem( $request ) {
+
+        $request->merge( [
+            'item_id' => \Helper::decode( $request->item_id ),
+        ] );
+
+        $validator = Validator::make( $request->all(), [
+            'item_id' => [ 'required', 'exists:items,id' ],
+        ] );
+
+        $attributeName = [
+            'item_id' => __( 'item.title' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+
+        DB::beginTransaction();
+
+        try {
+
+            ItemLike::where( 'item_id', $request->item_id )
+                ->where( 'user_id', auth()->id() )
+                ->delete();
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'item.item_unliked' ),
+        ] );
     }
 
 }

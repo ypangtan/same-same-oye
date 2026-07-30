@@ -66,6 +66,18 @@ class Item extends Model
         return $this->hasMany( Playlist::class, 'item_id' );
     }
 
+    public function likes() {
+        return $this->hasMany( ItemLike::class, 'item_id' );
+    }
+
+    public function getIsLikedAttribute() {
+        if( !auth()->check() ) {
+            return false;
+        }
+
+        return $this->likes()->where( 'user_id', auth()->id() )->exists();
+    }
+
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
             $localPath = storage_path ('app/public/' . $this->attributes['image'] );

@@ -154,6 +154,11 @@ Route::middleware( 'auth:user' )->group( function() {
 
     } );
 
+    Route::prefix( 'items' )->group( function() {
+        Route::post( '/like', [ ItemController::class, 'likeItem' ] );
+        Route::post( '/unlike', [ ItemController::class, 'unlikeItem' ] );
+    } );
+
     Route::prefix( 'user-playlist' )->group( function() {
         Route::post( '/get-user-playlists', [ UserPlaylistController::class, 'getUserPlaylists' ] );
         Route::post( '/get-user-playlist', [ UserPlaylistController::class, 'getUserPlaylist' ] );

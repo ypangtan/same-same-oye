@@ -14,6 +14,7 @@ use Illuminate\Validation\Rules\Password;
 use App\Models\{
     FileManager,
     Collection,
+    Playlist,
     User,
     Role as RoleModel
 };
@@ -193,12 +194,21 @@ class CollectionService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'display_type' => [ 'required', 'in:1,2,3,4,5,6,7' ],
-            'playlists' => [ 'required', function ( $attribute, $value, $fail ) {
+            'display_type' => [ 'required', 'in:1,2,3,4,5,6,7,8' ],
+            'playlists' => [ 'required', function ( $attribute, $value, $fail ) use ( $request ) {
                 $playlists = json_decode( $value, true );
                 if ( empty( $playlists ) || !is_array( $playlists ) || count( $playlists ) == 0 ) {
                     $fail( __( 'validation.required' ) );
                     return false;
+                }
+
+                if ( $request->display_type == 8 ) {
+                    $playlistIds = array_column( $playlists, 'id' );
+                    $nonVideoCount = Playlist::whereIn( 'id', $playlistIds )->where( 'file_type', '!=', 2 )->count();
+                    if ( $nonVideoCount > 0 ) {
+                        $fail( __( 'collection.type_8_playlists_must_be_video' ) );
+                        return false;
+                    }
                 }
             } ],
         ] );
@@ -272,12 +282,21 @@ class CollectionService
             'zh_name' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'display_type' => [ 'required', 'in:1,2,3,4,5,6,7' ],
-            'playlists' => [ 'required', function ( $attribute, $value, $fail ) {
+            'display_type' => [ 'required', 'in:1,2,3,4,5,6,7,8' ],
+            'playlists' => [ 'required', function ( $attribute, $value, $fail ) use ( $request ) {
                 $playlists = json_decode( $value, true );
                 if ( empty( $playlists ) || !is_array( $playlists ) || count( $playlists ) == 0 ) {
                     $fail( __( 'validation.required' ) );
                     return false;
+                }
+
+                if ( $request->display_type == 8 ) {
+                    $playlistIds = array_column( $playlists, 'id' );
+                    $nonVideoCount = Playlist::whereIn( 'id', $playlistIds )->where( 'file_type', '!=', 2 )->count();
+                    if ( $nonVideoCount > 0 ) {
+                        $fail( __( 'collection.type_8_playlists_must_be_video' ) );
+                        return false;
+                    }
                 }
             } ],
         ] );

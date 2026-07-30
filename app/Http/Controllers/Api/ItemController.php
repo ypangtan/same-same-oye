@@ -50,4 +50,38 @@ class ItemController extends Controller
         return ItemService::getItem( $request );
     }
 
+    /**
+     * 3. Like Item
+     *
+     * @sort 3
+     *
+     * @authenticated
+     *
+     * @group Item API
+     *
+     * @bodyParam item_id string The encrypted_id of the item. Example: 52
+     *
+     */
+    public function likeItem( Request $request ) {
+
+        return ItemService::likeItem( $request );
+    }
+
+    /**
+     * 4. Unlike Item
+     *
+     * @sort 4
+     *
+     * @authenticated
+     *
+     * @group Item API
+     *
+     * @bodyParam item_id string The encrypted_id of the item. Example: 52
+     *
+     */
+    public function unlikeItem( Request $request ) {
+
+        return ItemService::unlikeItem( $request );
+    }
+
 }

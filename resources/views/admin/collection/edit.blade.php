@@ -75,6 +75,7 @@ $parent_route = $data['parent_route'] ?? '';
                 <div class="row mb-3">
                     <div>
                         <label for="{{ $collection_edit }}_playlists" class="form-label" style="font-size:16px; font-weight:bold;">{{ __( 'collection.playlists' ) }}</label>
+                        <div id="{{ $collection_edit }}_video_only_hint" class="text-warning mb-1" style="display:none; font-size:13px;">{{ __( 'collection.type_8_video_playlist_only' ) }}</div>
                         <select class="form-select form-select-md" id="{{ $collection_edit }}_playlists" data-placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'collection.playlists' ) ] ) }}"></select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -138,6 +139,10 @@ $parent_route = $data['parent_route'] ?? '';
 
         $( de + '_cancel' ).click( function() {
             window.location.href = '{{ $parent_route }}';
+        } );
+
+        $( de + '_display_type' ).on( 'change', function() {
+            $( de + '_video_only_hint' ).toggle( $( this ).val() == '8' );
         } );
 
         $( de + '_submit' ).click( function() {
@@ -214,6 +219,7 @@ $parent_route = $data['parent_route'] ?? '';
                     $( de + '_en_name' ).val( response.en_name ?? '' );
                     $( de + '_zh_name' ).val( response.zh_name ?? '' );
                     $( de + '_display_type' ).val( response.display_type ?? '' );
+                    $( de + '_video_only_hint' ).toggle( response.display_type == 8 );
                     $( de + '_publishing_date' ).val( response.publishing_date ?? '' );
 
                     imagePath = response.image_url;
@@ -308,6 +314,7 @@ $parent_route = $data['parent_route'] ?? '';
                     return {
                         title: params.term, // search term
                         type: '{{ $type }}',
+                        file_type: $( de + '_display_type' ).val() == '8' ? 2 : '',
                         designation: 1,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,

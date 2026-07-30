@@ -33,4 +33,7 @@ return [
     'video' => 'Video',
     'live' => 'Live',
 
+    'item_liked' => 'Item liked.',
+    'item_unliked' => 'Item unliked.',
+
 ];

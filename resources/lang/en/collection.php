@@ -29,7 +29,10 @@ return [
     'type_5' => 'Type 5',
     'type_6' => 'Type 6',
     'type_7' => 'Type 7',
+    'type_8' => 'Type 8',
     'display_type' => 'Display Type',
 
     'display_type_guide' => 'Display Type Guide',
+    'type_8_video_playlist_only' => 'Type 8 can only be assigned video playlists.',
+    'type_8_playlists_must_be_video' => 'All selected playlists must be video playlists when display type is Type 8.',
 ];

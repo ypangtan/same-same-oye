@@ -35,9 +35,10 @@ class CollectionController extends Controller
             [ 'value' => '5', 'title' => __( 'collection.type_5' ) ],
             [ 'value' => '6', 'title' => __( 'collection.type_6' ) ],
             [ 'value' => '7', 'title' => __( 'collection.type_7' ) ],
+            [ 'value' => '8', 'title' => __( 'collection.type_8' ) ],
         ];
 
-        return view( 'admin.main' )->with( $this->data );  
+        return view( 'admin.main' )->with( $this->data );
     }
 
     public function edit( Request $request ) {
@@ -61,9 +62,10 @@ class CollectionController extends Controller
             [ 'value' => '5', 'title' => __( 'collection.type_5' ) ],
             [ 'value' => '6', 'title' => __( 'collection.type_6' ) ],
             [ 'value' => '7', 'title' => __( 'collection.type_7' ) ],
+            [ 'value' => '8', 'title' => __( 'collection.type_8' ) ],
         ];
 
-        return view( 'admin.main' )->with( $this->data );  
+        return view( 'admin.main' )->with( $this->data );
     }
 
     public function allCollections( Request $request ) {
