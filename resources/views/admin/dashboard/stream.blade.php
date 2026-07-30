@@ -111,8 +111,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     return true;
                 },
                 columns: excludeLastCol
-                    ? ':not(:first-child):not(:nth-child(2)):not(:last-child)'
-                    : ':not(:first-child):not(:nth-child(2))',
+                    ? ':not(:first-child):not(:last-child)'
+                    : ':not(:first-child)',
+                format: {
+                    body: function (data, row, column) {
+                        return column === 0 ? row + 1 : data;
+                    },
+                },
             };
         }
 

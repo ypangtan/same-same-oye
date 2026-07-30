@@ -83,7 +83,8 @@
         display: none;
     }
 
-    #engagement-detail-modal .dt-buttons {
+    #engagement-detail-modal .dt-buttons,
+    #click-detail-modal .dt-buttons {
         display: block;
     }
 
@@ -541,7 +542,6 @@
         function exportOpts(cls) {
             return {
                 modifier: { page: 'all' },
-                orthogonal: 'export',
                 rows: function (idx, data, node) {
                     if ($('#' + chkId).is(':checked')) {
                         return $(node).find('.select-row').is(':checked');
@@ -549,6 +549,11 @@
                     return true;
                 },
                 columns: excludeLastCol ? ':not(:last-child)' : ':visible',
+                format: {
+                    body: function (data, row, column) {
+                        return column === 0 ? row + 1 : data;
+                    },
+                },
             };
         }
 
@@ -640,9 +645,7 @@
             targets  : 0,
             orderable: false,
             searchable: false,
-            render   : function (data, type, row, meta) {
-                return type === 'display' ? '' : meta.row + 1;
-            },
+            render   : function () { return ''; },
         };
     }
 
@@ -679,7 +682,7 @@
                     ? '<span class="bx bx-inactive">Guest</span>'
                     : esc(data);
             }},
-        ], 3);
+        ], 3, false);
     }
 
     clickDetailModalEl.addEventListener('shown.bs.modal', function () {
