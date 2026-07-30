@@ -30,6 +30,17 @@ class DashboardService {
         if ( $to )   $q->where( $column, '<=', Carbon::parse( $to )->endOfDay() );
     }
 
+    // Display name for a joined user row: falls back through fullname → first/last
+    // name → generic "User" rather than repeating the email (username is often
+    // just a copy of the email address, so it isn't a useful fallback here).
+    private static function resolveUserName( $r ) {
+        if ( empty( $r->user_id ) ) {
+            return 'Guest';
+        }
+        $name = $r->fullname ?: trim( ( $r->first_name ?? '' ) . ' ' . ( $r->last_name ?? '' ) );
+        return $name !== '' ? $name : 'User';
+    }
+
     // ── Engagement summary cards ──────────────────────────────────────────────
 
     public static function getEngagementStats() {
@@ -156,7 +167,8 @@ class DashboardService {
                 'stream_logs.radio_name',
                 'stream_logs.user_id',
                 'users.fullname',
-                'users.username',
+                'users.first_name',
+                'users.last_name',
                 'users.email',
                 'stream_logs.created_at',
             )
@@ -166,7 +178,7 @@ class DashboardService {
 
         $rows = $q->get()->map( function ( $r ) {
             return [
-                'user'       => $r->user_id ? ( $r->fullname ?? $r->username ?? 'User' ) : 'Guest',
+                'user'       => self::resolveUserName( $r ),
                 'email'      => $r->email ?? '—',
                 'radio_name' => $r->radio_name ?? '—',
                 'played_at'  => $r->created_at
@@ -199,12 +211,12 @@ class DashboardService {
             ->leftJoin( 'users', 'users.id', '=', 'stream_logs.user_id' )
             ->where( 'stream_logs.content_type', $contentType )
             ->where( 'stream_logs.' . $column, $id )
-            ->select( 'stream_logs.user_id', 'users.fullname', 'users.username', 'users.email', 'stream_logs.created_at' )
+            ->select( 'stream_logs.user_id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'stream_logs.created_at' )
             ->orderByDesc( 'stream_logs.created_at' )
             ->get()
             ->map( function ( $r ) {
                 return [
-                    'user'      => $r->user_id ? ( $r->fullname ?? $r->username ?? 'User' ) : 'Guest',
+                    'user'      => self::resolveUserName( $r ),
                     'email'     => $r->email ?? '—',
                     'played_at' => $r->created_at
                         ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
@@ -438,12 +450,12 @@ class DashboardService {
         $rows = DB::table( 'banner_clicks' )
             ->leftJoin( 'users', 'users.id', '=', 'banner_clicks.user_id' )
             ->where( 'banner_clicks.banner_id', $id )
-            ->select( 'banner_clicks.user_id', 'users.fullname', 'users.username', 'users.email', 'banner_clicks.created_at' )
+            ->select( 'banner_clicks.user_id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'banner_clicks.created_at' )
             ->orderByDesc( 'banner_clicks.created_at' )
             ->get()
             ->map( function ( $r ) {
                 return [
-                    'user'       => $r->user_id ? ( $r->fullname ?? $r->username ?? 'User' ) : 'Guest',
+                    'user'       => self::resolveUserName( $r ),
                     'email'      => $r->email ?? '—',
                     'clicked_at' => $r->created_at
                         ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
@@ -466,12 +478,12 @@ class DashboardService {
         $rows = DB::table( 'pop_announcement_clicks' )
             ->leftJoin( 'users', 'users.id', '=', 'pop_announcement_clicks.user_id' )
             ->where( 'pop_announcement_clicks.pop_announcement_id', $id )
-            ->select( 'pop_announcement_clicks.user_id', 'users.fullname', 'users.username', 'users.email', 'pop_announcement_clicks.created_at' )
+            ->select( 'pop_announcement_clicks.user_id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'pop_announcement_clicks.created_at' )
             ->orderByDesc( 'pop_announcement_clicks.created_at' )
             ->get()
             ->map( function ( $r ) {
                 return [
-                    'user'       => $r->user_id ? ( $r->fullname ?? $r->username ?? 'User' ) : 'Guest',
+                    'user'       => self::resolveUserName( $r ),
                     'email'      => $r->email ?? '—',
                     'clicked_at' => $r->created_at
                         ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
