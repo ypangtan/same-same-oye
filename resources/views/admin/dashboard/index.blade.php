@@ -599,11 +599,11 @@
         return [
             { extend: 'copyHtml5',  className: 'd-none ' + copyCls,  exportOptions: exportOpts(copyCls) },
             { text: '<i class="fa fa-copy"></i>',       className: 'btn btn-light',   titleAttr: 'Copy',           action: visibleAction(copyCls) },
-            { extend: 'excelHtml5', className: 'd-none ' + excelCls, exportOptions: exportOpts(excelCls) },
+            { extend: 'excelHtml5', className: 'd-none ' + excelCls, title: fileName, exportOptions: exportOpts(excelCls) },
             { text: '<i class="fa fa-file-excel"></i>', className: 'btn btn-success', titleAttr: 'Export to EXCEL', action: visibleAction(excelCls) },
-            { extend: 'csvHtml5',   className: 'd-none ' + csvCls,   exportOptions: exportOpts(csvCls) },
+            { extend: 'csvHtml5',   className: 'd-none ' + csvCls,   title: fileName, exportOptions: exportOpts(csvCls) },
             { text: '<i class="fa fa-file-csv"></i>',   className: 'btn btn-info',    titleAttr: 'Export to CSV',   action: visibleAction(csvCls) },
-            { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   exportOptions: exportOpts(pdfCls), orientation: 'landscape', customize: pdfCustomize },
+            { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   title: fileName, exportOptions: exportOpts(pdfCls), orientation: 'landscape', customize: pdfCustomize },
             { text: '<i class="fa fa-file-pdf"></i>',   className: 'btn btn-danger',  titleAttr: 'Export to PDF',   action: visibleAction(pdfCls) },
         ];
     }
@@ -625,7 +625,7 @@
     }
 
     /* Generic table factory */
-    function makeDT(id, data, columns, columnDefs, orderCol, excludeLastCol) {
+    function makeDT(id, data, columns, columnDefs, orderCol, excludeLastCol, label) {
         var key = id.replace('-table', '').replace(/-/g, '');
         if ($.fn.DataTable.isDataTable('#' + id)) {
             $('#' + id).DataTable().destroy(); /* keep <table> in DOM for reinit */
@@ -642,7 +642,7 @@
             export       : false,
             scrollX      : true,
             dom          : DT_DOM,
-            buttons      : makeButtons(key, excludeLastCol),
+            buttons      : makeButtons(key, excludeLastCol, label),
             language     : DT_LANG,
             createdRow   : function (row) { $(row).addClass('nk-tb-item'); },
             initComplete : makeInitComplete(key),
@@ -685,6 +685,7 @@
     var clickDetailDT      = null;
     var clickModalShown    = false;
     var clickPendingLogs   = null;
+    var clickDetailLabel   = 'Click Detail';
 
     function buildClickDetailTable(logs) {
         clickDetailDT = makeDT('click-detail-table', logs, [
@@ -700,7 +701,7 @@
                     ? '<span class="bx bx-inactive">Guest</span>'
                     : esc(data);
             }},
-        ], 3, false);
+        ], 3, false, clickDetailLabel);
     }
 
     clickDetailModalEl.addEventListener('shown.bs.modal', function () {
@@ -722,8 +723,8 @@
         var title    = $btn.data('title');
         var fallback = $btn.data('fallback');
 
-        document.getElementById('click-detail-title').textContent =
-            (title && title !== '—') ? title : fallback;
+        clickDetailLabel = (title && title !== '—') ? title : fallback;
+        document.getElementById('click-detail-title').textContent = clickDetailLabel;
         clickDetailModal.show();
 
         post(url, { id: id }).then(function (d) {
@@ -742,6 +743,7 @@
     var engagementDetailDT      = null;
     var engagementModalShown    = false;
     var engagementPendingLogs   = null;
+    var engagementDetailLabel   = 'User Detail';
 
     function buildEngagementDetailTable(logs) {
         engagementDetailDT = makeDT('engagement-detail-table', logs, [
@@ -751,7 +753,7 @@
             { data: 'date'  },
         ], [
             noColDef(),
-        ], 3, false);
+        ], 3, false, engagementDetailLabel);
     }
 
     engagementDetailModalEl.addEventListener('shown.bs.modal', function () {
@@ -771,7 +773,8 @@
         var stat  = $card.data('stat');
         var title = $card.data('stat-title');
 
-        document.getElementById('engagement-detail-title').textContent = title || 'User Detail';
+        engagementDetailLabel = title || 'User Detail';
+        document.getElementById('engagement-detail-title').textContent = engagementDetailLabel;
         engagementDetailModal.show();
 
         post('{{ route("admin.dashboard.getEngagementDetail") }}', { stat: stat }).then(function (d) {
@@ -891,7 +894,7 @@
                       var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
                       return '<span class="bx ' + c + '">' + esc(data) + '</span>';
                   } },
-            ], 7);
+            ], 7, undefined, 'Subscriptions');
         });
     }
 
@@ -954,7 +957,7 @@
               } },
             { targets: 3, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
             viewStreamColDef(4, '{{ route("admin.dashboard.getBannerClickDetail") }}', 'id', 'name', 'Banner Stream'),
-        ], 3);
+        ], 3, undefined, 'Banner Clicks');
     });
 
     var bannersTimer;
@@ -992,7 +995,7 @@
               } },
             { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
             viewStreamColDef(5, '{{ route("admin.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title', 'Pop Announcement Stream'),
-        ], 5);
+        ], 5, undefined, 'Popup Clicks');
     });
 
     var popupsTimer;
