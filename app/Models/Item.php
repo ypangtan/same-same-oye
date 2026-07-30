@@ -72,10 +72,10 @@ class Item extends Model
 
     public function getIsLikedAttribute() {
         if( !auth()->check() ) {
-            return false;
+            return 20;
         }
 
-        return $this->likes()->where( 'user_id', auth()->id() )->exists();
+        return $this->likes()->where( 'user_id', auth()->id() )->exists() ? 10 : 20;
     }
 
     public function getImageUrlAttribute() {
