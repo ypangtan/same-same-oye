@@ -206,6 +206,11 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ── Stream detail modal (who streamed a specific item/playlist/collection) ── */
 
     var streamDetailModal = new bootstrap.Modal(document.getElementById('stream-detail-modal'));
+    var streamDetailDT    = null;
+
+    document.getElementById('stream-detail-modal').addEventListener('shown.bs.modal', function () {
+        if (streamDetailDT) streamDetailDT.columns.adjust();
+    });
 
     $('#stream-content').on('click', '.btn-stream-detail', function (e) {
         e.preventDefault();
@@ -219,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         post('{{ route("admin.dashboard.getStreamDetail") }}', { content_type: contentType, id: id })
             .then(function (d) {
-                makeDT('stream-detail-table', d.logs, [
+                streamDetailDT = makeDT('stream-detail-table', d.logs, [
                     { data: null        },
                     { data: 'user'      },
                     { data: 'email'     },
@@ -232,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             : esc(data);
                     }},
                 ], 3);
+                streamDetailDT.columns.adjust();
             });
     });
 

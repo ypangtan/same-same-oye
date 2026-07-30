@@ -612,6 +612,11 @@
     /* ── Click detail modal (who clicked a banner / popup) ─────────────── */
 
     var clickDetailModal = new bootstrap.Modal(document.getElementById('click-detail-modal'));
+    var clickDetailDT    = null;
+
+    document.getElementById('click-detail-modal').addEventListener('shown.bs.modal', function () {
+        if (clickDetailDT) clickDetailDT.columns.adjust();
+    });
 
     $(document).on('click', '.btn-click-detail', function (e) {
         e.preventDefault();
@@ -626,7 +631,7 @@
         clickDetailModal.show();
 
         post(url, { id: id }).then(function (d) {
-            makeDT('click-detail-table', d.logs, [
+            clickDetailDT = makeDT('click-detail-table', d.logs, [
                 { data: null         },
                 { data: 'user'       },
                 { data: 'email'      },
@@ -639,6 +644,7 @@
                         : esc(data);
                 }},
             ], 3);
+            clickDetailDT.columns.adjust();
         });
     });
 
