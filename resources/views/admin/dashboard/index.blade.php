@@ -541,6 +541,7 @@
         function exportOpts(cls) {
             return {
                 modifier: { page: 'all' },
+                orthogonal: 'export',
                 rows: function (idx, data, node) {
                     if ($('#' + chkId).is(':checked')) {
                         return $(node).find('.select-row').is(':checked');
