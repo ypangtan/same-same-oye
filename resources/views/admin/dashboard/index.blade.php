@@ -613,11 +613,13 @@
         ];
     }
 
-    /* initComplete: add "Export ONLY selected rows" checkbox scoped to this table */
+    /* initComplete: add "Export ONLY selected rows" checkbox scoped to this table,
+       plus a "select all" checkbox in the row-select column's header.            */
     function makeInitComplete(key) {
         var chkId = 'exportSelected-' + key;
         return function () {
-            var $container = $(this.api().table().container());
+            var api = this.api();
+            var $container = $(api.table().container());
             $container.find('.export-check-wrapper').remove();
             $container.find('.dt-buttons').append(
                 '<div class="my-3 export-check-wrapper">' +
@@ -626,6 +628,14 @@
                 '</div>'
             );
             $container.find('.dataTables_length select').addClass('custom-dropdown');
+
+            var $selectAllTh = $(api.table().header()).find('th').eq(0).addClass('text-center');
+            if (!$selectAllTh.find('.select-all-rows').length) {
+                $selectAllTh.html('<input type="checkbox" class="select-all-rows">');
+            }
+            $selectAllTh.off('change.selectAll').on('change.selectAll', '.select-all-rows', function () {
+                $(api.table().body()).find('.select-row').prop('checked', $(this).is(':checked'));
+            });
         };
     }
 
@@ -658,6 +668,8 @@
                 api.column(1, { page: 'current' }).nodes().each(function (cell, i) {
                     cell.innerHTML = info.start + i + 1;
                 });
+
+                $(api.table().header()).find('.select-all-rows').prop('checked', false);
             },
         });
     }
