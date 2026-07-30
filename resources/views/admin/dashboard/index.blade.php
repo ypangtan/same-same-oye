@@ -84,7 +84,7 @@
     }
 
     #engagement-detail-modal .dt-buttons {
-        display: flex;
+        display: block;
     }
 
     .dt-length {
