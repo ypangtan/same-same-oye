@@ -141,8 +141,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 customize: function (doc) {
                     var tableIndex = doc.content.findIndex(function (item) { return item.table; });
                     if (tableIndex > -1) {
-                        var colCount = doc.content[tableIndex].table.body[0].length;
+                        var body     = doc.content[tableIndex].table.body;
+                        var colCount = body[0].length;
                         doc.content[tableIndex].table.widths = Array(colCount).fill('*');
+                        body.forEach(function (row) {
+                            if (row[colCount - 1]) row[colCount - 1].alignment = 'center';
+                        });
                     }
                 } },
             { text: '<i class="fa fa-file-pdf"></i>',   className: 'btn btn-danger',  titleAttr: 'Export to PDF',   action: visibleAction(pdfCls) },
