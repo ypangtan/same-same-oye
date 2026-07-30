@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"Get-Process mysqld -ErrorAction SilentlyContinue\")",
+      "Bash(powershell -Command 'Get-Service | Where-Object {$_.Name -like '\\\\''*mysql*'\\\\''}')",
+      "Bash(/c/xampp/mysql/bin/mysqladmin.exe -u root shutdown)"
+    ]
+  }
+}
