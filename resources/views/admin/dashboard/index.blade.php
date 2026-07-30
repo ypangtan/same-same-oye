@@ -611,11 +611,37 @@
 
     /* ── Click detail modal (who clicked a banner / popup) ─────────────── */
 
-    var clickDetailModal = new bootstrap.Modal(document.getElementById('click-detail-modal'));
-    var clickDetailDT    = null;
+    var clickDetailModalEl = document.getElementById('click-detail-modal');
+    var clickDetailModal   = new bootstrap.Modal(clickDetailModalEl);
+    var clickDetailDT      = null;
+    var clickModalShown    = false;
+    var clickPendingLogs   = null;
 
-    document.getElementById('click-detail-modal').addEventListener('shown.bs.modal', function () {
-        if (clickDetailDT) clickDetailDT.columns.adjust();
+    function buildClickDetailTable(logs) {
+        clickDetailDT = makeDT('click-detail-table', logs, [
+            { data: null         },
+            { data: 'user'       },
+            { data: 'email'      },
+            { data: 'clicked_at' },
+        ], [
+            noColDef(),
+            { targets: 1, render: function (data) {
+                return data === 'Guest'
+                    ? '<span class="bx bx-inactive">Guest</span>'
+                    : esc(data);
+            }},
+        ], 3);
+    }
+
+    clickDetailModalEl.addEventListener('shown.bs.modal', function () {
+        clickModalShown = true;
+        if (clickPendingLogs) {
+            buildClickDetailTable(clickPendingLogs);
+            clickPendingLogs = null;
+        }
+    });
+    clickDetailModalEl.addEventListener('hidden.bs.modal', function () {
+        clickModalShown = false;
     });
 
     $(document).on('click', '.btn-click-detail', function (e) {
@@ -631,20 +657,11 @@
         clickDetailModal.show();
 
         post(url, { id: id }).then(function (d) {
-            clickDetailDT = makeDT('click-detail-table', d.logs, [
-                { data: null         },
-                { data: 'user'       },
-                { data: 'email'      },
-                { data: 'clicked_at' },
-            ], [
-                noColDef(),
-                { targets: 1, render: function (data) {
-                    return data === 'Guest'
-                        ? '<span class="bx bx-inactive">Guest</span>'
-                        : esc(data);
-                }},
-            ], 3);
-            clickDetailDT.columns.adjust();
+            if (clickModalShown) {
+                buildClickDetailTable(d.logs);
+            } else {
+                clickPendingLogs = d.logs;
+            }
         });
     });
 

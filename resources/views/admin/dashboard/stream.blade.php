@@ -205,11 +205,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ── Stream detail modal (who streamed a specific item/playlist/collection) ── */
 
-    var streamDetailModal = new bootstrap.Modal(document.getElementById('stream-detail-modal'));
-    var streamDetailDT    = null;
+    var streamDetailModalEl = document.getElementById('stream-detail-modal');
+    var streamDetailModal   = new bootstrap.Modal(streamDetailModalEl);
+    var streamDetailDT      = null;
+    var streamModalShown    = false;
+    var streamPendingLogs   = null;
 
-    document.getElementById('stream-detail-modal').addEventListener('shown.bs.modal', function () {
-        if (streamDetailDT) streamDetailDT.columns.adjust();
+    function buildStreamDetailTable(logs) {
+        streamDetailDT = makeDT('stream-detail-table', logs, [
+            { data: null        },
+            { data: 'user'      },
+            { data: 'email'     },
+            { data: 'played_at' },
+        ], [
+            noColDef(),
+            { targets: 1, render: function (data) {
+                return data === 'Guest'
+                    ? '<span class="bx bx-inactive">Guest</span>'
+                    : esc(data);
+            }},
+        ], 3);
+    }
+
+    streamDetailModalEl.addEventListener('shown.bs.modal', function () {
+        streamModalShown = true;
+        if (streamPendingLogs) {
+            buildStreamDetailTable(streamPendingLogs);
+            streamPendingLogs = null;
+        }
+    });
+    streamDetailModalEl.addEventListener('hidden.bs.modal', function () {
+        streamModalShown = false;
     });
 
     $('#stream-content').on('click', '.btn-stream-detail', function (e) {
@@ -224,20 +250,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         post('{{ route("admin.dashboard.getStreamDetail") }}', { content_type: contentType, id: id })
             .then(function (d) {
-                streamDetailDT = makeDT('stream-detail-table', d.logs, [
-                    { data: null        },
-                    { data: 'user'      },
-                    { data: 'email'     },
-                    { data: 'played_at' },
-                ], [
-                    noColDef(),
-                    { targets: 1, render: function (data) {
-                        return data === 'Guest'
-                            ? '<span class="bx bx-inactive">Guest</span>'
-                            : esc(data);
-                    }},
-                ], 3);
-                streamDetailDT.columns.adjust();
+                if (streamModalShown) {
+                    buildStreamDetailTable(d.logs);
+                } else {
+                    streamPendingLogs = d.logs;
+                }
             });
     });
 
