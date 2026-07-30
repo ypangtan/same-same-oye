@@ -262,7 +262,24 @@ class ItemService
             'author' => [ 'nullable' ],
             'file' => [ $request->upload_type == 1 ? 'required' : 'nullable' ],
             'url' => [ $request->upload_type == 2 ? 'required' : 'nullable' ],
-            'upload_type' => [ 'required', 'in:1,2' ],
+            'upload_type' => [ 'required', 'in:1,2', function ( $attribute, $value, $fail ) use ( $request ) {
+                $item = Item::find( $request->id );
+                if ( !$item ) {
+                    return;
+                }
+
+                $inType8Collection = $item->playlists()->whereHas( 'collection', function ( $q ) {
+                    $q->where( 'collections.display_type', 8 );
+                } )->exists();
+
+                if ( $inType8Collection ) {
+                    $resultingFileType = $value == 1 ? ( !empty( $request->file_type ) ? $request->file_type : null ) : 2;
+                    if ( $value != 1 || $resultingFileType != 2 ) {
+                        $fail( __( 'item.type_8_collection_video_only' ) );
+                        return false;
+                    }
+                }
+            } ],
             'url_type' => [ $request->upload_type == 2 ? 'required' : 'nullable', 'in:1,2' ],
             'membership_level' => [ 'required' ],
         ] );

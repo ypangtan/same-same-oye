@@ -35,5 +35,6 @@ return [
 
     'item_liked' => 'Item liked.',
     'item_unliked' => 'Item unliked.',
+    'type_8_collection_video_only' => 'This item is used in a Type 8 collection, so it must remain an uploaded video file (URL/live videos are not allowed).',
 
 ];

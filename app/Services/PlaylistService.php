@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
     FileManager,
+    Item,
     Playlist,
     PlaylistTag,
     User,
@@ -333,11 +334,28 @@ class PlaylistService
             'desc' => [ 'nullable' ],
             'image' => [ 'nullable' ],
             'membership_level' => [ 'nullable' ],
-            'items' => [ 'required', function ( $attribute, $value, $fail ) {
+            'items' => [ 'required', function ( $attribute, $value, $fail ) use ( $request ) {
                 $items = json_decode( $value, true );
                 if ( empty( $items ) || !is_array( $items ) || count( $items ) == 0 ) {
                     $fail( __( 'validation.required' ) );
                     return false;
+                }
+
+                $playlist = Playlist::find( $request->id );
+                $inType8Collection = $playlist && $playlist->collection()->where( 'collections.display_type', 8 )->exists();
+
+                if ( $inType8Collection ) {
+                    $itemIds = array_column( $items, 'id' );
+                    $invalidCount = Item::whereIn( 'id', $itemIds )
+                        ->where( function ( $q ) {
+                            $q->where( 'file_type', '!=', 2 )
+                                ->orWhere( 'upload_type', '!=', 1 );
+                        } )
+                        ->count();
+                    if ( $invalidCount > 0 ) {
+                        $fail( __( 'playlist.type_8_collection_video_only' ) );
+                        return false;
+                    }
                 }
             } ],
             'tag' => [ 'nullable', function ( $attribute, $value, $fail ) {

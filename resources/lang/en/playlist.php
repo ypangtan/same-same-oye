@@ -27,4 +27,5 @@ return [
 
     'max_tag' => 'You can only add a maximum of 2 tags per playlist',
     'playlist_type_mismatch' => 'The type of the song does not match the type of the playlist.',
+    'type_8_collection_video_only' => 'This playlist is used in a Type 8 collection, so it can only contain uploaded video files (URL/live videos are not allowed).',
 ];
