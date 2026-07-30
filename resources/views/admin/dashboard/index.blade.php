@@ -597,12 +597,13 @@
         };
     }
 
-    function viewStreamColDef(target, url, idField, titleField) {
+    function viewStreamColDef(target, url, idField, titleField, fallbackLabel) {
         return {
             targets: target, orderable: false, searchable: false,
             render: function (data, type, row) {
                 return '<button type="button" class="btn btn-sm btn-outline-primary btn-click-detail" ' +
-                    'data-url="' + url + '" data-id="' + row[idField] + '" data-title="' + esc(row[titleField]) + '">' +
+                    'data-url="' + url + '" data-id="' + row[idField] + '" data-title="' + esc(row[titleField]) + '" ' +
+                    'data-fallback="' + esc(fallbackLabel) + '">' +
                     '<em class="icon ni ni-eye me-1"></em>View Stream</button>';
             },
         };
@@ -614,12 +615,14 @@
 
     $(document).on('click', '.btn-click-detail', function (e) {
         e.preventDefault();
-        var $btn   = $(this);
-        var url    = $btn.data('url');
-        var id     = $btn.data('id');
-        var title  = $btn.data('title');
+        var $btn     = $(this);
+        var url      = $btn.data('url');
+        var id       = $btn.data('id');
+        var title    = $btn.data('title');
+        var fallback = $btn.data('fallback');
 
-        document.getElementById('click-detail-title').textContent = title || 'Click Detail';
+        document.getElementById('click-detail-title').textContent =
+            (title && title !== '—') ? title : fallback;
         clickDetailModal.show();
 
         post(url, { id: id }).then(function (d) {
@@ -809,7 +812,7 @@
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
             { targets: 3, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-            viewStreamColDef(4, '{{ route("admin.dashboard.getBannerClickDetail") }}', 'id', 'name'),
+            viewStreamColDef(4, '{{ route("admin.dashboard.getBannerClickDetail") }}', 'id', 'name', 'Banner Stream'),
         ], 3);
     });
 
@@ -847,7 +850,7 @@
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
             { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-            viewStreamColDef(5, '{{ route("admin.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title'),
+            viewStreamColDef(5, '{{ route("admin.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title', 'Pop Announcement Stream'),
         ], 5);
     });
 
