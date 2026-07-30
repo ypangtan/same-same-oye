@@ -54,6 +54,7 @@ $parent_route = $data['parent_route'] ?? '';
                                 <option value="1" selected>{{ __( 'item.upload_file' ) }}</option>
                                 <option value="2">{{ __( 'item.upload_url' ) }}</option>
                             </select>
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
                 </div>
