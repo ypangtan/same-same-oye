@@ -110,7 +110,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     return true;
                 },
-                columns: excludeLastCol ? ':not(:first-child):not(:last-child)' : ':not(:first-child)',
+                columns: excludeLastCol
+                    ? ':not(:first-child):not(:nth-child(2)):not(:last-child)'
+                    : ':not(:first-child):not(:nth-child(2))',
             };
         }
 
@@ -119,11 +121,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ($('#' + chkId).is(':checked')) {
                     $('.' + proxyClass).click();
                 } else {
-                    dt.page.len(-1).draw();
                     dt.one('draw', function () {
                         $('.' + proxyClass).click();
                         setTimeout(function () { dt.page.len(10).draw(); }, 1000);
                     });
+                    dt.page.len(-1).draw();
                 }
             };
         }
