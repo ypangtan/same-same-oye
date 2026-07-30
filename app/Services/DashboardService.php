@@ -125,6 +125,57 @@ class DashboardService {
         ] );
     }
 
+    // ── Engagement summary card detail (who's behind each number) ──────────────
+
+    public static function getEngagementDetail( Request $request ) {
+        $stat         = $request->input( 'stat' );
+        $today        = Carbon::today()->timezone( 'Asia/Kuala_Lumpur' );
+        $startOfMonth = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->startOfMonth();
+        $since        = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subHours( 24 );
+
+        $activeUserIds = DB::table( 'stream_logs' )
+            ->where( 'created_at', '>=', $since )
+            ->whereNotNull( 'user_id' )
+            ->distinct()
+            ->pluck( 'user_id' );
+
+        $userRows = function ( $query ) {
+            return $query->get()->map( function ( $r ) {
+                return [
+                    'user'  => self::resolveUserName( (object) [ 'user_id' => $r->id, 'fullname' => $r->fullname, 'first_name' => $r->first_name, 'last_name' => $r->last_name ] ),
+                    'email' => $r->email ?? '—',
+                    'date'  => $r->date_col
+                        ? Carbon::parse( $r->date_col )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
+                        : '—',
+                ];
+            } );
+        };
+
+        $base = fn() => User::select( 'id', 'fullname', 'first_name', 'last_name', 'email', 'created_at as date_col' );
+
+        $rows = match ( $stat ) {
+            'total_active' => $userRows( $base()->whereIn( 'id', $activeUserIds ) ),
+            'free'         => $userRows( $base()->whereIn( 'id', $activeUserIds )->where( 'membership', 0 ) ),
+            'trial'        => $userRows( $base()->whereIn( 'id', $activeUserIds )->where( 'membership', 2 ) ),
+            'paid'         => $userRows( $base()->whereIn( 'id', $activeUserIds )->whereIn( 'membership', [ 1, 3, 4 ] ) ),
+            'new_today'    => $userRows( $base()->whereDate( 'created_at', $today ) ),
+            'new_month'    => $userRows( $base()->where( 'created_at', '>=', $startOfMonth ) ),
+            'subs_today'   => $userRows( DB::table( 'user_subscriptions' )
+                ->join( 'users', 'users.id', '=', 'user_subscriptions.user_id' )
+                ->where( 'user_subscriptions.type', 1 )
+                ->whereDate( 'user_subscriptions.created_at', $today )
+                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'user_subscriptions.created_at as date_col' ) ),
+            'subs_month'   => $userRows( DB::table( 'user_subscriptions' )
+                ->join( 'users', 'users.id', '=', 'user_subscriptions.user_id' )
+                ->where( 'user_subscriptions.type', 1 )
+                ->where( 'user_subscriptions.created_at', '>=', $startOfMonth )
+                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'user_subscriptions.created_at as date_col' ) ),
+            default        => collect(),
+        };
+
+        return response()->json( [ 'logs' => $rows->values() ] );
+    }
+
     // ── Daily user chart ──────────────────────────────────────────────────────
 
     public static function getDailyUserStats() {
