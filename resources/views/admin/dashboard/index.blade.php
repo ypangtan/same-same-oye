@@ -397,6 +397,7 @@
                                 <th>Image</th>
                                 <th>Status</th>
                                 <th>Clicks</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -423,6 +424,7 @@
                                 <th>Title</th>
                                 <th>Status</th>
                                 <th>Clicks</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -433,6 +435,29 @@
     </div>
 </div>
 
+{{-- CLICK DETAIL MODAL (shared by Banner Clicks + Popup Clicks "View Stream" buttons) --}}
+<div class="modal fade" id="click-detail-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="click-detail-title">Click Detail</h5>
+                <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="card card-bordered card-preview">
+                    <div class="card-inner">
+                        <table class="table" style="width:100%" id="click-detail-table">
+                            <thead><tr><th>No.</th><th>User</th><th>Email</th><th>Clicked At</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -571,6 +596,48 @@
             render   : function () { return ''; },
         };
     }
+
+    function viewStreamColDef(target, url, idField, titleField) {
+        return {
+            targets: target, orderable: false, searchable: false,
+            render: function (data, type, row) {
+                return '<button type="button" class="btn btn-sm btn-outline-primary btn-click-detail" ' +
+                    'data-url="' + url + '" data-id="' + row[idField] + '" data-title="' + esc(row[titleField]) + '">' +
+                    '<em class="icon ni ni-eye me-1"></em>View Stream</button>';
+            },
+        };
+    }
+
+    /* ── Click detail modal (who clicked a banner / popup) ─────────────── */
+
+    var clickDetailModal = new bootstrap.Modal(document.getElementById('click-detail-modal'));
+
+    $(document).on('click', '.btn-click-detail', function (e) {
+        e.preventDefault();
+        var $btn   = $(this);
+        var url    = $btn.data('url');
+        var id     = $btn.data('id');
+        var title  = $btn.data('title');
+
+        document.getElementById('click-detail-title').textContent = title || 'Click Detail';
+        clickDetailModal.show();
+
+        post(url, { id: id }).then(function (d) {
+            makeDT('click-detail-table', d.logs, [
+                { data: null         },
+                { data: 'user'       },
+                { data: 'email'      },
+                { data: 'clicked_at' },
+            ], [
+                noColDef(),
+                { targets: 1, render: function (data) {
+                    return data === 'Guest'
+                        ? '<span class="bx bx-inactive">Guest</span>'
+                        : esc(data);
+                }},
+            ], 3);
+        });
+    });
 
     /* ══════════════════════════════════════════════════════════════════
        SECTIONS 1-5: ONE-TIME LOADS
@@ -729,6 +796,7 @@
             { data: 'image_path' },
             { data: 'status'     },
             { data: 'clicks'     },
+            { data: null         },
         ], [
             noColDef(),
             { targets: 1, orderable: false,
@@ -741,6 +809,7 @@
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
             { targets: 3, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            viewStreamColDef(4, '{{ route("admin.dashboard.getBannerClickDetail") }}', 'id', 'name'),
         ], 3);
     });
 
@@ -765,6 +834,7 @@
             { data: 'title'      },
             { data: 'status'     },
             { data: 'clicks'     },
+            { data: null         },
         ], [
             noColDef(),
             { targets: 1, orderable: false,
@@ -777,6 +847,7 @@
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
             { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            viewStreamColDef(5, '{{ route("admin.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title'),
         ], 5);
     });
 

@@ -425,6 +425,62 @@ class DashboardService {
         return response()->json( [ 'popups' => $popups ] );
     }
 
+    // ── Banner click detail (who clicked a specific banner) ──────────────────
+
+    public static function getBannerClickDetail( Request $request ) {
+        $id = (int) $request->input( 'id' );
+
+        if ( !$id ) {
+            return response()->json( [ 'logs' => [] ] );
+        }
+
+        $rows = DB::table( 'banner_clicks' )
+            ->leftJoin( 'users', 'users.id', '=', 'banner_clicks.user_id' )
+            ->where( 'banner_clicks.banner_id', $id )
+            ->select( 'users.fullname', 'users.email', 'banner_clicks.created_at' )
+            ->orderByDesc( 'banner_clicks.created_at' )
+            ->get()
+            ->map( function ( $r ) {
+                return [
+                    'user'       => $r->fullname ?? 'Guest',
+                    'email'      => $r->email ?? '—',
+                    'clicked_at' => $r->created_at
+                        ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
+                        : '—',
+                ];
+            } );
+
+        return response()->json( [ 'logs' => $rows ] );
+    }
+
+    // ── Pop-announcement click detail (who clicked a specific popup) ─────────
+
+    public static function getPopAnnouncementClickDetail( Request $request ) {
+        $id = (int) $request->input( 'id' );
+
+        if ( !$id ) {
+            return response()->json( [ 'logs' => [] ] );
+        }
+
+        $rows = DB::table( 'pop_announcement_clicks' )
+            ->leftJoin( 'users', 'users.id', '=', 'pop_announcement_clicks.user_id' )
+            ->where( 'pop_announcement_clicks.pop_announcement_id', $id )
+            ->select( 'users.fullname', 'users.email', 'pop_announcement_clicks.created_at' )
+            ->orderByDesc( 'pop_announcement_clicks.created_at' )
+            ->get()
+            ->map( function ( $r ) {
+                return [
+                    'user'       => $r->fullname ?? 'Guest',
+                    'email'      => $r->email ?? '—',
+                    'clicked_at' => $r->created_at
+                        ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
+                        : '—',
+                ];
+            } );
+
+        return response()->json( [ 'logs' => $rows ] );
+    }
+
     // ── Firebase App Analytics (GA4) ─────────────────────────────────────────
 
     public static function getAppAnalytics( Request $request ) {

@@ -58,6 +58,14 @@ class DashboardController extends Controller
         return DashboardService::getPopAnnouncementClickStats();
     }
 
+    public function getBannerClickDetail( Request $request ) {
+        return DashboardService::getBannerClickDetail( $request );
+    }
+
+    public function getPopAnnouncementClickDetail( Request $request ) {
+        return DashboardService::getPopAnnouncementClickDetail( $request );
+    }
+
     public function getAppAnalytics( Request $request ) {
         return DashboardService::getAppAnalytics( $request );
     }

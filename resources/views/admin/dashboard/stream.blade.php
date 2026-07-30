@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return '<button type="button" class="btn btn-sm btn-outline-primary btn-stream-detail" ' +
                     'data-content-type="' + contentType + '" data-id="' + row[idField] + '" ' +
                     'data-title="' + esc(row[titleField]) + '">' +
-                    '<em class="icon ni ni-eye"></em> Detail</button>';
+                    '<em class="icon ni ni-eye me-1"></em>Detail</button>';
             },
         };
     }
