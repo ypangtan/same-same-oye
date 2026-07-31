@@ -78,6 +78,10 @@ class Item extends Model
         return $this->likes()->where( 'user_id', auth()->id() )->exists() ? 10 : 20;
     }
 
+    public function getLikeCountAttribute() {
+        return $this->likes()->count();
+    }
+
     public function getImageUrlAttribute() {
         if( $this->attributes['image'] ) {
             $localPath = storage_path ('app/public/' . $this->attributes['image'] );

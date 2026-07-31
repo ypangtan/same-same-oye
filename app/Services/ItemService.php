@@ -430,6 +430,7 @@ class ItemService
                 'file_url',
                 'display_duration',
                 'is_liked',
+                'like_count',
             ] );
             return $item;
         } );
@@ -447,6 +448,7 @@ class ItemService
             'file_url',
             'display_duration',
             'is_liked',
+            'like_count',
         ] );
 
         return response()->json( $item );

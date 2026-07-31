@@ -58,6 +58,7 @@ class UserPlaylistService
                         'song_url',
                         'display_duration',
                         'is_liked',
+                        'like_count',
                     ] );
                     
                     if( $item->pivot && $item->pivot->id ) {
@@ -92,6 +93,7 @@ class UserPlaylistService
                     'song_url',
                     'display_duration',
                     'is_liked',
+                    'like_count',
                 ] );
 
                 if( $item->pivot && $item->pivot->id ) {

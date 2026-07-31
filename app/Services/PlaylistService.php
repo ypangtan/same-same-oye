@@ -564,6 +564,7 @@ class PlaylistService
                     'image_url',
                     'file_url',
                     'is_liked',
+                    'like_count',
                 ] );
             }
 
@@ -575,6 +576,7 @@ class PlaylistService
                         'file_url',
                         'display_duration',
                         'is_liked',
+                        'like_count',
                     ] );
                     return $item;
                 });
@@ -608,6 +610,7 @@ class PlaylistService
                 'image_url',
                 'file_url',
                 'is_liked',
+                'like_count',
             ] );
         }
 
@@ -619,6 +622,7 @@ class PlaylistService
                     'file_url',
                     'display_duration',
                     'is_liked',
+                    'like_count',
                 ] );
             }
         }

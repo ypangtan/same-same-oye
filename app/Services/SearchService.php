@@ -78,6 +78,7 @@ class SearchService {
                     'image_url',
                     'song_url',
                     'is_liked',
+                    'like_count',
                 ] );
             }
 
