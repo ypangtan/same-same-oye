@@ -18,7 +18,8 @@ class TrendingContentService
 {
     public static function allTrendingContents( $request ) {
 
-        $trending_content = TrendingContent::select( 'trending_contents.*' );
+        $trending_content = TrendingContent::select( 'trending_contents.*' )
+            ->where( 'trending_contents.status', '!=', 30 );
 
         $filterObject = self::filter( $request, $trending_content );
         $trending_content = $filterObject['model'];
@@ -48,7 +49,7 @@ class TrendingContentService
             ] );
         }
 
-        $totalRecord = TrendingContent::count();
+        $totalRecord = TrendingContent::where( 'status', '!=', 30 )->count();
 
         $data = [
             'trending_contents' => $trending_contents,
@@ -266,6 +267,21 @@ class TrendingContentService
 
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.trending_contents' ) ) ] ),
+        ] );
+    }
+
+    public static function deleteTrendingContent( $request ) {
+
+        $request->merge( [
+            'id' => \Helper::decode( $request->id ),
+        ] );
+
+        $trendingContent = TrendingContent::find( $request->id );
+        $trendingContent->status = 30;
+        $trendingContent->save();
+
+        return response()->json( [
+            'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.trending_contents' ) ) ] ),
         ] );
     }
 

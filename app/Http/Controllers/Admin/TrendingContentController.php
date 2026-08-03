@@ -81,6 +81,10 @@ class TrendingContentController extends Controller
         return TrendingContentService::updateTrendingContentStatus( $request );
     }
 
+    public function deleteTrendingContent( Request $request ) {
+        return TrendingContentService::deleteTrendingContent( $request );
+    }
+
     public function songUpload( Request $request ) {
         return FileService::songUpload( $request );
     }

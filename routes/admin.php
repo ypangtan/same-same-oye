@@ -276,6 +276,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'create-trending-content', [ TrendingContentController::class, 'createTrendingContent' ] )->name( 'admin.trending_content.createTrendingContent' );
                 Route::post( 'update-trending-content', [ TrendingContentController::class, 'updateTrendingContent' ] )->name( 'admin.trending_content.updateTrendingContent' );
                 Route::post( 'update-trending-content-status', [ TrendingContentController::class, 'updateTrendingContentStatus' ] )->name( 'admin.trending_content.updateTrendingContentStatus' );
+                Route::post( 'delete-trending-content', [ TrendingContentController::class, 'deleteTrendingContent' ] )->name( 'admin.trending_content.deleteTrendingContent' );
                 Route::post( 'cke-upload', [ TrendingContentController::class, 'ckeUpload' ] )->name( 'admin.trending_content.ckeUpload' );
                 Route::post( 'image-upload', [ TrendingContentController::class, 'imageUpload' ] )->name( 'admin.trending_content.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'song-upload', [ TrendingContentController::class, 'songUpload' ] )->name( 'admin.trending_content.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
