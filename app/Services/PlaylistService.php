@@ -556,6 +556,7 @@ class PlaylistService
                 'image_url',
                 'name',
                 'display_tag',
+                'total_likes',
             ] );
 
             if ( $playlist->relationLoaded('item') && $playlist->item ) {
@@ -602,6 +603,7 @@ class PlaylistService
             'image_url',
             'name',
             'display_tag',
+            'total_likes',
         ] );
 
         if( $playlist->item ) {

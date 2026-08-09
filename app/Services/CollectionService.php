@@ -466,6 +466,7 @@ class CollectionService
                         'name',
                         'image_url',
                         'display_tag',
+                        'total_likes',
                     ] );
                     return $playlist;
                 });
@@ -498,6 +499,7 @@ class CollectionService
                     'name',
                     'image_url',
                     'display_tag',
+                    'total_likes',
                 ] );
 
                 // if( $playlist->item ) {

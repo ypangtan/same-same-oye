@@ -73,6 +73,18 @@ class Playlist extends Model
         return $this->belongsToMany( Collection::class, 'collection_playlists', 'playlist_id', 'collection_id' );
     }
 
+    public function getTotalLikesAttribute() {
+        return ItemLike::query()
+            ->whereIn( 'item_id', function ( $query ) {
+                $query->select( 'playlist_items.item_id' )
+                    ->from( 'playlist_items' )
+                    ->join( 'items', 'items.id', '=', 'playlist_items.item_id' )
+                    ->where( 'playlist_items.playlist_id', $this->getKey() )
+                    ->where( 'items.status', 10 );
+            } )
+            ->count();
+    }
+
     public function items() {
         $items = $this->belongsToMany( Item::class, 'playlist_items', 'playlist_id', 'item_id' )
             ->where( 'items.status', 10 )
