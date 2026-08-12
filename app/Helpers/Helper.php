@@ -93,6 +93,8 @@ class Helper {
             'music_requests',
             'wallet_transactions',
             'wallets',
+            'item.adds',
+            'playlist.adds',
         ];
 
         return $array;

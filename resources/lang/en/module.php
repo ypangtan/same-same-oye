@@ -48,4 +48,6 @@ return [
     'website_banners' => 'Website Banners',
     'marketing_notifications' => 'Marketing Notifications',
     'pop_announcements' => 'Pop Announcements',
+    'trending_contents ' => 'Trending Contents',
+    'dashboard' => 'Dashboard',
 ];
