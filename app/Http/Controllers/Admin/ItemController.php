@@ -56,6 +56,10 @@ class ItemController extends Controller
         return ItemService::oneItem( $request );
     }
 
+    public function itemLikes( Request $request ) {
+        return ItemService::itemLikes( $request );
+    }
+
     public function createItem( Request $request ) {
         return ItemService::createItem( $request );
     }

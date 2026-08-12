@@ -56,6 +56,10 @@ class PlaylistController extends Controller
         return PlaylistService::onePlaylist( $request );
     }
 
+    public function playlistLikes( Request $request ) {
+        return PlaylistService::playlistLikes( $request );
+    }
+
     public function createPlaylist( Request $request ) {
         return PlaylistService::createPlaylist( $request );
     }

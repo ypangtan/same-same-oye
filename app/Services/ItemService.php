@@ -63,6 +63,7 @@ class ItemService
             $items->append( [
                 'encrypted_id',
                 'image_url',
+                'like_count',
             ] );
         }
 
@@ -80,6 +81,28 @@ class ItemService
         ];
 
         return response()->json( $data );
+    }
+
+    public static function itemLikes( $request ) {
+
+        $id = Helper::decode( $request->id );
+
+        $likes = ItemLike::with( 'user' )
+            ->where( 'item_id', $id )
+            ->orderByDesc( 'created_at' )
+            ->get()
+            ->map( function( $like ) {
+                $user = $like->user;
+                return [
+                    'user' => $user ? ( $user->fullname ?: trim( ( $user->first_name ?? '' ) . ' ' . ( $user->last_name ?? '' ) ) ?: $user->username ) : 'Deleted User',
+                    'email' => $user->email ?? '-',
+                    'liked_at' => $like->created_at ? $like->created_at->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' ) : '-',
+                ];
+            } );
+
+        return response()->json( [
+            'likes' => $likes,
+        ] );
     }
 
     private static function filter( $request, $model ) {

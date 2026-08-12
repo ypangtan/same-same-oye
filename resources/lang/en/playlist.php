@@ -24,6 +24,7 @@ return [
     'desc' => 'Description',
     'tags' => 'Tags',
     'tag' => 'Tag',
+    'likes' => 'Likes',
 
     'max_tag' => 'You can only add a maximum of 2 tags per playlist',
     'playlist_type_mismatch' => 'The type of the song does not match the type of the playlist.',

@@ -75,6 +75,11 @@ $columns = [
     ],
     [
         'type' => 'default',
+        'id' => 'likes',
+        'title' => __( 'item.likes' ),
+    ],
+    [
+        'type' => 'default',
         'id' => 'dt_action',
         'title' => __( 'datatables.action' ),
     ],
@@ -83,7 +88,37 @@ $columns = [
 
 <x-data-tables id="item_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
 
+<div class="modal fade" id="item_likes_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="item_likes_modal_title">{{ __( 'item.likes' ) }}</h5>
+                <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="card card-bordered card-preview">
+                    <div class="card-inner">
+                        <table class="table" style="width:100%">
+                            <thead><tr><th>No.</th><th>{{ __( 'wallet.user' ) }}</th><th>Email</th><th>Liked At</th></tr></thead>
+                            <tbody id="item_likes_modal_body">
+                                <tr><td colspan="4" class="text-center">{{ __( 'template.loading' ) }}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+
+function escItemLikes( s ) {
+    return s == null ? '' : String( s )
+        .replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
+}
 
 window['columns'] = @json( $columns );
     
@@ -127,6 +162,7 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: 'author' },
             { data: 'status' },
+            { data: 'like_count' },
             { data: 'encrypted_id' },
         ],
         columnDefs: [
@@ -191,6 +227,13 @@ var statusMapper = @json( $data['status'] ),
                 },
             },
             {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "likes" ) }}' ),
+                className: 'text-center',
+                render: function( data, type, row, meta ) {
+                    return '<a href="#" class="dt-view-likes" data-id="' + row['encrypted_id'] + '" data-title="' + escItemLikes( row['title'] ) + '">' + ( data ?? 0 ) + ' <em class="icon ni ni-heart-fill" style="color:#e85347;"></em></a>';
+                },
+            },
+            {
                 targets: parseInt( '{{ count( $columns ) - 1 }}' ),
                 orderable: false,
                 
@@ -252,6 +295,46 @@ var statusMapper = @json( $data['status'] ),
 
         $( document ).on( 'click', '.dt-edit', function() {
             window.location.href = '{{ route( 'admin.item.edit' ) }}?id=' + $( this ).data( 'id' ) + '&type=' + '{{ $type }}' + '&parent_route=' + '{{ $parent_route }}';
+        } );
+
+        var itemLikesModal = new bootstrap.Modal( document.getElementById( 'item_likes_modal' ) );
+
+        $( document ).on( 'click', '.dt-view-likes', function( e ) {
+            e.preventDefault();
+
+            var id = $( this ).data( 'id' ),
+                title = $( this ).data( 'title' );
+
+            $( '#item_likes_modal_title' ).text( title ? title + ' — ' + '{{ __( 'item.likes' ) }}' : '{{ __( 'item.likes' ) }}' );
+            $( '#item_likes_modal_body' ).html( '<tr><td colspan="4" class="text-center">{{ __( 'template.loading' ) }}</td></tr>' );
+            itemLikesModal.show();
+
+            $.ajax( {
+                url: '{{ route( 'admin.item.itemLikes' ) }}',
+                type: 'POST',
+                data: {
+                    'id': id,
+                    '_token': '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    var likes = response.likes || [];
+
+                    if ( !likes.length ) {
+                        $( '#item_likes_modal_body' ).html( '<tr><td colspan="4" class="text-center">{{ __( "datatables.zeroRecords" ) }}</td></tr>' );
+                        return;
+                    }
+
+                    var rows = '';
+                    likes.forEach( function( like, i ) {
+                        rows += '<tr><td>' + ( i + 1 ) + '</td><td>' + escItemLikes( like.user ) + '</td><td>' + escItemLikes( like.email ) + '</td><td>' + escItemLikes( like.liked_at ) + '</td></tr>';
+                    } );
+
+                    $( '#item_likes_modal_body' ).html( rows );
+                },
+                error: function() {
+                    $( '#item_likes_modal_body' ).html( '<tr><td colspan="4" class="text-center text-danger">{{ __( "template.error" ) }}</td></tr>' );
+                },
+            } );
         } );
 
         $( document ).on( 'click', '.dt-status', function() {

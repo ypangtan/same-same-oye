@@ -80,6 +80,11 @@ $columns = [
     ],
     [
         'type' => 'default',
+        'id' => 'likes',
+        'title' => __( 'playlist.likes' ),
+    ],
+    [
+        'type' => 'default',
         'id' => 'dt_action',
         'title' => __( 'datatables.action' ),
     ],
@@ -97,7 +102,65 @@ if ( $enableReorder == 1 ) {
 
 <x-data-tables id="playlist_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
 
+<div class="modal fade" id="playlist_likes_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="playlist_likes_modal_title">{{ __( 'playlist.likes' ) }}</h5>
+                <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="card card-bordered card-preview">
+                    <div class="card-inner">
+                        <table class="table" style="width:100%">
+                            <thead><tr><th>No.</th><th>{{ __( 'item.title' ) }}</th><th>{{ __( 'playlist.likes' ) }}</th></tr></thead>
+                            <tbody id="playlist_likes_modal_body">
+                                <tr><td colspan="3" class="text-center">{{ __( 'template.loading' ) }}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="playlist_item_users_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="btn btn-icon btn-sm me-1" id="playlist_item_users_modal_back" title="Back">
+                    <em class="icon ni ni-arrow-left"></em>
+                </a>
+                <h5 class="modal-title" id="playlist_item_users_modal_title">{{ __( 'playlist.likes' ) }}</h5>
+                <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="card card-bordered card-preview">
+                    <div class="card-inner">
+                        <table class="table" style="width:100%">
+                            <thead><tr><th>No.</th><th>{{ __( 'wallet.user' ) }}</th><th>Email</th><th>Liked At</th></tr></thead>
+                            <tbody id="playlist_item_users_modal_body">
+                                <tr><td colspan="4" class="text-center">{{ __( 'template.loading' ) }}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+
+function escPlaylistLikes( s ) {
+    return s == null ? '' : String( s )
+        .replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
+}
 
 window['columns'] = @json( $columns );
     
@@ -141,6 +204,7 @@ var statusMapper = @json( $data['status'] ),
             { data: 'name' },
             { data: null },
             { data: 'status' },
+            { data: 'total_likes' },
             { data: 'encrypted_id' },
         ],
         columnDefs: [
@@ -210,6 +274,13 @@ var statusMapper = @json( $data['status'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
                 render: function( data, type, row, meta ) {
                     return statusMapper[data];
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "likes" ) }}' ),
+                className: 'text-center',
+                render: function( data, type, row, meta ) {
+                    return '<a href="#" class="dt-view-likes" data-id="' + row['encrypted_id'] + '" data-title="' + escPlaylistLikes( row['name'] ) + '">' + ( data ?? 0 ) + ' <em class="icon ni ni-heart-fill" style="color:#e85347;"></em></a>';
                 },
             },
             {
@@ -297,6 +368,99 @@ var statusMapper = @json( $data['status'] ),
 
         $( document ).on( 'click', '.dt-edit', function() {
             window.location.href = '{{ route( 'admin.playlist.edit' ) }}?id=' + $( this ).data( 'id' ) + '&type=' + '{{ $type }}' + '&parent_route=' + '{{ $parent_route }}';
+        } );
+
+        var playlistLikesModal = new bootstrap.Modal( document.getElementById( 'playlist_likes_modal' ) );
+        var playlistItemUsersModal = new bootstrap.Modal( document.getElementById( 'playlist_item_users_modal' ) );
+
+        // Level 1: playlist's like count -> list of its items with each item's total likes.
+        $( document ).on( 'click', '.dt-view-likes', function( e ) {
+            e.preventDefault();
+
+            var id = $( this ).data( 'id' ),
+                title = $( this ).data( 'title' );
+
+            $( '#playlist_likes_modal_title' ).text( title ? title + ' — ' + '{{ __( 'playlist.likes' ) }}' : '{{ __( 'playlist.likes' ) }}' );
+            $( '#playlist_likes_modal_body' ).html( '<tr><td colspan="3" class="text-center">{{ __( 'template.loading' ) }}</td></tr>' );
+            playlistLikesModal.show();
+
+            $.ajax( {
+                url: '{{ route( 'admin.playlist.playlistLikes' ) }}',
+                type: 'POST',
+                data: {
+                    'id': id,
+                    '_token': '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    var items = response.items || [];
+
+                    if ( !items.length ) {
+                        $( '#playlist_likes_modal_body' ).html( '<tr><td colspan="3" class="text-center">{{ __( "datatables.zeroRecords" ) }}</td></tr>' );
+                        return;
+                    }
+
+                    var rows = '';
+                    items.forEach( function( item, i ) {
+                        rows += '<tr><td>' + ( i + 1 ) + '</td><td>' + escPlaylistLikes( item.title ) + '</td><td><a href="#" class="dt-view-item-likes" data-id="' + item.id + '" data-title="' + escPlaylistLikes( item.title ) + '">' + ( item.like_count ?? 0 ) + ' <em class="icon ni ni-heart-fill" style="color:#e85347;"></em></a></td></tr>';
+                    } );
+
+                    $( '#playlist_likes_modal_body' ).html( rows );
+                },
+                error: function() {
+                    $( '#playlist_likes_modal_body' ).html( '<tr><td colspan="3" class="text-center text-danger">{{ __( "template.error" ) }}</td></tr>' );
+                },
+            } );
+        } );
+
+        // Level 2: an item's like count (inside the level 1 modal) -> list of users who liked that item.
+        $( document ).on( 'click', '.dt-view-item-likes', function( e ) {
+            e.preventDefault();
+
+            var id = $( this ).data( 'id' ),
+                title = $( this ).data( 'title' );
+
+            $( '#playlist_item_users_modal_title' ).text( title ? title + ' — ' + '{{ __( 'playlist.likes' ) }}' : '{{ __( 'playlist.likes' ) }}' );
+            $( '#playlist_item_users_modal_body' ).html( '<tr><td colspan="4" class="text-center">{{ __( 'template.loading' ) }}</td></tr>' );
+
+            playlistLikesModal.hide();
+            playlistItemUsersModal.show();
+
+            $.ajax( {
+                url: '{{ route( 'admin.item.itemLikes' ) }}',
+                type: 'POST',
+                data: {
+                    'id': id,
+                    '_token': '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    var likes = response.likes || [];
+
+                    if ( !likes.length ) {
+                        $( '#playlist_item_users_modal_body' ).html( '<tr><td colspan="4" class="text-center">{{ __( "datatables.zeroRecords" ) }}</td></tr>' );
+                        return;
+                    }
+
+                    var rows = '';
+                    likes.forEach( function( like, i ) {
+                        rows += '<tr><td>' + ( i + 1 ) + '</td><td>' + escPlaylistLikes( like.user ) + '</td><td>' + escPlaylistLikes( like.email ) + '</td><td>' + escPlaylistLikes( like.liked_at ) + '</td></tr>';
+                    } );
+
+                    $( '#playlist_item_users_modal_body' ).html( rows );
+                },
+                error: function() {
+                    $( '#playlist_item_users_modal_body' ).html( '<tr><td colspan="4" class="text-center text-danger">{{ __( "template.error" ) }}</td></tr>' );
+                },
+            } );
+        } );
+
+        $( '#playlist_item_users_modal_back' ).on( 'click', function( e ) {
+            e.preventDefault();
+            playlistItemUsersModal.hide();
+        } );
+
+        // Closing the user-list modal (via the back arrow, the X, or the backdrop) returns to the item list.
+        document.getElementById( 'playlist_item_users_modal' ).addEventListener( 'hidden.bs.modal', function() {
+            playlistLikesModal.show();
         } );
 
         $( document ).on( 'click', '.dt-status', function() {

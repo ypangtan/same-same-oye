@@ -68,6 +68,7 @@ class PlaylistService
                 'encrypted_id',
                 'name',
                 'image_url',
+                'total_likes',
             ] );
         }
 
@@ -85,6 +86,27 @@ class PlaylistService
         ];
 
         return response()->json( $data );
+    }
+
+    public static function playlistLikes( $request ) {
+
+        $id = Helper::decode( $request->id );
+
+        $playlist = Playlist::find( $id );
+
+        $items = $playlist ? $playlist->items()->get() : collect();
+
+        $items = $items->map( function( $item ) {
+            return [
+                'id' => $item->encrypted_id,
+                'title' => $item->title,
+                'like_count' => $item->like_count,
+            ];
+        } )->sortByDesc( 'like_count' )->values();
+
+        return response()->json( [
+            'items' => $items,
+        ] );
     }
 
     private static function filter( $request, $model ) {

@@ -293,6 +293,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
                 Route::post( 'all-items', [ ItemController::class, 'allItems' ] )->name( 'admin.item.allItems' );
                 Route::post( 'one-item', [ ItemController::class, 'oneItem' ] )->name( 'admin.item.oneItem' );
+                Route::post( 'item-likes', [ ItemController::class, 'itemLikes' ] )->name( 'admin.item.itemLikes' );
                 Route::post( 'create-item', [ ItemController::class, 'createItem' ] )->name( 'admin.item.createItem' );
                 Route::post( 'update-item', [ ItemController::class, 'updateItem' ] )->name( 'admin.item.updateItem' );
                 Route::post( 'update-item-status', [ ItemController::class, 'updateItemStatus' ] )->name( 'admin.item.updateItemStatus' );
@@ -312,6 +313,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
 
                 Route::post( 'all-playlists', [ PlaylistController::class, 'allPlaylists' ] )->name( 'admin.playlist.allPlaylists' );
                 Route::post( 'one-playlist', [ PlaylistController::class, 'onePlaylist' ] )->name( 'admin.playlist.onePlaylist' );
+                Route::post( 'playlist-likes', [ PlaylistController::class, 'playlistLikes' ] )->name( 'admin.playlist.playlistLikes' );
                 Route::post( 'create-playlist', [ PlaylistController::class, 'createPlaylist' ] )->name( 'admin.playlist.createPlaylist' );
                 Route::post( 'update-playlist', [ PlaylistController::class, 'updatePlaylist' ] )->name( 'admin.playlist.updatePlaylist' );
                 Route::post( 'update-playlist-status', [ PlaylistController::class, 'updatePlaylistStatus' ] )->name( 'admin.playlist.updatePlaylistStatus' );
