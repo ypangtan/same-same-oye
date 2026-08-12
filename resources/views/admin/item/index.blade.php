@@ -98,7 +98,7 @@ $columns = [
                 </a>
             </div>
             <div class="modal-body">
-                <div class="listing-filter mb-2">
+                <div class="mb-2" style="max-width: 320px;">
                     <input type="text" class="form-control form-control-sm" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ) }}" id="item_likes_date" style="background-color: #fff;">
                 </div>
                 <div class="card card-bordered card-preview">
@@ -326,7 +326,7 @@ var statusMapper = @json( $data['status'] ),
                         }
                         return true;
                     },
-                    columns: ':not(:first-child):not(:last-child)',
+                    columns: ':not(:first-child)',
                     format: {
                         header: function( data, column ) {
                             if ( column === 1 ) rowNum = 0;
