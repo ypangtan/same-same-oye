@@ -88,8 +88,22 @@ class ItemService
         $id = Helper::decode( $request->id );
 
         $likes = ItemLike::with( 'user' )
-            ->where( 'item_id', $id )
-            ->orderByDesc( 'created_at' )
+            ->where( 'item_id', $id );
+
+        if ( !empty( $request->date_range ) ) {
+            $range = $request->date_range;
+
+            if ( str_contains( $range, ' to ' ) ) {
+                [ $from, $to ] = array_map( 'trim', explode( ' to ', $range ) );
+            } else {
+                $from = $to = trim( $range );
+            }
+
+            if ( $from ) $likes->where( 'created_at', '>=', Carbon::parse( $from, 'Asia/Kuala_Lumpur' )->startOfDay()->setTimezone( 'UTC' ) );
+            if ( $to )   $likes->where( 'created_at', '<=', Carbon::parse( $to, 'Asia/Kuala_Lumpur' )->endOfDay()->setTimezone( 'UTC' ) );
+        }
+
+        $likes = $likes->orderByDesc( 'created_at' )
             ->get()
             ->map( function( $like ) {
                 $user = $like->user;

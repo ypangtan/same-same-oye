@@ -112,13 +112,14 @@ if ( $enableReorder == 1 ) {
                 </a>
             </div>
             <div class="modal-body">
+                <div class="listing-filter mb-2">
+                    <input type="text" class="form-control form-control-sm" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'item.title' ) ] ) }}" id="playlist_likes_search">
+                </div>
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
-                        <table class="table" style="width:100%">
-                            <thead><tr><th>No.</th><th>{{ __( 'item.title' ) }}</th><th>{{ __( 'playlist.likes' ) }}</th></tr></thead>
-                            <tbody id="playlist_likes_modal_body">
-                                <tr><td colspan="3" class="text-center">{{ __( 'template.loading' ) }}</td></tr>
-                            </tbody>
+                        <table class="table" style="width:100%" id="playlist_likes_table">
+                            <thead><tr><th></th><th>No.</th><th>{{ __( 'item.title' ) }}</th><th>{{ __( 'playlist.likes' ) }}</th></tr></thead>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -140,13 +141,14 @@ if ( $enableReorder == 1 ) {
                 </a>
             </div>
             <div class="modal-body">
+                <div class="listing-filter mb-2">
+                    <input type="text" class="form-control form-control-sm" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ) }}" id="playlist_item_users_date" style="background-color: #fff;">
+                </div>
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
-                        <table class="table" style="width:100%">
-                            <thead><tr><th>No.</th><th>{{ __( 'wallet.user' ) }}</th><th>Email</th><th>Liked At</th></tr></thead>
-                            <tbody id="playlist_item_users_modal_body">
-                                <tr><td colspan="4" class="text-center">{{ __( 'template.loading' ) }}</td></tr>
-                            </tbody>
+                        <table class="table" style="width:100%" id="playlist_item_users_table">
+                            <thead><tr><th></th><th>No.</th><th>{{ __( 'wallet.user' ) }}</th><th>Email</th><th>Liked At</th></tr></thead>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -373,6 +375,266 @@ var statusMapper = @json( $data['status'] ),
         var playlistLikesModal = new bootstrap.Modal( document.getElementById( 'playlist_likes_modal' ) );
         var playlistItemUsersModal = new bootstrap.Modal( document.getElementById( 'playlist_item_users_modal' ) );
 
+        var PL_DT_DOM = "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
+                     "<'row'<'col-sm-12'tr>>" +
+                     "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>";
+
+        var PL_DT_LANG = {
+            'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
+            'zeroRecords': '{{ __( "datatables.zeroRecords" ) }}',
+            'info': '{{ __( "datatables.info" ) }}',
+            'infoEmpty': '{{ __( "datatables.infoEmpty" ) }}',
+            'infoFiltered': '{{ __( "datatables.infoFiltered" ) }}',
+            'paginate': {
+                'previous': '{{ __( "datatables.previous" ) }}',
+                'next': '{{ __( "datatables.next" ) }}',
+            },
+        };
+
+        function plExportFileName( label ) {
+            var d = new Date();
+            function p( n ) { return ( n < 10 ? '0' : '' ) + n; }
+            var stamp = String( d.getFullYear() ).slice( 2 ) + p( d.getMonth() + 1 ) + p( d.getDate() ) +
+                '_' + p( d.getHours() ) + p( d.getMinutes() ) + p( d.getSeconds() );
+            return ( label || 'Playlist' ).replace( /\s+/g, '_' ) + '_' + stamp;
+        }
+
+        // Shared export-button + select-all/only-selected wiring for both modal tables below,
+        // scoped per table via `key` so their button/checkbox ids never collide.
+        function plMakeButtons( key, label ) {
+            var chkId = 'pl-export-selected-' + key,
+                copyCls = 'pl-copy-' + key, excelCls = 'pl-excel-' + key, csvCls = 'pl-csv-' + key, pdfCls = 'pl-pdf-' + key,
+                fileName = function() { return plExportFileName( label ); };
+
+            function exportOpts() {
+                var rowNum = 0;
+                return {
+                    modifier: { page: 'all' },
+                    orthogonal: 'export',
+                    rows: function( idx, data, node ) {
+                        if ( $( '#' + chkId ).is( ':checked' ) ) {
+                            return $( node ).find( '.select-row' ).is( ':checked' );
+                        }
+                        return true;
+                    },
+                    columns: ':not(:first-child):not(:last-child)',
+                    format: {
+                        header: function( data, column ) {
+                            if ( column === 1 ) rowNum = 0;
+                            return data;
+                        },
+                        body: function( data, row, column ) {
+                            return column === 1 ? ++rowNum : data;
+                        },
+                    },
+                };
+            }
+
+            function visibleAction( cls ) {
+                return function() { $( '.' + cls ).click(); };
+            }
+
+            function pdfCustomize( doc ) {
+                var tableIndex = doc.content.findIndex( function( item ) { return item.table; } );
+                if ( tableIndex > -1 ) {
+                    var colCount = doc.content[ tableIndex ].table.body[0].length;
+                    doc.content[ tableIndex ].table.widths = Array( colCount ).fill( '*' );
+                }
+            }
+
+            return {
+                chkId: chkId,
+                buttons: [
+                    { extend: 'copyHtml5',  className: 'd-none ' + copyCls,  exportOptions: exportOpts() },
+                    { text: '<i class="fa fa-copy"></i>',       className: 'btn btn-light',   titleAttr: 'Copy',           action: visibleAction( copyCls ) },
+                    { extend: 'excelHtml5', className: 'd-none ' + excelCls, title: fileName, exportOptions: exportOpts() },
+                    { text: '<i class="fa fa-file-excel"></i>', className: 'btn btn-success', titleAttr: 'Export to EXCEL', action: visibleAction( excelCls ) },
+                    { extend: 'csvHtml5',   className: 'd-none ' + csvCls,   title: fileName, exportOptions: exportOpts() },
+                    { text: '<i class="fa fa-file-csv"></i>',   className: 'btn btn-info',    titleAttr: 'Export to CSV',   action: visibleAction( csvCls ) },
+                    { extend: 'pdfHtml5',   className: 'd-none ' + pdfCls,   title: fileName, exportOptions: exportOpts(), orientation: 'landscape', customize: pdfCustomize },
+                    { text: '<i class="fa fa-file-pdf"></i>',   className: 'btn btn-danger',  titleAttr: 'Export to PDF',   action: visibleAction( pdfCls ) },
+                ],
+            };
+        }
+
+        function plInitComplete( chkId ) {
+            return function() {
+                var api = this.api();
+                var $container = $( api.table().container() );
+                $container.find( '.export-check-wrapper' ).remove();
+                $container.find( '.dt-buttons' ).append(
+                    '<div class="my-3 export-check-wrapper">' +
+                    '<input type="checkbox" id="' + chkId + '">' +
+                    '<label for="' + chkId + '" class="ms-1">Export ONLY selected rows</label>' +
+                    '</div>'
+                );
+
+                var $selectAllTh = $( api.table().header() ).find( 'th' ).eq( 0 ).addClass( 'text-center' );
+                if ( !$selectAllTh.find( '.select-all-rows' ).length ) {
+                    $selectAllTh.html( '<input type="checkbox" class="select-all-rows">' );
+                }
+                $selectAllTh.off( 'change.selectAll' ).on( 'change.selectAll', '.select-all-rows', function() {
+                    $( api.table().body() ).find( '.select-row' ).prop( 'checked', $( this ).is( ':checked' ) );
+                } );
+            };
+        }
+
+        function plDrawCallback() {
+            var api = this.api();
+            var info = api.page.info();
+            api.column( 1, { page: 'current' } ).nodes().each( function( cell, i ) {
+                cell.innerHTML = info.start + i + 1;
+            } );
+            $( api.table().header() ).find( '.select-all-rows' ).prop( 'checked', false );
+        }
+
+        var playlistLikesDT = null;
+
+        function buildPlaylistLikesTable( items, label ) {
+            if ( $.fn.DataTable.isDataTable( '#playlist_likes_table' ) ) {
+                $( '#playlist_likes_table' ).DataTable().destroy();
+                $( '#playlist_likes_table tbody' ).empty();
+            }
+
+            var b = plMakeButtons( 'plikes', label );
+
+            playlistLikesDT = $( '#playlist_likes_table' ).DataTable( {
+                data: items || [],
+                columns: [
+                    { data: null },
+                    { data: null },
+                    { data: 'title' },
+                    { data: 'like_count' },
+                ],
+                columnDefs: [
+                    {
+                        targets: 0, orderable: false, searchable: false, className: 'text-center',
+                        render: function() { return '<input type="checkbox" class="select-row">'; },
+                    },
+                    {
+                        targets: 1, orderable: false, searchable: false,
+                        render: function() { return ''; },
+                    },
+                    {
+                        targets: 2,
+                        render: function( data, type ) {
+                            return type === 'display' ? escPlaylistLikes( data ) : data;
+                        },
+                    },
+                    {
+                        targets: 3,
+                        className: 'text-center',
+                        render: function( data, type, row ) {
+                            if ( type !== 'display' ) return data ?? 0;
+                            return '<a href="#" class="dt-view-item-likes" data-id="' + row.id + '" data-title="' + escPlaylistLikes( row.title ) + '">' + ( data ?? 0 ) + ' <em class="icon ni ni-heart-fill" style="color:#e85347;"></em></a>';
+                        },
+                    },
+                ],
+                order: [[ 3, 'desc' ]],
+                pageLength: 10,
+                lengthMenu: [ 5, 10, 25, 50, 100 ],
+                searching: true,
+                ordering: true,
+                scrollX: true,
+                dom: PL_DT_DOM,
+                buttons: b.buttons,
+                language: PL_DT_LANG,
+                createdRow: function( row ) { $( row ).addClass( 'nk-tb-item' ); },
+                initComplete: plInitComplete( b.chkId ),
+                drawCallback: plDrawCallback,
+            } );
+        }
+
+        $( '#playlist_likes_search' ).on( 'keyup', function() {
+            if ( playlistLikesDT ) playlistLikesDT.column( 2 ).search( this.value ).draw();
+        } );
+
+        var playlistItemUsersDT = null,
+            playlistItemUsersId = null,
+            playlistItemUsersLabel = '{{ __( 'playlist.likes' ) }}',
+            playlistItemUsersDateRange = '';
+
+        function buildPlaylistItemUsersTable( likes, label ) {
+            if ( $.fn.DataTable.isDataTable( '#playlist_item_users_table' ) ) {
+                $( '#playlist_item_users_table' ).DataTable().destroy();
+                $( '#playlist_item_users_table tbody' ).empty();
+            }
+
+            var b = plMakeButtons( 'plusers', label );
+
+            playlistItemUsersDT = $( '#playlist_item_users_table' ).DataTable( {
+                data: likes || [],
+                columns: [
+                    { data: null },
+                    { data: null },
+                    { data: 'user' },
+                    { data: 'email' },
+                    { data: 'liked_at' },
+                ],
+                columnDefs: [
+                    {
+                        targets: 0, orderable: false, searchable: false, className: 'text-center',
+                        render: function() { return '<input type="checkbox" class="select-row">'; },
+                    },
+                    {
+                        targets: 1, orderable: false, searchable: false,
+                        render: function() { return ''; },
+                    },
+                    {
+                        targets: 2,
+                        render: function( data, type ) {
+                            return type === 'display' ? escPlaylistLikes( data ) : data;
+                        },
+                    },
+                    {
+                        targets: 3,
+                        render: function( data, type ) {
+                            return type === 'display' ? escPlaylistLikes( data ) : data;
+                        },
+                    },
+                ],
+                order: [[ 4, 'desc' ]],
+                pageLength: 10,
+                lengthMenu: [ 5, 10, 25, 50, 100 ],
+                searching: true,
+                ordering: true,
+                scrollX: true,
+                dom: PL_DT_DOM,
+                buttons: b.buttons,
+                language: PL_DT_LANG,
+                createdRow: function( row ) { $( row ).addClass( 'nk-tb-item' ); },
+                initComplete: plInitComplete( b.chkId ),
+                drawCallback: plDrawCallback,
+            } );
+        }
+
+        function loadPlaylistItemUsers() {
+            $.ajax( {
+                url: '{{ route( 'admin.item.itemLikes' ) }}',
+                type: 'POST',
+                data: {
+                    'id': playlistItemUsersId,
+                    'date_range': playlistItemUsersDateRange,
+                    '_token': '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    buildPlaylistItemUsersTable( response.likes || [], playlistItemUsersLabel );
+                },
+                error: function() {
+                    buildPlaylistItemUsersTable( [], playlistItemUsersLabel );
+                },
+            } );
+        }
+
+        $( '#playlist_item_users_date' ).flatpickr( {
+            mode: 'range',
+            disableMobile: true,
+            onClose: function( selected, dateStr ) {
+                playlistItemUsersDateRange = dateStr;
+                loadPlaylistItemUsers();
+            },
+        } );
+
         // Level 1: playlist's like count -> list of its items with each item's total likes.
         $( document ).on( 'click', '.dt-view-likes', function( e ) {
             e.preventDefault();
@@ -381,7 +643,7 @@ var statusMapper = @json( $data['status'] ),
                 title = $( this ).data( 'title' );
 
             $( '#playlist_likes_modal_title' ).text( title ? title + ' — ' + '{{ __( 'playlist.likes' ) }}' : '{{ __( 'playlist.likes' ) }}' );
-            $( '#playlist_likes_modal_body' ).html( '<tr><td colspan="3" class="text-center">{{ __( 'template.loading' ) }}</td></tr>' );
+            $( '#playlist_likes_search' ).val( '' );
             playlistLikesModal.show();
 
             $.ajax( {
@@ -392,22 +654,10 @@ var statusMapper = @json( $data['status'] ),
                     '_token': '{{ csrf_token() }}',
                 },
                 success: function( response ) {
-                    var items = response.items || [];
-
-                    if ( !items.length ) {
-                        $( '#playlist_likes_modal_body' ).html( '<tr><td colspan="3" class="text-center">{{ __( "datatables.zeroRecords" ) }}</td></tr>' );
-                        return;
-                    }
-
-                    var rows = '';
-                    items.forEach( function( item, i ) {
-                        rows += '<tr><td>' + ( i + 1 ) + '</td><td>' + escPlaylistLikes( item.title ) + '</td><td><a href="#" class="dt-view-item-likes" data-id="' + item.id + '" data-title="' + escPlaylistLikes( item.title ) + '">' + ( item.like_count ?? 0 ) + ' <em class="icon ni ni-heart-fill" style="color:#e85347;"></em></a></td></tr>';
-                    } );
-
-                    $( '#playlist_likes_modal_body' ).html( rows );
+                    buildPlaylistLikesTable( response.items || [], title || '{{ __( 'playlist.likes' ) }}' );
                 },
                 error: function() {
-                    $( '#playlist_likes_modal_body' ).html( '<tr><td colspan="3" class="text-center text-danger">{{ __( "template.error" ) }}</td></tr>' );
+                    buildPlaylistLikesTable( [], title || '{{ __( 'playlist.likes' ) }}' );
                 },
             } );
         } );
@@ -419,38 +669,19 @@ var statusMapper = @json( $data['status'] ),
             var id = $( this ).data( 'id' ),
                 title = $( this ).data( 'title' );
 
+            playlistItemUsersId = id;
+            playlistItemUsersLabel = title || '{{ __( 'playlist.likes' ) }}';
+            playlistItemUsersDateRange = '';
+
+            var dateFp = $( '#playlist_item_users_date' )[0]._flatpickr;
+            if ( dateFp ) dateFp.clear();
+
             $( '#playlist_item_users_modal_title' ).text( title ? title + ' — ' + '{{ __( 'playlist.likes' ) }}' : '{{ __( 'playlist.likes' ) }}' );
-            $( '#playlist_item_users_modal_body' ).html( '<tr><td colspan="4" class="text-center">{{ __( 'template.loading' ) }}</td></tr>' );
 
             playlistLikesModal.hide();
             playlistItemUsersModal.show();
 
-            $.ajax( {
-                url: '{{ route( 'admin.item.itemLikes' ) }}',
-                type: 'POST',
-                data: {
-                    'id': id,
-                    '_token': '{{ csrf_token() }}',
-                },
-                success: function( response ) {
-                    var likes = response.likes || [];
-
-                    if ( !likes.length ) {
-                        $( '#playlist_item_users_modal_body' ).html( '<tr><td colspan="4" class="text-center">{{ __( "datatables.zeroRecords" ) }}</td></tr>' );
-                        return;
-                    }
-
-                    var rows = '';
-                    likes.forEach( function( like, i ) {
-                        rows += '<tr><td>' + ( i + 1 ) + '</td><td>' + escPlaylistLikes( like.user ) + '</td><td>' + escPlaylistLikes( like.email ) + '</td><td>' + escPlaylistLikes( like.liked_at ) + '</td></tr>';
-                    } );
-
-                    $( '#playlist_item_users_modal_body' ).html( rows );
-                },
-                error: function() {
-                    $( '#playlist_item_users_modal_body' ).html( '<tr><td colspan="4" class="text-center text-danger">{{ __( "template.error" ) }}</td></tr>' );
-                },
-            } );
+            loadPlaylistItemUsers();
         } );
 
         $( '#playlist_item_users_modal_back' ).on( 'click', function( e ) {

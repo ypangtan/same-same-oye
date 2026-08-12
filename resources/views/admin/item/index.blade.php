@@ -98,13 +98,14 @@ $columns = [
                 </a>
             </div>
             <div class="modal-body">
+                <div class="listing-filter mb-2">
+                    <input type="text" class="form-control form-control-sm" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ) }}" id="item_likes_date" style="background-color: #fff;">
+                </div>
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
-                        <table class="table" style="width:100%">
-                            <thead><tr><th>No.</th><th>{{ __( 'wallet.user' ) }}</th><th>Email</th><th>Liked At</th></tr></thead>
-                            <tbody id="item_likes_modal_body">
-                                <tr><td colspan="4" class="text-center">{{ __( 'template.loading' ) }}</td></tr>
-                            </tbody>
+                        <table class="table" style="width:100%" id="item_likes_table">
+                            <thead><tr><th></th><th>No.</th><th>{{ __( 'wallet.user' ) }}</th><th>Email</th><th>Liked At</th></tr></thead>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -298,6 +299,185 @@ var statusMapper = @json( $data['status'] ),
         } );
 
         var itemLikesModal = new bootstrap.Modal( document.getElementById( 'item_likes_modal' ) );
+        var itemLikesDT = null;
+        var itemLikesId = null;
+        var itemLikesLabel = '{{ __( 'item.likes' ) }}';
+        var itemLikesDateRange = '';
+
+        function itemLikesExportFileName( label ) {
+            var d = new Date();
+            function p( n ) { return ( n < 10 ? '0' : '' ) + n; }
+            var stamp = String( d.getFullYear() ).slice( 2 ) + p( d.getMonth() + 1 ) + p( d.getDate() ) +
+                '_' + p( d.getHours() ) + p( d.getMinutes() ) + p( d.getSeconds() );
+            return ( label || 'Item_Likes' ).replace( /\s+/g, '_' ) + '_' + stamp;
+        }
+
+        function itemLikesButtons( label ) {
+            var fileName = function() { return itemLikesExportFileName( label ); };
+
+            function exportOpts() {
+                var rowNum = 0;
+                return {
+                    modifier: { page: 'all' },
+                    orthogonal: 'export',
+                    rows: function( idx, data, node ) {
+                        if ( $( '#item_likes_export_selected' ).is( ':checked' ) ) {
+                            return $( node ).find( '.select-row' ).is( ':checked' );
+                        }
+                        return true;
+                    },
+                    columns: ':not(:first-child):not(:last-child)',
+                    format: {
+                        header: function( data, column ) {
+                            if ( column === 1 ) rowNum = 0;
+                            return data;
+                        },
+                        body: function( data, row, column ) {
+                            return column === 1 ? ++rowNum : data;
+                        },
+                    },
+                };
+            }
+
+            function visibleAction( cls ) {
+                return function() { $( '.' + cls ).click(); };
+            }
+
+            function pdfCustomize( doc ) {
+                var tableIndex = doc.content.findIndex( function( item ) { return item.table; } );
+                if ( tableIndex > -1 ) {
+                    var colCount = doc.content[ tableIndex ].table.body[0].length;
+                    doc.content[ tableIndex ].table.widths = Array( colCount ).fill( '*' );
+                }
+            }
+
+            return [
+                { extend: 'copyHtml5',  className: 'd-none item-likes-copy',  exportOptions: exportOpts() },
+                { text: '<i class="fa fa-copy"></i>',       className: 'btn btn-light',   titleAttr: 'Copy',           action: visibleAction( 'item-likes-copy' ) },
+                { extend: 'excelHtml5', className: 'd-none item-likes-excel', title: fileName, exportOptions: exportOpts() },
+                { text: '<i class="fa fa-file-excel"></i>', className: 'btn btn-success', titleAttr: 'Export to EXCEL', action: visibleAction( 'item-likes-excel' ) },
+                { extend: 'csvHtml5',   className: 'd-none item-likes-csv',   title: fileName, exportOptions: exportOpts() },
+                { text: '<i class="fa fa-file-csv"></i>',   className: 'btn btn-info',    titleAttr: 'Export to CSV',   action: visibleAction( 'item-likes-csv' ) },
+                { extend: 'pdfHtml5',   className: 'd-none item-likes-pdf',   title: fileName, exportOptions: exportOpts(), orientation: 'landscape', customize: pdfCustomize },
+                { text: '<i class="fa fa-file-pdf"></i>',   className: 'btn btn-danger',  titleAttr: 'Export to PDF',   action: visibleAction( 'item-likes-pdf' ) },
+            ];
+        }
+
+        function buildItemLikesTable( likes, label ) {
+            if ( $.fn.DataTable.isDataTable( '#item_likes_table' ) ) {
+                $( '#item_likes_table' ).DataTable().destroy();
+                $( '#item_likes_table tbody' ).empty();
+            }
+
+            itemLikesDT = $( '#item_likes_table' ).DataTable( {
+                data: likes || [],
+                columns: [
+                    { data: null },
+                    { data: null },
+                    { data: 'user' },
+                    { data: 'email' },
+                    { data: 'liked_at' },
+                ],
+                columnDefs: [
+                    {
+                        targets: 0, orderable: false, searchable: false, className: 'text-center',
+                        render: function() { return '<input type="checkbox" class="select-row">'; },
+                    },
+                    {
+                        targets: 1, orderable: false, searchable: false,
+                        render: function() { return ''; },
+                    },
+                    {
+                        targets: 2,
+                        render: function( data, type ) {
+                            return type === 'display' ? escItemLikes( data ) : data;
+                        },
+                    },
+                    {
+                        targets: 3,
+                        render: function( data, type ) {
+                            return type === 'display' ? escItemLikes( data ) : data;
+                        },
+                    },
+                ],
+                order: [[ 4, 'desc' ]],
+                pageLength: 10,
+                lengthMenu: [ 5, 10, 25, 50, 100 ],
+                searching: true,
+                ordering: true,
+                scrollX: true,
+                dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
+                     "<'row'<'col-sm-12'tr>>" +
+                     "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>",
+                buttons: itemLikesButtons( label ),
+                language: {
+                    'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
+                    'zeroRecords': '{{ __( "datatables.zeroRecords" ) }}',
+                    'info': '{{ __( "datatables.info" ) }}',
+                    'infoEmpty': '{{ __( "datatables.infoEmpty" ) }}',
+                    'infoFiltered': '{{ __( "datatables.infoFiltered" ) }}',
+                    'paginate': {
+                        'previous': '{{ __( "datatables.previous" ) }}',
+                        'next': '{{ __( "datatables.next" ) }}',
+                    },
+                },
+                createdRow: function( row ) { $( row ).addClass( 'nk-tb-item' ); },
+                initComplete: function() {
+                    var api = this.api();
+                    var $container = $( api.table().container() );
+                    $container.find( '.export-check-wrapper' ).remove();
+                    $container.find( '.dt-buttons' ).append(
+                        '<div class="my-3 export-check-wrapper">' +
+                        '<input type="checkbox" id="item_likes_export_selected">' +
+                        '<label for="item_likes_export_selected" class="ms-1">Export ONLY selected rows</label>' +
+                        '</div>'
+                    );
+
+                    var $selectAllTh = $( api.table().header() ).find( 'th' ).eq( 0 ).addClass( 'text-center' );
+                    if ( !$selectAllTh.find( '.select-all-rows' ).length ) {
+                        $selectAllTh.html( '<input type="checkbox" class="select-all-rows">' );
+                    }
+                    $selectAllTh.off( 'change.selectAll' ).on( 'change.selectAll', '.select-all-rows', function() {
+                        $( api.table().body() ).find( '.select-row' ).prop( 'checked', $( this ).is( ':checked' ) );
+                    } );
+                },
+                drawCallback: function() {
+                    var api = this.api();
+                    var info = api.page.info();
+                    api.column( 1, { page: 'current' } ).nodes().each( function( cell, i ) {
+                        cell.innerHTML = info.start + i + 1;
+                    } );
+                    $( api.table().header() ).find( '.select-all-rows' ).prop( 'checked', false );
+                },
+            } );
+        }
+
+        function loadItemLikes() {
+            $.ajax( {
+                url: '{{ route( 'admin.item.itemLikes' ) }}',
+                type: 'POST',
+                data: {
+                    'id': itemLikesId,
+                    'date_range': itemLikesDateRange,
+                    '_token': '{{ csrf_token() }}',
+                },
+                success: function( response ) {
+                    buildItemLikesTable( response.likes || [], itemLikesLabel );
+                },
+                error: function() {
+                    buildItemLikesTable( [], itemLikesLabel );
+                },
+            } );
+        }
+
+        $( '#item_likes_date' ).flatpickr( {
+            mode: 'range',
+            disableMobile: true,
+            onClose: function( selected, dateStr ) {
+                itemLikesDateRange = dateStr;
+                loadItemLikes();
+            },
+        } );
 
         $( document ).on( 'click', '.dt-view-likes', function( e ) {
             e.preventDefault();
@@ -305,36 +485,17 @@ var statusMapper = @json( $data['status'] ),
             var id = $( this ).data( 'id' ),
                 title = $( this ).data( 'title' );
 
+            itemLikesId = id;
+            itemLikesLabel = title || '{{ __( 'item.likes' ) }}';
+            itemLikesDateRange = '';
+
+            var dateFp = $( '#item_likes_date' )[0]._flatpickr;
+            if ( dateFp ) dateFp.clear();
+
             $( '#item_likes_modal_title' ).text( title ? title + ' — ' + '{{ __( 'item.likes' ) }}' : '{{ __( 'item.likes' ) }}' );
-            $( '#item_likes_modal_body' ).html( '<tr><td colspan="4" class="text-center">{{ __( 'template.loading' ) }}</td></tr>' );
             itemLikesModal.show();
 
-            $.ajax( {
-                url: '{{ route( 'admin.item.itemLikes' ) }}',
-                type: 'POST',
-                data: {
-                    'id': id,
-                    '_token': '{{ csrf_token() }}',
-                },
-                success: function( response ) {
-                    var likes = response.likes || [];
-
-                    if ( !likes.length ) {
-                        $( '#item_likes_modal_body' ).html( '<tr><td colspan="4" class="text-center">{{ __( "datatables.zeroRecords" ) }}</td></tr>' );
-                        return;
-                    }
-
-                    var rows = '';
-                    likes.forEach( function( like, i ) {
-                        rows += '<tr><td>' + ( i + 1 ) + '</td><td>' + escItemLikes( like.user ) + '</td><td>' + escItemLikes( like.email ) + '</td><td>' + escItemLikes( like.liked_at ) + '</td></tr>';
-                    } );
-
-                    $( '#item_likes_modal_body' ).html( rows );
-                },
-                error: function() {
-                    $( '#item_likes_modal_body' ).html( '<tr><td colspan="4" class="text-center text-danger">{{ __( "template.error" ) }}</td></tr>' );
-                },
-            } );
+            loadItemLikes();
         } );
 
         $( document ).on( 'click', '.dt-status', function() {
