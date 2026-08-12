@@ -42,16 +42,16 @@ class DashboardController extends Controller
         return DashboardService::getSubscriptionsTable( $request );
     }
 
-    public function getItemStreams() {
-        return DashboardService::getItemStreams();
+    public function getItemStreams( Request $request ) {
+        return DashboardService::getItemStreams( $request );
     }
 
-    public function getPlaylistStreams() {
-        return DashboardService::getPlaylistStreams();
+    public function getPlaylistStreams( Request $request ) {
+        return DashboardService::getPlaylistStreams( $request );
     }
 
-    public function getCollectionStreams() {
-        return DashboardService::getCollectionStreams();
+    public function getCollectionStreams( Request $request ) {
+        return DashboardService::getCollectionStreams( $request );
     }
 
     public function getBannerClickStats() {

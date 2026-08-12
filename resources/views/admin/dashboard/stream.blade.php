@@ -416,37 +416,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
         var cfg = CFG[prefix];
 
-        post(cfg.endpoint, {}).then(function (d) {
-            var type     = (d.types || []).find(function (t) { return t.id == typeId; });
-            var typeName = type ? (TYPE_NAMES[type.name] || type.name) : '';
-            document.getElementById('stream-page-title').textContent = typeName + ' ' + cfg.suffix;
+        var tableId  = prefix + 't' + typeId + 'table';
+        var searchId = prefix + 't' + typeId + 'search';
+        var dateId   = prefix + 't' + typeId + 'date';
 
-            var tableId  = prefix + 't' + typeId + 'table';
-            var searchId = prefix + 't' + typeId + 'search';
+        $('#stream-content').html(
+            '<div class="listing-filter" style="grid-template-columns:1fr 3fr">' +
+            '<input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="' + dateId + '" style="background:#fff">' +
+            '<input type="text" class="form-control form-control-sm" placeholder="Search…" id="' + searchId + '">' +
+            '</div>' +
+            '<div class="card card-bordered card-preview"><div class="card-inner">' +
+            '<table class="table" style="width:100%" id="' + tableId + '">' +
+            '<thead><tr>' + cfg.thead + '</tr></thead><tbody></tbody>' +
+            '</table></div></div>'
+        );
 
-            $('#stream-content').html(
-                '<div class="listing-filter" style="grid-template-columns:1fr 3fr">' +
-                '<input type="text" class="form-control form-control-sm" placeholder="Search…" id="' + searchId + '">' +
-                '<div></div>' +
-                '</div>' +
-                '<div class="card card-bordered card-preview"><div class="card-inner">' +
-                '<table class="table" style="width:100%" id="' + tableId + '">' +
-                '<thead><tr>' + cfg.thead + '</tr></thead><tbody></tbody>' +
-                '</table></div></div>'
-            );
+        var dt = null, typeDateRange = '';
 
-            var rows = (d[cfg.dataKey] || []).filter(function (r) { return r.type_id == typeId; });
-            var dt   = makeDT(tableId, rows, cfg.cols, cfg.defs, cfg.orderCol, true, typeName + ' ' + cfg.suffix);
+        function loadTypeTable() {
+            post(cfg.endpoint, { date_range: typeDateRange }).then(function (d) {
+                var type     = (d.types || []).find(function (t) { return t.id == typeId; });
+                var typeName = type ? (TYPE_NAMES[type.name] || type.name) : '';
+                document.getElementById('stream-page-title').textContent = typeName + ' ' + cfg.suffix;
 
-            var timer;
-            $('#' + searchId).on('input', function () {
-                var v = $(this).val(); clearTimeout(timer);
-                timer = setTimeout(function () { if (dt) dt.search(v).draw(); }, 400);
+                var rows = (d[cfg.dataKey] || []).filter(function (r) { return r.type_id == typeId; });
+                dt = makeDT(tableId, rows, cfg.cols, cfg.defs, cfg.orderCol, true, typeName + ' ' + cfg.suffix);
+            }).catch(function () {
+                $('#stream-content').html('<div class="text-danger py-3">Failed to load.</div>');
             });
+        }
 
-        }).catch(function () {
-            $('#stream-content').html('<div class="text-danger py-3">Failed to load.</div>');
+        $('#' + dateId).flatpickr({ mode: 'range', disableMobile: true,
+            onClose: function (sel, dateStr) { typeDateRange = dateStr; loadTypeTable(); }
         });
+
+        var timer;
+        $('#' + searchId).on('input', function () {
+            var v = $(this).val(); clearTimeout(timer);
+            timer = setTimeout(function () { if (dt) dt.search(v).draw(); }, 400);
+        });
+
+        loadTypeTable();
     }
 });
 </script>

@@ -389,65 +389,74 @@ class DashboardService {
 
     // ── Item Streams DataTable ────────────────────────────────────────────────
 
-    public static function getItemStreams() {
+    public static function getItemStreams( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+
         $types = DB::table( 'types' )
             ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'items' )->whereColumn( 'items.type_id', 'types.id' ) )
             ->select( 'id', 'en_name as name' )
             ->orderBy( 'en_name' )
             ->get();
 
-        $items = DB::table( 'stream_logs' )
+        $q = DB::table( 'stream_logs' )
             ->join( 'items', 'items.id', '=', 'stream_logs.item_id' )
             ->join( 'types', 'types.id', '=', 'items.type_id' )
             ->where( 'stream_logs.content_type', 2 )
             ->selectRaw( 'types.id as type_id, items.id as item_id, items.title, COUNT(*) as total' )
             ->groupBy( 'types.id', 'items.id', 'items.title' )
-            ->orderByDesc( 'total' )
-            ->get();
+            ->orderByDesc( 'total' );
 
-        return response()->json( [ 'types' => $types, 'items' => $items ] );
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+
+        return response()->json( [ 'types' => $types, 'items' => $q->get() ] );
     }
 
     // ── Playlist Streams DataTable ────────────────────────────────────────────
 
-    public static function getPlaylistStreams() {
+    public static function getPlaylistStreams( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+
         $types = DB::table( 'types' )
             ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'playlists' )->whereColumn( 'playlists.type_id', 'types.id' ) )
             ->select( 'id', 'en_name as name' )
             ->orderBy( 'en_name' )
             ->get();
 
-        $playlists = DB::table( 'stream_logs' )
+        $q = DB::table( 'stream_logs' )
             ->join( 'playlists', 'playlists.id', '=', 'stream_logs.playlist_id' )
             ->join( 'types', 'types.id', '=', 'playlists.type_id' )
             ->where( 'stream_logs.content_type', 3 )
             ->selectRaw( 'types.id as type_id, playlists.id as playlist_id, playlists.en_name as name, COUNT(*) as total' )
             ->groupBy( 'types.id', 'playlists.id', 'playlists.en_name' )
-            ->orderByDesc( 'total' )
-            ->get();
+            ->orderByDesc( 'total' );
 
-        return response()->json( [ 'types' => $types, 'playlists' => $playlists ] );
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+
+        return response()->json( [ 'types' => $types, 'playlists' => $q->get() ] );
     }
 
     // ── Collection Streams DataTable ──────────────────────────────────────────
 
-    public static function getCollectionStreams() {
+    public static function getCollectionStreams( Request $request ) {
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+
         $types = DB::table( 'types' )
             ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'collections' )->whereColumn( 'collections.type_id', 'types.id' ) )
             ->select( 'id', 'en_name as name' )
             ->orderBy( 'en_name' )
             ->get();
 
-        $collections = DB::table( 'stream_logs' )
+        $q = DB::table( 'stream_logs' )
             ->join( 'collections', 'collections.id', '=', 'stream_logs.collection_id' )
             ->join( 'types', 'types.id', '=', 'collections.type_id' )
             ->where( 'stream_logs.content_type', 4 )
             ->selectRaw( 'types.id as type_id, collections.id as collection_id, collections.en_name as name, COUNT(*) as total' )
             ->groupBy( 'types.id', 'collections.id', 'collections.en_name' )
-            ->orderByDesc( 'total' )
-            ->get();
+            ->orderByDesc( 'total' );
 
-        return response()->json( [ 'types' => $types, 'collections' => $collections ] );
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+
+        return response()->json( [ 'types' => $types, 'collections' => $q->get() ] );
     }
 
     // ── Banner click table ────────────────────────────────────────────────────
