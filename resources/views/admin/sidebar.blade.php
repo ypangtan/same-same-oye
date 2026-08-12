@@ -17,7 +17,7 @@
                         <div class="nk-sidebar-menu" data-simplebar>
                             <ul class="nk-menu">
                                 <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\DashboardController' ? 'active current-page' : '' }}">
-                                    <a href="{{ route( 'admin.dashboard' ) }}" class="nk-menu-link">
+                                    <a href="{{ route( 'admin.module_parent.dashboard' ) }}" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-growth-fill"></em></span>
                                         <span class="nk-menu-text">{{ __( 'template.dashboard' ) }}</span>
                                     </a>

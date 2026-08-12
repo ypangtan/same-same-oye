@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function loadStreamDetail() {
         if (!streamDetailContentType || !streamDetailId) return;
-        post('{{ route("admin.dashboard.getStreamDetail") }}', {
+        post('{{ route("admin.module_parent.dashboard.getStreamDetail") }}', {
             content_type: streamDetailContentType,
             id          : streamDetailId,
             date_range  : streamDetailDateRange,
@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var dtRadio = null, radioDateRange = '';
 
         function loadRadioTable() {
-            post('{{ route("admin.dashboard.getRadioStreamTable") }}', { date_range: radioDateRange })
+            post('{{ route("admin.module_parent.dashboard.getRadioStreamTable") }}', { date_range: radioDateRange })
                 .then(function (d) {
                     dtRadio = makeDT('radio-table', d.logs, [
                         { data: null        },
@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         var CFG = {
             items: {
-                endpoint : '{{ route("admin.dashboard.getItemStreams") }}',
+                endpoint : '{{ route("admin.module_parent.dashboard.getItemStreams") }}',
                 dataKey  : 'items',
                 thead    : '<th></th><th>No.</th><th>Title</th><th>Plays</th><th>Action</th>',
                 cols     : [{ data: null }, { data: null }, { data: 'title' }, { data: 'total' }, { data: null }],
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 suffix   : 'Streams',
             },
             plists: {
-                endpoint : '{{ route("admin.dashboard.getPlaylistStreams") }}',
+                endpoint : '{{ route("admin.module_parent.dashboard.getPlaylistStreams") }}',
                 dataKey  : 'playlists',
                 thead    : '<th></th><th>No.</th><th>Playlist Name</th><th>Plays</th><th>Action</th>',
                 cols     : [{ data: null }, { data: null }, { data: 'name' }, { data: 'total' }, { data: null }],
@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 suffix   : 'Playlists',
             },
             colls: {
-                endpoint : '{{ route("admin.dashboard.getCollectionStreams") }}',
+                endpoint : '{{ route("admin.module_parent.dashboard.getCollectionStreams") }}',
                 dataKey  : 'collections',
                 thead    : '<th></th><th>No.</th><th>Collection Name</th><th>Plays</th><th>Action</th>',
                 cols     : [{ data: null }, { data: null }, { data: 'name' }, { data: 'total' }, { data: null }],

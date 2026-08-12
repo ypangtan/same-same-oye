@@ -108,7 +108,7 @@
                     that.addClass( 'disabled' );
 
                     setTimeout(function(){
-                        window.location.href = '{{ route( 'admin.dashboard' ) }}';
+                        window.location.href = '{{ route( 'admin.module_parent.dashboard' ) }}';
                     }, 2000 );
 
                 },

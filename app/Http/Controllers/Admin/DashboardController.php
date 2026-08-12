@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index() {
         $this->data['header']['title'] = __( 'template.dashboard' );
-        $this->data['content'] = 'admin.dashboard.index';
+        $this->data['content'] = 'admin.module_parent.dashboard.index';
         return view( 'admin.main' )->with( $this->data );
     }
 
@@ -76,7 +76,7 @@ class DashboardController extends Controller
 
     public function streamPage( Request $request ) {
         $this->data['header']['title'] = __( 'template.dashboard' );
-        $this->data['content']         = 'admin.dashboard.stream';
+        $this->data['content']         = 'admin.module_parent.dashboard.stream';
         $this->data['activePage']      = $request->query( 'page', 'radio' );
         return view( 'admin.main' )->with( $this->data );
     }

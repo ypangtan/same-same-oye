@@ -77,7 +77,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
             Route::post( 'file/song-upload', [ FileController::class, 'songUpload' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] )->name( 'admin.file.songUpload' );
 
             Route::prefix( 'dashboard' )->group( function() {
-                Route::get( '/', [ DashboardController::class, 'index' ] )->name( 'admin.dashboard' );
+                Route::get( '/', [ DashboardController::class, 'index' ] )->name( 'admin.module_parent.dashboard' );
 
                 Route::post( 'engagement-stats', [ DashboardController::class, 'getEngagementStats' ] )->name( 'admin.dashboard.getEngagementStats' );
                 Route::post( 'engagement-detail', [ DashboardController::class, 'getEngagementDetail' ] )->name( 'admin.dashboard.getEngagementDetail' );

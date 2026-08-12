@@ -17,7 +17,7 @@ class PopAnnouncementController extends Controller
         $this->data['content'] = 'admin.pop_announcement.index';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -53,7 +53,7 @@ class PopAnnouncementController extends Controller
         $this->data['content'] = 'admin.pop_announcement.add';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -88,7 +88,7 @@ class PopAnnouncementController extends Controller
         $this->data['content'] = 'admin.pop_announcement.edit';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],

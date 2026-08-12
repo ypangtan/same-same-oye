@@ -46,7 +46,7 @@
                     console.log( response );
 
                     if( response.status ) {
-                        window.location.href = '{{ route( 'admin.dashboard' ) }}';
+                        window.location.href = '{{ route( 'admin.module_parent.dashboard' ) }}';
                     }
                 },
                 error: function( error ) {

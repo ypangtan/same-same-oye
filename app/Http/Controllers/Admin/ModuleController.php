@@ -29,7 +29,7 @@ class ModuleController extends Controller
         $this->data['content'] = 'admin.module.index';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],

@@ -40,7 +40,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof NotFoundHttpException) {
-            return redirect()->route('admin.dashboard'); // Redirect to the admin dashboard on 404
+            return redirect()->route('admin.module_parent.dashboard'); // Redirect to the admin dashboard on 404
         }
 
         return parent::render($request, $exception);

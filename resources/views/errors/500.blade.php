@@ -8,7 +8,7 @@
                     <h1 class="nk-error-head">500</h1>
                     <h3 class="nk-error-title">Server Error</h3>
                     <p class="nk-error-text">We are very sorry for inconvenience. It looks like like some how our server is crashed.</p>
-                    <a href="{{ route( 'admin.dashboard' ) }}" class="btn btn-lg btn-primary mt-2">Back To Home</a>
+                    <a href="{{ route( 'admin.module_parent.dashboard' ) }}" class="btn btn-lg btn-primary mt-2">Back To Home</a>
                 </div>
             </div><!-- .nk-block -->
         </div>

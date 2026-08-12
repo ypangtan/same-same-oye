@@ -31,7 +31,7 @@ class RoleController extends Controller
         $this->data['content'] = 'admin.role.index';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -51,7 +51,7 @@ class RoleController extends Controller
         $this->data['content'] = 'admin.role.add';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -78,7 +78,7 @@ class RoleController extends Controller
         $this->data['content'] = 'admin.role.edit';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],

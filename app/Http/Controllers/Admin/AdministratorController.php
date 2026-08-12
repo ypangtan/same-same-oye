@@ -29,7 +29,7 @@ class AdministratorController extends Controller
         $this->data['content'] = 'admin.administrator.index';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -54,7 +54,7 @@ class AdministratorController extends Controller
         $this->data['content'] = 'admin.administrator.add';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -85,7 +85,7 @@ class AdministratorController extends Controller
         $this->data['content'] = 'admin.administrator.edit';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -140,7 +140,7 @@ class AdministratorController extends Controller
         $value = $request->session()->get( 'mfa-ed' );
 
         if ( $value ) {
-            return redirect()->route( 'admin.dashboard' );
+            return redirect()->route( 'admin.module_parent.dashboard' );
         }
         
         $this->data['header']['title'] = __( 'template.verify_account' );

@@ -20,7 +20,7 @@ class SettingController extends Controller
     public function firstSetup( Request $request ) {
 
         if ( !empty( auth()->user()->mfa_secret ) ) {
-            return redirect()->route( 'admin.dashboard' );
+            return redirect()->route( 'admin.module_parent.dashboard' );
         }
 
         $this->data['header']['title'] = __( 'template.first_setup' );

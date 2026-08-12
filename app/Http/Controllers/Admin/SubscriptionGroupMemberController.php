@@ -20,7 +20,7 @@ class SubscriptionGroupMemberController extends Controller {
         $this->data['content'] = 'admin.subscription_group_member.index';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],

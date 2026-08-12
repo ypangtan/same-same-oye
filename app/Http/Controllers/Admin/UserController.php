@@ -17,7 +17,7 @@ class UserController extends Controller
         $this->data['content'] = 'admin.user.index';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -70,7 +70,7 @@ class UserController extends Controller
         $this->data['content'] = 'admin.user.my_friend';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -119,7 +119,7 @@ class UserController extends Controller
         $this->data['content'] = 'admin.user.add';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -152,7 +152,7 @@ class UserController extends Controller
         $this->data['content'] = 'admin.user.edit';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],

@@ -30,7 +30,7 @@ class WebsiteBannerController extends Controller
         $this->data['content'] = 'admin.website_banner.add';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -57,7 +57,7 @@ class WebsiteBannerController extends Controller
         $this->data['content'] = 'admin.website_banner.add';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
@@ -88,7 +88,7 @@ class WebsiteBannerController extends Controller
         $this->data['content'] = 'admin.website_banner.edit';
         $this->data['breadcrumb'] = [
             [
-                'url' => route( 'admin.dashboard' ),
+                'url' => route( 'admin.module_parent.dashboard' ),
                 'text' => __( 'template.dashboard' ),
                 'class' => '',
             ],
