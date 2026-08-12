@@ -100,9 +100,9 @@ class Helper {
 
     public static function unusedAction () {
         $array = [
-            [ 'name' => 'dashboard', 'action' => 'add' ],
-            [ 'name' => 'dashboard', 'action' => 'edit' ],
-            [ 'name' => 'dashboard', 'action' => 'delete' ],
+            [ 'name' => 'dashboards', 'action' => 'add' ],
+            [ 'name' => 'dashboards', 'action' => 'edit' ],
+            [ 'name' => 'dashboards', 'action' => 'delete' ],
         ];
 
         return $array;
