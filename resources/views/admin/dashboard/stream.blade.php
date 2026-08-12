@@ -48,6 +48,9 @@
                 </a>
             </div>
             <div class="modal-body">
+                <div class="listing-filter mb-2" style="max-width:260px">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="stream-detail-date" style="background:#fff">
+                </div>
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
                         <table class="table" style="width:100%" id="stream-detail-table">
@@ -252,12 +255,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ── Stream detail modal (who streamed a specific item/playlist/collection) ── */
 
-    var streamDetailModalEl = document.getElementById('stream-detail-modal');
-    var streamDetailModal   = new bootstrap.Modal(streamDetailModalEl);
-    var streamDetailDT      = null;
-    var streamModalShown    = false;
-    var streamPendingLogs   = null;
-    var streamDetailLabel   = 'Stream Detail';
+    var streamDetailModalEl     = document.getElementById('stream-detail-modal');
+    var streamDetailModal       = new bootstrap.Modal(streamDetailModalEl);
+    var streamDetailDT          = null;
+    var streamModalShown        = false;
+    var streamPendingLogs       = null;
+    var streamDetailLabel       = 'Stream Detail';
+    var streamDetailContentType = null;
+    var streamDetailId          = null;
+    var streamDetailDateRange   = '';
+
+    $('#stream-detail-date').flatpickr({ mode: 'range', disableMobile: true,
+        onClose: function (sel, dateStr) { streamDetailDateRange = dateStr; loadStreamDetail(); }
+    });
+
+    function loadStreamDetail() {
+        if (!streamDetailContentType || !streamDetailId) return;
+        post('{{ route("admin.dashboard.getStreamDetail") }}', {
+            content_type: streamDetailContentType,
+            id          : streamDetailId,
+            date_range  : streamDetailDateRange,
+        }).then(function (d) {
+            if (streamModalShown) {
+                buildStreamDetailTable(d.logs);
+            } else {
+                streamPendingLogs = d.logs;
+            }
+        });
+    }
 
     function buildStreamDetailTable(logs) {
         streamDetailDT = makeDT('stream-detail-table', logs, [
@@ -291,23 +316,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('#stream-content').on('click', '.btn-stream-detail', function (e) {
         e.preventDefault();
-        var $btn        = $(this);
-        var contentType = $btn.data('content-type');
-        var id          = $btn.data('id');
-        var title       = $btn.data('title');
+        var $btn = $(this);
 
-        streamDetailLabel = title || 'Stream Detail';
+        streamDetailContentType = $btn.data('content-type');
+        streamDetailId          = $btn.data('id');
+        streamDetailLabel       = $btn.data('title') || 'Stream Detail';
+        streamDetailDateRange   = '';
+        var dateFp = $('#stream-detail-date')[0]._flatpickr;
+        if (dateFp) dateFp.clear();
+
         document.getElementById('stream-detail-title').textContent = streamDetailLabel;
         streamDetailModal.show();
 
-        post('{{ route("admin.dashboard.getStreamDetail") }}', { content_type: contentType, id: id })
-            .then(function (d) {
-                if (streamModalShown) {
-                    buildStreamDetailTable(d.logs);
-                } else {
-                    streamPendingLogs = d.logs;
-                }
-            });
+        loadStreamDetail();
     });
 
     /* ── Route to correct page ───────────────────────────────────────── */

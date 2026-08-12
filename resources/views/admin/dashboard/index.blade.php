@@ -463,6 +463,9 @@
                 </a>
             </div>
             <div class="modal-body">
+                <div class="listing-filter mb-2" style="grid-template-columns:1fr">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="engagement-detail-date" style="background:#fff">
+                </div>
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
                         <table class="table" style="width:100%" id="engagement-detail-table">
@@ -487,6 +490,9 @@
                 </a>
             </div>
             <div class="modal-body">
+                <div class="listing-filter mb-2" style="grid-template-columns:1fr">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="click-detail-date" style="background:#fff">
+                </div>
                 <div class="card card-bordered card-preview">
                     <div class="card-inner">
                         <table class="table" style="width:100%" id="click-detail-table">
@@ -711,6 +717,9 @@
     var clickModalShown    = false;
     var clickPendingLogs   = null;
     var clickDetailLabel   = 'Click Detail';
+    var clickDetailUrl     = null;
+    var clickDetailId      = null;
+    var clickDetailDateRange = '';
 
     function buildClickDetailTable(logs) {
         clickDetailDT = makeDT('click-detail-table', logs, [
@@ -742,6 +751,20 @@
         clickModalShown = false;
     });
 
+    function loadClickDetail() {
+        post(clickDetailUrl, { id: clickDetailId, date_range: clickDetailDateRange }).then(function (d) {
+            if (clickModalShown) {
+                buildClickDetailTable(d.logs);
+            } else {
+                clickPendingLogs = d.logs;
+            }
+        });
+    }
+
+    $('#click-detail-date').flatpickr({ mode: 'range', disableMobile: true,
+        onClose: function (sel, dateStr) { clickDetailDateRange = dateStr; loadClickDetail(); }
+    });
+
     $(document).on('click', '.btn-click-detail', function (e) {
         e.preventDefault();
         var $btn     = $(this);
@@ -750,17 +773,17 @@
         var title    = $btn.data('title');
         var fallback = $btn.data('fallback');
 
+        clickDetailUrl       = url;
+        clickDetailId        = id;
+        clickDetailDateRange = '';
+        var dateFp = $('#click-detail-date')[0]._flatpickr;
+        if (dateFp) dateFp.clear();
+
         clickDetailLabel = (title && title !== '—') ? title : fallback;
         document.getElementById('click-detail-title').textContent = clickDetailLabel;
         clickDetailModal.show();
 
-        post(url, { id: id }).then(function (d) {
-            if (clickModalShown) {
-                buildClickDetailTable(d.logs);
-            } else {
-                clickPendingLogs = d.logs;
-            }
-        });
+        loadClickDetail();
     });
 
     /* ── Engagement detail modal (who's behind an Active Users / New Users / Subscriptions card) ── */
@@ -771,6 +794,8 @@
     var engagementModalShown    = false;
     var engagementPendingLogs   = null;
     var engagementDetailLabel   = 'User Detail';
+    var engagementDetailStat      = null;
+    var engagementDetailDateRange = '';
 
     function buildEngagementDetailTable(logs) {
         engagementDetailDT = makeDT('engagement-detail-table', logs, [
@@ -797,23 +822,36 @@
         engagementModalShown = false;
     });
 
-    $(document).on('click', '.stat-card-clickable', function (e) {
-        e.preventDefault();
-        var $card = $(this);
-        var stat  = $card.data('stat');
-        var title = $card.data('stat-title');
-
-        engagementDetailLabel = title || 'User Detail';
-        document.getElementById('engagement-detail-title').textContent = engagementDetailLabel;
-        engagementDetailModal.show();
-
-        post('{{ route("admin.dashboard.getEngagementDetail") }}', { stat: stat }).then(function (d) {
+    function loadEngagementDetail() {
+        post('{{ route("admin.dashboard.getEngagementDetail") }}', { stat: engagementDetailStat, date_range: engagementDetailDateRange }).then(function (d) {
             if (engagementModalShown) {
                 buildEngagementDetailTable(d.logs);
             } else {
                 engagementPendingLogs = d.logs;
             }
         });
+    }
+
+    $('#engagement-detail-date').flatpickr({ mode: 'range', disableMobile: true,
+        onClose: function (sel, dateStr) { engagementDetailDateRange = dateStr; loadEngagementDetail(); }
+    });
+
+    $(document).on('click', '.stat-card-clickable', function (e) {
+        e.preventDefault();
+        var $card = $(this);
+        var stat  = $card.data('stat');
+        var title = $card.data('stat-title');
+
+        engagementDetailStat      = stat;
+        engagementDetailDateRange = '';
+        var dateFp = $('#engagement-detail-date')[0]._flatpickr;
+        if (dateFp) dateFp.clear();
+
+        engagementDetailLabel = title || 'User Detail';
+        document.getElementById('engagement-detail-title').textContent = engagementDetailLabel;
+        engagementDetailModal.show();
+
+        loadEngagementDetail();
     });
 
     /* ══════════════════════════════════════════════════════════════════

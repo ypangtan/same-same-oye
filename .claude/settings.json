@@ -3,7 +3,12 @@
     "allow": [
       "Bash(powershell -Command \"Get-Process mysqld -ErrorAction SilentlyContinue\")",
       "Bash(powershell -Command 'Get-Service | Where-Object {$_.Name -like '\\\\''*mysql*'\\\\''}')",
-      "Bash(/c/xampp/mysql/bin/mysqladmin.exe -u root shutdown)"
+      "Bash(/c/xampp/mysql/bin/mysqladmin.exe -u root shutdown)",
+      "Bash(\"/c/xampp/mysql/bin/mysql\" -u root -h 127.0.0.1 same-same-oye -e \"SELECT id, content_type, created_at FROM stream_logs WHERE content_type=1 ORDER BY created_at DESC LIMIT 10;\")",
+      "Bash(cmd.exe /c \"C:\\\\xampp\\\\mysql_start.bat\")",
+      "Bash(nc -z 127.0.0.1 3306)",
+      "Bash(break)",
+      "Bash(\"/c/xampp/php/php.exe\" -l app/Services/DashboardService.php)"
     ]
   }
 }

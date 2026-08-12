@@ -18,16 +18,28 @@ class DashboardService {
     // ── Private helpers ───────────────────────────────────────────────────────
 
     private static function parseDateRange( ?string $range ): array {
-        if ( !$range || !str_contains( $range, ' to ' ) ) {
+        if ( !$range ) {
             return [ null, null ];
         }
-        $parts = explode( ' to ', $range );
-        return [ trim( $parts[0] ) ?: null, trim( $parts[1] ) ?: null ];
+        // Normal case: flatpickr range picker gives "start to end".
+        if ( str_contains( $range, ' to ' ) ) {
+            $parts = explode( ' to ', $range );
+            return [ trim( $parts[0] ) ?: null, trim( $parts[1] ) ?: null ];
+        }
+        // The picker also closes with just one date when the user clicks a single
+        // day and then clicks away before picking an end date — treat that as a
+        // one-day filter instead of silently dropping it (which looked like the
+        // date filter "not working").
+        $date = trim( $range );
+        return $date !== '' ? [ $date, $date ] : [ null, null ];
     }
 
-    private static function applyDateRange( $q, string $column, ?string $from, ?string $to ): void {
-        if ( $from ) $q->where( $column, '>=', Carbon::parse( $from )->startOfDay() );
-        if ( $to )   $q->where( $column, '<=', Carbon::parse( $to )->endOfDay() );
+    // $timezone lets the from/to bounds be interpreted in the timezone the dates are
+    // *displayed* in (e.g. Asia/Kuala_Lumpur) rather than the app's storage timezone
+    // (UTC), then converts back to UTC for the comparison against the DB column.
+    private static function applyDateRange( $q, string $column, ?string $from, ?string $to, ?string $timezone = null ): void {
+        if ( $from ) $q->where( $column, '>=', Carbon::parse( $from, $timezone )->startOfDay()->setTimezone( 'UTC' ) );
+        if ( $to )   $q->where( $column, '<=', Carbon::parse( $to, $timezone )->endOfDay()->setTimezone( 'UTC' ) );
     }
 
     // Display name for a joined user row: falls back through fullname → first/last
@@ -128,10 +140,11 @@ class DashboardService {
     // ── Engagement summary card detail (who's behind each number) ──────────────
 
     public static function getEngagementDetail( Request $request ) {
-        $stat         = $request->input( 'stat' );
-        $today        = Carbon::today()->timezone( 'Asia/Kuala_Lumpur' );
-        $startOfMonth = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->startOfMonth();
-        $since        = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subHours( 24 );
+        $stat          = $request->input( 'stat' );
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+        $today         = Carbon::today()->timezone( 'Asia/Kuala_Lumpur' );
+        $startOfMonth  = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->startOfMonth();
+        $since         = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->subHours( 24 );
 
         $activeUserIds = DB::table( 'stream_logs' )
             ->where( 'created_at', '>=', $since )
@@ -139,7 +152,8 @@ class DashboardService {
             ->distinct()
             ->pluck( 'user_id' );
 
-        $userRows = function ( $query ) {
+        $userRows = function ( $query, string $dateColumn = 'created_at' ) use ( $from, $to ) {
+            self::applyDateRange( $query, $dateColumn, $from, $to );
             return $query->get()->map( function ( $r ) {
                 return [
                     'user'  => self::resolveUserName( (object) [ 'user_id' => $r->id, 'fullname' => $r->fullname, 'first_name' => $r->first_name, 'last_name' => $r->last_name ] ),
@@ -166,13 +180,15 @@ class DashboardService {
                 ->leftJoin( 'subscription_plans', 'subscription_plans.id', '=', 'user_subscriptions.subscription_plan_id' )
                 ->where( 'user_subscriptions.type', 1 )
                 ->whereDate( 'user_subscriptions.created_at', $today )
-                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'subscription_plans.name as plan_name', 'user_subscriptions.created_at as date_col' ) ),
+                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'subscription_plans.name as plan_name', 'user_subscriptions.created_at as date_col' ),
+                'user_subscriptions.created_at' ),
             'subs_month'   => $userRows( DB::table( 'user_subscriptions' )
                 ->join( 'users', 'users.id', '=', 'user_subscriptions.user_id' )
                 ->leftJoin( 'subscription_plans', 'subscription_plans.id', '=', 'user_subscriptions.subscription_plan_id' )
                 ->where( 'user_subscriptions.type', 1 )
                 ->where( 'user_subscriptions.created_at', '>=', $startOfMonth )
-                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'subscription_plans.name as plan_name', 'user_subscriptions.created_at as date_col' ) ),
+                ->select( 'users.id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'subscription_plans.name as plan_name', 'user_subscriptions.created_at as date_col' ),
+                'user_subscriptions.created_at' ),
             default        => collect(),
         };
 
@@ -228,7 +244,7 @@ class DashboardService {
             )
             ->orderByDesc( 'stream_logs.created_at' );
 
-        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to, 'Asia/Kuala_Lumpur' );
 
         $rows = $q->get()->map( function ( $r ) {
             return [
@@ -261,13 +277,18 @@ class DashboardService {
             return response()->json( [ 'logs' => [] ] );
         }
 
-        $rows = DB::table( 'stream_logs' )
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+
+        $q = DB::table( 'stream_logs' )
             ->leftJoin( 'users', 'users.id', '=', 'stream_logs.user_id' )
             ->where( 'stream_logs.content_type', $contentType )
             ->where( 'stream_logs.' . $column, $id )
             ->select( 'stream_logs.user_id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'stream_logs.created_at' )
-            ->orderByDesc( 'stream_logs.created_at' )
-            ->get()
+            ->orderByDesc( 'stream_logs.created_at' );
+
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to, 'Asia/Kuala_Lumpur' );
+
+        $rows = $q->get()
             ->map( function ( $r ) {
                 return [
                     'user'      => self::resolveUserName( $r ),
@@ -406,7 +427,7 @@ class DashboardService {
             ->groupBy( 'types.id', 'items.id', 'items.title' )
             ->orderByDesc( 'total' );
 
-        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to, 'Asia/Kuala_Lumpur' );
 
         return response()->json( [ 'types' => $types, 'items' => $q->get() ] );
     }
@@ -430,7 +451,7 @@ class DashboardService {
             ->groupBy( 'types.id', 'playlists.id', 'playlists.en_name' )
             ->orderByDesc( 'total' );
 
-        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to, 'Asia/Kuala_Lumpur' );
 
         return response()->json( [ 'types' => $types, 'playlists' => $q->get() ] );
     }
@@ -454,7 +475,7 @@ class DashboardService {
             ->groupBy( 'types.id', 'collections.id', 'collections.en_name' )
             ->orderByDesc( 'total' );
 
-        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to );
+        self::applyDateRange( $q, 'stream_logs.created_at', $from, $to, 'Asia/Kuala_Lumpur' );
 
         return response()->json( [ 'types' => $types, 'collections' => $q->get() ] );
     }
@@ -510,12 +531,17 @@ class DashboardService {
             return response()->json( [ 'logs' => [] ] );
         }
 
-        $rows = DB::table( 'banner_clicks' )
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+
+        $q = DB::table( 'banner_clicks' )
             ->leftJoin( 'users', 'users.id', '=', 'banner_clicks.user_id' )
             ->where( 'banner_clicks.banner_id', $id )
             ->select( 'banner_clicks.user_id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'banner_clicks.created_at' )
-            ->orderByDesc( 'banner_clicks.created_at' )
-            ->get()
+            ->orderByDesc( 'banner_clicks.created_at' );
+
+        self::applyDateRange( $q, 'banner_clicks.created_at', $from, $to );
+
+        $rows = $q->get()
             ->map( function ( $r ) {
                 return [
                     'user'       => self::resolveUserName( $r ),
@@ -538,12 +564,17 @@ class DashboardService {
             return response()->json( [ 'logs' => [] ] );
         }
 
-        $rows = DB::table( 'pop_announcement_clicks' )
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+
+        $q = DB::table( 'pop_announcement_clicks' )
             ->leftJoin( 'users', 'users.id', '=', 'pop_announcement_clicks.user_id' )
             ->where( 'pop_announcement_clicks.pop_announcement_id', $id )
             ->select( 'pop_announcement_clicks.user_id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'pop_announcement_clicks.created_at' )
-            ->orderByDesc( 'pop_announcement_clicks.created_at' )
-            ->get()
+            ->orderByDesc( 'pop_announcement_clicks.created_at' );
+
+        self::applyDateRange( $q, 'pop_announcement_clicks.created_at', $from, $to );
+
+        $rows = $q->get()
             ->map( function ( $r ) {
                 return [
                     'user'       => self::resolveUserName( $r ),
