@@ -81,7 +81,7 @@ class Helper {
 
     public static function additionPermission() {
         return [
-            [ 'name' => 'dashboard', 'action' => 'view' ],
+            // [ 'name' => 'dashboard', 'action' => 'view' ],
         ];
     }
 
@@ -100,7 +100,9 @@ class Helper {
 
     public static function unusedAction () {
         $array = [
-            // [ 'name' => 'users', 'action' => 'soft_delete' ],
+            [ 'name' => 'dashboard', 'action' => 'add' ],
+            [ 'name' => 'dashboard', 'action' => 'edit' ],
+            [ 'name' => 'dashboard', 'action' => 'delete' ],
         ];
 
         return $array;
