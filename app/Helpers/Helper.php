@@ -81,7 +81,7 @@ class Helper {
 
     public static function additionPermission() {
         return [
-            // [ 'name' => 'users', 'action' => 'adjust_3' ],
+            [ 'name' => 'dashboard', 'action' => 'view' ],
         ];
     }
 

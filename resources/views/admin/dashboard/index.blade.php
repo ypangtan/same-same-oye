@@ -1,3 +1,4 @@
+@can('view_dashboard')
 <style>
     .page-title {
         color: #ae4342;
@@ -1042,3 +1043,4 @@
 
 });
 </script>
+@endcan
