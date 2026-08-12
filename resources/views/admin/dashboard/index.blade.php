@@ -463,7 +463,7 @@
                 </a>
             </div>
             <div class="modal-body">
-                <div class="listing-filter mb-2" style="grid-template-columns:1fr">
+                <div class="listing-filter mb-2">
                     <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="engagement-detail-date" style="background:#fff">
                 </div>
                 <div class="card card-bordered card-preview">
@@ -490,7 +490,7 @@
                 </a>
             </div>
             <div class="modal-body">
-                <div class="listing-filter mb-2" style="grid-template-columns:1fr">
+                <div class="listing-filter mb-2">
                     <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="click-detail-date" style="background:#fff">
                 </div>
                 <div class="card card-bordered card-preview">

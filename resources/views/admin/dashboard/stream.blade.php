@@ -48,7 +48,7 @@
                 </a>
             </div>
             <div class="modal-body">
-                <div class="listing-filter mb-2" style="max-width:260px">
+                <div class="listing-filter mb-2">
                     <input type="text" class="form-control form-control-sm" placeholder="Search date range…" id="stream-detail-date" style="background:#fff">
                 </div>
                 <div class="card card-bordered card-preview">
