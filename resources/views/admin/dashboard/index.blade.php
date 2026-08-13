@@ -337,7 +337,7 @@
     <p class="section-title">Streaming Activity (All Time)</p>
     <div class="row g-3" id="stream-cards-row">
         {{-- Radio always first --}}
-        <a href="{{ route('admin.module_parent.dashboard.stream') }}?page=radio" class="col-6 col-md-4 col-lg-3 stream-link-card text-decoration-none">
+        <a href="{{ route('admin.dashboardstream') }}?page=radio" class="col-6 col-md-4 col-lg-3 stream-link-card text-decoration-none">
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="gap-3 d-flex align-items-center h-100">
@@ -823,7 +823,7 @@
     });
 
     function loadEngagementDetail() {
-        post('{{ route("admin.module_parent.dashboard.getEngagementDetail") }}', { stat: engagementDetailStat, date_range: engagementDetailDateRange }).then(function (d) {
+        post('{{ route("admin.dashboardgetEngagementDetail") }}', { stat: engagementDetailStat, date_range: engagementDetailDateRange }).then(function (d) {
             if (engagementModalShown) {
                 buildEngagementDetailTable(d.logs);
             } else {
@@ -858,7 +858,7 @@
        SECTIONS 1-5: ONE-TIME LOADS
     ══════════════════════════════════════════════════════════════════ */
 
-    post('{{ route("admin.module_parent.dashboard.getEngagementStats") }}').then(function (d) {
+    post('{{ route("admin.dashboardgetEngagementStats") }}').then(function (d) {
         document.getElementById('stat-total-active').textContent = d.total_active    || '0';
         document.getElementById('stat-free').textContent         = d.free_users      || '0';
         document.getElementById('stat-trial').textContent        = d.trial_users     || '0';
@@ -878,7 +878,7 @@
         var $row = $('#stream-cards-row');
         $row.find('.stream-type-card').remove();
         var CARD_TYPE_NAMES = { 'Song': 'Music' };
-        var streamBaseUrl = '{{ route("admin.module_parent.dashboard.stream") }}';
+        var streamBaseUrl = '{{ route("admin.dashboardstream") }}';
         (d.stream_types || []).forEach(function (type) {
             var typeName = CARD_TYPE_NAMES[type.name] || type.name;
             ['items', 'playlists', 'collections'].forEach(function (ct) {
@@ -907,7 +907,7 @@
         document.getElementById('stat-total-installs').textContent   = '…';
         document.getElementById('stat-app-removed').textContent      = '…';
 
-        post('{{ route("admin.module_parent.dashboard.getAppAnalytics") }}', { period: period })
+        post('{{ route("admin.dashboardgetAppAnalytics") }}', { period: period })
             .then(function (d) {
                 if (d.error) {
                     ['stat-android-installs','stat-ios-installs','stat-total-installs','stat-app-removed']
@@ -939,7 +939,7 @@
     var dtSubs = null, subsDateRange = '', subsLoaded = false;
 
     function loadSubs() {
-        post('{{ route("admin.module_parent.dashboard.getSubscriptionsTable") }}', { date_range: subsDateRange }).then(function (d) {
+        post('{{ route("admin.dashboardgetSubscriptionsTable") }}', { date_range: subsDateRange }).then(function (d) {
             subsLoaded = true;
             dtSubs = makeDT('subs-table', d.subscriptions, [
                 { data: null         },
@@ -1007,7 +1007,7 @@
 
     var dtBanners = null;
 
-    post('{{ route("admin.module_parent.dashboard.getBannerClickStats") }}').then(function (d) {
+    post('{{ route("admin.dashboardgetBannerClickStats") }}').then(function (d) {
         dtBanners = makeDT('banners-table', d.banners, [
             { data: null         },
             { data: null         },
@@ -1028,7 +1028,7 @@
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
             { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-            viewStreamColDef(5, '{{ route("admin.module_parent.dashboard.getBannerClickDetail") }}', 'id', 'name', 'Banner Stream'),
+            viewStreamColDef(5, '{{ route("admin.dashboardgetBannerClickDetail") }}', 'id', 'name', 'Banner Stream'),
         ], 4, undefined, 'Banner Clicks');
     });
 
@@ -1046,7 +1046,7 @@
 
     var dtPopups = null;
 
-    post('{{ route("admin.module_parent.dashboard.getPopAnnouncementClickStats") }}').then(function (d) {
+    post('{{ route("admin.dashboardgetPopAnnouncementClickStats") }}').then(function (d) {
         dtPopups = makeDT('popups-table', d.popups, [
             { data: null         },
             { data: null         },
@@ -1068,7 +1068,7 @@
                   return '<span class="bx ' + c + '">' + esc(data) + '</span>';
               } },
             { targets: 5, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
-            viewStreamColDef(6, '{{ route("admin.module_parent.dashboard.getPopAnnouncementClickDetail") }}', 'id', 'title', 'Pop Announcement Stream'),
+            viewStreamColDef(6, '{{ route("admin.dashboardgetPopAnnouncementClickDetail") }}', 'id', 'title', 'Pop Announcement Stream'),
         ], 5, undefined, 'Popup Clicks');
     });
 
