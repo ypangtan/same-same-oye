@@ -298,11 +298,29 @@ var statusMapper = @json( $data['status'] ),
             window.location.href = '{{ route( 'admin.item.edit' ) }}?id=' + $( this ).data( 'id' ) + '&type=' + '{{ $type }}' + '&parent_route=' + '{{ $parent_route }}';
         } );
 
-        var itemLikesModal = new bootstrap.Modal( document.getElementById( 'item_likes_modal' ) );
+        var itemLikesModalEl = document.getElementById( 'item_likes_modal' );
+        var itemLikesModal = new bootstrap.Modal( itemLikesModalEl );
         var itemLikesDT = null;
         var itemLikesId = null;
         var itemLikesLabel = '{{ __( 'item.likes' ) }}';
         var itemLikesDateRange = '';
+
+        // DataTables (scrollX:true) computes column widths from the modal's rendered size, so
+        // building the table before Bootstrap's fade-in transition finishes yields misaligned
+        // columns. Defer the build until the modal is actually shown, queuing data that arrives early.
+        var itemLikesModalShown = false;
+        var itemLikesPending = null;
+
+        itemLikesModalEl.addEventListener( 'shown.bs.modal', function() {
+            itemLikesModalShown = true;
+            if ( itemLikesPending ) {
+                buildItemLikesTable( itemLikesPending, itemLikesLabel );
+                itemLikesPending = null;
+            }
+        } );
+        itemLikesModalEl.addEventListener( 'hidden.bs.modal', function() {
+            itemLikesModalShown = false;
+        } );
 
         function itemLikesExportFileName( label ) {
             var d = new Date();
@@ -462,10 +480,18 @@ var statusMapper = @json( $data['status'] ),
                     '_token': '{{ csrf_token() }}',
                 },
                 success: function( response ) {
-                    buildItemLikesTable( response.likes || [], itemLikesLabel );
+                    if ( itemLikesModalShown ) {
+                        buildItemLikesTable( response.likes || [], itemLikesLabel );
+                    } else {
+                        itemLikesPending = response.likes || [];
+                    }
                 },
                 error: function() {
-                    buildItemLikesTable( [], itemLikesLabel );
+                    if ( itemLikesModalShown ) {
+                        buildItemLikesTable( [], itemLikesLabel );
+                    } else {
+                        itemLikesPending = [];
+                    }
                 },
             } );
         }

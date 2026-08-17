@@ -372,8 +372,42 @@ var statusMapper = @json( $data['status'] ),
             window.location.href = '{{ route( 'admin.playlist.edit' ) }}?id=' + $( this ).data( 'id' ) + '&type=' + '{{ $type }}' + '&parent_route=' + '{{ $parent_route }}';
         } );
 
-        var playlistLikesModal = new bootstrap.Modal( document.getElementById( 'playlist_likes_modal' ) );
-        var playlistItemUsersModal = new bootstrap.Modal( document.getElementById( 'playlist_item_users_modal' ) );
+        var playlistLikesModalEl = document.getElementById( 'playlist_likes_modal' );
+        var playlistItemUsersModalEl = document.getElementById( 'playlist_item_users_modal' );
+        var playlistLikesModal = new bootstrap.Modal( playlistLikesModalEl );
+        var playlistItemUsersModal = new bootstrap.Modal( playlistItemUsersModalEl );
+
+        // DataTables (scrollX:true) computes column widths from the modal's rendered size, so
+        // building the table before Bootstrap's fade-in transition finishes yields misaligned
+        // columns. Defer the build until the modal is actually shown, queuing data that arrives early.
+        var playlistLikesModalShown = false;
+        var playlistLikesPending = null;
+        var playlistLikesLabel = '{{ __( 'playlist.likes' ) }}';
+
+        playlistLikesModalEl.addEventListener( 'shown.bs.modal', function() {
+            playlistLikesModalShown = true;
+            if ( playlistLikesPending ) {
+                buildPlaylistLikesTable( playlistLikesPending, playlistLikesLabel );
+                playlistLikesPending = null;
+            }
+        } );
+        playlistLikesModalEl.addEventListener( 'hidden.bs.modal', function() {
+            playlistLikesModalShown = false;
+        } );
+
+        var playlistItemUsersModalShown = false;
+        var playlistItemUsersPending = null;
+
+        playlistItemUsersModalEl.addEventListener( 'shown.bs.modal', function() {
+            playlistItemUsersModalShown = true;
+            if ( playlistItemUsersPending ) {
+                buildPlaylistItemUsersTable( playlistItemUsersPending, playlistItemUsersLabel );
+                playlistItemUsersPending = null;
+            }
+        } );
+        playlistItemUsersModalEl.addEventListener( 'hidden.bs.modal', function() {
+            playlistItemUsersModalShown = false;
+        } );
 
         var PL_DT_DOM = "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
                      "<'row'<'col-sm-12'tr>>" +
@@ -618,10 +652,18 @@ var statusMapper = @json( $data['status'] ),
                     '_token': '{{ csrf_token() }}',
                 },
                 success: function( response ) {
-                    buildPlaylistItemUsersTable( response.likes || [], playlistItemUsersLabel );
+                    if ( playlistItemUsersModalShown ) {
+                        buildPlaylistItemUsersTable( response.likes || [], playlistItemUsersLabel );
+                    } else {
+                        playlistItemUsersPending = response.likes || [];
+                    }
                 },
                 error: function() {
-                    buildPlaylistItemUsersTable( [], playlistItemUsersLabel );
+                    if ( playlistItemUsersModalShown ) {
+                        buildPlaylistItemUsersTable( [], playlistItemUsersLabel );
+                    } else {
+                        playlistItemUsersPending = [];
+                    }
                 },
             } );
         }
@@ -642,6 +684,8 @@ var statusMapper = @json( $data['status'] ),
             var id = $( this ).data( 'id' ),
                 title = $( this ).data( 'title' );
 
+            playlistLikesLabel = title || '{{ __( 'playlist.likes' ) }}';
+
             $( '#playlist_likes_modal_title' ).text( title ? title + ' — ' + '{{ __( 'playlist.likes' ) }}' : '{{ __( 'playlist.likes' ) }}' );
             $( '#playlist_likes_search' ).val( '' );
             playlistLikesModal.show();
@@ -654,10 +698,18 @@ var statusMapper = @json( $data['status'] ),
                     '_token': '{{ csrf_token() }}',
                 },
                 success: function( response ) {
-                    buildPlaylistLikesTable( response.items || [], title || '{{ __( 'playlist.likes' ) }}' );
+                    if ( playlistLikesModalShown ) {
+                        buildPlaylistLikesTable( response.items || [], playlistLikesLabel );
+                    } else {
+                        playlistLikesPending = response.items || [];
+                    }
                 },
                 error: function() {
-                    buildPlaylistLikesTable( [], title || '{{ __( 'playlist.likes' ) }}' );
+                    if ( playlistLikesModalShown ) {
+                        buildPlaylistLikesTable( [], playlistLikesLabel );
+                    } else {
+                        playlistLikesPending = [];
+                    }
                 },
             } );
         } );
