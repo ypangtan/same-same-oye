@@ -350,9 +350,9 @@ $parent_route = $data['parent_route'] ?? '';
             let data = e.params.data;
             
             if (!selectedPlaylists.some( item => item.id === data.id ) ) {
-                selectedPlaylists.push( {id: data.id, text: data.text} );
+                selectedPlaylists.unshift( {id: data.id, text: data.text} );
 
-                $('#selected-playlists').append(`
+                $('#selected-playlists').prepend(`
                     <span class="playlist-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
                         <em class="icon ni ni-cross remove-playlist click-action"></em>
