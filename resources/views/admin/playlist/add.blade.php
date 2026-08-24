@@ -293,9 +293,9 @@ window.cke_element = [ 'playlist_create_desc'];
             file_type = e.params.data.file_type;
             
             if (!selectedItems.some(tag => tag.id === data.id)) {
-                selectedItems.push( {id: data.id, text: data.text, file_type: data.file_type} );
+                selectedItems.unshift( {id: data.id, text: data.text, file_type: data.file_type} );
 
-                $('#selected-items').append(`
+                $('#selected-items').prepend(`
                     <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
                         <em class="icon ni ni-cross remove-item click-action"></em>

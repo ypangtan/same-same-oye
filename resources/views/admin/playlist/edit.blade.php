@@ -407,9 +407,9 @@ window.cke_element = [ 'playlist_edit_desc'];
             file_type = e.params.data.file_type;
             
             if (!selectedItems.some( item => item.id === data.id ) ) {
-                selectedItems.push( {id: data.id, text: data.text} );
+                selectedItems.unshift( {id: data.id, text: data.text} );
 
-                $('#selected-items').append(`
+                $('#selected-items').prepend(`
                     <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
                         ${data.text}
                         <i class="icon icon-icon16-close remove-item click-action" style="font-size:23px;"></i>
