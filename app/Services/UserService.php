@@ -2412,7 +2412,8 @@ class UserService
         $notifications = UserNotification::select(
             'user_notifications.*',
             // DB::raw( '( SELECT COUNT(*) FROM user_notification_seens AS a WHERE a.user_notification_id = user_notifications.id AND a.user_id = ' .request()->user()->id. ' ) as is_read' )
-            DB::raw( 'CASE WHEN user_notification_seens.id > 0 THEN 1 ELSE 0 END as is_read' )
+            DB::raw( 'CASE WHEN user_notification_seens.id > 0 THEN 1 ELSE 0 END as is_read' ),
+            DB::raw( 'COALESCE( user_notifications.publishing_date, user_notifications.created_at ) as sort_date' )
         )->where( function( $query ) {
             $query->where( 'user_notifications.status', 10 );
             $query->where( 'user_notifications.is_broadcast', 10 );
@@ -2446,14 +2447,15 @@ class UserService
 
         $notifications->where( 'user_notifications.status', 10 );
 
-        $notifications->orderBy( 'user_notifications.created_at', 'DESC' );
+        $notifications->orderBy( 'sort_date', 'DESC' );
 
         $notifications = $notifications->simplePaginate( empty( $request->per_page ) ? 100 : $request->per_page );
 
         $notifications->getCollection()->transform(function ($item) {
-            $item->image_path = $item->image 
-                ? asset('storage/notifications/' . $item->image) 
+            $item->image_path = $item->image
+                ? asset('storage/notifications/' . $item->image)
                 : asset('storage/notifications/default.png');
+            $item->created_at = $item->sort_date;
             return $item;
         });
         
@@ -2463,6 +2465,10 @@ class UserService
     public static function getNotification( $request ) {
 
         $notification = UserNotification::find( $request->notification );
+
+        if ( $notification && $notification->publishing_date ) {
+            $notification->created_at = $notification->publishing_date;
+        }
 
         return response()->json( [
             'data' => $notification,
