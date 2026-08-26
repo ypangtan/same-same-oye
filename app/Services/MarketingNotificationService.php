@@ -436,6 +436,7 @@ class MarketingNotificationService {
         $marketingNotificationsIds = UserNotificationUser::where( 'user_id', auth()->user()->id )->pluck('user_notification_id');
 
         $marketingNotificationss = UserNotification::select('user_notifications.*' )
+            ->selectRaw( 'COALESCE( user_notifications.publishing_date, user_notifications.created_at ) as sort_date' )
             ->where( 'status', 10 )
             ->where( function( $q ) use ( $marketingNotificationsIds ) {
                 $q->whereIn( 'id', $marketingNotificationsIds )
@@ -445,11 +446,13 @@ class MarketingNotificationService {
                 $q->whereNull( 'publishing_date' )->orWhere( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
             } );
 
-        $marketingNotificationss->orderBy( 'user_notifications.created_at', 'DESC' );
+        $marketingNotificationss->orderBy( 'sort_date', 'DESC' );
 
         $marketingNotificationss = $marketingNotificationss->simplePaginate( empty( $request->per_page ) ? 10 : $request->per_page );
 
         foreach ( $marketingNotificationss->items() as $marketingNotifications ) {
+
+            $marketingNotifications->created_at = $marketingNotifications->sort_date;
 
             $marketingNotifications->append( [
                 'photo_path',
