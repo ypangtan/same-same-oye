@@ -452,7 +452,9 @@ class MarketingNotificationService {
 
         foreach ( $marketingNotificationss->items() as $marketingNotifications ) {
 
-            $marketingNotifications->created_at = $marketingNotifications->sort_date;
+            if ( $marketingNotifications->publishing_date ) {
+                $marketingNotifications->created_at = Carbon::parse( $marketingNotifications->publishing_date, config( 'app.timezone' ) )->subHours( 8 );
+            }
 
             $marketingNotifications->append( [
                 'photo_path',

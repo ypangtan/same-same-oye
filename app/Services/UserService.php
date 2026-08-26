@@ -2455,7 +2455,9 @@ class UserService
             $item->image_path = $item->image
                 ? asset('storage/notifications/' . $item->image)
                 : asset('storage/notifications/default.png');
-            $item->created_at = $item->sort_date;
+            if ( $item->publishing_date ) {
+                $item->created_at = Carbon::parse( $item->publishing_date, config( 'app.timezone' ) )->subHours( 8 );
+            }
             return $item;
         });
         
@@ -2467,7 +2469,7 @@ class UserService
         $notification = UserNotification::find( $request->notification );
 
         if ( $notification && $notification->publishing_date ) {
-            $notification->created_at = $notification->publishing_date;
+            $notification->created_at = Carbon::parse( $notification->publishing_date, config( 'app.timezone' ) )->subHours( 8 );
         }
 
         return response()->json( [
