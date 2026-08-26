@@ -309,10 +309,14 @@ class PopAnnouncementService
     }
 
     public static function getAllPopAnnouncements() {
-        $rank = PopAnnouncement::where( 'status', '10' )
+        $rank = PopAnnouncement::select( 'pop_announcements.*' )
+        ->selectRaw( 'COALESCE( pop_announcements.publishing_date, pop_announcements.created_at ) as sort_date' )
+        ->where( 'status', '10' )
         ->where( function( $q ) {
             $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
-        } )->get();
+        } )
+        ->orderBy( 'sort_date', 'DESC' )
+        ->get();
 
         $rank->append( [
             'encrypted_id',
@@ -320,6 +324,15 @@ class PopAnnouncementService
             'title',
             'text',
         ] );
+
+        foreach ( $rank as $popAnnouncement ) {
+            // publishing_date is stored/read as Asia/Kuala_Lumpur wall-clock, but created_at goes
+            // through Model::serializeDate() which adds +8 on output, so subtract it here first
+            // to avoid it being applied twice.
+            if ( $popAnnouncement->publishing_date ) {
+                $popAnnouncement->created_at = Carbon::parse( $popAnnouncement->publishing_date, config( 'app.timezone' ) )->subHours( 8 );
+            }
+        }
 
         return response()->json( [
             'data' => $rank,
