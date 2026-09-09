@@ -42,7 +42,12 @@ class IcecastService
             // Populated once Liquidsoap has pushed at least one track's ICY metadata (it tags
             // each request with title="..." via the annotate: protocol — see radio.liq). Empty
             // until then, or while silence (no metadata) is what's actually on air.
-            $title = $source['title'] ?? null;
+            //
+            // Icecast's status-json.xsl HTML-entity-encodes non-ASCII characters in metadata
+            // (a long-standing Icecast quirk, not something we're doing) — e.g. Chinese titles
+            // come back as "&#23391;&#32500;..." instead of raw UTF-8. Decode it here so every
+            // consumer of getStatus() gets the real text.
+            $title = html_entity_decode( $source['title'] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 
             return [
                 'listeners' => (int) ( $source['listeners'] ?? 0 ),
