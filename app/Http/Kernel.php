@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'api_version' => \App\Http\Middleware\APIVersion::class,
         'checkMFA' => \App\Http\Middleware\CheckMFA::class,
         'vending.auth' => \App\Http\Middleware\VerifyVendingMachineKey::class,
+        'radio.engine' => \App\Http\Middleware\VerifyRadioEngineKey::class,
         'log.cart.order' => \App\Http\Middleware\LogCartOrderActivity::class,
         'auth.optional' => \App\Http\Middleware\OptionalAuth::class,
     ];

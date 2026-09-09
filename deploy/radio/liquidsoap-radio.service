@@ -1,0 +1,14 @@
+[Unit]
+Description=same-same-oye radio engine (Liquidsoap)
+After=network.target icecast2.service
+Wants=icecast2.service
+
+[Service]
+Type=simple
+User=liquidsoap
+ExecStart=/usr/bin/liquidsoap /opt/same-same-oye-radio/radio.liq
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

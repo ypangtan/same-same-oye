@@ -148,7 +148,24 @@
                                     </ul>
                                 </li>
                                 @endcanany
-                                
+
+                                @can( 'view radios' )
+                                <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\RadioController' ) ? 'active current-page' : '' }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-signal"></em></span>
+                                        <span class="nk-menu-text">{{ __( 'template.radios' ) }}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item {{ ( $controller == 'App\Http\Controllers\Admin\RadioController' && $action != 'history' ) ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.radio.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.radio_queue' ) }}</span></a>
+                                        </li>
+                                        <li class="nk-menu-item {{ ( $controller == 'App\Http\Controllers\Admin\RadioController' && $action == 'history' ) ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.radio.history' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.radio_history' ) }}</span></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @endcan
+
                                 @canany( [ 'view items', 'view playlists', 'view collections', 'view categories' ] )
                                 <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\TalkController' ||
                                     ( isset( $data, $data['type'] ) && $data['type'] == '3' )

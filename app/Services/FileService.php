@@ -120,4 +120,47 @@ class FileService
             'file_name' => $createFile->name,
         ] );
     }
+
+    /**
+     * Same as songUpload(), but stored under a "radio" prefix instead of "song" — radio queue
+     * files are short-lived (deleted from R2 once played), so keeping them out of the permanent
+     * song library prefix makes that lifecycle obvious.
+     */
+    public static function radioSongUpload( $request ) {
+
+        $file = $request->file( 'file' );
+        $mimeType = $file->getMimeType();
+        $pathname = $file->getPathname();
+        $clientName = $file->getClientOriginalName();
+
+        if (empty($pathname) || !file_exists($pathname)) {
+            return response()->json([
+                'status'  => 422,
+                'message' => '上传的文件不可读。',
+            ], 422);
+        }
+
+        $duration = null;
+        try {
+            $ffprobe  = \FFMpeg\FFProbe::create();
+            $duration = (int) round(
+                $ffprobe->format($pathname)->get('duration')
+            );
+        } catch (\Exception $e) {
+            \Log::warning('FFProbe 无法读取时长', [
+                'file'  => $clientName,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        $path = StorageService::upload( 'radio', $file );
+
+        return response()->json( [
+            'status' => 200,
+            'url' => StorageService::get( $path ),
+            'duration' => $duration,
+            'file' => $path,
+            'file_name' => $clientName,
+        ] );
+    }
 }

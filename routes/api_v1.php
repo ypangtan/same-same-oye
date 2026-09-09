@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\{
     TypeController,
     UserPlaylistController,
     StreamController,
+    RadioEngineController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -132,6 +133,13 @@ Route::middleware( 'auth.optional' )->group( function() {
     } );
 
     Route::post( '/record', [ StreamController::class, 'record' ] );
+} );
+
+// Called only by the Icecast/Liquidsoap streaming engine on this same server — never by the
+// app. Guarded by a shared-secret header instead of user auth, see 'radio.engine' middleware.
+Route::prefix( 'radio' )->middleware( 'radio.engine' )->group( function() {
+    Route::get( '/next', [ RadioEngineController::class, 'next' ] );
+    Route::post( '/played', [ RadioEngineController::class, 'played' ] );
 } );
 
 /* End Public route */

@@ -85,6 +85,16 @@ return [
         'deeplink_url' => env( 'DEEPLINK_URL' ),
     ],
 
+    'radio' => [
+        // Shared secret the Liquidsoap/Icecast engine sends as the X-Radio-Engine-Key header
+        // when polling /api/radio/next and /api/radio/played. Generate with e.g. `openssl rand -hex 32`.
+        'engine_key' => env( 'RADIO_ENGINE_KEY' ),
+
+        // Icecast's built-in JSON stats endpoint, read for the backoffice "now playing" panel
+        // and the radio:snapshot-listeners command. Same server, so localhost is normally right.
+        'icecast_status_url' => env( 'RADIO_ICECAST_STATUS_URL', 'http://127.0.0.1:8000/status-json.xsl' ),
+    ],
+
     'firebase' => [
         // Absolute path to the Firebase service-account JSON key file.
         'credentials_path' => env( 'FIREBASE_CREDENTIALS_PATH', storage_path( 'app/credentials/firebase.json' ) ),

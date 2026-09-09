@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+    Minimal Icecast config for this project's radio stream.
+    Merge the relevant bits into /etc/icecast2/icecast.xml (Debian/Ubuntu) —
+    don't just replace the whole file, it has other required sections
+    (paths, logging, etc.) that apt installs for you.
+-->
+<icecast>
+    <limits>
+        <clients>200</clients>
+        <sources>2</sources>
+        <queue-size>524288</queue-size>
+        <!-- Bytes sent to a client immediately on connect, before it has to wait
+             for the live stream to catch up. This is what makes startup fast
+             (near-MP3-file speed) instead of the multi-second delay you get
+             from most hosted radio widgets. Tune up if listeners on slow
+             connections stutter at the start; down for even snappier joins. -->
+        <burst-size>65536</burst-size>
+        <source-timeout>10</source-timeout>
+    </limits>
+
+    <authentication>
+        <source-password>REPLACE_WITH_ICECAST_SOURCE_PASSWORD</source-password>
+        <admin-user>admin</admin-user>
+        <admin-password>REPLACE_WITH_ICECAST_ADMIN_PASSWORD</admin-password>
+    </authentication>
+
+    <listen-socket>
+        <port>8000</port>
+    </listen-socket>
+
+    <mount type="normal">
+        <mount-name>/radio.mp3</mount-name>
+        <!-- keep this in sync with icecast_mount in radio.liq -->
+        <public>0</public>
+    </mount>
+</icecast>

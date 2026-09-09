@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\{
     PlaylistController,
     PodcastController,
     PopAnnouncementController,
+    RadioController,
     SubscriptionGroupMemberController,
     SubscriptionPlanController,
     TalkController,
@@ -384,6 +385,25 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view categories' ] ], function() {
                     Route::get( 'category', [ TalkController::class, 'category' ] )->name( 'admin.talk.category' );
                 } );
+            } );
+
+            Route::prefix( 'radio' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view radios' ] ], function() {
+                    Route::get( '/', [ RadioController::class, 'index' ] )->name( 'admin.module_parent.radio.index' );
+                    Route::get( 'history', [ RadioController::class, 'history' ] )->name( 'admin.radio.history' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add radios' ] ], function() {
+                    Route::get( 'add', [ RadioController::class, 'add' ] )->name( 'admin.radio.add' );
+                } );
+
+                Route::post( 'all-items', [ RadioController::class, 'allItems' ] )->name( 'admin.radio.allItems' );
+                Route::post( 'all-history', [ RadioController::class, 'allHistory' ] )->name( 'admin.radio.allHistory' );
+                Route::post( 'create-item', [ RadioController::class, 'createItem' ] )->name( 'admin.radio.createItem' );
+                Route::post( 'delete-item', [ RadioController::class, 'deleteItem' ] )->name( 'admin.radio.deleteItem' );
+                Route::post( 'reorder', [ RadioController::class, 'reorder' ] )->name( 'admin.radio.reorder' );
+                Route::post( 'song-upload', [ RadioController::class, 'songUpload' ] )->name( 'admin.radio.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+                Route::post( 'now-playing', [ RadioController::class, 'nowPlaying' ] )->name( 'admin.radio.nowPlaying' );
+                Route::post( 'listener-graph', [ RadioController::class, 'listenerGraph' ] )->name( 'admin.radio.listenerGraph' );
             } );
 
             Route::prefix( 'categories' )->group( function() {

@@ -77,6 +77,9 @@ return [
     'category' => 'Category',
     'musics' => 'Music',
     'podcasts' => 'Podcasts',
+    'radios' => 'Radio',
+    'radio_queue' => 'Radio Queue',
+    'radio_history' => 'Play History',
     'talks' => 'Talks',
     'user_playlists' => 'User Playlists',
     'subscription_plans' => 'Subscription Plans',
@@ -123,6 +126,7 @@ return [
     'x_updated' => ':title Updated.',
     'x_redeemed' => ':title Redeemed.',
     'x_deleted' => ':title Deleted.',
+    'record_not_found' => 'Record not found.',
 
     'leave_blank' => 'Leave blank to leave unchanged',
     'general_info' => 'General Info',
