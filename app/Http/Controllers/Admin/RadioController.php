@@ -78,6 +78,13 @@ class RadioController extends Controller
         return FileService::radioSongUpload( $request );
     }
 
+    public function imageUpload( Request $request ) {
+        $request->merge( [
+            'source' => 'image/radio'
+        ] );
+        return FileService::imageUpload( $request );
+    }
+
     public function nowPlaying() {
         return RadioQueueService::nowPlaying();
     }

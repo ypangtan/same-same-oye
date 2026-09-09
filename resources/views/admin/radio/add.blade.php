@@ -32,6 +32,15 @@ $parent_route = route( 'admin.module_parent.radio.index' );
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
+                <div class="mb-3">
+                    <label>{{ __( 'radio.image' ) }}</label>
+                    <div class="dropzone mb-3" id="{{ $radio_create }}_image" style="min-height: 0px;">
+                        <div class="dz-message needsclick">
+                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback"></div>
+                </div>
                 <div class="text-end">
                     <button id="{{ $radio_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -48,7 +57,8 @@ $parent_route = route( 'admin.module_parent.radio.index' );
         let dc = '#{{ $radio_create }}',
             file2ID = '',
             song_file = '',
-            duration = '';
+            duration = '',
+            imageID = '';
 
         $( dc + '_cancel' ).click( function() {
             window.location.href = '{{ $parent_route }}';
@@ -70,6 +80,7 @@ $parent_route = route( 'admin.module_parent.radio.index' );
                     file: file2ID ?? '',
                     file_name: song_file ?? '',
                     duration: duration ?? '',
+                    image: imageID ?? '',
                     _token: '{{ csrf_token() }}',
                 },
                 success: function( response ) {
@@ -101,7 +112,11 @@ $parent_route = route( 'admin.module_parent.radio.index' );
         const dropzone = new Dropzone( dc + '_file', {
             url: '{{ route("admin.radio.songUpload") }}',
             maxFiles: 1,
-            acceptedFiles: 'audio/mpeg,audio/mp3',
+            // Liquidsoap decodes whatever format is uploaded and re-encodes to MP3 for the
+            // Icecast broadcast, so this isn't limited to what the stream itself outputs.
+            // Extensions are listed alongside MIME types because some browsers/OSes report
+            // FLAC (and sometimes WAV) with an inconsistent or blank MIME type.
+            acceptedFiles: 'audio/mpeg,audio/mp3,audio/flac,audio/x-flac,audio/wav,audio/x-wav,audio/mp4,audio/aac,audio/ogg,.mp3,.flac,.wav,.m4a,.aac,.ogg',
             addRemoveLinks: true,
             previewTemplate: `
                 <div class="dz-preview dz-file-preview" style="cursor:pointer;">
@@ -149,6 +164,35 @@ $parent_route = route( 'admin.module_parent.radio.index' );
                 });
             }
         });
+
+        const imageDropzone = new Dropzone( dc + '_image', {
+            url: '{{ route("admin.radio.imageUpload") }}',
+            maxFiles: 1,
+            acceptedFiles: 'image/jpg,image/jpeg,image/png',
+            addRemoveLinks: true,
+            init: function() {
+                this.on("addedfile", function (file) {
+                    if (this.files.length > 1) {
+                        this.removeFile(this.files[0]);
+                    }
+                });
+                this.on("sending", function( file ) {
+                    $( 'body' ).loading( {
+                        message: '{{ __( 'template.loading' ) }}'
+                    } );
+                });
+                this.on("complete", function( file ) {
+                    $( 'body' ).loading( 'stop' );
+                });
+            },
+            removedfile: function( file ) {
+                imageID = '';
+                file.previewElement.remove();
+            },
+            success: function( file, response ) {
+                imageID = response.file;
+            }
+        } );
 
     } );
 </script>

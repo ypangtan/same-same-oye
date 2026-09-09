@@ -26,7 +26,10 @@
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="gap-3 d-flex align-items-center h-100">
-                        <div class="stat-icon" id="radio_now_playing_dot" style="background:#e4e4e4;color:#777"><em class="icon ni ni-music"></em></div>
+                        <div class="stat-icon" id="radio_now_playing_dot" style="background:#e4e4e4;color:#777;overflow:hidden;padding:0;">
+                            <em class="icon ni ni-music" id="radio_now_playing_icon"></em>
+                            <img id="radio_now_playing_image" src="" alt="" hidden style="width:100%;height:100%;object-fit:cover;">
+                        </div>
                         <div>
                             <div class="stat-value" id="radio_now_playing_title" style="font-size:1rem;">—</div>
                             <div class="stat-label">{{ __( 'radio.now_playing' ) }}</div>
@@ -99,12 +102,20 @@
                 type: 'POST',
                 data: { '_token': '{{ csrf_token() }}' },
                 success: function( response ) {
-                    $( '#radio_now_playing_title' ).text( response.title ?? '{{ __( "radio.nothing_played_yet" ) }}' );
+                    $( '#radio_now_playing_title' ).text( response.title ?? '—' );
                     $( '#radio_listener_count' ).text( response.listeners );
                     $( '#radio_now_playing_dot' ).css( {
                         background: response.online ? '#e8f5e9' : '#e4e4e4',
                         color: response.online ? '#2e7d32' : '#777',
                     } );
+
+                    if ( response.image ) {
+                        $( '#radio_now_playing_image' ).attr( 'src', response.image ).prop( 'hidden', false );
+                        $( '#radio_now_playing_icon' ).prop( 'hidden', true );
+                    } else {
+                        $( '#radio_now_playing_image' ).prop( 'hidden', true ).attr( 'src', '' );
+                        $( '#radio_now_playing_icon' ).prop( 'hidden', false );
+                    }
                 },
             } );
         }
@@ -187,7 +198,7 @@ window['{{ $column['id'] }}'] = '';
 
 var statusMapper = {
         10: '{{ __( "datatables.pending" ) }}',
-        20: '{{ __( "radio.now_playing" ) }}',
+        20: '{{ __( "radio.reserved" ) }}',
     },
     dt_table,
     dt_table_name = '#radio_queue_table',

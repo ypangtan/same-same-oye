@@ -17,14 +17,14 @@ class IcecastService
         $url = config( 'services.radio.icecast_status_url' );
 
         if ( !$url ) {
-            return [ 'listeners' => 0, 'online' => false ];
+            return [ 'listeners' => 0, 'online' => false, 'title' => null ];
         }
 
         try {
             $response = Http::timeout( 3 )->get( $url );
 
             if ( !$response->successful() ) {
-                return [ 'listeners' => 0, 'online' => false ];
+                return [ 'listeners' => 0, 'online' => false, 'title' => null ];
             }
 
             $source = data_get( $response->json(), 'icestats.source' );
@@ -36,17 +36,23 @@ class IcecastService
             }
 
             if ( !$source ) {
-                return [ 'listeners' => 0, 'online' => false ];
+                return [ 'listeners' => 0, 'online' => false, 'title' => null ];
             }
+
+            // Populated once Liquidsoap has pushed at least one track's ICY metadata (it tags
+            // each request with title="..." via the annotate: protocol — see radio.liq). Empty
+            // until then, or while silence (no metadata) is what's actually on air.
+            $title = $source['title'] ?? null;
 
             return [
                 'listeners' => (int) ( $source['listeners'] ?? 0 ),
                 'online' => true,
+                'title' => $title !== '' ? $title : null,
             ];
 
         } catch ( \Throwable $e ) {
             Log::warning( 'Icecast status check failed: ' . $e->getMessage() );
-            return [ 'listeners' => 0, 'online' => false ];
+            return [ 'listeners' => 0, 'online' => false, 'title' => null ];
         }
     }
 }

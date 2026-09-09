@@ -402,6 +402,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'delete-item', [ RadioController::class, 'deleteItem' ] )->name( 'admin.radio.deleteItem' );
                 Route::post( 'reorder', [ RadioController::class, 'reorder' ] )->name( 'admin.radio.reorder' );
                 Route::post( 'song-upload', [ RadioController::class, 'songUpload' ] )->name( 'admin.radio.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+                Route::post( 'image-upload', [ RadioController::class, 'imageUpload' ] )->name( 'admin.radio.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'now-playing', [ RadioController::class, 'nowPlaying' ] )->name( 'admin.radio.nowPlaying' );
                 Route::post( 'listener-graph', [ RadioController::class, 'listenerGraph' ] )->name( 'admin.radio.listenerGraph' );
             } );

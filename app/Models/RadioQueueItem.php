@@ -25,6 +25,7 @@ class RadioQueueItem extends Model
         'title',
         'file',
         'file_name',
+        'image',
         'duration',
         'position',
         'status',
@@ -51,6 +52,14 @@ class RadioQueueItem extends Model
         }
 
         return StorageService::get( $this->attributes['file'] );
+    }
+
+    public function getImageUrlAttribute() {
+        if( empty( $this->attributes['image'] ) ) {
+            return null;
+        }
+
+        return StorageService::get( $this->attributes['image'] );
     }
 
     public function getDisplayDurationAttribute() {
