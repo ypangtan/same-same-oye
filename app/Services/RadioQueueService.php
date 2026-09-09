@@ -236,6 +236,25 @@ class RadioQueueService {
             }
         }
 
+        // A "Reserved" track has already been claimed by the streaming engine and is about to
+        // air — a pending track landing at or before its position wouldn't change real playback
+        // order (the reserved one plays regardless of what the list shows above it), just
+        // create a confusing mismatch between the list and what's actually next. Re-number
+        // pending tracks (keeping whatever relative order the drag above just produced) so they
+        // always sort after it.
+        $reservedPosition = RadioQueueItem::where( 'status', RadioQueueItem::STATUS_RESERVED )
+            ->min( 'position' );
+
+        if ( $reservedPosition !== null ) {
+            $next = $reservedPosition + 1;
+            RadioQueueItem::where( 'status', RadioQueueItem::STATUS_QUEUED )
+                ->orderBy( 'position', 'asc' )
+                ->get()
+                ->each( function( $item ) use ( &$next ) {
+                    $item->update( [ 'position' => $next++ ] );
+                } );
+        }
+
         return response()->json( [
             'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.radio_queue' ) ) ] ),
         ] );
@@ -296,7 +315,17 @@ class RadioQueueService {
         }
 
         if ( $item->file ) {
-            StorageService::delete( $item->file );
+            // If R2 is unreachable/erroring, don't let that stop the track from being recorded
+            // as played — better to leave one orphaned R2 file than to leave the row stuck at
+            // "reserved" forever (the engine has already moved on, so it never retries this).
+            try {
+                StorageService::delete( $item->file );
+            } catch ( \Throwable $e ) {
+                \Log::warning( 'Radio: failed to delete R2 file after play: ' . $e->getMessage(), [
+                    'radio_queue_item_id' => $item->id,
+                    'file' => $item->file,
+                ] );
+            }
         }
 
         $item->file = null;
