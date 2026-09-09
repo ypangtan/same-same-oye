@@ -33,6 +33,14 @@ class RadioQueueItem extends Model
         'played_at',
     ];
 
+    // Eloquent only auto-casts created_at/updated_at by default — without this, reserved_at and
+    // played_at come back as plain strings (not Carbon), which both breaks ->timezone() calls on
+    // them and skips serializeDate() below, so they'd render in raw UTC instead of KL time.
+    protected $casts = [
+        'reserved_at' => 'datetime',
+        'played_at' => 'datetime',
+    ];
+
     public function administrator() {
         return $this->belongsTo( Administrator::class, 'add_by' );
     }
