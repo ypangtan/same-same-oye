@@ -62,5 +62,12 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(200);
         });
+
+        // The radio streaming engine (Liquidsoap) polls /api/v1/radio/next repeatedly whenever
+        // the queue is empty (no built-in backoff), so it needs its own, much more generous
+        // bucket instead of sharing the general 'api' one — see routes/api_v1.php.
+        RateLimiter::for('radio-engine', function (Request $request) {
+            return Limit::perMinute(600);
+        });
     }
 }
