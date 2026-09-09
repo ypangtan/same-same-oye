@@ -193,8 +193,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
             }      
         ],
         footerCallback: function (row, data, start, end, display) {
-            // Example: Calculate total for column index 3
+            // Example: Calculate total for column index 3 — only makes sense on tables that
+            // actually have a 4th column; without this guard it throws on any table with 3 or
+            // fewer columns (column(3) doesn't exist), which aborts that table's draw entirely.
             var api = this.api();
+            if ( api.columns().count() <= 3 ) {
+                return;
+            }
             var total = api
                 .column(3, { page: 'current' })
                 .data()

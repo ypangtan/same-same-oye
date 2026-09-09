@@ -400,7 +400,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'all-history', [ RadioController::class, 'allHistory' ] )->name( 'admin.radio.allHistory' );
                 Route::post( 'create-item', [ RadioController::class, 'createItem' ] )->name( 'admin.radio.createItem' );
                 Route::post( 'delete-item', [ RadioController::class, 'deleteItem' ] )->name( 'admin.radio.deleteItem' );
-                Route::post( 'reorder', [ RadioController::class, 'reorder' ] )->name( 'admin.radio.reorder' );
+                Route::post( 'reorder', [ RadioController::class, 'reorder' ] )->name( 'admin.radio.reorder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'song-upload', [ RadioController::class, 'songUpload' ] )->name( 'admin.radio.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'image-upload', [ RadioController::class, 'imageUpload' ] )->name( 'admin.radio.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'now-playing', [ RadioController::class, 'nowPlaying' ] )->name( 'admin.radio.nowPlaying' );
