@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\{
     UserPlaylistController,
     StreamController,
     RadioEngineController,
+    RadioController,
 };
 
 use Illuminate\Support\Facades\Route;
@@ -113,6 +114,12 @@ Route::prefix( 'trending-contents' )->group( function() {
 
 Route::prefix( 'plans' )->group( function() {
     Route::post( '/get-plans', [ InAppPurchaseController::class, 'getPlans' ] );
+} );
+
+// What's currently on air (title + cover image) — for the app to show alongside the
+// https://.../radio-stream/ audio stream, which is just raw bytes and can't carry that itself.
+Route::prefix( 'radio' )->group( function() {
+    Route::post( '/now-playing', [ RadioController::class, 'nowPlaying' ] );
 } );
 
 Route::middleware( 'auth.optional' )->group( function() {
