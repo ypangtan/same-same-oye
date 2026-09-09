@@ -244,6 +244,12 @@ class RadioQueueService {
      * "reserved" so a second poll before this one is confirmed played doesn't hand out the same
      * track twice. A reservation older than 10 minutes (engine died mid-play) is treated as
      * abandoned and becomes eligible again.
+     *
+     * Deliberately plain text, not JSON: "{id}\n{url}", or an empty body when the queue is
+     * empty. Liquidsoap's JSON API has changed shape across versions (needs a typed `default`
+     * argument on newer ones); a two-line body needs nothing but string.split, which has been
+     * stable forever. Title/duration aren't included — the engine doesn't need them, and the
+     * backoffice "now playing" panel reads the title straight from the DB (see nowPlaying()).
      */
     public static function next() {
 
@@ -258,21 +264,15 @@ class RadioQueueService {
             ->first();
 
         if ( !$item ) {
-            return response()->json( [ 'data' => null ] );
+            return response( '', 200 )->header( 'Content-Type', 'text/plain' );
         }
 
         $item->status = RadioQueueItem::STATUS_RESERVED;
         $item->reserved_at = Carbon::now();
         $item->save();
 
-        return response()->json( [
-            'data' => [
-                'id' => $item->encrypted_id,
-                'title' => $item->title,
-                'url' => $item->file_url,
-                'duration' => $item->duration,
-            ],
-        ] );
+        return response( $item->encrypted_id . "\n" . $item->file_url, 200 )
+            ->header( 'Content-Type', 'text/plain' );
     }
 
     /**
