@@ -375,7 +375,6 @@ class RadioQueueService {
         return response()->json( [
             'title' => $status['title'],
             'image' => $image,
-            'current' => $current,
             'listeners' => $status['listeners'],
             'online' => $status['online'],
         ] );
