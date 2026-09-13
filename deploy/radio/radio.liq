@@ -105,6 +105,14 @@ end
 
 queue = request.dynamic.list(next_request)
 
+# Export the admin title without the file's embedded artist/song tags. Icecast's
+# default ICY song otherwise becomes "artist - title", which cannot match the
+# database title used by nowPlaying() to find the cover. Keep radio_id for /played.
+def radio_metadata(m) =
+  [("title", m["title"]), ("song", m["title"]), ("radio_id", m["radio_id"])]
+end
+queue = metadata.map(update=false, radio_metadata, queue)
+
 # Fallback silence so the stream never drops even if the queue runs dry
 # (e.g. nothing uploaded yet, or fetch_next errors out). Carries no title
 # metadata, which is what makes nowPlaying() correctly go blank while this
