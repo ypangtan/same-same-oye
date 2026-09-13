@@ -26,9 +26,9 @@
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="gap-3 d-flex align-items-center h-100">
-                        <div class="stat-icon" id="radio_now_playing_dot" style="background:#e4e4e4;color:#777;overflow:hidden;padding:0;">
+                        <div class="stat-icon" id="radio_now_playing_dot" style="background:#e4e4e4;color:#777;overflow:hidden;padding:0;width:50px;height:50px;min-width:50px;flex:0 0 50px;">
                             <em class="icon ni ni-music" id="radio_now_playing_icon"></em>
-                            <img id="radio_now_playing_image" src="" alt="" hidden style="width:100%;height:100%;object-fit:cover;">
+                            <img id="radio_now_playing_image" src="" alt="" hidden width="50" height="50" style="width:50px;height:50px;object-fit:cover;">
                         </div>
                         <div>
                             <div class="stat-value" id="radio_now_playing_title" style="font-size:1rem;">—</div>
@@ -210,6 +210,11 @@ $columns = [
         'title' => __( 'datatables.created_date' ),
     ],
     [
+        'type' => 'default',
+        'id' => 'image',
+        'title' => __( 'radio.image' ),
+    ],
+    [
         'type' => 'input',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'radio.title' ) ] ),
         'id' => 'title',
@@ -285,6 +290,7 @@ var statusMapper = {
             { data: null },
             { data: null },
             { data: 'created_at' },
+            { data: 'image_url', defaultContent: '' },
             { data: 'title' },
             { data: 'display_duration' },
             { data: 'status' },
@@ -313,6 +319,28 @@ var statusMapper = {
 
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "image" ) }}' ),
+                orderable: false,
+                searchable: false,
+                width: '50px',
+                render: function( data, type ) {
+                    if ( type !== 'display' ) return '';
+                    if ( !data ) return '-';
+                    return $( '<img>' ).attr( {
+                        src: data,
+                        alt: '',
+                        width: 50,
+                        height: 50,
+                        loading: 'lazy',
+                    } ).css( {
+                        width: '50px',
+                        height: '50px',
+                        objectFit: 'cover',
+                        borderRadius: '4px',
+                    } )[0].outerHTML;
                 },
             },
             {

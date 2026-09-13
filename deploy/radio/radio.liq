@@ -111,7 +111,7 @@ queue = request.dynamic.list(next_request)
 def radio_metadata(m) =
   [("title", m["title"]), ("song", m["title"]), ("radio_id", m["radio_id"])]
 end
-queue = metadata.map(update=false, radio_metadata, queue)
+queue = map_metadata(update=false, radio_metadata, queue)
 
 # Fallback silence so the stream never drops even if the queue runs dry
 # (e.g. nothing uploaded yet, or fetch_next errors out). Carries no title

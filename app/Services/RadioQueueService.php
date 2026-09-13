@@ -330,6 +330,19 @@ class RadioQueueService {
         }
 
         $item->file = null;
+        // Clean up the uploaded cover in the same callback as the audio file.
+        // Retain its path if deletion fails so it can still be retried.
+        if ( $item->image ) {
+            try {
+                if ( StorageService::delete( $item->image ) ) {
+                    $item->image = null;
+                } else {
+                    \Log::warning( 'Radio: cover deletion failed', [ 'radio_queue_item_id' => $item->id ] );
+                }
+            } catch ( \Throwable $e ) {
+                \Log::warning( 'Radio: cover deletion failed', [ 'radio_queue_item_id' => $item->id ] );
+            }
+        }
         $item->status = RadioQueueItem::STATUS_PLAYED;
         $item->played_at = Carbon::now();
         $item->save();
