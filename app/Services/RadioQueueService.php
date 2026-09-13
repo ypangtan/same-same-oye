@@ -363,16 +363,6 @@ class RadioQueueService {
                 ->where( 'title', $status['title'] )
                 ->orderBy( 'played_at', 'desc' )
                 ->first();
-            // Icecast can publish the title before /played finishes (or if the callback
-            // fails). Only consider reserved tracks matching the live title, never the
-            // next queued track. Leave playback state for the engine callback to update.
-            if ( !$current ) {
-                $current = RadioQueueItem::where( 'status', RadioQueueItem::STATUS_RESERVED )
-                    ->where( 'title', $status['title'] )
-                    ->orderBy( 'reserved_at', 'desc' )
-                    ->orderBy( 'id', 'desc' )
-                    ->first();
-            }
             $image = $current->image_url ?? null;
         }
 
@@ -385,6 +375,7 @@ class RadioQueueService {
         return response()->json( [
             'title' => $status['title'],
             'image' => $image,
+            'current' => $current,
             'listeners' => $status['listeners'],
             'online' => $status['online'],
         ] );
