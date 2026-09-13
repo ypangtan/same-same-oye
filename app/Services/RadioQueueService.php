@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\{
 use App\Models\{
     RadioQueueItem,
     RadioListenerSnapshot,
+    RadioSetting,
 };
 
 use Helper;
@@ -365,11 +366,39 @@ class RadioQueueService {
             $image = $current->image_url ?? null;
         }
 
+        // Tracks uploaded without their own cover fall back to the admin-configured default
+        // (Radio → Radio Queue → Default Cover) instead of showing nothing.
+        if ( !$image ) {
+            $image = RadioSetting::current()->default_image_url;
+        }
+
         return response()->json( [
             'title' => $status['title'],
             'image' => $image,
             'listeners' => $status['listeners'],
             'online' => $status['online'],
+        ] );
+    }
+
+    /**
+     * Fallback cover image for tracks that don't have their own — shown by nowPlaying().
+     */
+    public static function getDefaultImage() {
+
+        return response()->json( [
+            'image' => RadioSetting::current()->default_image_url,
+        ] );
+    }
+
+    public static function updateDefaultImage( $request ) {
+
+        $setting = RadioSetting::current();
+        $setting->default_image = $request->image ?: null;
+        $setting->save();
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => __( 'radio.default_image' ) ] ),
+            'image' => $setting->default_image_url,
         ] );
     }
 

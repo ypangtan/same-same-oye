@@ -405,6 +405,8 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'image-upload', [ RadioController::class, 'imageUpload' ] )->name( 'admin.radio.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'now-playing', [ RadioController::class, 'nowPlaying' ] )->name( 'admin.radio.nowPlaying' );
                 Route::post( 'listener-graph', [ RadioController::class, 'listenerGraph' ] )->name( 'admin.radio.listenerGraph' );
+                Route::post( 'default-image', [ RadioController::class, 'getDefaultImage' ] )->name( 'admin.radio.getDefaultImage' );
+                Route::post( 'update-default-image', [ RadioController::class, 'updateDefaultImage' ] )->name( 'admin.radio.updateDefaultImage' );
             } );
 
             Route::prefix( 'categories' )->group( function() {

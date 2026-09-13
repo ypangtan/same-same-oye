@@ -11,6 +11,8 @@ return [
     'title' => 'Title',
     'song' => 'Song',
     'image' => 'Cover Image',
+    'default_image' => 'Default Cover',
+    'default_image_desc' => 'Shown for tracks uploaded without their own cover image.',
     'file_name' => 'File Name',
     'duration' => 'Duration',
     'uploaded_by' => 'Uploaded By',

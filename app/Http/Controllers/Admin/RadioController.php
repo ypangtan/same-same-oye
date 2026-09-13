@@ -92,4 +92,12 @@ class RadioController extends Controller
     public function listenerGraph( Request $request ) {
         return RadioQueueService::listenerGraph( $request );
     }
+
+    public function getDefaultImage() {
+        return RadioQueueService::getDefaultImage();
+    }
+
+    public function updateDefaultImage( Request $request ) {
+        return RadioQueueService::updateDefaultImage( $request );
+    }
 }
