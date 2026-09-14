@@ -2,13 +2,9 @@
 
 return [
     'listener_connected_at' => 'Connected at (MYT)',
-    'listeners_empty' => 'No listeners in the latest sample.',
-    'listeners_disabled' => 'Listener IP tracking is not enabled yet.',
-    'listeners_failed' => 'Could not load listeners. Please reopen to retry.',
     'online_ips' => 'Online unique IPs',
     'today_ips' => 'Unique IPs seen today',
     'ip_sampled' => 'Last checked (MYT):',
-    'ip_stale' => 'IP statistics awaiting update',
     'listener_ip' => 'IP',
     'listener_ips' => 'Listener IPs',
     'listener_start' => 'Listen Start (MYT)',

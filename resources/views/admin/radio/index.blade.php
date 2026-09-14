@@ -76,7 +76,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p id="radio_listeners_message" role="status" class="text-soft small"></p>
                 <div class="d-flex flex-wrap mb-2" style="gap:.75rem;">
                     <input type="text" class="form-control form-control-sm" style="max-width:220px;" id="radio_listeners_search_ip" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_ip' ) ] ) }}" />
                 </div>
@@ -152,19 +151,11 @@
                 url: '{{ route( 'admin.radio.listeners' ) }}', type: 'POST',
                 data: { _token: '{{ csrf_token() }}' },
                 success: function( response ) {
-                    const summary = response.summary;
-                    let message = @json( __( 'radio.listeners_empty' ) );
-                    if ( !summary.enabled ) message = @json( __( 'radio.listeners_disabled' ) );
-                    else if ( !summary.fresh ) message = @json( __( 'radio.ip_stale' ) );
-                    else if ( response.listeners.length ) message = '';
-                    $( '#radio_listeners_message' ).text( message );
                     listenersDataTable.clear();
-                    if ( summary.fresh ) listenersDataTable.rows.add( response.listeners );
+                    if ( response.summary.fresh ) listenersDataTable.rows.add( response.listeners );
                     listenersDataTable.draw( false );
                 },
-                error: function( xhr, status ) {
-                    if ( status !== 'abort' ) $( '#radio_listeners_message' ).text( @json( __( 'radio.listeners_failed' ) ) );
-                },
+                error: function() {},
                 complete: function() { listenersRequest = null; },
             } );
         }
