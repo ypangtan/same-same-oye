@@ -120,7 +120,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
     </div>
 </div>
 
-<div class="d-flex flex-wrap mb-3">
+<div class="listing-filter">
     <input type="text" class="form-control form-control-sm" style="max-width:220px;" id="listener_ip_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_ip' ) ] ) }}" />
     <input type="text" class="form-control form-control-sm" style="max-width:220px;background-color:#fff;" id="listener_start_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_start' ) ] ) }}" />
     <input type="text" class="form-control form-control-sm" style="max-width:220px;background-color:#fff;" id="listener_end_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_end' ) ] ) }}" />
