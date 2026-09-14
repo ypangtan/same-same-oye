@@ -88,7 +88,7 @@ class RadioController extends Controller
     public function nowPlaying() {
         $response = RadioQueueService::nowPlaying();
         $data = $response->getData(true);
-        $data['listener_stats'] = \App\Services\RadioListenerService::summary();
+        $data['listener_stats'] = \App\Services\RadioListenerService::freshSummary();
         return response()->json($data);
     }
 
@@ -97,7 +97,7 @@ class RadioController extends Controller
     }
 
     public function listeners() {
-        return response()->json( \App\Services\RadioListenerService::onlineListeners() )
+        return response()->json( \App\Services\RadioListenerService::freshOnlineListeners() )
             ->header('Cache-Control', 'no-store');
     }
 

@@ -111,6 +111,32 @@ class RadioListenerService
         return array_values($result);
     }
 
+    // Used by the admin page so "live" counts/IPs don't wait for the once-a-minute
+    // scheduled sync. Failures (Icecast down, lock held by the scheduled sync, etc.)
+    // are swallowed here; summary()/onlineListeners() already fall back to the last
+    // known-good sample and report it as stale rather than wiping the display.
+    private static function trySync(): void
+    {
+        if (!config('services.radio.listener_tracking')) return;
+        try {
+            self::sync();
+        } catch (\Throwable $e) {
+            // Intentionally ignored; see comment above.
+        }
+    }
+
+    public static function freshSummary(): array
+    {
+        self::trySync();
+        return self::summary();
+    }
+
+    public static function freshOnlineListeners(): array
+    {
+        self::trySync();
+        return self::onlineListeners();
+    }
+
     public static function summary(): array
     {
         if (!config('services.radio.listener_tracking')) return ['enabled' => false];

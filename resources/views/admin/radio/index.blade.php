@@ -80,7 +80,7 @@
                 <p id="radio_listeners_message" role="status"></p>
                 <div class="table-responsive">
                     <table class="table">
-                        <thead><tr><th>IP</th><th>{{ __( 'radio.listener_connection' ) }}</th><th>{{ __( 'radio.listener_connected_at' ) }}</th></tr></thead>
+                        <thead><tr><th>IP</th><th>{{ __( 'radio.listener_connected_at' ) }}</th></tr></thead>
                         <tbody id="radio_listeners_rows"></tbody>
                     </table>
                 </div>
@@ -115,7 +115,6 @@
                         } ).format( new Date( listener.connected_at ) );
                         $( '<tr>' ).append(
                             $( '<td>' ).text( listener.ip ),
-                            $( '<td>' ).text( listener.client_id ),
                             $( '<td>' ).text( connected )
                         ).appendTo( '#radio_listeners_rows' );
                     } );
