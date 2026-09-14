@@ -64,7 +64,8 @@ systemctl cat icecast2 > "$radio_backup/icecast2-service.txt"
 apt-get update
 apt-get install -y build-essential fakeroot devscripts dpkg-dev debhelper debian-keyring gnupg \
     libcurl4-openssl-dev libmaxminddb-dev libogg-dev librhash-dev libspeex-dev libssl-dev \
-    libtheora-dev libvorbis-dev libxml2-dev libxslt1-dev pkgconf po-debconf
+    libtheora-dev libvorbis-dev libxml2-dev libxslt1-dev pkgconf po-debconf \
+    fonts-font-awesome   # runtime Depends of icecast2's admin web UI; not in Build-Depends
 
 # Not /tmp: many hardened cloud images mount /tmp (and mktemp's default
 # location) noexec, which fails `debian/rules clean/build` with a bare
