@@ -77,7 +77,7 @@
             </div>
             <div class="modal-body">
                 <p id="radio_listeners_message" role="status" class="text-soft small"></p>
-                <div class="d-flex flex-wrap gap-2 mb-2">
+                <div class="d-flex flex-wrap mb-2">
                     <input type="text" class="form-control form-control-sm" style="max-width:220px;" id="radio_listeners_search_ip" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_ip' ) ] ) }}" />
                 </div>
                 <div class="card card-bordered card-preview">
