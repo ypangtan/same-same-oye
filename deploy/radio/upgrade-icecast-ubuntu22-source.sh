@@ -89,11 +89,18 @@ cp "${igloo_debs[@]}" "$radio_backup/"
 dpkg -i "${igloo_debs[@]}" || apt-get install -f -y
 
 # --- Stage 2: icecast2 itself, now that libigloo-dev >= 0.9.5 is installed ---
+# DEB_BUILD_OPTIONS=nocheck skips icecast2's own `make check` test suite.
+# That suite starts real icecast processes and segfaults when run as root
+# (Debian's buildds compile as an unprivileged user; we are root throughout
+# this script). Skipping it does not weaken the GPG/checksum verification
+# already done on the source above -- it only skips upstream's own runtime
+# self-tests, which step 3 of LISTENER_IPS.md replaces with a real check
+# against the actual deployed config.
 (
     cd "$build_dir"
     dget "$icecast_dsc_url"
     cd "icecast2-${icecast_version%%-*}"
-    dpkg-buildpackage -us -uc -b
+    DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc -b
 )
 deb_path="$(find "$build_dir" -maxdepth 1 -name 'icecast2_*.deb' | head -n1)"
 if [ -z "$deb_path" ]; then
