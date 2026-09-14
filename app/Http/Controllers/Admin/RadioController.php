@@ -101,6 +101,10 @@ class RadioController extends Controller
             ->header('Cache-Control', 'no-store');
     }
 
+    public function allListenerSessions( Request $request ) {
+        return response()->json( \App\Services\RadioListenerService::sessionsTable( $request ) );
+    }
+
     public function getDefaultImage() {
         return RadioQueueService::getDefaultImage();
     }

@@ -76,11 +76,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead><tr><th>IP</th><th>{{ __( 'radio.listener_connected_at' ) }}</th></tr></thead>
-                        <tbody id="radio_listeners_rows"></tbody>
-                    </table>
+                <p id="radio_listeners_message" role="status" class="text-soft small"></p>
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <input type="text" class="form-control form-control-sm" style="max-width:220px;" id="radio_listeners_search_ip" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_ip' ) ] ) }}" />
+                </div>
+                <div class="card card-bordered card-preview">
+                    <div class="card-inner">
+                        <table class="table" id="radio_listeners_table" style="width:100%;">
+                            <thead><tr><th>No.</th><th>{{ __( 'radio.listener_ip' ) }}</th><th>{{ __( 'radio.listener_connected_at' ) }}</th></tr></thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,10 +96,53 @@
 
         const listenersElement = document.getElementById( 'radio_listeners_modal' );
         const listenersModal = new bootstrap.Modal( listenersElement );
-        let listenersRequest, listenersTimer;
+        let listenersDataTable, listenersRequest, listenersTimer;
+
+        function initListenersTable() {
+            if ( listenersDataTable ) return;
+            listenersDataTable = $( '#radio_listeners_table' ).DataTable( {
+                data: [],
+                columns: [
+                    { data: null, orderable: false, render: function( data, type, row, meta ) { return meta.row + 1; } },
+                    { data: 'ip' },
+                    {
+                        data: 'connected_at',
+                        render: function( data ) {
+                            return data ? new Intl.DateTimeFormat( 'en-GB', {
+                                timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'medium', timeStyle: 'medium', hourCycle: 'h23',
+                            } ).format( new Date( data ) ) : '-';
+                        },
+                    },
+                ],
+                order: [[ 2, 'desc' ]],
+                lengthMenu: [5, 10, 25, 50],
+                pageLength: 10,
+                searching: true,
+                autoWidth: false,
+                language: {
+                    lengthMenu: '{{ __( "datatables.lengthMenu" ) }}',
+                    zeroRecords: '{{ __( "datatables.zeroRecords" ) }}',
+                    info: '{{ __( "datatables.info" ) }}',
+                    infoEmpty: '{{ __( "datatables.infoEmpty" ) }}',
+                    infoFiltered: '{{ __( "datatables.infoFiltered" ) }}',
+                    paginate: {
+                        previous: '{{ __( "datatables.previous" ) }}',
+                        next: '{{ __( "datatables.next" ) }}',
+                    },
+                },
+                dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>",
+                buttons: [ 'copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5' ],
+            } );
+
+            $( '#radio_listeners_search_ip' ).on( 'keyup', function() {
+                listenersDataTable.column( 1 ).search( this.value ).draw();
+            } );
+        }
+
         function loadListeners() {
             if ( listenersRequest ) return;
-            $( '#radio_listeners_rows' ).empty();
             listenersRequest = $.ajax( {
                 url: '{{ route( 'admin.radio.listeners' ) }}', type: 'POST',
                 data: { _token: '{{ csrf_token() }}' },
@@ -104,18 +152,13 @@
                     if ( !summary.enabled ) message = @json( __( 'radio.listeners_disabled' ) );
                     else if ( !summary.fresh ) message = @json( __( 'radio.ip_stale' ) );
                     else if ( response.listeners.length ) message = '';
-                    if ( !summary.fresh ) return;
-                    response.listeners.forEach( function( listener ) {
-                        const connected = new Intl.DateTimeFormat( 'en-GB', {
-                            timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'medium', timeStyle: 'medium', hourCycle: 'h23',
-                        } ).format( new Date( listener.connected_at ) );
-                        $( '<tr>' ).append(
-                            $( '<td>' ).text( listener.ip ),
-                            $( '<td>' ).text( connected )
-                        ).appendTo( '#radio_listeners_rows' );
-                    } );
+                    $( '#radio_listeners_message' ).text( message );
+                    listenersDataTable.clear();
+                    if ( summary.fresh ) listenersDataTable.rows.add( response.listeners );
+                    listenersDataTable.draw( false );
                 },
                 error: function( xhr, status ) {
+                    if ( status !== 'abort' ) $( '#radio_listeners_message' ).text( @json( __( 'radio.listeners_failed' ) ) );
                 },
                 complete: function() { listenersRequest = null; },
             } );
@@ -124,6 +167,7 @@
             if ( event.key === 'Enter' || event.key === ' ' ) { event.preventDefault(); listenersModal.show(); }
         } );
         listenersElement.addEventListener( 'shown.bs.modal', function() {
+            initListenersTable();
             loadListeners();
             listenersTimer = setInterval( loadListeners, 5000 );
         } );

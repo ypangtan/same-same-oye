@@ -111,3 +111,140 @@ document.addEventListener( 'DOMContentLoaded', function() {
 </script>
 
 <script src="{{ asset( 'admin/js/dataTable.init.js' ) . Helper::assetVersion() }}"></script>
+
+<div class="nk-block-head nk-block-head-sm mt-4">
+    <div class="nk-block-between">
+        <div class="nk-block-head-content">
+            <h4 class="nk-block-title">{{ __( 'radio.listener_ips' ) }}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-wrap gap-3 mb-3">
+    <input type="text" class="form-control form-control-sm" style="max-width:220px;" id="listener_ip_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_ip' ) ] ) }}" />
+    <input type="text" class="form-control form-control-sm" style="max-width:220px;background-color:#fff;" id="listener_start_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_start' ) ] ) }}" />
+    <input type="text" class="form-control form-control-sm" style="max-width:220px;background-color:#fff;" id="listener_end_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_end' ) ] ) }}" />
+</div>
+
+<div class="card card-bordered card-preview">
+    <div class="card-inner">
+        <table class="table" id="listener_ips_table" style="width:100%;">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>{{ __( 'radio.listener_ip' ) }}</th>
+                    <th>{{ __( 'radio.listener_start' ) }}</th>
+                    <th>{{ __( 'radio.listener_end' ) }}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<script>
+document.addEventListener( 'DOMContentLoaded', function() {
+
+    window.listener_ip = '';
+    window.listener_start = '';
+    window.listener_end = '';
+
+    const formatMyt = function( data ) {
+        return data ? new Intl.DateTimeFormat( 'en-GB', {
+            timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'medium', timeStyle: 'medium', hourCycle: 'h23',
+        } ).format( new Date( data ) ) : @json( __( 'radio.listener_still_online' ) );
+    };
+
+    const listenerIpsDataTable = $( '#listener_ips_table' ).DataTable( {
+        language: {
+            lengthMenu: '{{ __( "datatables.lengthMenu" ) }}',
+            zeroRecords: '{{ __( "datatables.zeroRecords" ) }}',
+            info: '{{ __( "datatables.info" ) }}',
+            infoEmpty: '{{ __( "datatables.infoEmpty" ) }}',
+            infoFiltered: '{{ __( "datatables.infoFiltered" ) }}',
+            paginate: {
+                previous: '{{ __( "datatables.previous" ) }}',
+                next: '{{ __( "datatables.next" ) }}',
+            },
+        },
+        ajax: {
+            type: 'POST',
+            url: '{{ route( 'admin.radio.allListenerSessions' ) }}',
+            data: function( d ) {
+                d._token = '{{ csrf_token() }}';
+                d.ip = window.listener_ip;
+                d.connected_date = window.listener_start;
+                d.disconnected_date = window.listener_end;
+            },
+        },
+        lengthMenu: [5, 10, 25, 50, 100],
+        pageLength: 10,
+        processing: true,
+        serverSide: true,
+        searching: false,
+        order: [[ 2, 'desc' ]],
+        columns: [
+            { data: null, orderable: false, render: function( data, type, row, meta ) { return listenerIpsDataTable.page.info().start + meta.row + 1; } },
+            { data: 'ip' },
+            { data: 'connected_at', render: function( data ) { return formatMyt( data ); } },
+            { data: 'disconnected_at', render: function( data ) { return formatMyt( data ); } },
+        ],
+        dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>",
+        buttons: [
+            {
+                extend: 'excelHtml5', className: 'd-none listener-ips-buttons-excel',
+                exportOptions: { modifier: { page: 'all' } },
+            },
+            {
+                text: '<i class="fa fa-file-excel"></i>', className: 'btn btn-success', titleAttr: 'Export to EXCEL',
+                action: function( e, dt ) {
+                    dt.page.len( -1 ).draw();
+                    dt.one( 'draw', function() {
+                        $( '.listener-ips-buttons-excel' ).click();
+                        setTimeout( function() { dt.page.len( 10 ).draw(); }, 1000 );
+                    } );
+                },
+            },
+            {
+                extend: 'csvHtml5', className: 'd-none listener-ips-buttons-csv',
+                exportOptions: { modifier: { page: 'all' } },
+            },
+            {
+                text: '<i class="fa fa-file-csv"></i>', className: 'btn btn-info', titleAttr: 'Export to CSV',
+                action: function( e, dt ) {
+                    dt.page.len( -1 ).draw();
+                    dt.one( 'draw', function() {
+                        $( '.listener-ips-buttons-csv' ).click();
+                        setTimeout( function() { dt.page.len( 10 ).draw(); }, 1000 );
+                    } );
+                },
+            },
+        ],
+    } );
+
+    $( '#listener_ip_search' ).on( 'keydown keypress', function( e ) {
+        clearTimeout( window.listenerIpTimeout );
+        window.listenerIpTimeout = setTimeout( function() {
+            window.listener_ip = $( '#listener_ip_search' ).val();
+            listenerIpsDataTable.draw();
+        }, 500 );
+    } );
+
+    $( '#listener_start_search' ).flatpickr( {
+        mode: 'range', disableMobile: true,
+        onClose: function( selected, dateStr ) {
+            window.listener_start = dateStr;
+            listenerIpsDataTable.draw();
+        },
+    } );
+
+    $( '#listener_end_search' ).flatpickr( {
+        mode: 'range', disableMobile: true,
+        onClose: function( selected, dateStr ) {
+            window.listener_end = dateStr;
+            listenerIpsDataTable.draw();
+        },
+    } );
+} );
+</script>

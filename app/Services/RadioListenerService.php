@@ -171,4 +171,74 @@ class RadioListenerService
         }
         return ['summary' => $summary, 'listeners' => $listeners];
     }
+
+    /**
+     * All recorded listener sessions (online and disconnected) for the backoffice
+     * "Listener IPs" datatable on the history page. Server-side paginated: this table
+     * only grows over time (no retention policy), unlike the small live-listeners list.
+     */
+    public static function sessionsTable($request): array
+    {
+        $key = self::sourceKey();
+        $base = fn () => DB::table('radio_listener_sessions')->where('source_key', $key);
+
+        $totalRecord = $base()->count();
+
+        $query = $base();
+        $filter = false;
+        if (!empty($request->ip)) {
+            $query->where('ip', 'LIKE', '%'.$request->ip.'%');
+            $filter = true;
+        }
+        if (!empty($request->connected_date)) {
+            self::applyDateRangeFilter($query, 'connected_at', $request->connected_date);
+            $filter = true;
+        }
+        if (!empty($request->disconnected_date)) {
+            self::applyDateRangeFilter($query, 'disconnected_at', $request->disconnected_date);
+            $filter = true;
+        }
+
+        $columns = ['connected_at', 'ip', 'connected_at', 'disconnected_at'];
+        $column = $columns[$request->input('order.0.column')] ?? 'connected_at';
+        $dir = $request->input('order.0.dir') === 'asc' ? 'asc' : 'desc';
+        $query->orderBy($column, $dir);
+
+        $filteredCount = $filter ? (clone $query)->count() : $totalRecord;
+
+        $limit = $request->length == -1 ? 1000000 : $request->length;
+        $rows = $query->skip($request->start)->take($limit)
+            ->get(['ip', 'connected_at', 'disconnected_at'])
+            ->map(fn ($row) => [
+                'ip' => $row->ip,
+                'connected_at' => Carbon::parse($row->connected_at)->toIso8601String(),
+                'disconnected_at' => $row->disconnected_at ? Carbon::parse($row->disconnected_at)->toIso8601String() : null,
+            ]);
+
+        return [
+            'draw' => (int) $request->draw,
+            'recordsFiltered' => $filteredCount,
+            'recordsTotal' => $totalRecord,
+            'data' => $rows,
+        ];
+    }
+
+    // Same convention as RadioQueueService::applyDateRangeFilter (date-only search
+    // input, interpreted in Asia/Kuala_Lumpur and compared against the stored UTC column).
+    private static function applyDateRangeFilter($query, string $column, string $value): void
+    {
+        if (str_contains($value, 'to')) {
+            $dates = explode(' to ', $value);
+            $startDate = explode('-', $dates[0]);
+            $start = Carbon::create($startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur');
+            $endDate = explode('-', $dates[1]);
+            $end = Carbon::create($endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur');
+        } else {
+            $dates = explode('-', $value);
+            $start = Carbon::create($dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur');
+            $end = Carbon::create($dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur');
+        }
+
+        $query->whereBetween($column, [date('Y-m-d H:i:s', $start->timestamp), date('Y-m-d H:i:s', $end->timestamp)]);
+    }
 }
