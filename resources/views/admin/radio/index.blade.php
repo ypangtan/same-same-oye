@@ -46,11 +46,6 @@
                         <div>
                             <div class="stat-value" id="radio_listener_count">—</div>
                             <div class="stat-label">{{ __( 'radio.live_listeners' ) }}</div>
-                            <div id="radio_ip_stats" class="small text-soft mt-2" hidden>
-                                <div>{{ __( 'radio.online_ips' ) }}: <span id="radio_online_ips">-</span></div>
-                                <div>{{ __( 'radio.today_ips' ) }}: <span id="radio_today_ips">-</span></div>
-                                <div id="radio_ip_sample_time"></div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -208,15 +203,7 @@
                 success: function( response ) {
                     $( '#radio_now_playing_title' ).text( response.title || '-' );
                     $( '#radio_listener_count' ).text( response.listeners );
-                    const stats = response.listener_stats;
-                    $( '#radio_ip_stats' ).prop( 'hidden', !stats?.enabled );
-                    if ( stats?.enabled ) {
-                        $( '#radio_online_ips' ).text( stats.fresh ? stats.unique_ips : '-' );
-                        $( '#radio_today_ips' ).text( stats.today_unique_ips );
-                        $( '#radio_ip_sample_time' ).text( stats.fresh
-                            ? '{{ __( "radio.ip_sampled" ) }} ' + new Intl.DateTimeFormat( 'en-GB', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' } ).format( new Date( stats.sampled_at ) )
-                            : '{{ __( "radio.ip_stale" ) }}' );
-                    }
+                    
                     $( '#radio_now_playing_dot' ).css( {
                         background: response.online ? '#e8f5e9' : '#e4e4e4',
                         color: response.online ? '#2e7d32' : '#777',
