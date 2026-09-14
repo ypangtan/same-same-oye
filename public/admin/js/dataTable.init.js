@@ -220,10 +220,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
                     <label for="exportSelected" class="ms-1">Export ONLY selected rows</label>
                 </div>
             `;
-            // Scoped to this table's own container (not a page-wide '.dt-buttons' selector) so a
+            // Scoped to this table's own wrapper (not a page-wide '.dt-buttons' selector) so a
             // second, independently-initialized DataTable elsewhere on the same page doesn't also
-            // get this checkbox appended to its buttons.
-            $(this.table().container()).find('.dt-buttons').first().append(exportCheckbox);
+            // get this checkbox appended to its buttons. Uses the same dt_table_name selector the
+            // next line already relies on, rather than `this`, whose binding here isn't guaranteed.
+            $(dt_table_name).closest('.dataTables_wrapper').find('.dt-buttons').first().append(exportCheckbox);
             $(dt_table_name + '_filter').remove();
 
             let rawName = dt_table_name.replace('#', '');

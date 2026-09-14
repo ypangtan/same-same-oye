@@ -112,7 +112,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 <script src="{{ asset( 'admin/js/dataTable.init.js' ) . Helper::assetVersion() }}"></script>
 
-<div class="nk-block-head nk-block-head-sm mt-4">
+<hr class="my-5">
+
+<div class="nk-block-head nk-block-head-sm">
     <div class="nk-block-between">
         <div class="nk-block-head-content">
             <h4 class="nk-block-title">{{ __( 'radio.listener_ips' ) }}</h4>
@@ -120,10 +122,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
     </div>
 </div>
 
-<div class="listing-filter">
-    <input type="text" class="form-control form-control-sm" id="listener_ip_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_ip' ) ] ) }}" />
-    <input type="text" class="form-control form-control-sm" style="background-color:#fff;" id="listener_start_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_start' ) ] ) }}" />
-    <input type="text" class="form-control form-control-sm" style="background-color:#fff;" id="listener_end_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_end' ) ] ) }}" />
+<div class="d-flex flex-wrap gap-3 mb-4">
+    <input type="text" class="form-control form-control-sm" style="max-width:220px;" id="listener_ip_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_ip' ) ] ) }}" />
+    <input type="text" class="form-control form-control-sm" style="max-width:220px;background-color:#fff;" id="listener_start_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_start' ) ] ) }}" />
+    <input type="text" class="form-control form-control-sm" style="max-width:220px;background-color:#fff;" id="listener_end_search" placeholder="{{ __( 'datatables.search_x', [ 'title' => __( 'radio.listener_end' ) ] ) }}" />
 </div>
 
 <div class="card card-bordered card-preview">
