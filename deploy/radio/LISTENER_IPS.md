@@ -12,18 +12,31 @@ The server reported Ubuntu 22.04.5 amd64 and Icecast 2.4.4-4build1. The official
 Xiph OBS repository was checked on 2026-09-14: it contains `icecast2=2.5.0-1`
 and `libigloo0=0.9.5-1` for Ubuntu 22.04 amd64.
 
+**Update (2026-09-14, verified against the actual server):** the OBS repository's
+signing key (`77EC2301F23C6AA3`) expired 2020-01-30 and was never rotated (see
+[Icecast-Server#2434](https://gitlab.xiph.org/xiph/icecast-server/-/issues/2434)).
+`apt-get update` refuses it as unsigned. Use `upgrade-icecast-ubuntu22-source.sh`
+below instead; it has not been re-verified since.
+
 From the deployed project directory:
 
 ```bash
-sudo bash deploy/radio/upgrade-icecast-ubuntu22.sh
+sudo bash deploy/radio/upgrade-icecast-ubuntu22-source.sh
 ```
 
-The script backs up Icecast/Nginx configuration and downloads the installed
-Icecast rollback package before adding the signed, package-scoped repository.
-It retains the existing Icecast configuration. Installation/restart interrupts
-the broadcast briefly; Liquidsoap should reconnect automatically. Confirm that
-the stream plays again before proceeding. If the script fails, stop and inspect
-the error; do not run the later steps against a still-running 2.4 installation.
+This rebuilds Debian's own icecast2 2.5.0 backport source package locally
+against Ubuntu 22.04's libraries (GPG- and checksum-verified via `dget`/
+`dscverify` against Debian's maintainer keyring), rather than trusting the
+broken OBS repository or a hand-rolled `./configure`. It backs up Icecast/Nginx
+configuration and the installed Icecast package before building, and retains
+the existing Icecast configuration (`--force-confold`). Installation/restart
+interrupts the broadcast briefly; Liquidsoap should reconnect automatically.
+Confirm that the stream plays again before proceeding. If the script fails,
+stop and inspect the error; do not run the later steps against a still-running
+2.4 installation.
+
+The original `upgrade-icecast-ubuntu22.sh` (apt repository approach) is kept
+only for reference/rollback comparison; do not run it as-is.
 
 ## 2. Add the trusted Nginx listener
 
