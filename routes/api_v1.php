@@ -142,10 +142,6 @@ Route::middleware( 'auth.optional' )->group( function() {
     Route::post( '/record', [ StreamController::class, 'record' ] );
 } );
 
-// Called only by the Icecast/Liquidsoap streaming engine on this same server — never by the
-// app. Guarded by a shared-secret header instead of user auth, see 'radio.engine' middleware.
-// Given its own rate-limit bucket (radio-engine, not the shared api one) since the engine polls
-// /next repeatedly with no backoff whenever the queue is empty.
 Route::prefix( 'radio' )
     ->withoutMiddleware( 'throttle:api' )
     ->middleware( [ 'radio.engine', 'throttle:radio-engine' ] )

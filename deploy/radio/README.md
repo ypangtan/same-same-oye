@@ -76,10 +76,11 @@ MP3 rather than radio.co's 6-7s.
    the queue and marks it "reserved" so a second poll doesn't get the same
    track twice.
 4. Liquidsoap downloads that file and starts playing it on air.
-5. The instant it starts, Liquidsoap calls `POST /api/v1/radio/played`.
-   Laravel deletes the R2 file (it's already safely downloaded locally by
-   Liquidsoap, so this doesn't interrupt playback) and keeps the title +
-   timestamp as a permanent history row (**Radio → Play History**).
+5. Each output track transition calls `POST /api/v1/radio/played` with the
+   new track's ID, or an empty ID when output switches to silence. Laravel
+   marks the previous playing track completed and deletes its R2 audio and
+   cover. The new track becomes status 25 (playing), retaining its cover.
+   Status 30 means completed; `played_at` remains the actual start timestamp.
 6. Repeat from step 3.
 
 If the queue ever runs dry, Liquidsoap falls back to silence rather than
@@ -92,7 +93,10 @@ are listening right now, plus a graph of listener count over time. No extra
 Icecast config needed — `status-json.xsl` is public by default in a stock
 Icecast install, same as the public stats page.
 
-- **Now playing / current listener count**: read live from Icecast on every
+- **Now playing**: reads the status-25 database record while Icecast is online.
+  No playing record means a null title/image and `-` in the backoffice. This
+  does not depend on MP3 duration or Icecast's potentially stale title.
+- **Current listener count**: read live from Icecast on every
   page load / 15s poll — nothing to deploy for this part, it just needs
   Icecast reachable at `RADIO_ICECAST_STATUS_URL` (defaults to
   `http://127.0.0.1:8000/status-json.xsl`, i.e. Icecast on the same box).
@@ -102,3 +106,21 @@ Icecast install, same as the public stats page.
   `App\Console\Kernel::schedule()` — no extra cron entry needed as long as
   this server already runs `php artisan schedule:run` every minute (it does,
   for the existing notification/subscription jobs).
+
+## Deploying the playback-state update
+
+Deploy the PHP changes and update `mark_played` in the actual service script
+(`/opt/same-same-oye-radio/radio.liq` by default). Its HTTP call must run even
+when `id` is empty; only the local temporary-file deletion stays inside the
+nonempty-ID condition. Keep server-specific credentials and URLs intact.
+Pulling this repository does not update the script under `/opt`.
+
+Run `liquidsoap --check /opt/same-same-oye-radio/radio.liq` before restarting
+`liquidsoap-radio`. Check one song, a transition to another song, and the last
+song transitioning to silence. The existing integer status column supports
+25 without a migration. Old status-30 history is not reclassified as playing.
+
+The PHP lifecycle is tested with an isolated database and fake storage. The
+Liquidsoap script must still be checked and exercised on the installed server
+version. Failed callbacks or an engine crash can leave playing state stale
+until the next successful output transition; no duration-based timeout is used.

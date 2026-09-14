@@ -19,6 +19,7 @@ class RadioQueueItem extends Model
 
     const STATUS_QUEUED = 10;
     const STATUS_RESERVED = 20;
+    const STATUS_PLAYING = 25;
     const STATUS_PLAYED = 30;
 
     protected $fillable = [

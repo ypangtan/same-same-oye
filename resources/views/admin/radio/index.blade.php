@@ -117,14 +117,14 @@
                 type: 'POST',
                 data: { '_token': '{{ csrf_token() }}' },
                 success: function( response ) {
-                    $( '#radio_now_playing_title' ).text( response.title ?? '—' );
+                    $( '#radio_now_playing_title' ).text( response.title || '-' );
                     $( '#radio_listener_count' ).text( response.listeners );
                     $( '#radio_now_playing_dot' ).css( {
                         background: response.online ? '#e8f5e9' : '#e4e4e4',
                         color: response.online ? '#2e7d32' : '#777',
                     } );
 
-                    if ( response.image ) {
+                    if ( response.title && response.image ) {
                         $( '#radio_now_playing_image' ).attr( 'src', response.image ).prop( 'hidden', false );
                         $( '#radio_now_playing_icon' ).prop( 'hidden', true );
                     } else {
@@ -262,6 +262,7 @@ window['{{ $column['id'] }}'] = '';
 var statusMapper = {
         10: '{{ __( "datatables.pending" ) }}',
         20: '{{ __( "radio.reserved" ) }}',
+        25: '{{ __( "radio.now_playing" ) }}',
     },
     dt_table,
     dt_table_name = '#radio_queue_table',

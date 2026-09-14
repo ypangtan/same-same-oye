@@ -195,6 +195,68 @@ class RadioQueueService {
         ] );
     }
 
+    /** Output transition: id identifies the new track; empty id means silence. */
+    public static function markPlayed( $request ) {
+        $request->validate( [ 'id' => [ 'present', 'nullable', 'string' ] ] );
+        $item = $request->filled( 'id' )
+            ? RadioQueueItem::find( Helper::decode( $request->id ) ) : null;
+        if ( $request->filled( 'id' ) && !$item ) {
+            return response()->json( [ 'message' => 'Record not found' ], 404 );
+        }
+        if ( $item && $item->status == RadioQueueItem::STATUS_PLAYED ) {
+            return response()->json( [ 'message' => 'ok' ] );
+        }
+        $finished = DB::transaction( function() use ( $item ) {
+            $previous = RadioQueueItem::where( 'status', RadioQueueItem::STATUS_PLAYING )
+                ->when( $item, fn( $q ) => $q->where( 'id', '!=', $item->id ) )
+                ->lockForUpdate()->get();
+            foreach ( $previous as $track ) {
+                $track->status = RadioQueueItem::STATUS_PLAYED;
+                $track->save();
+            }
+            if ( $item && $item->status != RadioQueueItem::STATUS_PLAYING ) {
+                $item->status = RadioQueueItem::STATUS_PLAYING;
+                $item->played_at = Carbon::now();
+                $item->save();
+            }
+            return $previous;
+        } );
+        foreach ( $finished as $track ) {
+            // Delete only after the actual output transition, keeping the live cover intact.
+            foreach ( [ 'file', 'image' ] as $field ) {
+                if ( !$track->$field ) continue;
+                try {
+                    if ( StorageService::delete( $track->$field ) ) {
+                        $track->$field = null;
+                    } else {
+                        \Log::warning( 'Radio: cleanup failed', [ 'id' => $track->id, 'field' => $field ] );
+                    }
+                } catch ( \Throwable $e ) {
+                    \Log::warning( 'Radio: cleanup failed', [ 'id' => $track->id, 'field' => $field ] );
+                }
+            }
+            $track->save();
+        }
+        return response()->json( [ 'message' => 'ok' ] );
+    }
+
+    /** The engine-maintained playing state determines title and cover, never MP3 duration. */
+    public static function nowPlaying() {
+        $status = IcecastService::getStatus();
+        $current = $status['online']
+            ? RadioQueueItem::where( 'status', RadioQueueItem::STATUS_PLAYING )
+                ->orderBy( 'played_at', 'desc' )->first() : null;
+        $image = $current->image_url ?? null;
+        if ( $current && !$image ) {
+            $image = RadioSetting::current()->default_image_url;
+        }
+        return response()->json( [
+            'title' => $current->title ?? null,
+            'image' => $image,
+            'listeners' => $status['listeners'],
+            'online' => $status['online'],
+        ] );
+    }
     /**
      * Remove a track from the queue before it has aired. Since it was never broadcast there is
      * no history worth keeping, so this hard-deletes both the row and the R2 file.
@@ -206,6 +268,10 @@ class RadioQueueService {
         ] );
 
         $item = RadioQueueItem::find( $request->id );
+
+        if ( $item && $item->status == RadioQueueItem::STATUS_PLAYING ) {
+            return response()->json( [ 'message' => 'Cannot delete a playing track.' ], 422 );
+        }
 
         if ( !$item ) {
             return response()->json( [
@@ -261,19 +327,6 @@ class RadioQueueService {
         ] );
     }
 
-    /**
-     * Hand the next track to the streaming engine (Liquidsoap). The item is immediately marked
-     * "reserved" so a second poll before this one is confirmed played doesn't hand out the same
-     * track twice. A reservation older than 10 minutes (engine died mid-play) is treated as
-     * abandoned and becomes eligible again.
-     *
-     * Deliberately plain text, not JSON: "{id}\n{url}\n{title}", or an empty body when the
-     * queue is empty. Liquidsoap's JSON API has changed shape across versions (needs a typed
-     * `default` argument on newer ones); a line-based body needs nothing but string.split,
-     * which has been stable forever. The title is what Liquidsoap tags the request's ICY
-     * metadata with, which Icecast then reports back live — see IcecastService::getStatus()
-     * and nowPlaying(), which reads it from there instead of guessing off duration.
-     */
     public static function next() {
 
         $item = RadioQueueItem::where( function( $q ) {
@@ -299,103 +352,6 @@ class RadioQueueService {
         return response( $body, 200 )->header( 'Content-Type', 'text/plain' );
     }
 
-    /**
-     * Callback from the streaming engine the instant a track starts airing (safe to delete the
-     * R2 file at this point — Liquidsoap has already downloaded it locally). Only the title and
-     * timestamps are kept afterwards, as the played-history record.
-     */
-    public static function markPlayed( $request ) {
-
-        $id = Helper::decode( $request->id );
-        $item = RadioQueueItem::find( $id );
-
-        if ( !$item ) {
-            return response()->json( [
-                'message' => __( 'template.record_not_found' ),
-            ], 404 );
-        }
-
-        if ( $item->file ) {
-            // If R2 is unreachable/erroring, don't let that stop the track from being recorded
-            // as played — better to leave one orphaned R2 file than to leave the row stuck at
-            // "reserved" forever (the engine has already moved on, so it never retries this).
-            try {
-                StorageService::delete( $item->file );
-            } catch ( \Throwable $e ) {
-                \Log::warning( 'Radio: failed to delete R2 file after play: ' . $e->getMessage(), [
-                    'radio_queue_item_id' => $item->id,
-                    'file' => $item->file,
-                ] );
-            }
-        }
-
-        $item->file = null;
-        // Clean up the uploaded cover in the same callback as the audio file.
-        // Retain its path if deletion fails so it can still be retried.
-        if ( $item->image ) {
-            try {
-                if ( StorageService::delete( $item->image ) ) {
-                    $item->image = null;
-                } else {
-                    \Log::warning( 'Radio: cover deletion failed', [ 'radio_queue_item_id' => $item->id ] );
-                }
-            } catch ( \Throwable $e ) {
-                \Log::warning( 'Radio: cover deletion failed', [ 'radio_queue_item_id' => $item->id ] );
-            }
-        }
-        $item->status = RadioQueueItem::STATUS_PLAYED;
-        $item->played_at = Carbon::now();
-        $item->save();
-
-        // Note: this is the engine reporting a track aired, not a user pressing play — it does
-        // NOT go into stream_logs (content_type=1 there is the user-triggered "listened to
-        // radio" event from the app, via StreamService::recordStream, and stays keyed to a real
-        // user_id). This row in radio_queue_items IS the played-history record.
-
-        return response()->json( [ 'message' => 'ok' ] );
-    }
-
-    /**
-     * Live "now playing" panel for the backoffice. The title comes straight from Icecast's own
-     * live metadata (Liquidsoap tags each request with title="..." via annotate:, and
-     * output.icecast forwards that as an ICY update) — not guessed from our own duration data,
-     * so it's accurate even if ffprobe got a track's duration wrong, and correctly goes blank
-     * once the queue runs dry and the engine falls back to silence (which carries no title).
-     *
-     * Icecast only ever carries a text title, no image, so the cover image is found by matching
-     * that title back to our own played-history row. Titles aren't unique, but pairing "matches
-     * the live title" with "most recently played" is reliable enough in practice.
-     */
-    public static function nowPlaying() {
-
-        $status = IcecastService::getStatus();
-
-        $image = null;
-        if ( $status['title'] ) {
-            $current = RadioQueueItem::where( 'status', RadioQueueItem::STATUS_PLAYED )
-                ->where( 'title', $status['title'] )
-                ->orderBy( 'played_at', 'desc' )
-                ->first();
-            $image = $current->image_url ?? null;
-        }
-
-        // Tracks uploaded without their own cover fall back to the admin-configured default
-        // (Radio → Radio Queue → Default Cover) instead of showing nothing.
-        if ( !$image ) {
-            $image = RadioSetting::current()->default_image_url;
-        }
-
-        return response()->json( [
-            'title' => $status['title'],
-            'image' => $image,
-            'listeners' => $status['listeners'],
-            'online' => $status['online'],
-        ] );
-    }
-
-    /**
-     * Fallback cover image for tracks that don't have their own — shown by nowPlaying().
-     */
     public static function getDefaultImage() {
 
         return response()->json( [
@@ -415,10 +371,6 @@ class RadioQueueService {
         ] );
     }
 
-    /**
-     * Listener count over time, for the backoffice graph. Reads the periodic snapshots written
-     * by the radio:snapshot-listeners scheduled command — Icecast itself has no history.
-     */
     public static function listenerGraph( $request ) {
 
         $hours = (int) ( $request->hours ?: 24 );

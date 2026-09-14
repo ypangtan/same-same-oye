@@ -67,16 +67,15 @@ def fetch_next() =
   end
 end
 
-# Tell Laravel a track has started airing — it deletes the R2 file and logs
-# the play in radio_queue_items. Safe to call as soon as the track starts:
-# Liquidsoap has already downloaded the file locally by then, so deleting the
-# R2 copy does not interrupt playback. id travels as a query param, not a
+# Tell Laravel which track is now airing; it completes the previous track and
+# deletes that previous track's R2 audio and cover. id travels as a query param, not a
 # JSON body — Laravel reads it either way, and it means this call needs no
 # body-encoding function at all. Also cleans up the local temp download —
 # without this /tmp fills up with one leftover mp3 per track played, forever.
 def mark_played(id) =
+  # Empty id explicitly ends the previous track when output switches to silence.
+  ignore(process.read("curl -fsS --connect-timeout 3 --max-time 10 --retry 2 -X POST -H 'X-Radio-Engine-Key: #{engine_key}' '#{api_base}/played?id=#{id}'"))
   if id != "" then
-    ignore(process.read("curl -s -X POST -H 'X-Radio-Engine-Key: #{engine_key}' '#{api_base}/played?id=#{id}'"))
     ignore(process.read("rm -f /tmp/radio-#{id}.mp3"))
   end
 end
