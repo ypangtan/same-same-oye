@@ -67,21 +67,6 @@
     </div>
 </div>
 
-<div class="card mb-4">
-    <div class="card-inner">
-        <h6 class="card-title mb-1">{{ __( 'radio.default_image' ) }}</h6>
-        <p class="text-soft mb-3">{{ __( 'radio.default_image_desc' ) }}</p>
-        <div class="d-flex align-items-center gap-3">
-            <img id="radio_default_image_preview" src="" alt="" hidden style="width:64px;height:64px;object-fit:cover;border-radius:6px;">
-            <div class="dropzone mb-0 flex-grow-1" id="radio_default_image_dropzone" style="min-height:0px;">
-                <div class="dz-message needsclick">
-                    <h3 class="fs-6 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="{{ asset( 'admin/js/apexcharts.min.js' ) }}"></script>
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
@@ -134,49 +119,6 @@
                 },
             } );
         }
-
-        function showDefaultImage( url ) {
-            $( '#radio_default_image_preview' ).attr( 'src', url ?? '' ).prop( 'hidden', !url );
-        }
-
-        $.ajax( {
-            url: '{{ route( 'admin.radio.getDefaultImage' ) }}',
-            type: 'POST',
-            data: { '_token': '{{ csrf_token() }}' },
-            success: function( response ) {
-                showDefaultImage( response.image );
-            },
-        } );
-
-        Dropzone.autoDiscover = false;
-        new Dropzone( '#radio_default_image_dropzone', {
-            url: '{{ route( 'admin.radio.imageUpload' ) }}',
-            maxFiles: 1,
-            acceptedFiles: 'image/jpg,image/jpeg,image/png',
-            init: function() {
-                this.on( 'addedfile', function( file ) {
-                    if ( this.files.length > 1 ) {
-                        this.removeFile( this.files[0] );
-                    }
-                } );
-            },
-            success: function( file, response ) {
-                $.ajax( {
-                    url: '{{ route( 'admin.radio.updateDefaultImage' ) }}',
-                    type: 'POST',
-                    data: {
-                        image: response.file,
-                        '_token': '{{ csrf_token() }}',
-                    },
-                    success: function( saveResponse ) {
-                        showDefaultImage( saveResponse.image );
-                        this.removeFile( file );
-                        $( '#modal_success .caption-text' ).html( saveResponse.message );
-                        modalSuccess.toggle();
-                    }.bind( this ),
-                } );
-            },
-        } );
 
         loadListenerGraph();
         loadNowPlaying();
