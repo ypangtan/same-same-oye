@@ -130,7 +130,7 @@
         } );
         listenersElement.addEventListener( 'shown.bs.modal', function() {
             loadListeners();
-            listenersTimer = setInterval( loadListeners, 15000 );
+            listenersTimer = setInterval( loadListeners, 5000 );
         } );
         listenersElement.addEventListener( 'hidden.bs.modal', function() {
             clearInterval( listenersTimer );

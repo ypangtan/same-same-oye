@@ -35,6 +35,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('notifications:send-scheduled')->timezone( 'Asia/Kuala_Lumpur' )->everyMinute();
 
         $schedule->command('radio:snapshot-listeners')->everyFiveMinutes();
+        
         $schedule->command('radio:sync-listeners')->everyMinute()->withoutOverlapping();
     }
 
