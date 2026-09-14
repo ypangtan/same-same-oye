@@ -71,18 +71,43 @@
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
+        function graphTime( value, full = false ) {
+            const date = new Date( Number( value ) );
+            if ( !Number.isFinite( date.getTime() ) ) return '';
+            const options = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' };
+            if ( full || $( '#radio_listener_graph_range' ).val() === '168' ) {
+                options.day = '2-digit';
+                options.month = 'short';
+            }
+            return new Intl.DateTimeFormat( 'en-GB', options ).format( date );
+        }
+
+        let graphRequest;
         let listenerChart = new ApexCharts( document.querySelector( '#radio_listener_chart' ), {
-            chart: { type: 'line', height: 260, toolbar: { show: false } },
+            chart: { type: 'area', height: 300, toolbar: { show: false }, zoom: { enabled: false }, animations: { enabled: false } },
             series: [ { name: '{{ __( "radio.live_listeners" ) }}', data: [] } ],
-            xaxis: { type: 'category', labels: { rotate: -45 } },
-            stroke: { curve: 'smooth', width: 2 },
-            yaxis: { min: 0, forceNiceScale: true },
+            colors: [ '#3b82f6' ],
+            xaxis: {
+                type: 'numeric', tickAmount: 6,
+                labels: { rotate: 0, hideOverlappingLabels: true, formatter: value => graphTime( value ), style: { colors: '#8091a7', fontSize: '11px' } },
+                axisBorder: { show: false }, axisTicks: { show: false },
+                tooltip: { enabled: false },
+            },
+            stroke: { curve: 'stepline', width: 2 },
+            fill: { type: 'gradient', gradient: { opacityFrom: 0.25, opacityTo: 0.03 } },
+            markers: { size: 0, hover: { size: 5 } },
+            grid: { borderColor: '#edf0f5', strokeDashArray: 4 },
+            yaxis: { min: 0, max: 1, tickAmount: 1, labels: { formatter: value => Math.round( value ).toLocaleString() } },
+            tooltip: { x: { formatter: value => graphTime( value, true ) }, y: { formatter: value => Math.round( value ).toLocaleString() } },
+            dataLabels: { enabled: false },
+            responsive: [ { breakpoint: 576, options: { chart: { height: 250 }, xaxis: { tickAmount: 3 } } } ],
             noData: { text: '{{ __( "datatables.zeroRecords" ) }}' },
         } );
         listenerChart.render();
 
         function loadListenerGraph() {
-            $.ajax( {
+            if ( graphRequest ) graphRequest.abort();
+            graphRequest = $.ajax( {
                 url: '{{ route( 'admin.radio.listenerGraph' ) }}',
                 type: 'POST',
                 data: {
@@ -90,8 +115,14 @@
                     '_token': '{{ csrf_token() }}',
                 },
                 success: function( response ) {
-                    listenerChart.updateOptions( { xaxis: { categories: response.labels } } );
-                    listenerChart.updateSeries( [ { name: '{{ __( "radio.live_listeners" ) }}', data: response.data } ] );
+                    const points = response.data.map( ( value, index ) => ({ x: response.timestamps[index], y: Number( value ) }) );
+                    const peak = Math.max( 1, ...response.data.map( Number ) );
+                    const step = Math.max( 1, Math.ceil( peak / 4 ) );
+                    const maximum = Math.ceil( peak / step ) * step;
+                    listenerChart.updateOptions( {
+                        yaxis: { min: 0, max: maximum, tickAmount: maximum / step },
+                        series: [ { name: '{{ __( "radio.live_listeners" ) }}', data: points } ],
+                    } );
                 },
             } );
         }

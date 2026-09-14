@@ -382,6 +382,7 @@ class RadioQueueService {
 
         return response()->json( [
             'labels' => $rows->map( fn( $r ) => $r->created_at->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' ) ),
+            'timestamps' => $rows->map( fn( $r ) => $r->created_at->getTimestamp() * 1000 ),
             'data' => $rows->pluck( 'listeners' ),
         ] );
     }
