@@ -18,6 +18,6 @@ use App\Services\{
 class RadioController extends Controller
 {
     public function nowPlaying() {
-        return RadioQueueService::nowPlaying();
+        return RadioQueueService::publicNowPlaying();
     }
 }

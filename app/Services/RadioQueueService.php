@@ -243,6 +243,62 @@ class RadioQueueService {
     /** The engine-maintained playing state determines title and cover, never MP3 duration. */
     public static function nowPlaying() {
         $status = IcecastService::getStatus();
+        [ $current, $image ] = self::currentlyPlaying( $status );
+        return response()->json( [
+            'title' => $current->title ?? null,
+            'image' => $image,
+            'listeners' => $status['listeners'],
+            'online' => $status['online'],
+        ] );
+    }
+
+    /**
+     * Public "now playing" for the app's player screen, shaped to match the schema other radio
+     * platforms (e.g. radio.co) return — same underlying Icecast/queue data as nowPlaying(), just
+     * a richer response shape. Kept separate from nowPlaying() so the backoffice page (which merges
+     * its own listener_stats onto that simpler shape) is unaffected.
+     */
+    public static function publicNowPlaying() {
+        $status = IcecastService::getStatus();
+        [ $current, $image ] = self::currentlyPlaying( $status );
+
+        $history = RadioQueueItem::where( 'status', RadioQueueItem::STATUS_PLAYED )
+            ->orderBy( 'played_at', 'desc' )
+            ->limit( 20 )
+            ->get( [ 'title' ] )
+            ->map( fn( $item ) => [ 'title' => $item->title ] );
+
+        return response()->json( [
+            'status' => $status['online'] ? 'online' : 'offline',
+            // This station is an automated Liquidsoap queue, not a human DJ live-streaming in —
+            // there's no "collaborator"/"relay" concept here, so those stay null/empty rather
+            // than claiming something we can't back up.
+            'source' => [
+                'type' => $status['online'] ? 'auto' : null,
+                'collaborator' => null,
+                'relay' => null,
+            ],
+            'collaborators' => [],
+            'relays' => [],
+            'current_track' => $current ? [
+                'title' => $current->title,
+                'start_time' => optional( $current->played_at )->toIso8601String(),
+                'artwork_url' => $image,
+                'artwork_url_large' => $image,
+            ] : null,
+            'history' => $history,
+            'logo_url' => RadioSetting::current()->default_image_url,
+            'streaming_hostname' => parse_url( config( 'app.url' ), PHP_URL_HOST ),
+            // Matches deploy/radio/radio.liq's single output.icecast %mp3(bitrate=128) — there is
+            // no separate low-bitrate stream, unlike the two-output example this shape is based on.
+            'outputs' => [
+                [ 'name' => 'listen', 'format' => 'MP3', 'bitrate' => 128 ],
+            ],
+            'accepting_requests' => true,
+        ] );
+    }
+
+    private static function currentlyPlaying( array $status ) {
         $current = $status['online']
             ? RadioQueueItem::where( 'status', RadioQueueItem::STATUS_PLAYING )
                 ->orderBy( 'played_at', 'desc' )->first() : null;
@@ -250,12 +306,7 @@ class RadioQueueService {
         if ( $current && !$image ) {
             $image = RadioSetting::current()->default_image_url;
         }
-        return response()->json( [
-            'title' => $current->title ?? null,
-            'image' => $image,
-            'listeners' => $status['listeners'],
-            'online' => $status['online'],
-        ] );
+        return [ $current, $image ];
     }
     /**
      * Remove a track from the queue before it has aired. Since it was never broadcast there is
