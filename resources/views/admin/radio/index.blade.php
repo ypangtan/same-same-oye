@@ -133,7 +133,12 @@
                 dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-end'l>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>",
-                buttons: [ 'copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5' ],
+                buttons: [
+                    { extend: 'copyHtml5', text: '<i class="fa fa-copy"></i>', className: 'btn btn-light', titleAttr: 'Copy All', exportOptions: { modifier: { page: 'all' } } },
+                    { extend: 'excelHtml5', text: '<i class="fa fa-file-excel"></i>', className: 'btn btn-success', titleAttr: 'Export to EXCEL', exportOptions: { modifier: { page: 'all' } } },
+                    { extend: 'csvHtml5', text: '<i class="fa fa-file-csv"></i>', className: 'btn btn-info', titleAttr: 'Export to CSV', exportOptions: { modifier: { page: 'all' } } },
+                    { extend: 'pdfHtml5', text: '<i class="fa fa-file-pdf"></i>', className: 'btn btn-danger', titleAttr: 'Export to PDF', exportOptions: { modifier: { page: 'all' } } },
+                ],
             } );
 
             $( '#radio_listeners_search_ip' ).on( 'keyup', function() {

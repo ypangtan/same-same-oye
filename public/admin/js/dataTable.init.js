@@ -220,7 +220,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
                     <label for="exportSelected" class="ms-1">Export ONLY selected rows</label>
                 </div>
             `;
-            $('.dt-buttons').append(exportCheckbox);
+            // Scoped to this table's own container (not a page-wide '.dt-buttons' selector) so a
+            // second, independently-initialized DataTable elsewhere on the same page doesn't also
+            // get this checkbox appended to its buttons.
+            $(this.table().container()).find('.dt-buttons').first().append(exportCheckbox);
             $(dt_table_name + '_filter').remove();
 
             let rawName = dt_table_name.replace('#', '');

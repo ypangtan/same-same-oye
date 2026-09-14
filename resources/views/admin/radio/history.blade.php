@@ -193,6 +193,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
             "<'row'<'mt-2 col-sm-12 col-md-5'i><'mt-2 col-sm-12 col-md-7 text-end'p>>",
         buttons: [
             {
+                extend: 'copyHtml5', className: 'd-none listener-ips-buttons-copy',
+                exportOptions: { modifier: { page: 'all' } },
+            },
+            {
+                text: '<i class="fa fa-copy"></i>', className: 'btn btn-light', titleAttr: 'Copy All',
+                action: function( e, dt ) {
+                    dt.page.len( -1 ).draw();
+                    dt.one( 'draw', function() {
+                        $( '.listener-ips-buttons-copy' ).click();
+                        setTimeout( function() { dt.page.len( 10 ).draw(); }, 1000 );
+                    } );
+                },
+            },
+            {
                 extend: 'excelHtml5', className: 'd-none listener-ips-buttons-excel',
                 exportOptions: { modifier: { page: 'all' } },
             },
@@ -216,6 +230,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
                     dt.page.len( -1 ).draw();
                     dt.one( 'draw', function() {
                         $( '.listener-ips-buttons-csv' ).click();
+                        setTimeout( function() { dt.page.len( 10 ).draw(); }, 1000 );
+                    } );
+                },
+            },
+            {
+                extend: 'pdfHtml5', className: 'd-none listener-ips-buttons-pdf',
+                exportOptions: { modifier: { page: 'all' } },
+            },
+            {
+                text: '<i class="fa fa-file-pdf"></i>', className: 'btn btn-danger', titleAttr: 'Export to PDF',
+                action: function( e, dt ) {
+                    dt.page.len( -1 ).draw();
+                    dt.one( 'draw', function() {
+                        $( '.listener-ips-buttons-pdf' ).click();
                         setTimeout( function() { dt.page.len( 10 ).draw(); }, 1000 );
                     } );
                 },
