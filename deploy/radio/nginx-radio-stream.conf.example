@@ -1,0 +1,13 @@
+# Replace the current /radio-stream/ location inside the existing HTTPS server.
+# Icecast must already be listening on loopback port 8001 (see proxy XML).
+location /radio-stream/ {
+    proxy_pass http://127.0.0.1:8001/radio.mp3;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header Connection "";
+    # Overwrite untrusted headers supplied by the browser.
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_buffering off;
+    proxy_read_timeout 1d;
+    proxy_send_timeout 1d;
+}

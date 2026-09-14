@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'online_ips' => 'Online unique IPs',
+    'today_ips' => 'Unique IPs seen today',
+    'ip_sampled' => 'Last checked (MYT):',
+    'ip_stale' => 'IP statistics awaiting update',
 
     /*
     |--------------------------------------------------------------------------

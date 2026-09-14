@@ -86,6 +86,11 @@ return [
     ],
 
     'radio' => [
+        'listener_tracking' => env( 'RADIO_LISTENER_TRACKING', false ),
+        'icecast_admin_url' => env( 'RADIO_ICECAST_ADMIN_URL', 'http://127.0.0.1:8000/admin/listclients' ),
+        'icecast_admin_user' => env( 'RADIO_ICECAST_ADMIN_USER', 'admin' ),
+        'icecast_admin_password' => env( 'RADIO_ICECAST_ADMIN_PASSWORD' ),
+        'icecast_mount' => env( 'RADIO_ICECAST_MOUNT', '/radio.mp3' ),
         // Shared secret the Liquidsoap/Icecast engine sends as the X-Radio-Engine-Key header
         // when polling /api/radio/next and /api/radio/played. Generate with e.g. `openssl rand -hex 32`.
         'engine_key' => env( 'RADIO_ENGINE_KEY' ),

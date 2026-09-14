@@ -86,7 +86,10 @@ class RadioController extends Controller
     }
 
     public function nowPlaying() {
-        return RadioQueueService::nowPlaying();
+        $response = RadioQueueService::nowPlaying();
+        $data = $response->getData(true);
+        $data['listener_stats'] = \App\Services\RadioListenerService::summary();
+        return response()->json($data);
     }
 
     public function listenerGraph( Request $request ) {

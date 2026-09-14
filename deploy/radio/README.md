@@ -1,5 +1,8 @@
 # Radio streaming engine (Icecast + Liquidsoap)
 
+For real listener IP storage behind Nginx, see [LISTENER_IPS.md](./LISTENER_IPS.md)
+for the Ubuntu 22.04 upgrade, trusted proxy configuration, and Laravel setup.
+
 Runs on the same Linux server as this Laravel app. It has no code dependency
 on the app — it only talks to it over HTTP (`/api/v1/radio/next` and
 `/api/v1/radio/played`, guarded by the `RADIO_ENGINE_KEY` shared secret).

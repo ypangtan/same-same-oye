@@ -1,0 +1,13 @@
+<!-- Add these INSIDE <icecast> after upgrading to Icecast 2.5.
+     Keep the existing port-8000 listener for Liquidsoap and local admin requests.
+     Port 8001 is loopback-only and receives listener traffic from Nginx.
+     The referenced virtual socket MUST exist before using trusted-proxy. -->
+<listen-socket id="nginx-radio" type="virtual">
+    <port>443</port>
+    <client-address>127.0.0.1</client-address>
+</listen-socket>
+<listen-socket id="radio-proxy-input">
+    <port>8001</port>
+    <bind-address>127.0.0.1</bind-address>
+    <trusted-proxy>#nginx-radio</trusted-proxy>
+</listen-socket>
