@@ -42,7 +42,7 @@
             <div class="card stat-card h-100">
                 <div class="card-body" id="radio_listeners_open" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="radio_listeners_modal" style="cursor:pointer;">
                     <div class="gap-3 d-flex align-items-center h-100">
-                        <div class="stat-icon" style="background:#e4e4e4;color:#1565c0;overflow:hidden;padding:0;width:50px;height:50px;min-width:50px;flex:0 0 50px;display: flex;align-content: center;justify-content: center;flex-wrap: wrap;"><em class="icon ni ni-users"></em></div>
+                        <div class="stat-icon" style="background:#daebff;color:#1565c0;overflow:hidden;padding:0;width:50px;height:50px;min-width:50px;flex:0 0 50px;display: flex;align-content: center;justify-content: center;flex-wrap: wrap;"><em class="icon ni ni-users"></em></div>
                         <div>
                             <div class="stat-value" id="radio_listener_count">—</div>
                             <div class="stat-label">{{ __( 'radio.live_listeners' ) }}</div>
