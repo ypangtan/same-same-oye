@@ -24,7 +24,7 @@ class RadioSetting extends Model
 
     public function getDefaultImageUrlAttribute() {
         if ( empty( $this->attributes['default_image'] ) ) {
-            return null;
+            return asset( 'admin/images/song.png' );
         }
 
         return StorageService::get( $this->attributes['default_image'] );

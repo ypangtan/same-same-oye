@@ -26,7 +26,7 @@ class RadioQueueService {
     public static function allItems( $request ) {
 
         $items = RadioQueueItem::select( 'radio_queue_items.*' )
-            ->where( 'status', '!=', RadioQueueItem::STATUS_PLAYED );
+            ->whereIn( 'status', [ RadioQueueItem::STATUS_QUEUED, RadioQueueItem::STATUS_RESERVED ] );
 
         $filterObject = self::filter( $request, $items );
         $item = $filterObject['model'];
@@ -51,7 +51,7 @@ class RadioQueueService {
             ] );
         }
 
-        $totalRecord = RadioQueueItem::where( 'status', '!=', RadioQueueItem::STATUS_PLAYED )->count();
+        $totalRecord = RadioQueueItem::whereIn( 'status', [ RadioQueueItem::STATUS_QUEUED, RadioQueueItem::STATUS_RESERVED ] )->count();
 
         return response()->json( [
             'radio_queue_items' => $items,
