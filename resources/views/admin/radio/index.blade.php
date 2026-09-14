@@ -40,7 +40,7 @@
         </div>
         <div class="col-6 col-md-4 col-lg-3">
             <div class="card stat-card h-100">
-                <div class="card-body">
+                <div class="card-body" id="radio_listeners_open" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="radio_listeners_modal" style="cursor:pointer;">
                     <div class="gap-3 d-flex align-items-center h-100">
                         <div class="stat-icon" style="background:#e3f2fd;color:#1565c0"><em class="icon ni ni-users"></em></div>
                         <div>
@@ -73,8 +73,76 @@
 </div>
 
 <script src="{{ asset( 'admin/js/apexcharts.min.js' ) }}"></script>
+<div class="modal fade" id="radio_listeners_modal" tabindex="-1" aria-labelledby="radio_listeners_heading" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="radio_listeners_heading">{{ __( 'radio.live_listeners' ) }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-soft small">{{ __( 'radio.listener_sample_note' ) }}</p>
+                <p id="radio_listeners_message" role="status"></p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead><tr><th>IP</th><th>{{ __( 'radio.listener_connection' ) }}</th><th>{{ __( 'radio.listener_connected_at' ) }}</th></tr></thead>
+                        <tbody id="radio_listeners_rows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
+
+        const listenersElement = document.getElementById( 'radio_listeners_modal' );
+        const listenersModal = new bootstrap.Modal( listenersElement );
+        let listenersRequest, listenersTimer;
+        function loadListeners() {
+            if ( listenersRequest ) return;
+            $( '#radio_listeners_rows' ).empty();
+            $( '#radio_listeners_message' ).text( @json( __( 'template.loading' ) ) );
+            listenersRequest = $.ajax( {
+                url: '{{ route( 'admin.radio.listeners' ) }}', type: 'POST',
+                data: { _token: '{{ csrf_token() }}' },
+                success: function( response ) {
+                    const summary = response.summary;
+                    let message = @json( __( 'radio.listeners_empty' ) );
+                    if ( !summary.enabled ) message = @json( __( 'radio.listeners_disabled' ) );
+                    else if ( !summary.fresh ) message = @json( __( 'radio.ip_stale' ) );
+                    else if ( response.listeners.length ) message = '';
+                    $( '#radio_listeners_message' ).text( message );
+                    if ( !summary.fresh ) return;
+                    response.listeners.forEach( function( listener ) {
+                        const connected = new Intl.DateTimeFormat( 'en-GB', {
+                            timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'medium', timeStyle: 'medium', hourCycle: 'h23',
+                        } ).format( new Date( listener.connected_at ) );
+                        $( '<tr>' ).append(
+                            $( '<td>' ).text( listener.ip ),
+                            $( '<td>' ).text( listener.client_id ),
+                            $( '<td>' ).text( connected )
+                        ).appendTo( '#radio_listeners_rows' );
+                    } );
+                },
+                error: function( xhr, status ) {
+                    if ( status !== 'abort' ) $( '#radio_listeners_message' ).text( @json( __( 'radio.listeners_failed' ) ) );
+                },
+                complete: function() { listenersRequest = null; },
+            } );
+        }
+        $( '#radio_listeners_open' ).on( 'click', function() { listenersModal.show(); } ).on( 'keydown', function( event ) {
+            if ( event.key === 'Enter' || event.key === ' ' ) { event.preventDefault(); listenersModal.show(); }
+        } );
+        listenersElement.addEventListener( 'shown.bs.modal', function() {
+            loadListeners();
+            listenersTimer = setInterval( loadListeners, 15000 );
+        } );
+        listenersElement.addEventListener( 'hidden.bs.modal', function() {
+            clearInterval( listenersTimer );
+            if ( listenersRequest ) listenersRequest.abort();
+            document.getElementById( 'radio_listeners_open' ).focus();
+        } );
 
         function graphTime( value, full = false ) {
             const date = new Date( Number( value ) );

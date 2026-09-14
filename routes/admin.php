@@ -391,6 +391,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view radios' ] ], function() {
                     Route::get( '/', [ RadioController::class, 'index' ] )->name( 'admin.module_parent.radio.index' );
                     Route::get( 'history', [ RadioController::class, 'history' ] )->name( 'admin.radio.history' );
+                    Route::post( 'listeners', [ RadioController::class, 'listeners' ] )->name( 'admin.radio.listeners' );
                 } );
                 Route::group( [ 'middleware' => [ 'permission:add radios' ] ], function() {
                     Route::get( 'add', [ RadioController::class, 'add' ] )->name( 'admin.radio.add' );

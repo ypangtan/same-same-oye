@@ -96,6 +96,11 @@ class RadioController extends Controller
         return RadioQueueService::listenerGraph( $request );
     }
 
+    public function listeners() {
+        return response()->json( \App\Services\RadioListenerService::onlineListeners() )
+            ->header('Cache-Control', 'no-store');
+    }
+
     public function getDefaultImage() {
         return RadioQueueService::getDefaultImage();
     }

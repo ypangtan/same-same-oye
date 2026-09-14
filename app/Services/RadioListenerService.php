@@ -128,4 +128,21 @@ class RadioListenerService
                 ->distinct()->count('ip'),
         ];
     }
+
+    public static function onlineListeners(): array
+    {
+        $summary = self::summary();
+        $listeners = [];
+        if (!empty($summary['fresh'])) {
+            $listeners = DB::table('radio_listener_sessions')
+                ->where('source_key', self::sourceKey())->whereNull('disconnected_at')
+                ->orderBy('connected_at')->get(['client_id', 'ip', 'connected_at'])
+                ->map(fn ($row) => [
+                    'client_id' => $row->client_id,
+                    'ip' => $row->ip,
+                    'connected_at' => Carbon::parse($row->connected_at)->toIso8601String(),
+                ])->all();
+        }
+        return ['summary' => $summary, 'listeners' => $listeners];
+    }
 }

@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'listener_sample_note' => 'Online connections checked every minute. Multiple connections may share the same IP.',
+    'listener_connection' => 'Connection ID',
+    'listener_connected_at' => 'Connected at (MYT)',
+    'listeners_empty' => 'No listeners in the latest sample.',
+    'listeners_disabled' => 'Listener IP tracking is not enabled yet.',
+    'listeners_failed' => 'Could not load listeners. Please reopen to retry.',
     'online_ips' => 'Online unique IPs',
     'today_ips' => 'Unique IPs seen today',
     'ip_sampled' => 'Last checked (MYT):',
