@@ -66,7 +66,11 @@ apt-get install -y build-essential fakeroot devscripts dpkg-dev debhelper debian
     libcurl4-openssl-dev libmaxminddb-dev libogg-dev librhash-dev libspeex-dev libssl-dev \
     libtheora-dev libvorbis-dev libxml2-dev libxslt1-dev pkgconf po-debconf
 
-build_dir="$(mktemp -d)"
+# Not /tmp: many hardened cloud images mount /tmp (and mktemp's default
+# location) noexec, which fails `debian/rules clean/build` with a bare
+# "Permission denied" even though the file's executable bit is set correctly.
+build_dir="$radio_backup/build"
+install -d -m 700 "$build_dir"
 trap 'rm -rf "$build_dir"' EXIT
 
 # --- Stage 1: libigloo (icecast2's missing build dependency) ---
