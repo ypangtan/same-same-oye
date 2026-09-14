@@ -76,8 +76,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-soft small">{{ __( 'radio.listener_sample_note' ) }}</p>
-                <p id="radio_listeners_message" role="status"></p>
                 <div class="table-responsive">
                     <table class="table">
                         <thead><tr><th>IP</th><th>{{ __( 'radio.listener_connected_at' ) }}</th></tr></thead>
@@ -97,7 +95,6 @@
         function loadListeners() {
             if ( listenersRequest ) return;
             $( '#radio_listeners_rows' ).empty();
-            $( '#radio_listeners_message' ).text( @json( __( 'template.loading' ) ) );
             listenersRequest = $.ajax( {
                 url: '{{ route( 'admin.radio.listeners' ) }}', type: 'POST',
                 data: { _token: '{{ csrf_token() }}' },
@@ -107,7 +104,6 @@
                     if ( !summary.enabled ) message = @json( __( 'radio.listeners_disabled' ) );
                     else if ( !summary.fresh ) message = @json( __( 'radio.ip_stale' ) );
                     else if ( response.listeners.length ) message = '';
-                    $( '#radio_listeners_message' ).text( message );
                     if ( !summary.fresh ) return;
                     response.listeners.forEach( function( listener ) {
                         const connected = new Intl.DateTimeFormat( 'en-GB', {
@@ -120,7 +116,6 @@
                     } );
                 },
                 error: function( xhr, status ) {
-                    if ( status !== 'abort' ) $( '#radio_listeners_message' ).text( @json( __( 'radio.listeners_failed' ) ) );
                 },
                 complete: function() { listenersRequest = null; },
             } );
