@@ -182,11 +182,7 @@ var displayTypes = @json( $data['display_types'] ),
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
                 orderable: false,
                 render: function( data, type, row, meta ) {
-                    let html = data ? $( '<div>' ).text( data ).html() : '-';
-                    if ( row.priority == 1 ) {
-                        html += ' <span class="badge bg-primary ms-1">{{ __( 'template.recommended' ) }}</span>';
-                    }
-                    return html;
+                    return data ? $( '<div>' ).text( data ).html() : '-';
                 },
             },
             {
@@ -334,6 +330,7 @@ var displayTypes = @json( $data['display_types'] ),
                 data: function( params ) {
                     return {
                         title: params.term,
+                        status: 10,
                         start: ( ( params.page ? params.page : 1 ) - 1 ) * 10,
                         length: 10,
                         _token: '{{ csrf_token() }}',
