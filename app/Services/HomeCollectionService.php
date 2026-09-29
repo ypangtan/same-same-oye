@@ -276,8 +276,6 @@ class HomeCollectionService
             return $collection;
         } );
 
-        return response()->json( [
-            'data' => $collections,
-        ] );
+        return response()->json( $collections );
     }
 }
