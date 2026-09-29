@@ -189,6 +189,15 @@
                                     </ul>
                                 </li>
                                 @endcanany
+                                
+                                @can( 'view home_collections' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\HomeCollectionController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.home_collection.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-home-fill"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.home' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
 
                                 @can( 'view radios' )
                                 <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\RadioController' ) ? 'active current-page' : '' }}">
@@ -206,7 +215,7 @@
                                     </ul>
                                 </li>
                                 @endcan
-                                
+
                                 @canany( [ 'view subscription_plans', 'view user_subscriptions' ] )
                                 <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\SubscriptionPlanController' ||
                                     $controller == 'App\Http\Controllers\Admin\UserSubscriptionController' ||

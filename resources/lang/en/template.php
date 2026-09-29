@@ -90,7 +90,12 @@ return [
     'disclaimers' => 'Disclaimers',
     'website_banners' => 'Website Banners',
     'trending_contents' => 'Trending Contents',
-    
+    'home' => 'Home',
+    'home_layout' => 'Home Layout',
+    'home_layout_hint' => 'Add collections and drag to sort. The first collection is always displayed as "Recommended" in the app.',
+    'recommended' => 'Recommended',
+    'no_home_collections' => 'No collections added yet.',
+
     'content' => 'Content',
 
     'loading' => 'Loading...',

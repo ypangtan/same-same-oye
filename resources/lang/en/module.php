@@ -50,4 +50,5 @@ return [
     'pop_announcements' => 'Pop Announcements',
     'trending_contents ' => 'Trending Contents',
     'dashboard' => 'Dashboard',
+    'home_collections' => 'Home',
 ];

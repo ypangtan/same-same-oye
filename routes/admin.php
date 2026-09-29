@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\{
     CategoryController,
     CollectionController,
     CountryController,
+    HomeCollectionController,
     ItemController,
     MarketingNotificationController,
     MusicController,
@@ -282,6 +283,23 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'image-upload', [ TrendingContentController::class, 'imageUpload' ] )->name( 'admin.trending_content.imageUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'song-upload', [ TrendingContentController::class, 'songUpload' ] )->name( 'admin.trending_content.songUpload' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
                 Route::post( 'update-order', [ TrendingContentController::class, 'updateOrder' ] )->name( 'admin.trending_content.updateOrder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+            } );
+
+            Route::prefix( 'home' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view home_collections' ] ], function() {
+                    Route::get( '/', [ HomeCollectionController::class, 'index' ] )->name( 'admin.module_parent.home_collection.index' );
+                    Route::post( 'all-home-collections', [ HomeCollectionController::class, 'allHomeCollections' ] )->name( 'admin.home_collection.allHomeCollections' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add home_collections' ] ], function() {
+                    Route::post( 'add-home-collection', [ HomeCollectionController::class, 'addHomeCollection' ] )->name( 'admin.home_collection.addHomeCollection' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit home_collections' ] ], function() {
+                    Route::post( 'update-home-collection', [ HomeCollectionController::class, 'updateHomeCollection' ] )->name( 'admin.home_collection.updateHomeCollection' );
+                    Route::post( 'update-order', [ HomeCollectionController::class, 'updateOrder' ] )->name( 'admin.home_collection.updateOrder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:delete home_collections' ] ], function() {
+                    Route::post( 'delete-home-collection', [ HomeCollectionController::class, 'deleteHomeCollection' ] )->name( 'admin.home_collection.deleteHomeCollection' );
+                } );
             } );
 
             Route::prefix( 'items' )->group( function() {
