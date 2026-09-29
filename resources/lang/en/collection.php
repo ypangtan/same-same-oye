@@ -17,6 +17,7 @@ return [
     'title' => 'Title',
     'name' => 'Title',
     'category' => 'Category',
+    'type' => 'Type',
     'membership_level' => 'Membership Level',
     'priority' => 'Priority',
     'playlists' => 'Playlists',
@@ -30,6 +31,7 @@ return [
     'type_6' => 'Type 6',
     'type_7' => 'Type 7',
     'type_8' => 'Type 8',
+    'type_9' => 'Type 9',
     'display_type' => 'Display Type',
 
     'display_type_guide' => 'Display Type Guide',

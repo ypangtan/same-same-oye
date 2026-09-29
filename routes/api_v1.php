@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\{
     CategoryController,
     CollectionController,
     CountryController,
+    HomeCollectionController,
     InAppPurchaseController,
     ItemController,
     LuckyDrawRewardController,
@@ -118,6 +119,10 @@ Route::middleware( 'auth.optional' )->group( function() {
     Route::prefix( 'collections' )->group( function() {
         Route::post( '/get-all-collections', [ CollectionController::class, 'getCollections' ] );
         Route::post( '/get-one-collection', [ CollectionController::class, 'getCollection' ] );
+    } );
+
+    Route::prefix( 'home' )->group( function() {
+        Route::post( '/get-home-collections', [ HomeCollectionController::class, 'getHomeCollections' ] );
     } );
 
     Route::prefix( 'playlists' )->group( function() {
