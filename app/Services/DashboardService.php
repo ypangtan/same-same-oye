@@ -90,7 +90,7 @@ class DashboardService {
                   ->orWhereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'playlists' )->whereColumn( 'playlists.type_id', 'types.id' ) )
                   ->orWhereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'collections' )->whereColumn( 'collections.type_id', 'types.id' ) );
             } )
-            ->select( 'id', 'en_name as name' )
+            ->selectRaw( "id, IF( en_name = 'Podcast', 'Video', en_name ) as name" )
             ->orderBy( 'id' )
             ->get();
 
@@ -415,8 +415,8 @@ class DashboardService {
 
         $types = DB::table( 'types' )
             ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'items' )->whereColumn( 'items.type_id', 'types.id' ) )
-            ->select( 'id', 'en_name as name' )
-            ->orderBy( 'en_name' )
+            ->selectRaw( "id, IF( en_name = 'Podcast', 'Video', en_name ) as name" )
+            ->orderBy( 'name' )
             ->get();
 
         $q = DB::table( 'stream_logs' )
@@ -439,8 +439,8 @@ class DashboardService {
 
         $types = DB::table( 'types' )
             ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'playlists' )->whereColumn( 'playlists.type_id', 'types.id' ) )
-            ->select( 'id', 'en_name as name' )
-            ->orderBy( 'en_name' )
+            ->selectRaw( "id, IF( en_name = 'Podcast', 'Video', en_name ) as name" )
+            ->orderBy( 'name' )
             ->get();
 
         $q = DB::table( 'stream_logs' )
@@ -463,8 +463,8 @@ class DashboardService {
 
         $types = DB::table( 'types' )
             ->whereExists( fn( $s ) => $s->select( DB::raw( 1 ) )->from( 'collections' )->whereColumn( 'collections.type_id', 'types.id' ) )
-            ->select( 'id', 'en_name as name' )
-            ->orderBy( 'en_name' )
+            ->selectRaw( "id, IF( en_name = 'Podcast', 'Video', en_name ) as name" )
+            ->orderBy( 'name' )
             ->get();
 
         $q = DB::table( 'stream_logs' )
