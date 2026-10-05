@@ -47,4 +47,12 @@ class TypeService
 
         return response()->json( [ 'data' => $types ] );
     }
+
+    // same as getTypes, but Podcast is returned as Video
+    public static function getTypesV2( $request ) {
+
+        Type::$showPodcastAsVideo = true;
+
+        return self::getTypes( $request );
+    }
 }
