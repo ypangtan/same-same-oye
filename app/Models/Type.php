@@ -28,12 +28,22 @@ class Type extends Model
         'name',
     ];
 
+    // Podcast is shown as Video everywhere, except the legacy get types API
+    public static $showPodcastAsVideo = true;
+
+    public function getEnNameAttribute( $value ) {
+        if ( self::$showPodcastAsVideo && $value == 'Podcast' ) {
+            return 'Video';
+        }
+        return $value;
+    }
+
     public function getNameAttribute() {
         $locale = app()->getLocale();
         if( $locale == 'zh' ) {
-            return $this->attributes['zh_name'] ?? $this->attributes['en_name'];
+            return $this->attributes['zh_name'] ?? $this->en_name;
         } else {
-            return $this->attributes['en_name'];
+            return $this->en_name;
         }
     }
 
