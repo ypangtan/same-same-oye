@@ -36,4 +36,19 @@ class TypeController extends Controller
         return TypeService::getTypes( $request );
     }
 
+    /**
+     * 2. Get all Types V2
+     *
+     * Same as Get all Types, but Podcast is returned as Video.
+     *
+     * @group Type API
+     *
+     * @bodyParam per_page string The total record per page ( default 10 ). Example: 10
+     *
+     */
+    public function getTypesV2( Request $request ) {
+
+        return TypeService::getTypesV2( $request );
+    }
+
 }

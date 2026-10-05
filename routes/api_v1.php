@@ -92,6 +92,7 @@ Route::prefix( 'categories' )->group( function() {
 
 Route::prefix( 'types' )->group( function() {
     Route::post( '/', [ TypeController::class, 'getTypes' ] );
+    Route::post( '/v2', [ TypeController::class, 'getTypesV2' ] );
 } );
 
 Route::prefix( 'pop_announcements' )->group( function() {

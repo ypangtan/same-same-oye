@@ -76,7 +76,7 @@ return [
     'songs' => 'Songs',
     'category' => 'Category',
     'musics' => 'Music',
-    'podcasts' => 'Podcasts',
+    'podcasts' => 'Videos',
     'radios' => 'Radio',
     'radio_queue' => 'Radio Queue',
     'radio_history' => 'Play History',
