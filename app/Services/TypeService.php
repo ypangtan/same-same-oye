@@ -33,6 +33,15 @@ class TypeService
     // api
     public static function getTypes( $request ) {
 
+        // legacy, keep showing Podcast
+        Type::$showPodcastAsVideo = false;
+
+        return self::getTypesV2( $request );
+    }
+
+    // Podcast is returned as Video
+    public static function getTypesV2( $request ) {
+
         $per_page = $request->input( 'per_page', 10 );
 
         $types = Type::where( 'status', '10' )

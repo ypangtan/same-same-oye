@@ -28,8 +28,8 @@ class Type extends Model
         'name',
     ];
 
-    // Show Podcast as Video, only turned on by get types v2 API
-    public static $showPodcastAsVideo = false;
+    // Podcast is shown as Video everywhere, except the legacy get types API
+    public static $showPodcastAsVideo = true;
 
     public function getEnNameAttribute( $value ) {
         if ( self::$showPodcastAsVideo && $value == 'Podcast' ) {

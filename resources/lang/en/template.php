@@ -76,7 +76,7 @@ return [
     'songs' => 'Songs',
     'category' => 'Category',
     'musics' => 'Music',
-    'podcasts' => 'Podcasts',
+    'podcasts' => 'Videos',
     'talks' => 'Talks',
     'user_playlists' => 'User Playlists',
     'subscription_plans' => 'Subscription Plans',
