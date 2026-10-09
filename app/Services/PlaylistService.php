@@ -224,6 +224,12 @@ class PlaylistService
             'tags',
         ] )->find( Helper::decode( $request->id ) );
 
+        if ( !$playlist ) {
+            return response()->json( [
+                'message' => __( 'template.record_not_found' ),
+            ], 404 );
+        }
+
         $playlist->append( [
             'encrypted_id',
             'name',
@@ -627,6 +633,12 @@ class PlaylistService
             },
             'tags',
         ] )->find( Helper::decode( $request->id ) );
+
+        if ( !$playlist ) {
+            return response()->json( [
+                'message' => __( 'template.record_not_found' ),
+            ], 404 );
+        }
 
         $playlist->append( [
             'encrypted_id',
