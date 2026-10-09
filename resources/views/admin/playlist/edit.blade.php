@@ -417,7 +417,7 @@ window.cke_element = [ 'playlist_edit_desc'];
 
         function itemBlock( id, text, publishingDate ) {
             return `
-                <div class="item-block px-3 py-2 d-flex align-items-center w-full gap-3 text-black mb-2" data-id="${id}" style="font-size:14px;">
+                <div class="item-block px-3 py-2 d-flex align-items-center w-full gap-2 text-black mb-4" data-id="${id}" style="font-size:14px;">
                     <span class="flex-grow-1">${text}</span>
                     <input type="text" class="form-control form-control-sm item-publishing-date" style="width:200px;" value="${publishingDate}" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
                     <em class="icon ni ni-cross remove-item click-action"></em>
