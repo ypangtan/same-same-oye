@@ -431,7 +431,9 @@ class CollectionService
 
         $collections = Collection::with( [
             'playlists' => function ( $q ) {
-                $q->whereNull( 'publishing_date' )->orWhereDate( 'publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                $q->where( function ( $sq ) {
+                    $sq->whereNull( 'playlists.publishing_date' )->orWhereDate( 'playlists.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                } );
             },
             'playlists.tags',
         ] )->select( 'collections.*' )
