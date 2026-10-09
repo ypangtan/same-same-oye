@@ -95,13 +95,6 @@ $parent_route = $data['parent_route'] ?? '';
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class="mb-3 row">
-                    <label for="{{ $item_create }}_publishing_date" class="col-sm-5 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $item_create }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
                 <div class="text-end">
                     <button id="{{ $item_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -133,12 +126,6 @@ window.cke_element = [ 'item_create_desc'];
             duration = '',
             file2ID = '',
             songPath = '';
-
-        flatpickr( dc + '_publishing_date', {
-            dateFormat: 'Y-m-d',
-            disableMobile: true,
-            allowInput: true,
-        } );
 
         $( dc + '_upload_type' ).change( function() {
             let selectedType = $( this ).val();
@@ -178,7 +165,6 @@ window.cke_element = [ 'item_create_desc'];
             formData.append( 'url', $( dc + '_url' ).val() ?? '' );
             formData.append( 'url_type', $( dc + '_url_type' ).val() ?? '' );
             formData.append( 'membership_level', $( dc + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
-            formData.append( 'publishing_date', $( dc + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
