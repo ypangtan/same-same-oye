@@ -296,7 +296,7 @@ window.cke_element = [ 'playlist_create_desc'];
                 selectedItems.unshift( {id: data.id, text: data.text, file_type: data.file_type, publishing_date: ''} );
 
                 $('#selected-items').prepend(`
-                    <div class="item-block px-3 py-2 d-flex align-items-center w-full gap-3 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
+                    <div class="item-block px-3 py-2 d-flex align-items-center w-full gap-2 text-black mb-4" data-id="${data.id}" style="font-size:14px;">
                         <span class="flex-grow-1">${data.text}</span>
                         <input type="text" class="form-control form-control-sm item-publishing-date" style="width:200px;" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
                         <em class="icon ni ni-cross remove-item click-action"></em>
