@@ -534,7 +534,11 @@ class PlaylistService
 
         $playlists = Playlist::with([
             'item',
-            'items',
+            'items' => function ( $q ) {
+                $q->where( function ( $sq ) {
+                    $sq->whereNull( 'items.publishing_date' )->orWhereDate( 'items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                } );
+            },
             'tags',
         ])->select('playlists.*')
             ->whereHas( 'items' )

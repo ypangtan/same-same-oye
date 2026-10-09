@@ -1,3 +1,7 @@
+<style>
+    td:has(span.highlight) { background-color: #fff56d; }
+</style>
+
 <?php
 $type = $data['type'] ?? null;
 $parent_route = $data['parent_route'] ?? null;
@@ -43,6 +47,12 @@ $columns = [
         'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ),
         'id' => 'created_date',
         'title' => __( 'datatables.created_date' ),
+    ],
+    [
+        'type' => 'date',
+        'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'template.publishing_date' ) ] ),
+        'id' => 'publishing_date',
+        'title' => __( 'template.publishing_date' ),
     ],
     [
         'type' => 'default',
@@ -158,6 +168,7 @@ var statusMapper = @json( $data['status'] ),
             { data: null },
             { data: null },
             { data: 'created_at' },
+            { data: 'publishing_date' },
             { data: 'image_url' },
             { data: 'title' },
             { data: null },
@@ -191,6 +202,21 @@ var statusMapper = @json( $data['status'] ),
                 
                 render: function( data, type, row, meta ) {
                     return data ? data : '-' ;
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "publishing_date" ) }}' ),
+                width: '10%',
+                orderable: false,
+                render: function( data, type, row, meta ) {
+                    if ( !data ) return '-';
+                    var klNow = new Date( new Date().toLocaleString( 'en-US', { timeZone: 'Asia/Kuala_Lumpur' } ) );
+                    var today = new Date( klNow.getFullYear(), klNow.getMonth(), klNow.getDate() );
+                    var p = data.split( '-' ); var publishDate = new Date( p[0], p[1] - 1, p[2] );
+                    if ( publishDate > today ) {
+                        return '<span class="highlight">' + data + '</span>';
+                    }
+                    return data;
                 },
             },
             {
@@ -285,7 +311,7 @@ var statusMapper = @json( $data['status'] ),
         $( '#type' ).val( '{{ $type }}' ).addClass( 'd-none' );
         window['type'] = '{{ $type }}';
 
-        $( '#created_date' ).flatpickr( {
+        $( '#created_date, #publishing_date' ).flatpickr( {
             mode: 'range',
             disableMobile: true,
             onClose: function( selected, dateStr, instance ) {
