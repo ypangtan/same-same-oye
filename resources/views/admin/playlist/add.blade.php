@@ -293,20 +293,33 @@ window.cke_element = [ 'playlist_create_desc'];
             file_type = e.params.data.file_type;
             
             if (!selectedItems.some(tag => tag.id === data.id)) {
-                selectedItems.unshift( {id: data.id, text: data.text, file_type: data.file_type} );
+                selectedItems.unshift( {id: data.id, text: data.text, file_type: data.file_type, publishing_date: ''} );
 
                 $('#selected-items').prepend(`
-                    <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
-                        ${data.text}
+                    <div class="item-block px-3 py-2 d-flex align-items-center w-full gap-3 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
+                        <span class="flex-grow-1">${data.text}</span>
+                        <input type="text" class="form-control form-control-sm item-publishing-date" style="width:200px;" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
                         <em class="icon ni ni-cross remove-item click-action"></em>
-                    </span>
+                    </div>
                 `);
+
+                flatpickr( $( '#selected-items .item-block[data-id="' + data.id + '"] .item-publishing-date' )[0], {
+                    dateFormat: 'Y-m-d',
+                    disableMobile: true,
+                    allowInput: true,
+                } );
 
                 updateHiddenInput();
             }
 
             $( dc + '_items' ).val(null).trigger('change');
         });
+
+        $( document ).on( 'change', '#selected-items .item-publishing-date', function() {
+            let id = $( this ).closest( '.item-block' ).data( 'id' ),
+                item = selectedItems.find( i => i.id == id );
+            if ( item ) item.publishing_date = $( this ).val();
+        } );
 
         $(document).on('click', '.remove-item', function() {
             let id = $(this).closest('.item-block').data('id');

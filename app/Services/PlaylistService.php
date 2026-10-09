@@ -315,7 +315,10 @@ class PlaylistService
             $items = json_decode( $request->items, true );
             $syncData = [];
             foreach ( $items as $index => $item ) {
-                $syncData[$item['id']] = ['priority' => $index + 1];
+                $syncData[$item['id']] = [
+                    'priority' => $index + 1,
+                    'publishing_date' => !empty( $item['publishing_date'] ) ? $item['publishing_date'] : null,
+                ];
             }
 
             $createPlaylist->items()->sync( $syncData );
@@ -450,7 +453,10 @@ class PlaylistService
             $items = json_decode( $request->items, true );
             $syncData = [];
             foreach ( $items as $index => $item ) {
-                $syncData[$item['id']] = ['priority' => $index + 1];
+                $syncData[$item['id']] = [
+                    'priority' => $index + 1,
+                    'publishing_date' => !empty( $item['publishing_date'] ) ? $item['publishing_date'] : null,
+                ];
             }
 
             $updatePlaylist->items()->sync( $syncData );
@@ -536,7 +542,7 @@ class PlaylistService
             'item',
             'items' => function ( $q ) {
                 $q->where( function ( $sq ) {
-                    $sq->whereNull( 'items.publishing_date' )->orWhereDate( 'items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                    $sq->whereNull( 'playlist_items.publishing_date' )->orWhereDate( 'playlist_items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
                 } );
             },
             'tags',
@@ -622,7 +628,7 @@ class PlaylistService
             'item',
             'items' => function ( $q ) {
                 $q->where( function ( $sq ) {
-                    $sq->whereNull( 'items.publishing_date' )->orWhereDate( 'items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                    $sq->whereNull( 'playlist_items.publishing_date' )->orWhereDate( 'playlist_items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
                 } );
             },
             'tags',

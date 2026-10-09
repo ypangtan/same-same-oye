@@ -289,14 +289,11 @@ window.cke_element = [ 'playlist_edit_desc'];
                     $.each( response.items, function( i, v ) {
                         data = v;
                         if ( !selectedItems.some( item => item.id === data.id ) ) {
-                            selectedItems.push( {id: data.id, text: data.name, file_type: data.file_type} );
-                            
-                            $('#selected-items').append(`
-                                <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
-                                    ${data.title}
-                                    <em class="icon ni ni-cross remove-item click-action"></em>
-                                    </span>
-                            `);
+                            let publishingDate = data.pivot && data.pivot.publishing_date ? data.pivot.publishing_date.substring( 0, 10 ) : '';
+                            selectedItems.push( {id: data.id, text: data.name, file_type: data.file_type, publishing_date: publishingDate} );
+
+                            $('#selected-items').append( itemBlock( data.id, data.title, publishingDate ) );
+                            initItemDate( data.id );
 
                             updateHiddenInput();
                         }
@@ -407,20 +404,40 @@ window.cke_element = [ 'playlist_edit_desc'];
             file_type = e.params.data.file_type;
             
             if (!selectedItems.some( item => item.id === data.id ) ) {
-                selectedItems.unshift( {id: data.id, text: data.text} );
+                selectedItems.unshift( {id: data.id, text: data.text, publishing_date: ''} );
 
-                $('#selected-items').prepend(`
-                    <span class="item-block px-3 py-2 d-flex justify-content-between w-full gap-2 text-black mb-2" data-id="${data.id}" style="font-size:14px;">
-                        ${data.text}
-                        <i class="icon icon-icon16-close remove-item click-action" style="font-size:23px;"></i>
-                    </span>
-                `);
+                $('#selected-items').prepend( itemBlock( data.id, data.text, '' ) );
+                initItemDate( data.id );
 
                 updateHiddenInput();
             }
 
             $( de + '_items' ).val(null).trigger('change');
         });
+
+        function itemBlock( id, text, publishingDate ) {
+            return `
+                <div class="item-block px-3 py-2 d-flex align-items-center w-full gap-3 text-black mb-2" data-id="${id}" style="font-size:14px;">
+                    <span class="flex-grow-1">${text}</span>
+                    <input type="text" class="form-control form-control-sm item-publishing-date" style="width:200px;" value="${publishingDate}" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
+                    <em class="icon ni ni-cross remove-item click-action"></em>
+                </div>
+            `;
+        }
+
+        function initItemDate( id ) {
+            flatpickr( $( '#selected-items .item-block[data-id="' + id + '"] .item-publishing-date' )[0], {
+                dateFormat: 'Y-m-d',
+                disableMobile: true,
+                allowInput: true,
+            } );
+        }
+
+        $( document ).on( 'change', '#selected-items .item-publishing-date', function() {
+            let id = $( this ).closest( '.item-block' ).data( 'id' ),
+                item = selectedItems.find( i => i.id == id );
+            if ( item ) item.publishing_date = $( this ).val();
+        } );
 
         $(document).on('click', '.remove-item', function() {
             let id = $(this).closest('.item-block').data('id');

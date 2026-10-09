@@ -95,13 +95,6 @@ $parent_route = $data['parent_route'] ?? '';
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
-                <div class="mb-3 row">
-                    <label for="{{ $item_edit }}_publishing_date" class="col-sm-5 col-form-label">{{ __( 'template.publishing_date' ) }}</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="{{ $item_edit }}_publishing_date" placeholder="{{ __( 'template.publishing_date_placeholder' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
                 <div class="text-end">
                     <button id="{{ $item_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -132,12 +125,6 @@ window.cke_element = [ 'item_edit_desc'];
             song_file = '',
             duration = '',
             file2ID = '';
-
-        flatpickr( de + '_publishing_date', {
-            dateFormat: 'Y-m-d',
-            disableMobile: true,
-            allowInput: true,
-        } );
 
         $( de + '_upload_type' ).change( function() {
             let selectedType = $( this ).val();
@@ -178,7 +165,6 @@ window.cke_element = [ 'item_edit_desc'];
             formData.append( 'url', $( de + '_url' ).val() ?? '' );
             formData.append( 'url_type', $( de + '_url_type' ).val() ?? '' );
             formData.append( 'membership_level', $( de + '_membership_level' ).is( ':checked' ) ? 1 : 0 );
-            formData.append( 'publishing_date', $( de + '_publishing_date' ).val() ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -236,7 +222,6 @@ window.cke_element = [ 'item_edit_desc'];
                     $( de + '_url_type' ).val( response.url_type );
                     editors['item_edit_desc'].setData( response.desc ?? '' );
                     $( de + '_membership_level' ).prop('checked', response.membership_level == 1);
-                    $( de + '_publishing_date' ).val( response.publishing_date ?? '' );
 
                     duration = response.duration ?? '';
                     fileID = response.image;

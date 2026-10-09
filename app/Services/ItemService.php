@@ -146,23 +146,6 @@ class ItemService
             $filter = true;
         }
 
-        if ( !empty( $request->publishing_date ) ) {
-            if ( str_contains( $request->publishing_date, 'to' ) ) {
-                $dates = explode( ' to ', $request->publishing_date );
-
-                $startDate = explode( '-', $dates[0] );
-                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
-
-                $endDate = explode( '-', $dates[1] );
-                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
-
-                $model->whereBetween( 'items.publishing_date', [ date( 'Y-m-d', $start->timestamp ), date( 'Y-m-d', $end->timestamp ) ] );
-            } else {
-                $model->whereDate( 'items.publishing_date', $request->publishing_date );
-            }
-            $filter = true;
-        }
-
         if ( !empty( $request->search_text ) ) {
             $model->where( function ( $q ) use ( $request ) {
                 $q->where( 'items.title', 'LIKE', '%' . $request->search_text . '%' )
@@ -283,7 +266,6 @@ class ItemService
                 'upload_type' => $request->upload_type,
                 'url_type' => $request->url_type,
                 'status' => 10,
-                'publishing_date' => $request->publishing_date ?: null,
             ] );
 
             DB::commit();
@@ -379,7 +361,6 @@ class ItemService
             $updateItem->upload_type = $request->upload_type;
             $updateItem->duration = $request->duration;
             $updateItem->url_type = !empty( $request->url_type ) ? $request->url_type : 1;
-            $updateItem->publishing_date = $request->publishing_date ?: null;
             $updateItem->save();
 
             DB::commit();
@@ -465,10 +446,7 @@ class ItemService
             ->when( !empty( $request->type_id ), function( $q ) use ( $request ) {
                 $q->where( 'items.type_id', $request->type_id );
             } )
-            ->where( 'items.status', 10 )
-            ->where( function( $q ) {
-                $q->whereNull( 'items.publishing_date' )->orWhereDate( 'items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
-            } );
+            ->where( 'items.status', 10 );
 
         
         // if( !auth()->check() || auth()->user()->membership == 0 ) {
