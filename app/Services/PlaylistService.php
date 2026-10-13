@@ -548,7 +548,7 @@ class PlaylistService
             'item',
             'items' => function ( $q ) {
                 $q->where( function ( $sq ) {
-                    $sq->whereNull( 'playlist_items.publishing_date' )->orWhereDate( 'playlist_items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                    $sq->whereNull( 'playlist_items.publishing_date' )->orWhere( 'playlist_items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' ) );
                 } );
             },
             'tags',
@@ -634,7 +634,7 @@ class PlaylistService
             'item',
             'items' => function ( $q ) {
                 $q->where( function ( $sq ) {
-                    $sq->whereNull( 'playlist_items.publishing_date' )->orWhereDate( 'playlist_items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' ) );
+                    $sq->whereNull( 'playlist_items.publishing_date' )->orWhere( 'playlist_items.publishing_date', '<=', Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' ) );
                 } );
             },
             'tags',

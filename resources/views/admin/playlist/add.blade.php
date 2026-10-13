@@ -304,7 +304,11 @@ window.cke_element = [ 'playlist_create_desc'];
                 `);
 
                 flatpickr( $( '#selected-items .item-block[data-id="' + data.id + '"] .item-publishing-date' )[0], {
-                    dateFormat: 'Y-m-d',
+                    enableTime: true,
+                    time_24hr: true,
+                    defaultHour: 0,
+                    defaultMinute: 0,
+                    dateFormat: 'Y-m-d H:i',
                     disableMobile: true,
                     allowInput: true,
                 } );

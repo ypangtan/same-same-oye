@@ -289,7 +289,7 @@ window.cke_element = [ 'playlist_edit_desc'];
                     $.each( response.items, function( i, v ) {
                         data = v;
                         if ( !selectedItems.some( item => item.id === data.id ) ) {
-                            let publishingDate = data.pivot && data.pivot.publishing_date ? data.pivot.publishing_date.substring( 0, 10 ) : '';
+                            let publishingDate = data.pivot && data.pivot.publishing_date ? data.pivot.publishing_date.substring( 0, 16 ) : '';
                             selectedItems.push( {id: data.id, text: data.name, file_type: data.file_type, publishing_date: publishingDate} );
 
                             $('#selected-items').append( itemBlock( data.id, data.title, publishingDate ) );
@@ -427,7 +427,11 @@ window.cke_element = [ 'playlist_edit_desc'];
 
         function initItemDate( id ) {
             flatpickr( $( '#selected-items .item-block[data-id="' + id + '"] .item-publishing-date' )[0], {
-                dateFormat: 'Y-m-d',
+                enableTime: true,
+                time_24hr: true,
+                defaultHour: 0,
+                defaultMinute: 0,
+                dateFormat: 'Y-m-d H:i',
                 disableMobile: true,
                 allowInput: true,
             } );

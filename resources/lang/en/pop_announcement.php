@@ -17,4 +17,5 @@ return [
     'title' => 'Title',
     'text' => 'Text',
     'url' => 'Url',
+    'clicks' => 'No. of Clicks',
 ];
