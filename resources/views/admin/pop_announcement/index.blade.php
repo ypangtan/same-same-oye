@@ -60,6 +60,11 @@ $columns = [
         'title' => __( 'pop_announcement.title' ),
     ],
     [
+        'type' => 'default',
+        'id' => 'clicks',
+        'title' => __( 'pop_announcement.clicks' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -125,6 +130,7 @@ var statusMapper = {
             { data: 'publishing_date' },
             { data: 'image_path' },
             { data: 'title' },
+            { data: 'clicks_count' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -190,6 +196,14 @@ var statusMapper = {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
                 render: function( data, type, row, meta ) {
                     return  data ?? '-';
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "clicks" ) }}' ),
+                width: '1%',
+                className: 'text-center',
+                render: function( data, type, row, meta ) {
+                    return data ?? 0;
                 },
             },
             {

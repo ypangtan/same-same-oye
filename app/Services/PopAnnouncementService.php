@@ -24,7 +24,7 @@ class PopAnnouncementService
 {
     public static function allPopAnnouncements( $request ) {
 
-        $rank = PopAnnouncement::select( 'pop_announcements.*' );
+        $rank = PopAnnouncement::select( 'pop_announcements.*' )->withCount( 'clicks' );
 
         $filterObject = self::filter( $request, $rank );
         $rank = $filterObject['model'];
@@ -35,6 +35,9 @@ class PopAnnouncementService
             switch ( $request->input( 'order.0.column' ) ) {
                 case 2:
                     $rank->orderBy( 'created_at', $dir );
+                    break;
+                case 6:
+                    $rank->orderBy( 'clicks_count', $dir );
                     break;
             }
         }
