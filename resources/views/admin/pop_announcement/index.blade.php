@@ -200,9 +200,10 @@ var statusMapper = {
             },
             {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "clicks" ) }}' ),
+                width: '1%',
                 className: 'text-center',
                 render: function( data, type, row, meta ) {
-                    return ( data ?? 0 ) + ' <em class="icon ni ni-growth-fill" style="color:#6576ff;"></em>';
+                    return data ?? 0;
                 },
             },
             {
