@@ -137,7 +137,7 @@ Route::middleware( 'auth.optional' )->group( function() {
         Route::post( '/search', [ SearchController::class, 'search' ] );
     } );
 
-    Route::post( '/record', [ StreamController::class, 'record' ] );
+    Route::post( '/record', [ StreamController::class, 'record' ] )->middleware( 'log.cart.order' );
 } );
 
 /* End Public route */
