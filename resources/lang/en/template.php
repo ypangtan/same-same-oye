@@ -86,6 +86,7 @@ return [
     'user_subscriptions' => 'User Subscriptions',
     'disclaimers' => 'Disclaimers',
     'website_banners' => 'Website Banners',
+    'festive_animations' => 'Festive Animations and Advertisements',
     'trending_contents' => 'Trending Contents',
     'home' => 'Home',
     'home_layout' => 'Home Layout',

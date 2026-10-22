@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\{
     CategoryController,
     CollectionController,
     CountryController,
+    FestiveAnimationController,
     HomeCollectionController,
     InAppPurchaseController,
     ItemController,
@@ -105,6 +106,11 @@ Route::prefix( 'banners' )->group( function() {
 Route::prefix( 'website-banners' )->group( function() {
     Route::post( '/get-all-website-banners', [ WebsiteBannerController::class, 'getWebsiteBanners' ] );
     Route::post( '/get-one-website-banner', [ WebsiteBannerController::class, 'getWebsiteBanner' ] );
+} );
+
+Route::prefix( 'festive-animations' )->group( function() {
+    Route::post( '/get-all-festive-animations', [ FestiveAnimationController::class, 'getFestiveAnimations' ] );
+    Route::post( '/get-one-festive-animation', [ FestiveAnimationController::class, 'getFestiveAnimation' ] );
 } );
 
 Route::prefix( 'trending-contents' )->group( function() {
