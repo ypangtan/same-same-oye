@@ -189,6 +189,22 @@ $festive_animation_edit = 'festive_animation_edit';
                                         img.style.objectFit = 'cover';
                                     }
                                 }
+
+                                // 视频：用 video 取代缩略图，显示第一帧
+                                if ( parseInt( response.file_type ) == 3 && mockFile.previewElement ) {
+                                    let img = mockFile.previewElement.querySelector( '[data-dz-thumbnail]' );
+                                    if ( img ) {
+                                        let video = document.createElement( 'video' );
+                                        video.src = filePath;
+                                        video.muted = true;
+                                        video.playsInline = true;
+                                        video.preload = 'metadata';
+                                        video.style.width = '100%';
+                                        video.style.height = '100%';
+                                        video.style.objectFit = 'cover';
+                                        img.replaceWith( video );
+                                    }
+                                }
                             }
                         },
                         removedfile: function( file ) {
