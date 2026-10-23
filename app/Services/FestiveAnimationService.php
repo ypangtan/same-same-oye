@@ -333,19 +333,18 @@ class FestiveAnimationService
 
         $festiveAnimations = $festiveAnimations->orderBy( 'sequence' )
             ->orderBy( 'created_at', 'DESC' )
-            ->get();
+            ->paginate( empty( $request->per_page ) ? 10 : $request->per_page );
 
-        $festiveAnimations->append( [
+        $festiveAnimations->getCollection()->append( [
             'encrypted_id',
             'file_path',
             'title',
         ] );
 
-        return response()->json( [
+        return response()->json( array_merge( [
             'message' => '',
             'message_key' => 'get_festive_animation_success',
-            'data' => $festiveAnimations,
-        ] );
+        ], $festiveAnimations->toArray() ) );
     }
 
     public static function getFestiveAnimation( $request ) {

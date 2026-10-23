@@ -20,6 +20,7 @@ class FestiveAnimationController extends Controller
      * @group Festive Animation API
      *
      * @bodyParam file_type integer Filter by file type. Example: 3
+     * @bodyParam per_page string The total record per page. Example: 10
      *
      */
     public function getFestiveAnimations( Request $request ) {
