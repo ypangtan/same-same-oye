@@ -56,16 +56,6 @@ $columns = [
         'title' => __( 'festive_animation.file_type' ),
     ],
     [
-        'type' => 'default',
-        'id' => 'period',
-        'title' => __( 'festive_animation.start_date' ) . ' - ' . __( 'festive_animation.end_date' ),
-    ],
-    [
-        'type' => 'default',
-        'id' => 'sequence',
-        'title' => __( 'festive_animation.sequence' ),
-    ],
-    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -132,8 +122,6 @@ var statusMapper = {
             { data: 'file_path' },
             { data: 'title' },
             { data: 'file_type' },
-            { data: 'start_date' },
-            { data: 'sequence' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -192,21 +180,6 @@ var statusMapper = {
                 orderable: false,
                 render: function( data, type, row, meta ) {
                     return fileTypeMapper[data] ?? '-';
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "period" ) }}' ),
-                orderable: false,
-                render: function( data, type, row, meta ) {
-                    return ( row.start_date ?? '-' ) + ' ~ ' + ( row.end_date ?? '-' );
-                },
-            },
-            {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "sequence" ) }}' ),
-                width: '1%',
-                className: 'text-center',
-                render: function( data, type, row, meta ) {
-                    return data ?? 0;
                 },
             },
             {

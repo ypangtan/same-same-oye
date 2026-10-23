@@ -14,7 +14,7 @@ class FestiveAnimationController extends Controller
     /**
      * 1. Get all Festive Animations & Advertisements
      *
-     * Only returns active records within their start / end date window, ordered by sequence.
+     * Only returns active records, latest first.
      * file_type: 1 = image, 2 = gif, 3 = video, 4 = other
      *
      * @group Festive Animation API

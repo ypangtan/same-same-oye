@@ -29,14 +29,7 @@ class FestiveAnimationService
 
         if ( $request->input( 'order.0.column' ) != 0 ) {
             $dir = $request->input( 'order.0.dir' ) ?? 'DESC';
-            switch ( $request->input( 'order.0.column' ) ) {
-                case 7:
-                    $festiveAnimation->orderBy( 'sequence', $dir );
-                    break;
-                default:
-                    $festiveAnimation->orderBy( 'created_at', $dir );
-                    break;
-            }
+            $festiveAnimation->orderBy( 'created_at', $dir );
         }
 
         $festiveAnimationCount = $festiveAnimation->count();
@@ -139,10 +132,6 @@ class FestiveAnimationService
             'zh_title' => [ 'nullable' ],
             'file' => [ 'required' ],
             'file_name' => [ 'nullable' ],
-            'url' => [ 'nullable', 'url' ],
-            'start_date' => [ 'nullable', 'date' ],
-            'end_date' => [ 'nullable', 'date', 'after_or_equal:start_date' ],
-            'sequence' => [ 'nullable', 'integer' ],
         ] );
 
         $attributeName = [
@@ -150,10 +139,6 @@ class FestiveAnimationService
             'zh_title' => __( 'festive_animation.title' ),
             'file' => __( 'festive_animation.file' ),
             'file_name' => __( 'festive_animation.file' ),
-            'url' => __( 'festive_animation.url' ),
-            'start_date' => __( 'festive_animation.start_date' ),
-            'end_date' => __( 'festive_animation.end_date' ),
-            'sequence' => __( 'festive_animation.sequence' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -177,10 +162,6 @@ class FestiveAnimationService
                 'file' => $request->file,
                 'file_name' => $request->file_name,
                 'file_type' => FestiveAnimation::resolveFileType( $request->file ),
-                'url' => $request->url,
-                'start_date' => $request->start_date ?: null,
-                'end_date' => $request->end_date ?: null,
-                'sequence' => $request->sequence ?? 0,
                 'status' => 10,
             ] );
 
@@ -223,10 +204,6 @@ class FestiveAnimationService
                 $updateFestiveAnimation->file_name = $request->file_name;
                 $updateFestiveAnimation->file_type = FestiveAnimation::resolveFileType( $request->file );
             }
-            $updateFestiveAnimation->url = $request->url;
-            $updateFestiveAnimation->start_date = $request->start_date ?: null;
-            $updateFestiveAnimation->end_date = $request->end_date ?: null;
-            $updateFestiveAnimation->sequence = $request->sequence ?? 0;
             $updateFestiveAnimation->save();
 
             DB::commit();
@@ -317,22 +294,13 @@ class FestiveAnimationService
 
     public static function getFestiveAnimations( $request ) {
 
-        $today = Carbon::now()->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d' );
-
-        $festiveAnimations = FestiveAnimation::where( 'status', 10 )
-            ->where( function( $q ) use ( $today ) {
-                $q->whereNull( 'start_date' )->orWhereDate( 'start_date', '<=', $today );
-            } )
-            ->where( function( $q ) use ( $today ) {
-                $q->whereNull( 'end_date' )->orWhereDate( 'end_date', '>=', $today );
-            } );
+        $festiveAnimations = FestiveAnimation::where( 'status', 10 );
 
         if ( !empty( $request->file_type ) ) {
             $festiveAnimations->where( 'file_type', $request->file_type );
         }
 
-        $festiveAnimations = $festiveAnimations->orderBy( 'sequence' )
-            ->orderBy( 'created_at', 'DESC' )
+        $festiveAnimations = $festiveAnimations->orderBy( 'created_at', 'DESC' )
             ->paginate( empty( $request->per_page ) ? 10 : $request->per_page );
 
         $festiveAnimations->getCollection()->append( [
