@@ -50,7 +50,8 @@ $festive_animation_create = 'festive_animation_create';
 
         let fc = '#{{ $festive_animation_create }}',
             fileID = '',
-            fileName = '';
+            fileName = '',
+            fileDuration = '';
 
         $( fc + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.festive_animation.index' ) }}';
@@ -68,6 +69,7 @@ $festive_animation_create = 'festive_animation_create';
             formData.append( 'label', $( fc + '_label' ).val() );
             formData.append( 'file', fileID ?? '' );
             formData.append( 'file_name', fileName ?? '' );
+            formData.append( 'duration', fileDuration ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -129,11 +131,13 @@ $festive_animation_create = 'festive_animation_create';
             removedfile: function( file ) {
                 fileID = null;
                 fileName = null;
+                fileDuration = null;
                 file.previewElement.remove();
             },
             success: function( file, response ) {
                 fileID = response.file;
                 fileName = response.file_name;
+                fileDuration = response.duration;
             },
             error: function( file, message ) {
                 $( '#modal_danger .caption-text' ).html( message.message ?? message );

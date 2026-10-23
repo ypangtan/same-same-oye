@@ -56,6 +56,11 @@ $columns = [
         'title' => __( 'festive_animation.file_type' ),
     ],
     [
+        'type' => 'default',
+        'id' => 'duration',
+        'title' => __( 'festive_animation.duration' ),
+    ],
+    [
         'type' => 'select',
         'options' => $data['status'],
         'id' => 'status',
@@ -122,6 +127,7 @@ var statusMapper = {
             { data: 'file_path' },
             { data: 'label' },
             { data: 'file_type' },
+            { data: 'duration' },
             { data: 'status' },
             { data: 'encrypted_id' },
         ],
@@ -180,6 +186,13 @@ var statusMapper = {
                 orderable: false,
                 render: function( data, type, row, meta ) {
                     return fileTypeMapper[data] ?? '-';
+                },
+            },
+            {
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "duration" ) }}' ),
+                orderable: false,
+                render: function( data, type, row, meta ) {
+                    return data != null ? data + 's' : '-';
                 },
             },
             {

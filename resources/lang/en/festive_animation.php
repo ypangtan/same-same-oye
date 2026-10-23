@@ -16,6 +16,7 @@ return [
     'label' => 'Label',
     'file' => 'File',
     'file_type' => 'File Type',
+    'duration' => 'Duration',
     'file_hint' => 'Any file type is accepted (image, GIF, video, animation, etc).',
     'preview' => 'Preview',
     'url' => 'Url',

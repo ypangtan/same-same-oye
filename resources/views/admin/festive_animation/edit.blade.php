@@ -50,7 +50,8 @@ $festive_animation_edit = 'festive_animation_edit';
 
         let fe = '#{{ $festive_animation_edit }}',
             fileID = '',
-            fileName = '';
+            fileName = '',
+            fileDuration = '';
 
         $( fe + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.festive_animation.index' ) }}';
@@ -69,6 +70,7 @@ $festive_animation_edit = 'festive_animation_edit';
             formData.append( 'label', $( fe + '_label' ).val() );
             formData.append( 'file', fileID ?? '' );
             formData.append( 'file_name', fileName ?? '' );
+            formData.append( 'duration', fileDuration ?? '' );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -124,6 +126,7 @@ $festive_animation_edit = 'festive_animation_edit';
 
                     fileID = response.file ?? '';
                     fileName = response.file_name ?? '';
+                    fileDuration = response.duration ?? '';
                     let filePath = response.file_path ?? '';
 
                     const dropzone = new Dropzone( fe + '_file', {
@@ -189,11 +192,13 @@ $festive_animation_edit = 'festive_animation_edit';
                         removedfile: function( file ) {
                             fileID = null;
                             fileName = null;
+                            fileDuration = null;
                             file.previewElement.remove();
                         },
                         success: function( file, response ) {
                             fileID = response.file;
                             fileName = response.file_name;
+                            fileDuration = response.duration;
                         },
                         error: function( file, message ) {
                             $( '#modal_danger .caption-text' ).html( message.message ?? message );

@@ -157,6 +157,7 @@ class FestiveAnimationService
                 'file' => $request->file,
                 'file_name' => $request->file_name,
                 'file_type' => FestiveAnimation::resolveFileType( $request->file ),
+                'duration' => is_numeric( $request->duration ) ? $request->duration : null,
                 'status' => 10,
             ] );
 
@@ -197,6 +198,7 @@ class FestiveAnimationService
                 $updateFestiveAnimation->file = $request->file;
                 $updateFestiveAnimation->file_name = $request->file_name;
                 $updateFestiveAnimation->file_type = FestiveAnimation::resolveFileType( $request->file );
+                $updateFestiveAnimation->duration = is_numeric( $request->duration ) ? $request->duration : null;
             }
             $updateFestiveAnimation->save();
 
@@ -288,6 +290,9 @@ class FestiveAnimationService
         ] )->validate();
 
         $file = $request->file( 'file' );
+        $fileType = FestiveAnimation::resolveFileType( $file->getClientOriginalName() );
+        $duration = FestiveAnimation::resolveDuration( $file->getPathname(), $fileType );
+
         $path = StorageService::upload( 'festive_animation', $file );
 
         $createFile = FileManager::create( [
@@ -303,6 +308,7 @@ class FestiveAnimationService
             'file' => $path,
             'file_name' => $createFile->name,
             'file_type' => FestiveAnimation::resolveFileType( $path ),
+            'duration' => $duration,
         ] );
     }
 
