@@ -21,8 +21,6 @@
 </div><!-- .nk-block-head -->
 
 <?php
-$enableReorder = 1;
-
 $columns = [
     [
         'type' => 'default',
@@ -69,15 +67,6 @@ $columns = [
         'title' => __( 'datatables.action' ),
     ],
 ];
-
-if ( $enableReorder == 1 ) {
-    array_unshift( $columns,  [
-        'type' => 'default',
-        'id' => 'dt_reorder',
-        'title' => '',
-        'reorder' => 'yes',
-    ] );
-}
 ?>
 
 <x-data-tables id="festive_animation_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
@@ -173,7 +162,7 @@ var statusMapper = {
                         case 2:
                             return '<img src="' + data + '" width="75px" />';
                         case 3:
-                            return '<video src="' + data + '" width="120px" muted loop autoplay playsinline></video>';
+                            return '<video src="' + data + '" width="120px" muted playsinline preload="metadata"></video>';
                         default:
                             return '<a href="' + data + '" target="_blank"><em class="icon ni ni-file"></em> ' + ( row.file_name ?? '{{ __( 'festive_animation.file' ) }}' ) + '</a>';
                     }
@@ -243,31 +232,7 @@ var statusMapper = {
         ],
     },
     table_no = 0,
-    timeout = null,
-    reorderPath = '{{ route( 'admin.festive_animation.updateOrder' ) }}';
-
-    if ( parseInt( '{{ $enableReorder }}' ) == 1 ) {
-
-        dt_table_config.rowReorder = {
-            selector: '.dt-reorder',
-            dataSrc: 'priority',
-            update: false,
-        };
-
-        dt_table_config.order[0] = [ 3, 'desc' ],
-        dt_table_config.columns.unshift( {
-            data: 'encrypted_id'
-        } );
-        dt_table_config.columnDefs.unshift( {
-            targets: 0,
-            orderable: false,
-            render: function( data, type, row, meta ) {
-                return `<div class="dt-reorder"style="width: 20px" data-id="${data}" />
-                    <i class="align-middle feather" icon-name="move" style="color: #5f5f5f;"></i>
-                </div>`;
-            },
-        } );
-    }
+    timeout = null;
 
     document.addEventListener( 'DOMContentLoaded', function() {
 

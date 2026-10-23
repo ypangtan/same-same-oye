@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPriorityToFestiveAnimationsTable extends Migration
+class RemovePriorityFromFestiveAnimationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class AddPriorityToFestiveAnimationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('festive_animations', function (Blueprint $table) {
-            $table->integer( 'priority' )->default(0)->after( 'file_type' );
-        });
+        if ( Schema::hasColumn( 'festive_animations', 'priority' ) ) {
+            Schema::table('festive_animations', function (Blueprint $table) {
+                $table->dropColumn( 'priority' );
+            });
+        }
     }
 
     /**
@@ -26,7 +28,7 @@ class AddPriorityToFestiveAnimationsTable extends Migration
     public function down()
     {
         Schema::table('festive_animations', function (Blueprint $table) {
-            $table->dropColumn( 'priority' );
+            $table->integer( 'priority' )->default(0)->after( 'file_type' );
         });
     }
 }

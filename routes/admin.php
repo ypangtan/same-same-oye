@@ -581,9 +581,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-festive-animation', [ FestiveAnimationController::class, 'updateFestiveAnimation' ] )->name( 'admin.festive_animation.updateFestiveAnimation' );
                 Route::post( 'update-festive-animation-status', [ FestiveAnimationController::class, 'updateFestiveAnimationStatus' ] )->name( 'admin.festive_animation.updateFestiveAnimationStatus' );
                 Route::post( 'delete-festive-animation', [ FestiveAnimationController::class, 'deleteFestiveAnimation' ] )->name( 'admin.festive_animation.deleteFestiveAnimation' );
-                Route::post( 'file-upload', [ FestiveAnimationController::class, 'fileUpload' ] )->name( 'admin.festive_animation.fileUpload' );
-                Route::post( 'update-order', [ FestiveAnimationController::class, 'updateOrder' ] )->name( 'admin.festive_animation.updateOrder' )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] );
-            } );
+                Route::post( 'file-upload', [ FestiveAnimationController::class, 'fileUpload' ] )->name( 'admin.festive_animation.fileUpload' );            } );
             
             Route::prefix( 'country' )->group( function() {
                 Route::post( 'all-countries', [ CountryController::class, 'allCountries' ] )->name( 'admin.country.allCountries' );
