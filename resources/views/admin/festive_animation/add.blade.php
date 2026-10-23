@@ -111,6 +111,7 @@ $festive_animation_create = 'festive_animation_create';
             },
             maxFiles: 1,
             maxFilesize: null,
+            acceptedFiles: 'image/*,video/*',
             timeout: 0,
             addRemoveLinks: true,
             init: function() {

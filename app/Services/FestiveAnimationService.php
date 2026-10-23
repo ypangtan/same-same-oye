@@ -282,7 +282,7 @@ class FestiveAnimationService
     public static function fileUpload( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'file' => [ 'required', 'file' ],
+            'file' => [ 'required', 'file', 'mimetypes:image/*,video/*' ],
         ] );
 
         $validator->setAttributeNames( [
