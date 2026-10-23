@@ -136,6 +136,7 @@ $festive_animation_edit = 'festive_animation_edit';
                         },
                         maxFiles: 1,
                         maxFilesize: null,
+                        acceptedFiles: 'image/*,video/*',
                         timeout: 0,
                         addRemoveLinks: true,
                         init: function() {

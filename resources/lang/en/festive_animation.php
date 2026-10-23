@@ -17,7 +17,7 @@ return [
     'file' => 'File',
     'file_type' => 'File Type',
     'duration' => 'Duration',
-    'file_hint' => 'Any file type is accepted (image, GIF, video, animation, etc).',
+    'file_hint' => 'Only image, GIF and video are accepted.',
     'preview' => 'Preview',
     'url' => 'Url',
     'start_date' => 'Start Date',

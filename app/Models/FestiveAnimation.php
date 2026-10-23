@@ -44,11 +44,11 @@ class FestiveAnimation extends Model
             return 2;
         }
 
-        if ( in_array( $extension, [ 'jpg', 'jpeg', 'png', 'webp', 'bmp', 'svg' ] ) ) {
+        if ( in_array( $extension, [ 'jpg', 'jpeg', 'png', 'webp', 'bmp', 'svg', 'avif', 'heic', 'heif', 'tif', 'tiff', 'ico' ] ) ) {
             return 1;
         }
 
-        if ( in_array( $extension, [ 'mp4', 'mov', 'webm', 'm4v', 'avi', 'mkv', '3gp' ] ) ) {
+        if ( in_array( $extension, [ 'mp4', 'mov', 'webm', 'm4v', 'avi', 'mkv', '3gp', '3g2', 'mpeg', 'mpg', 'wmv', 'flv', 'ogv', 'ts', 'mts', 'm2ts' ] ) ) {
             return 3;
         }
 
