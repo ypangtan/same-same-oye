@@ -132,7 +132,7 @@ $festive_animation_edit = 'festive_animation_edit';
                             '_token': '{{ csrf_token() }}',
                         },
                         maxFiles: 1,
-                        maxFilesize: 100,
+                        maxFilesize: null,
                         timeout: 0,
                         addRemoveLinks: true,
                         init: function() {

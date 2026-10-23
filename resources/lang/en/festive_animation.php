@@ -16,7 +16,7 @@ return [
     'label' => 'Label',
     'file' => 'File',
     'file_type' => 'File Type',
-    'file_hint' => 'Any file type is accepted (image, GIF, video, animation, etc). Max 100MB.',
+    'file_hint' => 'Any file type is accepted (image, GIF, video, animation, etc).',
     'preview' => 'Preview',
     'url' => 'Url',
     'start_date' => 'Start Date',

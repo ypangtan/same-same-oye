@@ -108,7 +108,7 @@ $festive_animation_create = 'festive_animation_create';
                 '_token': '{{ csrf_token() }}',
             },
             maxFiles: 1,
-            maxFilesize: 100,
+            maxFilesize: null,
             timeout: 0,
             addRemoveLinks: true,
             init: function() {
