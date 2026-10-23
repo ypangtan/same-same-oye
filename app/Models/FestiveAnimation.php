@@ -26,7 +26,6 @@ class FestiveAnimation extends Model
         'file',
         'file_name',
         'file_type',
-        'priority',
         'status',
     ];
 
@@ -85,7 +84,6 @@ class FestiveAnimation extends Model
         'file',
         'file_name',
         'file_type',
-        'priority',
         'status',
     ];
 

@@ -28,7 +28,8 @@ class FestiveAnimationService
         $filter = $filterObject['filter'];
 
         if ( $request->input( 'order.0.column' ) != 0 ) {
-            $festiveAnimation->orderBy( 'priority', 'asc' );
+            $dir = $request->input( 'order.0.dir' ) ?? 'DESC';
+            $festiveAnimation->orderBy( 'created_at', $dir );
         }
 
         $festiveAnimationCount = $festiveAnimation->count();
@@ -164,7 +165,6 @@ class FestiveAnimationService
                 'file' => $request->file,
                 'file_name' => $request->file_name,
                 'file_type' => FestiveAnimation::resolveFileType( $request->file ),
-                'priority' => FestiveAnimation::max( 'priority' ) + 1,
                 'status' => 10,
             ] );
 
@@ -266,23 +266,6 @@ class FestiveAnimationService
         ] );
     }
 
-    public static function updateOrder( $request ) {
-
-        $updates = $request->input( 'updates' );
-
-        foreach ( $updates as $update ) {
-            $festiveAnimation = FestiveAnimation::find( Helper::decode( $update['id'] ) );
-            if ( $festiveAnimation ) {
-                $festiveAnimation->priority = $update['position'];
-                $festiveAnimation->save();
-            }
-        }
-
-        return response()->json( [
-            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.festive_animations' ) ) ] ),
-        ] );
-    }
-
     public static function deleteFestiveAnimation( $request ) {
 
         $request->merge( [
@@ -342,8 +325,7 @@ class FestiveAnimationService
             $festiveAnimations->where( 'file_type', $request->file_type );
         }
 
-        $festiveAnimations = $festiveAnimations->orderBy( 'priority' )
-            ->orderBy( 'created_at', 'DESC' )
+        $festiveAnimations = $festiveAnimations->orderBy( 'created_at', 'DESC' )
             ->paginate( empty( $request->per_page ) ? 10 : $request->per_page );
 
         $festiveAnimations->getCollection()->append( [
