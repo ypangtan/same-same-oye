@@ -282,6 +282,15 @@
                                 </li>
                                 @endcan
 
+                                @can( 'view festive_animations' )
+                                    <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\FestiveAnimationController' ? 'active current-page' : '' }}">
+                                        <a href="{{ route( 'admin.module_parent.festive_animation.index' ) }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-gift"></em></span>
+                                            <span class="nk-menu-text">{{ __( 'template.festive_animations' ) }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
                                 @can( 'view trending_contents' )
                                     <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\TrendingContentController' ? 'active current-page' : '' }}">
                                         <a href="{{ route( 'admin.module_parent.trending_content.index' ) }}" class="nk-menu-link">

@@ -1,0 +1,117 @@
+<?php
+
+namespace App\Models;
+
+use DateTimeInterface;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
+use Helper;
+
+use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
+use App\Services\StorageService;
+
+class FestiveAnimation extends Model
+{
+    use HasFactory, LogsActivity;
+
+    protected $fillable = [
+        'en_title',
+        'zh_title',
+        'file',
+        'file_name',
+        'file_type',
+        'url',
+        'start_date',
+        'end_date',
+        'sequence',
+        'status',
+    ];
+
+    public static function resolveFileType( $path ) {
+
+        $extension = strtolower( pathinfo( $path ?? '', PATHINFO_EXTENSION ) );
+
+        if ( $extension == 'gif' ) {
+            return 2;
+        }
+
+        if ( in_array( $extension, [ 'jpg', 'jpeg', 'png', 'webp', 'bmp', 'svg' ] ) ) {
+            return 1;
+        }
+
+        if ( in_array( $extension, [ 'mp4', 'mov', 'webm', 'm4v', 'avi', 'mkv', '3gp' ] ) ) {
+            return 3;
+        }
+
+        return 4;
+    }
+
+    public function getFilePathAttribute() {
+        if ( $this->attributes['file'] ) {
+            $localPath = storage_path( 'app/public/' . $this->attributes['file'] );
+            if ( file_exists( $localPath ) ) {
+                return asset( 'storage/' . $this->attributes['file'] );
+            }
+
+            return StorageService::get( $this->attributes['file'] );
+        }
+        return null;
+    }
+
+    public function getTitleAttribute() {
+
+        switch ( App::getLocale() ) {
+            case 'zh':
+                return $this->attributes['zh_title'] ?? ( $this->attributes['en_title'] ?? '' );
+            default:
+                return $this->attributes['en_title'] ?? '-';
+        }
+    }
+
+    public function getStartDateAttribute() {
+        return !empty( $this->attributes['start_date'] ) ? Carbon::parse( $this->attributes['start_date'] )->format( 'Y-m-d' ) : null;
+    }
+
+    public function getEndDateAttribute() {
+        return !empty( $this->attributes['end_date'] ) ? Carbon::parse( $this->attributes['end_date'] )->format( 'Y-m-d' ) : null;
+    }
+
+    public function getEncryptedIdAttribute() {
+        return Helper::encode( $this->attributes['id'] );
+    }
+
+    protected function serializeDate( DateTimeInterface $date ) {
+        return $date->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i:s' );
+    }
+
+    protected static $logAttributes = [
+        'en_title',
+        'zh_title',
+        'file',
+        'file_name',
+        'file_type',
+        'url',
+        'start_date',
+        'end_date',
+        'sequence',
+        'status',
+    ];
+
+    protected static $logName = 'festive_animations';
+
+    protected static $logOnlyDirty = true;
+
+    public function getActivitylogOptions(): LogOptions {
+        return LogOptions::defaults()->logFillable();
+    }
+
+    public function getDescriptionForEvent( string $eventName ): string {
+        return "{$eventName} ";
+    }
+}

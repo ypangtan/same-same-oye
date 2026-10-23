@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\{
     CategoryController,
     CollectionController,
     CountryController,
+    FestiveAnimationController,
     HomeCollectionController,
     ItemController,
     MarketingNotificationController,
@@ -561,6 +562,26 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-ad', [ AdController::class, 'updateAd' ] )->name( 'admin.ad.updateAd' );
                 Route::post( 'update-ad-status', [ AdController::class, 'updateAdStatus' ] )->name( 'admin.ad.updateAdStatus' );
                 Route::post( 'ckeUpload', [ AdController::class, 'ckeUpload' ] )->name( 'admin.ad.ckeUpload' );
+            } );
+
+            Route::prefix( 'festive-animations' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view festive_animations' ] ], function() {
+                    Route::get( '/', [ FestiveAnimationController::class, 'index' ] )->name( 'admin.module_parent.festive_animation.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add festive_animations' ] ], function() {
+                    Route::get( 'add', [ FestiveAnimationController::class, 'add' ] )->name( 'admin.festive_animation.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit festive_animations' ] ], function() {
+                    Route::get( 'edit', [ FestiveAnimationController::class, 'edit' ] )->name( 'admin.festive_animation.edit' );
+                } );
+
+                Route::post( 'all-festive-animations', [ FestiveAnimationController::class, 'allFestiveAnimations' ] )->name( 'admin.festive_animation.allFestiveAnimations' );
+                Route::post( 'one-festive-animation', [ FestiveAnimationController::class, 'oneFestiveAnimation' ] )->name( 'admin.festive_animation.oneFestiveAnimation' );
+                Route::post( 'create-festive-animation', [ FestiveAnimationController::class, 'createFestiveAnimation' ] )->name( 'admin.festive_animation.createFestiveAnimation' );
+                Route::post( 'update-festive-animation', [ FestiveAnimationController::class, 'updateFestiveAnimation' ] )->name( 'admin.festive_animation.updateFestiveAnimation' );
+                Route::post( 'update-festive-animation-status', [ FestiveAnimationController::class, 'updateFestiveAnimationStatus' ] )->name( 'admin.festive_animation.updateFestiveAnimationStatus' );
+                Route::post( 'delete-festive-animation', [ FestiveAnimationController::class, 'deleteFestiveAnimation' ] )->name( 'admin.festive_animation.deleteFestiveAnimation' );
+                Route::post( 'file-upload', [ FestiveAnimationController::class, 'fileUpload' ] )->name( 'admin.festive_animation.fileUpload' );
             } );
             
             Route::prefix( 'country' )->group( function() {

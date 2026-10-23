@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\{
     CategoryController,
     CollectionController,
     CountryController,
+    FestiveAnimationController,
     HomeCollectionController,
     InAppPurchaseController,
     ItemController,
@@ -109,6 +110,11 @@ Route::prefix( 'website-banners' )->group( function() {
     Route::post( '/get-one-website-banner', [ WebsiteBannerController::class, 'getWebsiteBanner' ] );
 } );
 
+Route::prefix( 'festive-animations' )->group( function() {
+    Route::post( '/get-all-festive-animations', [ FestiveAnimationController::class, 'getFestiveAnimations' ] );
+    Route::post( '/get-one-festive-animation', [ FestiveAnimationController::class, 'getFestiveAnimation' ] );
+} );
+
 Route::prefix( 'trending-contents' )->group( function() {
     Route::post( '/get-all-trending-contents', [ TrendingContentController::class, 'getTrendingContents' ] );
     Route::post( '/get-one-trending-content', [ TrendingContentController::class, 'getTrendingContent' ] );
@@ -145,7 +151,7 @@ Route::middleware( 'auth.optional' )->group( function() {
         Route::post( '/search', [ SearchController::class, 'search' ] );
     } );
 
-    Route::post( '/record', [ StreamController::class, 'record' ] );
+    Route::post( '/record', [ StreamController::class, 'record' ] )->middleware( 'log.cart.order' );
 } );
 
 Route::prefix( 'radio' )
