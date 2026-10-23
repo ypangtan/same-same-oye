@@ -54,35 +54,6 @@ $festive_animation_create = 'festive_animation_create';
                     </div>
                 </div>
 
-                <div class="mb-3 row">
-                    <label for="{{ $festive_animation_create }}_url" class="col-sm-4 col-form-label">{{ __( 'festive_animation.url' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control form-control-sm" id="{{ $festive_animation_create }}_url" placeholder="https://">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $festive_animation_create }}_start_date" class="col-sm-4 col-form-label">{{ __( 'festive_animation.start_date' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control form-control-sm" id="{{ $festive_animation_create }}_start_date" placeholder="{{ __( 'festive_animation.date_placeholder' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $festive_animation_create }}_end_date" class="col-sm-4 col-form-label">{{ __( 'festive_animation.end_date' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control form-control-sm" id="{{ $festive_animation_create }}_end_date" placeholder="{{ __( 'festive_animation.date_placeholder' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $festive_animation_create }}_sequence" class="col-sm-4 col-form-label">{{ __( 'festive_animation.sequence' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="number" class="form-control form-control-sm" id="{{ $festive_animation_create }}_sequence" value="0">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
                 <div class="text-end">
                     <button id="{{ $festive_animation_create }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -99,18 +70,6 @@ $festive_animation_create = 'festive_animation_create';
         let fc = '#{{ $festive_animation_create }}',
             fileID = '',
             fileName = '';
-
-        flatpickr( fc + '_start_date', {
-            dateFormat: 'Y-m-d',
-            disableMobile: true,
-            allowInput: true,
-        } );
-
-        flatpickr( fc + '_end_date', {
-            dateFormat: 'Y-m-d',
-            disableMobile: true,
-            allowInput: true,
-        } );
 
         $( fc + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.festive_animation.index' ) }}';
@@ -129,10 +88,6 @@ $festive_animation_create = 'festive_animation_create';
             formData.append( 'zh_title', $( fc + '_zh_title' ).val() );
             formData.append( 'file', fileID ?? '' );
             formData.append( 'file_name', fileName ?? '' );
-            formData.append( 'url', $( fc + '_url' ).val() );
-            formData.append( 'start_date', $( fc + '_start_date' ).val() );
-            formData.append( 'end_date', $( fc + '_end_date' ).val() );
-            formData.append( 'sequence', $( fc + '_sequence' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {

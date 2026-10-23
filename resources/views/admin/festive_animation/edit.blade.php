@@ -54,35 +54,6 @@ $festive_animation_edit = 'festive_animation_edit';
                     </div>
                 </div>
 
-                <div class="mb-3 row">
-                    <label for="{{ $festive_animation_edit }}_url" class="col-sm-4 col-form-label">{{ __( 'festive_animation.url' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control form-control-sm" id="{{ $festive_animation_edit }}_url" placeholder="https://">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $festive_animation_edit }}_start_date" class="col-sm-4 col-form-label">{{ __( 'festive_animation.start_date' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control form-control-sm" id="{{ $festive_animation_edit }}_start_date" placeholder="{{ __( 'festive_animation.date_placeholder' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $festive_animation_edit }}_end_date" class="col-sm-4 col-form-label">{{ __( 'festive_animation.end_date' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control form-control-sm" id="{{ $festive_animation_edit }}_end_date" placeholder="{{ __( 'festive_animation.date_placeholder' ) }}">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="{{ $festive_animation_edit }}_sequence" class="col-sm-4 col-form-label">{{ __( 'festive_animation.sequence' ) }}</label>
-                    <div class="col-sm-8">
-                        <input type="number" class="form-control form-control-sm" id="{{ $festive_animation_edit }}_sequence" value="0">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
                 <div class="text-end">
                     <button id="{{ $festive_animation_edit }}_cancel" type="button" class="btn btn-outline-secondary">{{ __( 'template.cancel' ) }}</button>
                     &nbsp;
@@ -98,17 +69,7 @@ $festive_animation_edit = 'festive_animation_edit';
 
         let fe = '#{{ $festive_animation_edit }}',
             fileID = '',
-            fileName = '',
-            startDate = flatpickr( fe + '_start_date', {
-                dateFormat: 'Y-m-d',
-                disableMobile: true,
-                allowInput: true,
-            } ),
-            endDate = flatpickr( fe + '_end_date', {
-                dateFormat: 'Y-m-d',
-                disableMobile: true,
-                allowInput: true,
-            } );
+            fileName = '';
 
         $( fe + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.festive_animation.index' ) }}';
@@ -128,10 +89,6 @@ $festive_animation_edit = 'festive_animation_edit';
             formData.append( 'zh_title', $( fe + '_zh_title' ).val() );
             formData.append( 'file', fileID ?? '' );
             formData.append( 'file_name', fileName ?? '' );
-            formData.append( 'url', $( fe + '_url' ).val() );
-            formData.append( 'start_date', $( fe + '_start_date' ).val() );
-            formData.append( 'end_date', $( fe + '_end_date' ).val() );
-            formData.append( 'sequence', $( fe + '_sequence' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -185,10 +142,6 @@ $festive_animation_edit = 'festive_animation_edit';
 
                     $( fe + '_en_title' ).val( response.en_title ?? '' );
                     $( fe + '_zh_title' ).val( response.zh_title ?? '' );
-                    $( fe + '_url' ).val( response.url ?? '' );
-                    $( fe + '_sequence' ).val( response.sequence ?? 0 );
-                    startDate.setDate( response.start_date ?? null );
-                    endDate.setDate( response.end_date ?? null );
 
                     fileID = response.file ?? '';
                     fileName = response.file_name ?? '';

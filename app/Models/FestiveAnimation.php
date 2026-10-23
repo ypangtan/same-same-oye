@@ -26,10 +26,6 @@ class FestiveAnimation extends Model
         'file',
         'file_name',
         'file_type',
-        'url',
-        'start_date',
-        'end_date',
-        'sequence',
         'status',
     ];
 
@@ -74,14 +70,6 @@ class FestiveAnimation extends Model
         }
     }
 
-    public function getStartDateAttribute() {
-        return !empty( $this->attributes['start_date'] ) ? Carbon::parse( $this->attributes['start_date'] )->format( 'Y-m-d' ) : null;
-    }
-
-    public function getEndDateAttribute() {
-        return !empty( $this->attributes['end_date'] ) ? Carbon::parse( $this->attributes['end_date'] )->format( 'Y-m-d' ) : null;
-    }
-
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }
@@ -96,10 +84,6 @@ class FestiveAnimation extends Model
         'file',
         'file_name',
         'file_type',
-        'url',
-        'start_date',
-        'end_date',
-        'sequence',
         'status',
     ];
 
