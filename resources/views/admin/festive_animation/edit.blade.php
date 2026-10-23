@@ -25,7 +25,6 @@ $festive_animation_edit = 'festive_animation_edit';
                         </div>
                     </div>
                     <div class="invalid-feedback"></div>
-                    <div id="{{ $festive_animation_edit }}_preview" class="mb-3"></div>
                 </div>
 
                 <nav>
@@ -111,22 +110,6 @@ $festive_animation_edit = 'festive_animation_edit';
                 allowInput: true,
             } );
 
-        function renderPreview( url, fileType ) {
-            let html = '';
-            switch ( parseInt( fileType ) ) {
-                case 1:
-                case 2:
-                    html = '<img src="' + url + '" style="max-width: 300px;" />';
-                    break;
-                case 3:
-                    html = '<video src="' + url + '" style="max-width: 300px;" controls muted loop autoplay playsinline></video>';
-                    break;
-                default:
-                    html = url ? '<a href="' + url + '" target="_blank"><em class="icon ni ni-file"></em> ' + ( fileName || '{{ __( 'festive_animation.file' ) }}' ) + '</a>' : '';
-            }
-            $( fe + '_preview' ).html( html );
-        }
-
         $( fe + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.festive_animation.index' ) }}';
         } );
@@ -211,8 +194,6 @@ $festive_animation_edit = 'festive_animation_edit';
                     fileName = response.file_name ?? '';
                     let filePath = response.file_path ?? '';
 
-                    renderPreview( filePath, response.file_type );
-
                     const dropzone = new Dropzone( fe + '_file', {
                         url: '{{ route( 'admin.festive_animation.fileUpload' ) }}',
                         params: {
@@ -252,13 +233,11 @@ $festive_animation_edit = 'festive_animation_edit';
                         removedfile: function( file ) {
                             fileID = null;
                             fileName = null;
-                            renderPreview( null, 4 );
                             file.previewElement.remove();
                         },
                         success: function( file, response ) {
                             fileID = response.file;
                             fileName = response.file_name;
-                            renderPreview( response.url, response.file_type );
                         },
                         error: function( file, message ) {
                             $( '#modal_danger .caption-text' ).html( message.message ?? message );
