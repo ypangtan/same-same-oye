@@ -175,11 +175,19 @@ $festive_animation_edit = 'festive_animation_edit';
                                     mockFile = { name: fileName || 'Default', size: 1024, accepted: true };
 
                                 myDropzone.files.push( mockFile );
-                                if ( [ 1, 2 ].includes( parseInt( response.file_type ) ) ) {
-                                    myDropzone.displayExistingFile( mockFile, filePath );
-                                } else {
-                                    myDropzone.emit( 'addedfile', mockFile );
-                                    myDropzone.emit( 'complete', mockFile );
+                                // 不要使用 displayExistingFile，手动创建预览
+                                myDropzone.emit( 'addedfile', mockFile );
+                                myDropzone.emit( 'complete', mockFile );
+
+                                // 手动设置缩略图，直接使用图片 URL
+                                if ( [ 1, 2 ].includes( parseInt( response.file_type ) ) && mockFile.previewElement ) {
+                                    let img = mockFile.previewElement.querySelector( '[data-dz-thumbnail]' );
+                                    if ( img ) {
+                                        img.src = filePath;
+                                        img.style.width = '100%';
+                                        img.style.height = '100%';
+                                        img.style.objectFit = 'cover';
+                                    }
                                 }
                             }
                         },
