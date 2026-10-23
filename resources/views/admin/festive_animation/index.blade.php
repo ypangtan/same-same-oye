@@ -21,6 +21,8 @@
 </div><!-- .nk-block-head -->
 
 <?php
+$enableReorder = 1;
+
 $columns = [
     [
         'type' => 'default',
@@ -67,6 +69,15 @@ $columns = [
         'title' => __( 'datatables.action' ),
     ],
 ];
+
+if ( $enableReorder == 1 ) {
+    array_unshift( $columns,  [
+        'type' => 'default',
+        'id' => 'dt_reorder',
+        'title' => '',
+        'reorder' => 'yes',
+    ] );
+}
 ?>
 
 <x-data-tables id="festive_animation_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
@@ -127,7 +138,7 @@ var statusMapper = {
         ],
         columnDefs: [
             {
-                targets: 0,
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "select_row" ) }}' ),
                 orderable: false,
                 className: 'text-center',
                 render: function (data, type, row) {
@@ -232,11 +243,33 @@ var statusMapper = {
         ],
     },
     table_no = 0,
-    timeout = null;
+    timeout = null,
+    reorderPath = '{{ route( 'admin.festive_animation.updateOrder' ) }}';
+
+    if ( parseInt( '{{ $enableReorder }}' ) == 1 ) {
+
+        dt_table_config.rowReorder = {
+            selector: '.dt-reorder',
+            dataSrc: 'priority',
+            update: false,
+        };
+
+        dt_table_config.order[0] = [ 3, 'desc' ],
+        dt_table_config.columns.unshift( {
+            data: 'encrypted_id'
+        } );
+        dt_table_config.columnDefs.unshift( {
+            targets: 0,
+            orderable: false,
+            render: function( data, type, row, meta ) {
+                return `<div class="dt-reorder"style="width: 20px" data-id="${data}" />
+                    <i class="align-middle feather" icon-name="move" style="color: #5f5f5f;"></i>
+                </div>`;
+            },
+        } );
+    }
 
     document.addEventListener( 'DOMContentLoaded', function() {
-
-        let uid = '';
 
         $( '#created_date' ).flatpickr( {
             mode: 'range',
@@ -270,34 +303,27 @@ var statusMapper = {
         } );
 
         $( document ).on( 'click', '.dt-delete', function() {
-
-            uid = $( this ).data( 'id' );
-
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.delete' ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'festive_animation.delete_confirm' ) }}' );
-
-            modalConfirmation.show();
-        } );
-
-        $( document ).on( 'click', '#modal_confirmation_submit', function() {
+            $( 'body' ).loading( {
+                message: '{{ __( 'template.loading' ) }}'
+            } );
 
             $.ajax( {
                 url: '{{ route( 'admin.festive_animation.deleteFestiveAnimation' ) }}',
                 type: 'POST',
                 data: {
-                    id: uid,
-                    _token: '{{ csrf_token() }}',
+                    'id': $( this ).data( 'id' ),
+                    '_token': '{{ csrf_token() }}'
                 },
                 success: function( response ) {
-                    modalConfirmation.hide();
-                    $( '#modal_success .caption-text' ).html( response.message );
-                    modalSuccess.show();
                     dt_table.draw( false );
+                    $( '#modal_success .caption-text' ).html( response.message );
+                    modalSuccess.toggle();
+                    $( 'body' ).loading( 'stop' );
                 },
                 error: function( error ) {
-                    modalConfirmation.hide();
+                    $( 'body' ).loading( 'stop' );
                     $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
-                    modalDanger.show();
+                    modalDanger.toggle();
                 },
             } );
         } );
