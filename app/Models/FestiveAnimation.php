@@ -21,8 +21,7 @@ class FestiveAnimation extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'en_title',
-        'zh_title',
+        'label',
         'file',
         'file_name',
         'file_type',
@@ -60,16 +59,6 @@ class FestiveAnimation extends Model
         return null;
     }
 
-    public function getTitleAttribute() {
-
-        switch ( App::getLocale() ) {
-            case 'zh':
-                return $this->attributes['zh_title'] ?? ( $this->attributes['en_title'] ?? '' );
-            default:
-                return $this->attributes['en_title'] ?? '-';
-        }
-    }
-
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }
@@ -79,8 +68,7 @@ class FestiveAnimation extends Model
     }
 
     protected static $logAttributes = [
-        'en_title',
-        'zh_title',
+        'label',
         'file',
         'file_name',
         'file_type',

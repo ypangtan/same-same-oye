@@ -43,7 +43,6 @@ class FestiveAnimationService
             $festiveAnimations->append( [
                 'encrypted_id',
                 'file_path',
-                'title',
             ] );
         }
 
@@ -86,11 +85,8 @@ class FestiveAnimationService
             $filter = true;
         }
 
-        if ( !empty( $request->title ) ) {
-            $model->where( function( $q ) use ( $request ) {
-                $q->where( 'en_title', 'LIKE', '%' . $request->title . '%' )
-                    ->orWhere( 'zh_title', 'LIKE', '%' . $request->title . '%' );
-            } );
+        if ( !empty( $request->label ) ) {
+            $model->where( 'label', 'LIKE', '%' . $request->label . '%' );
             $filter = true;
         }
 
@@ -118,7 +114,6 @@ class FestiveAnimationService
             $festiveAnimation->append( [
                 'encrypted_id',
                 'file_path',
-                'title',
             ] );
         }
 
@@ -128,15 +123,13 @@ class FestiveAnimationService
     private static function validateFestiveAnimation( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'en_title' => [ 'required' ],
-            'zh_title' => [ 'nullable' ],
+            'label' => [ 'required' ],
             'file' => [ 'required' ],
             'file_name' => [ 'nullable' ],
         ] );
 
         $attributeName = [
-            'en_title' => __( 'festive_animation.title' ),
-            'zh_title' => __( 'festive_animation.title' ),
+            'label' => __( 'festive_animation.label' ),
             'file' => __( 'festive_animation.file' ),
             'file_name' => __( 'festive_animation.file' ),
         ];
@@ -160,8 +153,7 @@ class FestiveAnimationService
             FestiveAnimation::where( 'status', 10 )->update( [ 'status' => 20 ] );
 
             FestiveAnimation::create( [
-                'en_title' => $request->en_title,
-                'zh_title' => $request->zh_title,
+                'label' => $request->label,
                 'file' => $request->file,
                 'file_name' => $request->file_name,
                 'file_type' => FestiveAnimation::resolveFileType( $request->file ),
@@ -200,8 +192,7 @@ class FestiveAnimationService
 
             $oldFile = $updateFestiveAnimation->file;
 
-            $updateFestiveAnimation->en_title = $request->en_title;
-            $updateFestiveAnimation->zh_title = $request->zh_title;
+            $updateFestiveAnimation->label = $request->label;
             if ( $oldFile != $request->file ) {
                 $updateFestiveAnimation->file = $request->file;
                 $updateFestiveAnimation->file_name = $request->file_name;
@@ -331,7 +322,6 @@ class FestiveAnimationService
         $festiveAnimations->getCollection()->append( [
             'encrypted_id',
             'file_path',
-            'title',
         ] );
 
         return response()->json( array_merge( [
@@ -356,7 +346,6 @@ class FestiveAnimationService
         $festiveAnimation->append( [
             'encrypted_id',
             'file_path',
-            'title',
         ] );
 
         return response()->json( [

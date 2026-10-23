@@ -45,9 +45,9 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'festive_animation.title' ) ] ),
-        'id' => 'title',
-        'title' => __( 'festive_animation.title' ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'festive_animation.label' ) ] ),
+        'id' => 'label',
+        'title' => __( 'festive_animation.label' ),
     ],
     [
         'type' => 'select',
@@ -120,7 +120,7 @@ var statusMapper = {
             { data: null },
             { data: 'created_at' },
             { data: 'file_path' },
-            { data: 'title' },
+            { data: 'label' },
             { data: 'file_type' },
             { data: 'status' },
             { data: 'encrypted_id' },
@@ -169,7 +169,7 @@ var statusMapper = {
                 },
             },
             {
-                targets: parseInt( '{{ Helper::columnIndex( $columns, "title" ) }}' ),
+                targets: parseInt( '{{ Helper::columnIndex( $columns, "label" ) }}' ),
                 orderable: false,
                 render: function( data, type, row, meta ) {
                     return data ?? '-';
