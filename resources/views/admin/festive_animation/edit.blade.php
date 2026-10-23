@@ -16,17 +16,6 @@ $festive_animation_edit = 'festive_animation_edit';
             <div class="col-md-12 col-lg-12">
                 <h5 class="card-title mb-4">{{ __( 'template.general_info' ) }}</h5>
 
-                <div class="mb-3">
-                    <label>{{ __( 'festive_animation.file' ) }}</label>
-                    <div class="form-note mb-2">{{ __( 'festive_animation.file_hint' ) }}</div>
-                    <div class="dropzone mb-3" id="{{ $festive_animation_edit }}_file" style="min-height: 0px;">
-                        <div class="dz-message needsclick">
-                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
-                        </div>
-                    </div>
-                    <div class="invalid-feedback"></div>
-                </div>
-
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist" style="gap:20px;">
                         <button class="nav-link active" id="en_title-tab" data-bs-toggle="tab" data-bs-target="#en_title" type="button" role="tab" aria-controls="en_title" aria-selected="true"> English </button>
@@ -52,6 +41,17 @@ $festive_animation_edit = 'festive_animation_edit';
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>{{ __( 'festive_animation.file' ) }}</label>
+                    <div class="form-note mb-2">{{ __( 'festive_animation.file_hint' ) }}</div>
+                    <div class="dropzone mb-3" id="{{ $festive_animation_edit }}_file" style="min-height: 0px;">
+                        <div class="dz-message needsclick">
+                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="text-end">
