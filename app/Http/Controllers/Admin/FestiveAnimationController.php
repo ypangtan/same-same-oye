@@ -123,6 +123,11 @@ class FestiveAnimationController extends Controller
         return FestiveAnimationService::deleteFestiveAnimation( $request );
     }
 
+    public function updateOrder( Request $request ) {
+
+        return FestiveAnimationService::updateOrder( $request );
+    }
+
     public function fileUpload( Request $request ) {
 
         return FestiveAnimationService::fileUpload( $request );
