@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'Title',
+    'label' => 'Label',
     'file' => 'File',
     'file_type' => 'File Type',
     'file_hint' => 'Any file type is accepted (image, GIF, video, animation, etc). Max 100MB.',
