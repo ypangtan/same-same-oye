@@ -280,7 +280,7 @@ class FestiveAnimationService
     public static function fileUpload( $request ) {
 
         $validator = Validator::make( $request->all(), [
-            'file' => [ 'required', 'file', 'max:' . ( 100 * 1024 ) ],
+            'file' => [ 'required', 'file' ],
         ] );
 
         $validator->setAttributeNames( [
