@@ -25,8 +25,16 @@ class FestiveAnimation extends Model
         'file',
         'file_name',
         'file_type',
+        'duration',
         'status',
     ];
+
+    protected $casts = [
+        'duration' => 'float',
+    ];
+
+    // Default duration ( seconds ) for image
+    const IMAGE_DURATION = 2;
 
     public static function resolveFileType( $path ) {
 
@@ -45,6 +53,49 @@ class FestiveAnimation extends Model
         }
 
         return 4;
+    }
+
+    // Duration in seconds: image use IMAGE_DURATION, gif / video read from file, null for others
+    public static function resolveDuration( $pathname, $fileType ) {
+
+        try {
+            switch ( $fileType ) {
+                case 1:
+                    return self::IMAGE_DURATION;
+                case 2:
+                    return self::gifDuration( $pathname );
+                case 3:
+                    $ffprobe = \FFMpeg\FFProbe::create();
+                    return round( (float) $ffprobe->format( $pathname )->get( 'duration' ), 2 );
+            }
+        } catch ( \Throwable $th ) {
+            \Log::warning( 'Festive animation duration failed', [
+                'file' => $pathname,
+                'error' => $th->getMessage(),
+            ] );
+        }
+
+        return null;
+    }
+
+    // Sum every frame delay ( Graphic Control Extension, unit 1/100s )
+    private static function gifDuration( $pathname ) {
+
+        $content = file_get_contents( $pathname );
+        if ( $content === false ) {
+            return null;
+        }
+
+        preg_match_all( '/\x21\xF9\x04[\x00-\xFF]([\x00-\xFF]{2})[\x00-\xFF]\x00/s', $content, $matches );
+
+        $total = 0;
+        foreach ( $matches[1] as $delay ) {
+            $delay = unpack( 'v', $delay )[1];
+            // Browsers treat 0 / 1 as 10 ( 0.1s )
+            $total += $delay <= 1 ? 10 : $delay;
+        }
+
+        return $total > 0 ? round( $total / 100, 2 ) : null;
     }
 
     public function getFilePathAttribute() {
@@ -72,6 +123,7 @@ class FestiveAnimation extends Model
         'file',
         'file_name',
         'file_type',
+        'duration',
         'status',
     ];
 
