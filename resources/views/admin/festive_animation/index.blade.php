@@ -192,8 +192,17 @@ var statusMapper = {
                 targets: parseInt( '{{ Helper::columnIndex( $columns, "duration" ) }}' ),
                 orderable: false,
                 render: function( data, type, row, meta ) {
+                    if ( data == null ) {
+                        return '-';
+                    }
+
                     // Shorter GIF / video will be replayed up to minimum duration
-                    return data != null ? Math.max( parseFloat( data ), {{ \App\Models\FestiveAnimation::IMAGE_DURATION }} ) + 's' : '-';
+                    let minDuration = {{ \App\Models\FestiveAnimation::IMAGE_DURATION }};
+                    if ( parseFloat( data ) < minDuration ) {
+                        return minDuration + 's<br><small class="text-soft">{{ __( 'festive_animation.original' ) }}: ' + data + 's</small>';
+                    }
+
+                    return data + 's';
                 },
             },
             {

@@ -17,6 +17,7 @@ return [
     'file' => 'File',
     'file_type' => 'File Type',
     'duration' => 'Duration',
+    'original' => 'Original',
     'file_hint' => 'Only image, GIF and video are accepted.',
     'short_duration_warning' => 'This file is shorter than :duration seconds and will be replayed for :duration seconds.',
     'preview' => 'Preview',
