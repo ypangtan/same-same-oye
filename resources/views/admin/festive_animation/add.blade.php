@@ -32,6 +32,7 @@ $festive_animation_create = 'festive_animation_create';
                             <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
                         </div>
                     </div>
+                    <div class="text-warning small mt-n2 mb-2" id="{{ $festive_animation_create }}_duration_reminder" style="display: none;">{{ __( 'festive_animation.short_duration_warning', [ 'duration' => \App\Models\FestiveAnimation::IMAGE_DURATION ] ) }}</div>
                     <div class="invalid-feedback"></div>
                 </div>
 
@@ -133,6 +134,7 @@ $festive_animation_create = 'festive_animation_create';
                 fileID = null;
                 fileName = null;
                 fileDuration = null;
+                $( fc + '_duration_reminder' ).hide();
                 file.previewElement.remove();
             },
             success: function( file, response ) {
@@ -141,11 +143,7 @@ $festive_animation_create = 'festive_animation_create';
                 fileDuration = response.duration;
 
                 // GIF / video shorter than minimum duration will be replayed
-                if ( [ 2, 3 ].includes( parseInt( response.file_type ) ) && response.duration !== null && parseFloat( response.duration ) < {{ \App\Models\FestiveAnimation::IMAGE_DURATION }} ) {
-                    $( '#modal_warning .caption-text' ).html( '{{ __( 'festive_animation.short_duration_warning', [ 'duration' => \App\Models\FestiveAnimation::IMAGE_DURATION ] ) }}' );
-                    $( '#modal_warning .btn_cancel' ).hide();
-                    modalWarning.toggle();
-                }
+                $( fc + '_duration_reminder' ).toggle( [ 2, 3 ].includes( parseInt( response.file_type ) ) && response.duration != null && parseFloat( response.duration ) < {{ \App\Models\FestiveAnimation::IMAGE_DURATION }} );
             },
             error: function( file, message ) {
                 $( '#modal_danger .caption-text' ).html( message.message ?? message );

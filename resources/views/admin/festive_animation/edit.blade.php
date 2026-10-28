@@ -32,6 +32,7 @@ $festive_animation_edit = 'festive_animation_edit';
                             <h3 class="fs-5 fw-bold text-gray-900 mb-1">{{ __( 'template.drop_file_or_click_to_upload' ) }}</h3>
                         </div>
                     </div>
+                    <div class="text-warning small mt-n2 mb-2" id="{{ $festive_animation_edit }}_duration_reminder" style="display: none;">{{ __( 'festive_animation.short_duration_warning', [ 'duration' => \App\Models\FestiveAnimation::IMAGE_DURATION ] ) }}</div>
                     <div class="invalid-feedback"></div>
                 </div>
 
@@ -194,6 +195,7 @@ $festive_animation_edit = 'festive_animation_edit';
                             fileID = null;
                             fileName = null;
                             fileDuration = null;
+                            $( fe + '_duration_reminder' ).hide();
                             file.previewElement.remove();
                         },
                         success: function( file, response ) {
@@ -201,12 +203,7 @@ $festive_animation_edit = 'festive_animation_edit';
                             fileName = response.file_name;
                             fileDuration = response.duration;
 
-                            // GIF / video shorter than minimum duration will be replayed
-                            if ( [ 2, 3 ].includes( parseInt( response.file_type ) ) && response.duration !== null && parseFloat( response.duration ) < {{ \App\Models\FestiveAnimation::IMAGE_DURATION }} ) {
-                                $( '#modal_warning .caption-text' ).html( '{{ __( 'festive_animation.short_duration_warning', [ 'duration' => \App\Models\FestiveAnimation::IMAGE_DURATION ] ) }}' );
-                                $( '#modal_warning .btn_cancel' ).hide();
-                                modalWarning.toggle();
-                            }
+                            checkShortDuration( response.file_type, response.duration );
                         },
                         error: function( file, message ) {
                             $( '#modal_danger .caption-text' ).html( message.message ?? message );
@@ -216,8 +213,17 @@ $festive_animation_edit = 'festive_animation_edit';
                     } );
 
                     $( 'body' ).loading( 'stop' );
+
+                    if ( filePath ) {
+                        checkShortDuration( response.file_type, response.duration );
+                    }
                 },
             } );
+        }
+
+        // GIF / video shorter than minimum duration will be replayed
+        function checkShortDuration( fileType, duration ) {
+            $( fe + '_duration_reminder' ).toggle( [ 2, 3 ].includes( parseInt( fileType ) ) && duration != null && duration !== '' && parseFloat( duration ) < {{ \App\Models\FestiveAnimation::IMAGE_DURATION }} );
         }
     } );
 </script>
