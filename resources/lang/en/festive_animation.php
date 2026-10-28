@@ -18,6 +18,7 @@ return [
     'file_type' => 'File Type',
     'duration' => 'Duration',
     'file_hint' => 'Only image, GIF and video are accepted.',
+    'short_duration_warning' => 'The uploaded file is shorter than :duration seconds. It will be replayed for :duration seconds.',
     'preview' => 'Preview',
     'url' => 'Url',
     'start_date' => 'Start Date',

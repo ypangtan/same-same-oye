@@ -200,6 +200,13 @@ $festive_animation_edit = 'festive_animation_edit';
                             fileID = response.file;
                             fileName = response.file_name;
                             fileDuration = response.duration;
+
+                            // GIF / video shorter than minimum duration will be replayed
+                            if ( [ 2, 3 ].includes( parseInt( response.file_type ) ) && response.duration !== null && parseFloat( response.duration ) < {{ \App\Models\FestiveAnimation::IMAGE_DURATION }} ) {
+                                $( '#modal_warning .caption-text' ).html( '{{ __( 'festive_animation.short_duration_warning', [ 'duration' => \App\Models\FestiveAnimation::IMAGE_DURATION ] ) }}' );
+                                $( '#modal_warning .btn_cancel' ).hide();
+                                modalWarning.toggle();
+                            }
                         },
                         error: function( file, message ) {
                             $( '#modal_danger .caption-text' ).html( message.message ?? message );
