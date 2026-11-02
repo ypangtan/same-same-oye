@@ -1,28 +1,34 @@
-name: 'Check-in API'
+name: 'App Version API'
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/checkin
+    uri: api/v1/app_versions
     metadata:
-      title: '1. Get Check-in History'
-      description: ''
-      authenticated: true
+      title: '1. Lastest App Version'
+      description: |-
+        <aside class="notice">Get Lastest App Version </aside>
+
+        <strong>platform</strong><br>
+        1: App Store<br>
+        2: Play Store<br>
+        3: App Gallery<br>
+      authenticated: false
       custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
-    queryParameters:
-      per_page:
-        name: per_page
-        description: 'Retrieve how many product in a page, default is 10.'
-        required: false
-        example: 10
-        type: integer
+    queryParameters: []
+    bodyParameters:
+      platform:
+        name: platform
+        description: 'The number of the platform.'
+        required: true
+        example: '1'
+        type: string
         custom: []
-    bodyParameters: []
     responses:
       -
         status: 302
@@ -31,73 +37,17 @@ endpoints:
           <html>
               <head>
                   <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
+                  <meta http-equiv="refresh" content="0;url='http://localhost/same-same-oye/backoffice/dashboard'" />
 
-                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
+                  <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>
               </head>
               <body>
-                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
+                  Redirecting to <a href="http://localhost/same-same-oye/backoffice/dashboard">http://localhost/same-same-oye/backoffice/dashboard</a>.
               </body>
           </html>
         headers:
           cache-control: 'no-cache, private'
-          location: 'https://staging.ifei.com.my/backoffice/dashboard'
+          location: 'http://localhost/same-same-oye/backoffice/dashboard'
           content-type: 'text/html; charset=utf-8'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/checkin
-    metadata:
-      title: '2. Check-in'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses: []
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/checkin/rewards
-    metadata:
-      title: '3. Get Check-in Rewards'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
-
-                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'https://staging.ifei.com.my/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-          access-control-allow-origin: '*'
         description: null
     responseFields: []

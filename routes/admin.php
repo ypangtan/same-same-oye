@@ -31,6 +31,8 @@ use App\Http\Controllers\Admin\{
     PopAnnouncementController,
     SubscriptionGroupMemberController,
     SubscriptionPlanController,
+    SubscriptionVoucherController,
+    SubscriptionVoucherNotificationController,
     TalkController,
     TrendingContentController,
     UserSubscriptionController,
@@ -559,7 +561,52 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-festive-animation-status', [ FestiveAnimationController::class, 'updateFestiveAnimationStatus' ] )->name( 'admin.festive_animation.updateFestiveAnimationStatus' );
                 Route::post( 'delete-festive-animation', [ FestiveAnimationController::class, 'deleteFestiveAnimation' ] )->name( 'admin.festive_animation.deleteFestiveAnimation' );
                 Route::post( 'file-upload', [ FestiveAnimationController::class, 'fileUpload' ] )->name( 'admin.festive_animation.fileUpload' );            } );
-            
+
+            Route::prefix( 'subscription-vouchers' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view subscription_vouchers' ] ], function() {
+                    Route::get( '/', [ SubscriptionVoucherController::class, 'index' ] )->name( 'admin.module_parent.subscription_voucher.index' );
+                    Route::get( 'codes', [ SubscriptionVoucherController::class, 'codes' ] )->name( 'admin.subscription_voucher.codes' );
+                    Route::get( 'urls', [ SubscriptionVoucherController::class, 'urls' ] )->name( 'admin.subscription_voucher.urls' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add subscription_vouchers' ] ], function() {
+                    Route::get( 'add', [ SubscriptionVoucherController::class, 'add' ] )->name( 'admin.subscription_voucher.add' );
+                    Route::post( 'create-subscription-voucher-urls', [ SubscriptionVoucherController::class, 'createSubscriptionVoucherUrls' ] )->name( 'admin.subscription_voucher.createSubscriptionVoucherUrls' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit subscription_vouchers' ] ], function() {
+                    Route::get( 'edit', [ SubscriptionVoucherController::class, 'edit' ] )->name( 'admin.subscription_voucher.edit' );
+                    Route::post( 'update-subscription-voucher-code-status', [ SubscriptionVoucherController::class, 'updateSubscriptionVoucherCodeStatus' ] )->name( 'admin.subscription_voucher.updateSubscriptionVoucherCodeStatus' );
+                    Route::post( 'update-subscription-voucher-urls', [ SubscriptionVoucherController::class, 'updateSubscriptionVoucherUrls' ] )->name( 'admin.subscription_voucher.updateSubscriptionVoucherUrls' );
+                    Route::post( 'update-subscription-voucher-url-status', [ SubscriptionVoucherController::class, 'updateSubscriptionVoucherUrlStatus' ] )->name( 'admin.subscription_voucher.updateSubscriptionVoucherUrlStatus' );
+                    Route::post( 'delete-subscription-voucher-urls', [ SubscriptionVoucherController::class, 'deleteSubscriptionVoucherUrls' ] )->name( 'admin.subscription_voucher.deleteSubscriptionVoucherUrls' );
+                } );
+
+                Route::post( 'all-subscription-vouchers', [ SubscriptionVoucherController::class, 'allSubscriptionVouchers' ] )->name( 'admin.subscription_voucher.allSubscriptionVouchers' );
+                Route::post( 'one-subscription-voucher', [ SubscriptionVoucherController::class, 'oneSubscriptionVoucher' ] )->name( 'admin.subscription_voucher.oneSubscriptionVoucher' );
+                Route::post( 'create-subscription-voucher', [ SubscriptionVoucherController::class, 'createSubscriptionVoucher' ] )->name( 'admin.subscription_voucher.createSubscriptionVoucher' );
+                Route::post( 'update-subscription-voucher', [ SubscriptionVoucherController::class, 'updateSubscriptionVoucher' ] )->name( 'admin.subscription_voucher.updateSubscriptionVoucher' );
+                Route::post( 'update-subscription-voucher-status', [ SubscriptionVoucherController::class, 'updateSubscriptionVoucherStatus' ] )->name( 'admin.subscription_voucher.updateSubscriptionVoucherStatus' );
+                Route::post( 'all-subscription-voucher-codes', [ SubscriptionVoucherController::class, 'allSubscriptionVoucherCodes' ] )->name( 'admin.subscription_voucher.allSubscriptionVoucherCodes' );
+                Route::post( 'all-subscription-voucher-urls', [ SubscriptionVoucherController::class, 'allSubscriptionVoucherUrls' ] )->name( 'admin.subscription_voucher.allSubscriptionVoucherUrls' );
+            } );
+
+            Route::prefix( 'subscription-voucher-notifications' )->group( function() {
+                Route::group( [ 'middleware' => [ 'permission:view subscription_voucher_notifications' ] ], function() {
+                    Route::get( '/', [ SubscriptionVoucherNotificationController::class, 'index' ] )->name( 'admin.module_parent.subscription_voucher_notification.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add subscription_voucher_notifications' ] ], function() {
+                    Route::get( 'add', [ SubscriptionVoucherNotificationController::class, 'add' ] )->name( 'admin.subscription_voucher_notification.add' );
+                    Route::post( 'create-voucher-notification', [ SubscriptionVoucherNotificationController::class, 'createVoucherNotification' ] )->name( 'admin.subscription_voucher_notification.createVoucherNotification' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit subscription_voucher_notifications' ] ], function() {
+                    Route::get( 'edit', [ SubscriptionVoucherNotificationController::class, 'edit' ] )->name( 'admin.subscription_voucher_notification.edit' );
+                    Route::post( 'update-voucher-notification', [ SubscriptionVoucherNotificationController::class, 'updateVoucherNotification' ] )->name( 'admin.subscription_voucher_notification.updateVoucherNotification' );
+                    Route::post( 'update-voucher-notification-status', [ SubscriptionVoucherNotificationController::class, 'updateVoucherNotificationStatus' ] )->name( 'admin.subscription_voucher_notification.updateVoucherNotificationStatus' );
+                } );
+
+                Route::post( 'all-voucher-notifications', [ SubscriptionVoucherNotificationController::class, 'allVoucherNotifications' ] )->name( 'admin.subscription_voucher_notification.allVoucherNotifications' );
+                Route::post( 'one-voucher-notification', [ SubscriptionVoucherNotificationController::class, 'oneVoucherNotification' ] )->name( 'admin.subscription_voucher_notification.oneVoucherNotification' );
+            } );
+
             Route::prefix( 'country' )->group( function() {
                 Route::post( 'all-countries', [ CountryController::class, 'allCountries' ] )->name( 'admin.country.allCountries' );
             } );

@@ -87,6 +87,8 @@ return [
     'disclaimers' => 'Disclaimers',
     'website_banners' => 'Website Banners',
     'festive_animations' => 'Festive Animations and Advertisements',
+    'subscription_vouchers' => 'Subscription Vouchers',
+    'subscription_voucher_notifications' => 'Voucher Notifications',
     'trending_contents' => 'Trending Contents',
     'home' => 'Home',
     'home_layout' => 'Home Layout',

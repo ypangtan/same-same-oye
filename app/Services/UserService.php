@@ -2460,7 +2460,9 @@ class UserService
             }
             return $item;
         });
-        
+
+        SubscriptionVoucherService::appendVoucherCodes( $notifications->items(), auth()->user()->id );
+
         return response()->json( $notifications );
     }
 
@@ -2471,6 +2473,8 @@ class UserService
         if ( $notification && $notification->publishing_date ) {
             $notification->created_at = Carbon::parse( $notification->publishing_date, config( 'app.timezone' ) )->subHours( 8 );
         }
+
+        SubscriptionVoucherService::appendVoucherCodes( [ $notification ], auth()->user()->id );
 
         return response()->json( [
             'data' => $notification,
@@ -2495,6 +2499,8 @@ class UserService
         ] );
 
         $notification->append( [ 'image_path' ] );
+
+        SubscriptionVoucherService::appendVoucherCodes( [ $notification ], auth()->user()->id );
 
         return response()->json( [
             'message' => __( 'notification.notification_seen' ),

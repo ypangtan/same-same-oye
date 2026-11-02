@@ -1,19 +1,13 @@
-name: 'App Version API'
+name: 'Ad API'
 description: ''
 endpoints:
   -
     httpMethods:
-      - GET
-    uri: api/v1/app_versions
+      - POST
+    uri: api/v1/ads/get-all-ads
     metadata:
-      title: '1. Lastest App Version'
-      description: |-
-        <aside class="notice">Get Lastest App Version </aside>
-
-        <strong>platform</strong><br>
-        1: App Store<br>
-        2: Play Store<br>
-        3: App Gallery<br>
+      title: '1. Get all Ads'
+      description: ''
       authenticated: false
       custom: []
     headers:
@@ -21,34 +15,23 @@ endpoints:
       Accept: application/json
     urlParameters: []
     queryParameters: []
-    bodyParameters:
-      platform:
-        name: platform
-        description: 'The number of the platform.'
-        required: true
-        example: '1'
-        type: string
-        custom: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
-
-                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'https://staging.ifei.com.my/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-          access-control-allow-origin: '*'
-        description: null
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/ads/get-one-ad
+    metadata:
+      title: '2. Get one Ad'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
     responseFields: []

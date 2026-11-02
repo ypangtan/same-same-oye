@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\{
     SearchController,
     WebsiteBannerController,
     SubscriptionGroupMemberController,
+    SubscriptionVoucherController,
     TrendingContentController,
     TypeController,
     UserPlaylistController,
@@ -204,6 +205,10 @@ Route::middleware( 'auth:user' )->group( function() {
         Route::post( '/accept-subscription-group-member', [ SubscriptionGroupMemberController::class, 'acceptSubscriptionGroupMember' ] );
         Route::post( '/verify-user-subscription', [ SubscriptionGroupMemberController::class, 'verifyUserSubscription' ] );
         Route::get( '/leave-subscription-group-member', [ SubscriptionGroupMemberController::class, 'leaveSubscriptionGroupMember' ] );
+    } );
+
+    Route::prefix( 'subscription-vouchers' )->middleware( 'log.cart.order' )->group( function() {
+        Route::post( '/claim-voucher', [ SubscriptionVoucherController::class, 'claimSubscriptionVoucher' ] );
     } );
 
 });

@@ -199,10 +199,11 @@
                                 </li>
                                 @endcanany
 
-                                @canany( [ 'view subscription_plans', 'view user_subscriptions' ] )
+                                @canany( [ 'view subscription_plans', 'view user_subscriptions', 'view subscription_vouchers' ] )
                                 <li class="nk-menu-item has-sub {{ ( $controller == 'App\Http\Controllers\Admin\SubscriptionPlanController' ||
                                     $controller == 'App\Http\Controllers\Admin\UserSubscriptionController' ||
-                                    $controller == 'App\Http\Controllers\Admin\SubscriptionGroupMemberController'
+                                    $controller == 'App\Http\Controllers\Admin\SubscriptionGroupMemberController' ||
+                                    $controller == 'App\Http\Controllers\Admin\SubscriptionVoucherController'
                                     ) ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-report-profit"></em></span>
@@ -219,12 +220,17 @@
                                             <a href="{{ route( 'admin.module_parent.user_subscription.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.user_subscriptions' ) }}</span></a>
                                         </li>
                                         @endcan
+                                        @can( 'view subscription_vouchers' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SubscriptionVoucherController' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.subscription_voucher.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.subscription_vouchers' ) }}</span></a>
+                                        </li>
+                                        @endcan
                                     </ul>
                                 </li>
                                 @endcanany
                                 
-                                @canany( [ 'view marketing_notifications', 'view pop_announcements' ] )
-                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\MarketingNotificationController' || $controller == 'App\Http\Controllers\Admin\PopAnnouncementController') ? 'active current-page' : '' }}">
+                                @canany( [ 'view marketing_notifications', 'view pop_announcements', 'view subscription_voucher_notifications' ] )
+                                <li class="nk-menu-item has-sub {{ ($controller == 'App\Http\Controllers\Admin\MarketingNotificationController' || $controller == 'App\Http\Controllers\Admin\PopAnnouncementController' || $controller == 'App\Http\Controllers\Admin\SubscriptionVoucherNotificationController') ? 'active current-page' : '' }}">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
                                         <span class="nk-menu-text">{{ __( 'template.marketing_notifications' ) }}</span>
@@ -238,6 +244,11 @@
                                         @can( 'view pop_announcements' )
                                         <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\PopAnnouncementController' && in_array( $action, [ 'index', 'edit', 'add' ] ) ? 'active current-page' : '' }}">
                                             <a href="{{ route( 'admin.module_parent.pop_announcement.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.pop_announcements' ) }}</span></a>
+                                        </li>
+                                        @endcan
+                                        @can( 'view subscription_voucher_notifications' )
+                                        <li class="nk-menu-item {{ $controller == 'App\Http\Controllers\Admin\SubscriptionVoucherNotificationController' ? 'active current-page' : '' }}">
+                                            <a href="{{ route( 'admin.module_parent.subscription_voucher_notification.index' ) }}" class="nk-menu-link"><span class="nk-menu-text">{{ __( 'template.subscription_voucher_notifications' ) }}</span></a>
                                         </li>
                                         @endcan
                                     </ul>

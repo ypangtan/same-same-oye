@@ -1,12 +1,29 @@
-name: 'Contact-Us API'
+name: 'Banner API'
 description: ''
 endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/contact-us
+    uri: api/v1/banners/get-all-banners
     metadata:
-      title: '1. Enquiry Mail'
+      title: '1. Get all Banners'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters: []
+    responses: []
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/banners/get-one-banner
+    metadata:
+      title: '2. Get one Banner'
       description: ''
       authenticated: false
       custom: []
@@ -16,32 +33,11 @@ endpoints:
     urlParameters: []
     queryParameters: []
     bodyParameters:
-      fullname:
-        name: fullname
-        description: 'The fullname for contact us enquiry.'
+      id:
+        name: id
+        description: 'The encrypted_id of the banner.'
         required: false
-        example: 'John Wick'
-        type: string
-        custom: []
-      email:
-        name: email
-        description: 'The email for contact us enquiry.'
-        required: true
-        example: johnwick@gmail.com
-        type: string
-        custom: []
-      phone_number:
-        name: phone_number
-        description: 'The phone_number for contact us enquiry.'
-        required: true
-        example: '012342123'
-        type: string
-        custom: []
-      message:
-        name: message
-        description: 'The message for contact us enquiry.'
-        required: true
-        example: 'lorem ipsum..'
+        example: '52'
         type: string
         custom: []
     responses: []

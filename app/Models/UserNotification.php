@@ -22,6 +22,7 @@ class UserNotification extends Model
 
     protected $fillable = [
         'user_id',
+        'subscription_voucher_id',
         'title',
         'content',
         'en_title',
@@ -103,6 +104,14 @@ class UserNotification extends Model
 
     public function user() {
         return $this->belongsTo( User::class, 'user_id' )->withTrashed();
+    }
+
+    public function subscriptionVoucher() {
+        return $this->belongsTo( SubscriptionVoucher::class, 'subscription_voucher_id' );
+    }
+
+    public function subscriptionVoucherCodes() {
+        return $this->hasMany( SubscriptionVoucherCode::class, 'user_notification_id' );
     }
 
     public function getImagePathAttribute() {

@@ -1,15 +1,15 @@
 openapi: 3.0.3
 info:
-  title: Ifei
+  title: same-same-oye
   description: ''
   version: 1.0.0
 servers:
   -
-    url: 'https://staging.ifei.com.my'
+    url: 'http://localhost/same-same-oye'
 paths:
-  /api/v1/pop_announcements:
-    get:
-      summary: '3. Get all pop announcements'
+  /api/v1/record:
+    post:
+      summary: 'Record an activity (stream, banner click, or popup click).'
       description: ''
       parameters:
         -
@@ -26,32 +26,49 @@ paths:
           example: application/json
           schema:
             type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
+      responses: {  }
       tags:
-        - 'Announcement API'
-      security: []
-  /api/v1/announcements:
-    get:
-      summary: '1. Get announcements'
-      description: '<aside class="notice">Get all announcement filtered, claim the promotion with claim voucher api</aside>'
+        - 'Activity API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content_type:
+                  type: integer
+                  description: 'Required when type=stream. One of: 1, 2, 3, 4, 5, 6.'
+                  example: 2
+                radio_name:
+                  type: string
+                  description: nullable.
+                  example: '"Hits FM"'
+                item_id:
+                  type: string
+                  description: 'Required when content_type=2.'
+                  example: '5'
+                playlist_id:
+                  type: string
+                  description: 'Required when content_type=3.'
+                  example: '5'
+                collection_id:
+                  type: string
+                  description: 'Required when content_type=4.'
+                  example: '5'
+                banner_id:
+                  type: string
+                  description: 'Required when content_type=5.'
+                  example: '5'
+                pop_announcement_id:
+                  type: string
+                  description: 'Required when content_type=6.'
+                  example: '5'
+  /api/v1/ads/get-all-ads:
+    post:
+      summary: '1. Get all Ads'
+      description: ''
       parameters:
-        -
-          in: query
-          name: show_claimed
-          description: 'To show claimed announcement .'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'To show claimed announcement .'
-            example: 1
         -
           in: header
           name: Content-Type
@@ -66,19 +83,36 @@ paths:
           example: application/json
           schema:
             type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
+      responses: {  }
       tags:
-        - 'Announcement API'
-  /api/v1/announcements/close:
+        - 'Ad API'
+      security: []
+  /api/v1/ads/get-one-ad:
     post:
-      summary: '2. Close/Claim Announcement'
+      summary: '2. Get one Ad'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Ad API'
+      security: []
+  /api/v1/pop_announcements:
+    post:
+      summary: '1. Get all pop announcements'
       description: ''
       parameters:
         -
@@ -98,6 +132,29 @@ paths:
       responses: {  }
       tags:
         - 'Announcement API'
+      security: []
+  /api/v1/categories:
+    post:
+      summary: '1. Get all Categories'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Category API'
       requestBody:
         required: false
         content:
@@ -105,10 +162,1516 @@ paths:
             schema:
               type: object
               properties:
-                announcement:
-                  type: required
-                  description: 'integer The id of announcement to be claim.'
+                per_page:
+                  type: string
+                  description: 'The total record per page.'
+                  example: '10'
+                type_id:
+                  type: string
+                  description: 'The encrypted_id of the type.'
+                  example: '52'
+      security: []
+  /api/v1/collections/get-all-collections:
+    post:
+      summary: '1. Get all Collections'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Collection API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The total record per page.'
+                  example: '10'
+                type_id:
+                  type: string
+                  description: 'The encrypted_id of the type.'
+                  example: '52'
+      security: []
+  /api/v1/collections/get-one-collection:
+    post:
+      summary: '2. Get one Collection'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Collection API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of the collection.'
+                  example: '52'
+      security: []
+  /api/v1/country:
+    get:
+      summary: '1. Get all Countries'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Country API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The total record per page.'
+                  example: '10'
+      security: []
+  /api/v1/disclaimer:
+    get:
+      summary: '1. Get Disclaimer'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Disclaimer API'
+      security: []
+  /api/v1/festive-animations/get-all-festive-animations:
+    post:
+      summary: '1. Get all Festive Animations & Advertisements'
+      description: "Only returns active records, latest first.\nfile_type: 1 = image, 2 = gif, 3 = video, 4 = other"
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Festive Animation API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file_type:
+                  type: integer
+                  description: 'Filter by file type.'
+                  example: 3
+                per_page:
+                  type: string
+                  description: 'The total record per page.'
+                  example: '10'
+      security: []
+  /api/v1/festive-animations/get-one-festive-animation:
+    post:
+      summary: '2. Get one Festive Animation & Advertisement'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Festive Animation API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of the festive animation.'
+                  example: '52'
+              required:
+                - id
+      security: []
+  /api/v1/home/get-home-collections:
+    post:
+      summary: '1. Get Home Collections'
+      description: "Returns the collections configured for the home page, in display order.\nThe first collection is shown as \"Recommended\" by the frontend."
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Home API'
+      security: []
+  /api/v1/plans/get-plans:
+    post:
+      summary: '4. Get Plans'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'In App Purchase API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The per_page.'
+                  example: '10'
+      security: []
+  /api/v1/in-app-purchase/verify-payment:
+    post:
+      summary: '1. Verify Payment'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'In App Purchase API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 'The platform.'
                   example: '1'
+                receipt_data:
+                  type: string
+                  description: 'The receipt_data required when ios.'
+                  example: '1'
+                plan_id:
+                  type: string
+                  description: 'The encrypted id of subscription plan.'
+                  example: '1'
+                purchase_token:
+                  type: string
+                  description: 'The purchase_token required when Android and huawei.'
+                  example: '1'
+                purchase_data:
+                  type: string
+                  description: 'The purchase_data required when huawei.'
+                  example: '1'
+                signature:
+                  type: string
+                  description: 'The signature required when huawei.'
+                  example: '1'
+  /api/v1/in-app-purchase/get-current-subscription:
+    get:
+      summary: '2. Get Current Subscription'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'In App Purchase API'
+  /api/v1/in-app-purchase/cancel-subscription:
+    get:
+      summary: '3. Cancel Subscription'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'In App Purchase API'
+  /api/v1/items/get-all-items:
+    post:
+      summary: '1. Get all Items'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Item API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The total record per page.'
+                  example: '10'
+                type_id:
+                  type: string
+                  description: 'The encrypted_id of the type.'
+                  example: '52'
+                playlist_id:
+                  type: string
+                  description: 'The encrypted_id of the playlist.'
+                  example: '1'
+      security: []
+  /api/v1/items/get-one-item:
+    post:
+      summary: '2. Get one Item'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Item API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of the item.'
+                  example: '52'
+      security: []
+  /api/v1/items/like:
+    post:
+      summary: '3. Like Item'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Item API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item_id:
+                  type: string
+                  description: 'The encrypted_id of the item.'
+                  example: '52'
+  /api/v1/items/unlike:
+    post:
+      summary: '4. Unlike Item'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Item API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item_id:
+                  type: string
+                  description: 'The encrypted_id of the item.'
+                  example: '52'
+  /api/v1/music-requests/create-music-requests:
+    post:
+      summary: '1. Create Music Request'
+      description: '<aside class="notice">Create Music Request </aside>'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Music Request API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the song.'
+                  example: abc
+              required:
+                - name
+      security: []
+  /api/v1/playlists/get-all-playlists:
+    post:
+      summary: '1. Get all Playlists'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Playlist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The total record per page.'
+                  example: '10'
+                type_id:
+                  type: string
+                  description: 'The encrypted_id of the type.'
+                  example: '52'
+                collection_id:
+                  type: string
+                  description: 'The encrypted_id of the collection.'
+                  example: '1'
+                category_id:
+                  type: string
+                  description: 'The encrypted_id of the category.'
+                  example: '52'
+      security: []
+  /api/v1/playlists/get-one-playlist:
+    post:
+      summary: '2. Get one Playlist'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Playlist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of the playlist.'
+                  example: '52'
+      security: []
+  /api/v1/items/search:
+    post:
+      summary: '1. Search'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Search API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  description: 'The page.'
+                  example: 1
+                per_page:
+                  type: integer
+                  description: 'The per_page.'
+                  example: 10
+                text:
+                  type: string
+                  description: 'The text for filter.'
+                  example: abc
+                category_id:
+                  type: string
+                  description: 'The category_id of item for filter.'
+                  example: '1'
+                type_id:
+                  type: string
+                  description: 'The type_id of item for filter (song, talk, postcast ).'
+                  example: '1'
+              required:
+                - page
+                - per_page
+                - text
+                - category_id
+                - type_id
+      security: []
+  /api/v1/subscription-group-member/get-subscription-group-members:
+    get:
+      summary: '1. Get Subscription Group Members'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Subscription Group Member API'
+  /api/v1/subscription-group-member/create-subscription-group-member:
+    post:
+      summary: '2. Create Subscription Group Member'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Subscription Group Member API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  description: 'The email of the user.'
+                  example: user@example.com
+  /api/v1/subscription-group-member/delete-subscription-group-member:
+    post:
+      summary: '3. Delete Subscription Group Member'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Subscription Group Member API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of the subscription group member.'
+                  example: '52'
+  /api/v1/subscription-group-member/accept-subscription-group-member:
+    post:
+      summary: '4. Accept Subscription Group Member'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Subscription Group Member API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: 'The token.'
+                  example: '52'
+  /api/v1/subscription-group-member/verify-user-subscription:
+    post:
+      summary: '5. Verify User Subscription'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Subscription Group Member API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plan_id:
+                  type: string
+                  description: 'The plan_id of the subscription.'
+                  example: '52'
+  /api/v1/subscription-group-member/leave-subscription-group-member:
+    get:
+      summary: '6. Leave Subscription Group Member'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'Subscription Group Member API'
+  /api/v1/subscription-vouchers/claim-voucher:
+    post:
+      summary: '1. Claim Subscription Voucher'
+      description: "Redeem a voucher code into a free subscription ( duration_in_months of the voucher ).\nOnly free user ( no active own plan and not in any group plan ) can claim.\nEach user can only claim the same voucher once.\n\nThe code is also returned as voucher_code in the notifications API ( key = subscription_voucher )."
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Subscription Voucher API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: 'The voucher code, case insensitive.'
+                  example: ABCD2345
+              required:
+                - code
+  /api/v1/trending-contents/get-all-trending-contents:
+    post:
+      summary: '1. Get all TrendingContents'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'TrendingContent API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The total record per page.'
+                  example: '10'
+      security: []
+  /api/v1/trending-contents/get-one-trending-content:
+    post:
+      summary: '2. Get one TrendingContent'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'TrendingContent API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of the trending_content.'
+                  example: '52'
+      security: []
+  /api/v1/types:
+    post:
+      summary: '1. Get all Types'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Type API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The total record per page ( default 10 ).'
+                  example: '10'
+      security: []
+  /api/v1/types/v2:
+    post:
+      summary: '2. Get all Types V2'
+      description: 'Same as Get all Types, but Podcast is returned as Video.'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Type API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The total record per page ( default 10 ).'
+                  example: '10'
+      security: []
+  /api/v1/user-playlist/get-user-playlists:
+    post:
+      summary: '1. Get User Playlists'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'UserPlaylist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                per_page:
+                  type: string
+                  description: 'The total record per page.'
+                  example: '10'
+                type_id:
+                  type: string
+                  description: 'The encrypted_id of the type.'
+                  example: '52'
+  /api/v1/user-playlist/get-user-playlist:
+    post:
+      summary: '2. Get User Playlist Detail'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'UserPlaylist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of user playlist.'
+                  example: '10'
+  /api/v1/user-playlist/create-user-playList:
+    post:
+      summary: '3. Create User PlayList'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'UserPlaylist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of user playlist.'
+                  example: abc
+                type_id:
+                  type: string
+                  description: 'The encrypted_id of the type.'
+                  example: '52'
+  /api/v1/user-playlist/update-user-playList:
+    post:
+      summary: '4. Update User PlayList'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'UserPlaylist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of user playlist.'
+                  example: '10'
+                name:
+                  type: string
+                  description: 'The name of user playlist.'
+                  example: abc
+                type_id:
+                  type: string
+                  description: 'The encrypted_id of the type.'
+                  example: '52'
+  /api/v1/user-playlist/delete-user-playList:
+    post:
+      summary: '5. Delete User PlayList'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'UserPlaylist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of user playlist.'
+                  example: '10'
+  /api/v1/user-playlist/add-song-to-user-playList:
+    post:
+      summary: '6. Add Song To User PlayList'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'UserPlaylist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_playlist_id:
+                  type: string
+                  description: 'The encrypted_id of user playlist.'
+                  example: '10'
+                song_id:
+                  type: string
+                  description: 'The encrypted_id of song.'
+                  example: '10'
+  /api/v1/user-playlist/remove-song-to-user-playList:
+    post:
+      summary: '7. Remove Song To User PlayList'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'UserPlaylist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of user playlist item( in item->pivot ).'
+                  example: '10'
+  /api/v1/user-playlist/add-playlist-to-user-playList:
+    post:
+      summary: '8. Copy Playlist To User PlayList'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'UserPlaylist API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playlist_id:
+                  type: string
+                  description: 'The encrypted_id of playlist.'
+                  example: '10'
+  /api/v1/website-banners/get-all-website-banners:
+    post:
+      summary: '1. Get all Website Banners'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Website Banner API'
+      security: []
+  /api/v1/website-banners/get-one-website-banner:
+    post:
+      summary: '2. Get one Website Banner'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Website Banner API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of the website banner.'
+                  example: '52'
+      security: []
+  /api/v1/app_versions:
+    get:
+      summary: '1. Lastest App Version'
+      description: "<aside class=\"notice\">Get Lastest App Version </aside>\n\n<strong>platform</strong><br>\n1: App Store<br>\n2: Play Store<br>\n3: App Gallery<br>"
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        302:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
+      tags:
+        - 'App Version API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  description: 'The number of the platform.'
+                  example: '1'
+              required:
+                - platform
+      security: []
+  /api/v1/banners/get-all-banners:
+    post:
+      summary: '1. Get all Banners'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Banner API'
+      security: []
+  /api/v1/banners/get-one-banner:
+    post:
+      summary: '2. Get one Banner'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'Banner API'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 'The encrypted_id of the banner.'
+                  example: '52'
+      security: []
   /api/v1/contact-us:
     post:
       summary: '1. Enquiry Mail'
@@ -159,161 +1722,9 @@ paths:
                 - phone_number
                 - message
       security: []
-  /api/v1/app_versions:
-    get:
-      summary: '1. Lastest App Version'
-      description: "<aside class=\"notice\">Get Lastest App Version </aside>\n\n<strong>platform</strong><br>\n1: App Store<br>\n2: Play Store<br>\n3: App Gallery<br>"
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'App Version API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                platform:
-                  type: string
-                  description: 'The number of the platform.'
-                  example: '1'
-              required:
-                - platform
-      security: []
-  /api/v1/banners/details:
-    get:
-      summary: '2. Get one banner detail'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Banner API'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  description: 'The id the banner.'
-                  example: '1'
-              required:
-                - id
-  /api/v1/banners:
-    get:
-      summary: '1. Get banners'
-      description: '<aside class="notice">Get all banners ( sorted )</aside>'
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Banner API'
-  /api/v1/checkin:
-    get:
-      summary: '1. Get Check-in History'
-      description: ''
-      parameters:
-        -
-          in: query
-          name: per_page
-          description: 'Retrieve how many product in a page, default is 10.'
-          example: 10
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve how many product in a page, default is 10.'
-            example: 10
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Check-in API'
+  /api/v1/contact-us/send-contact-us-mail:
     post:
-      summary: '2. Check-in'
+      summary: '2. send Contact Us Mail'
       description: ''
       parameters:
         -
@@ -332,65 +1743,7 @@ paths:
             type: string
       responses: {  }
       tags:
-        - 'Check-in API'
-  /api/v1/checkin/rewards:
-    get:
-      summary: '3. Get Check-in Rewards'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Check-in API'
-  /api/v1/lucky-draw-rewards:
-    get:
-      summary: '1. Search Lucky Draw Reward'
-      description: '<aside class="notice">Search Lucky Draw Reward </aside>'
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Lucky Draw Reward API'
+        - 'Contact-Us API'
       requestBody:
         required: true
         content:
@@ -398,204 +1751,31 @@ paths:
             schema:
               type: object
               properties:
-                customer_member_id:
+                name:
                   type: string
-                  description: 'The customer member id of the lucky draw rewards.'
-                  example: abc1234
+                  description: 'The name.'
+                  example: abc
+                email:
+                  type: string
+                  description: 'The email.'
+                  example: abc@example.com
+                phone_number:
+                  type: string
+                  description: 'The phone number.'
+                  example: '1234567890'
+                message:
+                  type: string
+                  description: 'The message.'
+                  example: abc
               required:
-                - customer_member_id
-      security: []
-  /api/v1/points:
-    get:
-      summary: '1. Get Points'
-      description: '<aside class="notice">Get user''s current points </aside>'
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Points API'
-  /api/v1/points/redeem:
-    post:
-      summary: '2. Redeem Points'
-      description: '<aside class="notice">Redeem points with reference and amount</aside>'
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses: {  }
-      tags:
-        - 'Points API'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                reference:
-                  type: required
-                  description: 'integer The referance of sales to be claim.'
-                  example: 1231ns-12
-                amount:
-                  type: required
-                  description: 'float The id of amount of the sales.'
-                  example: '12.20'
-                customer_name:
-                  type: required
-                  description: 'float The name of the customer.'
-                  example: ali
-  /api/v1/points/history:
-    get:
-      summary: '3. Get redeem history'
-      description: '<aside class="notice">Get user''s points history </aside>'
-      parameters:
-        -
-          in: query
-          name: start_date
-          description: 'optional redeemed time in Y-m-d'
-          example: '2023-08-17'
-          required: false
-          schema:
-            type: string
-            description: 'optional redeemed time in Y-m-d'
-            example: '2023-08-17'
-        -
-          in: query
-          name: end_date
-          description: 'optional redeemed time in Y-m-d'
-          example: '2023-08-17'
-          required: false
-          schema:
-            type: string
-            description: 'optional redeemed time in Y-m-d'
-            example: '2023-08-17'
-        -
-          in: query
-          name: per_page
-          description: 'Show how many record in a page. Leave blank for default (100).'
-          example: 5
-          required: false
-          schema:
-            type: integer
-            description: 'Show how many record in a page. Leave blank for default (100).'
-            example: 5
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Points API'
-  /api/v1/points/conversion-rate:
-    get:
-      summary: '4. Get conversion rate'
-      description: '<aside class="notice">Get conversion rate, if any </aside>'
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Points API'
-  /api/v1/ranks:
-    get:
-      summary: '3. Get all ranks'
-      description: ''
-      parameters:
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Rank API'
+                - name
+                - email
+                - phone_number
+                - message
       security: []
   /api/v1/users:
     get:
-      summary: '6. Get user'
+      summary: '7. Get user'
       description: ''
       parameters:
         -
@@ -619,7 +1799,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'User API'
     post:
@@ -658,10 +1838,18 @@ paths:
                   type: string
                   description: 'The phone_number for register.'
                   example: '0123982334'
-                calling_code:
+                email:
                   type: string
-                  description: 'The calling_code for register.'
-                  example: '+60'
+                  description: 'The email for register.'
+                  example: abc@gmail.com
+                first_name:
+                  type: string
+                  description: 'The first_name for register.'
+                  example: tester
+                last_name:
+                  type: string
+                  description: 'The last_name for register.'
+                  example: tan
                 otp_code:
                   type: string
                   description: 'The otp for register.'
@@ -689,14 +1877,16 @@ paths:
               required:
                 - identifier
                 - phone_number
-                - calling_code
+                - email
+                - first_name
+                - last_name
                 - otp_code
                 - password
                 - password_confirmation
       security: []
   /api/v1/users/delete-verification:
     post:
-      summary: '11. Delete Verification'
+      summary: '13. Delete Verification'
       description: ''
       parameters:
         -
@@ -731,7 +1921,7 @@ paths:
                 - password
   /api/v1/users/delete-confirm:
     post:
-      summary: '12. Delete Confirm'
+      summary: '14. Delete Confirm'
       description: ''
       parameters:
         -
@@ -766,7 +1956,7 @@ paths:
                 - password
   /api/v1/users/update:
     post:
-      summary: '7. Update user'
+      summary: '8. Update user'
       description: ''
       parameters:
         -
@@ -787,7 +1977,7 @@ paths:
       tags:
         - 'User API'
       requestBody:
-        required: false
+        required: true
         content:
           multipart/form-data:
             schema:
@@ -809,6 +1999,14 @@ paths:
                   type: string
                   description: 'The email to update.'
                   example: john@email.com
+                calling_code:
+                  type: string
+                  description: 'The calling_code to update.'
+                  example: '+60'
+                phone_number:
+                  type: string
+                  description: 'The phone_number to update.'
+                  example: '012398'
                 date_of_birth:
                   type: string
                   description: 'The date of birth to update.'
@@ -821,13 +2019,24 @@ paths:
                   type: string
                   description: 'The invitation_code of upline.'
                   example: abcdef
+                age_group:
+                  type: string
+                  description: 'The age_group for register.'
+                  example: 10-15
+                nationality:
+                  type: string
+                  description: 'The nationality for register.'
+                  example: malaysian
                 profile_picture:
                   type: string
                   format: binary
                   description: 'The photo to update. Will create when empty'
+              required:
+                - age_group
+                - nationality
   /api/v1/users/notifications:
     get:
-      summary: '13. Get notifications'
+      summary: '15. Get notifications'
       description: "<strong>is_read</strong><br>\n0: New<br>\n1: Read<br>"
       parameters:
         -
@@ -881,12 +2090,12 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
+                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='http://localhost/same-same-oye/backoffice/dashboard'\" />\n\n        <title>Redirecting to http://localhost/same-same-oye/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"http://localhost/same-same-oye/backoffice/dashboard\">http://localhost/same-same-oye/backoffice/dashboard</a>.\n    </body>\n</html>"
       tags:
         - 'User API'
   /api/v1/users/notification:
     post:
-      summary: '14. Update notification seen'
+      summary: '16. Update notification seen'
       description: ''
       parameters:
         -
@@ -921,7 +2130,7 @@ paths:
                 - notification
   /api/v1/users/update-password:
     post:
-      summary: '8. Update user password'
+      summary: '9. Update user password'
       description: ''
       parameters:
         -
@@ -966,7 +2175,7 @@ paths:
                 - password_confirmation
   /api/v1/users/test-notification:
     post:
-      summary: '14. Test notification'
+      summary: '17. Test notification'
       description: ''
       parameters:
         -
@@ -1004,15 +2213,15 @@ paths:
                 register_token:
                   type: string
                   description: 'optional The target device token. ( Default will be following current authenticated user''s register token ).'
-                  example: nisi
+                  example: molestiae
                 app_id:
                   type: string
                   description: 'optional The one signal app id. ( Default will be following current settings ).'
-                  example: ipsa
+                  example: nemo
                 api_key:
                   type: string
                   description: 'optional The one signal api_key ( Default will be following current settings ).'
-                  example: aut
+                  example: voluptas
   /api/v1/otp:
     post:
       summary: '4. Request an OTP'
@@ -1046,10 +2255,26 @@ paths:
                   type: string
                   description: 'The phone_number for register.'
                   example: '0123982334'
-                calling_code:
+                email:
                   type: string
-                  description: 'optional The calling for register. ( Default +60 )'
-                  example: '+60'
+                  description: 'The email for register.'
+                  example: abc@gmail.com
+                first_name:
+                  type: string
+                  description: 'The first_name for register.'
+                  example: tester
+                last_name:
+                  type: string
+                  description: 'The last_name for register.'
+                  example: tan
+                age_group:
+                  type: string
+                  description: 'The age_group for register.'
+                  example: 10-15
+                nationality:
+                  type: string
+                  description: 'The nationality for register.'
+                  example: malaysian
                 password:
                   type: string
                   description: 'The password for register.'
@@ -1068,6 +2293,11 @@ paths:
                   example: 1
               required:
                 - phone_number
+                - email
+                - first_name
+                - last_name
+                - age_group
+                - nationality
                 - password
                 - password_confirmation
                 - request_type
@@ -1105,17 +2335,12 @@ paths:
                   type: string
                   description: 'The temporary user ID during request OTP.'
                   example: eyJpdiI...
-                phone_number:
-                  type: string
-                  description: 'The phone_number for login.'
-                  example: '0123982334'
                 request_type:
                   type: integer
                   description: 'The request type for OTP.'
                   example: 2
               required:
                 - identifier
-                - phone_number
                 - request_type
       security: []
   /api/v1/users/login:
@@ -1147,14 +2372,10 @@ paths:
             schema:
               type: object
               properties:
-                phone_number:
+                email:
                   type: string
-                  description: 'The phone_number for login.'
-                  example: '0123982334'
-                calling_code:
-                  type: string
-                  description: 'The calling_code for register.'
-                  example: '+60'
+                  description: 'The email for login.'
+                  example: abc@gmail.com
                 password:
                   type: string
                   description: 'The password for login.'
@@ -1168,8 +2389,7 @@ paths:
                   description: 'optional The device token to receive notification.'
                   example: 45ab6cc6-bcaa-461e-af5d-ea402e5b93da
               required:
-                - phone_number
-                - calling_code
+                - email
                 - password
       security: []
   /api/v1/users/login-social:
@@ -1204,7 +2424,7 @@ paths:
                 identifier:
                   type: string
                   description: 'The email for social login.'
-                  example: ifei@mail.com
+                  example: sso@mail.com
                 platform:
                   type: interger
                   description: 'The platform for login.'
@@ -1212,7 +2432,7 @@ paths:
                 email:
                   type: string
                   description: 'optional The email for user social login.'
-                  example: ifei@mail.com
+                  example: sso@mail.com
                 device_type:
                   type: integer
                   description: 'optional The device type required with register_token.'
@@ -1227,7 +2447,7 @@ paths:
       security: []
   /api/v1/users/forgot-password:
     post:
-      summary: '9. Forgot Password (Request Otp)'
+      summary: '10. Forgot Password (Request Otp)'
       description: ''
       parameters:
         -
@@ -1254,21 +2474,20 @@ paths:
             schema:
               type: object
               properties:
-                phone_number:
+                email:
                   type: string
-                  description: 'The phone_number for login.'
-                  example: '0123982334'
-                calling_code:
-                  type: string
-                  description: 'The calling_code for register.'
-                  example: '+60'
+                  description: 'The email to update.'
+                  example: john@email.com
+                request_type:
+                  type: integer
+                  description: 'The request type for OTP.'
+                  example: 1
               required:
-                - phone_number
-                - calling_code
+                - request_type
       security: []
   /api/v1/users/reset-password:
     post:
-      summary: '10. Reset Password'
+      summary: '12. Reset Password'
       description: ''
       parameters:
         -
@@ -1295,10 +2514,6 @@ paths:
             schema:
               type: object
               properties:
-                phone_number:
-                  type: string
-                  description: 'The phone_number for login.'
-                  example: '0123982334'
                 identifier:
                   type: string
                   description: 'The unique_identifier from forgot password.'
@@ -1316,103 +2531,13 @@ paths:
                   description: 'The new password confirmation to perform password reset.'
                   example: abcd1234
               required:
-                - phone_number
                 - identifier
                 - password
                 - password_confirmation
       security: []
-  /api/v1/vouchers:
-    get:
-      summary: '1. Get vouchers'
-      description: "<aside class=\"notice\">Get all voucher that is claimable</aside>\n\n<strong>voucher discount type</strong></br>\n1: percentage<br>\n2: fixed amount<br>\n3: buy x free y<br>\n\n<strong>voucher type</strong></br>\n1: public voucher<br>\n2: points redeemable<br>\n3: register reward<br>\n\n<strong>user_voucher (retrieve user's voucher)</strong></br>\n1: true<br>\n2: false<br>\n\n<strong>expired_only (retrieve user's expired voucher)</strong></br>\n1: true<br>\n2: false<br>"
-      parameters:
-        -
-          in: query
-          name: per_page
-          description: 'Retrieve how many product in a page, default is 10.'
-          example: 10
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve how many product in a page, default is 10.'
-            example: 10
-        -
-          in: query
-          name: promo_code
-          description: 'The voucher code to be filter.'
-          example: XBMSD22
-          required: false
-          schema:
-            type: string
-            description: 'The voucher code to be filter.'
-            example: XBMSD22
-        -
-          in: query
-          name: user_voucher
-          description: 'Retrieve all user''s voucher only'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'Retrieve all user''s voucher only'
-            example: 1
-        -
-          in: query
-          name: voucher_type
-          description: 'The voucher type to be filter'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'The voucher type to be filter'
-            example: 1
-        -
-          in: query
-          name: discount_type
-          description: 'The voucher discount type to be filter'
-          example: 2
-          required: false
-          schema:
-            type: integer
-            description: 'The voucher discount type to be filter'
-            example: 2
-        -
-          in: query
-          name: expired_only
-          description: 'The voucher usage type to be filter'
-          example: 2
-          required: false
-          schema:
-            type: integer
-            description: 'The voucher usage type to be filter'
-            example: 2
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        302:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\" />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://staging.ifei.com.my/backoffice/dashboard'\" />\n\n        <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>\n    </head>\n    <body>\n        Redirecting to <a href=\"https://staging.ifei.com.my/backoffice/dashboard\">https://staging.ifei.com.my/backoffice/dashboard</a>.\n    </body>\n</html>"
-      tags:
-        - 'Voucher API'
-  /api/v1/vouchers/claim-voucher:
+  /api/v1/users/test:
     post:
-      summary: '4. Claim Vouchers'
+      summary: '18. Login an user - test'
       description: ''
       parameters:
         -
@@ -1431,24 +2556,167 @@ paths:
             type: string
       responses: {  }
       tags:
-        - 'Voucher API'
+        - 'User API'
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                voucher_id:
-                  type: required
-                  description: 'integer The voucher_id to be claim.'
-                  example: '1'
+                email:
+                  type: string
+                  description: 'The email for login.'
+                  example: abc@gmail.com
+                password:
+                  type: string
+                  description: 'The password for login.'
+                  example: abcd1234
+              required:
+                - email
+                - password
+      security: []
+  /api/v1/users/resend-forgot-password:
+    post:
+      summary: '6. Resend Forgot password OTP'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: 'The temporary user ID during request OTP.'
+                  example: eyJpdiI...
+                request_type:
+                  type: integer
+                  description: 'The request type for OTP.'
+                  example: 2
+              required:
+                - identifier
+                - request_type
+      security: []
+  /api/v1/users/verify-otp:
+    post:
+      summary: '11. verify otp code for forgot password'
+      description: ''
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses: {  }
+      tags:
+        - 'User API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: 'The unique_identifier from forgot password.'
+                  example: WLnvrJw6YYK
+                otp_code:
+                  type: string
+                  description: 'The otp code to verify password reset.'
+                  example: '123456'
+              required:
+                - identifier
+      security: []
 tags:
+  -
+    name: 'Activity API'
+    description: "<strong>content_type</strong> (required when type=stream)<br>\n1: Radio<br>\n2: Item<br>\n3: Playlist<br>\n4: Collection<br>\n5: Banner<br>\n6: Pop Announcement<br>"
+  -
+    name: 'Ad API'
+    description: ''
   -
     name: 'Announcement API'
     description: ''
   -
-    name: 'Contact-Us API'
+    name: 'Category API'
+    description: ''
+  -
+    name: 'Collection API'
+    description: ''
+  -
+    name: 'Country API'
+    description: ''
+  -
+    name: 'Disclaimer API'
+    description: ''
+  -
+    name: 'Festive Animation API'
+    description: ''
+  -
+    name: 'Home API'
+    description: ''
+  -
+    name: 'In App Purchase API'
+    description: "<strong>platform</strong><br>\n1: IOS<br>\n2: Android<br>\n3: Huawei<br>"
+  -
+    name: 'Item API'
+    description: ''
+  -
+    name: 'Music Request API'
+    description: ''
+  -
+    name: 'Playlist API'
+    description: ''
+  -
+    name: 'Search API'
+    description: ''
+  -
+    name: 'Subscription Group Member API'
+    description: ''
+  -
+    name: 'Subscription Voucher API'
+    description: ''
+  -
+    name: 'TrendingContent API'
+    description: ''
+  -
+    name: 'Type API'
+    description: ''
+  -
+    name: 'UserPlaylist API'
+    description: ''
+  -
+    name: 'Website Banner API'
     description: ''
   -
     name: 'App Version API'
@@ -1457,20 +2725,8 @@ tags:
     name: 'Banner API'
     description: ''
   -
-    name: 'Check-in API'
-    description: ''
-  -
-    name: 'Lucky Draw Reward API'
-    description: ''
-  -
-    name: 'Points API'
-    description: ''
-  -
-    name: 'Rank API'
+    name: 'Contact-Us API'
     description: ''
   -
     name: 'User API'
-    description: ''
-  -
-    name: 'Voucher API'
     description: ''

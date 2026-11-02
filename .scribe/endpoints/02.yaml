@@ -1,64 +1,14 @@
-name: 'Banner API'
+name: 'Announcement API'
 description: ''
 endpoints:
   -
     httpMethods:
-      0: GET
-      2: POST
-      3: PUT
-      4: PATCH
-      5: DELETE
-      6: OPTIONS
-    uri: api/v1/banners/details
+      - POST
+    uri: api/v1/pop_announcements
     metadata:
-      title: '2. Get one banner detail'
+      title: '1. Get all pop announcements'
       description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters: []
-    bodyParameters:
-      id:
-        name: id
-        description: 'The id the banner.'
-        required: true
-        example: '1'
-        type: string
-        custom: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
-
-                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'https://staging.ifei.com.my/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/banners
-    metadata:
-      title: '1. Get banners'
-      description: '<aside class="notice">Get all banners ( sorted )</aside>'
-      authenticated: true
+      authenticated: false
       custom: []
     headers:
       Content-Type: application/json
@@ -66,26 +16,5 @@ endpoints:
     urlParameters: []
     queryParameters: []
     bodyParameters: []
-    responses:
-      -
-        status: 302
-        content: |-
-          <!DOCTYPE html>
-          <html>
-              <head>
-                  <meta charset="UTF-8" />
-                  <meta http-equiv="refresh" content="0;url='https://staging.ifei.com.my/backoffice/dashboard'" />
-
-                  <title>Redirecting to https://staging.ifei.com.my/backoffice/dashboard</title>
-              </head>
-              <body>
-                  Redirecting to <a href="https://staging.ifei.com.my/backoffice/dashboard">https://staging.ifei.com.my/backoffice/dashboard</a>.
-              </body>
-          </html>
-        headers:
-          cache-control: 'no-cache, private'
-          location: 'https://staging.ifei.com.my/backoffice/dashboard'
-          content-type: 'text/html; charset=utf-8'
-          access-control-allow-origin: '*'
-        description: null
+    responses: []
     responseFields: []
