@@ -807,6 +807,21 @@ class SubscriptionVoucherService
 
         $validator = Validator::make( $request->all(), $rules );
 
+        // Content must have the placeholder, otherwise user won't see his code / url
+        $subscriptionVoucher = $isCreate
+            ? SubscriptionVoucher::find( Helper::decode( $request->subscription_voucher ) )
+            : optional( UserNotification::whereNotNull( 'subscription_voucher_id' )->find( Helper::decode( $request->id ) ) )->subscriptionVoucher;
+
+        $validator->after( function( $validator ) use ( $request, $subscriptionVoucher ) {
+            if ( !$subscriptionVoucher || !$request->en_content ) {
+                return;
+            }
+            $placeholder = $subscriptionVoucher->isThirdParty() ? self::URL_PLACEHOLDER : self::CODE_PLACEHOLDER;
+            if ( !str_contains( $request->en_content, $placeholder ) ) {
+                $validator->errors()->add( 'en_content', __( 'subscription_voucher.content_missing_placeholder', [ 'placeholder' => $placeholder ] ) );
+            }
+        } );
+
         $attributeName = [
             'subscription_voucher' => __( 'subscription_voucher.voucher' ),
             'en_title' => __( 'datatables.title' ),
