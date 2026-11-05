@@ -152,6 +152,8 @@ Route::middleware( 'auth.optional' )->group( function() {
     } );
 
     Route::post( '/record', [ StreamController::class, 'record' ] )->middleware( 'log.cart.order' );
+
+    Route::post( 'website-banners/record-click', [ WebsiteBannerController::class, 'recordClick' ] );
 } );
 
 Route::prefix( 'radio' )

@@ -452,6 +452,34 @@
     </div>
 </div>
 
+{{-- SECTION 12 — WEBSITE BANNER CLICKS --}}
+<div class="row g-4 mb-4">
+    <div class="col-12 col-1024-6">
+        <div class="nk-block">
+            <div class="d-flex align-items-center justify-content-between mb-3" style="min-height:31px">
+                <p class="section-title mb-0">Website Banner Clicks</p>
+            </div>
+            <div class="card card-bordered card-preview">
+                <div class="card-inner">
+                    <table class="table" style="width:100%" id="website-banners-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>No.</th>
+                                <th>Image</th>
+                                <th>Status</th>
+                                <th>Clicks</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- ENGAGEMENT DETAIL MODAL (who's behind Active Users / New Users / Subscriptions cards) --}}
 <div class="modal fade" id="engagement-detail-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
@@ -1078,6 +1106,36 @@
         popupsTimer = setTimeout(function () { if (dtPopups) dtPopups.search(v).draw(); }, 400);
     });
     $('#popups-status').on('change', function () { if (dtPopups) dtPopups.column(4).search($(this).val()).draw(); });
+
+    /* ══════════════════════════════════════════════════════════════════
+       SECTION 12 — WEBSITE BANNER CLICKS
+       Cols: 0=chk 1=no 2=image 3=status 4=clicks 5=action
+    ══════════════════════════════════════════════════════════════════ */
+
+    post('{{ route("admin.dashboard.getWebsiteBannerClickStats") }}').then(function (d) {
+        makeDT('website-banners-table', d.banners, [
+            { data: null         },
+            { data: null         },
+            { data: 'image_path' },
+            { data: 'status'     },
+            { data: 'clicks'     },
+            { data: null         },
+        ], [
+            selectColDef(),
+            noColDef(),
+            { targets: 2, orderable: false,
+              render: function (data) {
+                  return data ? '<img src="' + esc(data) + '" class="thumb-img">' : '—';
+              } },
+            { targets: 3, orderable: false,
+              render: function (data) {
+                  var c = data === 'Active' ? 'bx-active' : 'bx-inactive';
+                  return '<span class="bx ' + c + '">' + esc(data) + '</span>';
+              } },
+            { targets: 4, render: function (data) { return '<strong>' + (data || 0) + '</strong>'; } },
+            viewStreamColDef(5, '{{ route("admin.dashboard.getWebsiteBannerClickDetail") }}', 'id', 'name', 'Website Banner Stream'),
+        ], 4, undefined, 'Website Banner Clicks');
+    });
 
 });
 </script>

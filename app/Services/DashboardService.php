@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\{
     User,
     Banner,
+    WebsiteBanner,
     PopAnnouncement,
     UserSubscription,
 };
@@ -573,6 +574,60 @@ class DashboardService {
             ->orderByDesc( 'pop_announcement_clicks.created_at' );
 
         self::applyDateRange( $q, 'pop_announcement_clicks.created_at', $from, $to );
+
+        $rows = $q->get()
+            ->map( function ( $r ) {
+                return [
+                    'user'       => self::resolveUserName( $r ),
+                    'email'      => $r->email ?? '—',
+                    'clicked_at' => $r->created_at
+                        ? Carbon::parse( $r->created_at )->timezone( 'Asia/Kuala_Lumpur' )->format( 'Y-m-d H:i' )
+                        : '—',
+                ];
+            } );
+
+        return response()->json( [ 'logs' => $rows ] );
+    }
+
+    // ── Website banner click table ────────────────────────────────────────────
+
+    public static function getWebsiteBannerClickStats() {
+        $banners = WebsiteBanner::withCount( 'clicks' )
+            ->where( 'status', '!=', 20 )
+            ->orderBy( 'sequence' )
+            ->get()
+            ->map( function ( $banner ) {
+                return [
+                    'id'         => $banner->id,
+                    'name'       => $banner->en_name ?? '—',
+                    'image_path' => $banner->image_path,
+                    'status'     => $banner->status == 10 ? 'Active' : 'Inactive',
+                    'clicks'     => $banner->clicks_count,
+                    'created_at' => $banner->created_at ? $banner->created_at->format( 'Y-m-d' ) : '—',
+                ];
+            } );
+
+        return response()->json( [ 'banners' => $banners ] );
+    }
+
+    // ── Website banner click detail (who clicked a specific website banner) ──
+
+    public static function getWebsiteBannerClickDetail( Request $request ) {
+        $id = (int) $request->input( 'id' );
+
+        if ( !$id ) {
+            return response()->json( [ 'logs' => [] ] );
+        }
+
+        [ $from, $to ] = self::parseDateRange( $request->input( 'date_range' ) );
+
+        $q = DB::table( 'website_banner_clicks' )
+            ->leftJoin( 'users', 'users.id', '=', 'website_banner_clicks.user_id' )
+            ->where( 'website_banner_clicks.website_banner_id', $id )
+            ->select( 'website_banner_clicks.user_id', 'users.fullname', 'users.first_name', 'users.last_name', 'users.email', 'website_banner_clicks.created_at' )
+            ->orderByDesc( 'website_banner_clicks.created_at' );
+
+        self::applyDateRange( $q, 'website_banner_clicks.created_at', $from, $to );
 
         $rows = $q->get()
             ->map( function ( $r ) {

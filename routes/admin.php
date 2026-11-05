@@ -96,6 +96,8 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'popup-click-stats', [ DashboardController::class, 'getPopAnnouncementClickStats' ] )->name( 'admin.dashboard.getPopAnnouncementClickStats' );
                 Route::post( 'banner-click-detail', [ DashboardController::class, 'getBannerClickDetail' ] )->name( 'admin.dashboard.getBannerClickDetail' );
                 Route::post( 'popup-click-detail', [ DashboardController::class, 'getPopAnnouncementClickDetail' ] )->name( 'admin.dashboard.getPopAnnouncementClickDetail' );
+                Route::post( 'website-banner-click-stats', [ DashboardController::class, 'getWebsiteBannerClickStats' ] )->name( 'admin.dashboard.getWebsiteBannerClickStats' );
+                Route::post( 'website-banner-click-detail', [ DashboardController::class, 'getWebsiteBannerClickDetail' ] )->name( 'admin.dashboard.getWebsiteBannerClickDetail' );
                 Route::post( 'app-analytics',     [ DashboardController::class, 'getAppAnalytics' ] )->name( 'admin.dashboard.getAppAnalytics' );
                 Route::get(  'stream',            [ DashboardController::class, 'streamPage' ] )->name( 'admin.dashboard.stream' );
 

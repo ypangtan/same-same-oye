@@ -13,6 +13,7 @@ use Helper;
 
 use App\Models\{
     WebsiteBanner,
+    WebsiteBannerClick,
     FileManager,
     VendingMachineStock,
 };
@@ -285,6 +286,26 @@ class WebsiteBannerService
             'message_key' => 'get_website_banner_success',
             'data' => $website_banner,
         ] );
+    }
+
+    public static function recordClick( $request ) {
+
+        if( !empty( $request->website_banner_id ) ) {
+            $request->merge( [
+                'website_banner_id' => \Helper::decode( $request->website_banner_id )
+            ] );
+        }
+
+        $request->validate( [
+            'website_banner_id' => [ 'required', 'exists:website_banners,id' ],
+        ] );
+
+        WebsiteBannerClick::create( [
+            'user_id'           => auth()->id() ?? null,
+            'website_banner_id' => $request->website_banner_id,
+        ] );
+
+        return response()->json( [ 'message' => 'Click recorded.' ] );
     }
 
     public static function deleteWebsiteBanner( $request ){

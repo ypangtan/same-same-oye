@@ -46,4 +46,17 @@ class WebsiteBannerController extends Controller
         return WebsiteBannerService::oneWebsiteBannerClient( $request );
     }
 
+    /**
+     * 3. Record Website Banner click
+     *
+     * @group Website Banner API
+     *
+     * @bodyParam website_banner_id string required The encrypted_id of the website banner. Example: 52
+     *
+     */
+    public function recordClick( Request $request ) {
+
+        return WebsiteBannerService::recordClick( $request );
+    }
+
 }
