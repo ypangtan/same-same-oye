@@ -113,4 +113,9 @@ class WebsiteBanner extends Model
     public function getDescriptionForEvent( string $eventName ): string {
         return "{$eventName} ";
     }
+
+    public function clicks()
+    {
+        return $this->hasMany(WebsiteBannerClick::class, 'website_banner_id');
+    }
 }
