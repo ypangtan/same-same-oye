@@ -46,7 +46,7 @@ class WebsiteBannerController extends Controller
             '21' => __( 'datatables.expired' ),
         ];
         
-        $this->data['data']['website_banners'] = WebsiteBanner::where( 'status', 10 )->orderBy( 'sequence' )->get();
+        $this->data['data']['website_banners'] = WebsiteBanner::where( 'status', '!=', 20 )->orderBy( 'sequence' )->get();
 
         return view( 'admin.main' )->with( $this->data );
     }
@@ -136,6 +136,11 @@ class WebsiteBannerController extends Controller
     public function updateWebsiteBannerStatus( Request $request ) {
 
         return WebsiteBannerService::updateWebsiteBannerStatus( $request );
+    }
+
+    public function deleteWebsiteBannerStatus( Request $request ) {
+
+        return WebsiteBannerService::deleteWebsiteBannerStatus( $request );
     }
 
     public function removeWebsiteBannerGalleryImage( Request $request ) {

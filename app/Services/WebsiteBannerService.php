@@ -356,7 +356,35 @@ class WebsiteBannerService
         try {
 
             $updateWebsiteBanner = WebsiteBanner::find( $request->id );
-            $updateWebsiteBanner->status = $updateWebsiteBanner->status == 10 ? 20 : 10;
+            $updateWebsiteBanner->status = $updateWebsiteBanner->status == 10 ? 30 : 10;
+
+            $updateWebsiteBanner->save();
+            DB::commit();
+
+            return response()->json( [
+                'data' => [
+                    'website_banner' => $updateWebsiteBanner,
+                    'message_key' => 'update_website_banner_success',
+                ]
+            ] );
+
+        } catch ( \Throwable $th ) {
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+                'message_key' => 'create_website_banner_failed',
+            ], 500 );
+        }
+    }
+
+    public static function deleteWebsiteBannerStatus( $request ) {
+
+        DB::beginTransaction();
+
+        try {
+
+            $updateWebsiteBanner = WebsiteBanner::find( $request->id );
+            $updateWebsiteBanner->status = 20;
 
             $updateWebsiteBanner->save();
             DB::commit();

@@ -80,8 +80,8 @@
         @endcan
         <ul id="website_banner-list" class="list-group">
             @foreach($website_banners as $website_banner)
-                <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="{{ $website_banner->id }}">
-                    <img src="{{ $website_banner->image_path }}" class="website_banner-img rounded">
+                <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="{{ $website_banner->id }}" data-status="{{ $website_banner->status }}">
+                    <img src="{{ $website_banner->image_path }}" class="website_banner-img rounded{{ $website_banner->status == 30 ? ' opacity-50' : '' }}">
                     <!-- Dropdown -->
                     @can( 'edit website_banners' )
                     <div class="dropdown mt-2">
@@ -93,7 +93,12 @@
                                 <button class="dropdown-item edit-website_banner" data-id="{{ $website_banner->id }}">{{ __( 'template.edit' ) }}</button>
                             </li>
                             <li>
-                                <button class="dropdown-item text-danger delete-website_banner" data-id="{{ $website_banner->id }}">Delete</button>
+                                <button class="dropdown-item status-website_banner" data-id="{{ $website_banner->id }}">
+                                    {{ $website_banner->status == 10 ? __( 'datatables.suspend' ) : __( 'datatables.activate' ) }}
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item text-danger delete-website_banner" data-id="{{ $website_banner->id }}">{{ __( 'template.delete' ) }}</button>
                             </li>
                         </ul>
                     </div>
@@ -142,7 +147,7 @@
             success: function(file, response) {
                 if (response.status == 200) {
                     let newWebsiteBanner = $(`
-                        <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="${response.data.id}${response.data.id}">
+                        <li class="list-group-item d-flex flex-column align-items-center justify-content-center position-relative" data-id="${response.data.id}" data-status="10">
                             <img src="${response.data.website_banner_url}" class="website_banner-img rounded">
                             <!-- Dropdown -->
                             <div class="dropdown mt-2">
@@ -154,7 +159,10 @@
                                         <button class="dropdown-item edit-website_banner" data-id="${response.data.id}">{{ __( 'template.edit' ) }}</button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item text-danger delete-website_banner" data-id="${response.data.id}">Delete</button>
+                                        <button class="dropdown-item status-website_banner" data-id="${response.data.id}">{{ __( 'datatables.suspend' ) }}</button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger delete-website_banner" data-id="${response.data.id}">{{ __( 'template.delete' ) }}</button>
                                     </li>
                                 </ul>
                             </div>
@@ -216,7 +224,7 @@
             message: '{{ __( 'template.loading' ) }}'
         } );
 
-        $.post('{{ route("admin.website_banner.updateWebsiteBannerStatus") }}', {
+        $.post('{{ route("admin.website_banner.deleteWebsiteBannerStatus") }}', {
             _token: '{{ csrf_token() }}',
             id: website_bannerId
         }).done(function(response) {
@@ -225,6 +233,39 @@
             website_bannerItem.fadeOut(300, function() {
                 $(this).remove();
             });
+        }).fail(function() {
+            $( 'body' ).loading( 'stop' );
+
+            alert("Error occurred. Please check your connection.");
+        });
+    });
+
+    $(document).on("click", ".status-website_banner", function() {
+        let btn = $(this);
+        let website_bannerId = btn.data("id");
+        let website_bannerItem = btn.closest(".list-group-item");
+
+        $( 'body' ).loading( {
+            message: '{{ __( 'template.loading' ) }}'
+        } );
+
+        $.post('{{ route("admin.website_banner.updateWebsiteBannerStatus") }}', {
+            _token: '{{ csrf_token() }}',
+            id: website_bannerId
+        }).done(function(response) {
+            $( 'body' ).loading( 'stop' );
+
+            let currentStatus = parseInt( website_bannerItem.data('status') );
+            let newStatus = currentStatus == 10 ? 30 : 10;
+            website_bannerItem.data('status', newStatus);
+
+            if ( newStatus == 30 ) {
+                btn.text('{{ __( 'datatables.activate' ) }}');
+                website_bannerItem.find('.website_banner-img').addClass('opacity-50');
+            } else {
+                btn.text('{{ __( 'datatables.suspend' ) }}');
+                website_bannerItem.find('.website_banner-img').removeClass('opacity-50');
+            }
         }).fail(function() {
             $( 'body' ).loading( 'stop' );
 
