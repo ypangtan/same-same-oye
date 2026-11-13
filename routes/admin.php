@@ -475,6 +475,7 @@ Route::prefix( config( 'services.url.admin_path' ) )->group( function() {
                 Route::post( 'update-website-banner', [ WebsiteBannerController::class, 'updateWebsiteBanner' ] )->name( 'admin.website_banner.updateWebsiteBanner' );
                 Route::post( 'delete-website-banner', [ WebsiteBannerController::class, 'deleteWebsiteBanner' ] )->name( 'admin.website_banner.deleteWebsiteBanner' );
                 Route::post( 'update-website-banner-status', [ WebsiteBannerController::class, 'updateWebsiteBannerStatus' ] )->name( 'admin.website_banner.updateWebsiteBannerStatus' );
+                Route::post( 'delete-website-banner-status', [ WebsiteBannerController::class, 'deleteWebsiteBannerStatus' ] )->name( 'admin.website_banner.deleteWebsiteBannerStatus' );
                 Route::post( 'remove-website-banner-gallery-image', [ WebsiteBannerController::class, 'removeWebsiteBannerGalleryImage' ] )->name( 'admin.website_banner.removeWebsiteBannerGalleryImage' );
                 Route::post( 'ckeUpload', [ WebsiteBannerController::class, 'ckeUpload' ] )->name( 'admin.website_banner.ckeUpload' );
                 Route::post( 'image-upload', [ WebsiteBannerController::class, 'imageUpload' ] )->name( 'admin.website_banner.imageUpload' );
